@@ -1,0 +1,3751 @@
+７ Note
+Canvas apps running on Windows platform must use the legacy Microsoft Dataverse
+connector. A warning is displayed for apps that still use the legacy connector, but using it
+for Windows platform is supported.
+
+Request limits
+These limits apply to each single outgoing request:
+ﾉ
+
+Name
+
+Limit
+
+Timeout
+
+180 seconds
+
+Retry attempts
+
+4
+
+Expand table
+
+７ Note
+The retry value might vary. For certain error conditions, retrying isn't necessary.
+
+IP addresses
+Requests from Power Apps use IP addresses that depend on the region of the environment
+that the app is in. Microsoft doesn't publish fully qualified domain names for Power Apps
+scenarios.
+Calls made from an API connected through an app (for example, the SQL API or the SharePoint
+API) come from these IP addresses.
+
+Required services
+This list identifies all services to which Power Apps communicates and their usages. Your
+network must not block these services.
+ﾉ
+
+Expand table
+
+Domains
+
+Protocols
+
+Uses
+
+api.bap.microsoft.com
+*.api.bap.microsoft.com
+
+https
+
+Environment permissions management
+
+management.azure.com
+
+https
+
+Power Apps Management Service
+
+msmanaged-na.azure-apim.net
+
+https
+
+Runtime of Connectors/Apis
+
+login.microsoft.com
+login.windows.net
+login.microsoftonline.com
+
+https
+
+Microsoft Authentication Library
+
+https
+
+Azure Graph - For getting user info (for
+
+secure.aadcdn.microsoftonline-p.com
+*.odc.officeapps.live.com
+graph.microsoft.com
+graph.windows.net
+
+example, profile photo)
+
+*.azure-apim.net
+
+https
+
+API Hubs - Different subdomains for each
+locale
+
+*.azure-apihub.net
+
+https
+
+API Hubs - Different subdomains for each
+locale
+
+*.powerapps.com
+
+https
+
+create.powerapps.com,
+content.powerapps.com,
+apps.powerapps.com,
+make.powerapps.com,
+*gateway.prod.island.powerapps.com,
+*gateway.prod.cm.powerapps.com,
+*harvest.preview.powerapps.com, and
+*harvest.powerapps.com
+
+*.gateway.prod.island.powerapps.com
+
+WSS
+
+*.harvest.preview.powerapps.com
+*.harvest.powerapps.com
+*.azureedge.net
+
+Required for communication with and
+startup of canvas apps and real-time
+updates with Coding Agent.
+
+https
+
+create.powerapps.com,
+content.powerapps.com, and
+make.powerapps.com
+(Optional) We highly recommend that
+you use the wildcard listed under
+Domains. You can download the
+complete list if you want to allow specific
+domain names instead of using
+*.azureedge.net. However, this list is
+subject to change.
+
+*.azurefd.net
+
+https
+
+create.powerapps.com,
+content.powerapps.com, and
+make.powerapps.com
+
+Domains
+
+Protocols
+
+Uses
+
+*.ces.microsoftcloud.com
+config.centro.core.microsoft
+
+https
+
+Access to net promoter score (NPS) and
+surveys.
+
+https
+
+Blob storage
+(Optional) We highly recommend that
+you use the wildcard listed under
+
+admin.microsoft.com
+petrol.office.microsoft.com
+oness.microsoft.com
+*.blob.core.windows.net
+
+Domains. You can download the
+complete list if you want to allow specific
+domain names instead of using
+*.blob.core.windows.net. However, this list
+is subject to change.
+*.flow.microsoft.com
+
+https
+
+*.powerautomate.com
+
+http://*.crm#.dynamics.com and
+https://*.crm#.dynamics.com
+
+create.powerapps.com,
+content.powerapps.com, and
+make.powerapps.com
+
+https
+
+Required for environments access.
+Includes integration and static Content
+Delivery Network (CDN) content
+endpoints.
+Replace # in http://*.crm#.dynamics.com
+and https://*.crm#.dynamics.com with
+your region's number:
+Asia/Pacific: 5
+Canada: 3
+Europe, Africa, and Middle East: 15
+and 4
+France: 12
+Germany: 16
+India: 8
+Japan: 7
+North America: no number
+Oceania: 6
+Singapore: 20
+South Africa: 14
+South America: 2
+Switzerland: 17
+UAE: 15
+United Kingdom: 11
+Dynamics 365 US Government: 9
+
+browser.pipe.aria.microsoft.com
+
+https
+
+Rest of the World telemetry endpoint for
+
+Domains
+
+Protocols
+
+Uses
+model-driven apps
+
+*.events.data.microsoft.com
+
+https
+
+Telemetry endpoint for Power Apps
+
+localhost
+
+http
+
+Power Apps Mobile
+
+127.0.0.1
+
+http
+
+Power Apps Mobile
+
+You might need to
+explicitly list the
+port (5040 and up)
+for
+localhost/127.0.0.1.
+ecs.office.com
+
+https
+
+Retrieve feature flags for Power Apps
+
+augloop.svc.cloud.microsoft
+*.augloop.svc.cloud.microsoft
+
+WSS
+
+Power Apps Studio Copilot
+
+config.edge.skype.com
+
+https
+
+Retrieve feature flags for Power Apps
+(backup)
+
+api.powerplatform.com
+*.powerplatform.com
+*.api.powerplatformusercontent.com
+
+https
+
+Required for Power Platform API
+connectivity used internally by Microsoft
+products, and Power Platform
+
+*.powerplatformusercontent.com
+
+programmability and extensibility.
+
+*.sharepointonline.com
+
+https
+
+Retrieve assets for presenting the header
+that appears at the top of app playing
+experiences
+
+ris.api.iris.microsoft.com
+eudb.ris.api.iris.microsoft.com
+
+https
+
+Record user action in response to Power
+Apps in-app campaigns
+
+arc.msn.com
+arc-emea.msn.com
+
+https
+
+Record user viewing of Power Apps inapp campaigns
+
+*.hubblecontent.osi.office.net
+hubble.officeapps.live.com
+res.cdn.office.net
+
+https
+
+Provides stock images to use in your app
+
+dc.services.visualstudio.com
+
+https
+
+Application Insights endpoint used for
+custom telemetry in canvas app
+
+*.ocv.microsoft.com
+
+https
+
+Allows users to provide Copilot feedback
+data in Power Apps
+
+js.monitor.azure.com
+
+https
+
+This is used by the office header for
+reporting telemetry
+
+1
+
+Replaces domain name gov.content.powerapps.us used before July 2022.
+
+2
+
+Replaces domain name high.content.powerapps.us used before July 2022.
+
+3
+
+Replaces domain name content.appsplatform.us used before July 2022.
+） Important
+If you're using a VPN, it must be configured to exclude localhost from tunneling for
+Power Apps Mobile.
+If you're a US Government customer or a customer in China, unblock additional
+service URLs. For more information:
+US Government: Power Apps US Government service URLs, Power Automate US
+Government service URLs
+China: Power Platform and Dynamics 365 apps - operated by 21Vianet in China.
+
+Deprecated endpoints
+This section lists endpoints that Microsoft no longer supports. Instead, use the new endpoints
+listed in the table. Update any bookmarks that use the deprecated endpoint to the new
+endpoint.
+ﾉ
+
+Expand table
+
+Deprecated endpoint
+
+New endpoint
+
+web.powerapps.com/apps/{yourAppGuid}
+
+apps.powerapps.com/play/{yourAppGuid}
+
+web.powerapps.com/apps/{yourAppGuid}/open
+
+apps.powerapps.com/play/{yourAppGuid}
+
+Embedding limits for Power Apps
+Canvas app embedding
+Power Apps doesn't support the nested embedding of canvas apps in native desktop, mobile,
+or other non-browser clients.
+The following table shows some of the examples where embedding a canvas app is and isn't
+supported:
+ﾉ
+
+Expand table
+
+Power Apps embedding scenario
+
+Supported clients
+
+Unsupported clients
+
+A canvas app embedded in a SharePoint
+page.
+
+Web, for example,
+Sharepoint.com
+
+Teams desktop
+Teams mobile
+
+A canvas app embedded in a SharePoint
+page that is added as a tab in a Microsoft
+
+Web, for example.
+Sharepoint.com
+
+Teams desktop
+Teams mobile
+
+Teams channel.
+
+Teams.microsoft.com
+
+A canvas app used as a custom form in the
+SharePoint page.
+
+Web, for example,
+Sharepoint.com
+
+Teams desktop
+Teams mobile
+
+A canvas app used as a custom form in the
+SharePoint page that is added to a Teams
+team.
+
+Web, for example.
+Sharepoint.com
+Teams.microsoft.com
+
+Teams desktop
+Teams mobile
+SharePoint
+mobile
+
+A Power BI report that is added to Teams, or
+a SharePoint site.
+
+Web, for example,
+Teams.microsoft.com
+
+Teams desktop
+Teams mobile
+SharePoint
+mobile
+
+A canvas app is embedded in a third party
+
+Third party websites in a
+
+Third party native
+
+client.
+
+browser
+
+applications
+
+A canvas app in Unified Service Desk
+
+None
+
+Unified Service Desk
+Desktop app
+
+A canvas app embedded in Power BI
+
+Web, for example,
+app.powerbi.com
+
+Power BI Desktop
+Client
+
+Model-driven app embedding
+Power Apps doesn't support embedding a model-driven app or page within an IFrame in
+another application.
+
+Proxies
+Power Apps doesn't support running with a proxy enabled. This limitation can cause
+unpredictable behavior. If you encounter problems, disable the proxy and then try again.
+Some proxies, such as Zscaler and Blue Coat, remove headers from Power Apps requests.
+Power Apps relies on these headers, like CORS or authentication headers, to load the app.
+
+Some proxies, such as Microsoft Defender for Cloud Apps and McAfee, might intercept
+and change the URL of an app or embedded app. For example, if there's a Dynamics 365
+app that runs under domain org.crm.dynamics.com or a canvas app that runs under
+domain apps.powerapps.com, the platform doesn't support a proxy that changes these
+domains to a custom domain such as mycustomdomain.com. This limitation can cause
+unpredictable behavior when the platform tries to retrieve tokens that are necessary to
+run the app.
+
+Local network access and permission problems
+In 2025, many browsers introduced additional security controls to prevent cross-origin attacks
+and unauthorized access to private network resources
+
+. These changes went into effect for
+
+Edge with their December 4, 2025 release.
+Some proxies are configured by default to host resources in a way that appears to the enduser's browser as a local network resource. This configuration now results in those requests
+being blocked. This behavior might appear to end-users as unexpected permission prompts,
+silent failures, or generic messages such as "This app stopped working. Try refreshing your
+browser".
+７ Note
+Microsoft Support can't resolve these networking problems. Enterprise admins might be
+able to mitigate this problem by updating browser policies such as
+LocalNetworkAccessAllowedForUrls for Microsoft Edge and Google Chrome
+
+or by
+
+updating proxy configurations according to their vendor's guidelines.
+
+Data types size limits
+For canvas app data type limits, you can find information about size limits on text, hyperlinks,
+images, and media in Data types in Power Apps.
+For Microsoft Dataverse data type size limits, you can find information on column types, such
+as text and image columns, in Types of columns.
+
+Power Apps per app plan
+For more information, see Power Apps per app plan in the Power Platform admin guide.
+
+See also
+System requirements, limits, and configuration values for Power Pages
+
+Last updated on 01/14/2026
+
+How do I find and run apps?
+Article • 10/23/2024
+
+No need to manually work on a task to get your work done. With Power Apps, you can
+create and use a canvas app or model-driven app to get your work done quickly. Once
+you create an app, you can share the app with your organization.
+Canvas apps give you much control over the user experience of the app. An app maker
+can use templates to create a canvas app, or they can configure the app any way they
+like. A canvas app, like its name, is a blank canvas, so you can create an app to fit the
+needs of users in your organization.
+Because canvas apps can essentially be anything, there isn’t much help documentation
+on how to use an app once it’s created. If you need help with using a canvas app,
+contact your app maker or Power Apps admin.
+Model-driven apps use the Unified Interface that provides a responsive and accessible
+design. You can run the app on a web browser or on popular mobile devices. The app
+has multiple components including dashboards, forms, views, charts, and business
+processes that together help make the app easy to use.
+This section provides information about how to find and run canvas and model-driven
+apps from various places. It also provides information on how to navigate and work
+within a model-driven app: Use model-driven apps.
+
+What's required to run apps?
+Ensure that you're using a supported web browser and operating system. For more
+information, see System requirements, limits, and configuration values for Power Apps
+Additionally, you need a Power Apps license to run an app. If you don't have a license,
+you can request one by following instructions here: Request a Power Apps license
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Run an app in a web browser
+Article • 06/05/2024
+
+When you create an app, or someone shares an app with you, you can run that app on
+the Power Apps mobile app or in a web browser. In this topic, you'll learn how to run a
+canvas or model-driven app in a web browser from the Microsoft 365 apps page .
+For full functionality and optimized experience on a tablet device, we strongly
+recommend that you use the Power Apps mobile app. If you don't have the Power Apps
+mobile app installed, you can still use the web browser on your tablet, as long as your
+device has sufficiently high screen resolution. For more information: Required privileges
+and supported devices.
+７ Note
+Using the web browser on your phone to run your model-driven apps isn't
+supported; you must use the Power Apps mobile app.
+To follow this quickstart, you need:
+A Power Apps license. This is available with a Power Apps plan, such as the Power
+Apps per user plan, or Power Apps trial, or any of the Microsoft Office 365
+Dynamics 365
+
+or
+
+plans that include Power Apps.
+
+Access to an app that you built or that someone else built and shared with you.
+Access to a supported web browser and operating system. For more information:
+System requirements, limits, and configuration values for Power Apps
+
+Sign in to Microsoft 365 apps page
+Sign in to the Microsoft 365 apps page .
+
+Find an app on the Home page
+The Home page may show several types of business apps.
+
+The list of Office apps is a limited, curated list based on the following criteria:
+Apps that you launched in the last week.
+Apps that you created.
+Apps your admin marked as Featured in your tenant.
+First-party, model-driven apps such as Dynamics 365 Sales, Dynamics 365
+Customer Service, and Dynamics 365 Field Service that you can access and are
+hosted in production or default environments.
+７ Note
+Marking an app as Featured is the only way to guarantee inclusion in the list.
+
+Known limitations
+When a new app is shared with users, the app needs to meet the criteria listed
+above. It can take up to 24 hours for the app to appear in the list of Office apps.
+Some model-driven apps aren't recording the last launched time. Until this issue is
+resolved, we recommend using featured apps. Featured apps only appear to users
+who have access to the apps. Featured apps don't appear to all users.
+It's possible that users will be able to see model-driven apps that they used to be
+able to access, but can no longer. There's also a chance that users won't be able to
+see model-driven apps that they have access to.
+It can take up to a week for users to start seeing the new URL after an org URL
+update.
+
+In the case of model-driven apps, changes made only to the icon may not be
+reflected. Until this issue is resolved, changing another property, like description,
+causes the icon to be updated.
+
+What if I can't find an app?
+Apps that haven't been used in the last week won't appear in the list of Office apps. If
+you can't find an app, then you need to use the web link to open the app directly in
+your browser.
+1. To find the web link for an app, sign in to Power Platform admin center
+Apps
+
+or Power
+
+.
+
+2. Find the app that you're looking for.
+3. Across the app name, select (...) More Commands > Details.
+4. From the Details tab copy the Web link.
+5. Paste the web link in a browser window to launch the app.
+The Microsoft 365 apps page has a different URL per cloud.
+ﾉ
+
+#
+
+Cloud
+
+Microsoft 365 app discovery URL
+
+1
+
+Commercial
+
+https://www.office.com/apps
+
+2
+
+Government
+
+https://www.office.com/apps
+
+Expand table
+
+Community
+Cloud (GCC)
+3
+
+Government
+Community
+Cloud (GCC
+
+https://www.office365.us/apps
+
+High)
+4
+
+Department
+of Defense
+
+https://www.ohome.apps.mil/apps
+
+5
+
+Office 365
+
+There isn’t a corresponding https://www.office.com/apps
+
+operated by
+21Vianet
+
+this cloud. However, the Microsoft 365 app launcher experience throughout
+Microsoft 365 experiences includes Power Apps and Dynamics apps such as
+new word document in
+
+experience for
+
+https://portal.partner.microsoftonline.cn/NewSpoDocument?docType=Word
+
+Run an app from a URL
+
+You can save an app's URL as a bookmark in your browser and run it by selecting the
+bookmark, or you can send a URL as a link through email. If someone else created an
+app and shared it with you in an email, you can run the app by selecting the link in the
+email. When running an app using a URL, you may be prompted to sign in using your
+Azure Active Directory credentials.
+
+Connect to data
+If an app requires a connection to a data source or permission to use the device's
+capabilities (such as the camera or location services), you must give consent before you
+can use the app. Typically, you're prompted only the first time.
+
+Sign out
+To sign out of the Microsoft 365 apps page, select your profile image and then select
+Sign out.
+
+Next steps
+In this topic, you learned how to run a canvas or model-driven app in a web browser. To
+learn how to:
+run a model-driven apps or canvas apps on a mobile device, see Run model-driven
+apps and canvas apps on Power Apps mobile
+use a model-driven app, see Use model-driven apps
+mark an app as featured, see Set-AdminPowerAppsFeatured
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Discover apps via Marketplace
+The apps you build and publish with Power Apps are discovered and used in Dynamics 365 on
+the web. It displays all of your apps--the apps that you've chosen to use (that is, by launching
+from a share email or opening from Marketplace) or that an admin has provisioned for you.
+This includes all of your apps from Power Apps, and Dynamics 365 applications from Microsoft.
+You can search for apps, filter by environment, and pin the apps you use most frequently to the
+top of the page.
+
+Find apps via the Marketplace organization gallery
+Microsoft Marketplace is now embedded in the Microsoft 365 apps
+(https://www.office.com/apps
+
+) home page and throughout the common navigation. It now
+
+includes a private gallery of apps available to you within your company. Select Get more apps
+from the home page or task pane, and navigate to the My Organization tab to see apps that
+are available to you.
+
+Apps built with Power Apps and shared with a security group or the entire company with User
+permission appear here, instead of cluttering your home page by default. When you get an app
+from Marketplace, it will then appear on the home page and be easily accessible throughout
+the experience.
+
+Last updated on 01/16/2026
+
+Use Microsoft 365 Copilot in canvas
+apps (preview)
+Microsoft 365 Copilot for apps is a next-generation AI assistant that helps you gain insights into
+the data in your apps through conversations in natural language. Microsoft 365 Copilot boosts
+your productivity through AI-powered insights and navigation assistance.
+） Important
+This feature is in preview.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+. They're
+
+available before an official release so that customers can get early access and provide
+feedback.
+This feature is in the process of rolling out and might not be available in your region
+yet.
+
+Prerequisites
+A maker must enable Microsoft 365 Copilot in your application before it becomes visible in your
+app. For more information, see Add Microsoft 365 Copilot for app users.
+７ Note
+To use the Microsoft 365 Copilot feature in your app, you must have a Microsoft 365
+Copilot license.
+
+Copilot pane
+After Microsoft 365 Copilot is enabled, access it through the Copilot button near the upper-right
+corner of the page.
+
+Use Microsoft 365 Copilot to ask questions
+Microsoft 365 Copilot in apps answers questions about the Dataverse tables or SharePoint list
+data in the app.
+
+
+
+Share your feedback
+Help us improve Copilot responses by using the feedback controls on each response. Provide
+feedback for every response:
+
+If a response is high quality and helpful, select the thumbs up button.
+If a response is incorrect, incomplete, or not helpful, select the thumbs down button.
+When you provide feedback, share as much information as possible. For example, include what
+you expected to see, what was missing or incorrect, and any relevant context. The more detail
+you share, the better we can understand your feedback and continuously improve responses.
+
+
+
+Microsoft 365 Copilot suggested questions
+To help you get started, Microsoft 365 Copilot suggests questions to ask. Many suggested
+questions have placeholders you replace with appropriate text.
+
+
+
+Use agents in Microsoft 365 Copilot
+） Important
+When you explicitly select an agent in Microsoft 365 Copilot in apps, the agent no longer
+answers questions about the Dataverse table or SharePoint list data in the app unless you
+explicitly configure your agent to do so. However, the agent uses information from the chat
+history. To get the side chat to answer questions about the Dataverse table or SharePoint list
+data in the app again, you need to remove the explicit agent selection.
+Microsoft 365 Copilot in apps lets you use any agent available in Microsoft 365 Copilot right from
+the side pane. Once an agent is available within Microsoft 365 Copilot, you can interact with your
+agent by either choosing it from the navigation panel or @ mentioning it.
+
+
+
+One of the benefits of @ mentioning an agent is that you can add or remove it from an ongoing
+conversation, which lets you have several agents collaborating in one conversation. When you
+select an agent from the navigation panel, you have a direct conversation only with the agent you
+selected.
+
+Limitations
+M365 Copilot in canvas apps supports apps that use either SharePoint or Dataverse as a
+data source but not both within the same app.
+During the initial preview phase, for SharePoint, only applications containing a single
+SharePoint list will return answers to questions.
+If your canvas app connects to a SharePoint list through an environment variable, Microsoft
+365 Copilot responses will not reference data from that SharePoint list.
+Microsoft 365 Copilot for canvas apps allows users to view data by using read-only
+operations. This capability means that users can only view data that matches their queries
+and can't make any changes. To make changes, customization with an agent is required.
+Microsoft 365 Copilot for canvas apps isn't available in the Power Apps mobile app.
+
+Related information
+Add Microsoft 365 Copilot for app users in canvas apps (preview)
+
+Customize Microsoft 365 Copilot with an agent in canvas apps (preview)
+
+Last updated on 06/16/2026
+
+Run a canvas app from a SharePoint
+page
+Article • 09/05/2024
+
+You can add a Power Apps canvas app to a SharePoint Online page using the Power
+Apps web part. Then users can run the app from the SharePoint Online page. Learn
+more in Office: Use the Power Apps web part
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+.
+
+Add an app to Microsoft Teams
+Article • 02/15/2022
+
+Microsoft Teams is a chat-based collaboration platform built on Office 365 technologies.
+You can customize the Teams experience by adding Power Apps canvas apps to your
+channels in Teams.
+For detailed information about how to add the Product Showcase sample app to a
+Teams channel and then open the app from the channel, see Embed a canvas app as a
+tab app in Power Apps and Teams integration section.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Use model-driven apps in Power Apps
+06/30/2025
+
+A model-driven app has multiple components including dashboards, forms, views, charts, and
+business processes that make the app easy to use. Model-driven apps can also include AI
+features that let users to supervise and interact with agents around business processes more
+efficiently and productively.
+This section explains how to navigate in a model-driven app, work with rows, import and
+export data, and automate processes by using Power Automate.
+） Important
+Because canvas apps provide a lot of control over the user experience and can essentially
+be anything, there isn’t much help documentation on how to use a canvas app. If you
+need help using a canvas app, contact your app maker or Power Apps admin.
+
+Related articles
+Enhanced user experience with the Unified Interface
+Basic navigation in a model-driven app
+
+See also
+Find and run apps
+What is a model-driven app?
+What is a canvas app?
+
+Modern, refreshed look for modeldriven apps
+Model-driven apps are modernized in waves. Each wave updates styling, layout, and behavior to
+align with the latest Microsoft Fluent design system
+
+— making apps easier to use so people
+
+can accomplish their goals more quickly. The Fluent design system provides consistency, quality,
+and Microsoft-wide platform coherence. It also provides a solid foundation for extensibility and
+future capabilities like dark mode.
+） Important
+With the 2026 Wave 1 release, all users must use the New Look (Wave 1 of the
+modernization arc). Makers can't switch a model-driven app back to the classic look. This
+requirement doesn't include the Header and navigation refresh (preview) (Wave 2).
+
+Modernization waves at a glance
+ﾉ
+
+Expand table
+
+Wave
+
+What it includes
+
+Availability
+
+Wave 1 — The New
+
+Updated styling in forms, views, dashboards, dialogs,
+
+Generally available.
+
+Look
+
+and controls; the floating command bar; the Power
+Apps grid; new field control styling
+
+Mandatory as of 2026
+Wave 1.
+
+Wave 2 — Header
+
+Modern app header, streamlined sitemap, condensed
+
+Public preview
+
+and navigation
+refresh
+
+page headers, and updated command bar behavior
+
+Future waves continue to build on this foundation.
+
+Wave 1: The New Look
+Here's what you can expect in the New Look experience:
+Updated styling in form, view, and dashboard pages, which includes the use of drop
+shadows and brighter background colors to create an elevated or floating appearance. The
+
+floating appearance helps to visually separate sections and focuses attention on primary
+content.
+New Fluent-based controls in forms, business process flows, and dialogs. Dialogs now resize
+height automatically based on the content.
+A new Power Apps grid in place of the read-only grid in view and standard, dashboard
+pages.
+A new mechanism for customizing the app header colors to match your personal or
+organizational branding. To learn more, see Use modern themes.
+
+Command bar
+The floating command bar aligns with the Microsoft 365 experience, with consistent spacing,
+rounded corners, and elevation. In the following example, the command bar is in a separate
+section at the top of the page.
+
+View pages
+View pages use the new command bar and updated grid areas that take advantage of the
+elevation changes to help draw the user's attention.
+The most significant change on view pages is the switch from the read-only grid to the Power
+Apps grid control, which features infinite scrolling for a modern, data browsing experience. This
+grid also appears in subgrids and associated grids in main forms and dashboards. The Power
+Apps grid control also supports inline editing by using the Enable filtering property. Makers can
+manually configure their editable grids to use the Power Apps grid control.
+The following example shows a view page with the modern, refreshed look.
+
+Form pages
+Form pages use the new command bar with refreshed headers, tabs, sections, and business
+process flows. Quick views, card forms, headers, sitemaps, and timeline controls also feature
+updated styling.
+The following example shows a form page with the modern, refreshed look.
+
+Field controls
+Field controls such as text input, action input, lookup, and check box controls are built and
+designed by using Fluent components. Future updates will modernize more field controls by
+using Fluent design.
+Field sections, which are containers for the fields on a form, have a more streamlined design.
+Icons are now on the right side of field labels. Some redundant icons were removed for a cleaner
+layout. Input and error message styling is also refreshed based on Fluent design.
+The following example shows a set of fields with the modern, refreshed look.
+
+Dashboard page
+The system dashboard page, with independent subgrids and charts, uses the new command bar
+and has styling similar to the sections in form and view pages. When you turn on the modern
+experience, or when you use the monthly channel, the system dashboard grids use the new
+Power Apps grid control. The new grid isn't turned on by default.
+
+Chart controls
+
+The chart controls on view pages and dashboards are updated to a new color palette for the
+modern, refreshed look.
+If you customize the chart colors, the new look overrides your custom colors. To keep your
+custom colors, add the CustomColorOverride property in the chart .xml file.
+XML
+<Chart CustomColorOverride="true">
+
+Wave 2: Header and navigation refresh (preview)
+[This topic is pre-release documentation and is subject to change.]
+） Important
+This is a preview feature.
+Preview features aren’t meant for production use and may have restricted functionality.
+These features are available before an official release so that customers can get early
+access and provide feedback.
+The header and navigation refresh feature makes apps easier to use and enhances productivity
+by reducing time spent navigating pages, finding commands, and learning layouts. This preview
+includes:
+Modern app header and streamlined sitemap. Updated styling aligned to the Fluent design
+system with a simplified sitemap that reduces navigation complexity.
+Condensed page headers with compact commands. Page headers take up less vertical
+space, giving more room for content.
+New command ordering. Injected system commands like Show As and Show Chart now
+appear in the third position on the command bar, after New and Delete, giving the most
+common user actions priority placement.
+Here's how the new app header and the streamlined sitemap look:
+
+
+
+Here's how the new form header looks with more focus on row details:
+
+
+
+This update automatically applies to all apps generated by the Plan designer. For other existing
+apps, you can opt in by following these steps:
+1. In the app designer, select Settings on the command bar.
+2. Select Features, and then enable Header and navigation refresh.
+
+
+
+Learn more in FAQ for header and navigation refresh (preview).
+
+Known limitations
+The modern, refreshed look for model-driven apps has some limitations:
+
+Modern, refreshed look outside of browser
+The mail app supports the modern, refreshed look. It's on by default for environments on the
+monthly channel as part of the February 2026 release, and will be enabled on the semi-annual
+channel with the October 2026 update.
+The mobile app also supports the modern, refreshed look. Admins can enable it by adding the
+Mobile modern experience setting to a solution and updating the value for the environment or
+for individual apps (2 = on). To learn more about app settings, see Manage model-driven app
+settings in the app designer.
+
+Switching themes or enabling dark mode
+Switching themes or enabling dark mode isn't supported at this time.
+
+Honoring classic theming
+With the modern, refreshed look, Power Apps no longer honors classic theme customizations.
+You can, however, override the colors for the app header to match your organization branding
+with the modern, refreshed look. Learn more in Change the color of the app header. Other theme
+customization options for the modern, refreshed look aren't available yet.
+
+Custom icons
+Only SVG icons are supported. If you use other formats such as PNG, the navigation doesn't
+display them and a default icon appears instead.
+
+Frequently asked questions (FAQs)
+1. Can I use the modern, refreshed look in the Power Apps
+component framework or in custom code components?
+The modern theme in use is passed to Power Apps component framework components, so you
+can style your components with modern theming.
+
+2. Can I use the modern, refreshed look in custom pages?
+You can use modern controls with custom pages and the modern, refreshed look. Currently,
+custom pages don't use the modern theme.
+
+3. Can I change the color of the app header?
+You can change the color of the app header to match your organization while using the modern,
+refreshed look. To learn more, see Use modern themes. Other theme customization options for
+the modern, refreshed look aren't available yet.
+
+4. FAQ for header and navigation refresh (preview)
+Can I turn on Header and navigation refresh without turning on the
+New look?
+No, you need to turn on New look in addition to turning on Header and navigation refresh to see
+the refreshed header and navigation experience in the app.
+
+How do I enable the Header and navigation refresh for existing apps?
+The feature is available as an opt-in capability for existing apps. You can enable it through the
+app setting.
+
+Why don't I see the Help icon in the global command bar in the
+app header?
+Help link to documentation is available in the Settings pane.
+
+Where is the side pane rail next to the Copilot chat pane?
+The side pane switcher becomes available only when there are two or more side panes in the
+app. When Copilot chat is the only side pane, the switcher is hidden.
+
+Why does the sitemap of an app generated by the Plan designer look
+different from existing apps' sitemap?
+Apps generated by the Plan designer have a streamlined sitemap. Home, Recent, Pinned, and
+sitemap groups are turned off by default for a simplified flat list of navigation options in the
+sitemap.
+
+Revert to the classic look
+７ Note
+
+Starting with the 2026 Wave 1 release, the New Look is mandatory for all users. Makers can
+no longer switch a model-driven app to the classic look.
+Admins can turn off the New Look for all users by updating the New look for model driven apps
+app setting.
+1. Open https://make.powerapps.com/
+
+.
+
+2. Under Solutions, open an existing solution with one or more model-driven apps.
+3. Select Add Existing > More > Setting.
+4. Search for New look.
+5. Select New look for model driven apps.
+6. Select Add to add it to the solution.
+7. Select New look for model driven apps from the solution explorer.
+8. Update Setting Environment Value to No.
+9. Add the apps to the solution for which you want to turn off new look.
+10. Update the value of the apps to No.
+11. Select Save.
+12. Publish all customizations.
+To learn more about this and other app settings, see Manage model-driven app settings in the
+app designer.
+
+Last updated on 07/31/2026
+
+Enhanced user experience with Unified
+Interface for model-driven apps
+Article • 06/27/2023
+
+Unified Interface for model-driven apps provides a consistent and accessible user
+experience across devices—whether on a desktop, laptop, tablet, or phone. The apps
+scale by reflowing the components on the screen. The responsive design adapts to your
+environment based on screen size, so the more available space that you have, the more
+information can be displayed.
+
+For an overview of Unified Interface in model-driven apps, watch this video: Introduction
+to Unified Interface
+
+Reflow
+Unified Interface is designed for a modern reflow experience.
+For forms, there are pixel breakpoints that cause information on a form to move on the
+screen based on the space available for the form to display in. This happens when the
+display space available to the form decreases. For example, if you resize the window that
+your app is in and decrease the width of the window it will decrease the space available
+for the form to display in. When the width decreases past certain breakpoints,
+information that would be hidden will move below where it used to be so that it is either
+visible or you can vertically scroll down to see it.
+When columns in a form section reflows from multiple columns to one column, it
+reflows from top to bottom. When a control spans at least two columns in a section,
+
+then it reflows from left to right (in left-to-right languages). The difference in behavior is
+so that tab navigation order is kept after reflow.
+In example below, each number corresponds to a control.
+
+Navigation
+The menu options let you swiftly navigate the different apps in the system. They provide
+quick access to recently viewed rows and pinned favorites.
+
+Legend
+1. Click to change app: Select the current app name to change a differ app.
+2. Collapse/expand button: Select this to collapse the navigator to allow more room
+for the main part of the page. If the navigator is already collapsed, select this
+button to expand it again.
+3. Recent rows: Expand this entry to view a list of rows you were recently using.
+Select a row here to open it. Select the push-pin icon next to a row listed here to
+add it to your favorites (pinned rows).
+4. Favorite rows: Expand this entry to view and open your favorite (pinned) rows. Use
+the Recent rows list to add rows here. Select the remove-pin icon next to a row
+listed here to remove it from this list.
+5. Page navigation: This area lists each entity and dashboard page available for the
+current work area. Select any entry here to open the named dashboard or list view
+for that entity.
+For more information, see Basic navigation in a model-driven app.
+
+Dashboards and charts
+You can access all the system and user dashboards from within your Unified Interface
+apps. The interactive dashboards are now available for all row types with richer
+interactive dashboard capabilities. For more information, see Track your progress with
+dashboards and charts.
+
+Timeline control
+The timeline view helps you collaborate with your team by tracking customer
+communication in a row on a single page in an easy-to-read view. You can see
+everything from posts and voice attachments, to emails and notes. It provides a quick
+way to see the entire communication thread. For more information, see Add an
+appointment, email, phone call, notes or task activity to the timeline.
+
+Business process
+The business process flow has been improved by the docking mechanism. You can dock
+the business process stage on your screen to help you stay focused on the task at hand
+in your business process flow. This is especially useful when the stage of the process has
+complex steps to complete. For more information, see Work with business processes.
+
+Accessibility
+The improved accessibility experience lets you use screen readers to translate on-screen
+information into audible sound and print to a Braille reader so that more people can use
+the app. For more information, see Use a screen reader.
+
+Create a Unified Interface app
+If you have requirements to create your own experience on Unified Interface, you can
+create a model-driven app using the app designer. See Overview of building modeldriven apps.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+AI features overview
+AI features in apps combine model-driven apps with intelligent automation and assistance.
+Business users can supervise their team of AI agents doing work on their behalf, spot-checking
+accuracy, intervening when they get blocked, and handle exceptions. Users get inline assistance
+from agents, fill out forms faster, explore data more easily, and understand what changed at a
+glance. AI in apps lets users supervise and interact with agents around business processes for
+more efficiency and productivity.
+
+
+
+Prerequisites
+Copilot needs to be enabled for your tenant and environment, and apps need to have the new
+look turned on. AI features also have their own enablement settings.
+
+Agent supervision
+Agent feed helps business users manage and work with agents directly in their apps. It makes
+apps a central hub for human-agent collaboration by showing a complete activity feed of what
+agents have done on their behalf, wherever they are in the app.
+Add agents to be supervised in app
+Supervise agents in app
+
+AI in apps
+Built-in skills help you enter, explore, and summarize data faster and better.
+Data entry
+Get assistance filling forms
+Smart paste into forms
+Draft richer text
+Data exploration
+Explore data in a view
+Generate data visuals for a view
+Summary
+Create custom row summaries
+See row summaries in a form and view
+Copilot in apps
+Microsoft 365 Copilot in model-driven apps
+Customize Microsoft 365 Copilot in model-driven apps
+Chat with Copilot
+Customize Copilot chat
+Custom AI experiences
+Use APIs to create custom AI-powered experiences
+Add an agent response control
+
+Last updated on 04/15/2026
+
+Use Microsoft 365 Copilot in modeldriven apps
+Microsoft 365 Copilot for apps is your next-generation AI assistant. It helps you explore and
+understand data in your apps through natural language conversations. Use Microsoft 365 Copilot
+to boost productivity with AI-powered insights and navigation.
+
+Prerequisites
+An administrator must enable Microsoft 365 Copilot in your application before it becomes visible
+in your app. For more information, see Add Microsoft 365 Copilot for app users.
+７ Note
+To use the Microsoft 365 Copilot feature in a Power Apps app, users must have both a
+Power Apps premium license and a Microsoft 365 Copilot license. For more information
+about licensing, see Power Platform licensing guide .
+To use the Microsoft 365 Copilot feature in a Dynamics 365 app, users must have a
+Dynamics 365 Enterprise or Premium license. However, to get the full capabilities of
+Work IQ, beyond Dataverse grounding, a Microsoft 365 Copilot license is required. For
+more information about licensing, see Dynamics 365 licensing guide .
+
+Copilot pane
+After Microsoft 365 Copilot is enabled, you can access it through the Copilot button near the
+upper-right corner of the page.
+
+If both Microsoft 365 Copilot and Copilot chat in apps are enabled, you can switch between
+them:
+
+Chat option opens Microsoft 365 Copilot.
+App Skills option opens Copilot chat in apps. These terms align with Microsoft 365 apps for
+consistency.
+
+You can expand or collapse the Microsoft 365 Copilot pane as needed.
+
+Ask questions with Microsoft 365 Copilot
+Microsoft 365 Copilot in apps answers questions about the Dataverse table data in the app.
+
+
+
+Share your feedback
+Help us improve Copilot responses by using the feedback controls on each response. Provide
+feedback for every response:
+If a response is high quality and helpful, select the thumbs up button.
+If a response is incorrect, incomplete, or not helpful, select the thumbs down button.
+
+When you provide feedback, share as much information as possible. For example, include what
+you expected to see, what was missing or incorrect, and any relevant context. The more detail
+you share, the better we can understand your feedback and continuously improve responses.
+
+
+
+Microsoft 365 Copilot suggested questions
+To help you get started, Microsoft 365 Copilot suggests questions. Many include placeholders
+you can replace with appropriate text.
+
+
+
+Use agents in Microsoft 365 Copilot
+） Important
+If you select an agent in Microsoft 365 Copilot in apps, it stops answering questions about
+Dataverse table data unless you configure it to do so. However, the agent can still use chat
+history. To get the side chat to answer questions about the Dataverse table data in the app
+again, you need to remove the explicit agent selection.
+You can use any agent available in Microsoft 365 Copilot directly from the side pane. When an
+agent is available within Microsoft 365 Copilot, you can interact by either choosing it from the
+navigation panel or @ mentioning it.
+
+
+
+One of the benefits of @ mentioning an agent is that you can add or remove it from an ongoing
+conversation, which lets you have several agents collaborating in one conversation. When you
+select an agent from the navigation panel, you have a direct conversation only with the agent you
+selected.
+
+Navigate to model-driven form using citations
+When results have citations, select the citation result in the side pane to navigate to the modeldriven form.
+
+Limitations
+Microsoft 365 Copilot for model-driven apps allows users to view data by using read-only
+operations. This capability means that users can only view data that matches their queries
+and can't make any changes. To make changes, customization with an agent is required.
+Microsoft 365 Copilot for model-driven apps isn't available in the Power Apps mobile app.
+
+Related information
+Add Microsoft 365 Copilot to model-driven apps
+Customize Microsoft 365 Copilot in model-driven apps
+Add Microsoft 365 Copilot for app users in canvas apps (preview)
+Use Microsoft 365 Copilot in canvas apps (preview)
+Customize Microsoft 365 Copilot with an agent in canvas apps (preview)
+
+Last updated on 06/16/2026
+
+Supervise agents in model-driven apps
+with agent feed (preview)
+[This article is prerelease documentation and is subject to change.]
+） Important
+Starting May 01, 2026, agent feed will support those agents only that use the Power Apps
+MCP server to create tasks. Make sure that your agents are properly onboarded to the
+Power Apps MCP server by this date to continue using the agent feed. If your agents
+don't use the Power Apps MCP server, the agent feed won't appear in your model-driven
+app.
+Agent feed enables human-agent collaboration in apps by surfacing agent-generated,
+actionable tasks that users can review, validate, and complete. By using agent feed, apps act as
+a collaboration surface where users supervise and interact with agent work through a unified,
+task-based feed.
+
+Prerequisite
+The agent feed shows when at least one agent uses the Power Apps MCP server and is
+supervised in the app. Learn how to Add agents to an app.
+） Important
+This is a preview feature.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so that customers can get early access and
+provide feedback.
+This feature is being gradually rolled out across regions and might not be available
+yet in your region.
+This feature is only available in English language and replaces older Microsoft
+Copilot Studio activity-based agent feed version.
+
+７ Note
+Currently, all users who have access to the Agent Task table can see agent feed items in
+apps. To prevent unintended exposure, don't configure agents to log tasks targeted at
+specific users.
+
+Use agent feed to supervise agents
+The enhanced agent feed is powered by the autonomous agents using Power Apps MCP
+server. Power Apps MCP server tools enable following two core human‑agent collaboration
+patterns:
+1. Autonomous Dataverse record creation and updates with human‑in‑the‑loop approval
+and review.
+2. Agent requests for human assistance and logging tasks for human review. In
+agent‑enabled apps, user focus shifts from doing the work to supervising and prioritizing
+agent‑driven work. Agents help with automations and organize work, ensuring business
+experts remain involved in decision-making and critical actions.
+To allow users to view an agent's activity in the app, the agent must connect to Power Apps
+MCP server. The agent feed appears at the top of the site map in an app.
+
+
+
+You can view the feed in the side pane or expand it to full screen.
+
+
+
+The feed shows a list of agent tasks. Each item can include:
+Title of the task
+Description of the tasks with optional steps
+The agent's name and icon
+A timestamp of when the task was logged
+
+
+
+Activity is grouped into two sections:
+Needs Attention: Shows tasks that are waiting for your input or need your attention.
+These tasks are logged by using the request_assistance or invoke_data_entry MCP tools.
+Completed: Displays all other agent feed tasks, including tasks the user completed and
+tasks the agent completed that are logged for review by using the request_review MCP
+tool.
+By default, each section loads 20 agent tasks and lazy loading is enabled as you scroll. The
+sections are sorted chronologically by the last modification date of each action.
+
+You can filter the feed by agents.
+
+
+
+View the agent feed in a side pane to support multitasking or expand it to full screen for
+focused review.
+
+Take action on agent activity
+Take these actions on tasks under the needs attention tab in agent feed:
+Complete: Move a task from the needs attention section to Completed after completing
+the task the agent couldn't finish. This action is available for the agent tasks logged by
+using the request_assistance mcp tool.
+
+Accept and complete: Move a data entry task from the Needs attention section to
+Completed after reviewing and accepting the data entry suggestions from
+
+invoke_data_entry mcp tool. The Accept and complete button is available inside the
+agent pane associated with the agent feed task.
+
+
+
+Dismiss: Remove a data entry task logged via invoke_data_entry mcp tool from the
+Needs attention section if it's no longer relevant. The Dismiss button is available inside
+the agent pane associated with the agent feed task.
+
+
+
+７ Note
+You can perform all actions either from the main screen in the feed or from the details
+page of a specific action.
+Request_review tasks: Tasks logged via request_review mcp tool don't have any actions
+for the users. They're informational tasks completed autonomously by agent and can be
+found in completed agent feed tab.
+
+Navigation from agent feed item
+Agent feed tasks generated through the request_assistance or request_review MCP tools can
+reference a Dataverse record as a related navigation link in the agent description. This
+reference allows users to easily open and review associated data when interacting with the feed
+item.
+
+
+
+Insights panel
+The default insights panel complements the agent feed by giving users a clear, aggregated
+view of how their agents and users collaborate over time. While the agent feed surfaces
+individual tasks and actions in the moment, the Insights chart provides a historical, high‑level
+representation of those interactions. This representation helps organizations understand the
+
+true patterns of human–agent collaboration, whether users step in to provide missing context,
+guide agents through a complex workflow, complete tasks directly, or monitor agent activity.
+By visualizing these trends over time, organizations gain transparency into how their agentic
+workflows actually operate in practice, strengthening trust, identifying friction points, and
+revealing opportunities to improve system reliability and user experience.
+
+
+
+The insights chart presents aggregated activity across the last 7, 14, or 30 days. It gives
+customers a time‑based snapshot of collaboration between agents and users. Activity is
+categorized into two groups:
+Tasks completed by agents
+Tasks completed by users These at‑a‑glance aggregations offer a concise understanding
+of collaboration volume and balance over time. They help teams quickly assess how work
+is distributed across human and agent participants.
+
+Related information
+Add agents to an app
+Customize Copilot Chat
+
+Last updated on 04/07/2026
+
+Use AI form fill assistance feature in modeldriven apps
+Form fill assistance suggests AI-generated content for fields, making it easier and faster to
+enter data in forms. The suggestions are entirely optional and aren't saved until the user
+explicitly reviews and accepts them.
+
+Prerequisites
+Form fill assistance is available for all apps on the web where the modern, refreshed look
+is turned on.
+Requires at least one of the AI form fill assistance environment feature settings enabled.
+The Allow form fill assistance column property is enabled for the column where form fill
+assistance occurs. For more information, see Create and edit columns in Dataverse using
+Power Apps.
+
+Limitations
+Inside apps, suggestions are provided for fields only in main forms and quick create
+forms. In Microsoft 365 Copilot chat, suggestions are provided for fields based on main
+forms only.
+The currently supported field types inside apps are text, numeric, choice, and date. The
+currently supported field types inside Microsoft 365 Copilot chat are text, numeric, choice,
+date, and lookup.
+Fields that have column security aren't currently supported.
+
+Use form fill assistance in apps
+Form fill assistance in apps (Power Apps and Dynamics 365) provides suggestions for blank
+form fields in three ways:
+1. Based on the user's usage of the app, what information is already available in the form,
+and their frequently used data.
+2. Based on the copied text the user provides through the Smart paste capability.
+3. Based on the file contents the user provides through the Files capability.
+
+The feature generates suggestions only for the open tab. It presents suggestions inline in the
+form.
+
+Suggestions are entirely optional and aren't saved in the app until you accept them. To learn
+more about a suggestion, hover over the field, and specifically hover over the information icon.
+This icon is a citation, and identifies the source of a specific suggestion, such as "Records you
+have updated recently" or "Clipboard".
+
+To accept a specific suggestion, hover over the field, and then select Accept. Alternatively,
+select the field, and then press the Enter key.
+
+To accept all suggestions on the open tab of the form, select Accept all suggestions on the
+notification bar. To clear all suggestions on the open tab of the form, select Clear all
+suggestions.
+
+To replace a suggestion with a different value, select the field and start typing to overwrite the
+suggestion. Alternatively, select the field, press Backspace or Delete, and then start typing.
+If you have unsaved suggestions in a form and try to navigate away, you get a prompt asking if
+you want to discard those suggestions. The suggestions are saved only when you accept them.
+
+You can continue navigating away or stay on the form to review your pending suggestions. You
+can also select Do not show again to avoid being prompted in the future.
+
+To provide feedback about the feature, select the thumbs up or down button on the
+notification bar, and optionally provide detailed comments to help improve the feature.
+
+） Important
+This feature is generally available in Dynamics 365 apps.
+
+This feature is in production ready preview in Power Apps.
+Preview features are available before an official release so that customers can get
+early access and provide feedback.
+Due to high demand, this feature might be unavailable intermittently. If the feature is
+unavailable, try again later.
+
+Use smart paste
+Smart paste is a capability that analyzes the form and the text or image you copy to your
+clipboard. It suggests what text could fill specific fields and provides suggestions inline in the
+form. To use smart paste (preview):
+1. Copy the text or image you want to use to fill in the form.
+2. Select the smart paste icon in the command bar. Alternatively, make sure you don't select
+any specific fields in the form, and then use the regular paste keyboard shortcut (Ctrl+V
+or Cmd+V).
+To use the smart paste (preview) capability, your admin must enable it. For more information,
+see Manage feature settings.
+You can continue to paste directly, without smart paste (preview), into a specific field by
+selecting that field first and then pasting.
+
+Use toolbar and files
+
+Files is a capability that can reason over the form and the file you provide to suggest what text
+could fill specific fields. It provides suggestions inline in the form. Supported file types are .txt,
+.docx, .csv, .pdf, .png, .jpg, .jpeg, and .bmp. Files classified with sensitivity labels aren't
+supported.
+The form fill assist toolbar
+1. Show or hide the form fill assist toolbar by using the show/hide button.
+2. To provide feedback, select the more actions button (...) and give a compliment, report a
+problem, or make a suggestion.
+3. The smart paste button is now located to the left of the toolbar.
+
+To use files:
+1. Use the file selector button to select the file you want to use to fill in the form.
+Alternatively, drag and drop the file in the toolbar.
+2. Hover over the file's source tag to identify which fields are suggested based on the file's
+contents.
+3. To accept all suggestions from the sources listed in the toolbar, select the accept all
+button located to the right of the toolbar. This button identifies the number of open
+suggestions in the form that it accepts.
+4. To clear suggestions from the file, select the clear button in the tag. If the toolbar lists
+multiple sources, clear all suggestions by using the clear all button in the toolbar.
+
+Licensing requirements
+The form fill assistance requires specific user licenses based on the product. If the user doesn't
+have the license, the feature is hidden. This license enforcement will gradually rollout following
+the feature's general availability.
+Power Apps model-driven app: The user must have a Power Apps premium license. For
+details, see the Power Platform License Guide
+
+.
+
+Dynamics 365 model-driven app: The user must have a Dynamics 365 enterprise or
+premium license as outlined in Dynamics 365 License Guide
+
+.
+
+Usage might be subject to service limits or throttling. Microsoft reserves the right to update
+the limits.
+
+Admin control
+The primary admin control for form fill assistance is moving to the Power Platform admin
+center under Copilot > Settings > Power Apps > Data entry. Learn more in Copilot hub. This is
+gradually rolling out over the next coming weeks.
+Smart paste ( FormPredictSmartPasteEnabled ) or form fill assist toolbar
+( FormFileUploadEnabled ) app settings previously available in Power Platform admin center
+Environment > Settings > Product > Features page is moving and you can configure this
+setting at the app level either by using Manage model-driven app settings in the app designer
+or Updating a setting definition.
+
+Use form fill assistance with agents in Microsoft 365
+Copilot (preview)
+[This section is prerelease documentation and is subject to change.]
+With Microsoft 365 Copilot, you have ability to bring app-based experiences to agents. The
+app experience can leverage the form fill assistance right in the chat.
+
+） Important
+This is a preview feature.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so that customers can get early access and
+provide feedback.
+This feature is being gradually rolled out across regions and might not be available
+yet in your region.
+
+７ Note
+To use this capability, you need to set up an apps agent in Microsoft 365 Copilot.
+When you interact with agents in Copilot, agents can surface forms from apps directly in the
+conversation. Form fill assistance helps populate these forms by suggesting values based on
+relevant context, such as existing data you have access to from emails, chats, or any document.
+The suggestions appear inline in the chat-based form and you can review or edit them before
+submission. All suggestions are optional and aren't saved until you explicitly accept and save
+the input.
+After submission, the data is saved to the connected app and is available, just as if you
+complete the form directly in the app.
+
+Related information
+Manage model-driven app settings in the app designer
+Create and edit columns in Dataverse using Power Apps
+Responsible AI FAQ about form fill assistance
+Complete forms quickly with model-driven apps (video)
+
+Last updated on 04/21/2026
+
+Find data in a view with AI
+Users can quickly find, filter, and sort their data by using natural language, so they don't need
+to use complicated advanced filters. If your administrator turns on Natural Language Grid and
+View Search, you see the natural language search box.
+
+Natural language search in apps
+Use smart grid natural language search to ask data-related questions in natural language. For
+example, request “cases with high priority with overdue follow-up by date” to filter your view
+and display only those relevant cases.
+
+Licensing requirements
+Natural language grid and view search requires specific user licenses based on the product. If
+the user doesn't have the license, the feature is hidden. This license enforcement will gradually
+rollout following the feature's general availability.
+Power Apps model-driven app: The user must have a Power Apps premium license. For
+details, see the Power Platform License Guide
+
+.
+
+Dynamics 365 model-driven app: The user must have a Dynamics 365 enterprise or
+premium license as outlined in Dynamics 365 License Guide
+
+.
+
+Usage might be subject to service limits or throttling. Microsoft reserves the right to update
+the limits.
+
+Admin control
+The primary admin control for Natural Language Grid and View Search is moving to the Power
+Platform admin center under Copilot > Settings > Power Apps > Data exploration. Learn
+more in Copilot hub. This is gradually rolling out over the next coming weeks.
+
+Natural language grid and view search app setting ( NLGridSearchSetting ) previously available
+in Power Platform admin center Environment > Settings > Product > Features page is moving
+and you can configure this setting at the app level either by using Manage model-driven app
+settings in the app designer or Updating a setting definition.
+
+Explore data with agents in Microsoft 365 Copilot
+(preview)
+[This section is prerelease documentation and is subject to change.]
+With Microsoft 365 Copilot you have the ability to bring app-based experiences to agents, the
+app experience can also use the AI assisted search in the grid view.
+） Important
+This is a preview feature.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so that customers can get early access and
+provide feedback.
+This feature is being gradually rolled out across regions and might not be available
+yet in your region.
+
+７ Note
+To use this capability, you need to set up an apps agent in Microsoft 365 Copilot.
+When users interact with agents in M365 Copilot, the agents can search and retrieve data from
+apps view directly within the conversation. By using natural language, users can find, filter, and
+review app data without switching to the app experience. Natural language search interprets
+the user's request and applies the appropriate filters, sorting, and text search against the
+underlying view data. The agent returns the results in Copilot chat, presented in a structured,
+tabular format that reflects the view data. Users can continue to work with the returned results
+in the conversation, iterating with natural language to refine the output until it reflects the
+exact results they’re looking for.
+
+Supported features
+Filtering of records
+Sorting
+Text search
+
+Known limitations
+These capabilities aren't supported:
+Query aggregation
+Query grouping
+
+Adding columns
+
+Considerations
+After you run a query, check the generated filter tags to make sure that the filter
+conditions were correctly interpreted from your natural language query. If any part of
+your query is missing from the filter tags, the results aren't filtered by that condition.
+If search doesn't give the desired results, consider modifying your query by:
+Referring to data columns by the names shown in the grid header.
+Separating multiple conditions with commas or periods.
+In model-driven app for grids, if your search string has two words or fewer, the search
+does a text search. To do a natural language search, use more than two words. To do a
+text search with more than two words, put the search term in single or double quotes.
+This behavior doesn't apply to Copilot chat.
+
+Last updated on 04/21/2026
+
+Visualize data in a view with AI
+Chart visualization helps you visualize the data in the view as a chart. This visualization makes it
+easy to understand trends, patterns, and relationships in your data. The visualization is
+interactive, based on the visible columns in the view, and you can personalize it to support
+further data exploration.
+
+Prerequisites
+All apps on the web support chart visualization when the modern, refreshed look is turned
+on.
+See License requirements and Admin control for additional settings.
+
+Visualize data in a view
+When you navigate to a grid page, you can see the Visualize option on top of the page.
+
+
+
+When you select Visualize, the chart pane opens next to the grid, complementing the table of
+rows. If the table has system or personal charts, the default chart for the table appears. If the
+table doesn't have charts, AI generates a visualization for the view based on the visible columns
+and filters. The visualization is a chart that aggregates the data in the view.
+
+
+
+
+
+If chart visualization generates a visualization for the view, you can edit the chart by changing
+the chart type, the columns that are visualized, or both. If you add or remove columns from the
+view, chart visualization regenerates the chart based on the updated set of columns for the
+visualization. If you add or remove filters, chart visualization refreshes the chart without
+changing the visualization. The asterisk (*) next to the chart name shows that the chart isn't
+saved yet.
+
+Select the three dots in the upper-right corner of the chart pane, and then select Save As to
+save the chart.
+
+Chart visualization automatically populates the chart name and description, but you can edit
+them to suit your needs. Select Save to save the chart. You access the saved chart by using the
+chart switcher in the chart pane. The Visualize icon next to the chart name indicates that it's an
+AI-generated chart, helping you distinguish it from other charts.
+
+To manage a personal chart, select the chart in the chart switcher, and then select the three
+dots in the upper-right corner of the chart pane. Select an option to delete, assign, or share the
+chart with others in your organization.
+
+Hover over the charts to examine data points or select chart elements to drill into the data. The
+grid filters rows automatically to match the selected area of the chart. Selecting the same area
+of the chart again toggles the selection and removes the filter.
+７ Note
+Charts created by using the legacy chart designer use the same styling as AI-generated
+charts. To learn how to turn off the styling update for charts created by using the legacy
+chart designer, see Manage feature settings.
+
+Visualize data in a view with natural language
+Use natural language prompts in the search bar on the grid page to visualize data in the view.
+Here are example prompts to help you understand the types of requests supported.
+Visualize data as a bar chart.
+
+Customers by location. Use the prompt [table name] by [column] generically depending on
+the table you're visualizing.
+Trend of orders created during this fiscal year.
+Visualize average revenue per month as a column chart.
+Visualize high-priority cases as a chart.
+Visualize data as a bubble chart.
+
+Chart pane
+
+1. Chart title: AI-generated title for the chart based on the data and columns visualized.
+2. Chart switcher: Select and manage saved charts. Use it to switch between different charts,
+including AI-generated and personal charts, for the current view.
+3. Create new chart with AI: AI-generated chart for the visualization of this view.
+4. Commands to manage saved chart: The Commands to manage saved chart appear as
+three dots in the top-right corner of the chart pane. They provide options to perform
+actions on saved charts.
+
+5. Expand: Select Expand to expand the chart to full screen for a better view of the chart
+area.
+6. Close: Select Close to close the chart pane.
+7. Chart selector: List of 11 supported chart types – Pie, Donut, Bar, Column, Clustered Bar,
+Stacked Bar, Clustered Column, Stacked Column, Line, Histogram, and Bubble chart.
+8. Edit chart columns: Customize the chart by selecting which columns from the view are
+visualized.
+9. Copy: Select Copy to copy the chart as a PNG file to the clipboard.
+10. Feedback: Select Thumbs up or Thumbs Down to provide feedback about the feature.
+To provide feedback about the feature, select the thumbs up or down button on the chart
+pane, and provide detailed comments to help improve the feature.
+
+Licensing requirements
+The visualize data in a view requires specific user licenses based on the product. If the user
+doesn't have the license, the feature is hidden. This license enforcement will gradually rollout
+following the feature's general availability.
+Power Apps model-driven app: The user must have a Power Apps premium license. For
+details, see the Power Platform License Guide
+
+.
+
+Dynamics 365 model-driven app: The user must have a Dynamics 365 enterprise or
+premium license as outlined in Dynamics 365 License Guide
+
+.
+
+Usage might be subject to service limits or throttling. Microsoft reserves the right to update
+the limits.
+
+Admin control
+The primary admin control for visualize data in a view is moving to the Power Platform admin
+center under Copilot > Settings > Power Apps > Data exploration > Chart Visualization.
+Learn more in Copilot hub. This is gradually rolling out over the next coming weeks.
+Allow AI to generate charts to visualize the data in a view app setting
+( NLChartDataVisualizationSetting ) previously available in Power Platform admin center
+Environment > Settings > Product > Features page is moving and you can configure this
+setting at the app level either by using Manage model-driven app settings in the app designer
+or Updating a setting definition.
+
+Related information
+Manage feature settings
+Responsible AI FAQ about Copilot visualizations on a view
+
+Last updated on 04/21/2026
+
+Use row summaries in model-driven apps
+The Row summary feature in apps provides users with a concise, AI-generated overview of key
+details about a record. Summaries help users quickly understand essential information without
+manually scanning fields, related records, or activity timelines. You see summaries as a
+paragraph or bullet points, so they're easy to read.
+Summaries can be accessed in two ways:
+From the Insights bar at the top of main forms.
+From view pages by selecting the inline Summary action in the grid, which opens the
+summary for a record in a modal popup.
+The feature enhances user efficiency by delivering context-rich insights directly within the form.
+Users can interact with summaries to copy content, regenerate updated information, and
+provide feedback on their relevance, improving both usability and accuracy.
+
+Prerequisite
+Each of the following settings must be turned on to see the row summaries for apps.
+The AI insight cards toggle is turned on for the Power Platform environment.
+
+Feature details
+Accessing record summaries
+View the record summary from a form or view when a table is configured to display summaries.
+Forms: When viewing a record in a main form, the summary appears in the insights bar at
+the top of the main form.
+
+
+
+７ Note
+You see the record summary after you save a new record. If you haven't saved the record,
+the summary area stays hidden.
+Views: When browsing records in a view, select the inline Summary action next to a
+record to open the summary in a modal popup.
+
+
+
+Interacting with summaries
+Here are some actions you can take with summaries:
+Copy: Select to copy the summary content directly to your clipboard for easy sharing or
+documentation. The summary copies in markdown format, so when you paste it into
+other applications, the formatting might not appear exactly as it appears in the app.
+Feedback: Use the thumbs up or thumbs down icons to rate the summary's usefulness.
+Your feedback helps improve future summaries so they better meet your expectations
+and needs.
+
+Refresh (forms only): Select the Refresh button to regenerate the summary so it reflects
+the latest updates to the record.
+Expand/Collapse (forms only): In forms, the insights bar is collapsed by default and shows
+a one-line peek of the summary. Expand the insights bar to see more details.
+
+
+
+Licensing requirements
+The row summary feature requires specific user licenses based on the product. If the user
+doesn't have the license, the feature is hidden. This license enforcement will gradually rollout
+following the feature's general availability.
+Power Apps model-driven app: The user must have a Power Apps premium license. For
+details, see the Power Platform License Guide
+
+.
+
+Dynamics 365 model-driven app: The user must have a Dynamics 365 enterprise or
+premium license as outlined in Dynamics 365 License Guide
+
+.
+
+Usage might be subject to service limits or throttling. Microsoft reserves the right to update
+the limits.
+
+Admin control
+The primary admin control for row summary is moving to the Power Platform admin center
+under Copilot > Settings > Power Apps > Summary > Row summaries. Learn more about the
+Copilot hub here.
+The AI insight cards app setting (EnableFormInsights) for main forms, previously available in
+Power Platform admin center Settings > Product > Features is being moved and you can
+configure this setting at the app level either by using the Model App Designer Setting or
+Solution Explorer App Settings.
+
+Related information
+Manage feature settings
+Configuring summaries for tables
+
+Last updated on 04/21/2026
+
+Use AI-generated timeline highlights
+If timeline highlights are enabled on your app, Copilot creates an AI-generated, bulleted list
+that populates at the top of the timeline. You can use timeline highlights to quickly get caught
+up on a record's status.
+The highlights include a record's main activities, such as details about who you or the previous
+user interacted with, the reported issue, and actions taken to try to resolve the issue.
+You can copy the timeline highlights by selecting Copy.
+
+） Important
+This feature is only available with Power Platform environments with Dataverse that have
+the Enable Dynamics 365 apps setting enabled.
+
+Last updated on 02/04/2026
+
+Use Copilot case summary in model-driven
+apps
+07/08/2025
+
+Copilot case summaries help users quickly understand the context of a case and resolve
+customer issues more efficiently. The case summary includes key information such as the case
+title, customer, subject, product, priority, case type, and description.
+
+View case summary card
+Copilot case summary is enabled by default for all model-driven apps that use the incident
+table. When you open a case record, the case summary card appears. When you open the case
+or custom record in a new session the summary card is expanded by default until you collapse
+it for the first time. The card then remains in collapsed state
+Based on the case form configured, users see the summary either on the top of the case form
+or within the form.
+７ Note
+Users won't see case summary cards on case forms
+By default, if their organization has opted out of the automatic enablement of
+Copilot feature.
+If case summary is disabled in the experience profile.
+Users can see the case form displayed on the top of all case forms except Case for
+Interactive experience, Enhanced full case form, Case, and Case for Multisession
+experience forms. Users can copy the summary, refresh it, regenerate the summary, and
+provide feedback.
+
+Users can see the case form displayed within the case form for Case for Interactive
+experience, Enhanced full case form, Case, and Case for Multisession experience forms.
+Users can copy the summary, translate the summary into multiple languages, refresh it,
+regenerate the summary, and provide feedback.
+
+If custom record summary is enabled, users see the custom record displayed on top of
+the form by default.
+
+Supervise agents in model-driven apps
+with agent feed (preview)
+[This article is prerelease documentation and is subject to change.]
+） Important
+Starting May 01, 2026, agent feed will support those agents only that use the Power Apps
+MCP server to create tasks. Make sure that your agents are properly onboarded to the
+Power Apps MCP server by this date to continue using the agent feed. If your agents
+don't use the Power Apps MCP server, the agent feed won't appear in your model-driven
+app.
+Agent feed enables human-agent collaboration in apps by surfacing agent-generated,
+actionable tasks that users can review, validate, and complete. By using agent feed, apps act as
+a collaboration surface where users supervise and interact with agent work through a unified,
+task-based feed.
+
+Prerequisite
+The agent feed shows when at least one agent uses the Power Apps MCP server and is
+supervised in the app. Learn how to Add agents to an app.
+） Important
+This is a preview feature.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so that customers can get early access and
+provide feedback.
+This feature is being gradually rolled out across regions and might not be available
+yet in your region.
+This feature is only available in English language and replaces older Microsoft
+Copilot Studio activity-based agent feed version.
+
+７ Note
+Currently, all users who have access to the Agent Task table can see agent feed items in
+apps. To prevent unintended exposure, don't configure agents to log tasks targeted at
+specific users.
+
+Use agent feed to supervise agents
+The enhanced agent feed is powered by the autonomous agents using Power Apps MCP
+server. Power Apps MCP server tools enable following two core human‑agent collaboration
+patterns:
+1. Autonomous Dataverse record creation and updates with human‑in‑the‑loop approval
+and review.
+2. Agent requests for human assistance and logging tasks for human review. In
+agent‑enabled apps, user focus shifts from doing the work to supervising and prioritizing
+agent‑driven work. Agents help with automations and organize work, ensuring business
+experts remain involved in decision-making and critical actions.
+To allow users to view an agent's activity in the app, the agent must connect to Power Apps
+MCP server. The agent feed appears at the top of the site map in an app.
+
+
+
+You can view the feed in the side pane or expand it to full screen.
+
+
+
+The feed shows a list of agent tasks. Each item can include:
+Title of the task
+Description of the tasks with optional steps
+The agent's name and icon
+A timestamp of when the task was logged
+
+
+
+Activity is grouped into two sections:
+Needs Attention: Shows tasks that are waiting for your input or need your attention.
+These tasks are logged by using the request_assistance or invoke_data_entry MCP tools.
+Completed: Displays all other agent feed tasks, including tasks the user completed and
+tasks the agent completed that are logged for review by using the request_review MCP
+tool.
+By default, each section loads 20 agent tasks and lazy loading is enabled as you scroll. The
+sections are sorted chronologically by the last modification date of each action.
+
+You can filter the feed by agents.
+
+
+
+View the agent feed in a side pane to support multitasking or expand it to full screen for
+focused review.
+
+Take action on agent activity
+Take these actions on tasks under the needs attention tab in agent feed:
+Complete: Move a task from the needs attention section to Completed after completing
+the task the agent couldn't finish. This action is available for the agent tasks logged by
+using the request_assistance mcp tool.
+
+Accept and complete: Move a data entry task from the Needs attention section to
+Completed after reviewing and accepting the data entry suggestions from
+
+invoke_data_entry mcp tool. The Accept and complete button is available inside the
+agent pane associated with the agent feed task.
+
+
+
+Dismiss: Remove a data entry task logged via invoke_data_entry mcp tool from the
+Needs attention section if it's no longer relevant. The Dismiss button is available inside
+the agent pane associated with the agent feed task.
+
+
+
+７ Note
+You can perform all actions either from the main screen in the feed or from the details
+page of a specific action.
+Request_review tasks: Tasks logged via request_review mcp tool don't have any actions
+for the users. They're informational tasks completed autonomously by agent and can be
+found in completed agent feed tab.
+
+Navigation from agent feed item
+Agent feed tasks generated through the request_assistance or request_review MCP tools can
+reference a Dataverse record as a related navigation link in the agent description. This
+reference allows users to easily open and review associated data when interacting with the feed
+item.
+
+
+
+Insights panel
+The default insights panel complements the agent feed by giving users a clear, aggregated
+view of how their agents and users collaborate over time. While the agent feed surfaces
+individual tasks and actions in the moment, the Insights chart provides a historical, high‑level
+representation of those interactions. This representation helps organizations understand the
+
+true patterns of human–agent collaboration, whether users step in to provide missing context,
+guide agents through a complex workflow, complete tasks directly, or monitor agent activity.
+By visualizing these trends over time, organizations gain transparency into how their agentic
+workflows actually operate in practice, strengthening trust, identifying friction points, and
+revealing opportunities to improve system reliability and user experience.
+
+
+
+The insights chart presents aggregated activity across the last 7, 14, or 30 days. It gives
+customers a time‑based snapshot of collaboration between agents and users. Activity is
+categorized into two groups:
+Tasks completed by agents
+Tasks completed by users These at‑a‑glance aggregations offer a concise understanding
+of collaboration volume and balance over time. They help teams quickly assess how work
+is distributed across human and agent participants.
+
+Related information
+Add agents to an app
+Customize Copilot Chat
+
+Last updated on 04/07/2026
+
+Use Copilot chat in model-driven apps
+Copilot chat for model-driven apps in Power Apps is a next-generation AI assistant that helps
+you gain insights into the data in your apps through conversations in natural language. Copilot
+chat helps you boost your productivity through AI-powered insights and navigation assistance.
+） Important
+This feature is generally available in Dynamics 365 apps, but remains a preview
+feature in Power Apps.
+Preview features aren't meant for production use and might have restricted
+functionality These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so that customers can get early access and
+provide feedback.
+
+７ Note
+Copilot chat in Power Apps is a preview feature that will be deprecated for model-driven
+apps in environments not enabled for Dynamics 365 apps, starting January 2026. We
+recommend switching to Microsoft 365 Copilot chat. During the transition period, makers
+can enable either one or both chat experiences. For more information, see Deprecation of
+Copilot chat in model-driven apps
+
+Prerequisites
+An administrator must enable Copilot chat in your application before it becomes visible in your
+app. More information: Add Copilot for app users in model-driven apps.
+
+Copilot pane
+After Copilot chat is enabled, you can access it through the Copilot icon near the upper-right
+corner of the page or through the Copilot icon at the right side of the command bar. You can
+expand or collapse the Copilot pane as you want. By default, the pane is expanded after
+Copilot chat is enabled.
+
+Use Copilot to ask questions
+Copilot chat in model-driven apps can answer questions about the Dataverse table data in the
+app. It can also help you navigate the app. For example, if you enter Navigate to challenges,
+Copilot automatically opens the relevant page in the app.
+
+Copilot chat suggested questions
+To help you get started, Copilot chat can suggest questions for you to ask. You can edit and
+personalize these questions (also known as prompts) based on your app and the type of
+insight that you need from Copilot.
+To view more suggested questions, select View prompts in the Copilot pane. Many of the
+suggested questions have placeholders that you must replace with appropriate text to
+complete the question.
+
+Use the record picker
+When you ask a question, you can use the record picker to select the object of your question.
+The record picker helps Copilot chat understand the context of your question and provide a
+more accurate response.
+Enter a slash (/) to open the record picker, and then enter the name of the record. Select the
+record that you want, and complete the question to make it meaningful. Finally, submit the
+question to Copilot to view the response.
+For example, you ask Copilot "What are the details for Contoso?" Many accounts might have
+"Contoso" in their name, such as Contoso, Inc., Contoso Co., and Contoso NW. What you really
+want are the details for Contoso, Inc. The record picker helps Copilot scope the question to the
+right record for a more relevant and accurate response.
+
+
+
+The record picker is available in Dynamics 365 Sales and Power Apps model-driven apps.
+７ Note
+By using the record picker, you increase the likelihood that Copilot chat can
+understand your question and therefore respond with an accurate answer.
+The record picker requires that Dataverse search is enabled and configured for the
+type-ahead search capability.
+
+Provide feedback
+Unless your admin turned off the feedback feature, every Copilot response includes a Like
+button ("thumbs up" icon) and a Dislike button ("thumbs down" icon). For each response, you
+can select one of these icons to provide feedback that helps us improve Copilot chat. Select the
+"thumbs up" or "thumbs down" icon as appropriate. Optionally, provide feedback in your own
+words about what you liked or didn't like about the response. When you're done, select
+Submit.
+
+Last updated on 01/08/2026
+
+Basic navigation in a model-driven app
+Article • 01/16/2025
+
+This introduction explains how to find and open an app, and how to work with its
+common user interface elements including lists, forms, and business processes.
+
+Navigating among apps, areas, and tables
+A model-driven app is built out of applications (apps), areas, and tables.
+Apps provide a collection of functionalities for accomplishing a specific class of
+activity, such as managing your accounts and contacts. Use the app-selector menu
+to navigate between the apps that are available to your organization.
+A work area is a subdivision of an app, dedicated to a specific feature. Each work
+area provides a targeted collection of tables for working in that area. In some
+cases, the same table appears in more than one area (or even more than one app).
+The Contact and Account tables, for example, appear in various apps and work
+areas. Use the work-area menu to navigate between work areas for your current
+app.
+Tables represent a specific type of data, such as contacts or accounts. Tables use a
+structured data format, which defines the collection of columns available to the
+table. Each table consists of a collection of individual rows. For example, for the
+Contact table, each row describes a single person, and each row includes a
+collection of columns such as first name, last name, and email address. Tables
+normally present two views: a list view, which is typically a table listing available
+rows; and a form view, which shows all available data and settings for a single row.
+Use the side navigator to move between tables in your current work area.
+
+User info and sign out
+Select the user menu to view your account information or sign out. Go to your account
+page by selecting the View account hyperlink.
+
+Move between apps
+Use the app-selector menu to switch between apps.
+1. Select the current app name.
+2. On the Apps page, select an app. You'll only see apps for your organization.
+
+Move between pages and rows
+It's easy to get around and get back to your favorite or most-used rows. The following
+illustration shows the primary navigation elements.
+
+Legend
+1. Click to change app: Select the current app name to change to a different app.
+2. Collapse/expand site map: Select this to collapse the navigator to allow more
+room for the main part of the page. If the navigator is already collapsed, select this
+button to expand it again.
+3. Recent: Expand this entry to view a list of rows you were recently using. Select a
+row here to open it. Select the push-pin icon next to a row listed here to add it to
+your pinned rows. This is limited to displaying the last 10 rows of pages most
+recently loaded across apps for the user within this organization.
+4. Pinned: Expand this entry to view and open your favorite pinned rows. Use the
+Recent list to add rows here. Select the remove-pin icon next to a row listed here
+to remove it from this list. The number of pinned rows displayed is limited to 25,
+but no more than 15 rows from a single table are displayed.
+5. Page navigation: This area lists each table and dashboard page available for the
+current work area. Select any entry here to open the named dashboard or list view
+for that table.
+
+７ Note
+When a user sets a dashboard as default (via the Set as default action in the
+command bar), all page navigation to dashboards will take the user to the
+default dashboard, which may be a different dashboard than the named
+dashboard the user selected.
+6. Collapsible groups: Your app maker can enable collapsible groups. For information
+on how to customize the navigation bar, see Overview of the model-driven app
+designer.
+If your screen is zoomed in too much or is narrow, then you won't see your current app
+name which lets you change apps. To access the change app button, select Site map >
+Apps.
+
+Hide or show the Home, Pinned, Recent, and collapsible
+groups
+Your site map might look different if it's been customized. Your app maker can
+customize the navigation bar to show or hide the Home, Recent, Pinned buttons in the
+site map. An app maker can also make groups collapsible. For information on how to
+customize the navigation bar, see Overview of the model-driven app designer.
+
+Area switcher
+In the left-hand navigation pane, the area switcher appears at the bottom left only when
+a single model-driven app has more than one area in the sitemap definition.
+Open this menu to move to another work area. The current work area is named here.
+
+Go back
+Use the back button for form, view, and dashboard pages on the command bar to go
+back to the previous page.
+
+To go back to the previous page, select the Go back button.
+
+Working with list views
+Usually, when you first open a table, you'll see the list view, which shows a list of rows
+belonging to that table, formatted as a table. For example, if you open the Products
+table, you'll see a list of accounts.
+
+Legend:
+1. Go back: Select to go back to the previous page.
+2. Select rows: Select one or more rows by placing a check mark in this column.
+Depending on where you're working, you might be able to apply a single
+operation to all the selected rows at once by using buttons in the command bar.
+
+Note, when you use the Email a link command on the command bar you can only
+select up to 10 rows to send via email.
+3. Open a row: Select any row in the list to open its row view, which shows all the
+details about the row. Usually you select from the Name column to open a row
+from the current table. Some tables provide links to rows from related tables in
+other columns (such as a related contact).
+4. Sort or filter the list: Select to sort the list by values in that column or filter the list
+by values in that column. An arrow in the column heading indicates which column
+is being sorted and in which direction.
+5. Open advanced filtering panel: See which filters are applied to the current view
+and add or modify view filters.
+6. Command bar: Use the commands in the command bar to operate on rows in the
+list and do related actions. Some commands (such as Delete) require that you first
+select one or more target rows by placing a check mark in the leftmost column,
+while others operate on the entire list. You can export the list to an Excel workbook
+(possibly based on a template), open charts and dashboards, and more, depending
+on the type of rows you're working with.
+7. Search the view: Enter text in the search column above the list to show only those
+rows in the current view that contain your text.
+8. Jump bar and paging: Select a letter to show only those rows whose names start
+with that letter. If the list contains more rows than can be shown on one page, use
+the paging arrows at the bottom of the list to move forward and backward
+through the pages.
+
+Working with row views
+Row views show all the details about a single row and sometimes also provide special
+features for working with it. Usually you'll open a row view by selecting a row that
+appears in a list view, but you can also open a row view by following a link from a
+related row.
+
+Legend:
+1. Tabs: Most row views are divided into tabs. Each tab provides a collection of
+related columns from the row. When tabs are available, they're listed below the
+row name. Select any tab name to go to that tab. The current tab is shown
+underlined.
+2. Related: Nearly all types of rows show a Related tab after you've saved them at
+least once. This tab is actually a drop-down list that you can use to find other types
+of rows that use or reference the displayed row. When you choose a table name
+from the Related drop-down list, a new tab named for that table opens, showing a
+list of all related rows of that type. The Related tab remains available, and you can
+still use it to find other types of rows that reference the current one.
+3. Command bar: Use the commands in the command bar to operate on the current
+row or perform a task related to the row. The available commands vary based on
+the row type, but you can typically use the command bar to save your changes,
+delete the row, refresh the page, email a link to the row, reassign the row owner, or
+export the row by using a Word template.
+4. Heading bar: Some row views display a few especially important columns in the
+heading bar, opposite the row name. These are typically columns that are
+fundamental to working with rows of the current type (such as a row name or row
+owner).
+5. View and edit all column values: In the main body of the row view, you'll find all of
+the columns related to the current tab, form view, and row type. Columns marked
+with a red asterisk are required, and you can't save the row without their having
+valid values. Columns marked with a blue plus sign are especially important or
+
+recommended, but aren't strictly required. Columns showing a lock icon are read
+only and can't be edited.
+
+Row set navigation
+Navigate through multiple rows by using preset views and queries. The row-focused
+navigation improves productivity by allowing users to jump from row to row in the list
+and easily navigate back without losing their working list.
+The number of rows that you see in the row set navigation pane is based on the number
+of rows that your system administrator has defined for the subgrid.
+1. To use row set navigation, open a page with a list of rows.
+2. Open a row and then select Open Row Set
+
+and then select a row from the list.
+
+Reference panel
+The reference panel is a great way to get work done without moving away from the
+screen you're on. You can look up other related items—such as reviews or reservations
+for a product—within the context of the row you're viewing, without having to navigate
+to other screens.
+
+Watch the How to use the Reference panel in the Customer Service Hub
+
+video to learn
+
+more about the reference panel.
+
+App message bar
+The app message bar shows three types of notifications: informational, warning, and
+error.
+When you select the error notification, it will take you to the column on the form where
+the error occurred.
+
+Legend:
+1. Information notifications
+2. Warning notifications
+3. Error notifications
+
+: The notification is informational.
+: The notification is a warning.
+
+: The notification is an error.
+
+Multiple notifications
+If there's only one notification, you'll see a single line. If there are multiple notifications,
+you'll see chevron button. Select the chevron to view each message.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+In-app notifications in model-driven
+apps
+Article • 12/13/2022
+
+In-app notifications allow you to receive notifications in the notification center of your
+model-driven app. Notifications are stored in the notification center until you dismiss
+them or when they expire. By default, notifications expire in 14 days but your system
+administrator can modify the expiration date.
+You only see notifications when you're using an app. That's when the system runs a
+check and displays any new notification. Notifications are at the organization level so
+you'll see notifications in the app you're using for all apps in your environment.
+
+Notification center
+The notification bell icon shows the count of new notifications. When you open the
+notification center the count is cleared. To access your notifications, select the bell
+icon on the nav bar.
+
+To dismiss and delete a notification, select the close X button on a notification. Or,
+select Dismiss all to dismiss and delete all notifications.
+
+Toast notifications
+Toast notifications appear temporarily to the right side of your app. When multiple
+notifications appear, they are stacked. When there's more than three toast notifications
+at the same time, you'll get a toast letting you know that there's more notifications. You
+can use the F2 shortcut key to access the notification toasts.
+
+Your system administrator can enable or disable toast notifications. If toasts are enabled,
+you can turn them off at a user level. Regardless of the toast being shown, all
+notifications can be accessed from notification center.
+1. To enable or disable toast notifications in the notification center, select Settings
+
+2. To enable or disable toast notifications, do one of the following:
+To enable toast notifications: Move the toggle to On and then enter how
+many seconds the toast will show.
+To disable toast notifications: Move the toggle to Off.
+
+3. When you're done, select Save.
+
+See also
+In-app notifications on Power Apps mobile
+Send in-app notifications within model-driven apps
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+View your user information
+Article • 10/22/2024
+
+The user information page displays useful information about you and your organization. On
+the page you can view your contact information, your security role, and information about your
+organization. Depending on your security role, you might be able to make changes to your
+user profile.
+1. Open an app and in the upper-right corner of the screen, select Settings
+
+>
+
+Personalization Settings.
+
+2. On the General tab, scroll down to the bottom and select the user information link.
+
+3. On the user information page, select the different tabs, such as Summary, Details, or
+Administration to see details about your profile.
+
+Set personal options
+Article • 11/27/2023
+
+Change your display settings in an app to suit your preferences. For example, you can
+choose the page that you want to see as soon as you sign in to the app. You can also
+personalize many other options such as language, currency, and time zone.
+７ Note
+You may need to refresh your app twice for some changed settings to take effect.
+
+To set personal options
+1. In the upper-right corner of the screen, select Settings
+
+> Personalization
+
+Settings.
+2. Fill in the information, as required.
+3. When you’re done, select OK.
+
+General tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Select your home page
+and settings for Get
+Started panes
+Default Pane
+
+Select the default home pane (page) that you want to see when you
+sign in. By default, the Default based on user role option is selected,
+which shows the default pane based on the app you are using. This
+option does not apply when you sign in using the Power Apps mobile
+app.
+
+Default Tab
+
+Set the number of rows
+shown per page in any
+list of rows
+
+Select the default tab that you want to see for the selected default
+pane. For example, select the Accounts tab for the Service pane.
+
+Options
+
+Description
+
+Rows Per Page
+
+Select the maximum number of rows you want to see in a list on a
+page. You can set a value from 25 to 250. A smaller number of rows
+per page is recommended, as it will help maximize grid performance.
+Selecting a larger number of rows per page can negatively impact grid
+performance.
+
+Select the default mode
+in Advanced Find
+Advanced Find Mode
+
+By default, every time you open the Advanced Find Mode dialog box,
+the query details are hidden. To see the query details every time, select
+Detailed.
+
+Select the default
+search experience
+Default Search
+
+Select your default search experience. For more information, see
+
+Experience
+
+Compare search options
+
+Set the time zone you
+are in
+Time Zone
+
+Select the time zone that you want to display for your region.
+
+Select a default
+currency
+Currency
+
+Choose the default currency value to use in financial transactions.
+Select the Lookup button to search for a currency.
+
+Support high-contrast
+settings
+Enable high contrast
+
+Select this check box to enable high-contrast levels in your app
+display. Tip: Set this option if you are using high contrast settings in
+your browser or operating system.
+
+Set the default
+country/region code
+Enable country/region
+
+Select this check box to enable the default calling code for your
+
+code prefixing
+
+region.
+
+Country/Region Code
+
+Enter the value of your region’s calling code in the text box. For
+
+Prefix
+
+example, enter +1 for the United States.
+
+View your user
+
+Select this link to view details about you. These details are displayed to
+
+information
+
+your entire organization and include your contact information and
+security role. For more information, View your user profile.
+
+Synchronization tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Synchronize Dynamics 365 items
+with Outlook or Exchange
+filters
+
+Choose the rows to synchronize between Dynamics 365
+and Dynamics 365 for Outlook or Exchange (using
+server-side synchronization).
+
+synchronized columns
+
+View the columns that are synchronized between
+Dynamics 365 and Dynamics 365 for Outlook so you can
+see where the data is coming from.
+
+Manage your offline filters and take
+your information offline in Dynamics
+365 for Outlook
+offline filters
+
+Choose a subset of Dynamics 365 data that you want to
+work with when you go offline with Dynamics 365 for
+Outlook.
+
+Activities tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Default view
+Default Calendar
+
+Select the default view for your calendar.
+
+Start your default work hours
+
+Select your default start and end time for your work hours.
+
+Formats tab options
+ﾉ
+
+Options
+Current
+Formats
+
+Description
+
+Expand table
+
+Options
+
+Description
+
+Customize
+
+Choose this option to add a new region and formats.
+
+Format preview
+
+Shows the current region and its formats for Number, Currency, Time, and
+Date.
+
+Email Templates tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Create and modify
+personal email
+templates
+New
+
+Create an email template with custom values (such as a date or
+signature), so you don’t have to enter the same information,
+repeatedly, when you send an email.
+On the command bar, select New and enter values for the template.
+
+Email Signatures tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Create and modify
+personal email signatures
+New
+
+Create an email signature to save time and be consistent in your
+responses. The owner of an email signature can be a user or a team.
+On the command bar, select New and enter values for the signature.
+
+Email tab options
+ﾉ
+
+Expand table
+
+Options
+
+Description
+
+Select if other users
+can send emails for you
+Allow other users to
+send email on your
+behalf.
+
+Select this option to allow other users of Dynamics 365 to send email
+on your behalf. Caution: If you select this option, other users can send
+email on your behalf with or without your consent. Your email name
+will appear as the sender.
+
+Select the email
+messages to track in
+Dynamics 365
+Track
+
+Select the email messages that you want to automatically track in
+Dynamics 365.
+Options:
+- All Email messages
+- Email messages in response to Dynamics 365 email
+- Email messages from Dynamics 365 Leads, Contacts and Accounts
+- Email messages from Dynamics 365 rows that are email enabled
+
+Configure Folder
+Tracking Rules
+
+Set up folders to automatically track incoming email.
+
+Automatically create
+rows in Dynamics 365
+Create
+
+Select this option to allow Dynamics 365 to create leads or contacts
+automatically from the information in tracked email messages.
+
+Show emails as
+conversation on
+
+Select this to list emails in a conversation thread, the way many email
+applications work when viewing emails in a conversation.
+
+Timeline
+View your Mailbox
+
+Select this link to see your mailbox details.
+
+Privacy tab options
+７ Note
+This tab isn’t available if your system administrator has selected the privacy
+preference for the entire organization in System Settings. Talk to your administrator.
+
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Select your error notification
+preference
+Options:
+
+Specify what you want Dynamics 365 to do when an error
+
+- Ask me for permission to send
+an error report to Microsoft.
+- Automatically send report to
+Microsoft without asking me for
+permission.
+- Never send an error report to
+Microsoft about Dynamics 365.
+
+occurs. Based on your selection, the error reports are shared
+with and used by Microsoft for product improvements.
+We recommend that you send the error reports to Microsoft so
+that Microsoft can use the information for product
+improvements.
+
+Languages tab options
+ﾉ
+
+Options
+
+Expand table
+
+Description
+
+Select the language you
+prefer to see Dynamics
+365 displayed in
+Base Language
+
+Shows the base language. The base language is set during the
+Dynamics 365 installation process. You can’t edit this option.
+
+User Interface Language
+
+Select the language that you want to see for labels and dialog
+boxes in the Dynamics 365 user interface.
+
+Help Language
+
+Select the language for Help. To add an additional language other
+than the base language, your admin must install the required
+language packs and enable them. Talk to your administrator.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Use a screen reader
+Article • 02/15/2022
+
+Screen readers make model-driven apps accessible to people who have low or no vision
+or might need extra support for a temporary scenario, such as eye fatigue. Commonly
+used screen readers such as Narrator, JAWS, and NVDA are supported.
+Learn more about working with Microsoft Narrator
+Learn more about working with JAWS
+Learn more about working with NVDA
+
+Basic tasks using a screen reader
+Open an app
+1. On the navigation bar, use the Tab key to move to the app drop-down control and
+press Enter to open the site map.
+2. Press the Tab key until you hear the name of the application you want to open—
+for example, “Sales.” Press Enter to open the app.
+
+Use scan mode in Narrator
+You can use scan mode to quickly navigate apps using the arrow keys and common
+keyboard shortcuts. Quickly jump to headings, links, landmarks, form columns, controls,
+and tables in this mode. Turn scan mode on and off by pressing Caps lock+Spacebar.
+More information: Using scan mode
+
+Find your way around the app
+Navigation bar
+When you open an app, a vertical bar with subarea icons is displayed on the left. You
+can either use the Tab key to move through these icons until you hear the name of the
+subarea you want, such as “Accounts,” or you can use the site map control. For example,
+press the Tab key until you hear “Accounts” and then press Enter to open the Accounts
+view.
+
+Grids
+Screen readers navigate grids more reliably and consistently, and announce row and
+column headings, as well as the position within the grid. When you first open a grid, the
+default tab stop is the view selector.
+Whenever you enter a cell within the grid from outside of the grid, Narrator announces
+the name of the table, the row and column counts, and the position of your cursor
+within the table.
+If your cursor is within the table header, quickly navigate between headers by using the
+Tab key or Shift+Tab. Narrator will announce the name of each header as you enter the
+header cell. It also announces the type of cell (for example, “column header”), the
+location of the column (for example, “column 1 of 6”), and whether the column is sorted
+or selected. If you press Enter in a table header, it will sort the table by that column.
+Narrator announces the sort order, and you can press Enter again to change the order.
+When you move out of the last column in the table, the cursor moves to the second row
+of the grid, and from this point, you must use the Up and Down arrow keys to navigate
+between the non-header cells. If you instead press the Tab key again, your cursor will
+move to the next interactive element, typically the table filter list. When moving
+between non-header row cells, Narrator announces the column name, the location of
+the column, and text within the cell.
+
+Forms
+Multiple navigation modes are available for navigating a form using Narrator, with the
+most common modes being landmarks, headings, and form columns. To change the
+navigation mode, press Caps lock+Up arrow. Hold the Caps lock key down while
+pressing the Up arrow key to cycle through the modes until you hear the mode you
+want to use. Then use Caps lock + the Left/Right arrow keys to navigate through the
+various items. For example, if you want to go to the Last Name column in the Contact
+Information section of a contact, do the following:
+1. Press and hold the Caps lock key and press the Up arrow key until you hear
+“Landmarks.”
+2. Press and hold the Caps lock key and press the Right arrow key until you hear
+“Contact information.”
+3. Change the mode by pressing and holding the Caps lock key and pressing the Up
+arrow key until you hear “Form Columns.”
+4. Navigate to the Last Name column by using Caps lock + the Left/Right arrow keys
+until you hear “Last Name.” Narrator also announces the control type, value, state,
+
+and any special instructions for the column.
+You can also use the Tab key to quickly navigate to interactive elements on the form.
+Some form columns have an icon that will perform the default action when you press
+Ctrl+Enter. For example, an email form column might have an envelope icon that opens
+an email editor.
+
+Dashboards/charts
+You can navigate through the dashboard charts using the Tab key and Caps lock + arrow
+keys. Press the Tab key to quickly go to the interactive elements and use Caps lock + an
+arrow key for navigation of non-interactive elements, such as headings, landmarks, and
+items.
+７ Note
+You must have the latest Windows 10
+
+Update installed to have all of the
+
+accessibility features available for charts.
+
+Interactive dashboard streams
+You can use the Tab key or Shift+Tab keys to move between interactive dashboard
+streams, such as found in the Accounts dashboard, or just change the navigation mode
+until you hear “Headings” and then use the Tab key to quickly move between dashboard
+streams.
+To navigate through each element of a dashboard stream, use the Up/Down arrow keys.
+Narrator will read the type of control and the title of the control.
+
+Business process flows
+You can navigate a business process flow, such as the one found at the top of the Lead
+form, by pressing the Tab key to move forward, and Shift+Tab to move backward
+between the tables. Use the Enter key on the Move to the Left or Move to the Right
+buttons to display additional tables in the process flow. Narrator reads the table type,
+stage, status, title, element number out of total elements, and whether it is currently
+selected.
+
+Dialog boxes
+
+When a dialog box opens, Narrator announces the title. For dialog boxes with input
+columns, the Close button has the default focus, allowing you to close the dialog box by
+pressing Enter. For dialog boxes that require user action, the focus is on the primary
+action button, such as Delete or OK.
+You can navigate through the controls by using the Tab key. The cursor will loop
+through each element in the dialog box, and you can press Esc to close it.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Use keyboard shortcuts in Power Apps
+Keyboard shortcuts give you an alternate way to do common tasks instead of using your mouse
+or tapping with your finger. They help in seamless navigation of the interface. The following
+keyboard shortcuts apply across apps.
+７ Note
+The keyboard shortcuts described here refer to the United States keyboard layout. Keys on
+other keyboard layouts might not correspond exactly to the keys on a US keyboard.
+
+Global shortcuts
+ﾉ
+
+Expand table
+
+Type
+
+Shortcut
+key
+
+Description
+
+General
+
+F2
+
+Activates the flyouts including toast notifcations.
+
+Landmark
+
+Ctrl+F6
+
+Navigates you through the landmarks of a page in clockwise order. Remembers
+the last selected item in each landmark and will navigate to that last item.
+
+Landmark
+
+Ctrl+Shift+F6
+
+Navigates you through the landmarks of a page in counter clockwise order.
+Remembers the last selected item in each landmark and will navigate to that
+last item.
+
+Form shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Complete the command for the active option or button
+
+Enter
+
+Cancel a command, or close a selected list or dialog box
+
+Esc
+
+Save
+
+Ctrl+S
+
+Save and Close
+
+N/A
+
+Cancel edits and close (Close)
+
+Esc
+
+Task
+
+Unified Interface
+
+Delete the row (when forms are in edit mode)
+
+N/A
+
+Save and then open a new form (Save and New) (when forms are in edit mode)
+
+N/A
+
+Open the lookup menu with the most recently used items in alphabetical order
+
+Down arrow
+
+Open a lookup drop-down list
+
+Enter
+
+Close a lookup drop-down list
+
+Esc
+
+Open a row found in lookup with forms in edit mode
+
+Enter
+
+View more information when focus is on a lookup row item with a chevron
+
+Right arrow (→) key
+
+Close the more information when focus is on a lookup item with a chevron
+
+Left (←) arrow key
+
+Add an article to an email
+
+N/A
+
+Apply an email template (when editing an email message)
+
+N/A
+
+Form navigation shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Move to the next option, option group, or column
+
+Tab
+
+Move to the previous option, option group, or column
+
+Shift+Tab
+
+Move between options in an open list, or between options in a group of options
+
+Arrow keys
+
+Go to the Command Bar
+
+N/A
+
+Go to the landmark section of a page
+
+Ctrl+HOME
+
+Email
+The following table outlines a list of accessibility shortcuts available when using email. You can
+access this list while composing email by pressing Alt+0.
+ﾉ
+
+Expand table
+
+Type
+
+Shortcut
+
+Description
+
+key
+Tab
+
+Alt+Ctrl+0
+
+Go to the editor toolbar.
+
+Alt+1
+
+Go to the rich-text editor.
+
+Alt+2
+
+Go to the HTML editor.
+
+Alt+3
+
+Go to the preview view.
+
+Alt+F10
+
+Navigate to the editor toolbar. Move to the next and previous toolbar group
+
+navigation
+Tab
+navigation
+Tab
+navigation
+Tab
+navigation
+General
+editor
+commands
+
+with Tab and Shift+Tab. Move to the next and previous toolbar button with
+Right Arrow or Left Arrow. Press Space or Enter to activate the toolbar
+button.
+
+General
+
+Alt+-
+
+Expand/collapse the toolbar.
+
+General
+
+See
+
+Editor dialog: Inside a dialog, press Tab to navigate to the next dialog
+
+editor
+commands
+
+description.
+
+element, press Shift+Tab to move to the previous dialog element, press Enter
+to submit the dialog, press ESC to cancel the dialog. When a dialog has
+
+editor
+commands
+
+multiple tabs, the tab list can be reached either with Alt+F10 or with Tab,
+following the dialog tabbing order. With a tab list focused, move to the next
+and previous tab with Right and Left Arrow, respectively.
+General
+editor
+commands
+
+See
+description.
+
+Editor list box: Inside a list box, move to next list item with Tab or Down
+Arrow. Move to previous list item with Shift+Tab or Up Arrow. Press Space or
+Enter to select the list option. Press ESC to close the list box.
+
+Base
+commands
+
+Ctrl+Z
+
+Undo command.
+
+Base
+commands
+
+Shift+Ctrl+Z
+
+Redo command.
+
+Base
+commands
+
+Ctrl+B
+
+Bold command.
+
+Base
+commands
+
+Ctrl+I
+
+Italic command.
+
+Base
+commands
+
+Ctrl+U
+
+Underline command.
+
+Base
+
+Alt+0
+
+Accessibility help.
+
+Type
+
+Shortcut
+key
+
+Description
+
+Esc
+
+Cancel operation.
+
+commands
+Base
+commands
+
+Editable grids (views)
+If your administrator has enabled editable grids (views), you can edit data directly in a grid (view).
+The following table lists the keyboard shortcuts:
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+When the focus is on a column header,
+sort by column
+
+Spacebar to drop down list and then down arrow to select an
+action, followed by Enter
+
+When the focus is on a column header,
+
+Spacebar to drop down list and then down arrow to select the
+
+open filter dialog
+
+Filter by option, followed by Enter
+
+When the focus is on the cells, move to
+the next column
+
+Right arrow (→) key
+
+When the focus is on the cells, move to
+
+Left arrow (←) key
+
+the previous column
+When the focus is on the column header,
+move to the next column header
+
+Tab
+
+When the focus is on the column header,
+
+Shift+Tab
+
+move to the previous column header
+Move to the cell above
+
+Up arrow (↑) key
+
+Move to the cell below
+
+Down arrow (↓) key Or Enter, when cell is not in edit mode
+
+Go to edit mode for Text, Number, and
+Simple columns when the focus is on a
+
+Type the value directly to overwrite the existing value Or
+Spacebar to continue modifying the existing value Or F2 to
+
+column
+
+select the existing value
+
+Go to edit mode for Date and Time
+columns
+
+Type the value directly Or F4 or Alt+↓ to display the date/time
+picker
+
+Go to edit mode for drop-down (Lookup,
+
+Spacebar to open the list
+
+Option Set) columns
+
+Task
+
+Unified Interface
+
+Go to edit mode for Two Options
+columns
+
+Spacebar to switch between the two options Or F4 Or Alt+↓ to
+open the list
+
+Move between entries in an open dropdown list
+
+Up/Down (↑/↓) Arrow keys
+
+Select an option in an open drop-down
+list
+
+Enter
+
+Close an open drop-down list
+
+Esc
+
+Cancel your edits
+
+Esc
+
+Navigate to and open the lookup row
+
+Enter when the focus is on (→) icon
+
+Move to the next page (if any)
+
+Page down key
+
+Move to the previous page (if any)
+
+Page up key
+
+Move to the column header when the
+
+Shift+Tab
+
+focus is in the grid
+Move to the Save button when the focus
+is on the column header (if any unsaved
+
+Tab
+
+data)
+Move to the Refresh button when the
+focus is on the column header
+
+Tab
+
+Interactive dashboard shortcuts
+Interactive dashboards enable new functionality, such as filtering, sorting, and quick actions.
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Activate a dashboard element (simulate left-click)
+
+Enter Or Spacebar
+
+Move to the next element
+
+Tab
+
+Move to the previous element
+
+Shift+Tab
+
+Move to the next item within a dashboard element
+
+Down (↓) arrow key
+
+Move to the previous item within a dashboard element
+
+Up (↑) arrow key
+
+Close a menu
+
+Escape
+
+Task
+
+Unified Interface
+
+Select a check box or radio button
+
+Spacebar
+
+Move to the global command bar
+
+Ctrl+Alt+A
+
+Global filter shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Open a menu
+
+Enter Or Spacebar Or Down (↓) arrow key
+
+Activate a button
+
+Enter Or Spacebar
+
+Move to the next element
+
+Tab
+
+Move to the previous element
+
+Shift+Tab
+
+Open a tree view control
+
+Right (→) arrow key
+
+Close a tree view control
+
+Left (←) arrow key
+
+Move to the next tree view node
+
+Up (↑) arrow key
+
+Move to the previous tree view node
+
+Down (↓) arrow key
+
+Move to the first tree view node
+
+Home
+
+Move to the last tree view node
+
+End
+
+Perform the default action for the tree view node
+
+Enter
+
+Remove a filter
+
+Delete
+
+Dashboard stream control shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Move to the next element
+
+Tab
+
+Move to the previous element
+
+Shift+Tab
+
+Activate a button
+
+Enter Or Spacebar
+
+Activate the Sort by column button and open flyout
+
+Enter Or Spacebar Or Down (↓) arrow key
+
+Task
+
+Unified Interface
+
+Move to the next item
+
+Down (↓) arrow key
+
+Move to the previous item
+
+Up (↑) arrow key
+
+Move to the first item
+
+Home
+
+Move to the last item
+
+End
+
+Move to the next stream
+
+Ctrl+F6
+
+Move to the previous stream
+
+Ctrl+Shift+F6
+
+Close a menu
+
+Escape
+
+Change the state of a check box
+
+Spacebar
+
+Common controls
+Chart shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Move to the first element in a chart
+
+Tab
+
+Move to the next data point
+
+Right (→) arrow key OR Down (↓)
+arrow key
+
+Move to the previous data point
+
+Left (←) arrow key OR Up (↑) arrow
+key
+
+Move to the See More button in a Tag chart
+
+Tab
+
+Move back from the See More button to the tags in a Tag chart
+
+Shift+Tab
+
+Filter the dashboard when the focus is on a data point in an
+interactive dashboard
+
+Enter Or Spacebar
+
+Date-Time control shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Open the date picker flyout
+
+Enter Or Spacebar Or Down (↓) arrow key
+
+Task
+
+Unified Interface
+
+Activate the option and close the flyout
+
+Enter Or Spacebar
+
+Move to the next item
+
+Down (↓) arrow key
+
+Move to the previous item
+
+Up (↑) arrow key
+
+Move to the first item
+
+Home
+
+Move to the last item
+
+End
+
+Close the date picker flyout
+
+Escape
+
+Move to the next element
+
+Tab
+
+Move to the previous element
+
+Shift+Tab
+
+Select the calendar
+
+Enter Or Spacebar
+
+Activate a button
+
+Enter Or Spacebar
+
+Search results shortcuts
+ﾉ
+
+Expand table
+
+Task
+
+Unified Interface
+
+Move to the next search result
+
+Up (↑) arrow key
+
+Move to the previous search result
+
+Down (↓) arrow key
+
+Move to the list of available views
+
+Right (→) arrow key
+
+Move from the list of available views to search results
+
+Left (←) arrow key
+
+Navigate between buttons
+
+Tab
+
+Navigating submenus
+If you use a screen reader, follow these steps to access any of the submenus that are displayed
+when you hover the mouse over a navigation link.
+1. Navigate between the menu options using standard link navigation.
+2. Activate the link by selecting Enter or the space key as you usually would. A list of
+submenus will be displayed.
+3. To access these submenu options, use the assistive technology (AT) shortcut key to navigate
+to the next button. For example, if you use the NVDA screen reader, you would use the "b"
+
+shortcut key (NVDA+b). To navigate through all the options, select the key repeatedly.
+） Important
+Several areas in the user interface (UI) have auto-collapse built in for menus. This includes
+the Navigation Bar and Form Navigation. Both expand when selected, but after 30 seconds
+of inactivity, the items collapse.
+
+Navigating through stages of a process
+If you're in a row—for example, a lead—this section shows you the keyboard shortcuts to
+navigate through the different stages in the sales process to qualify the lead, and how to make
+selections in those stages. For example, if you want to move easily from the Qualify stage
+through to the Close stage, try these keyboard actions:
+After you select a stage, get to the columns by selecting the Down (↓) arrow.
+If a stage is collapsed, select Enter to expand it.
+７ Note
+The process name is an icon at the bottom of the page, not the top.
+Keyboard shortcuts in Windows: If you are using the Windows operating system, select the
+following link and choose the version number from the drop-down list. You can view all the
+shortcuts that are applicable to a Windows environment. See Windows keyboard
+shortcuts .
+Keyboard shortcuts in Mac: If you are using a Mac operating system, select the following
+link to view all the shortcuts that are applicable to a Mac environment. See Mac keyboard
+shortcuts .
+
+Last updated on 05/01/2026
+
+About dialog for model-driven apps
+Article • 11/07/2023
+
+This article explains the various parts of the About dialog for model-driven apps.
+
+The Channel attribute indicates the feature set being used. This attribute can be
+set by environment, app, user, or URL parameter so that a suffix indicates the
+release name of the current session. More information: Changing release channels
+The semi-annual channel is the current, twice-a-year release wave that is updated
+in April and October. The release for the semi-annual channel is shown at the top
+of the dialog like 2023 release wave 1 enabled.
+The monthly channel is the new, release cadence that happens once per month.
+The release for the monthly channel is shown after Channel: Monthly as a month
+and year. For example, in the screenshot provided, the monthly channel is May
+2023.
+
+See also
+Release Channels for your model driven app
+Changing release channels for model-driven apps
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Create a new row
+Article • 01/31/2024
+
+The New command or Quick create makes it fast and easy to enter almost any type of
+information into the system. The command is on the navigation bar, so it’s available
+whenever you need to enter new information into the system. You can also save a row
+and create a new one directly from the Quick create form.
+７ Note
+The Quick create option is only available for rows that are enabled by your admin.
+1. On the navigation bar, select the plus sign
+
+, and then select the item you want.
+
+2. Fill in the columns, and then select Save and Close. Or, to save and create another
+row, select the down arrow and then select Save & Create New.
+
+

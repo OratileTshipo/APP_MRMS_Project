@@ -1,0 +1,2747 @@
+      11. Select the Save icon from the upper right corner. Save the app with the name
+        "Opportunities App".
+     View the app in the report
+     The app is now available in the Power BI report, and it interacts with other visuals because it
+     shares the same data source.
+    In the Power BI report, select Jan in the slicer. This filters the whole report, including the data in
+    the Power Apps visual.
+     Notice that the updated opportunity count in the Power App visual matches the count in the
+     upper left of the report. You can select other items in the report, and the data in the app
+     updates.
+     Clean up resources
+     If you don't want to save the Opportunity Analysis sample with the Power Apps visual, delete
+     the dashboard, report, and semantic model.
+     Considerations and limitations
+     For troubleshooting information, see Power Apps visual for Power BI.
+     Related content
+         Q&A visual
+         Tutorial: Embed a Power Apps visual in a Power BI report
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 12/01/2025
+       Change app name and icon for canvas
+       apps
+       Article • 12/16/2022
+       Customize a canvas app by changing its name and icon.
+       Prerequisites
+         1. Create an app, or open one for editing.
+         2. Select Settings.
+       Rename an app
+       Under General, update the app name inside the Name text box.
+       Change an app tile
+       Follow one or more of these steps:
+          Select a different background color from the list of options.
+        Select an icon from the list of default icons.
+        Select Browse file, select the image that you want to use, and then select Open.
+         ７ Note
+         For best results, use a square-shaped icon.
+       Next step
+       On the File menu, select Save to republish your app with the new settings.
+       More resources
+         Share an app
+         Delete an app
+         Restore an app to a previous version
+            Edit a canvas app
+            Article • 09/07/2023
+            Edit any canvas app that you created, or for which you have Co-owner permission. You
+            can edit an app in Power Apps Studio.
+            If you try to edit an app that's open for editing elsewhere, a message tells you whether
+            you already have it open or another user does.
+            Edit an app
+               1. Sign in to Power Apps   .
+               2. Select Apps in the left navigation pane.
+               3. Select an app.
+               4. Select Edit from top menu. You can also use "..." (More Commands) for the app
+                  and then select Edit from the drop-down menu.
+       If you don't see the app that you want to edit, verify that you've selected the correct
+       environment.
+       Collaborate on an app
+       An app can be shared with others. Any Co-owner for an app can edit it. Consider the
+       following scenarios when collaborating over an app.
+       Edit an app already being edited
+       Only one user can edit an app at a time. For more information, see Find out who's
+       working on the same app.
+       Edit an app across multiple sessions
+       Consider that you already have an app open for editing. And then, you try to open the
+       app for editing on another device, or in another browser window. In that case, you'll see
+       the following message.
+       You can override the previous session, but you might lose any changes that you haven't
+       saved.
+       Next Steps
+       Learn more about how to add a screen, a control, or a data connection.
+       See also
+         Restore an app to a previous version
+         Export and import an app
+     Overview of exporting and importing
+     canvas apps
+     Article • 05/17/2025
+     In this article, you'll learn about the different options available to export and import canvas
+     apps in the form of singular app file, app package, and considerations from the application
+     lifecycle management (ALM) perspective. To effectively manage ALM, it's recommended to use
+     solutions. Canvas apps packages don’t support ALM and should only be used for basic import
+     and export capabilities when Dataverse isn’t accessible.
+     You can export and import canvas apps using one of the following options:
+        Export and import canvas apps as app packages
+        Export and import canvas apps as part of solutions
+        Export and import a canvas app as a single app file
+      ） Important
+         Canvas app packages can't be used with Dataverse solution packages because of
+         the package incompatibility.
+         Canvas apps that have Dataverse dependencies, such as flows, connection
+         references, etc. are not supported for canvas app packages. For ALM capabilities in
+         Microsoft Power Platform environments, use Microsoft Dataverse and solutions
+         instead of the canvas app package export and import. More information: ALM
+         overview
+         An App Insights instrumentation key may be present in imported canvas apps.
+         Inspect the instrumentation key after importing an app to ensure it corresponds to
+         the desired App Insights resource.
+     Export and import canvas apps as app packages
+     You can export and import canvas apps by using packages. This feature allows you to export an
+     app from one environment and import it to another.
+     Resources included in canvas apps packages
+     An app can consume different resources. For example, most apps use connections. Other apps
+     might use Power Automate, have custom connectors, or connect by using gateways to on-
+         premises resources. Some apps might also use Dataverse customizations
+         The following table explains different resource types, supportability, and import options.
+                                                                                       ﾉ Expand table
+          Resource type      Supported     Import options
+          App                Yes, for      There are two options to import an app into an environment:
+                             canvas apps         Create new: The app is created as a new app in the
+                                                 environment where the package is imported.
+                                                 Update: The app already exists in the environment and will be
+                                                 updated when this package is imported.
+          Power Automate     Yes           There are two options to import a flow into an environment:
+                                                 Create new: The flow is created as a new flow in the
+                                                 environment where the package is imported.
+                                                 Update: The flow already exists in the environment and will
+                                                 be updated when this package is imported.
+                                           Note: All resources that the flow depends on will also be included in
+                                           the app package that's exported and will need to be configured
+                                           when the package is imported.
+                                           You can also export and import flows by using solutions. More
+                                           information: Power Automate solutions
+          Custom             No            Exporting a custom connector isn't supported. You need to re-
+          connectors                       create the custom connector on the target environment.
+          Connections        No            Exporting a connection isn't supported. You need to re-create
+                                           connections on the target environment.
+          Dataverse          No            Exporting Dataverse customizations as a part of a canvas app
+          customizations                   package isn't supported. You need to use Dataverse solutions
+                                           instead. More information: Dataverse solutions
+          Gateways           No            You can't export or import gateways. You need to re-create
+                                           gateways on the target environment.
+         Permissions
+         Only the Owner or Co-owner of an app can export a canvas app package. To import an app,
+         the Environment Maker security role is required on the destination environment, either directly
+         or through a Dataverse team that is part of the AAD Security Group category. Custom security
+         roles are not currently supported.
+    See also
+       Save and publish an app
+       Edit an app
+       Delete an app
+       Share an app
+       Export and import canvas apps as a
+       package
+       Article • 10/01/2024
+       This article provides a step-by-step guide for exporting and importing canvas apps.
+       Before you begin, review the overview article to learn about the different export and
+       import options available.
+        ） Important
+        It's recommended to use solutions for application lifecycle management (ALM) to
+        ensure proper management and support.
+       Export a canvas apps package
+       To export a canvas apps package, select your app, and then select Export Package.
+       You can change the default Import Action for each resource used by your canvas app.
+       By default, resources in a canvas app package, including the app itself, are set to
+       Update. However, you have the option to select Create as new during import, which will
+       create the resource instead of updating an existing one. The import action you select
+       will be the default action during the app import
+        ） Important
+               You can only import the exported package. Changes to the exported package file
+               aren't supported.
+             To export a canvas app package
+                1. Sign in to Power Apps  .
+                2. Select Apps from the left pane.
+                3. Select the app that you want to export.
+                4. Select Export Package.
+                5. Enter the package Name and Description. You can also change the Environment
+                  name, if needed.
+       6. Select Update to choose the import action for the app package resource.
+       7. Select Create as new if the app should be created during import, or Update to
+        update an existing app.
+                      ７ Note
+                      The Import Setup action text changes depending on your new selection.
+                 8. Repeat the previous step for each additional resource in the app package.
+                 9. (Optional) Select     (comment icon) to insert a comment for each resource.
+               10. Select Export to export the package.
+             The package is downloaded to your browser's default downloads folder.
+             Importing a canvas app package
+             To import a canvas app package, select Import canvas app. Be sure to select the correct
+             actions for each app package resource—for example, create a new instance of an app or
+             a flow. You can also read additional information in comments that were entered while
+             the app package was being exported.
+             If you're updating an existing app or resource, be sure to publish the app so users can
+             see the changes.
+                Tip
+               You can quickly confirm selections before importing an app package by viewing the
+               icon changes for each resource type.
+                                                                                  ﾉ
+                                                                                      Expand table
+                Icon   Description
+                       Create as new: A new resource will be created.
+                       Import action changed: The import action for the resource has been modified.
+                       Action required: You must select an import action before the app package can be
+                       imported.
+             To import a canvas app package
+                1. Sign in to Power Apps  .
+                2. Select Apps from the left pane.
+                3. Select Import canvas app.
+                4. Select Upload, and select the app package file that you want to import.
+                5. Select the Import Setup action, or     for a resource.
+                        If you select Create as new, you can change the resource name.
+           If you select Update, select an app that you want to update during the
+           import.
+       6. Repeat the previous step for each additional resource in the app package.
+       7. (Optional) If the app package contains references to connections, you can choose
+        the connection from the available connections list.
+        Select Select during import to choose the appropriate connection.
+         ７ Note
+            If no connections are available, or the connection you want isn't listed,
+            select Create new to create a new connection in a new browser tab.
+            Ensure that you create the connection for the correct resource type.
+            After creating the connection, return to the import app browser tab and
+            select Refresh list to reflect and choose the newly created connection.
+            In some cases, it is necessary to reconfigure the flow association when
+            you import a canvas app with flows. For more information, see Add an
+            existing flow
+       8. (Optional) If comments were entered for a resource during the export of the app
+        package, the comment icon will appear filled and the text Comment yes will
+        appear when you hover over it. Select the comment to view it.
+                 9. Select Import to import the app package.
+                      ） Important
+                      If you select to Update an existing app, the new changes will be saved as a
+                      draft of the app. You'll need to publish the app so users can see the changes.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+         Export and import a canvas app as a single
+         app file
+         Article • 05/17/2025
+         In this article, you'll learn how to export and import a single canvas app. Before you begin,
+         review the overview article to learn about the different export and import options available.
+         Using this option, you’re able to export a single canvas app in the format of a .msapp file
+         extension. This allows you to export a single file that contains the canvas app that you’re
+         currently editing and import it.
+         Permissions
+         Only the Owner or Co-owner of an app can export a canvas app package. To import an app,
+         the Environment Maker security role is required on the destination environment, either directly
+         or through a Dataverse team that is part of the AAD Security Group category. Custom security
+         roles are not currently supported.
+         Export .msapp files in Power Apps
+            1. Sign in to Power Apps   .
+            2. Open the canvas app that you want to export in Power Apps Studio.
+            3. In the Power Apps Studio, select Save drop-down menu and then select, Download a
+              copy.
+         The .msapp file is downloaded to your device.
+         Import .msapp files in Power Apps
+            1. Sign in to Power Apps   .
+            2. From the left navigation pane, select Apps.
+            3. Select Import app > From file (.msapp).
+         When Power Apps Studio opens, you can choose the appropriate .msapp file to import. Power
+         Apps Studio will reload with the .msapp file opened.
+            ７ Note
+            For more information on resources included in the single app file, see Resources included.
+        Delete a canvas app
+        This article shows you how to delete a canvas app.
+        Delete an app as the owner
+           1. Sign in to Power Apps   .
+           2. Select Apps from the left pane.
+           3. (optional) Near the upper-right corner, filter the list of apps to show only those apps that
+             you own.
+       ７ Note
+       If the app that you want to delete doesn't appear, make sure that you're in the right
+       environment.
+     4. Select an app.
+     5. Select Delete from the top menu. You can also select More Commands (..) and then select
+      Delete instead.
+     6. Select Delete from cloud.
+          ） Important
+          This action deletes the app not only from your account but also from the accounts of
+          all users with whom this app was shared.
+     Delete an app as the administrator
+     If owner of an app is unavailable, a Power Platform or Dynamics 365 admin can set the owner of
+     an app. And then, the new owner can delete the app.
+     To set a user as the owner of an app, use the Power Apps cmdlets for administrators.
+        Tip
+       You can also recover a deleted canvas app using Power Apps cmdlets for administrators as
+       long as the app is discoverable.
+     See also
+         Share an app
+         Change app name and tile
+         Restore an app to a previous version
+         Export and import an app
+      Last updated on 05/20/2026
+              How to check license designation for an
+              app
+              Article • 03/03/2023
+              Starting October 2019, several connectors are reclassified from Standard to Premium.
+              Power Apps licensing FAQ outlines reclassified connectors. Apps using these connectors
+              before the reclassification have been granted an extended timeframe allowing users
+              without a premium license to access these apps.
+              The following table outlines the designations and which license an end user must have
+              to access an app.
+               Designation  Definition
+               Standard      An app that only uses standard connectors. An end user must have a Power Apps
+                             for Office 365 plan, per app plan, or a per user plan to access this app.
+               Extended      An app allowed to use connectors promoted to premium on October 1, 2019.  An
+                             end user must have a Power Apps for Office 365 plan, per app plan or per user
+                             plan. Power Apps licensing FAQ outlines which connectors were promoted to
+                             premium on October 1, 2019.
+               Premium       An app that uses at least one premium connector, a custom connector, or an on-
+                             premises gateway. An end user must have a per app plan or per user plan to
+                             access.
+                ７ Note
+                Power Apps built in Microsoft Teams environments that connect to Dataverse for
+                Teams, or use custom connectors have Premium license designation.
+                      End-users with a Microsoft 365 subscription including Dataverse for Teams
+                      use rights will be able to run these apps in Microsoft Teams.
+                      End-users that attempt to run these apps outside of Microsoft Teams are
+                      required to have a per app plan or per user plan.
+              Check app license designation from app
+              settings
+                 1. Sign in to Power Apps    .
+                2. Select Apps from left side.
+                3. Select an app from the list of app. You can use the Settings option from top or, use
+                  the More Commands (...) and then Settings from the drop-down menu:
+                4. Select Settings to see the license designation information:
+             Check app license designation from app details
+                1. Sign in to Power Apps  .
+                2. Select Apps from left side.
+        3. Select an app from the list of app. You can use the Details option from top or, use
+         the More Commands (...) and then Details from the drop-down menu:
+        4. Select Details:
+      Known issues
+         The use of a premium connector in a flow connected to an app isn't recognized by
+         the app's license designation.
+         For example, an app that only uses standard connectors and is connected to a flow
+         using a premium connector, like the HTTP connector, will have the license
+         designation as Standard although it requires the app users to have Premium use
+         rights.
+       Pass assignment
+       For information about Pass assignment, read Power Apps per app plans.
+       Next steps
+          Power Apps licensing FAQ
+       See also
+          Edit an app
+          Delete an app
+         Restore a canvas app to a previous version
+         ﾃ Summarize this article for me
+         [This article is prerelease documentation and is subject to change.]
+         This article shows you how to restore a canvas app to a previous version that was saved to the
+         cloud from your Power Apps account.
+         Restore an app from your account
+            1. Sign in to Power Apps   .
+            2. On the left navigation pane, select Apps.
+            3. Select your app and then select Details on the command bar.
+                 ７ Note
+                 If the app that you want to restore doesn't appear, make sure that you're in the right
+                 environment.
+            4. Select Versions and then select the app version that you want to restore.
+      5. Select Restore and confirm your changes by selecting Restore again.
+        ７ Note
+          For apps older than 6 months, this action will repackage the app with the oldest
+          version available. Functionality may have changed from the original packaging
+          of the app
+       New version is created.
+      6. (Optional) If you want to publish the restored version, select Publish this version, and
+       then select Publish this version when prompted to confirm.
+       Notice the published restore version that shows up as Live.
+             ７ Note
+             Publish this version option only appears for the latest unpublished version of an
+             app.
+       More resources
+       Share an app
+       Change app name and tile
+       Delete an app
+        Last updated on 03/11/2026
+     Test Studio
+     Article • 05/21/2025
+     Build end-to-end UI tests for your canvas app using Test Studio. Maintain your app quality by
+     continually validating that your app works as expected when new changes or updates are
+     deployed.
+     Overview
+     Testing is an important part of the software development life cycle (SDLC). Testing can help
+     ensure the quality of the app delivered to customers. It can identify issues or defects early in
+     the release process and provides an opportunity to fix these issues to make the app more
+     reliable before releasing changes. Depending on the size and usage of the app, manual testing
+     of new changes might be enough. However, as the app grows in complexity and usage, you
+     might need to consider a test strategy instead of manual testing. If the app is mission-critical,
+     even a small mistake can have a significant impact.
+     Increased app changes can result in longer testing cycles. Eventually, regression testing of the
+     app might be longer than the time spent to develop new features. In fast-paced development,
+     thoroughly testing every feature in the app becomes a bottleneck to releasing software
+     updates. One option to reduce the time taken during a test cycle and on regression testing is
+     test automation. Test automation can help you test your app with minimal effort, reducing
+     testing time and identifying critical issues before release.
+     Power Apps Test Studio is a low-code solution to write, organize, and automate tests for canvas
+     apps. In Test Studio, you can write tests using Power Apps expressions or use a recorder to save
+     app interaction to automatically generate the expressions. You can play written tests back
+     within the Test Studio to validate app functionality, and also run the tests in a web browser and
+     build the automated tests into your app deployment process.
+     Prerequisites
+     You must be creator or co-owner of an app to test the app with Test Studio.
+     Test Studio terminology
+     The following section explains key Test Studio terminology.
+     Test cases
+     Test cases are made up of a series of instructions or actions, called test steps. Test cases are
+     executed to validate that your app, or specific features in your app, is working as you expect.
+     For example, in an Expense app, you would like to ensure that only expenses with associated
+     actual cost can be submitted. A test case can help verify that this condition or requirement is
+     always met.
+     In Test Studio, test steps are written using the Power Apps expression language. Test
+     expressions can consist of both the functions available when building your app and additional
+     expressions to support automated testing.
+     Test suites
+     Test suites are used to organize or group test cases together. As the number of test cases in
+     the app grows, you might consider organizing the test cases in specific features or
+     functionality. For example, you might have one test suite with test cases to validate expense
+     report submissions and another test suite that focuses just on expense approvals.
+     Test cases contained in test suites are run sequentially. The app state is persisted across all test
+     cases in a suite. For example, if you have a test case that completes on Screen 5 in your app,
+     the next test case in your test suite will begin running from Screen 5. It allows you to break
+     down a complex test scenario into multiple test cases within a single suite, and the state is
+     shared across all test cases. If your second test case expects to begin at the start screen of the
+     app, you can navigate to the start screen as the first step in your test case. It's important to
+     remember that the app is not reloaded at the beginning of every test case in a test suite when
+     planning your test execution.
+     Test assertions
+     Every test case should have an expected result. To validate the expected result of a test against
+     the actual result of your test, you can write test assertions. An assertion is an expression that
+     evaluates to true or false in the test. If the expression returns false, the test case will fail.
+     In the expense app example above, you can write an assertion to validate whether an expense
+     report is created with an expense line item having zero cost associated.
+     Best practices
+     When testing canvas apps using Test Studio, consider the following best practices to gain
+     maximum benefits to improve your app quality:
+       1. Determine which test cases should be automated.
+        It's difficult to automate all tests and we do not recommend that you completely rely on
+        test automation. Manual testing should be performed in addition to test automation.
+        Tests best suited to automation are:
+           Repetitive tests.
+           High business impact functionality tests.
+           Features that are stable and not undergoing significant change.
+           Features that require multiple data sets.
+           Manual testing that takes significant time and effort.
+       2. Keep test cases small.
+        While a single test case can support testing all functionality in your app, we recommend
+        that you avoid writing a monolithic test case and try to divide it into multiple test cases.
+        Each test case could test a specific feature or functionality in your app. A failed assertion
+        in a large test case might cause other functionality to remain untested. Using multiple test
+        cases contained in a test suite allows other functionality to get tested regardless of
+        whether a previous test case failed. This strategy also makes it easier to isolate test
+        failures.
+       3. Keep expressions to a single test action.
+        A test action can contain multiple expressions. Large multi-action test expressions for a
+        single step might impact your ability to debug and isolate any test failures. Consider
+        dividing a test step with multiple actions into more test steps of single actions to identify
+        issues faster.
+       4. Every test case should have an expected result.
+        Each test case should have one or more expected results. Test assertions should be used
+        to validate the expected outcomes of your test against the actual outcomes. Multiple
+        assertions can be written for a single test case.
+       5. Use test suites.
+        For maintenance, group or categorize similar test cases together and describe the
+        purpose and expected results of your test.
+     Known limitations
+     While we work to provide full control coverage in Power Apps Test Studio is in progress, the
+     following functionality is currently unavailable:
+        Components.
+        Code components written in the Power Apps Component Framework.
+        Nested galleries.
+        Media controls.
+        Formula-level error management experimental feature needs to be turned on for the app.
+        Support for controls not listed in the Select and SetProperty functions.
+        Person-type columns.
+        Test Studio is not compatible with the experimental Git version control feature, and will
+        not work properly if that feature is enabled.
+     Next steps
+       Working with Test Studio
+    See also
+       Automate tests with Azure Pipelines using classic editor
+            Working with Test Studio
+            Article • 03/03/2023
+            In this quickstart, you'll create tests for a canvas app called Kudos. You can also explore
+            and discover testing concepts and apply them to writing tests for your own canvas apps.
+            The sample Kudos app is part of a suite of employee engagement apps available to
+            download from Employee Experience Starter Kit  .
+            Watch this video to learn how to work with Test Studio:
+            https://learn-video.azurefd.net/vod/player?id=3fe85f46-745a-411c-aba8-
+            6044cb184e78&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fworking-with-test-studio
+            Open Test Studio
+               1. Sign in to Power Apps .
+               2. Create a new app or edit an existing app.
+               3. Save your app to Power Apps to open Test Studio.
+                   ７ Note
+                   You must save an app before you can write tests for the app.
+               4. Select Advanced tools in the left navigation.
+               5. Select Open tests to open the Test Studio for this application. This action opens
+                 Test Studio in a new browser tab.
+         ７ Note
+         Tests are published and stored in the app package. Exporting and importing a
+         canvas app package to another environment will also include all the test definitions
+         such as test suites and test cases you have created.
+       Create a test suite
+       By default, a test suite and test case are created for you in Test Studio. Test suites are
+       used to organize your test cases. An app can contain one or more test suites. You can
+       use the default test suite and case to begin writing your tests immediately or create a
+       new test suite.
+         1. Select New suite.
+         2. Update the Test suite name and description by selecting the fields on the main
+           grid.
+       Create a test case
+       Depending on how you want to organize or group your tests, you can create multiple
+       test cases in a test suite. Each case can test a specific feature or a subset of
+       functionalities in your app.
+         1. Select a test suite.
+         2. Select New Case in the top menu to create a new case.
+         3. Update the Test case name and description by selecting the fields on the main
+          grid.
+       Record a test case
+       A test case consists of test steps that contain actions. Test actions are written using
+       Power Apps expressions that perform a task. You can use the recorder to automatically
+       generate the test steps as you interact with your app. After you record, you can update
+       the test case, add new steps, delete steps, and write test assertions to validate the result
+       of your test.
+       ７ Note
+       Only a published app plays in record mode. Publish any recent changes to the app
+       before you start recording a test case. Recording without publishing recent changes
+       causes the last published version of the app to play in record mode.
+       1. Select Record from the top menu. This action opens the published app with
+        recording mode in a new browser tab.
+         ） Important
+         Recording on an existing test case overrides any existing test steps already
+         present.
+       2. Interact with your app. Your actions are recorded in the left pane.
+       3. Once interaction completes, select Done. Optionally, you can select Cancel to
+        return to Test Studio without your interactions getting recorded.
+       4. View the test steps and the expressions that were automatically generated for you
+        in Test Studio.
+       5. Edit the step description text in the main grid if necessary. You can also update the
+        test step actions by selecting the formula on the main grid.
+      Add test steps and test assertions
+      Every test case should have an expected result. In the Kudos example, one of the
+      expected results of sending a kudo is creating a new record in the Microsoft Dataverse
+      (Dataverse) database. You'll now update the test case and add additional test steps to
+      validate that a record was created successfully.
+      Follow these steps to verify a successful record creation:
+        Initialize a variable for the kudo record count in the database at the beginning of
+        the test case.
+        Initialize a variable for the kudo record count in the database at the end of the test
+        case.
+        Write a test assertion expression to validate it incremented by one count. If the
+        count doesn't increase by one, the test assertion fails, and your test case fails.
+      To add test steps and test assertions in the Kudos app:
+       1. Select Step 1 or the step above which you want to insert a new step.
+       2. Select Insert a step above from the top menu or by selecting the option from the
+        active row. This action creates an empty step.
+         ７ Note
+         When you select Insert step above, a new blank step is added above the
+         current step. You can also use Assert, SetProperty, Select or Trace actions
+         instead. This adds a step with a respective action formula that you can edit.
+       3. Update the step description. For example, "Count Kudo in database".
+       4. Enter an expression or formula into the action input to count the records in the
+        database before executing the test.
+        You can use any supported expression. You can also query any data sources,
+        collections, variables, or run flows that are contained in your app, and create new
+        global variables or collections to use in your tests.
+            Power Fx
+            Set(kudosBeforeTest, CountRows(Filter(Kudos, Receiver.Email = 
+            "someone@example.com")))```
+         5. Select Step 2 or the step above which you want to insert a new step.
+         6. Select Insert a step above from the top menu or by selecting the option from the
+          active row. This action creates an empty step.
+         7. Enter an expression or formula in the action input to Trace and write the
+          kudosBeforeTest value to test the results record.
+            Power Fx
+            Trace("kudosBeforeTest : " & kudosBeforeTest);
+         8. Go to the bottom of the test case and insert a new step to count the records in the
+          database after the test has completed.
+            Power Fx
+            Set(kudosAfterTest, CountRows(Filter(Kudos, Receiver.Email = 
+            "someone@example.com")))```
+         9. Add a final step to validate that the record count in the database has increased by
+          a count of 1, and enter the following assertion action to verify:
+            Power Fx
+            Assert(kudosAfterTest = kudosBeforeTest + 1, "Kudos count incorrect. 
+            Expected : " & kudosBeforeTest + 1  & " Actual :" & kudosAfterTest)
+        10. Save the test case from the top-right menu in Test Studio.
+       Play back your test
+       You can play back your recorded test to validate app functionality. You can play back all
+       tests within a single test suite, or a single test case.
+       Before you play the recording back with recent changes, you must publish the app:
+        ） Important
+        If you skip publishing, the recording playback will not contain your recent test
+        changes. The last published test case or suite will play against the app.
+         1. Select Publish to automatically save and publish your test.
+         2. Select either a test suite or a single test case.
+         3. Select Play. The published app opens in Play mode, and you can see your test
+          steps playing back automatically. A green check mark indicates when a test step is
+          executed successfully. If a step fails, a red failure indicator along with a failure
+          message is displayed.
+           4. Select Done to return to Test Studio.
+         Failed assertion
+         In this section, you'll change the test assertion to experience a failed test:
+           1. Edit the assertion step by selecting the expression box.
+           2. Update + 1 to + 2 in test action. This update means that the test expects two
+            records to be created, which is incorrect. If the test is successful, only one record
+            should be created in the database.
+              Power Fx
+              Assert(kudosAfterTest = kudosBeforeTest + 2, "Kudos count incorrect. 
+              Expected : " & kudosBeforeTest + 2  & " Actual :" & kudosAfterTest)
+       3. Select Publish.
+       4. Select Play.
+       5. View the test playing back. The final step now fails and shows an error and the
+        message you provided in the assertion step.
+      Playing tests in a browser
+      You can copy a link to play a test in separate browser outside Test Studio. It helps
+      integrate your tests in a continuous build and release pipeline such as Azure DevOps.
+      The play link for the selected test is persisted. It doesn't change for the test suite or test
+      case. You can update your tests without the need to modify build and release processes.
+      To play tests in your browser:
+       1. Select a test suite or test case in the right pane.
+       2. Select Copy play link.
+       3. You're prompted to publish your tests if there are any unpublished changes.
+         4. You can select to skip the publish process and copy the play link. New test changes
+          don't play if you skip.
+         5. Open a browser and paste the URL into the address bar to play the test.
+         6. View your test playing back.
+       Setup your tests
+       The OnTestCaseStart property of a Test Suite can be used to setup your test. The
+       expression entered for this property triggers for every test case in a suite before the
+       case begins executing. OnTestCaseStart helps you avoid writing the same test steps at
+       the beginning of every case. You can customize this property to run set up tasks that are
+       common to all cases in the suite such as:
+          Always starting test execution from the first screen.
+          Initializing common collections or variables.
+          Fetching test data from a data source for the current executing test
+       The TestCaseInfo record contains details for the current test that is executing. It contains
+       the following properties:
+          TestCaseName – the name of the test case.
+          TestCaseDescription – the description of the test case.
+          TestCaseId – the ID of the test case.
+          TestSuiteName – the test suite name that the case belongs to.
+          TestSuiteDescription – the description of the test suite.
+          TestSuiteId – the test suite ID that the case belongs to.
+       In the below example, you'll customize the OnTestCaseStart property so every test case
+       begins from the first screen in your app. You'll also fetch the test data from a data
+       source that can be referenced in the steps for the test case.
+         1. Select Test in the left pane or View on the suite header.
+         2. Select the OnTestCaseStart action.
+         3. Input an expression to Navigate to first screen and fetch the test data for your test.
+            Power Fx
+            //Start every cases on the first screen in the Kudos app
+            Navigate('Dashboard Screen');
+            //Initialize my test data for the current case. 
+            Set(currentTestData, LookUp(KudosTestData, TestCase = 
+            TestCaseInfo.TestCaseName));
+            //Set kudosBeforeTest to 0
+            Set(kudosBeforeTest, 0)
+       Processing test results
+       The test panel visible when playing back tests in Test Studio isn't visible when using a
+       browser. Because of this behavior, you can't determine the specific test step that
+       executes, or if a test passes or fails.
+       To determine test results outside of Test Studio, there are two properties called
+       OnTestCaseComplete and OnTestSuiteComplete available in the test object that you
+       can use to process the results of your tests. When integrating tests into a continuous
+       build and release pipeline like Azure DevOps, these properties can be used to
+       determine if you should proceed with the app deployment.
+       The expression entered for these properties triggers when each case or suite completes.
+       You can customize these properties to process and send the results of your tests to
+       various data sources or services such as:
+          SQL Server.
+          Dataverse.
+          Power Automate.
+          Email using Office 365.
+       These settings apply to every test suite or test case in your app. After each test suite or
+       test case completes, the test results and any trace messages contained in the tests are
+       available in the TestCaseResult and TestSuiteResult records.
+       The TestCaseResult record contains the following properties:
+          TestCaseName – the name of the test case.
+          TestCaseDescription – the description of the test case.
+        TestCaseId – the ID of the test case.
+        TestSuiteName – the test suite name that the case belongs to.
+        TestSuiteDescription – the description of the test suite.
+        TestSuiteId – the test suite ID that the case belongs to.
+        StartTime – the start execution time of the test.
+        EndTime – the end execution time of the test.
+        Traces – the result of any test assertions and any messages from the Trace function.
+        Success – indicates if the test case completed successfully.
+        TestFailureMessage – if the case failed, the failure message.
+      The TestSuiteResult record contains the following properties:
+        TestSuiteName – the test suite name.
+        TestSuiteDescription – the description of the test suite.
+        TestSuiteId – the test suite ID.
+        StartTime – the start execution time of the test suite.
+        EndTime – the end execution time of the test suite.
+        TestsPassed – the number of test cases that completed successfully in the suite.
+        TestsFailed - the number of test cases that failed in the suite.
+      In this quickstart, you'll create two custom tables in the Dataverse database to store the
+      test results by customizing the OnTestCaseComplete and OnTestSuiteComplete
+      properties:
+       1. Select Test in the left pane or View on the suite header.
+       2. Select the OnTestCaseComplete action.
+       3. Input an expression to process the results of your test. The following sample saves
+        each test case's results to the custom AppTestResults table in Dataverse. The test
+        results can optionally be stored to SQL, SharePoint, or any other data source. You
+        might need to set or increase the Trace field in your data source as required.
+         ７ Note
+            The following samples connect to Microsoft Dataverse. You can create a
+            simple app or build an app from scratch using Dataverse. Also, refer to the
+            Patch function reference for more details to modify records of a data source
+            used in the following samples.
+            Power Fx
+            //Save to Dataverse
+            Patch(AppTestResults
+            , Defaults(AppTestResults)
+            , {
+                     TestPass: TestCaseResult.TestCaseName & ":" & Text(Now())
+                     ,TestSuiteId: TestCaseResult.TestSuiteId
+                     ,TestSuiteName: TestCaseResult.TestSuiteName
+                     ,TestCaseId: TestCaseResult.TestCaseId
+                     ,TestCaseName: TestCaseResult.TestCaseName
+                     ,StartTime: TestCaseResult.StartTime
+                     ,EndTime: TestCaseResult.EndTime
+                     ,TestSuccess: TestCaseResult.Success
+                     ,TestTraces: JSON(TestCaseResult.Traces)
+                     ,TestFailureMessage: TestCaseResult.TestFailureMessage
+            }
+            );
+         4. Select the OnTestSuiteComplete action.
+         5. Input an expression to process the results of your test. In the following sample,
+          you'll save each test suite's results to the custom AppTestSuiteResults table in
+          Dataverse.
+            Power Fx
+            //Save to Dataverse
+            Patch(AppTestSuiteResults
+                , Defaults(AppTestSuiteResults)
+                , {
+                     TestSuiteId: TestSuiteResult.TestSuiteId
+                     ,TestSuiteName: TestSuiteResult.TestSuiteName
+                     ,StartTime: TestSuiteResult.StartTime
+                     ,EndTime: TestSuiteResult.EndTime
+                     ,TestPassCount: TestSuiteResult.TestsPassed
+                     ,TestFailCount: TestSuiteResult.TestsFailed
+                }
+            );
+       Other examples of expressions you could use in these properties are:
+          Send results to a flow in Power Automate.
+            Power Fx
+            MyTestResultsFlow.Run(JSON(TestCaseResult))
+          Email your results.
+            Power Fx
+            Office365.SendMailV2("someone@example.com", "Test case results", 
+            JSON(TestCaseResult, JSONFormat.IndentFour))
+          Receive an app notification of the test result.
+                    For example, receive a notification after the test completes when playing the test in
+                    a browser, outside of Test Studio.
+                      Power Fx
+                      Notify(TestCaseResult.TestCaseName & " : "
+                              & If( TestCaseResult.Success
+                                  , " Passed"
+                                  , TestCaseResult.TestFailureMessage)
+                              ,If(  TestCaseResult.Success
+                                  , NotificationType.Success
+                                  , NotificationType.Error)
+                      )
+              Test Functions
+              In addition to the functions available in Power Apps, the following are common
+              functions that you'll typically use when authoring tests:
+                    Select
+                    SetProperty
+                    Assert
+                    Trace
+              Next steps
+                    Automate tests with Azure Pipelines using classic editor
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Automate tests with Azure Pipelines
+             using classic editor
+             Article • 12/16/2022
+             In this article, you'll learn how to set up and run your canvas app tests built in Test
+             Studio using the Azure Pipelines classic editor in Azure DevOps Services.
+             You can use a public project on GitHub - Microsoft/PowerAppsTestAutomation         to:
+                  Automate operations of signing in to your application.
+                  Open a browser on the build agent and execute a set of test cases and suites.
+                  View the status of the test execution in the Azure DevOps pipeline.
+             Prerequisites
+             Before you begin, you must complete the following steps:
+                  Fork the Microsoft/PowerAppsTestAutomation         project on GitHub.
+                     ７ Note
+                     Public forks can’t be made private. If you want to create a private repo, please
+                     duplicate the repository   .
+                  Create a new Test URL .json file in the repo with the App Test URLs you want to run
+                  from the pipeline.
+             Step 1 - Fork the PowerAppsTestAutomation project
+             A fork   is a copy of a repository. By forking a repository, you can make changes
+             without affecting the original project.
+                1. Sign in to GitHub  .
+                2. Go to the microsoft/PowerAppsTestAutomation        repository. You can also search
+                  for microsoft/PowerAppsTestAutomation instead, and then select the repository:
+       3. Select Fork:
+       4. Select where you want to fork:
+      Your forked repository will now be available.
+      Step 2 - Create Test URL .json file
+      The Test URL .json file will contain the test suite and test case URLs for validating your
+      app. The app test suite and test case URLs can be retrieved by selecting the Copy play
+      link in Test Studio.
+      You can find a sample file Samples/TestAutomationURLs.json in the repo you created
+      earlier.
+       1. Create a new TestURLs.json file in your repo, or use any other file name.
+        The file name and location will be mapped in the pipeline variables later in the
+        document.
+       2. Copy the format from the Samples/TestAutomationURLs.json file.
+       3. Update the Test URLs section with the tests that you want to validate in your app.
+       4. Commit the changes to your repo:
+       Create a pipeline
+         1. Sign in to your Azure DevOps instance.
+         2. Select an existing project or create a new project.
+         3. Select Pipelines in the left menu.
+         4. Select Create Pipeline:
+         5. Select Use the classic editor:
+         6. Select GitHub as the source.
+       7. If necessary, authorize your GitHub connection using OAuth or using a personal
+        access token:
+       8. If needed, edit the connection name.
+       9. Select ... (ellipsis) from the right side of Repository input.
+       10. Enter the name of your project on GitHub, and then Select it:
+        11. Select Continue.
+        12. In the Select a template screen, select Empty job:
+        13. Save your pipeline.
+       Add tasks to the pipeline
+       You'll now add new job tasks and configure the tasks to run the tests from the pipeline
+       in this sequence:
+         1. Configure screen resolution using PowerShell.
+         2. Restore NuGet packages for the PowerAppsTestAutomation solution.
+         3. Build the PowerAppsTestAutomation solution.
+         4. Add Visual Studio Tests for Google Chrome.
+         5. Add Visual Studio Tests for Mozilla Firefox.
+       Step 1 - Configure screen resolution using PowerShell
+         1. Select + next to Agent job 1.
+         2. Search for PowerShell.
+         3. Select Add to add a PowerShell task to the job:
+          4. Select the task.
+           You can also update the display name to Set Agent Screen Resolution to 1920 x
+           1080 or similar.
+          5. Select Inline as the script type, and enter the following in the script window:
+             PowerShell
+             # Set agent screen resolution to 1920x1080 to avoid sizing issues with 
+             Portal  
+             Set-DisplayResolution -Width 1920 -Height 1080 -Force
+             # Wait 10 seconds  
+             Start-Sleep -s 10
+             # Verify Screen Resolution is set to 1920x1080  
+             Get-DisplayResolution
+        Step 2 - Restore NuGet packages
+          1. Select + next to Agent job 1.
+       2. Search for NuGet.
+       3. Select Add to add a NuGet task to the job.
+       4. Select the task.
+        You can also update the display name to Restore NuGet Packages or similar.
+       5. Select … (ellipsis) in the Path to solution, packages.config, or project.json
+        configuration field.
+       6. Select the PowerAppsTestAutomation.sln solution file.
+       7. Select OK:
+      Step 3 - Build the PowerAppsTestAutomation solution
+       1. Select + next to Agent job 1.
+       2. Search for Visual Studio build.
+       3. Select Add to add a Visual Studio build task to the job.
+       4. Select the task.
+        You can also update the display name to Build Power Apps Test Automation
+        Solution or similar.
+       5. Select … (ellipsis) in the Solution configuration field.
+          6. Select the PowerAppsTestAutomation.sln solution file.
+          7. Select OK.
+        Step 4 - Add Visual Studio Tests for Google Chrome
+          1. Select + next to Agent job 1.
+          2. Search for Visual Studio Test.
+          3. Select Add to add a Visual Studio Test task to the job.
+          4. Select the task.
+            You can also update the display name to Run Power Apps Test Automation Tests
+            via $(BrowserTypeChrome) or similar.
+          5. Remove the default entries in the Test files text field and add the following:
+            **\Microsoft.PowerApps.TestAutomation.Tests\bin\\Debug\Microsoft.PowerApps.Tes
+            tAutomation.Tests.dll
+          6. Enter TestCategory=PowerAppsTestAutomation in the Test filter criteria field.
+          7. Select Test mix contains UI tests.
+          8. Select … (ellipsis) in the Settings file field.
+        9. Expand the Microsoft.PowerApps.TestAutomation.Tests, select the
+         patestautomation.runsettings file, and then select OK:
+        10. Copy the following in the Override test run parameters field.
+           -OnlineUsername "$(OnlineUsername)" -OnlinePassword "$(OnlinePassword)" 
+           -BrowserType "$(BrowserTypeChrome)" -OnlineUrl "$(OnlineUrl)" -
+           UsePrivateMode "$(UsePrivateMode)" -TestAutomationURLFilePath 
+           "$(TestAutomationURLFilePath)" -DriversPath "$(ChromeWebDriver)"
+           ７ Note
+           This is where the variables in the pipeline are configured, represented above
+           in the form of $(VariableName).
+        11. Enter Run Power Apps Test Automation Tests via $(BrowserTypeChrome) or
+         similar in the Test run title field.
+       Step 5 - Add Visual Studio Tests for Mozilla Firefox
+         1. Right-click the Add Visual Studio Tests for Chrome task and select Clone task(s).
+         2. Select the task and update the following areas:
+          a. Title: Run Power Apps Test Automation Tests via $(BrowserTypeFirefox)
+          b. Override test run parameters
+             -OnlineUsername "$(OnlineUsername)" -OnlinePassword 
+             "$(OnlinePassword)" -BrowserType "$(BrowserTypeFirefox)" -OnlineUrl 
+             "$(OnlineUrl)" -UsePrivateMode "$(UsePrivateMode)" -
+             TestAutomationURLFilePath "$(TestAutomationURLFilePath)" -
+             DriversPath "$(GeckoWebDriver)"
+          c. Test Run Title: Run Power Apps Test Automation Tests via $(BrowserTypeFirefox)
+       Configure pipeline variables
+       You'll now configure the pipeline variables defined in the tasks you've added earlier.
+         1. Select the Variables tab.
+         2. Select Add and repeat this step to configure the following variables:
+                                                                                        ﾉ Expand table
+              Variable name               Variable value
+              BrowserTypeChrome           Chrome
+              BrowserTypeFirefox          Firefox
+              OnlineUrl                   https://make.powerapps.com
+              TestAutomationURLFilePath   $(Build.SourcesDirectory)\<test URL file>.json
+                                          Note: This is the Test URLs .json file you created earlier.
+              UsePrivateMode              true
+              OnlineUsername              Enter the Microsoft Entra email address of the user context that will
+                                          sign in to the application. Tests will run under the context of this
+                                          user account. Ensure this user has the ability to run the app and
+                                          connect to any data sources the app might connect to.
+                1. Select Add and enter OnlinePassword in the variable name.
+                2. Check the lock image to make this variable a secret.
+                3. Save your pipeline configurations.
+             Run and analyze tests
+             To validate that your tests are executing successfully, select Queue and then select Run.
+             Your job will start running.
+      As the job runs, select the job to see a detailed status on each of the tasks running:
+      When the job completes, you can view the high-level job summary, and any errors or
+      warnings. By selecting the Tests tab, you can view specific details on the test cases
+      you've executed.
+      The following example indicates at least one of our test cases has failed while executing
+      the tests using the Chrome browser:
+      Select RunTestAutomation test to drill into the details on what test case has failed. In
+      the Attachments tab, you can see the summary of the test execution and which test
+      cases have failed or passed in your test suite:
+       ７ Note
+       If you execute a test suite, you'll see a summary of test cases passed and failed. If
+       you execute a test case, you'll see specific details on the failure with any trace
+        information, if available.
+       Known limitations
+          Multifactor authentication isn't supported.
+          Test summary will report a single test result per browser. The test result will contain
+          one or more test cases or test suite results.
+          Any authentication process other tha Microsoft Entra sign-in flow requires
+          customization of the sign-in process in the PowerAppsTestAutomation solution.
+       See also
+          Test Studio overview
+          Working with Test Studio
+          Configure pipeline using YAML
+            Automate tests with Azure Pipelines
+            using YAML
+            Article • 12/16/2022
+            In this article, you'll learn how to set up and run your canvas app tests built in the Test
+            Studio by using a YAML pipeline in Azure DevOps Services.
+            You can use a public project on GitHub—Microsoft/PowerAppsTestAutomation       —to:
+                  Automate the operations of signing in to your application.
+                  Open a browser on the build agent and execute a set of test cases and suites.
+                  View the status of the test execution in the Azure DevOps pipeline.
+            Prerequisites
+            Before you begin, you must complete the following steps:
+                  Fork the Microsoft/PowerAppsTestAutomation      project on GitHub.
+                    ７ Note
+                    Public forks can't be made private. If you want to create a private repo, you
+                    need to duplicate the repository  .
+                  Create a new Test URLs .json file that includes the app test URLs you want to run
+                  from the pipeline.
+                  Create a new Azure Pipelines YAML file.
+                  Create a GitHub service connection to your repo.
+            Step 1 - Fork the PowerAppsTestAutomation project
+            A fork   is a copy of a repository. By forking a repository, you can make changes
+            without affecting the original project.
+               1. Sign in to GitHub  .
+               2. Go to the microsoft/PowerAppsTestAutomation      repository. You can also search
+                  for microsoft/PowerAppsTestAutomation instead, and then select the repository.
+       3. Select Fork.
+       4. Select where you want to locate the fork.
+      Your forked repository will now be available.
+      Step 2 - Create a test URL .json file
+      The test URL .json file will contain the test suite and test case URLs for validating your
+      app. The app test suite and test case URLs can be retrieved by selecting the copy play
+      link in Test Studio.
+      You can find a sample file, Samples/TestAutomationURLs.json, in the repo you created
+      earlier.
+       1. Create a new file named TestURLs.json file in your repo, or use any file name you
+        want. The file name and location will be mapped in the pipeline variables later in
+        the document.
+       2. Copy the format from the Samples/TestAutomationURLs.json file.
+       3. Update the Test URLs section with the tests that you want to validate in your app.
+       4. Commit the changes to your repo.
+      Step 3 - Create an Azure Pipelines YAML file
+      You can find a sample file, Samples/azure-pipelines.yml, in the repo you created earlier.
+       1. Create a new file named azure-pipelines.yml file in your repo.
+       2. Copy the content from the Samples/azure-pipelines.yml file.
+       3. Commit the changes to your repo. You'll reference and update the azure-
+        pipelines.yml file when you're configuring your pipeline in Step 4.
+      Step 4 - Create a GitHub service connection
+       1. Sign in to your Azure DevOps instance.
+       2. Select an existing project, or create a new project.
+       3. Select Project settings at the bottom of the left navigation pane.
+       4. Under Pipelines, select Service connections.
+       5. Select Create service connection.
+       6. Select the GitHub service.
+       7. Select Next.
+       8. Under OAuth Configuration, select AzurePipelines.
+       9. Select Authorize.
+       10. Optionally, you can update the Service connection name.
+       11. Select Save.
+       Create a pipeline
+         1. Select Pipelines in the left navigation pane.
+         2. Select Create Pipeline.
+       3. Select GitHub YAML.
+       4. Search for or select your repo.
+       5. Select Existing Azure Pipelines YAML file.
+       6. Set the path to the Azure YAML pipeline file you created earlier.
+       7. Select Continue:
+        The azure-pipelines.yml file appears.
+       8. Update repositories name to your repo.
+       9. Update endpoint to the name of the GitHub service connection you created
+        earlier.
+       10. Update the TestAutomationURLs file name. This is the test URLs .json file file you
+        created earlier.
+       11. Update the LocalProjectName value to your repo name, if you changed it.
+       12. Update the TestAutomationURLFilePath to the location of the test URLs .json file
+        in your repo.
+       13. Select Variables.
+       14. Add a variable named OnlineUsername, and set the value to the Microsoft Entra
+        email address of the user context who will sign in to the application. Tests will run
+        under the context of this user account.
+       15. Select OK.
+       16. Add another variable named OnlinePassword. Set the value to the password of the
+        Microsoft Entra account created earlier.
+       17. Select Keep this value secret and Let users override this value when running this
+        pipeline.
+       18. Save and Commit the changes to your repo.
+       Run and analyze tests
+       To validate whether your tests are being successfully executed, select Run. Optionally,
+       you can optionally select the server image to run your tests and also the browser types.
+       As the job runs, select it to see detailed status for each of the tasks that are running.
+      When the job is completed, you can view the high-level job summary and any errors or
+      warnings. By selecting the Test tab, you can view specific details on the test cases you've
+      executed.
+      The following example indicates that at least one of our test cases has failed while
+      executing the tests by using the Chrome browser.
+      Select RunTestAutomation to drill into the details about the failed test cases. On the
+      Attachments tab, you can see the summary of the test execution and which test cases
+      have failed or passed in your test suite.
+        ７ Note
+        If you execute a test suite, you'll see a summary of test cases that have passed and
+        failed. If you execute a test case, you'll see specific details about the failure with any
+        trace information, if available.
+       Known limitations
+          Multi-factor authentication isn't supported.
+          The test summary will report a single test result per browser. The test result will
+          contain one or more test cases or test suite results.
+          For any authentication process other tha Microsoft Entra sign-in, you'll need to
+          customize the sign-in process in the PowerAppsTestAutomation solution.
+       See also
+          Test Studio overview
+          Working with Test Studio
+          Automate tests with Azure Pipelines using classic editor
+     Test canvas apps
+     Canvas apps run inside an iframe within the Power Apps player. This guide explains how to
+     launch a canvas app, scope your selectors to the correct frame, and interact with controls by
+     using data-control-name attributes.
+     How canvas app testing works
+     When a canvas app loads in play mode, the runtime hosts the app inside an iframe:
+      iframe[name="fullscreen-app-host"]
+     All controls inside the app have a data-control-name attribute that matches the control name
+     you set in Power Apps Studio. Gallery items have data-control-part="gallery-item".
+     You scope all locators to this frame before interacting with controls:
+      TypeScript
+      const canvasFrame = page.frameLocator('iframe[name="fullscreen-app-host"]');
+     Launch a canvas app
+     Use AppProvider to launch the app and get the CanvasAppPage object:
+      TypeScript
+      import { test, expect } from '@playwright/test';
+      import {
+        AppProvider,
+        AppType,
+        AppLaunchMode,
+        buildCanvasAppUrlFromEnv,
+      } from 'power-platform-playwright-toolkit';
+      const CANVAS_APP_URL = buildCanvasAppUrlFromEnv();
+      test.beforeEach(async ({ page, context }) => {
+        const app = new AppProvider(page, context);
+        await app.launch({
+            app: 'Northwind Orders',
+            type: AppType.Canvas,
+            mode: AppLaunchMode.Play,
+            skipMakerPortal: true,   // bypasses Power Apps navigation
+            directUrl: CANVAS_APP_URL,
+          });
+        });
+         Tip
+        Setting skipMakerPortal: true and providing a directUrl saves 10–20 seconds per test
+        by bypassing Power Apps navigation.
+      Wait for the app to load
+      After launch, wait for a known control to appear before interacting:
+        TypeScript
+        const canvasFrame = page.frameLocator('iframe[name="fullscreen-app-host"]');
+        // Wait for gallery to confirm the app is loaded and data is present
+        await canvasFrame
+          .locator('[data-control-name="Gallery1"] [data-control-part="gallery-item"]')
+          .first()
+          .waitFor({ state: 'visible', timeout: 60000 });
+        ７ Note
+        Canvas apps backed by Dataverse can take 30–60 seconds to load data into a gallery. Use
+        a 60-second timeout for gallery selectors.
+      Interact with controls
+      The following examples show how to interact with common canvas app controls using frame-
+      scoped locators.
+      Click a button
+      Locate a button by its data-control-name attribute, wait for it to be visible, and then click it.
+        TypeScript
+       const addButton = canvasFrame.locator('[data-control-name="icon3"]');
+       await addButton.waitFor({ state: 'visible', timeout: 10000 });
+       await addButton.click();
+      Fill a text input
+      Use the fill() method to set the value of a text input, targeting it by its aria-label.
+       TypeScript
+       const orderNumberInput = canvasFrame.locator('input[aria-label="Order Number"]');
+       await orderNumberInput.fill('ORD-12345');
+      Select a gallery item
+      Filter gallery items by their displayed text content to find and click a specific record.
+       TypeScript
+       const galleryItem = canvasFrame
+         .locator('[data-control-part="gallery-item"]')
+         .filter({ has: canvasFrame.locator('[data-control-
+       name="Title1"]').getByText('Order 001') });
+       await galleryItem.waitFor({ state: 'visible' });
+       await galleryItem.click();
+      Count gallery items
+      Use the count() method to verify that the gallery contains the expected number of items.
+       TypeScript
+       const galleryItems = canvasFrame.locator('[data-control-name="Gallery1"] [data-
+       control-part="gallery-item"]');
+       const count = await galleryItems.count();
+       expect(count).toBeGreaterThan(0);
+      Create a page object for your canvas app
+      For maintainability, encapsulate selectors and actions in a Page Object class:
+       TypeScript
+      // pages/my-app/MyCanvasAppPage.ts
+      import { Page, FrameLocator } from '@playwright/test';
+      export class MyCanvasAppPage {
+        private readonly frame: FrameLocator;
+        constructor(private readonly page: Page) {
+          this.frame = page.frameLocator('iframe[name="fullscreen-app-host"]');
+        }
+        get addButton() {
+          return this.frame.locator('[data-control-name="AddButton"]');
+        }
+        get gallery() {
+          return this.frame.locator('[data-control-name="Gallery1"]');
+        }
+        async waitForLoad(): Promise<void> {
+          await this.gallery
+            .locator('[data-control-part="gallery-item"]')
+            .first()
+            .waitFor({ state: 'visible', timeout: 60000 });
+        }
+        async clickAdd(): Promise<void> {
+          await this.addButton.click();
+        }
+        async getItemCount(): Promise<number> {
+          return this.gallery.locator('[data-control-part="gallery-item"]').count();
+        }
+      }
+     Full CRUD test example for canvas apps
+     This example combines app launch, gallery verification, and form interaction into a complete
+     test suite.
+      TypeScript
+      import { test, expect, FrameLocator } from '@playwright/test';
+      import { AppProvider, AppType, AppLaunchMode, buildCanvasAppUrlFromEnv } from 
+      'power-platform-playwright-toolkit';
+      const CANVAS_APP_URL = buildCanvasAppUrlFromEnv();
+      test.describe('Canvas App - Orders', () => {
+        let canvasFrame: FrameLocator;
+        test.beforeEach(async ({ page, context }) => {
+          const app = new AppProvider(page, context);
+          await app.launch({
+            app: 'Orders App',
+            type: AppType.Canvas,
+            mode: AppLaunchMode.Play,
+            skipMakerPortal: true,
+            directUrl: CANVAS_APP_URL,
+          });
+          canvasFrame = page.frameLocator('iframe[name="fullscreen-app-host"]');
+          await canvasFrame
+            .locator('[data-control-part="gallery-item"]')
+            .first()
+            .waitFor({ state: 'visible', timeout: 60000 });
+        });
+        test('should display orders in gallery', async () => {
+          const count = await canvasFrame
+            .locator('[data-control-part="gallery-item"]')
+            .count();
+          expect(count).toBeGreaterThan(0);
+        });
+        test('should click Add and show form', async ({ page }) => {
+          await canvasFrame.locator('[data-control-name="icon3"]').click();
+          await page.waitForTimeout(2000);
+          const input = canvasFrame.locator('input[type="text"]').first();
+          await expect(input).toBeVisible();
+        });
+      });
+     Discover control names in canvas apps
+     To find the data-control-name values in your app:
+       1. Open the app in play mode in a browser.
+       2. Open browser developer tools (F12).
+       3. Use the Inspector to hover over controls and look for data-control-name attributes.
+     Alternatively, use the Playwright MCP server to ask an AI assistant to inspect the DOM and
+     generate selectors for you. See AI-assisted testing.
+     Next steps
+        Test model-driven apps
+        Test custom pages
+        Page Object Model
+      See also
+         Sample tests
+         AI-assisted test authoring
+         Environment variables
+      Last updated on 04/17/2026
+            How to create a canvas app connected
+            to Microsoft Dataverse from scratch
+            Article • 12/16/2022
+            Microsoft Dataverse is a premier data platform for Power Platform. Dataverse lets you
+            securely store and manage data used by your apps within a set of tables.
+            In this article, we'll create an app connected to existing data in a Power Platform
+            environment.
+            Prerequisites
+            To complete this lesson, you'll need a Power Apps environment with a Dataverse
+            database with at least one table containing data. If you don’t have a license, you can
+            sign up for the Power Apps Developer Plan, or use a Power Apps trial.
+            Create a trial environment
+            An environment in Power Apps is a space to store, manage, and share your
+            organization’s business data, apps, chatbots, and flows. It also serves as a container to
+            separate apps that might have different roles, security requirements, or target
+            audiences. Each environment can have one Dataverse database.
+            To make sure that you have what you need to complete this lesson, we're going to
+            create a new environment that includes a Dataverse database. This environment is a 30-
+            day trial that will go away at the end of the 30 days, but you can upgrade it to a
+            sandbox or production environment if you want to keep it.
+            We're going to create a trial environment that will include a Dataverse database, and the
+            sample data used in this article.
+               1. Go to Power Platform admin center  .
+               2. Select Environments.
+               3. Select New.
+               4. Name the environment Dataverse Trial.
+               5. Select Trial for environment type.
+               6. Toggle Create Database to Yes.
+        7. Select Next.
+        8. Toggle Deploy Sample Apps and Data to Yes.
+        9. Select Save.
+       Your trial environment will now be created, including a Dataverse database and sample
+       data.
+       Create a canvas app
+       Create a canvas app with Accounts table in Dataverse. When done, Power Apps will
+       generate an app for you. This app includes the following screens:
+          Browse Screen - a screen to search, sort, and select an account record, and launch
+          the edit screen to create a new record.
+                    Detail Screen - a read-only screen that displays the details of the record selected
+                    on the browse screen.
+                    Edit Screen - an edit form that is used to edit the details of a selected record or
+                    create new records.
+              Try the app
+              From Power Apps Studio, you can preview your app to try it out.
+                  1. Select Play from the top-right corner of the screen.
+                  2. From the Account list, select Alpine Ski House.
+                  3. View the details of Alpine Ski House.
+                  4. Select      to edit the record.
+                  5. On edit form, remove (sample) from the account name field.
+                  6. Select      to save the record changes.
+                  7. Back on the account list screen, select + to launch a new record form.
+                  8. Enter the desired fields, such as Account name.
+                  9. Save the record.
+                10. Verify that the newly created record appears in the account list gallery.
+                11. To exit preview mode, select         in the upper-right corner of the screen.
+              Using the Tree view
+              The Tree View is on the left-side of the screen (if you don’t see it, select            ). The tree
+              view gives you easy access to the components in your canvas app, such as screens,
+              galleries, text input controls, and text labels.
+              The tree view can be collapsed or expanded by screen to make it easy to focus on the
+              part of the app on which you're working.
+              Currently, the BrowseScreen1 is expanded. To see the components for other screens,
+              select > next to the name of the screen.
+       Modify the gallery of accounts
+       A gallery in Power Apps is used to show several related items. For example, in our app,
+       BrowseGallery1 displays all of our account records. When one of the items is selected, a
+       border is placed around the item to indicate that it has been selected.
+       By default, this gallery includes the following three fields: Account name, phone number,
+       and city.
+       However, we can change the fields included in the gallery.
+         1. From the tree view, select BrowseGallery1.
+         2. In the property pane on the right-side of the screen, select Edit.
+         3. The field data panel will appear. Change Subtitle to Website.
+         4. Select outside of the field data panel.
+         5. App will now display the website fields value instead of the phone number.
+        Update search to include the account name
+        When you previewed the app, you may have noticed that searching by account name
+        didn’t work. That is because the autogenerated app search formula doesn't include the
+        Account name field. In this lesson, we'll update to search formula to include the
+        Account name field.
+           Tip
+          The account name is stored in a column called Name.
+          1. In the tree view, select BrowseGallery1.
+          2. Verify the Items property is selected in the property selector.
+          3. In the formula bar, update the formula as follows:
+             Power Fx
+            SortByColumns(Search([@Accounts], TextSearchBox1.Text, 
+            "name","address1_city","address1_composite"), "name", 
+            If(SortDescending1, Descending, Ascending))
+          The formula consists of SortByColumns, Search, and If functions to search the
+          Accounts table with the text entered in the search box that has the matching data
+          in the name, address1_city, and address1_composite fields, and allow sorting.
+       The account list can now be searched and sorted by the Account name field.
+       Add fields to the account detail screen
+       Datascreen1 includes a display form that displays the data of the record selected on the
+       browse screen. Display form controls are read-only, intended to allow users to read data
+       but not create or edit data.
+         1. In the tree view, expand DetailScreen1.
+         2. Select DetailForm1.
+         3. In the right-side properties pane, select Edit Fields.
+         4. Select Add field.
+         5. Select the following fields:
+             Address 1: Country
+             Address 1: State/Province
+             Address 1: Street 1
+             Address 1: ZIP/Postal Code
+         6. Select Add.
+       7. You'll now see the selected fields in the Field panel. Rearrange the fields by
+        dragging and dropping them or by selecting ... (ellipsis) to the right of the field
+        name, and selecting Move up or Move down.
+       8. Arrange the field in the following order:
+           Account Name
+           Main Phone
+           Address 1: Street 1
+           Address 1: City
+           Address 1: State/Province
+           Address 1: Zip/Postal Code
+           Address 1: Country/Region
+       9. Select anywhere outside of the field pane to close the pane, and return to
+        DetailScreen1.
+      You'll now see the selected fields displayed in the correct order.
+       Modify account edit screen
+       EditScreen1 allows users to edit or create account records. This screen includes an Edit
+       Form control called EditForm1.
+        ７ Note
+        Since the edit form is one of the primary methods for creating or updating records,
+        it should include every field that you want your users to be able to submit, and
+        shouldn't include any fields that are read-only or the ones you don't want your
+        users to modify.
+       In this lesson, we'll add the same fields that we added earlier to the display form, plus
+       the ability to attach files.
+        1. In the tree view, expand EditScreen1.
+        2. Select EditForm1.
+        3. In the right-side properties panel, select Edit Fields.
+        4. Select Add field.
+        5. Select the following fields:
+            Address 1: Country
+            Address 1: State/Province
+            Address 1: Street 1
+            Address 1: ZIP/Postal Code
+        6. You'll now see the selected fields in the field pane. Rearrange the fields by
+          dragging and dropping them or by selecting ... (ellipsis) to the right of the field
+          name, and selecting Move up or Move down.
+        7. Arrange the field in the following order:
+            Account Name
+            Main Phone
+            Address 1: Street 1
+            Address 1: City
+            Address 1: State/Province
+            Address 1: Zip/Postal Code
+            Address 1: Country/Region
+       8. Select anywhere outside of the field pane to close the field pane.
+       9. To minimize unnecessary scrolling in the app, we want the Edit Form to arrange
+        the fields into two columns. In the properties pane on the right, select 2 in the
+        Columns drop down.
+       10. To make the form easier to read, we want to remove Address 1: part of the address
+        field labels.
+           In tree view, expand EditForm1.
+           Select Address 1: City_DataCard2 control.
+           In the properties pane on right, select Advanced.
+           Select Unlock to change properties.
+           Change DisplayName property to City.
+           Follow the above steps to remove Address 1: from the Street 1,
+           Country/Region, State/Province, and Zip/Postal Code fields.
+      EditScreen1 should now look like the following:
+       Save the app
+       By saving the app, your app will become available to use and share with others.
+        1. In Power Apps Studio, select File.
+        2. In the Name field, enter Account Manager.
+        3. Select an icon and background color from the Icon area. This will be used to
+         identify your app in the app list.
+        4. Select Save.
+        5. Select Save in the lower right corner.
+        6. Once app is saved, select the back arrow to return to the Power Apps Studio.
+             Run the app
+                1. Sign in to Power Apps  .
+                2. Verify that you're in the environment you used to create the app by looking in the
+                  upper-right corner of the screen. If different, select Environment and select the
+                  appropriate environment.
+                3. Select Apps.
+                4. From the app list, select Account Manager.
+                5. When the app loads, verify the changes made.
+                       Search app list for Blue Yonder Airlines.
+                       Select the Blue Yonder record and verify you see the fields added to the
+                       Display form.
+                       Select     to edit the record.
+                       Verify form displays two columns of fields.
+                       Verify that the field names don't display Address 1: in the labels.
+                       Select Attach file in the Attachment area, select a file, and select Open.
+                       Verify uploaded file appears in the attachment list.
+                       Select      to save the record.
+              Run your app on mobile
+              To test your Power Apps on your mobile device:
+                 1. Download  the app from your mobile app store.
+                 2. Sign in using your work or school account.
+                 3. Select your app from the list.
+              See also
+                    Create a canvas app from a template
+                    Add and configure controls in canvas apps
+                    Get started with formulas in canvas apps
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       How to create a canvas app with Power
+       BI visual
+       Article • 12/16/2022
+       Microsoft Power BI is a powerful analysis and visualization tool. Power Apps is great at
+       enabling people to take action on the web and mobile. Canvas apps created using
+       Power Apps can be embedded in a Power BI report. Similarly, a Power BI report tile can
+       be added to a canvas app. The best of both worlds can be achieved at the same place
+       and same time.
+       In this example, we'll create a quick Power BI report and a canvas app, and then see how
+       we can add the report as a tile in the app.
+       Watch this video to learn how to create a canvas app with Power BI visual:
+       https://learn-video.azurefd.net/vod/player?id=1624717a-18d6-4aba-ae5f-
+       0d0503b2cccb&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+       apps%2Fhow-to%2Fbuild-powerbi-visual
+       Prerequisites
+       To complete this lesson, we'd need the ability to create Power BI dashboards and
+       reports.
+       Sign in to Power BI
+       Sign in to Power BI with the same Office license as the one used for creating the Power
+       Apps.
+       Create a new workspace
+         1. Select Workspaces from the left-pane.
+       2. Select Create a workspace.
+       3. Enter a name for the workspace, and then select Save.
+        The workspace gets created
+       4. Select + New, and add a dashboard.
+       5. Add a name for the dashboard, then select Create.
+        The Power BI dashboard gets created within the workspace we created
+       6. Open the workspace, select + New, and then select Dataset to create a new
+        dataset.
+       7. Select Samples under "More ways to create your own content" to use sample data.
+       8. Select Sales and Marketing sample. You can also select another sample of your
+        choice.
+       9. Select Connect to connect to the sample data.
+        A dataset with the Sales and Marketing sample and a report gets added to the
+        Workspace.
+       10. From the left-pane, select the report that was created from the dataset, select ...
+        (ellipsis), and select then select Pin to a dashboard.
+       11. Select Existing dashboard, select the dashboard, and then select Pin live.
+       The report gets added to the dashboard, and is ready for use in Power Apps.
+       Create a new canvas app
+        1. Start by creating a blank canvas app.
+        2. Select Insert > Charts > Power BI tile.
+         The Power BI Tile gets added to the screen.
+                 3. Select the Workspace, dashboard and tile created earlier to add the Power BI tile to
+                    the canvas app.
+                 4. Save and publish the app.
+              You've created a canvas app with Power BI tile.
+              See also
+                    Connect to Power BI from Power Apps
+                    Power Apps visual for Power BI
+                    Power BI tile control in Power Apps
+                    Tutorial: Embed a Power Apps visual in a Power BI report
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+       Provide product feedback
+            Create a canvas app that can trigger a
+            Power Automate flow
+            Article • 12/16/2022
+            Power Automate can be used to create logic that performs one or more tasks when an
+            event occurs in a canvas app. For example, a button can be configured so that, when a
+            user selects it, an item is created in a list, an email, or meeting request is sent, a file is
+            added to the cloud, or all of these. Any control in the app can be configured to start the
+            flow, that continues to run even if you close the app.
+            In this article, we'll learn how create and trigger a flow using canvas apps.
+            Watch this video to learn how to create a canvas app that can trigger a flow:
+            https://learn-video.azurefd.net/vod/player?id=97f1d303-9f0d-4817-9f9d-
+            c899d023d9b1&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Ftrigger-flow
+            Prerequisites
+            To complete this lesson, you'll need Power Automate and Power Apps environment with
+            a Dataverse database. If you don't have a license, you can sign up for the Power Apps
+            Developer Plan or use Power Apps trial.
+            Create a trial environment
+            An environment in Power Apps is a space to store, manage, and share your
+            organization’s business data, apps, chatbots, and flows. It also serves as a container to
+            separate apps that might have different roles, security requirements, or target
+            audiences. Each environment can have one Dataverse database.
+            To make sure that you have what you need to complete this lesson, we're going to
+            create a new environment that includes a Dataverse database. This is a 30-day trial that
+            will go away at the end of the 30 days, but you can upgrade it to a sandbox or
+            production environment if you want to keep it.
+            We're going to create a trial environment that will include a Dataverse database, and the
+            sample data used in this article.
+               1. Go to Power Platform admin center  .
+        2. Select Environments.
+        3. Select New.
+        4. Name the environment Dataverse Trial.
+        5. Select Trial for environment type.
+        6. Toggle Create Database to Yes.
+        7. Select Next.
+        8. Toggle Deploy Sample Apps and Data to Yes.
+        9. Select Save.
+       Your trial environment will now be created, including a Dataverse database and sample
+       data.
+       Create a canvas app
+       In this lesson, we'll create an app to search, view, and create customer accounts using
+       the Accounts table in Dataverse.
+        1. Start by creating a blank canvas app.
+        2. Select Create a gallery.
+        3. Select Accounts table.
+            4. Stretch the gallery to the bottom of the screen, and add a label to the top with the
+              text Accounts. And then, update the other properties as listed below.
+                                                                 ﾉ Expand table
+               Property                  Value
+               Font                      Open Sans
+               Font size                 21
+               Font weight               Bold
+               Text alignment            Center
+               Auto height               Off
+               Line height               1.2
+               Overflow                  Hidden
+               Display mode              Edit
+               Visible                   On
+               Position (X, Y)           0, 0
+               Size (Width, Height)      640, 71
+               Padding                   5 Top, 5 Bottom, 5 Left, 5 Right
+       5. Add an Add icon to the top-right of the screen by selecting Insert > Icon > Add.
+        And then, update the properties of the icon to color white and padding of 5 from
+        all sides.
+       6. From the top-left side of the screen, select New screen > Form.
+       7. Update the title of the form to New Account, and select the data source as
+        Accounts from the pane on the right-side of the screen.
+       8. Select Edit fields on the right-pane.
+       9. Select Add field and add Email to the form.
+        The email field gets added to the form.
+       10. Set the default mode of the form to New.
+       11. Select Screen1 that has the accounts gallery, and set the OnSelect property of the
+        + icon to Navigate(Screen2).
+       12. Select Insert > New screen > Blank screen to add a new screen to the app.
+       13. Select Insert > Icon, and then select the Check (badge) icon to add it to the screen.
+       14. Move the icon to the top center of the canvas.
+       15. Add a label with text Account was created successfully!, and move it under the
+        icon added in the earlier step.
+       16. Add an additional label below the label added in the previous step with text Send
+        a welcome note to the Customer?.
+       17. Add a Text Input box by selecting Insert > Input > Text Input. Set the Mode of the
+        control to Multiline, and default text to Thank you for creating an account with
+        us. We look forward to serving you!. And move the control below the label added
+        in the previous step.
+       18. Set the OnVisible property of Screen3 to Reset(TextInput1).
+        19. Add two buttons to the screen with text Yes and No, and place them below the
+          input text box added in the previous step.
+        20. Go to the New Account form screen, and set the OnVisible property of the screen
+          to ResetForm(EditForm3).
+        21. Select the check icon on the top-right, and set the OnSelect property to
+          SubmitForm(EditForm3);Navigate(Screen3).
+       22. Select the X button on the top-right, and set the OnSelect property to Back().
+       23. Go back to Screen3 by selecting Screen3 in the tree view.
+        24. Select the No button, and set the button's OnSelect property to
+          Navigate(Screen1).
+       25. Select the Yes button, on the app authoring menu select Power Automate.
+       26. Select Create a new flow to create a new Power Automate flow.
+       Create the Power Automate Flow
+        1. On the Create your flow screen, from the list of instant templates, select Click a
+         button in Power Apps to send an email.
+        2. Enter a name for the flow as "Flow triggered by Power Apps", and select Power
+         Apps as the trigger.
+        3. Select Edit in advanced mode and then select, Continue.
+         4. The To field and the Body field are automatically auto-populated with the
+          following:
+             To: Sendanemail(V2)_To.
+             Body: Sendanemail(V2)_Body
+         5. In Subject field, delete Sendanemail(V2)_To and enten Thank you for your
+          business! in the Subject field.
+         6. Select Save to save the flow.
+       Trigger the flow from within the canvas app
+         1. Select the Yes button > in the OnSelect property enter the two parameters for the
+          To email address and the Body of the email as follows:
+            Power Fx
+            FlowtriggeredbyaPowerapp.Run(
+               EditForm3.LastSubmit.Email,
+               TextInput1.Text
+            );
+            Navigate(Screen1);
+            ７ Note
+            The email address is picked up from the new account record created on the
+            previous screen. and the body for the email is picked from the text box text
+            captured on this screen.
+       Test the app
+       Run the app in preview mode. In this test, we'll create a new account by entering details
+       like account name, phone number, city, and email address on the New Account screen.
+       On saving the new account details, we'll be prompted to send an email to the customer
+       where we can update the verbiage of the email, and then select Yes to send the email.
+       This will trigger the flow, and email will be sent to the email address on the account.
+      An email like this should appear in your inbox
+              See also
+              Use Power Automate pane
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Create a canvas app with the barcode
+       reader control
+       Article • 03/13/2023
+       The barcode reader control in Power Apps lets you use your phone or mobile device to
+       scan barcodes from various formats.
+       Some of the common uses of barcode reader control in a canvas app are:
+          An app to check in items like books into a collection
+          An inventory management app that uses barcode to identify items
+          An employee app to check in and badge scanning for security
+       In this article, we'll create a canvas app with barcode reader and display scanned items
+       in a gallery.
+       Watch this video to learn how to create an app with barcode reader:
+       https://learn-video.azurefd.net/vod/player?id=8714cb52-ce37-452c-bc47-
+       1af24b1f6b93&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+       apps%2Fhow-to%2Fcreate-app-barcode-scanner
+       Prerequisites
+          Power Apps license
+          Before you create an app from scratch, familiarize yourself with Power Apps basics
+          by generating an app and then customizing that app's controls, gallery, forms, and
+          cards.
+          To create an app, you must be assigned to the Environment Maker security role.
+       Open a blank app
+       Create a blank canvas app.
+       Add barcode scanner
+         1. From the left-pane, select Screen1.
+         2. From the left-pane, select + Insert > expand Media > select Barcode reader
+          control.
+         3. From the properties list on the right-side of the screen, select Advanced tab, and
+          then select the OnScan property.
+         4. Set the OnScan property of the Barcode scanner control to this expression by
+          typing or pasting it in the formula bar.
+            Power Fx
+            Collect(
+                colScannedItems,
+                {ScannedItem: First(BarcodeReader1.Barcodes).Value, ScannedTime: 
+            Now()}
+            )
+        5. From the Properties pane, set X property to "180" and the Y property to "1005".
+       Add gallery
+        1. Select + Insert > expand Layout > select Vertical gallery control.
+         2. From the properties pane, select the layout for the gallery as Title and subtitle.
+         3. Select the gallery control on canvas.
+         4. Set the Items property of the gallery control to this expression by typing or pasting
+          it in the formula bar.
+            Power Fx
+            colScannedItems
+         5. In the left-pane, expand the Gallery1, and select Title2.
+         6. Set the Text property of Title2 to the following expression.
+            Power Fx
+            ThisItem.ScannedItem
+         7. Select Subtitle2 label, and set it's Text property to this expression.
+                  Power Fx
+                  ThisItem.ScannedTime
+           Try the app
+              1. To test the app, select Screen1, and then press F5 on the keyboard.
+              2. After testing, save and publish the app.
+              3. Download Power Apps Mobile   on your phone.
+              4. Open the Power Apps app, and sign in.
+              5. Select and open the barcode reader app.
+         6. Select Scan, and scan any barcode label (for example, barcode label on a book).
+       Final Results
+       You'll see the scanned barcode information is saved inside the app.
+              See also
+              Barcode scanner control in Power Apps
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Create an app that uses mobile sensors
+            Article • 12/16/2022
+            Sensors enable you to add richer functionality into your apps by leveraging the
+            capabilities of your phone. In this article, you'll learn about using sensors on your mobile
+            device within Power Apps.
+            To do this, you'll be making a sample app with two screens. The first screen will display
+            the current compass heading, latitude, longitude, altitude, and can scan NFC tags to
+            obtain text information. The second screen will showcase how to display accelerometer
+            data to produce the angle of the device along the X and Y axes.
+            To set up the scenario behind the first screen, imagine that you are building an app for
+            an NFC-based scavenger hunt. Each participant will use the app to scan an NFC tag
+            which will provide them with a compass heading, latitude, and longitude that will point
+            them to their next destination. At that destination, the participant will then scan another
+            tag and repeat the process until they reach the end of the hunt.
+            For the second screen, imagine needing a tool to roughly measure angles. When on the
+            second screen, the participant will be able to place or hold their device on a surface, and
+            get the angles on the X and Y axis of the device as well as view a visual representation of
+            those angles.
+            Watch this video to learn how to build an app that uses mobile sensors:
+            https://learn-video.azurefd.net/vod/player?id=01899fa6-7a02-4ed6-9ab1-
+            4bc8b5bf17b9&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fmobile-sensors
+            Prerequisites
+                Any level of Power Apps license can be used for this app, as no data connections
+                are being used.
+                A mobile device such as a mobile phone or tablet with GPS and accelerometer
+                capabilities will be needed as most PCs might not have the necessary sensors.
+                An NFC capable device    is needed for the NFC scanning feature. It's also assumed
+                that the NFC tags to be scanned have been pre-configured to produce text values
+                in the following example format:
+                    "<b>Heading: </b> 80 degrees <br>
+                    <b>Latitude: </b> 44.4604788 <br>
+                    <b>Longitude: </b> -110.82813759"
+                 This will provide the text in an HTML-friendly format for the app. The setup of the
+                 NFC tags is beyond the scope of this article, and the NFC elements can be ignored
+                 if needed; the primary focus is using the mobile sensors in Power Apps.
+            Add header and HTML text for the device
+            sensor outputs
+            Header label
+            With an app open for editing in Power Apps  , add a Text label to the screen by
+            dragging and dropping it from the Insert pane. Position it at the top-left corner of the
+            screen, and modify the following properties in the Properties pane:
+                                                                                 ﾉ
+                                                                                    Expand table
+             Property                            Value
+             Text                                "Scavenger Hunt"
+             Font size                           24
+             Font weight                         FontWeight.Semibold
+             Text alignment                      Align.Center
+             Width                               Parent.Width
+            Then in the Advanced pane, modify the following properties:
+                                                                                 ﾉ
+                                                                                    Expand table
+             Property                    Value
+             Color                       RGBA(255, 255, 255, 1)
+             Fill                        RGBA(56, 96, 178, 1)
+            This will provide a header for the screen.
+        HTML text for the device sensor outputs
+        Next, add an HTML text control. This will be used to display all the device sensor
+        outputs in one place. Use this code in the HtmlText property:
+          Power Fx
+          "<b><u>Current Location</u></b><br>  
+          <br>
+          <b>Compass Heading: </b>" & Round(Compass.Heading, 2) & Char(0176) &
+          "<br>
+          <br>
+          <b>Lat: </b>" & Location.Latitude & "<br>
+          <b>Long: </b>" & Location.Longitude & "<br>
+          <b>Alt: </b>" & Round(Location.Altitude, 2) & " m"
+        Change the following properties in the Advanced pane:
+                                                      ﾉ
+                                                        Expand table
+         Property                    Value
+         Size                        21
+         BorderStyle                 BorderStyle.Solid
+         BorderThickness             2
+         Width                       560
+         Height                      576
+         PaddingTop                  16
+         PaddingRight                16
+         PaddingBottom               16
+         PaddingLeft                 16
+        If you examine what was put in the HtmlText, you may notice that there are two sensor
+        types that are being used.
+        First is the Compass sensor, which is using the Heading property to provide the
+        compass heading from the device.
+        Second is the Location sensor, which provides the Latitude, Longitude, and Altitude.
+        There are two considerations about Location. First, if you use just Location without the
+        dot operator and property, you'll get a record that has fields for Latitude, Longitude, and
+          Altitude. Second, the Altitude property is in meters by default. If you would like to
+          convert it to feet, replace the following formula:
+          Use meters:
+           Power Fx
+            Round(Location.Altitude, 2) & " m"
+          Use feet:
+           Power Fx
+            Round(Location.Altitude \* 3.2808, 2) & " ft"
+           ７ Note
+           Many sensor properties might not work correctly if you preview the app inside
+           Power Apps Studio. To work with sensor properties for testing, prefer to use a
+           mobile phone instead.
+          Now position the HTML text control near the lower half of the screen.
+          Add Button for the NFC scan and HTML text
+          control
+          NFC scan button
+          Add a button to the app, positioning in below the HTML text control that you added in
+          the last step, and change the following properties in the Advanced pane:
+                                                                ﾉ
+                                                                  Expand table
+           Property       Value
+           OnSelect       ClearCollect(colNFCScan, ReadNFC())
+           Text           "Scan NFC Tag"
+          The code in the OnSelect property is utilizing the ReadNFC() function, which activates
+          the NFC reader. It then stores what is read from the NFC tag in a collection called
+        colNFCScan. This collection will have four fields: RTD, Text, TNF, and URI. While a full
+        explanation of these fields is beyond the scope of this article, some explanation may be
+        helpful. TNF stands for Type Name Format and is used to define the structure of the
+        Record Type Definition, or RTD, which in turn defines the type of record contained in
+        the Text and/or URI fields. URI stands for Uniform Resource Identifier, which is
+        essentially the address of a resource. For the NFC tags being used in this example, in
+        addition to the Text field containing the example text from the introduction of this topic,
+        they would contain a TNF value of 1, an RTD value of T, and a blank URI value.
+        Add HTML text control to display the NFC scan
+        information
+        Add a second HTML text control and use the following formula in the HTMLText
+        property:
+          Power Fx
+          "<b><u>Next Destination</u></b><br>
+          <br>" &
+          First(colNFCScan).Text
+        Change the following properties in the Advanced pane:
+                                                     ﾉ
+                                                        Expand table
+         Property                   Value
+         Size                       21
+         BorderStyle                BorderStyle.Solid
+         BorderThickness            2
+         Width                      560
+         Height                     248
+         PaddingTop                 16
+         PaddingRight               16
+         PaddingBottom              16
+         PaddingLeft                16
+       Without any NFC data present, the control will display Next Destination. When an NFC
+       tag is scanned, it'll display Next Destination, and then the data from the Text field in the
+       data collected from the scan.
+       Assuming the data for the NFC tags has been configured as described in the
+       introduction, the user will see the next compass heading, latitude, and longitude values
+       for the next scavenger hunt location after scanning one of those tags.
+       Test the app
+       Save and publish the app. On a mobile device with the necessary sensors, open the app
+       and observe the compass heading, latitude, longitude, and altitude values. Try walking
+       around while turning in various directions to see changes in the various sensor readings.
+      Press the Scan NFC Tag button to observe the NFC reader control. If you have an NFC
+      tag that can produce a Text value, scan the tag to observe the text in the app. If not,
+      select Cancel.
+       Add and configure second screen
+       Add a new Blank screen for the angle measurement portion of the app.
+       After adding the screen, go back to the first screen and add a Next Arrow icon from +
+       Insert > Icons > choose the Next Arrow icon. Position it in the top-right corner of the
+       screen, and change the following properties in the Advanced pane:
+                                                 ﾉ
+                                                   Expand table
+        Property         Value
+        OnSelect         Navigate(Screen2)
+        Color            RGBA(255, 255, 255, 1)
+       If you have renamed the second screen that was just added, substitute that name for
+       Screen2 in the Navigate function.
+       Preview the app, selecting the icon that was just added to verify that it navigates you to
+       the blank screen that was just added.
+       Add configuration for X and Y angles
+       Add a Text label to the screen by dragging and dropping it from the Insert pane.
+       Position it at the top-left corner of the screen and modify the following properties in the
+       Properties pane:
+                                                 ﾉ Expand table
+        Property             Value
+        Text                 "2 Axis Level"
+        Font size            24
+        Font weight          FontWeight.Semibold
+        Text alignment       Align.Center
+        Width                Parent.Width
+       Then in the Advanced pane, modify the following properties:
+                                                 ﾉ Expand table
+        Property         Value
+        Color            RGBA(255, 255, 255, 1)
+        Fill             RGBA(56, 96, 178, 1)
+       This will provide a header for the second screen.
+       Next, add a Back Arrow icon from + Insert > Icons > choose the Back Arrow icon.
+       Position it in the top-left corner of the screen and change the following properties in the
+       Advanced pane:
+                                                 ﾉ Expand table
+        Property         Value
+        OnSelect         Navigate(Screen1)
+        Color            RGBA(255, 255, 255, 1)
+       If you've renamed the first screen that was just added, substitute that name for Screen1
+       in the Navigate function.
+       Finally, add an HTML text control. This will be used to display all the device sensor
+       outputs in one place. Use the following formula in the HTML Text property:
+         Power Fx
+         "<b><u>Angles:</u></b><br>
+         <br>
+         <table width='100%'>
+         <tr>
+         <td width='50%'><b>X: </b>" & Abs(Round(Acceleration.X * (90 / 9.81),
+         0)) & Char(0176) & "</td>
+         <td width='50%'><b>Y: </b>" & Abs(Round(Acceleration.Y * (90 / 9.81),
+         0)) & Char(0176) & "</td>
+         </tr>
+         </table>"
+       Change the following properties in the Advanced tab:
+                                                 ﾉ
+                                                   Expand table
+        Property                 Value
+        Size                     21
+        BorderStyle              BorderStyle.Solid
+        BorderThickness          2
+        Width                    560
+        Height                   168
+        PaddingTop               16
+        PaddingRight             16
+        PaddingBottom            16
+        PaddingLeft              16
+       Position this control near the top of the app screen.
+       If you examine what was put in the HtmlText, you may notice that it is using the
+       Acceleration sensor, with X and Y properties. There is also a Z property that we are not
+       using in this scenario.
+       This sensor detects gravitational forces on the device over three planes. Using a mobile
+       phone as an example, imagine a line extending out of the sides of the phone. This
+       would be the X plane. Lifting the right side of the phone will produce a positive value
+       and lifting the left side will produce a negative value. A line extending out of the top
+       and bottom of the phone would represent the Y plane. Lifting the top of the phone will
+       produce a positive value and lifting the bottom will produce a negative value. Finally, a
+         line coming out of the screen and back of the phone would represent the Z plane.
+         Causing the screen to face upwards will produce a positive value and facing it
+         downward will result in a negative value.
+         The accelerometer will measure forces acting on the device both in motion, such as if
+         you dropped the device, and at rest, such as tilting the device on one or more of the
+         axes described earlier. At rest, the theoretical values should be between 0 and +/- 9.81
+         m/s2, with 0 indicating that the relative axis is parallel to the Earth with no gravity acting
+         on the sensor and a reading of 9.81 indicating that the relative axis is perpendicular to
+         the Earth and the full force of gravity is acting on the sensor.
+         Looking at the code in the HTML text control you just added, notice the following
+         section:
+           Power Fx
+           Abs(Round(Acceleration.X * (90 / 9.81), 0))
+         In this formula, from inside-out, first, the Acceleration on the X plane is being multiplied
+         by (90 / 9.81). This is using the theoretical maximum at-rest value to convert the sensor
+         reading into degrees. The value of 90 is present because at the maximum theoretical
+         value, the device would be perpendicular to the Earth on that plane, giving a measure of
+         90 degrees.
+         That value in degrees is then rounded to zero decimal places to provide a whole
+         number degree value. Last, the absolute value of that rounded number is calculated to
+         give a positive reading. This is so it will not matter if the angle is measured from one
+         side or another.
+           ７ Note
+           The values shared above are approximates, and don't represent exact
+           measurement.
+         Add the level visuals
+         In this step, we're going to use some controls in unconventional ways to achieve a visual
+         goal.
+         Circular bubble level-like visual
+             To begin, add a Button control to the screen, renaming it to btnCircleLevel and change
+             the following properties in the Advanced pane:
+                                                                                       ﾉ Expand table
+              Property                                 Value
+              Text                                     ""
+              BorderColor                              RGBA(56, 96, 178, 1)
+              FocusedBorderThickness                   2
+              Fill                                     Transparent
+              DisabledFill                             Self.Fill
+              X                                        (Parent.Width - Self.Width) / 2
+              Y                                        (Parent.Height - Self.Height) / 2
+              Width                                    400
+              Height                                   Self.Width
+             The result of these changes should produce a circular button in the center of the screen
+             that cannot be pressed due to being disabled.
+             Next, add a Circle shape, set it's Border Radius to 400 and change the following
+             properties in the Advanced pane:
+                                                                                       ﾉ Expand table
+              Property                 Value
+              FocusedBorderThickness   0
+              X                        (Parent.Width - Self.Width) / 2 + (Round(Acceleration.X / 9.81 * 90, 0) /
+                                       90 * btnCircleLevel.Width / 2)
+              Y                        (Parent.Height - Self.Height) / 2 - (Round(Acceleration.Y / 9.81 * 90, 0) /
+                                       90 * btnCircleLevel.Width / 2)
+              Width                    42
+              Height                   Self.Width
+              Width                    400
+              Height                   Self.Width
+         The X and Y properties allow the Circle shape to move about the center of the app
+         screen, relative change in the Acceleration sensor values but contained within the
+         circular area of btnCircleLevel.
+         X and Y Axis bubble level-like visuals
+         Add a Slider control to the app, rename it to sldXValue, and change the following
+         properties in the Advanced pane:
+                                                          ﾉ Expand table
+          Property    Value
+          Min         -90
+          Max         90
+          Default     Round(Acceleration.X * (90 / 9.81), 0)
+          ValueFill   Self.RailFill
+          X           (Parent.Width - Self.Width) / 2
+          Y           btnCircleLevel.Y + btnCircleLevel.Height + 30
+          Width       btnCircleLevel.Width
+          Height      70
+         This Slider control will display the angle similar to how a bubble level does: the Handle
+         will move towards the raised side of the device, similar to the air bubble in a bubble
+         level.
+         Next, copy btnCircleLevel by selecting it, pressing Ctrl + C and then Ctrl + V. Rename
+         the control to btnXValueOverlay and change the following properties in the Advanced
+         pane:
+                                                          ﾉ Expand table
+          Property     Value
+          X            sldXValue.X - sldXValue.HandleSize / 2
+          Y            sldXValue.Y
+          Width        sldXValue.Width + sldXValue.HandleSize
+        Property   Value
+        Height     sldXValue.Height
+       These changes will position it over the sldXValue control, preventing the user from
+       changing its value and providing a visual border.
+       Copy and paste sldXValue, using the same method used to copy btnCircleLevel.
+       Rename it to sldYValue and change the following properties:
+                                                 ﾉ
+                                                   Expand table
+        Property     Value
+        Layout       Layout.Vertical
+        X            btnCircleLevel.X - Self.Width - 30
+        Y            (Parent.Height - Self.Height) / 2
+        Width        sldXValue.Height
+        Height       sldXValue.Width
+       Copy and paste btnXValueOverlay, renaming it to btnYValueOverlay, changing the
+       following properties:
+                                                 ﾉ Expand table
+        Property   Value
+        X          sldYValue.X
+        Y          sldYValue.Y - sldYValue.HandleSize / 2
+        Width      sldYValue.Width
+        Height     sldYValue.Height + sldYValue.HandleSize
+       This completes the bubble level-like visuals.
+       Test the level app
+              Save and publish the app. On a mobile device with the necessary sensors, open the app
+              and navigate to screen with the bubble level visuals. Tilt the device from left to right,
+              then up and down, and finally in all directions, noting the changes in angle properties as
+              well as the changes in the visuals. Find an angled surface to place the device on and
+              again note the angles and visuals.
+              See also
+                    Acceleration, App, Compass, Connection, and Location signals in Power Apps
+                    Mixed reality controls in Power Apps
+                    Geospatial controls in Power Apps
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+            Create an app with 3D and mixed reality
+            controls
+            Article • 12/16/2022
+            You can use the 3D object and View in MR controls to view items in 3D, or to see how a
+            particular item might fit within a specified space.
+            In this article, you'll learn how to use the 3D and mixed reality controls in Power Apps.
+            Watch this video to learn how to build mobile apps with View in MR control:
+            https://learn-video.azurefd.net/vod/player?id=7651a5f3-4886-4910-97b0-
+            290116a9fa89&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fbuild-view-in-mr-3d-apps
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Create an app with View in MR control
+            The View in MR control creates a button in your app. When app users selects the
+            button, it overlays a selected 3D model (in the .glb file format) or image (in .jpg or .png
+            file formats) onto the live camera feed of the device.
+               Tip
+              You can also take photos and upload them to OneDrive.
+            In this section, we will build a screen in an app that will allow a user to view the selected
+            item in mixed reality using the View in MR control.
+               1. Open an app in Power Apps Studio  .
+               2. Select the OnStart property of the app, copy and paste the following:
+                   Power Fx
+                   ClearCollect(
+                       col3dObjects,
+                       {
+                           ObjectName: "Forklift",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/forklift.glb"
+               },
+               {
+                   ObjectName: "HVAC",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/hvac.glb"
+               },
+               {
+                   ObjectName: "Machine",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/machine.glb"
+               },
+               {
+                   ObjectName: "Pallet w/ Boxes",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/pallet_with_boxes.glb"
+               },
+               {
+                   ObjectName: "Robot Arm",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/robot_arm.glb"
+               }
+           )
+         This formula will create a collection containing the names and links of the 3D
+         objects to be viewed in mixed reality.
+        3. Add a Text label to the screen by dragging and dropping it from the Insert tab.
+        4. Position the added text label at the top-left corner of the screen, and modify the
+         following properties in the Properties tab:
+                                                  ﾉ Expand table
+            Property             Value
+            Text                 "View In MR"
+            Font size            24
+            Font weight          FontWeight.Semibold
+            Text alignment       Align.Center
+            Width                640
+          5. In the Advanced tab, modify the following properties for the text label:
+                                                  ﾉ Expand table
+            Property       Value
+            Color          RGBA(255, 255, 255, 1)
+            Fill           RGBA(56, 96, 178, 1)
+           This change provides a header for the screen.
+          6. Insert a Blank vertical gallery from the Layout section of the Insert tab.
+          7. Position the gallery below the "View in MR" header you added earlier and expand
+           it to use rest of the screen.
+          8. Change the following properties of the gallery:
+                                                  ﾉ Expand table
+            Property                Value
+            Data source             col3dObjects
+            Template size           80
+            X                       0
+            Y                       92
+            Width                   640
+            Height                  1044
+          9. Select Edit gallery to edit the gallery.
+         10. Insert a Text label into the gallery.
+         11. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property        Value
+            Text            ThisItem.ObjectName
+            X               10
+            Y               5
+            Width           540
+         12. Edit the gallery again.
+         13. From the Mixed Reality section of the Insert tab, drag and drop the View in MR
+           control into the gallery.
+         14. Change the following properties of the View in MR control.
+                                                  ﾉ Expand table
+        Property      Value
+        Text          "View In MR"
+        Display type  Icon
+        Source        ThisItem.ObjectURL
+        X             Parent.TemplateWidth - Self.Width - 5
+        Y             5
+       Property    Value
+       Width       70
+       This change will provide a gallery that has a list of 3D objects and a button to press for
+       the user to view those objects in mixed reality.
+       Test the mixed reality control
+       Now that all the controls have been added, save and publish the app. On a mixed-reality
+       capable device, open the app, and press the button that corresponds with the object
+       you would like to view. This will open the View in MR experience.
+       Follow the on-screen instructions to calibrate the device by slowly moving it left and
+       right while pointing the camera at a surface to be measured. Once the calibration is
+       complete, you'll see an array of dots on the surface as well as a circle near the center of
+       the screen. This circle shows where the 3D object can be placed initially. Once the cube
+       has been placed it can be moved or rotated by using touch controls.
+       To move the object, press on it and slide it to where you would like it to be placed. To
+       rotate the object, press one finger to the screen then swipe with another finger right or
+        left.
+        Use the back button in the top left corner to return to the app screen and select another
+        object. Repeat this process as desired to view each of the objects.
+        Create an app with 3D object control
+        The 3D object control allows you to view an item in 3D inside Power Apps. When app
+        loads, it shows the 3D models (in the .glb file format) or image (in .jpg or .png file
+        formats) inside the app through the control. You can select the 3D model to rotate,
+        zoom in or out.
+        In this section, we will build a screen in an app that will allow a user to view the selected
+        items in 3D using the 3D object control.
+          1. Follow the steps 1 and 2 from the Create an app with View in MR control section to
+           create an app with the collection of 3D objects for the app.
+          2. Add a Text label to the screen by dragging and dropping it from the Insert tab.
+          3. Position the added text label at the top-left corner of the screen, and modify the
+           following properties in the Properties tab:
+                                                  ﾉ Expand table
+            Property             Value
+            Text                 "3D object"
+            Font size            24
+            Font weight          FontWeight.Semibold
+            Text alignment       Align.Center
+            Width                640
+          4. In the Advanced tab, modify the following properties for the text label:
+                                                  ﾉ
+                                                    Expand table
+            Property       Value
+            Color          RGBA(255, 255, 255, 1)
+            Fill           RGBA(56, 96, 178, 1)
+           This change provides a header for the screen.
+          5. Insert a Blank vertical gallery from the Layout section of the Insert tab.
+          6. Position the gallery below the "View in MR" header you added earlier and expand
+           it to use rest of the screen.
+          7. Change the following properties of the gallery:
+                                                  ﾉ Expand table
+            Property                Value
+            Data source             col3dObjects
+            Template size           80
+            X                       0
+            Y                       92
+            Width                   640
+            Height                  1044
+          8. Select Edit gallery to edit the gallery.
+          9. Insert a Text label into the gallery.
+         10. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property        Value
+            Text            ThisItem.ObjectName
+            Width           640
+          11. Edit the gallery again.
+          12. From the Media section of the Insert tab, drag and drop the 3D object control into
+            the gallery.
+          13. Change the following properties of the View in MR control.
+                                                        ﾉ
+                                                           Expand table
+         Property             Value
+         Source               ThisItem.ObjectURL
+         X                    18
+         Y                    138
+         Width                600
+         Height               550
+         This change will provide a gallery that has a list of 3D objects that you can view in 3D.
+         Test the 3D control
+         Now that all the controls have been added, save and publish the app. On a mixed-reality
+         capable device, open the app, touch the screen to zoom in, zoom out, or turn the object
+         being viewed in 3D.
+              Since the gallery contains several objects in 3D, swipe down on the screen to see other
+              objects and use the zoom or turn capabilities to work with the objects in 3D.
+              See also
+                    3D object control
+                    Measuring Camera control
+                    View shape in MR control
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+            Create an app to view a shape in mixed
+            reality
+            Article • 12/16/2022
+            You can use the View Shape in MR control in your app to let users see if a simple cube
+            might fit within a specified space. They might want to do this to see how a certain object
+            that you provide would fit in their space. If you have a 3D model or a head-on picture
+            for the object, you'd like to fit test consider using the View in MR instead.
+            The control creates a button in your app. When app users select the button, it overlays a
+            cube onto the live camera feed of the device. You set up the dimensions of the cube
+            when you edit the control in Power Apps.
+            Watch this video to learn how to build mobile apps with View Shape in MR control:
+            https://learn-video.azurefd.net/vod/player?id=2b6080fd-8236-48a5-b9b2-
+            48285eccdba6&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fmobile-apps-view-shape-in-mr
+            In this article, we'll create a screen in an app that will allow users to create a custom
+            cube shape by inputting unit to be used (centimeters, feet, inches, or meters), and
+            defining the height, width, and depth of the cube.
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Add controls for cube’s dimensions and units
+            Add header and labels to define cube's dimensions and units to the app screen.
+            Header label
+            With an app open for editing in Power Apps Studio   , add a text label to the screen.
+            Position it at the top-left corner of the screen and modify the following properties in the
+            Properties tab:
+                                                                                  ﾉ Expand table
+         Property                 Value
+         Text                     "Place A Cube"
+         Font size                24
+         Font weight              FontWeight.Semibold
+         Text alignment           Align.Center
+         Width                    Parent.Width
+        Then in the Advanced tab, modify the following properties:
+                                                        ﾉ Expand table
+         Property          Value
+         Color             RGBA(255, 255, 255, 1)
+         Fill              RGBA(56, 96, 178, 1)
+        This change will provide a header for the screen.
+        Labels and controls to specify cube properties
+          1. Add four text labels to the screen. These labels will be used to identify the controls
+            we'll add later. For each label, modify the Text property to one of the following:
+                Unit Type
+                Width
+                Height
+                Depth
+          2. Set the Width property of these labels to 160 and position them so they're stacked
+            vertically in the order described above, near the top of the screen and to the left
+            side.
+          3. Add a dropdown control and three text entry controls. The dropdown will be used
+            to select a unit type for the cube dimensions and the three text entry controls will
+            be used to enter the width, height, and depth of the cube.
+          4. Select the drop-down, rename it to drpUnitType, and change the following
+            properties:
+                                                  ﾉ Expand table
+            Property Value
+            Items     ["Centimeters", "Feet", "Inches", "Meters"]
+            Default   "Feet"
+            Width     280
+          5. Position the control to the right of the Unit Type label.
+          6. Add three text input controls, and rename them to txtShapeHeight, txtShapeWidth,
+           and txtShapeDepth. Change the following properties for all three controls:
+                                                  ﾉ Expand table
+            Property         Value
+            Default           2
+            Format            TextFormat.Number
+            Width             144
+          7. Position the text input control named txtShapeWidth to the right of the Width
+           label. Likewise, position the controls named txtShapeHeight and txtShapeDepth to
+           the right of the Height and Depth labels, respectively.
+        Next, you'll add the View Shape in MR control and configure it to use the controls that
+        were created to provide dynamic dimensions to the MR cube it'll generate.
+        Insert the View Shape in MR control
+        Insert the control into your app.
+          1. Open the Insert tab.
+          2. Expand Mixed Reality.
+          3. Select the control View Shape in MR to place it in the center of the app screen, or
+           drag and drop it to position it anywhere on the screen.
+          4. Once the control has been added, position it near the bottom of the screen and
+           change the following properties:
+                                                  ﾉ Expand table
+            Property        Value
+            Text            "Place a cube"
+            ShapeWidth      txtShapeWidth.Text
+            ShapeHeight     txtShapeHeight.Text
+            ShapeDepth      txtShapeDepth.Text
+            Units           drpUnitType.Selected.Value
+            Width           280
+              Test the app
+              Now that all the controls have been added, save and publish the app. On a mixed-reality
+              capable device, open the app, and press the Place a cube button. This will open the
+              View Shape in MR experience, allowing the user to define an area to be measured.
+              Follow the on-screen instructions to calibrate the device by slowly moving it left and
+              right while pointing the camera at a surface to be measured. Once the calibration is
+              complete, you'll see an array of dots on the surface and a circle near the center of the
+              screen. This circle shows where the cube can be placed initially. Once the cube has been
+              placed, it can be moved or rotated by using touch controls.
+              To move the cube, press on it and slide it to where you would like it to be placed. To
+              rotate the cube, press one finger to the screen, and then swipe with another finger right
+              or left.
+              Use the back button in the top-left corner to return to the app screen and change one
+              or more of the width, height, depth, or unit type settings. Select the Place a cube button
+              and place the new cube.
+              See also
+                    3D object control
+                    Measuring Camera control
+                    View shape in MR control
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Create an app with address input and
+       map controls
+       Article • 12/16/2022
+       There are many scenarios where users are expected to enter addresses in an app.
+       Historically, there have been multiple fields capturing each element of an address where
+       the user provides the street address, city and the postal code, and selects state. Entering
+       addresses can be frustrating and error-prone, particularly in mobile scenarios.
+       The address input control presents the user with dynamic address suggestions as they
+       type. Using fuzzy matching logic, the control suggests multiple potential address
+       matches from which the user can select—making it quicker and easier to enter accurate
+       addresses.
+       The control returns the address as structured data, allowing the application to extract
+       information like city, street, municipality, and even latitude and longitude. The data is in
+       a format friendly to many locales and international address formats.
+       To use the control, you need to enable the Geospatial Services for the environment.
+          Watch this video to learn how to use the address input control:
+          https://learn-video.azurefd.net/vod/player?id=ff56e551-756f-4796-8af9-
+          419b40b1dbfd&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+          apps%2Fhow-to%2Fmobile-apps-address-map
+          Watch this video to learn how to use the map control:
+          https://learn-video.azurefd.net/vod/player?id=c62bc98b-cf1f-4289-af11-
+          82618c5e6d02&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+          apps%2Fhow-to%2Fmobile-apps-address-map
+       In this article, we'll learn how to use the address input control in canvas apps.
+       Prerequisites
+       To complete this lesson, you'll need a Power Apps environment with a Microsoft
+       Dataverse database. If you don't have a license, you can sign up for the Power Apps
+       Developer Plan or use a Power Apps trial.
+       Create a trial environment
+            An environment in Power Apps is a space to store, manage, and share your
+            organization’s business data, apps, chatbots, and flows. It also serves as a container to
+            separate apps that might have different roles, security requirements, or target
+            audiences.
+            Each environment can have one Dataverse database.
+            To make sure that you have what you need to complete this lesson, we're going to
+            create a new environment that includes a Dataverse database. This is a 30-day trial that
+            will go away at the end of the 30 days, but you can upgrade it to a sandbox or
+            production environment if you want to keep it.
+            We're going to create a trial environment that will include a Dataverse database, and the
+            sample data used in this topic.
+               1. Go to Power Platform admin center   in a web browser.
+               2. Select Environments.
+               3. Select New.
+               4. Enter a name, for example "Dataverse Trial".
+               5. Select Trial for the environment type.
+               6. Toggle Create Database to Yes.
+               7. Select Next.
+         8. Toggle Deploy Sample Apps and Data to Yes.
+         9. Select Save.
+       Your trial environment will now be created, including a Dataverse database and sample
+       data in Dataverse tables.
+       Enable the Geospatial Services for the
+       environment
+       Before we can use the Geospatial Services in canvas apps, an admin must enable access
+       to the features for the environment where we want to create the app.
+       To learn about how to enable Geospatial services in your environment, see Enable the
+       geospatial features for the environment.
+       Build a canvas app
+      We'll start with creating an app and then, we'll create a header control to use within the
+      app to standardize the look and feel of the header on different screens.
+       1. Create a blank canvas app in the environment you created earlier.
+       2. Select Insert > New Screen > Scrollable to add a new screen.
+       3. Change the label text to "New Account".
+       4. Select Insert > Forms > Edit to add a form to the screen.
+           The form control gets added
+         5. Update the following properties of the form:
+                                                 ﾉ Expand table
+           Property                Value
+           Data source             Accounts
+            Property                Value
+            Columns                 2
+            DefaultMode             FormMode.New
+          6. Select Edit next to fields to add more fields to the form, and select the following
+           address fields:
+              Address 1: Street 1
+              Address 1: City
+              Address 1: State
+              Address 1: Zip/Postal Code
+              Address 1: Country/Region
+              Address 1: Latitude
+              Address 1: Longitude
+          7. Adjust the order of the fields as shown below.
+       Address Input control
+       In this section, we'll add the Address Input control to the app.
+        1. Select Insert > Input > Address Input to add the control to the screen.
+        2. Move the control to the top-right side of the screen.
+             Configure properties for the Address Input control
+             In this section, we'll review and if necessary, set various properties of the address
+             control. There are a few Address Input control-specific properties.
+                                                                                       ﾉ Expand table
+              Property       Description
+              Search result  The number of suggested addresses the control displays. We've set it to 5 in this
+              limit          example, so not more than five addresses will show up in search.
+              Search         Whether the control should suggest addresses within the user-defined Radius of
+              within radius  the Latitude and Longitude. We've set it to Yes in this example.
+              Property       Description
+              Latitude       The latitude of the center point used to geo-bias address suggestions. Requires
+                             Search within radius to be on. We've set it to the formula Location.Latitude in
+                             this example to return the latitude of the current location.
+              Longitude      The longitude of the center point used to geo-bias address suggestions. Requires
+                             Search within radius to be on. We've set it to the formula Location.Longitude in
+                             this example to return the latitude of the current location.
+              Radius         The radius, in meters, around Latitude and Longitude to constrain the address
+                             suggestions. Requires Search within radius to be On. We've set it to 100000 in
+                             this example.
+              Language       The language the address suggestions are returned in. We've left it with the
+                             default - "English (United States)".
+              Country set    Comma-separated list of countries/regions to constrain the address suggestions
+                             to, in ISO 3166 alpha-2 country codes. Examples: "US", "FR", "KW". We've it as US
+                             in this example.
+             Configure output properties for the Address Input control
+             The control outputs various properties when a user interacts with it inside an app. You
+             can use these outputs in other controls or to customize the experience.
+             The following table lists the output properties available.
+                                                                                       ﾉ
+                                                                                          Expand table
+              Property                      Description
+              UserInput                     Text the user has typed in the input box.
+              SelectedLatitude              Latitude of the user-selected address in the input field.
+              SelectedLongitude             Longitude of the user-selected address in the input field.
+              SearchResultJson              The search result (based on the UserInput property), displayed as
+                                            a string in JSON format.
+              FreeformAddress               Selected address from the list of suggested addresses.
+              LocalName                     An address control that represents the name of a geographic
+                                            area or locality that groups multiple addressable objects for
+                                            addressing purposes, without being an administrative unit.
+              PostalCode                    Postal code.
+              Property                     Description
+              ExtendedPostalCode           Extended Postal Code.
+              CountryCode                  Country code.
+              Country                      Country.
+              CountryCodeISO3              Country code in ISO alpha-3 format.
+              CountrySubdivisionName       Country subdivision name.
+              StreetName                   Street name.
+              StreetNumber                 Street number.
+              Municipality                 Municipality.
+              MunicipalitySubdivision      Municipality subdivision.
+              CountryTertiarySubdivision   Country tertiary subdivision.
+              CountrySecondarySubdivision  Country secondary subdivision.
+              CountrySubdivision           Country subdivision.
+             When you run the app and start typing an address, it will show addresses that match the
+             entered value and are located only within 100,000 meters of the current location. Also,
+             notice that it doesn't show more than five address suggestions at a time when you start
+             typing in the address.
+               Using the above control, we'll capture the address in the address fields of the form to
+               create a new account. This step is useful so that the user doesn't have to type in each of
+               the address elements individually.
+               We'll set the data card values to the appropriate property value from the address input.
+                  Tip
+                 The default values of the data card might be locked. To unlock them, select the data
+                 card and go to the Advanced properties, and then select Unlock to change
+                 properties.
+                                                                                                   ﾉ
+                                                                                                       Expand table
+                Data card                             Value
+                Address 1: Street 1                    AddressInput1.StreetNumber & " " &
+                                                      AddressInput1.StreetName
+                Address 1: City                        AddressInput1.Municipality
+                Address 1: State/Province              AddressInput1.CountrySubdivision
+                Address 1: Zip/Postal Code             AddressInput1.PostalCode
+                Address 1: Country/Region              AddressInput1.Country
+                Data card                            Value
+                Datacard
+                Address 1: Latitude                   AddressInput1.SelectedLatitude
+                Address 1: Longitude                  AddressInput1.SelectedLongitude
+              Example for Address 1: Street 1 data card:
+              The form gets populated with all the address fields when an address is selected in the
+              Address Input control.
+              Map control
+              In this section, we'll see how to add the Map control on the app to show the selected
+              location on the map.
+         1. Before adding the Map control, we need to create a collection to capture the
+          address from the address input – this collection will be used as the data source for
+          the map.
+          On the OnAddressSelect property of the Address Input control, enter the
+          following formula to create a collection that captures the address data.
+            Power Fx
+            ClearCollect(
+                colSelectedAddress,
+                {
+                    Street: AddressInput1.StreetNumber & " " & 
+            AddressInput1.StreetName,
+                    City: AddressInput1.Municipality,
+                    State: AddressInput1.CountrySubdivision,
+                    Zip: AddressInput1.PostalCode,
+                    Country: AddressInput1.Country,
+                    Latitude: AddressInput1.SelectedLatitude,
+                    Longitude: AddressInput1.SelectedLongitude
+                }
+            )
+         2. Select an area outside of the Address Input control, and select Insert > Media >
+          Map to add the map control to the screen.
+       3. Select the collection as the data source.
+       4. Move the map below the address input section.
+              Configure properties for the Map control
+              In this section, we'll review and if necessary, set various properties of the map control.
+              The following table lists the properties available.
+                                                                                             ﾉ Expand table
+               Property                     Description
+               Data source(Items)           Data source (table) that lists a predefined set of longitudes and
+                                            latitudes to display as map pin on the map when it's loaded. Map
+                                            each of the columns in your data by using the ItemAddresses,
+                                            ItemLongitudes, ItemLatitudes, and ItemLabels.
+               Use default location         Whether the map initializes at a default location set by the user.
+               Default longitude            Longitude the map would go to when it's loaded if Use default
+                                            location is enabled.
+               Default latitude             Latitude the map would go to when it's loaded if Use default
+                                            location is enabled.
+               Default zoom level           Zoom level the map would be set to when it's loaded if Use default
+                                            location is enabled.
+               Show current location        Whether the map should display the current location of the user.
+               Current location latitude    The latitude of the current location of the user if Show Current
+                                            Location is enabled.
+                Property                     Description
+                Current location longitude   The longitude of the current location of the user if Show Current
+                                             Location is enabled.
+                Satellite view               Whether the style of the map is a satellite view or a road view.
+                Cluster pins                 Whether the map pins are clustered.
+                Zoom control                 Whether the zoom control appears on the map.
+                Compass control              Whether the compass control appears on the map.
+                Pitch control                Whether the pitch control appears on the map.
+                Pin color                    The color of the pins.
+                ItemsLabels                  A column in Items with the strings you want to use as labels for the
+                                             pins.
+                ItemsAddresses               A column in Items with the strings that represent the location of the
+                                             pins.
+                ItemsLongitudes              Name of the column in the table in your data source with floating-
+                                             point numbers that represent the longitude position of the pins.
+                ItemsLatitudes               Name of the column in the table in your data source with floating-
+                                             point numbers that represent the latitude position of the pins.
+                ItemsColors                  Color of the pins.
+                ItemsIcons                   Icon of the pins.
+                Items                        Name of the table in your data source that contains all the records
+                                             that you want to plot in the map by using pins. Each row must have
+                                             an entry for the label, longitude, and latitude for each row.
+                OnMapClick                   How the map responds when any location is selected.
+                OnSelect                     How the app responds when a map pin is selected.
+                OnLoad                       How the app responds when the map finishes loading.
+                OnItemsChange                How the app responds when the map pins change.
+                Show info cards              Whether the informational cards appear on the pins of the map.
+                Show shapes                  Whether the shapes in Shapes_Items appear on the map.
+                Show shape labels            Whether the labels appear on the shapes of the map.
+                Enable shape drawing         Whether the drawing tools control appears on the map.
+               Property                    Description
+               Enable shape deleting and   Whether shapes can be deleted and their labels can be edited on
+               label editing               the map.
+               Shapes_Items                Name of the table in your data source that contains all the records
+                                           with the GeoJSON objects that you want to show in the map as
+                                           shapes.
+               ShapeGeoJSONObjects         Name of the column in the table in your data source with strings
+                                           that represent the GeoJSON objects of the shapes.
+               ShapeLabels                 A column in Shapes_Items with the strings you want to use as labels
+                                           for the shapes.
+               ShapeColors                 Color of the shapes.
+               OnShapeSelected             How the app responds when a shape on the map is selected.
+               OnShapeCreated              How the app responds when a shape on the map is created.
+               OnShapeEdited               How the app responds when a shape on the map is edited.
+               OnShapeDeleted              How the app responds when a shape on the map is deleted.
+              Configure output properties for the Map control
+              The Map control outputs various properties when a user interacts with it inside an app.
+              You can use these outputs in other controls or to customize the experience.
+              The following table lists the output properties available.
+                                                                                           ﾉ
+                                                                                               Expand table
+               Property               Description
+               CenterLocation         Center location of the map as either .Latitude or .Longitude. The
+                                      output will be an integer. For example, calling
+                                       Map1.CenterLocation.Latitude will output a single integer such as
+                                      "47.60357".
+               Selected               The selected pin on the map.
+               SelectedItems          The selected pin or pins of the selected cluster on the map.
+               GeocodedItems          The geo-coded locations of the pins on the map.
+               ClickedLocation        The last clicked location on the map as either .Latitude or .Longitude.
+              Property               Description
+              Shapes_Selected        The record of the selected shape from Shapes_Items.
+              Shapes_SelectedItems   The records of the selected overlapping shapes from Shapes_Items.
+              SelectedShape          The selected shape on the map with .Perimeter and .Area.
+              DeletedShape           The last deleted shape on the map with .Perimeter and .Area.
+              GeoJSON                The list of shapes on the map in Feature Collection GeoJSON format.
+             To drop a pin on the address entered in the address input, we'll use the collection we
+             created on the OnAddressSelect property and use that in the map control.
+                                                                                       ﾉ Expand table
+              Property                         Value
+              Items                            colSelectedAddress
+              ItemsLatitudes                   colSelectedAddress.Latitude
+              ItemsLongitude                   colSelectedAddress.Longitude
+             Some of the properties of the pin can be customized per location pin are explained
+             below:
+                1. ItemsColors - To update the color of the pin to a different color for each location,
+                   add a column to the collection Color: Red, and use that in the ItemsColors data
+                   property of the Map control.
+         2. ItemsLabels - To update the label of the pin to a different label showing the
+          address for each location, add a column to the collection
+          Label:AddressInput1.FreeformAddress, and use that in the ItemsLabels data
+          property of the Map control.
+         3. ItemsIcons - To change the icon of the pin for each location, add a column to the
+          collection and use that in the ItemsIcons data property of the Map control. In this
+          example, we'll add a triangle icon with the formula as Icon: triangle.
+             Tip
+            For the complete list of icons, go to List of image templates.
+            Power Fx
+            ClearCollect(
+                colSelectedAddress,
+                {
+                    Street: AddressInput1.StreetNumber & " " & 
+            AddressInput1.StreetName,
+                    City: AddressInput1.Municipality,
+                    State: AddressInput1.CountrySubdivision,
+                    Zip: AddressInput1.PostalCode,
+                    Country: AddressInput1.Country,
+                    Latitude: AddressInput1.SelectedLatitude,
+                    Longitude: AddressInput1.SelectedLongitude,
+                    Label: AddressInput1.FreeformAddress,
+                    Color: Red,
+                    Icon: Triangle
+                }
+            );
+       After adding these to the collection, go to the Advanced tab of the Map control, and
+       update the ItemsColors, ItemsLabels and ItemsIcons properties.
+      Run the app in preview mode to test. The map shows the location selected in the
+      address input with a triangle icon and the address shows up as a label on the map.
+              See also
+              Interactive map control
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Create an app using the Measuring
+            Camera control
+            Article • 12/16/2022
+            You can use the Measuring Camera control in your app to let users measure distance,
+            area, and volume. During the measurement, you create two-dimensional and three-
+            dimensional polygons that can be used to confirm how a certain-sized object would fit
+            within a space.
+            The control creates a button in your app. When app users select the button, it shows a
+            live camera feed of the device. App users can then specify a starting point, and one or
+            multiple sequential endpoints to measure between. The instances of measured
+            segments are shown directly on the live camera feed.
+            When the user exits the control, the measurements that were taken are captured in the
+            Measurements property so they can be saved or stored.
+            Screenshots taken during the mixed reality experience are stored in the Photos property
+            for viewing within the app.
+            In this article, we'll create a screen in an app to use the Measuring camera control to
+            measure the area of a user-defined space as well as view a photo of the space that was
+            measured.
+            Watch this video to learn how to build mobile apps with Measuring Camera control:
+            https://learn-video.azurefd.net/vod/player?id=94d7ae60-3cb4-41e5-80bd-
+            d8212fa3e4a8&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fbuild-apps-measure-in-mr
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Create the app with Measuring Camera control
+               1. Open an app in Power Apps Studio  .
+               2. Select the Insert tab.
+               3. Expand Media.
+         4. Select the Measuring camera control to insert it on the screen.
+         5. Position the control near the bottom of the screen.
+         6. Change the following properties for the control using the property pane on the
+           right-side of the screen.
+                                                 ﾉ
+                                                   Expand table
+           Property                     Value
+           Text                         Measure Area
+           Unit of measurement          Feet
+           Measurement type             Area
+         7. Select the Advanced tab and change the OnMixedRealitySelect property to the
+           following formula:
+            Power Fx
+            ClearCollect(colMRMeasurements, Self.Measurements);  
+            ClearCollect(colMRPhotos, Self.Photos)  
+           This formula will allow the user to define areas to be measured in square feet and
+           store the most recent results of the measurements in a collection named
+           colMRMeasurements, and the most recent photos in a collection named
+           colMRPhotos.
+          8. Add a text label to the screen and move it to the top-left corner of the screen.
+          9. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property           Value
+            Text               Measure Area
+            Font size          24
+            Font weight        Semibold
+            Text alignment     Center
+            Width              Parent.Width
+            Color              RGBA(255, 255, 255, 1)
+            Fill               RGBA(56, 96, 178, 1)
+           This label provides a header for the screen.
+         10. Add an image control, and move it just below the header label.
+         11. Change the following properties for the image control:
+                                                  ﾉ Expand table
+            Property          Value
+            Image              First(colMRPhotos).ImageURI
+            Border Thickness  2
+           The image control will display the first image taken from the Measuring camera
+           control.
+        12. Add another label to the screen, positioning it below the image control.
+        13. Change the Text property of the label to the following formula:
+            Power Fx
+            "Area: " & If(IsEmpty(colMRMeasurements), "no area measured", 
+            First(colMRMeasurements).Area & " sq. " & 
+            First(colMRMeasurements).Unit)
+          This label will display the first area measurement and unit type that is collected
+          from the Measuring camera control. If there's no measurement to be returned, the
+          text will show Area: no area measured to let the user know that no value is
+          present.
+       Test the app
+          Tip
+         Watch the video embedded at the top of this article to see how the app works.

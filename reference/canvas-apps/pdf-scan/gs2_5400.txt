@@ -1,0 +1,2343 @@
+          Message: SEC7131 : Security of a sandboxed iframe is potentially compromised
+          by allowing script and same origin access.
+          Verify the source of the messages. If the source is Microsoft Dataverse or Dynamics
+          365 Customer Engagement (on-premises), these events don’t pose a security
+          threat and can be ignored.
+       Data cached for offline viewing remains after
+       the entity is no longer enabled for Dynamics
+       365 for mobile
+       In Dynamics 365 for mobile, record data is cached as the user visits the record so the
+       user can access the data when going offline.
+       This cached data persists after the entity is no longer enabled for Dynamics 365 for
+       mobile (Settings > Customizations > Customize the System > [select an entity] > under
+       Outlook & Mobile, deselect Dynamics 365 for tablets).
+       To remove the cached data, the user must sign out of mobile app, or the app must be
+       reconfigured or uninstalled.
+       Customization changes don't appear in the
+       mobile app
+       Cause 1: The customizations (metadata) from Microsoft Dataverse or Dynamics 365
+       Customer Engagement (on-premises) organization are cached on your device. The app
+       checks for updated metadata after 24 hours or anytime you reopen the app. For
+       customization changes to become available immediately, you must completely close
+       and then reopen the app. If new metadata is found, you're prompted to download it. For
+       more information on how to completely close an app, see the help for your operating
+       system or reference one of the articles provided:
+          Windows 10: How do I close an app?
+          iPad: Force an app to close
+          Android: How to force close Android apps
+       Cause 2: You might be seeing a different form than the one you customized. If you have
+       multiple forms for an entity, you see the first form in the form order that you have
+       access to. This is different than the web application where you see the last form you
+       used and have the ability to change between forms.
+       Native Android or iOS links aren't supported
+       The Dynamics 365 mobile app doesn't support universal links on iOS and Android app
+       links on Android.
+       Error message: in Android,
+       AUTH_FAILED_INTUNE_POLICY_REQUIRED
+       AADSTS53005: Application needs to enforce
+       Intune protection policies
+       Contact your administrator or help desk and make sure that your user is under Intune
+       app protection policies.
+       On your device, go to Settings > General > Accounts and remove any accounts that are
+       connected with Microsoft 365.
+       Error message: Access Denied. This app must
+       be protected with an Intune policy before you
+       can access company data
+       Contact your administrator or help desk and verify that Intune app protection policies
+       are applied for your user account.
+       Admin instructions to resolve the issue
+       If you're an admin, you can avoid users getting this error by making sure all mobile
+       users have access to the sales dashboard:
+         1. In the web app, go to Settings > Customizations > Customize the System.
+         2. Select Dashboards.
+         3. Select Sales Dashboard.
+         4. Select Enable Security Roles.
+        5. Select Display to everyone and then select OK. If you prefer to display only to
+          select security roles, be sure to select your user’s security role.
+        6. Select Publish.
+        7. Have your user close and open the mobile app so your dashboard changes
+          download.
+       End-user instructions to resolve the issue
+       You can choose a different dashboard and set it as your home
+       page:
+        1. From the mobile app, select the menu and then select Dashboards.
+        2. On the command bar, select Select Dashboard and then select the dashboard you
+          would like to use as your home page.
+        3. On the command bar, select Set as Home.
+       Or, you can create a personal dashboard through the web app:
+        1. In the web app, go to Sales > Dashboards.
+        2. Select New.
+        3. Select Properties.
+        4. Add the components you want on your dashboard and select Save.
+        5. In the mobile app, follow the previous procedure to select your new dashboard
+          and set it as your home page.
+       Network requests fail when Power Apps mobile
+       app is running in the background
+       When the Power Apps mobile app is running in the background and a canvas or model-
+       driven app makes a network request, a mobile operating system could deprioritize or
+       cancel this network request. This can cause an error message to appear in the mobile
+       app when it returns from the background.
+       If you experience a failed network request when the Power Apps mobile app is running
+       in the background, contact your app developer.
+            App doesn't appear in the app list offline
+            New and recently republished apps might not appear in the offline app list right away.
+            To make your app appear in the app list offline, open the app on your device when it's
+            online and keep it open for 1-2 minutes.
+            Not able to zoom in to input elements in the
+            app
+            Pinch to zoom isn't supported by HTML input elements by default. More information on
+            HTML input control default behavior: HTML Input element  .
+            Issue still not resolved?
+            If the information provided previously doesn’t resolve your issue, either Post your issue
+            in the Power App Community     or Contact Technical Support .
+            The following are some suggested details to provide:
+                 What are the specific symptoms you encounter? For example, if you encounter an
+                 error, what is the exact error message?
+                 Does the issue only occur for users with certain Dynamics 365 security roles?
+                 Does the issue only occur on certain devices but works correctly for the same user
+                 on another device?
+                 If you attempt to connect to a different Dynamics 365 organization that doesn't
+                 include your customizations, does the same issue occur? If the issue only occurs
+                 with your customizations, provide a copy of the customizations if possible.
+                 Does the issue still occur after uninstalling the app and reinstalling it?
+                 What type of device are you using, such as iPad 4th Generation, Microsoft Surface.
+                 What is the version of the operating system, such as iOS 10.0 or Windows 10.
+            See also
+            Setup overview for mobile apps
+            Power Pages known issues
+            Power Automate known issues
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Prevent canvas app restarts in the Power
+     Apps mobile app
+     When you run a canvas app in the Power Apps mobile app, it can be restarted for the following
+     reasons:
+        The app is using too much total memory.
+        The app is using too much memory or processing at one time.
+        The app is moved to background – either when your specific app uses a native control
+        (like Add Picture or Barcode Scanner) or the Power Apps mobile app is put in the
+        background by the user.
+     This memory and processing limitations, which is especially strict when the Power Apps mobile
+     app runs in the background, is imposed by the operating system (Android or iOS). If the app
+     uses more resources than are available on your device, the app will reset. This is similar to
+     when you visit a large complex webpage, the web browser suspends the page if it's consuming
+     too much power.
+     On Android devices, this app restart can look like a crash because the app is closed and the
+     user is taken to the home screen of the device.
+     Use this article to learn how to prevent canvas app restarts on Power Apps mobile.
+     Prevention tips for end users
+     While the biggest improvements are made by app makers, here are some tips that end users
+     can use to decrease the occurrence of app restarts:
+        In the Power Apps mobile app, on the user profile page, select Clear cache to remove
+        saved data. This should only be done when the end user has data as clearing the cache
+        will remove any SaveData or app caches.
+        On Android devices, ensure the Power Apps mobile app is prioritized. Refer to your device
+        manual to keep the app running through the settings like battery optimization and app
+        sleep configuration.
+        Close any running apps, other than the Power Apps mobile app, and remove any
+        unneeded data from the device such as unused apps or images.
+        While it's cumbersome, consider using the app slower – pause slightly between screen
+        navigation or after taking pictures or saving or loading data.
+     Prevention tips for app makers
+           The greatest memory improvements to decrease app restarts can be made by app makers.
+           When creating an app, remember to optimize the app to run on the lowest-specification device
+           that your end users will use and follow best practices around resource usage.
+              ７ Note
+              Since app restarts are caused by the operating system restricting the amount of memory
+              and processing an app can do, it might take a combination of the mitigations suggested
+              below to minimize app restarts. The more memory and processing that can be reduced,
+              both in total and at one time, the less likely an app restart will be.
+               Tip
+              You can connect a mobile app session to Monitor to see where your app is doing heavy
+              processing or memory-intensive operations. Monitor is a tool that offers makers a deep
+              view of what an app does and how it does it by logging all key activities that occur in the
+              app as it runs.
+                                                                                                           ﾉ
+                                                                                                                Expand table
+             Problem                         Root Cause                              Mitigation
+             App restarts when loading       If a specific screen is running too     Limit the number of controls on a
+             a specific screen.              many formulas at one time, the          screen and the number of formulas
+                                             app can have too much                   being run when the screen is loaded,
+                                             processing and be restarted by          which might require splitting up
+                                             the operating system.                   screens.
+                                                                                     Avoid control dependency between
+                                                                                     screens.
+                                                                                     Prevent the user from taking action
+                                                                                     during high-processing moments. For
+                                                                                     example, when a large gallery with
+                                                                                     multiple filters and lookups is loading.
+                                                                                     Consider using named formulas.
+                                                                                     Consider using the Delayed Load app
+                                                                                     setting.
+             App restarts after multiple     There are memory leaks                  Turn on the Keep recently visited
+             screen navigation.              happening on the screens,               screens in memory app setting. While
+                                             resulting in memory usage               this increases total memory usage in
+            Problem                       Root Cause                           Mitigation
+                                          building up as the user navigates    the short term as the screen is
+                                          around the app.                      preserved in memory, across multiple
+                                                                               screen navigation, it will prevent
+                                                                               memory leaks.
+            App restarts when             Offline scenarios that use           Use the new offline profiles feature to
+            operating in offline mode     SaveData/LoadData or large data      manage offline data more efficiently.
+            using the                     connections can consume              Avoid saving large media files locally.
+            SaveData/LoadData             significant memory, especially       Optimize data sync strategies, and use
+            method                        when media content is involved.      explicit column selection to reduce
+                                                                               payload size. Turn off experimental
+                                                                               features like record scope one-to-
+                                                                               many relationships if you don't need
+                                                                               them.
+            App restarts when using       The camera control saves the         Don't save any images beyond the
+            the camera control.           captured image to memory. This       most recently captured one.
+                                          can increase the memory usage
+                                          of the app, especially if the        Use Photo instead of Stream to only
+                                          captured image is saved into         capture images when the user taps on
+                                          variables or SaveData using the      the camera.
+                                          OnStream property.
+                                                                               If you need to use Stream, set the
+                                                                               StreamRate property as high as
+                                                                               possible to reduce the number of
+                                                                               updates.
+            App restarts when using       The Add Picture control saves the    Consider changing where the media
+            the Add Picture control.      selected media content into          content is captured.
+                                          memory. Due to the size of media
+                                          content, this can result in          Consider turning off the
+                                          significant memory pressure.         UseMobileCamera property so users
+                                                                               can only select media from
+                                                                               gallery/photo library.
+                                                                               Consider using the attachment control
+                                                                               (as part of a form) to only select files
+                                                                               instead of capturing them using the
+                                                                               camera.
+                                                                               Consider switching to the camera
+                                                                               control.
+            App restarts when using       Native controls can put the app in   Make sure all memory and processing
+            native controls like Add      the background where the             intensive operations are completed
+            Picture, Barcode              operating system has stricter        before using these controls. For
+            Scanner/Reader, View in       limitations on memory before         example, disable the Add Picture
+                                          restarting the app.                  control until any SaveData operations
+            Problem                       Root Cause                         Mitigation
+            MR, Measuring camera,                                            are completed.
+            and others.
+                                                                             Consider switching to a different
+                                                                             control like Camera instead of Add
+                                                                             Picture.
+            App restarts happen for a     Devices have different amounts of  Refer your users to the tips listed
+            subset of devices.            memory and processing available.   before in our Prevention tips for end
+                                          As an example, older devices are   users section.
+                                          more prone to app restarts due to
+                                          their lower available processing.  Consider investing in devices that
+                                                                             meet the performance needs of your
+                                          Having other apps running can      app.
+                                          also reduce the amount of
+                                          processing available. Similarly,
+                                          other apps installed and lots of
+                                          photos/media saved to the device
+                                          can take up memory, reducing
+                                          what is available for the app.
+            App restarts continue to      Memory usage is affected by how    Optimize your app following the best
+            happen.                       the canvas app is authored. Make   practices below.
+                                          sure your app follows best
+                                          practices can help ensure
+                                          performance, reduce memory
+                                          usage, and processing.
+          Best practices for building performant apps
+                Build large and complex apps
+                Troubleshoot Power Apps canvas app performance issues
+                Tips and best practices to improve performance of canvas apps
+                Power Apps coding guidelines - Code optimization
+           Last updated on 01/09/2026
+         Install Power Apps for Windows
+         Install Power Apps for Windows to run model-driven app or canvas app on your Windows
+         device. For more information on Power Apps, see What is Power Apps.
+         Install the app
+            1. Go to the Microsoft Store and install Power Apps    for Windows.
+            2. When the app is installed, open it and sign in.
+            ） Important
+            If you run into issues during the installation or the app closes without warning, follow the
+            steps in the next section to install the latest version of WebView2 Runtime, and retry
+            installing Power Apps for Windows.
+         Webview2 Runtime
+         If you get an Update Microsoft Edge error message when you're installing Power Apps for
+         Windows, this means you don't have WebView2 Runtime on your device.
+         Power Apps for Windows also won't run correctly if you have an older version of WebView2.
+         Follow these steps to see which version you have installed:
+             1. On your device, go to Settings > Apps > Apps & features.
+             2. Search for WebView. You need version 99.0 or later installed to run Power Apps for
+               Windows.
+          In both cases, whether you get an error message or have an older version installed, you need
+          to install WebView2 Runtime.
+          You need administrator rights on your device to install WebView2. If you don't have admin
+          rights, ask your administrator to install it for you.
+             1. Download the WebView2 Runtime.
+             2. Select version 99.0 or later. Installing an earlier version may cause Power Apps to crash.
+               Under Evergreen Bootstrapper, select Download.
+             3. Go over the license terms and privacy statement and then select Accept and Download.
+             4. Run MicroEdgeWebview2Setup.exe.
+          Install from app center
+          If you don't have access to install Power Apps for Windows from the Microsoft Store then you
+          can install it from the app center  .
+          An administrator can also download the package from the app center          and distribute it to
+          users with Intune.
+           Last updated on 01/08/2026
+       Use Power Apps for Windows
+       Article • 10/25/2023
+       This topic covers how to sign in and run your apps on Power Apps for Windows.
+       Sign in
+       Sign into Power Apps for Windows quickly using your work email address. If you need
+       help with your sign-in information, contact your Power Apps administrator.
+         1. On the Welcome screen, select Sign in.
+           ７ Note
+         You also have the option to sign in as a guest user and choose a different
+         region. 
+       2. Enter your email address, and then select Next. Then enter your password and
+        then select Sign in.
+       3. From the list of apps that you have access to, select the app that you want to use.
+       See non-production apps
+       By default, only production model-driven apps are shown in the list of apps.
+       To see model-driven apps from non-production environments, select the More button
+       (...) > Settings and then turn on Show non-production apps.
+       Move between apps
+       When you're using an app, you can select the back button to go back to the Apps
+       screen. From the Apps screen, you can then select another app to use.
+       For model-driven apps, you can also select the name of the current app that you're
+       using to go back to the Apps screen.
+       Switch to another canvas app
+        1. Select the back button.
+        2. On the Apps screen select an app. You'll only see apps for your organization.
+       Switch to another model-driven app
+        1. Select the back button or select the current app name.
+        2. On the Apps screen select an app. You'll only see apps for your organization.
+       Run an app
+       Because canvas apps can essentially be anything, there isn't much help documentation
+       on how to use an app once it's created. If you need help using a canvas app, contact
+       your app maker or Power Apps admin.
+       You'll find below the documentation on how to run model-driven apps on Power Apps
+       for Windows.
+       Navigation in model-driven apps
+       It's easy to get around and get back to your favorite or most-used rows. The following
+       illustration shows the primary navigation elements for a model-driven app.
+      Legend:
+       1. Click to change app: Select the current app name to change to a different app.
+       2. Collapse/expand site map: Select this to collapse the navigator to allow more
+        room for the main part of the page. If the navigator is already collapsed, select this
+        button to expand it again.
+       3. Recent: Expand this entry to view a list of rows you were recently using. Select a
+        row here to open it. Select the push-pin icon next to a row listed here to add it to
+        your pinned rows.
+       4. Pinned: Expand this entry to view and open your favorite pinned rows. Use
+        the Recent list to add rows here. Select the remove-pin icon next to a row listed
+        here to remove it from this list.
+       5. Page navigation: This area lists each table and dashboard page available for the
+        current work area. Select any entry here to open the named dashboard or list view
+        for that table.
+       6. Create new row: Select New to create a new row.
+       7. Setting: Access your setting such as personalization setting and information about
+        the app.
+       8. User Information: See the current user that's signed in, sign out of the app, or
+        reconfigure the app**.**
+                9. Go back: Use the back button for form, view, and dashboard pages on the
+                   command bar to go back to the previous page.
+             Create and edit rows
+             The New button or Quick create makes it fast and easy to enter almost any type of
+             information into the system. The command is on the navigation bar, so it's available
+             whenever you need to enter new information into the system. You can also save a row
+             and create a new one directly from the Quick create form.
+             Note, the Quick create option is only available for rows that are enabled by your admin.
+                1. On the navigation bar, select the plus sign    , and then select the item you want.
+                2. Fill in the columns, and then select Save and Close. Or, to save and create another
+                   row, select the down arrow and then select Save & Create New
+      Create a new row using the New button
+       1. From the left navigation pane, select a table such as Products and then select New.
+       2. Fill in the columns and then on the command bar, select Save or Save & Close.
+      Edit a row
+       1. From the left navigation pane, select a table such as Products.
+       2. Select a row to open it.
+       3. Make your edits and when you're done editing, select Save or Save & Close.
+       Use search
+       With Dataverse search, the search box is always available at the top of every page in
+       your app. You can start a new search and quickly find the information that you're
+       looking for. For more information, see Search for tables and rows by using Dataverse
+       search.
+       Notifications
+       Notifications on Power Apps for Windows work the same as when you run a model-
+       driven app on the web. For more information, see In-app notifications in model-driven
+       apps.
+       Set up mobile offline
+       To configure your app in offline mode, see:
+          For canvas apps: Develop offline-capable canvas app
+          For model-driven apps: Set up mobile offline
+       Session ID
+       To get the session ID, select the More button (...) > Settings and then copy the session
+       ID.
+        Log files
+        Open the following directory on your device to find the log files related to the Windows
+        session for Power Apps for Windows:
+        %LocalAppData%\Packages\MicrosoftCorporationII.PowerAppsforWindows10_8wekyb3d8bbwe\
+        LocalState
+        The Power Apps support team can use the log files to investigate issues.
+        Deep links
+        For more information on deep links, see Use deep links with Power Apps mobile.
+        Limitations and known issues
+           The following is not supported:
+            Advanced controls such as sensors.
+            Pinning an app on Windows desktop
+            Mixed reality controls
+            NFC function
+           You can't see favorites, recent, featured apps, or the app details.
+           A user picture isn’t displayed in the app list.
+           The Optimize images for Upload option is not available on Windows.
+           The barcode scanner doesn’t support BarcodeType, PreferFrontCamera, and
+           FlashlightEnabled properties. For more information, see Barcode scanner control
+           in Power Apps - Power Apps. The barcode scanner does support symbologies.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Microsoft Dataverse documentation
+     Securely store and manage data that's used by Power Apps business applications.
+      Get started
+        OVERVIEW
+      ｅ
+      What is Dataverse?
+      Why choose Dataverse?
+      Improve Copilot responses
+        TRAINING
+      ｄ
+      Introduction to Dataverse
+      Define data
+        CONCEPT
+      ｐ
+      Tables and metadata
+      Types of tables
+      Table relationships
+      Columns
+      Choices
+      Customize
+        HOW-TO GUIDE
+      ｃ
+      Create an app
+      Create a custom table
+      Create a relationship between tables
+      Create and edit columns
+      Create a choice
+      Apply business logic
+        OVERVIEW
+      ｅ
+      Business rules
+      Plug-ins
+      Real-time workflows
+      Actions
+      More >
+      Get insights from your data
+        CONCEPT
+      ｐ
+      Overview
+      Transition to Dataverse insights
+        HOW-TO GUIDE
+      ｃ
+      Azure Synapse Link for Dataverse
+      Link to Microsoft Fabric
+      Quick view and Power BI integration
+      Integrate with external data
+        CONCEPT
+      ｐ
+      Import or export data
+      Self-service data prep with dataflows
+      Use SharePoint, OneNote, and OneDrive
+        HOW-TO GUIDE
+      ｃ
+      Create virtual tables to connect to other data sources
+      Use solutions for ALM
+        OVERVIEW
+      ｅ
+      What are solutions?
+        HOW-TO GUIDE
+      ｃ
+      Create a solution
+      Export solutions
+      Validate solutions
+      More >
+      For developers
+        HOW-TO GUIDE
+      ｃ
+      Work with data using code
+      Apply business logic using code
+      Work with metadata using code
+      More >
+     What is Microsoft Dataverse?
+     Dataverse lets you securely store and manage data that's used by business applications. Data
+     within Dataverse is stored within a set of tables. A table is a set of rows (formerly referred to as
+     records) and columns (formerly referred to as fields/attributes). Each column in the table is
+     designed to store a certain type of data, for example, name, age, salary, and so on. Dataverse
+     includes a base set of standard tables that cover typical scenarios, but you can also create
+     custom tables specific to your organization and populate them with data by using Power
+     Query. App makers can then use Power Apps to build rich applications that use this data.
+     For information about purchasing a plan to use Dataverse, go to Pricing info.
+     Why use Dataverse?
+     Standard and custom tables within Dataverse provide a secure and cloud-based storage option
+     for your data. Tables let you create a business-focused definition of your organization's data for
+     use within apps. If you're not sure whether tables are your best option, consider these benefits:
+       Easy to manage – Both the metadata and data are stored in the cloud. You don't need to
+       worry about the details of how they're stored.
+       Easy to secure – Data is securely stored so that users can see it only if you grant them
+       access. Role-based security allows you to control access to tables for different users
+       within your organization.
+       Access your Dynamics 365 Data – Data from your Dynamics 365 applications is also
+       stored within Dataverse, allowing you to quickly build apps that use your Dynamics 365
+                 data and extend your apps with Power Apps.
+                 Rich metadata – Data types and relationships are used directly within Power Apps.
+                 Logic and validation – Define calculated columns, business rules, workflows, and business
+                 process flows to ensure data quality and drive business processes.
+                 Productivity tools – Tables are available within the add-ins for Microsoft Excel to increase
+                 productivity and ensure data accessibility.
+           More information: Why choose Dataverse?
+           Terminology updates
+           Responding to customer feedback and data from user research, effective November 2020 we're
+           updating some terminology in Dataverse to be more intuitive and make its usage more
+           productive. The terminology updates are listed below, and we're in the process of rolling them
+           out across Microsoft Power Platform.
+                                                                                                        ﾉ Expand table
+            Legacy term                                                               Current term
+            Entity, entities                                                          Table, tables
+            Field, fields                                                             Column, columns
+            Attribute, attributes
+            Record, records                                                           Row, rows
+            Option set, multi select option sets                                      Choice, choices
+            Picklist, picklists
+            Two Options                                                               Yes/No
+              ７ Note
+              These terminology updates aren’t applicable to any APIs or messages in the Dataverse
+              web services. For example, the names of the messages CreateEntityRequest and
+              CreateAttributeRequest won't change.
+           Dynamics 365 and Dataverse
+           Dynamics 365 applications—such as Dynamics 365 Sales, Dynamics 365 Customer Service, or
+           Dynamics 365 Human Resources—also use Dataverse to store and secure the data they use.
+     This enables you to build apps by using Power Apps and Dataverse directly against your core
+     business data, which is already used within Dynamics 365, without the need for integration.
+        Build apps against your Dynamics 365 data – Build apps quickly against your business
+        data within Power Apps or by using the extensible platform that lets pro developers
+        programmatically interact with data and metadata, apply business logic, create custom
+        connectors, and integrate with external data.
+        Manage reusable business logic and rules – Business rules and logic already defined in
+        your Dataverse tables are applied to apps created with Power Apps to ensure data
+        consistency, regardless of how your users access the data or which app they use.
+        Reusable skills across Dynamics 365 and Power Apps – Users who are skilled in Power
+        Apps or Dynamics 365 can now take advantage of those skills across the Dataverse
+        platform. Creating tables, forms, and charts are now common tasks you perform across
+        your applications.
+         ７ Note
+         Finance and Operations apps currently require the configuration of the Data
+         Integrator to make your business data from Finance and Operations apps available
+         in Dataverse.
+     Integrating data into Dataverse
+     Building an app typically involves data from more than one source. Although this can
+     sometimes be done at the application level, there are cases where integrating this data into a
+     common store allows for an easier app-building experience and a single set of logic to
+     maintain and operate over the data. Dataverse allows data to be integrated from multiple
+     sources into a single store, which can then be used in Power Apps, Power Automate, and Power
+     BI along with data that's already available from the Dynamics 365 applications.
+        Scheduled integration with other systems – Data that's kept within another application
+        can be regularly synchronized with Dataverse to allow you to take advantage of data from
+        other applications in Power Apps.
+        Transform and import data using Power Query – Transforming data when importing into
+        Dataverse can be done through Power Query—a tool commonly used across Excel and
+        Power BI—from many online data sources.
+        One-time import of data – Simple import and export of Excel and CSV files can be used
+        for a one-time (or infrequent) import of data into Dataverse.
+     For more information about integrating data into the Dataverse, go to Add data to a table in
+     Dataverse by using Power Query.
+     Interacting with tables
+     When you develop an app, you can use standard tables, custom tables, or both. Dataverse
+     provides standard tables by default. These are designed, in accordance with best practices, to
+     capture the most common concepts and scenarios within an organization.
+     For a full list of tables, see the entity reference.
+     You can extend the functionality of standard tables by creating one or more custom tables to
+     store information that's unique to your organization. More information: How to create a
+     custom table
+     Logic and validation
+     Tables within Dataverse can take advantage of rich server-side logic and validation to ensure
+     data quality and reduce repetitive code in each app that creates and uses data within a table.
+        Business rules validate data across multiple columns and tables, and provide warning and
+        error messages, regardless of the app used to create the data. More information: Create a
+        business rule
+        Business process flows guide users to ensure they enter data consistently and follow the
+        same steps every time. Business process flows are currently only supported for model-
+        driven apps. More information: Business process flows overview
+        Workflows allow you to automate business processes without user interaction. More
+        information: Workflows overview
+        Business logic with code supports advanced developer scenarios to extend the
+        application directly through code. More information: Apply business logic with code
+     Security
+     Dataverse has a rich security model to protect the data integrity and privacy of users while
+     promoting efficient data access and collaboration. You can combine business units, role-based
+     security, row-based security, and column-based security to define the overall access to
+     information that users have in a Power Platform environment. More information: Security in
+     Dataverse in the Power Platform admin guide
+         Developer capabilities
+         In addition to the features available through the Power Apps   portal, Dataverse includes
+         features for developers to programmatically access metadata and data to create tables and
+         business logic, in addition to interacting with data. More information: Dataverse Developer
+         Overview
+         Next steps
+         To get started using Dataverse:
+              Create a canvas app using a Dataverse database.
+              Create a custom table and then create a canvas app that uses the table.
+              Create a model-driven app built on Dataverse.
+              Use Power Query to connect to an online or on-premises data source and import the data
+              directly into Dataverse.
+         See also
+         Dataverse for Teams
+          Last updated on 03/31/2026
+     Why choose Microsoft Dataverse?
+     Data is at the center of everything a business does today and powers the insights that can drive
+     what it should do tomorrow. To thrive and grow, businesses need to capture, analyze, predict,
+     present, and report data and do it all with a high level of agility.
+     Building out the data infrastructure to enable business insight can be both time consuming and
+     expensive. The data originates from a variety of devices, applications, systems, services, and
+     software as a service (SaaS). This large and growing number of sources often consists of multiple
+     data technologies that store different types of data, expose different APIs, and use a mixture of
+     security models. The developers needed to create these technologies can be expensive and hard
+     to find. Developers often must have a deep understanding of how to deploy, configure, manage,
+     and integrate these different data technologies.
+     Dataverse addresses these concerns with an easy to use, easy to manage, compliant, secure,
+     scalable, and globally available SaaS data service. Dataverse empowers organizations to work
+     with any type of data and any type of app, and use the data within it to gain insights and drive
+     business action.
+     As part of Microsoft Power Platform, Dataverse requires no or little code to be written, so it can
+     easily be used by everyone from knowledge workers to professional developers.
+     Knowing that it's built on Azure, organizations choosing Dataverse can be confident that it's
+     globally available, compliant, scalable, and secure.
+     Work with any type of data
+     Dataverse is designed to work with any type of data and incorporates all the major categories of
+     data technologies that your organization needs—relational, non-relational, file, image, search,
+     and data lake.
+     Dataverse includes a set of visual designers to create, edit, and interact with data. This makes it
+     easy to quickly define the tables, relationships, business rules, forms, and workflows that
+     represent your business.
+     With the easy-to-configure integration features built into Dataverse, deep integration with
+     Microsoft's cloud services such as Azure, Dynamics 365, and Microsoft 365—plus access to many
+     connectors in Power Automate and Azure Logic Apps—Dataverse can connect to the devices,
+     apps, systems, services, and popular SaaS offerings that contain the data for your business.
+     As a result, a wide range of enterprise integration scenarios—from retrieving data sent in a
+     spreadsheet as an email attachment to emerging scenarios like using Dataverse data in a
+     blockchain network—can be achieved with ease and with little to no code required. Integration
+     efforts that previously were measured in days and weeks can now often be measured in hours
+     and minutes.
+     In addition to providing the ability to create data or import it from other systems, Dataverse also
+     supports virtual tables. Virtual tables map data in an external data source so that it appears to
+     exist in Dataverse. This enables Dataverse to execute real-time data operations against the
+     external data source. More information: Create and edit virtual tables that contain data from an
+     external data source
+     Work with any type of app
+     When an organization wants to create a new app, it can realize additional productivity gains by
+     using Dataverse with Power Apps. Power Apps understands the rich metadata included in
+     Dataverse and uses it in multiple ways to help you rapidly build great-looking apps that are
+     secure and scalable, and make them available across desktop, web, mobile, and Microsoft Teams.
+     Organizations that use Power Apps can quickly develop mobile apps for iOS and Android. You
+     can also take advantage of Dataverse mobile offline functionality, which enables apps to collect,
+     query, and interact with data when offline.
+     For organizations that want to integrate Dataverse data into existing apps or write new apps by
+     using custom code, Dataverse provides a powerful REST-based API, a developer SDK, and a
+     growing list of samples for common scenarios.
+     You can also use Dataverse in bot-based apps that deliver intuitive, interactive dialogues with
+     employees, partners, and customers. Whether they're embedded within Power Apps or custom
+     code, bots can be built quickly by using Microsoft Copilot Studio and powered by Dataverse data.
+     The goal of Dataverse working with any app means it should also work with the tools that
+     knowledge workers and professional developers use. To help them be even more productive,
+     Dataverse is integrated into popular tools such as Excel, Outlook, Dynamics 365 customer
+     engagement apps, Power BI Desktop, Power Query, Azure Data Factory, Data Export Service, and
+     SQL Server Management Studio. More information: Work with any type of app
+     Analytics and reporting
+     Dataverse can be used to gain insights and drive business action using analytics and reporting.
+     Dataverse also includes a variety of ways to deliver data and insight to key decision makers.
+     Dataverse includes the ability to create lightweight charts and paginated reports. The data in
+     Dataverse can also be used with Power BI to create rich, interactive reports and dashboards.
+     For organizations that are interested in employing AI to analyze their data, AI Builder can give
+     everyone in the organization—regardless of their technical expertise—the ability to add AI
+     capabilities to the business process flows they create and use. Delivered as part of Microsoft
+     Power Platform, AI Builder includes six pre-built AI models that can be used in Power Automate
+     and Power Apps, and to evaluate data within Dataverse.
+     To support advanced analytics and machine learning, Dataverse includes a managed data lake.
+     Data within the lake can be used to run Power BI reporting, machine learning, data warehousing,
+     and other downstream data processing.
+        One of the benefits of the data being in Azure Data Lake is that organizations can take advantage
+        of Azure Synapse Analytics. This service can deliver added productivity by bringing together
+        enterprise data warehousing, data exploration, code-free data orchestration, deeply integrated
+        Apache Spark and SQL engines, and integrated AI and BI.
+        Security
+        Dataverse uses Microsoft Entra identity and access management mechanisms to help ensure that
+        only authorized users can access the environment, data, and reports.
+        Dataverse uses role-based security to group together a collection of privileges. These security
+        roles can be associated directly with users, or they can be associated with Dataverse teams and
+        business units.
+        In Dataverse, you can share individual rows on a one-by-one basis with another user. Because
+        row-level control of access isn't adequate for some business scenarios, Dataverse has a column-
+        level security feature to allow more granular control of security at the column level.
+        Dataverse also includes two security models that can be used for hierarchies: the manager
+        hierarchy and the position hierarchy. With the manager hierarchy, a manager must be within the
+        same business unit as the report, or in the parent business unit of the report's business unit, to
+        have access to the report's data. The position hierarchy allows data access across business units.
+        Because Dataverse is built on Azure, it benefits from the Azure platform's powerful security
+        technologies. Encryption of data, at rest and in transit, preserves confidentiality.
+        Dataverse is governed by the Microsoft Online Services Terms   and the Microsoft Privacy
+        Statement   .
+        More information: Security concepts in Dataverse
+        Compliance
+        Compliance is a key concern for organizations. Microsoft regularly engages with dozens of
+        regulators around the world, so organizations can be assured that the data placed in Dataverse is
+        held in accordance with stringent industry safeguards. Dataverse complies with numerous
+        standards, and compliance is verified by third-party audits and certifications.
+        The list of currently supported standards can be found at the Microsoft Trust Center website  .
+        Availability and scalability
+        Dataverse is designed to meet enterprise-level scalability needs and offers a service level
+        agreement of 99.9% uptime.
+        To help ensure service levels, availability, and quality, entitlement limits to the number of requests
+        users can make each day are governed by licenses. Service protection limits have also been put in
+        place against malicious behavior that would otherwise disrupt service for all customers.
+        Microsoft Power Platform requests
+        Microsoft Power Platform requests consist of actions that users perform across various products.
+        At a high level, the following constitute Microsoft Power Platform requests:
+             Connectors: All API requests to connectors from Power Apps or Power Automate.
+             Power Automate: All Power Automate step actions.
+             Dataverse: All create, update, delete (CRUD) operations, in addition to special operations
+             like "share" or "assign." These can come from any client or app, using any SOAP or REST
+             endpoint. These include—but aren't limited to—plug-ins, asynchronous workflows, and
+             custom controls making the abovementioned operations.
+        The specific number of allowed requests that a user can make in a 24-hour period is governed by
+        the user's license.
+        Entitlement limits
+        Entitlement limits represent the number of requests users are entitled to make each day. The
+        allocated limit depends on the type of license assigned to each user.
+        For information about these entitlement limits, see Microsoft Power Platform requests allocations
+        based on licenses.
+        For information about viewing and allocating capacity add-ons, see Capacity add-ons.
+        For information about purchasing individual capacity add-ons, see the Power Apps and Power
+        Automate licensing guide  .
+        Service protection limits
+        Service protection limits exist to protect the health of the service for everyone. These limits
+        provide a level of protection against random and unexpected surges in request volumes that
+        threaten the availability and performance characteristics of the Dataverse platform.
+        The service limits the number of concurrent connections per user account, the number of API
+        requests per connection, and the amount of execution time that can be used for each connection.
+        These are evaluated within a five-minute sliding window. When one of these limits is exceeded,
+        an exception is returned by the platform.
+        Service limits aren't expected to negatively affect normal usage of Dataverse.
+        For information about current service protection limits for each service, see:
+             Dataverse API request limits: Applicable to Dynamics 365 customer engagement apps, such
+             as Dynamics 365 Sales and Dynamics 365 Customer Service, in addition to connections from
+             Power Apps and Power Automate to Dataverse.
+             Microsoft Power Automate limits: Applicable for Power Automate.
+             Limits in connectors: Applicable for Power Automate and Power Apps.
+        Capacity add-ons
+        The specific number of allowed Microsoft Power Platform requests that a user can make in a 24-
+        hour period is governed by the user's license. For scenarios where additional capacity is required,
+        a Power Apps and Power Automate capacity add-on allows customers to purchase additional
+        requests.
+        Each capacity add-on provides an additional 10,000 requests every 24 hours, which can be
+        assigned to any user. Multiple capacity add-ons can also be assigned to the same user.
+     Dataverse has entitlement limits that will evaluate the number of requests made against the
+     number allowed by their current license.
+     Backups
+     Dataverse provides two types of backups: automatic backups, referred to as system backups, and
+     manual backups.
+     System backups
+     System backups back up all environments. They take place automatically and continuously. The
+     underlying technology used is Azure SQL Database. For more information about Azure SQL
+     automated backups, see Automated backups.
+     System backups for production environments that have been created with a database and have
+     one or more Dynamics 365 applications installed are retained for 28 days. System backups for
+     production environments that don't have Dynamics 365 applications deployed in them are
+     retained for seven days. System backups for sandbox environments are retained for seven days.
+     Manual backups
+     Manual backups are user-initiated, typically done before making a significant customization
+     change or applying a version update.
+     Both sandbox and production environments can be manually backed up. Sandbox backups are
+     retained for seven days. Manual backups for production environments that have been created
+     with a database and have one or more Dynamics 365 applications installed are retained for 28
+     days. Manual backups for production environments that don't have Dynamics 365 applications
+     deployed in them are retained for seven days.
+     There's no limit to the number of manual backups that can be made, and manual backups don't
+     count against storage limits.
+      ７ Note
+      Both system and manual backups can only be restored to an environment in the same
+      region in which it was backed up.
+     More information: Back up and restore environments
+     Datacenter regions
+     As many organizations do business globally, their data needs are also global in nature. With
+     Dataverse deployed and supported in regions across the world, organizations can have
+     confidence that Dataverse is available when and where they need it.
+     For the current list of datacenter regions, see Datacenter regions.
+     See also
+     Work with any data
+      Last updated on 05/21/2026
+       Work with any data
+       Article • 03/02/2023
+       Microsoft Dataverse provides an abstraction that makes it possible to work with any
+       type of data, including relational, non-relational, image, file, relative search, or data lake.
+       There is no need to understand the type of data as Dataverse exposes a set of data
+       types that allow you to build up your model. The type of storage is optimized for the
+       data type chosen.
+       Data can be easily imported and exported with dataflows, Power Query, and Azure Data
+       Factory. Dynamics customers can also use the Data Export Service.
+       Dataverse also has a connector for Power Automate and Azure Logic Apps that can be
+       used with the hundreds of other connectors in those services for on-premises,
+       infrastructure as a service (IaaS), platform as a service (PaaS), or software as a service
+       (SaaS) services. This includes sources in Azure, Microsoft 365, Dynamics 365, SAP ERP,
+       Salesforce, Amazon Redshift, Access, Excel, text/CSV, SharePoint lists, SQL Server
+       databases, Oracle, MySQL, PostgreSQL, Blockchain, and Azure Synapse Analytics.
+       Common Data Model
+       If you've ever had to bring data from multiple systems and apps together, you know
+       what an expensive and time-consuming task that can be. Without being able to share
+       and understand the same data easily, each app or data integration project requires a
+       custom implementation.
+       Common Data Model provides reference architecture that's intended to streamline this
+       process by providing a shared data language for business and analytical apps to use.
+       The Common Data Model metadata system makes it possible for data and its meaning
+       to be shared across apps and business processes such as Power Apps, Power BI,
+       Dynamics 365, and Azure.
+       Common Data Model includes a set of standardized, extensible data schemas that
+       Microsoft and its partners have published. This collection of predefined schemas
+       includes tables, attributes, semantic metadata, and relationships. The schemas represent
+       commonly used concepts and activities, such as Account and Campaign, to simplify the
+       creation, aggregation, and analysis of data.
+       The Common Data Model schemas can be used to inform the creation of tables in
+       Dataverse. The resulting tables will then be compatible with apps and analytics that
+       target this Common Data Model definition.
+       The following image shows some elements of the standard Common Data Model
+       tables. 
+       Tables
+       In Dataverse, tables are used to model and manage business data. To increase
+       productivity, Dataverse includes a set of tables known as standard tables. These tables
+       are designed, in accordance with best practices, to capture the most common concepts
+       and scenarios within an organization. The standard tables adhere to Common Data
+       Model.
+       A set of tables that are commonly used across industries, such as User and Team, are
+       included in Dataverse and referred to as standard tables. These out-of-the-box tables
+       can also be customized, such as including additional columns. In addition, you can easily
+       create your own custom tables in Dataverse.
+       Columns
+       Columns define the individual data items that can be used to store data in a table. Fields
+       are sometimes called attributes by developers. A table representing a course at a
+       university might contain columns such as "Name," "Location," "Department," "Registered
+       Students," and so on.
+       Columns might have different types of data such as numerals, strings, digital data,
+       images, and files. There's no need to keep relational and non-relational data separated
+       artificially if it's part of the same business process or flow. Dataverse stores the data in
+       the best storage type for the model created.
+       Each of these columns can be associated with one of many data types supported by
+       Dataverse.
+       More information: Types of columns
+       Relationships
+      Data in one table often relates to data in another table. table relationships define how
+      rows can be related to each other in the Dataverse model.
+      Dataverse provides easy-to-use visual designers to define the different types of
+      relationships from one table to another (or between a table and itself). Each table can
+      have a relationship with more than one table, and each table can have more than one
+      relationship to another table.
+      The relationship types are:
+        Many-to-one: In this type of relationship, many table A records can be associated
+        with a single table B record. For example, a class of students have a single
+        classroom.
+        One-to-many: In this type of relationship, a single table B record can be associated
+        with many table A records. For example, one single teacher teaches many classes.
+        Many-to-many: In this type of relationship, each record in table A can match more
+        than one record in table B, and vice versa. For example, students attend many
+        classes, and each class can have multiple students.
+      Because many-to-one relationships are the most common, Dataverse provides a specific
+      data type named lookup, which not only makes it easy to define this relationship but
+      adds productivity to building forms and apps.
+      For more information about creating table relationships, see Create a relationship
+      between tables.
+      Organizations often need to be in compliance with various regulations to ensure the
+      availability of customer interaction history, audit logs, access reports, and security
+      incident tracking reports. Organizations might want to track changes in Dataverse data
+      for security and analytical purposes.
+      Dataverse provides an auditing capability where changes to tables and attribute data in
+      an organization can be rowed over time for use in analysis and reporting. Auditing is
+      supported on all custom—and most customizable—tables and attributes. Auditing isn't
+      supported on metadata changes, retrieve operations, export operations, or during
+      authentication. For information about how to configure auditing, go to Manage
+      Dataverse auditing.
+      Dataverse supports analytics by providing the capability to choose tables for machine
+      learning models to run. It has a prebuilt AI capability through AI Builder.
+      Search
+      Dataverse provides three ways to query rows:
+         Dataverse search
+         Quick find (single-table or multi-table)
+         Advanced find
+        ７ Note
+        Multi-table quick find is also called categorized search.
+      For more information, see Compare searches.
+      Dataverse search
+      Dataverse search delivers fast and comprehensive results across multiple tables in a
+      single list, sorted by relevance. It uses a dedicated search service external to Dataverse
+      (powered by Azure) to boost search performance.
+      Dataverse search brings the following enhancements and benefits:
+         Improves performance by using external indexing and Azure search technology.
+         Finds matches to any word in the search term in any column in the table,
+         compared to quick find where all words from the search term must be found in
+         one column.
+         Finds matches that include inflectional words like stream, streaming, or streamed.
+         Returns results from all searchable tables in a single list sorted by relevance, so the
+         better the match, the higher the result appears in the list. A match has a higher
+         relevancy if more words from the search term are found in close proximity to each
+         other. The smaller the amount of text where the search words are found, the
+         higher the relevancy. For example, if you find the search words in a company name
+         and address, it might be a better match than finding the same words in a long
+         article, far apart from each other.
+         Highlights matches in the results list. When a search term matches a term in a row,
+         the term appears as bold and italicized text in your search results.
+       For more information about Dataverse search, see Using Dataverse search to search for
+       rows.
+       Quick find
+       Dataverse includes the ability to find rows quickly and has approaches that will search
+       just one type of table, such as customer, or be used to search across multiple types of
+       tables at the same time, such as contacts, users, customers, and so on.
+       Single-table quick find is used to find rows of only one type. This search option is
+       available from within a view.
+       Multiple-table quick find (categorized search) is also used to find rows, but will find them
+       across different types of tables, such as accounts or contacts.
+       Data Lake
+       Dataverse supports continuous replication of table data to Azure Data Lake Storage,
+       which can then be used to run analytics such as Power BI reporting, machine learning,
+      data warehousing, and other downstream integration processes.
+      This feature is designed for enterprise big-data analytics. It's cost-effective, scalable, has
+      high availability and disaster recovery capabilities, and enables best-in-class analytics
+      performance.
+      Data is stored in the Common Data Model format, which provides semantic consistency
+      across apps and deployments. Standardized metadata and self-describing data in
+      Common Data Model facilitates metadata discovery and interoperability between data
+      producers and consumers such as Power BI, Data Factory, Azure Databricks, and Azure
+      Machine Learning.
+      See also
+      Importing and exporting data
+    Importing and exporting data
+    from Dataverse
+    Microsoft Dataverse is a software as a service (SaaS) data platform that helps you easily create
+    and manage your data, events, and logic and generate analytics and insights to support
+    interconnected apps built on the Dataverse platform. Apps include Microsoft apps such as
+    Dynamics 365 Sales, Service, Marketing, Customer Insights, Customer Journey Orchestration, as
+    well as customer apps and processes from other software providers, all of which operate in a
+    secure and compliant manner. Dataverse, being a hyperscale polyglot storage, can store any type
+    of data (relational, file, observational, and so on) for all your transactional and analytical
+    applications. For this reason, it's the data platform for all Power Platform products and Dynamics
+    365 applications. Dataverse is a critical element of Microsoft Power Platform, supporting all the
+    data, events, analytics, and related processing, in addition to generating insights for citizen app
+    makers and professional developers to build, store, and manage data for their applications.
+    Data required by apps and processes doesn't often originate from or reside within Dataverse.
+    Mashing up external data with Dataverse is an essential component in building apps, adding data
+    to existing apps, and creating valuable insights. With the proliferation of big data and the ever-
+    multiplying types of data sources, such as AI, ML, IoT, web commerce, web API, services, ERP, and
+    line of business apps require Dataverse customers to be agile with using this variety of data.
+     There are multiple ways to import and export data into Microsoft Dataverse. You can use
+     dataflows, Power Query, Azure Synapse Link, Azure Data Factory, Azure Logic Apps, and Power
+     Automate.
+     Where to start?
+     The first consideration is to start with the external data, which already exists outside of Dataverse
+     that is required for building an app, form, or other component. It isn't necessary to persist that
+     data in Dataverse to start using it. Many times, it's best to continue to let the other system
+     manage the data while using the data as needed in Dataverse. The virtual table feature in
+     Dataverse provides this capability. More information: Create virtual tables using virtual
+     connectors.
+     With virtual tables, you can build an app that uses the external data as if it were a Dataverse
+     table. To create virtual tables, use one of the provided virtual table connector providers when you
+     create a virtual table.
+     Import external data to Dataverse
+     Your desired outcomes might drive the decision to persist data in Dataverse versus using virtual
+     tables to surface external data in Dataverse. If you want your data to be managed by security
+     concepts in Dataverse and application lifecycle management features or if you're interested in
+     mashing up external data with native Dataverse data, consider moving data into Dataverse.
+     Additionally, if you’re interested in using Dataverse workflow and business rules, you might
+     consider migrating that data into Dataverse. You should also consider the economic impact of
+     loading data into Dataverse, which might increase storage costs. If the data must continue to be
+     managed by an external system, it can be beneficial to leave it there and interact with it in
+     Dataverse using virtual tables.
+     Dataflows, Power Query, and Excel files
+     Dataflows enable you to connect with business data from various sources, clean the data,
+     transform it, and then load it into Dataverse. Dataflows support dozens of popular on-premises,
+     cloud, and SaaS data sources.
+     Power Query is a data connection technology you can use to discover, connect, combine, and
+     refine data sources to meet your analysis needs. Features in Power Query are available in Excel
+     and Power BI Desktop.
+    During the project envisioning phase, you should weigh out all the options and decide whether
+    external data needs to be part of your transactional data. Once the approach is finalized,
+    changing it during implementation and post go-live might cause disruption for the end users
+    experience. Once the decision has been made to load external data into Dataverse, a great tool is
+    dataflows. Dataflows are a great choice when you need to transform and prepare the data while
+    you move it. The dataflow design environment, Power Query, has robust out-of-the-box
+    functionality to help with intuitive transformation and data prep.
+    More information: Create and use dataflows in Power Apps and Add data to a table in Dataverse
+    by using Power Query
+    Note that loading data via dataflows is subject to the Dataverse service protection limits. Learn
+    more
+    Power Query supports a multitude of available connectors as outlined here: List of all Power
+    Query connectors
+    If your data originates in Excel, like that of many Dataverse customers, then use the existing Excel
+    connector, for example, among the multitude of other available connectors, to build a data
+    pipeline into Dataverse. In addition to one-off data loads, sync your Excel data source with
+    Dataverse using a dataflow. Consider Excel file size limitations with this guidance reduce the size
+    of an Excel workbook to view it in Power BI
+    Moreover, if you have multiple Excel files in a folder that you want to load into Dataverse, use
+    Power Query folder connector to combine, transform, and load data.
+     IT professionals can also free up business users from the complexities of building data pipelines
+     by creating Power Platform dataflow templates. Build a complex query combining data from
+     multiple sources, save it, and share with business users. This file can be then used from the New
+     dataflow > Import template feature in Power Apps. All the user needs to do is verify credentials
+     for data access to start loading data into Dataverse tables. Learn more Create Power Platform
+     dataflows from queries in Microsoft Excel.
+     You can also perform a one-time import of data directly from a single Excel file into a Dataverse
+     table. More information: Import data from Excel and export data to CSV
+     Azure Data Factory
+    Data Factory is a data integration service that provides a low-code or no-code approach to
+    construct extract, transform, and load (ETL) processes within a visual environment or by writing
+    your own code.
+    Depending on your data needs, at some point you might require more involved data engineering
+    to bring the data from external sources into Dataverse. It isn't just about the data volume, but
+    also about the amount and complexity of data transformations required for the source data to
+    meet your data requirements in Dataverse. An additional consideration is the IT resources are
+    available to assist with the effort. These more complex data scenarios can be addressed with
+    Power Platform dataflows, Azure Data Factory, and Web API. Data Factory and Web API
+    integration patterns shine at building pipelines that require involved workflow and algorithm rich
+    transformations. Conversely, dataflows are faster to start with and easier to use.
+    With Data Factory, you can visually integrate Dataverse and other data sources by using more
+    than 90 natively built and maintenance-free connectors.
+     In addition to bringing data into Dataverse, Data Factory can also be used to prepare, transform,
+     and enrich data with Azure Databricks and move data into Azure Synapse Analytics.
+     Exporting data from Dataverse
+     Exporting data, either to another data technology or to another environment, can use any of the
+     same technologies mentioned for importing data, such as dataflows, Data Factory, Power Query,
+     and Power Automate.
+     Dynamics customers who are targeting SQL Server or Azure SQL Database can use Azure Synapse
+     Link. Azure Synapse Link for Dataverse connects with Azure Synapse Analytics to enable you to
+     get near real-time insights over your data from Microsoft Dataverse. With a tight seamless
+     integration between Dataverse and Azure Synapse Analytics, Azure Synapse Link enables you to
+     run analytics, business intelligence and machine learning scenarios on your data. More
+     information: What is Azure Synapse Link for Dataverse
+     See also
+     Work with any type of app
+      Last updated on 05/04/2026
+       Work with any type of app
+       Article • 06/21/2022
+       Microsoft Dataverse provides multiple ways to integrate in any type of app (mobile,
+       web, desktop), device, system, or service. For cloud solutions, there are ways to integrate
+       regardless of the model in which your solution is deployed—infrastructure as a service
+       (IaaS), platform as a service (PaaS), or software as a service (SaaS). For IaaS-based
+       solutions, the integration approach also works well if solutions are running inside of
+       containers.
+       In some cases, integration with an app can be achieved by using business logic
+       contained in Dataverse. In other cases, it will involve integration via events, the
+       Dataverse OData API, or using plug-ins.
+       Defining business logic
+       Tables in Dataverse can use rich server-side logic and validation to ensure data quality
+       and reduce repetitive code in each app that creates and uses data in a table.
+          Business rules: Validate data across multiple columns and tables, and provide
+          warning and error messages, regardless of the app used to create the data. More
+          information: Create a business rule for a table
+          Business process flows: Guide users to ensure that they enter data consistently
+          and follow the same steps every time. Business process flows are currently only
+          supported for model-driven apps. More information: Business processes flows
+          overview
+          Workflows: Automate business processes without user interaction. More
+          information: Classic Dataverse workflows
+          Business logic with code: Supports advanced developer scenarios to extend the
+          app directly through code. More information: Apply business logic using code
+       Integrating with apps by using events
+       A common approach of app integration is through the use of events. For example, an
+       event such as adding a new row occurs in Dataverse, and this should be communicated
+       to an associated system so that an action can be taken. For example, if a new support
+       request was raised, it might trigger an SMS message to be sent to the assigned support
+       staff.
+       This interactivity can also occur in the opposite direction—an update in an external
+       system might result in data being added, updated, or deleted from a Power Platform
+       environment.
+       The most popular approaches in Dataverse involve webhooks, Azure messaging (Service
+       Bus, Event Hubs), Azure Logic Apps, or Power Automate.
+       Webhooks
+       With Dataverse, you can send data about events that occur on the service to a web app
+       by using webhooks. A webhook is a lightweight HTTP pattern for connecting web APIs
+       and services with a publish-and-subscribe model. Webhook senders notify receivers
+       about events by making requests to receiver endpoints with some information about
+       the events.
+       Webhooks enable developers and ISVs to integrate Dataverse data with their own
+       custom code hosted on external services. By using the webhook model, you can secure
+       your endpoint by using authentication header or query string parameter keys. This is
+       simpler than the shared access signature authentication model used with Azure Service
+       Bus integration.
+         Webhooks can only scale to the point at which your hosted web service can handle
+         the messages.
+         Webhooks enable synchronous and asynchronous steps.
+                 Webhooks send POST requests with the JSON payload and can be consumed by
+                 any programming language or web app hosted anywhere.
+                 Webhooks can be invoked from a plug-in or custom workflow activity.
+            Azure Service Bus
+            Service Bus provides a secure and reliable communication channel between Dataverse
+            runtime data and external, cloud-based line-of-business apps. This capability is
+            especially useful in keeping disparate Dataverse systems or other Dataverse servers
+            synchronized with business data changes.
+            The sequence of events is as follows:
+                 A listener app is registered on a Service Bus solution endpoint and begins actively
+                 listening for the Dataverse remote execution context on the service bus.
+                 A user performs some operation in Dataverse that triggers execution of the
+                 registered out-of-the-box plug-in or a custom Azure-aware plug-in. The plug-in
+                 initiates a post, through an asynchronous service system job, of the current request
+                 data context to Service Bus.
+                 The claims posted by Dataverse are authenticated. Service Bus then relays the
+                 remote execution context to the listener. The listener processes the context
+                 information and performs some business-related task with that information.
+                 Service Bus notifies the asynchronous service of a successful post and sets the
+                 status of the related system job to Completed.
+            Service Bus relays the request message data context between Dataverse and the Service
+            Bus solution listener apps. Service Bus also provides data security so that only
+            authorized apps can access the posted Dynamics 365 data. Authorization of Dataverse
+            to post the data context to Service Bus, and for listener apps to read it, is managed by
+            Azure shared access signatures.
+            More information: Service Bus   and Service Bus authentication and authorization
+            Logic Apps and Power Automate
+            Logic Apps, offered via Azure, and Power Automate, offered via Microsoft Power
+            Platform, can trigger a workflow that can be used to integrate with application events
+            and data on a schedule or by activity in a database, system, service, or SaaS.
+       These workflows can execute logic and interact with these systems using the hundreds
+       of connectors to databases, PaaS, and SaaS.
+       For example, when a row is added to a relational database, such as SQL, this might
+       trigger a workflow that can insert this data in Dataverse.
+       With the ability to create custom connectors by using Open API (formerly known as
+       Swagger) definitions for a service, it's also straightforward to include services, functions,
+       and code running in IaaS and Azure Kubernetes Service (AKS).
+       Integrating Dataverse into apps with the OData
+       API
+       All popular programming languages support a form of integration with REST-based
+       APIs.
+            The Dataverse Web API provides a development experience that can be used across a
+            wide variety of programming languages, platforms, and devices. The Web API
+            implements the OData (Open Data Protocol), version 4.0, an OASIS standard for building
+            and consuming RESTful APIs over rich data sources. You can learn more about this
+            protocol at www.odata.org  . For more information about this standard, see www.oasis-
+            open.org .
+            Dataverse takes an "API first" approach. This means that the service doesn't just provide
+            a mechanism to query data, it also provides metadata from the service on business
+            rules, constraints, and so on, that you can use to build intelligent, responsive apps and
+            services.
+            The API is secured by using OAuth. OAuth requires an idtable provider for
+            authentication. For Dataverse, the idtable provider is Microsoft Entra ID. To
+            authenticate with Microsoft Entra by using a Microsoft work or school account, use the
+            Microsoft Authentication Libraries (MSAL).
+            For more information about getting started with the Dataverse Web API, see Use the
+            Dataverse Web API.
+            For more information about using the Dataverse Web API with OAuth, see Use OAuth
+            with Dataverse.
+            Plug-ins
+      The Dataverse provides the ability to write code that sits between the API and the data.
+      This code, written in .NET, is referred to as a plug-in. Because the plug-in sits between
+      the API and the data, it enforces the same logic on every app.
+      Plug-ins can be synchronous or asynchronous, and perform the following tasks:
+        Return errors to the user.
+        Query Dataverse data to evaluate logic to perform.
+        Perform data operations.
+        Perform outbound HTTP requests.
+      Plug-ins are registered at points in the event pipeline, which are illustrated here.
+      Within the event pipeline, the following events can occur:
+        Requests and Responses can be examined and rejected or manipulated in several
+        steps of the event pipeline.
+        Validation handlers can throw custom exceptions to reject operations that your
+        logic considers invalid.
+        Pre-operation handlers can modify requests before the database operation.
+        Post-operation handlers can modify responses.
+        Async handlers perform automation after the response is returned.
+      One constraint with plug-ins is that they must be self-contained. If integration code
+      requires references to other libraries, integration can be done by using Azure Functions.
+      Azure Functions
+      Azure Functions provides a serverless code execution option for business and
+      integration logic.
+      Functions are triggered by a call from an external system, service, or code. For
+      Dataverse, that trigger can come directly from Dataverse using Service Bus, a webhook,
+      or a call from a plug-in. Additionally, the Azure Functions call can be initiated via a flow
+      in either Logic Apps or Power Automate that involves the Dataverse connector.
+      More information: Use plug-ins to extend business processes
+     Tables in Dataverse
+     Tables are used to model and manage business data. When you develop an app, you can use
+     standard tables, custom tables, or both. Microsoft Dataverse provides standard tables by default.
+     These are designed, in accordance with best practices, to capture the most common concepts
+     and scenarios within an organization.
+     Create new custom tables or customize existing standard tables to suit your business needs. To
+     do this, app makers manage tables in Power Apps (make.powerapps.com). Makers can also
+     manage tables in the model-driven app designer.
+     See also
+     Types of tables
+     Create a custom table
+      Last updated on 08/07/2026
+     Tables and metadata in Microsoft Dataverse
+     Microsoft Dataverse is designed so that you can quickly and easily create a data model for your
+     application. Normally, you shouldn't have to concern yourself with some of the details about
+     metadata that this article introduces. But if you want to develop a deeper understanding about
+     how apps that use Dataverse work or you're evaluating what is possible, understanding the
+     metadata used by Dataverse can provide you with insight.
+     Metadata means data about data. Dataverse provides a flexible platform for you because it's
+     relatively easy to edit the definitions of the data that the environment will use. In Dataverse, the
+     metadata is a collection of tables. Tables describe the kinds of data stored in the database. Table
+     metadata is what controls the kinds of records you can create and what kind of actions can be
+     performed on them. When you use the customization tools to create or edit tables, columns, and
+     table relationships, you're editing this metadata.
+     Different clients people use to interact with the data in your environment depend on the table
+     metadata and adapt as you customize the metadata. But these clients also depend on other data
+     to control what visual elements to display, any custom logic to apply, and how to apply security.
+     This system data is also stored within tables but the tables themselves aren't available for
+     customization.
+     You can learn about standard tables, attributes, and table relationships included by default in
+     Dataverse by reviewing the entity reference.
+       Tip
+      The designers available to edit metadata don't show all the details found in the metadata.
+      You can install a model-driven app called the Metadata Browser, which allows you to view
+      all the tables and metadata properties that are found in the system. More information:
+      Browse table definitions in your environment.
+     Create new metadata or use existing metadata?
+     Dataverse comes with standard tables that support core business application capabilities. For
+     example, data about your customers or potential customers is intended to be stored using the
+     account or contact tables.
+     Each of these tables also contains many columns that represent common data that the system
+     might need to store for the respective table.
+     For most organizations it's to your advantage to use the standard tables and attributes for the
+     purposes they were provided.
+     If you install a solution, you can expect that the solution developer leveraged the standard tables
+     and attributes. Creating a new custom table that replaces a system table or attribute means that
+     any solutions available might not work for your organization.
+     For these reasons, we recommend that you look for and use the provided standard tables,
+     columns, and table relationships when they make sense for your organization. If they don't make
+     sense and can't be edited to match your need, you should evaluate if creating a new table,
+     column, or table relationships is required.
+     Remember that you can change the display name of a table so that it matches the nomenclature
+     your organization uses. For example, it's common for people to change the display name of the
+     Account table to Company or the name of the Contact table to Individual. This can be done to
+     tables or attributes without changing the behavior of the table. For more information about
+     renaming tables, see Change the name of a table.
+     You can't delete standard tables, columns, or table relationships. They're considered part of the
+     system solution and every Dataverse environment is expected to have them. If you want to hide a
+     standard table, change the security role privileges for your organization to remove the read
+     privilege for that table. This removes the table from most parts of the application. If there's a
+     system column that you don't need, remove it from the form and any views that use it. Change
+     the Searchable value in the column and table relationship definitions so that they don't appear in
+     advanced find.
+     Limitations on creating metadata items
+     There's a limit to the number of tables you can create. Admins can view information about the
+     number of tables and percent used towards the maximum in the legacy Resources In Use page.
+     Go to Power Platform admin center (admin.powerplatform.com) select Manage > Environments,
+     and open the environment you want. Select Settings, expand Resources select All legacy
+     settings. In the legacy settings, select Administration > Resources In Use.
+     Within each table there's also an upper limit on the number of columns you can create. This limit
+     is based on the technical limitations on the amount of data that can be stored in a row of a
+     Dataverse table and isn't viewable. It's difficult to provide a specific number because each type of
+     column can use a different amount of space. The upper limit depends on the total space used by
+     all the columns for the table.
+     Most people don't create enough custom columns to reach the limit, but if you find yourself
+     planning to add hundreds of custom columns to a table, you should consider if this is the best
+     design. Do all the columns you plan to add describe properties for a row for that table? Do you
+     really expect that people using your environment will be able to manage a form that includes
+     such a high number of columns? The number of columns you add to a form increase the amount
+     of data that has to be transferred each time a row is edited and affects the performance of the
+     system. Take these factors into consideration when you're adding custom columns to a table.
+     Choice columns provide a set of options that are displayed in a drop-down control on a form or
+     in picklist control when using advanced find. Your environment can support thousands of options
+     within a choice column, but you shouldn't consider this as the upper limit. Usability studies show
+     that people have trouble using a system where a drop-down control provides large numbers of
+     options. Use choice columns to define categories for data. Don't use choice columns to select
+     categories that actually represent separate items of data. For example, rather than maintain a
+     choice column that stores each of hundreds of possible manufacturers of a type of equipment,
+     consider creating a table that stores references to each manufacturer and use a lookup column
+     instead of a choice.
+     Next steps
+     Create or edit tables (row types)
+     Create and edit relationships between tables
+      Last updated on 04/17/2026
+    Types of tables
+    A table defines information that you want to track in the form of rows (records), which typically
+    include column data such as company name, location, products, email, phone, and so on.
+    Tables appear in Power Apps as one of these different types:
+      Standard: Several standard tables, also known as out-of-box tables, are included with a
+      Power Platform environment that includes Microsoft Dataverse. Account, business unit,
+      contact, task, and user tables are examples of standard tables in Dataverse. Most of the
+      standard tables included with Dataverse can be customized. Tables that are imported as part
+      of a managed solution and set as customizable also appear as standard tables. Any user
+      with appropriate privileges can customize these tables where the table property has
+      customizable set to true.
+      Activity: Are a special kind of table and are best for rows that have an activity-based
+      element, which can include a subject, start time, stop time, due date, and duration.
+      Dataverse already comes with several out-of-the-box activity tables, such as appointment,
+      task, email, and phone call. More information: Activity tables
+      Virtual: Are when you need the table to be populated with data from an external source
+      outside of Dataverse.
+      Elastic: Are for when the table stores a very large dataset in excess of tens of millions of
+      rows.
+    Activity tables
+    An activity can be thought of as any action for which an entry can be made on a calendar. An
+    activity has time dimensions (start time, stop time, due date, and duration) that help determine
+    when the action occurred or will occur. Activities also contain data that helps determine what
+    action the activity represents, for example, subject and description. An activity can be opened,
+    canceled, or completed. The completed status of an activity will have several sub-status values
+    associated with it to clarify the way that the activity was completed.
+    Activity tables are a special kind of table that only a user or team can own. An organization can't
+    own activity tables. When you create a table, you can specify it as a standard or activity table.
+    The following table lists activity tables that are available in a default environment.
+                                                                                                                 ﾉ Expand table
+            Name                 Description                                      Display in       Reference
+                                                                                  activity
+                                                                                  menus
+            Appointment          Commitment representing a time interval          Yes              Appointment
+                                 with start and end times and duration.
+            Email                Activity that is delivered using email           Yes              Email
+                                 protocols.
+            Fax                  Activity that tracks call outcome and            Yes              Fax
+                                 number of pages for a fax and optionally
+                                 stores an electronic copy of the
+                                 document.
+            Letter               Activity that tracks the delivery of a letter.   Yes              Letter
+                                 The activity can contain the electronic
+                                 copy of the letter.
+            Phone Call           Activity to track a telephone call.              Yes              PhoneCall
+            Recurring            The master appointment of a recurring            Yes              RecurringAppointmentMaster
+            Appointment          appointment series.
+            Task                 Generic activity representing work               Yes              Task
+                                 needed to be done.
+          When you can create a new custom activity table, you might create it to read instant message
+          communications. Creating an activity table is different from creating a non-activity table because
+          you don't specify a primary column. All activity tables have a Primary Field set to Subject and
+          other common columns that are defined by the Activity table. This allows all types of activities to
+          be shown in a view where just the common columns are displayed.
+          To create a custom activity table, open the Advanced options section in the New table panel,
+          select the Activity option from the Type drop-down list. After you select this, you'll see that
+          Display in Activity menus is selected. This setting allows people to create this type of activity in
+          the activity menus. This isn't selected for activities that are typically associated with specific
+          events and created behind using code or by a workflow. After you save the table, you can't
+          change these settings.
+          Enable activities for a table
+          Enable activities to add activities to a table and use the Regarding lookup for the table.
+            1. To enable activities, sign in to Power Apps  .
+            2. On the left nav, select Tables, and then open the table you want.
+            3. Select Properties.
+            4. Expand Advanced options, and then select Creating a new activity.
+                 ） Important
+                 Once enabled this setting can't be disabled.
+            5. Select Save.
+        Enable users to associate activity table records to multiple
+        business records
+        Users sometimes need to associate an activity, like email to multiple records. For example, a
+        customer sends an email that is related to multiple cases. The existing Regarding lookup only
+        allows a user to relate an email to a single parent record. The email activity record can now be
+        associated to multiple business records such as accounts, contacts, leads, opportunities, and
+        cases through a new activity party type column named related. When this email activity record is
+        associated to multiple business records, it appears in the timeline for each of the associated
+        records.
+           ７ Note
+           This feature is supported with the activity tables listed earlier in this article. However, the
+           Task activity isn't supported.
+        The related column isn't added to the activity table form by default. To enable users to use this
+        new column, add the related column to the activity main form. For information about how to add
+        a column to a form, see add columns to a form.
+        After you add the related column to the form, users can associate the activity record with other
+        related party records (parties) like cases or opportunities.
+        Differences between regarding and related columns
+     While there are similarities between the regarding and related columns, the following are
+     important differences to note:
+        Supported tables
+        The related column is currently only available for the Email table. The related column
+        doesn't currently support the same relationships utilized by the regarding column. The list
+        of supported tables is currently limited to the tables that can have a contact email.
+        Relationship type
+        The regarding column acts as a parental relationship from a parent record. For example, if
+        an account has multiple activities and is later deleted, the same action is automatically
+        applied to the child activity records. The related column isn't a parental relationship. Actions
+        performed on related records don't affect the related activities.
+        When the column value is set
+        After the related column is added to the email form, users can manually add one or more
+        records to indicate the records are related to the activity. The regarding and related
+        columns are independent. Setting a value for the regarding lookup column doesn't affect
+        the values for related. When a new email is related to an existing email (for example, as a
+        reply), the values from the related and regarding columns of the correlated email are copied
+        to the new activity. However, when you create a new email from the timeline control within
+        a record’s context, the related column isn't automatically set to the current record. This
+        behavior can be modified by enabling an OrgDBOrgSetting named
+        AddParentEntityToRelatedOnNewActivityCreate.
+        Outlook add-in scenarios
+        Some features such as Dynamics 365 App for Outlook and Copilot for Sales include an
+        ability to save an Outlook email as an email record while also setting the regarding column.
+        These features don't set the value of the related column.
+     Table ownership
+     There are two different types of standard and custom table ownership. When you create a
+     custom table the ownership options are User or team or Organization owned. Once a table is
+     created, the ownership type can't be changed.
+                                                   ﾉ
+                                                     Expand table
+          Ownership     Description
+          Organization  Data belongs to the organization. Access to the data is controlled at the organization level.
+          User or team  Data belongs to a user or a team. Actions that can be performed on these rows can be
+                        controlled on a user level.
+        Notice that there are a few Dataverse system tables that are similar to standard tables but have a
+        different type of ownership from organization and user or team ownership:
+              None. Some system tables don't have an owner, such as the Privilege table.
+              Business Unit. A few system tables are business-owned. These include Business Unit,
+              Calendar, Team, and Security Role tables.
+           ） Important
+           After you create a custom table, you can't change the ownership. Before you create a table,
+           make sure that you choose the correct type of ownership. If you later determine that your
+           custom table must be of a different type, you need to delete it and create a new one.
+        Virtual tables
+        A virtual table is a custom table in Dataverse that has columns containing data from an external
+        data source. Virtual tables appear in your app to users as regular table rows, but contain data that
+        is sourced from an external database dynamically at runtime, such as an Azure SQL Database.
+        Rows based on virtual tables are available in all clients including custom clients developed using
+        the Dataverse web services. More information: Create and edit virtual tables that contain data
+        from an external data source
+        Elastic tables
+        Elastic tables offer performance benefits over standard tables when the table contains a very
+        large dataset. Elastic tables are powered by Azure Cosmos DB. More information: Create and edit
+        elastic tables
+        See also
+        Create tables
+        Edit tables
+      Last updated on 07/30/2026
+         Create and edit tables using Power Apps
+         Tables are used to model and manage business data. When you develop an app, you can use
+         standard tables, custom tables, or both. Power Apps provides an easy way to view, create, and
+         edit tables for Microsoft Dataverse.
+         Prerequisites
+         To create and edit tables in Dataverse, you need the following:
+              A Power Platform environment with Dataverse.
+              Appropriate permission that includes both of the following privileges:
+                The system customizer security role in the environment. Note that, apart from self-
+                created table records, the system customizer role doesn’t have the privileges to access
+                table records that aren’t shared with them. More information: Environments with a
+                Dataverse database.
+                A system or custom security role that has Create, Read, and Write privileges to the
+                Entity table. These privileges allow the user to create and edit tables in Dataverse. Note
+                that a Power Platform admin must grant the user data access to edit the rows of these
+                tables.
+         View tables
+         Sign into Power Apps  , and then select Tables on the left navigation pane. If the item isn’t in
+         the side panel pane, select …More and then select the item you want.
+         Filter the tables that are displayed using the following tabs:
+                                                                                   ﾉ
+                                                                                      Expand table
+          View           Description
+          Recommended Displays only the standard tables. Standard tables are tables included with Power Apps
+                         or Dynamics 365 apps.
+          Custom         Displays only custom tables. Custom tables are created by you and other app makers.
+          All            Displays all the tables.
+     You can also select a column heading from the table view, and then select Filter by to display
+     tables by a certain property, such as Type, Managed, or Tags.
+     Create a table
+     There are several ways to create a new table:
+        Create new tables
+        Set advanced properties
+        Create with external data
+        Create a virtual table
+     Create new tables
+     Use the data workspace experience where you create tables, configure table relationships, and
+     can view a diagram of your data.
+                                            
+      1. Command bar:
+         Back. Takes you back where you were in Power Apps.
+         New table. Create a new table using any of the methods described in this article.
+         Existing table. Add one more more existing tables and visualize them in the
+         designer.
+         Hide data or View data. Closes or displays the table row editor.
+         Create relationships. Creates a table relationship between two tables. Select a table
+         on the canvas and CTRL + click another table, then select Create relationships. More
+         information: Types of table relationships (NOTE: many-to-many relationships aren't
+         supported)
+         Remove. Deletes the table and all associated table rows when a new table is
+         selected. Remove doesn't delete the table and associated rows when an existing
+         table is selected.
+      2. Data workspace canvas. On the data workspace canvas, you can drag tables around the
+       data workspace to relocate them and select ... to invoke the table actions menu, and view
+       a diagram of your data.
+      3. Data workspace actions:
+         +. Zoom in to increase the size of the table objects on the canvas.
+         -. Zoom out to decrease the size of the table objects on the canvas.
+         Fit view. Resize to fit within the available space in the browser tab.
+         Show map or Hide map. When Show map is selected, displays a compact
+         representation of the tables on the canvas.
+      4. Table actions menu:
+         Hide data or View data. Closes or displays the table row editor.
+         Row ownership. Select the ownership type as either user or team, or organization.
+         Properties. Edit the table display name, plural name, description, and schema name.
+         Remove. Remove the table and all associated rows. If the tables is a new table, all
+         data is deleted. For existing tables, that table is only removed from the table
+         designer and no data is removed.
+      5. Table row editor. In this area, create new, edit, or delete rows, create new columns,
+       change the table ownership type, and edit table properties.
+      6. Show more or less column. You can select and clear the columns to be displayed in the
+       table card. Also displays or hides the relationship for lookup columns that connect to
+       another table currently in the designer.
+      7. Add new relationship handle. Drag the handle and create a new relationship by pointing
+       it towards another table. Some relationship types are currently not supported. More
+       information: Limitations using the data workspace
+      Tip
+     Can't find the tables you created on the canvas? Select Fit view on the data workspace
+     actions menu.
+    Create a table with the visual table designer by using any of the following methods:
+       Start with Copilot
+       Import with SharePoint list
+       Import an Excel file or .CSV
+       Start from blank
+    Start with Copilot
+    Describe your data in natural language and Copilot generates tables along with relationships
+    for you.
+     ７ Note
+     To use this feature, note the following requirements:
+        Copilot must be enabled for the environment. By default, Copilot is enabled. More
+        information: Manage feature settings
+             This feature is available in 20 languages including Danish, Dutch, English (United
+             States), French, German, Italian, Japanese, Portuguese (Brazil), Spanish, Chinese
+             (Simplified), Czech, Finnish, Greek, Korean, Norwegian (Bokmål), Polish, Russian,
+             Swedish, Thai, and Turkish. Depending on where your environment is hosted, you
+             might need to enable data movement across regions. For more information go to
+             Copilots and generative AI features that are available when you enable data
+             movement across regions.
+         1. From the Choose an option to create tables page, select Start with Copilot.
+         2. Describe the tables you'd like to create with the assistance of Copilot. You can also specify
+           the number of tables to create, size of table, and whether to include relationship by
+           configuring the Table options menu.
+         3. Keep iterating with Copilot in the Copilot panel until you're satisfied with your data. More
+           information: Review the table
+         4. When you're finished, select Save and exit.
+       Limitations using the data workspace
+       The following data types aren't currently supported when you create a column in the data
+       workspace:
+           Rich text
+           Customer
+           Autonumber
+           Formula
+       Some relationship configurations are currently not supported.
+                                                                 ﾉ
+                                                                    Expand table
+        Starting table  Targeting table   Relationship type   Status
+        New             New               One-to-many         Supported
+        New             New               Many-to-one         Supported
+        New             New               Many-to-many        Not supported
+        Existing        New               One-to-many         Supported
+        Existing        New               Many-to-one         Not supported
+        Existing        New               Many-to-many        Not supported
+           Starting table           Targeting table           Relationship type             Status
+           Existing                 Existing                  One-to-many                   Not supported
+           Existing                 Existing                  Many-to-one                   Not supported
+           Existing                 Existing                  Many-to-many                  Not supported
+          Set advanced properties
+          From the Tables area, on the command bar select New table > Set advanced properties. This
+          opens the New table properties panel. You start with a blank table and enter the table
+          properties, such as name, and description. Expand Advanced options to set more properties,
+          such as track changes and audit changes.
+           Table properties
+           Enter data for the following properties.
+                                                                                                       ﾉ Expand table
+            Property               Description
+            Display name           This is the singular name for the table that is shown in the app. This can be changed
+                                   later.
+            Plural display         This is the plural name for the table that is shown in the app. This can be changed
+            name                   later.
+            Description            Provide a meaningful description of the purpose of the table.
+           Select Enable Attachments to append notes and files to records for this table.
+           Select the Primary column tab if you want to change the Display name or Description of the
+           primary column. The primary column is used by lookup fields when establishing relationships
+           with other tables.
+              ） Important
+              After you save the table, the Primary column display name and description can't be
+              changed.
+           Advanced options
+           Select Advanced options to display additional properties that are optional for a table.
+                                                                                                       ﾉ Expand table
+            Property              Description
+            Schema name           By default, the schema name is automatically created for you based on the display
+                                  name, but you can change it. The schema name can't contain spaces and includes
+                                  the customization prefix for the Dataverse solution publisher. You can't change this
+                                  after the table is saved.
+            Type                  Select the type of table. Use standard for most tables. Activity tables are a special
+                                  table that can only be owned by a user or team, but can't be owned by an
+                                  organization. Virtual tables require the table be populated with data from an
+                                  external source. Elastic tables should be considered when your business scenario
+          Property           Description
+                             entails very large data volumes with high throughput, storage, and low latency
+                             requirements.
+          Record ownership   Switch the table type to Activity table to create tables that can manage tasks. The
+                             type of Ownership defines who can perform operations on a record.
+          Choose a table     You can choose whether to display an image for the table. This image is displayed in
+          image              Power Apps in some design areas. Notice that the image doesn't appear in apps
+                             using the table. To display images in apps, use the image column. More information:
+                             Image columns
+          Color              Set a color to be used for the table in model-driven apps.
+          Apply duplicate    If duplicate detection is enabled for your organization, enabling this allows you to
+          detection rules    create duplicate detection rules for this table.
+          Track changes      Enables data synchronization in a performant way by detecting what data has
+                             changed since the data was initially extracted or last synchronized. This option must
+                             be enabled for certain features such as Azure Synapse Link for Dataverse.
+          Provide custom     When selected, set a Help URL to control what page users see when they select the
+          help               help button in the application. Use this to provide guidance specific to your
+                             company processes for the table.
+          Audit changes to   When auditing is enabled for your environment, this allows for changes to table
+          its data           records to be captured over time. When you enable auditing for a table, by default,
+                             many table columns, such as data types of owner, number, text, and choice are
+                             enabled for auditing. However, some columns aren’t enabled by default such as
+                             those with data types of lookup, but those columns can be enabled. Select or clear
+                             the Enable auditing property for the columns that you want to enable auditing on.
+          Leverage quick     After you've created and published a Quick Create Form for this table, people have
+          create form if     the option to create a new record using the Create button in the navigation pane.
+          available          More information: Create and design model-driven app forms
+                             When this is enabled for a custom activity table, the custom activity is visible in the
+                             group of activity entities when people use the Create button in the navigation pane.
+                             However, because activities don't support quick create forms, the main form is used
+                             when the custom table icon is selected.
+          Enable long term   Dataverse supports custom retention policies to securely retain unlimited data long
+          retention          term in a cost-efficient way. More information: Long term data retention overview
+          Creating a new     Associate activities to records for this table.
+          activity
+          Doing a mail       App users can use this table with mail merge.
+          merge
+          Setting up         When you turn on OneNote integration, you have the benefits of using OneNote to
+          OneNote            take or review customer notes from within your records. Requires SharePoint
+            Property            Description
+            integration         document management to be set up. More information: Set up OneNote integration
+            Setting up          After other tasks have been performed to enable document management for your
+            SharePoint          organization, enabling this feature allows for this table to participate in integration
+            document            with SharePoint. More information: Manage your documents using SharePoint
+            management
+            Can have            Use the connections feature to show how records for this table have connections to
+            connections         records of other tables that also have connections enabled.
+            Can have a          Send emails using an email address stored in one of the fields for this table. If a
+            contact email       Single Line of Text column with format set to email doesn't already exist for this
+                                table, a new one is created when you enable sending email.
+            Have an access      Create team templates for this table.
+            team
+            Can be linked to    Let app users write feedback for any table record, or rate table records within a
+            feedback            defined rating range. More information: Configure a table for feedback/ratings
+            Appear in search    Enable so that table records can be included in search results when using an app.
+            results
+            Can be taken        Makes data in this table available while the Power Apps application isn't connected
+            offline             to a network.
+            Can be added to     Use the table with queues. Queues improve routing and sharing of work by making
+            a queue             records for this table available in a central place that everyone can access.
+          Select Save to continue. This action closes the New table panel and displays the table hub.
+          Create with external data
+          Use an Excel file/CSV file or SharePoint list to populate a table with your data, which uses
+          copilot to assist with the table generation.
+             ７ Note
+                   Generally available copilot features are enabled by default and can't be turned off.
+                   To disable them, a tenant admin must contact support.
+                   When you use create with external data, such as data from Excel or SharePoint,
+                   Power Apps initially displays only the first 20 rows of your dataset as a preview. The
+                   full dataset is ingested and made available after you save the table.
+       1. From the Tables area, on the command bar select New table > Create with external data,
+         and then select either File (Excel, .CSV) or SharePoint list.
+          File (Excel, .CSV)
+          a. Select from device or drag and drop your Excel file onto the Upload an Excel file
+            page.
+          b. The data from the Excel file is displayed as a Dataverse table. Select a column
+            header > Edit column to make changes, such as the column name or data type.
+          c. When you're finished, select Create.
+          For more information about how AI is used with this feature, go to FAQ for Excel to
+          table and app.
+      SharePoint columns not used in Dataverse table generation
+      The following columns aren’t included when generating a Dataverse table from a SharePoint
+      list because the respective data types aren’t supported with Dataverse:
+         Image
+         Task outcome
+         External data
+         Managed metadata
+         Attachment (single)
+         Multiple attachments / images
+         SharePoint list system columns
+         Symbol at column level (currency, prefix, postfix) in numbers
+         Unique values
+      Create a virtual table
+      A virtual table is a custom table in Microsoft Dataverse that has columns containing data from
+      an external data source, such as Azure SQL Database or SharePoint.
+       1. From the Tables area, on the command bar select New table > Create a virtual table.
+       2. Follow the New table from external data wizard to create the virtual table. More
+         information: Create the virtual table
+      Edit a table
+    While viewing tables, select the table you want to edit, and then select Properties from the
+    command bar if you want to edit the table properties.
+    Edit table components using the table hub
+    To edit form components, open the table to display the table hub. The table hub displays the
+    table components described in the following sections.
+                                            
+    Table properties
+    Displays a few common properties for the table. Select Properties on the command bar to edit
+    the table properties.
+    Schema
+    From the Schema area, select from the following table components to open the area where
+    you can view and open existing components or create a new one.
+       Columns. More information: Create and edit columns
+       Relationships. See Create and edit relationships between tables
+       Keys. More information: Define alternate keys to reference rows
+    Data experiences
+    From the Data experiences area select from the following table components to open the area
+    where you can view and open existing components or create a new one.
+       Forms. More information: Create and design forms
+       Views. More information: Create or edit a view
+       Charts. More information: Create a system chart
+       Dashboards. More information: Create or edit dashboards
+    Customizations
+    From the Customizations area, select from the following table components to open the area
+    where you can view and open existing components or create a new one.
+       Business rules. More information: Create business rules and recommendations to apply
+       logic in a form
+       Commands. More information: Customize the command bar using command designer
+    Table columns and data
+    View and create table record data for the table. Select the number of columns, such as +17
+    more, to select columns to display in the columns and data view.
+    Table designer
+    From the table hub, select Edit to open the table designer. The table designer lets you make
+    extensive changes to a table including editing or adding new records and columns, editing
+    table properties, or creating a model-driven app based on the table.
+       Update forms and views
+       From the table hub, select Update forms and views to add selected columns to forms and
+       views in this table without having to edit them in the form and view designers. More
+       information: Update forms and views using table designer
+       Delete a table
+       As someone with the system administrator security role, you can delete custom tables that
+       aren't part of a managed solution.
+         ２ Warning
+         When you delete a custom table, the database tables that store data for that table are
+         deleted and all data they contain is lost. Any associated records that have a parental
+         relationship to the custom table are also deleted. For more information about parental
+         relationships, see Create and edit relationships between tables.
+         The only way to recover data from a table that was deleted is to restore the database from
+         a point before the table was deleted. More information: Backup and restore instances
+       While viewing tables, select the table, and then select Delete from the menu.
+       If the table has dependencies that prevent it from being deleted you see an error message. To
+       identify and remove any dependencies, you need to use the solution explorer. More
+       information Identify table dependencies
+       See also
+       Build apps through conversation (preview)
+       Create a custom table using code
+        Last updated on 01/09/2026
+            Create a custom table that has
+            components in Power Apps
+            Article • 04/12/2024
+            With Power Apps, you tailor your app to closely fit your organization’s industry,
+            nomenclature, and unique business processes. Power Apps app development includes
+            adding standard "out-of-box" tables or creating custom tables. A table defines the
+            information you want to track in the form of records, which typically include properties
+            such as company name, location, products, email, and phone.
+            In this article you create a table and then add or customize key components such as
+            columns, relationships, views, and forms. You learn how to:
+                 Create a custom table.
+                 Add custom columns to your table.
+                 Add a table relationship.
+                 Customize a view.
+                 Customize a form.
+            The article will follow the company, Contoso, which is a pet grooming business that
+            grooms dogs and cats. Contoso needs an app for client and pet tracking that can be
+            used by employees across a variety of devices.
+            Prerequisites
+            Sign in to Power Apps  . If you don’t already have a Power Apps account, select the Get
+            started free link from powerapps.com   .
+            Create a custom table
+               1. On the left navigation pane select Tables. If the item isn’t in the side panel pane,
+                 select …More and then select the item you want.
+               2. On the command bar select New table > Set advanced properties.
+               3. In the right pane, enter the following values, and then select Create.
+                      Display name: Pet
+                      Description: Custom table to track pet services
+      Add and customize columns
+        1. Open the Pet table that was created in the previous section.
+        2. Select Columns, and select the Pet column.
+        3. In the right pane make the following changes to the Display name column:
+           Change the Display name from Pet to Pet Name.
+           Make sure Searchable is selected.
+       4. Select Done.
+       5. On the Columns area on the table designer toolbar select Add column. On the
+        Column properties pane, enter or select the following values and options.
+           Display name. Species
+           Data type. Choice
+           Choice. New choice
+       6. Select View more, and then select Local choice.
+       7. Create the choice:
+        a. Replace New option with Dog.
+        b. Select Add new item.
+        c. Replace New option with Cat.
+        d. Select Done.
+         8. Make sure Searchable is selected, and then select Done.
+         9. On the table designer toolbar select Add column. On the Column properties pane,
+          enter or select the following values:
+             Display name. Breed
+             Data type. Text
+        10. Make sure Searchable is selected, and then select Done.
+        11. On the table designer toolbar select Add column.
+        12. On the Column properties pane, enter or select the following values, and then
+          select Done.
+             Display name. Appointment date
+             Data type. Date and time
+       Add a relationship
+        1. Select the Relationships area. Then, on the table designer toolbar, select Add
+         relationship, and then select Many-to-one.
+        2. On the right pane, in the Related list select Account.
+        3. Select Done.
+        4. Select Save table.
+       Notice that when you add a many-to-one relationship, an Account column with the data
+       type Lookup is automatically added to your list of columns in the Columns area.
+       Customize a view
+        1. Select the Views area, and then open the Active Pets view. If you don't see the
+         Active Pets view, change the filter on the command bar from Default to All.
+        2. On the view designer Table columns left pane, select the following columns to add
+         them to the view.
+            Account
+            Appointment date
+            Breed
+            Species
+        3. On the view designer canvas, select the Created On column, and then select
+         Remove.
+        4. To arrange the columns, on the view designer canvas, select the column you want
+         to move and then use Move Left or Move Right. Your view should look like this.
+        5. On the view designer toolbar, select Save, and then select Publish.
+       Model-driven apps only: Customize the main
+       form
+       Skip this step if you only want to use the Pet table in a canvas app.
+        1. Select Back to close the view designer and return to Power Apps.
+        2. On the left navigation pane, select Tables. If the item isn’t in the side panel pane,
+         select …More and then select the item you want.
+        3. Select Pet.
+        4. In the Pet table, select the Forms area, and then select Information next to the
+         Main form type to open the form designer.
+        5. On the form editor, select the Table columns on the left pane. Then, drag and drop
+          the Species, Breed, Appointment date, and Account columns located on the pane
+          on to the General section of the form designer canvas until the form looks like this.
+        6. Select Save.
+        7. Select Publish.
+        8. Select Back to return to Power Apps.
+       Add the custom table to an app
+       Now your table is ready to be used to build either a canvas or model-driven app.
+       Next steps
+       In this topic, you learned how to create a table that can be used to create a useful app.
+          To learn how to create a model-driven app, see Build your first model-driven app.
+          To learn how to create a canvas app, see Create an app from scratch.
+     Configure a row summary for a model-
+     driven app
+     Write a custom prompt to specify which columns should be included in a Copilot‑generated row
+     summary. These summaries appear in a consistent, dedicated experience, either surfaced in a
+     collapsible summary bar at the top of a main form or accessed directly for individual rows from
+     views, giving users quick access to the most important information for a record.
+     Records are often comprised of dozens of fields spread across multiple tables, views, forms, tabs,
+     and sections, making it time‑consuming for users to locate and understand the information that
+     matters most. By highlighting key fields and insights in an at‑a‑glance summary, makers can help
+     users quickly orient themselves, regardless of where they encounter the record.
+     Prerequisite for configuring a row summary
+     To enable and use this feature, the following criterion is required:
+        A Power Platform administrator has enabled the AI insight cards environment setting. More
+        information: Manage feature settings
+     Create a row summary
+     Row summaries can be configured for most tables and appear on main forms and views.
+     ７ Note
+       When you configure the row summary, it applies to all views and main forms for the
+       table.
+       Some Dynamics 365 apps tables, such as Case, Lead, and Opportunity, provide their
+       own summaries via the Dynamics 365 Customer Service and Dynamics 365 Sales
+       applications. To avoid conflicts, the row summary feature isn't available for these tables.
+       You can find more information about the summaries for these tables and the options
+       for configuring or disabling these summaries by reading about the Customer Service
+       summary and Sales summary features. These out-of-the-box summaries are currently
+       only accessible from main forms (not views).
+     1. Sign in to Power Apps (make.powerapps.com) select Tables on the left navigation pane, and
+      then open the table where you want to configure a row summary. If the item isn’t in the side
+      panel pane, select …More and then select the item you want.
+     2. Under Customizations, select Row summary.
+         If Row summary is disabled, hover over the words to find out the reason. For example,
+         the table must have at least one row of data for the summary option to be enabled.
+     3. In the Prompt box, add the columns that you want included in the summary by selecting
+      Add or by typing /. You can also specify formatting for the summary, such as make it a
+      bulleted list or a paragraph, as well as how to ensure the summary is generated in the user's
+      preferred language. More information: Write a good prompt for the row summary
+                                             
+     4. Select Test prompt to display a preview of the summary. The most recently edited row in
+      the table is used to generate a test response.
+      5. Once you're satisfied with the columns and response from the test, select Apply to main
+       forms.
+      ） Important
+      Any user who needs to view summaries configured through the Dynamics 365 Customer
+      Service app must be assigned the prvReadLanguageLocale privilege through a security role.
+    Determine which main forms include a row summary
+    After you apply a row summary, the summary displays on all main forms for the table. To view the
+    forms that include a row summary, in Power Apps, select Tables on the left navigation pane, and
+    then under Data experiences select Forms.
+    All forms with the row summary applied have a form AI icon next to the form name. Hovering
+    over the icon displays "The row summary is applied to all main from for the table name table, and
+    appears in every model-driven app that uses this form."
+                                                     
+    Write a good prompt for the row summary
+    Writing a custom prompt gives you the ability to instruct the AI model to perform a specific task.
+    By carefully crafting a prompt, you can generate a response that suits your specific business
+    need. Here are some tips to consider when writing a prompt:
+       Provide a list of the columns you want to include in the summary. Alternatively, you might
+       wish to provide a list of columns that you want to exclude from the summary.
+       Specify any formatting preferences, such as write the summary as a bulleted list.
+       Include the appropriate input and instruction if your users work in multiple languages and
+       you want the summary to respect the user's preferred language; otherwise, the summary
+       will be generated in the language of the summary prompt itself, regardless of the user's
+       language settings. To configure:
+               Include the LanguageCode input in the prompt.
+               Add the instruction to the prompt: "You must respond in language <LanguageCode>."
+               If Copilot doesn't support the user's language, the summary is generated in English.
+               This language instruction is added by default for newly configured summaries, but must
+               be manually added for any pre-existing summaries that were created before this behavior
+               was introduced.
+             For information about how to craft effective prompts, download the AI Builder prompt
+             engineering guide  .
+        Prompt example for a row summary
+        Here are examples to use when building a row summary prompt.
+        Summarize Account record in a way that is easy to understand for a sales manager. Make sure to
+        include all important information, including main ideas and important details, while keeping the
+        order of the content logical. Remove any repetitive elements to make the summary as concise as
+        possible without losing the original text's integrity. If the original text is too short to condense,
+        present it as the summary.
+        Don't include the title in the summary. Create the summary in two paragraphs. For the first
+        paragraph, use the instructions under the header Data. For the second paragraph, use the data
+        under the header Activity. Leave a blank line between the two paragraphs. Don't include the titles
+        Data & Activity in the paragraphs.
+        Data:
+        Show the below values as bullet points using markdown text and bold the values. Make the primary
+        contact a navigation link to the contact record. The link must not include query string parameters in
+        it.
+        Account.Annual Revenue, Account.Category, Account.Industry, Account.Ownership
+        Activity:
+        Generate a summary paragraph using the following customer communication fields identifying top
+        2 key information and top 2 important actions to take.
+        Account.Regarding (Phone Call).Subject, Account.Regarding (Email).Subject
+        You must respond in language LanguageCode
+     Edit a row summary
+     To edit a row summary, open the table, and then under Customizations select Row summary
+     (applied). Follow the steps similar in Create a row summary to make and apply changes.
+     Hide a row summary
+      1. In Power Apps, select Tables on the left navigation pane, and open the table where you
+        want to edit a row summary.
+      2. Under Customizations, select Row summary.
+      3. Unselect the Show row summary option at the top right of the modal.
+      ７ Note
+      If you're trying to hide the default summary for case, lead, and opportunity, which are
+      provided via the Dynamics 365 Customer Service and Dynamics 365 Sales applications, go to
+      these articles to learn more about options for configuring and/or disabling these summaries:
+         Case: Customer Service summary
+         Lead and opportunity: Sales summary features.
+     Adding summaries to solutions
+     Row summaries are solution-aware and can be added to a solution to facilitate moving between
+     environments. To add a summary to a solution, follow these steps:
+       1. In Power Apps, select Solutions on the left navigation pane, and open the desired solution.
+       2. Select Add existing > More > Other > AI Skill Config.
+       3. Select the rows corresponding to the tables you created summaries for, and then select
+        Add.
+      ） Important
+      Don't add AI Skill Config table rows with an owner of System to your solutions. These don't
+      correspond to row summaries you have created and might cause solution import to fail.
+     Known limitations
+     Keep the following limitations in mind when you configure a row summary:
+        Dates. Row summary isn't intended for date-based operations, such as calculating
+        durations, comparing dates, or determining status from a date. Use business logic or
+        calculated columns for those scenarios.
+        Related-record links. Hyperlinks to related records might not render as expected in the
+        summary.
+        Formula and calculated columns. Values from these columns might not be reflected
+        accurately.
+        Metadata. Choice (option set) labels and related-table associations might not be
+        interpreted as expected.
+        Formatting. Rich formatting, citations, and footnotes aren't supported.
+     Related information
+     FAQ for prompts and text generation capabilities
+      Last updated on 07/29/2026
+     Import data from Excel and export data to
+     CSV
+     To get (import) data into Microsoft Dataverse tables, use an Excel worksheet file or a comma-
+     separated values (CSV) file.
+     When you export Dataverse table data, it's exported as a CSV file.
+     Import from an Excel or CSV file
+     There are two ways to import data from Excel.
+        Option 1: Import by creating and modifying a file template
+        Option 2: Import by bringing your own source file
+       ） Important
+         To import or export data, you must have the Environment Maker security role.
+         Import from Excel or CSV file using the Import > Import data from Excel command
+         isn’t available in GCC, GCC High, and DoD environments. To work around this
+         limitation, from the Tables area in Power Apps select Import > Import data, and
+         then choose a data source, such as Excel workbook or Text/CSV.
+     Option 1: Import by creating and modifying a file template
+     Every table has required columns that must exist in your input file. We recommend that you
+     create a template. To do this, export data from the table. Then, use the same file and modify it
+     with your data. Finally, import the modified file back into the table. Using a template can save
+     you time because you won't have to specify the required columns for each table.
+     Prepare the file template
+       1. Export the table data.
+       2. Define a plan to make sure data is unique before you import it. Use either primary keys or
+        alternate keys. More information: Ensure uniqueness when you import data into a table
+        from Excel or CSV
+     Modify the file with your data
+    Copy data from your Excel or CSV file into the template that you created in the previous step.
+    Import the file
+      1. On powerapps.com  select Tables in the left navigation pane. If the item isn’t in the side
+       panel pane, select …More and then select the item you want.
+      2. Select Import > Import data from Excel.
+      3. Select the tables where you want to import data, and then select Next.
+      4. On the Import data page, select Upload, and choose your file. Follow the prompts to
+       upload your file.
+      5. After the file is uploaded and Mapping status indicates Mapping was successful, select
+       Import from the top-right corner. Go to Troubleshoot mapping errors with Excel to
+       navigate and fix any mapping errors.
+       After the import finishes successfully, you'll see the total number of inserts and updates.
+    New import from Excel (preview)
+    [This topic is pre-release documentation and is subject to change.]
+    The new import experience lets users import data directly from an Excel file into existing
+    Dataverse tables using a unified UI. This experience improves upon the original import method
+    by offering:
+       Assisted mapping: Uses vector-based search to provide more contextually relevant
+       column mapping suggestions.
+       Sheet selection: Users can choose which sheet to import from within a multi-sheet Excel
+       file.
+       Notifications: Real-time feedback on import status, including success, in-progress, and
+       error states.
+       Error logs: Downloadable logs to help users self-diagnose and resolve issues.
+       Performance improvements: Asynchronous ingestion offers better reliability and speed
+       for large files.
+            ） Important
+                 This is a preview feature.
+                 Preview features aren’t meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+         Prerequisites
+         To use the feature a Power Platform admin must enable the "Import Excel to existing table
+         with assisted mapping" environment setting in the Power Platform admin center. Select the
+         environment, and then select Settings > Product > Features and enable the "Import Excel to
+         existing table with assisted mapping" setting.
+            ７ Note
+            The Import Excel to existing table with assisted mapping environment setting is being
+            removed from the Power Platform admin center. This feature is currently being improved
+            and that setting is no longer used.
+         Import from Excel (preview) steps
+            1. Go to the table you want to import data to, and then on the command bar select Import
+               > Import from Excel (Preview).
+      2. Upload your Excel file and select the sheet to import.
+      3. Map columns. A primary key is required if you want to update existing records in the
+       table. If no primary key is selected ("None" option), then all records from the Excel sheet
+       or CSV file are added as new records.
+      4. Review the summary and select Import.
+    Monitor the import status from notifications:
+       In progress: Ongoing import activity with the message Your data is importing displayed.
+       Success: Data was processed or indexed with the message Upload completed displayed.
+       Error: Upload completed with some errors displayed that includes a link to download
+       logs for troubleshooting.
+    Option 2: Import by bringing your own source file
+    If you're an advanced user and know the required columns for a given table for Dataverse
+    tables, define your own Excel or CSV source file. Follow the steps in Import the file.
+    Troubleshoot mapping errors with Excel
+    If you get mapping errors after you upload your file, select Map status. Take the following
+    steps to inspect and rectify the column mapping errors.
+      1. Use the drop-down menu on the right, under Show, to walk through the Unmapped
+       columns, Fields with error, or Required Fields.
+         Tip
+          Depending on whether you get a Warning or an Error, inspect Unmapped
+          columns or Fields with error through the drop-down menu in Column
+          Mappings.
+          Use the upsert (Update or Insert) logic to either update the row, if it already
+          exists, or to insert a new row.
+      2. After you resolve all the errors and warnings, select Save Changes in the top-right corner.
+       You'll go back to the Import Data screen.
+      3. When the Mapping status column shows Mapping was successful, select Import from
+       the top-right corner.
+    When the Import completed successfully message appears, the total inserts and updates are
+    displayed.
+    Ensure uniqueness when you import data into a table from
+    Excel or CSV
+    Dataverse tables use a primary key to uniquely identify rows within a Dataverse table. The
+    primary key for a Dataverse table is a globally unique identifier (GUID). It forms the default
+    basis for row identification. Data operations, like importing data into Dataverse tables, surface
+    the default primary keys.
+         Example:
+         The primary key for an Account table is accountid.
+         Sometimes, a primary key might not work when you integrate data from an external source.
+         Use Dataverse to define alternate keys that uniquely identify a row in place of the primary key.
+         Example:
+         For an Account table, you might set transactioncurrencyid as an alternate key by using a
+         natural key-based identification. For example, use US Dollar instead of the GUID value
+         88c6c893-5b45-e811-a953-000d3a33bcb9 shown previously. You can also choose currency
+         symbol or currency name as keys. More information: Define alternate keys using Power Apps
+         portal
+         You can still use primary keys as identifiers after you specify alternate keys. In the preceding
+         sample, the first file is still valid if GUIDs are valid data.
+         Export data
+         Export data from a single table in a comma-separated value (CSV) format.
+            1. Sign into Power Apps  , on the left navigation pane select Tables. If the item isn’t in the
+              side panel pane, select …More and then select the item you want.
+            2. Select Export > Export data.
+            3. Select the table from which you want to export data, and then select Export data.
+       4. After the export finishes successfully, select Download exported data to download the
+        CSV file to the download folder specified in your web browser.
+      ７ Note
+      Exports have a 12 minute time limit. If the volume of data exported exceeds 12 minutes
+      the export will fail. If this occurs, export data in smaller segments.
+     Unsupported data types and fields
+     The following data types aren't currently supported for import or export.
+        Timezone
+        Choices (multiselect)
+        Image
+           File
+       The following fields are system fields and aren't supported for import and export.
+           Ownerid
+           Createdby
+           Createdonbehalfby
+           Createdon
+           Modifiedby
+           Modifiedonbehalfby
+           Modifiedon
+           Overriddencreatedon
+         ７ Note
+         Get Data from Excel and Export Data features are currently not included in the Power Apps
+         Developer Plan.
+       Import using a connector
+       Use a connector to import data from a selection of many different sources, such as Azure, SQL
+       Server database, SharePoint, Access, OData, and more. More information: Create and use
+       dataflows in Power Apps
+       See also
+       Tables in Dataverse
+        Last updated on 01/16/2026
+     Create and use dataflows in Power Apps
+     With advanced data preparation available in Power Apps, you can create a collection of data
+     called a dataflow, which you can then use to connect with business data from various sources,
+     clean the data, transform it, and then load it to Microsoft Dataverse or your organization’s
+     Azure Data Lake Gen2 storage account.
+     A dataflow is a collection of tables that are created and managed in environments in the Power
+     Apps service. You can add and edit tables in your dataflow, as well as manage data refresh
+     schedules, directly from the environment in which your dataflow was created.
+     Once you create a dataflow in the Power Apps portal, you can get data from it using the
+     Dataverse connector or Power BI Desktop Dataflow connector, depending on which destination
+     you chose when creating the dataflow.
+     There are three primary steps to using a dataflow:
+       1. Author the dataflow in the Power Apps portal. You select the destination to load the
+        output data to, the source to get the data from, and the Power Query steps to transform
+        the data using Microsoft tools that are designed to make doing so straightforward.
+       2. Schedule dataflow runs. This is the frequency in which the Power Platform Dataflow
+        should refresh the data that your dataflow will load and transform.
+       3. Use the data you loaded to the destination storage. You can build apps, flows, Power BI
+        reports, and dashboards or connect directly to the dataflow’s Common Data Model folder
+        in your organization’s lake using Azure data services like Azure Data Factory, Azure
+        Databricks, or any other service that supports the Common Data Model folder standard.
+     The following sections look at each of these steps so you can become familiar with the tools
+     provided to complete each step.
+     Create a dataflow
+     Dataflows are created in one environment. Therefore, you'll only be able to see and manage
+     them from that environment. In addition, individuals who want to get data from your dataflow
+     must have access to the environment in which you created it.
+      ） Important
+         Creating dataflows is currently not available with Power Apps Developer Plan
+         licenses.
+        The Firefox web browser currently isn't supported for the "Download refresh history
+        file" action in Power Apps dataflows. More information: You receive the error
+        message "There was a problem refreshing the dataflow"
+      1. Sign in to Power Apps, and verify which environment you're in, find the environment
+       switcher near the right side of the command bar.
+      2. On the left navigation pane, select Dataflows. If the item isn’t in the side panel pane,
+       select …More and then select the item you want.
+      3. Select New dataflow. On the New Dataflow page, enter a Name for the dataflow. By
+       default, dataflows store tables in Dataverse. Select Analytical entities only if you want
+       tables to be stored in your organization's Azure Data Lake storage account. Select Create.
+        ） Important
+        There's only one owner of any dataflow—the person who created it. Only the owner
+        can edit the dataflow. Authorization and access to data created by the dataflow
+        depend on the destination you loaded data to. Data loaded into Dataverse will be
+        available via the Dataverse Connector and requires the person accessing the data to
+        be authorized to Dataverse. Data loaded into your organization’s Azure Data Lake
+        Gen2 storage account is accessible via the Power Platform Dataflow connector and
+        access to it requires membership within the environment it was created in.
+      4. On the Choose data source page, select the data source where the tables are stored. The
+       selection of data sources displayed allows you to create dataflow tables.
+                                            
+      5. After you select a data source, you’re prompted to provide the connection settings,
+       including the account to use when connecting to the data source. Select Next.
+       6. Once connected, you select the data to use for your table. When you choose data and a
+        source, the Power Platform Dataflow service will subsequently reconnect to the data
+        source in order to keep the data in your dataflow refreshed, at the frequency you select
+        later in the setup process.
+     Now that you've selected the data to use in the table, you can use the dataflow editor to shape
+     or transform that data into the format necessary for use in your dataflow.
+     Use the dataflow editor to shape or transform data
+     You can shape your data selection into a form that works best for your table using a Power
+     Query editing experience, similar to the Power Query Editor in Power BI Desktop. To learn more
+     about Power Query, see Query overview in Power BI Desktop.
+     If you want to see the code that Query Editor is creating with each step, or if you want to create
+     your own shaping code, you can use the advanced editor.
+     Dataflows and the Common Data Model
+     Dataflows tables include new tools to easily map your business data to the Common Data
+     Model, enrich it with Microsoft and non-Microsoft data, and gain simplified access to machine
+     learning. These new capabilities can be leveraged to provide intelligent and actionable insights
+     into your business data. Once you’ve completed any transformations in the edit queries step
+     described below, you can map columns from your data source tables to standard table
+     columns as defined by the Common Data Model. Standard tables have a known schema
+     defined by the Common Data Model.
+     For more information about this approach, and about the Common Data Model, see The
+     Common Data Model.
+     To leverage the Common Data Model with your dataflow, select the Map to Standard
+     transformation in the Edit Queries dialog. In the Map tables screen that appears, select the
+     standard table that you want to map.
+     When you map a source column to a standard column, the following occurs:
+       1. The source column takes on the standard column name (the column is renamed if the
+        names are different).
+       2. The source column gets the standard column data type.
+     To keep the Common Data Model standard table, all standard columns that aren't mapped get
+     Null values.
+     All source columns that aren't mapped remain as is to ensure that the result of the mapping is
+     a standard table with custom columns.
+     Once you’ve completed your selections and your table and its data settings are complete,
+     you’re ready for the next step, which is selecting the refresh frequency of your dataflow.
+     Set the refresh frequency
+     Once your tables have been defined, you should schedule the refresh frequency for each of
+     your connected data sources.
+     Dataflows use a data refresh process to keep data up to date. In the Power Platform Dataflow
+     authoring tool, you can choose to refresh your dataflow manually or automatically on a
+     scheduled interval of your choice.
+     Schedule a refresh automatically
+       1. Select Refresh automatically.
+       2. Enter the dataflow frequency:
+           Frequency-based refresh. Set how often in 30-minute increments, start date, and
+           time in UTC.
+           Refresh on specific days and times. Choose time zone, frequency (daily or weekly)
+           and time of day in 30-minute increments.
+       3. Select Publish.
+     Some organizations might want to use their own storage for creation and management of
+     dataflows. You can integrate dataflows with Azure Data Lake Storage Gen2 if you follow the
+     requirements to set up the storage account properly. More information: Connect Azure Data
+     Lake Storage Gen2 for dataflow storage
+     Troubleshooting data connections
+     There might be occasions when connecting to data sources for dataflows runs into issues. This
+     section provides troubleshooting tips when issues occur.
+        Salesforce connector. Using a trial account for Salesforce with dataflows results in a
+        connection failure with no information provided. To resolve this, use a production
+        Salesforce account or a developer account for testing.
+        SharePoint connector. Make sure you supply the root address of the SharePoint site,
+        without any subfolders or documents. For example, use a link similar to
+        https://microsoft.sharepoint.com/teams/ObjectModel.
+          JSON File connector. Currently you can connect to a JSON file using basic authentication
+          only. For example, a URL similar to https://XXXXX.blob.core.windows.net/path/file.json?
+          sv=2019-01-01&si=something&sr=c&sig=123456abcdefg is currently not supported.
+          Azure Synapse Analytics. Dataflows don't currently support Microsoft Entra
+          authentication for Azure Synapse Analytics. Use basic authentication for this scenario.
+        ７ Note
+        If you use data loss prevention (DLP) policies to block the HTTP with Microsoft Entra
+        (preauthorized) connector then SharePoint and OData connectors will fail. The HTTP with
+        Microsoft Entra (preauthorized) connector needs to be allowed in DLP policies for
+        SharePoint and OData connectors to work.
+      Troubleshoot the error: Connection to Dataverse failed. Please
+      check the link below on how to fix this issue
+      Users might receive an error message if the connection they're using for export requires a fix.
+      In this case, the user receives an error message that states Connection to Dataverse failed.
+      Please check the link below on how to fix this issue.
+      To resolve this issue:
+        1. In Power Apps (make.powerapps.com), select Connections from the left navigation pane.
+          If the item isn’t in the side panel pane, select …More and then select the item you want.
+        2. Locate the Microsoft Dataverse (legacy) connection.
+        3. Select the Fix connection link in the Status column, and follow the instructions on your
+          screen.
+      After the fix completes, retry the export.
+      You receive the error message "There was a problem
+      refreshing the dataflow"
+      This error occurs when you try to refresh the dataflow while using the Firefox web browser. To
+      work around this issue use a different web browser, such as Microsoft Edge or Google Chrome.
+      Next steps
+      The following articles are useful for further information and scenarios when using dataflows:
+         Add data to a table in Dataverse
+         Using an on-premises data gateway in Power Platform dataflows
+         Connect Azure Data Lake Storage Gen2 for dataflow storage
+         Use dataflows in solutions
+      For more information about the Common Data Model:
+         Common Data Model - overview
+         Learn more about the Common Data Model schema and tables on GitHub
+      Last updated on 01/09/2026
+     Dataverse long term data retention
+     overview
+     Microsoft Dataverse supports custom retention policies to securely retain unlimited data long
+     term in a cost-efficient way. While Dataverse can support your business growth with no limit on
+     active data, you might want to consider moving inactive data to the Dataverse long term
+     retention store.
+       ） Important
+       The Power Platform environment where the retention policy resides must be a Managed
+       Environment. This also applies to Dynamics 365 customers who will be required to
+       upgrade to a Managed Environment if the environment isn't already a Managed
+       Environment.
+       Customers who don't meet this requirement can continue to create data retention
+       policies, but the policies are disabled.
+     Watch this video to learn about Dataverse long term data retention.
+     https://learn-video.azurefd.net/vod/player?id=c34fea68-46b2-4486-b9c1-
+     a3ef9d01b4f9&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fdata-
+     platform%2Fdata-retention-overview
+     Business application data lifecycle
+     Consider the business application data lifecycle in three stages. First active data, which over
+     time transitions to inactive data, and finally transitions to deleted data.
+                                                                                                        ﾉ Expand table
+            Stage                 Description
+            1. Active data        Data is readily available and transformed via apps.
+                                  Accessed across all application workflows.
+                                  Also referred to as live data.
+            2. Inactive data      Data is immutable and read-only.
+                                  Is stored in long term retention.
+                                  Has limited access. Retained for compliance, audit, and legal discovery.
+            3. Deleted data       Permanently deleted. Data lifecycle is completed.
+           Dataverse delivers native platform support for long-term retention of data. It helps your
+           organization get immediate and ongoing benefits:
+                 Securely retain the historical application data long term for audit, legal, and regulatory
+                 requirements.
+                 Access the read-only data for limited inquiry purposes.
+                 Reduce database capacity consumed and save money on inactive data.
+                 Avoid IT investments required to build and maintain custom solutions for long-term
+                 retention of historical application data.
+           How it works
+           Application admins set up custom policies for a table with criterion to retain data long term.
+           The retained data is never moved out of Dataverse, the data is stored in Dataverse long term
+           retention. The data is always secured with Dataverse security backed by Microsoft Entra ID.
+              ） Important
+         Once data is retained with Dataverse long term retention it can't be moved back to
+         the Dataverse live (active) application state.
+         When a retention policy is run, the process makes API requests in Microsoft Power
+         Platform. These requests are counted towards the existing API requests available
+         with your plan. More information: Requests limits and allocations
+     Dataverse provides read-only access to the retained data via:
+        Advanced Find within an application.
+        Power Automate cloud flow.
+        Dataverse OData APIs for custom screens.
+     Types of data retained long term
+     Dataverse standard (except system) tables, custom tables, along with attachments and images,
+     can be retained in Dataverse long term storage.
+      ７ Note
+      Currently, audit tables and elastic tables aren't supported for long term retention.
+     Admins set retention policies on tables when the application maker enables long term
+     retention for the table. When a maker enables retention on a parent root table, it also enables
+     retention for all child tables and associated attachments and images.
+     Long term data retention and existing delete action and
+     plugins
+     All the existing delete action cascade relationships and plugins for tables are executed when a
+     data retention policy is run on the table. In addition, the retain action can be used to trigger
+     custom behavior. Application makers can write custom plugins for the retain action.
+     More information: Long-term data retention
+     Storage capacity reports
+     With Dataverse long term retention, data is never moved out of Dataverse. The reported
+     capacity in the existing Power Platform admin reports includes both live (active) and retained
+      (inactive) data in GBs.
+          Database capacity details reported:
+           Database capacity reported is the sum of the live and retained data. The overall
+           database capacity consumed is reduced depending on the proportion of the data rows
+           retained during a policy run.
+          Notice that the policy run takes 72 to 96 hours to complete and there's an additional 24
+          hours afterward for the database capacity reports to appear.
+          When available, the reports display two entries for a table that is enabled for long term
+          retention:
+                        1
+           Table, such as Case  or Contact.
+           Table-Retained, such as Case-Retained and Contact-Retained.
+          1
+           The case table requires a Dynamics 365 app, such as Dynamics 365 Customer Service.
+          File capacity details reported:
+           If there are associated file attachments retained long term, the file capacity reflects the
+           sum of the live and retained data. There will be no reduction or savings observed with
+           file capacity after running a retention policy, which involved file attachments.
+      Log capacity reports aren't currently available.
+      Viewing the capacity reports
+      Imagine a nonproduction scenario where all the live data for the case and contacts tables are
+      retained with Dataverse long term retention. After the long term retention policy is successfully
+      completed, there are entries for Case-Retained and Contact-Retained in the report. The
+      reduction in database capacity consumed depends on the number of rows and column data
+      types involved in the retention process. The reports could take a few days to a week to reflect
+      the fully reduced savings in production environments. For nonproduction environments, the
+      reports could take up to two weeks to reflect the savings.

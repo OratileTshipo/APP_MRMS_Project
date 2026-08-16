@@ -1,0 +1,2284 @@
+     Microsoft Dataverse Developer Guide
+     ﾃ Summarize this article for me
+     Microsoft Dataverse is the underlying data platform for Power Apps, providing core
+     functionality such as server-side logic (plug-ins and workflows), business process flows, a
+     sophisticated security model, and an extensible platform for developers. This guide helps
+     developers understand how to extend Dataverse with code to build custom line-of-business
+     apps for users, businesses, independent software vendors (ISVs), and systems integrators (SIs).
+     There are many ways developers can contribute to creating apps that use Dataverse. While you
+     can build an application with code using Dataverse as your data source, most projects use
+     either model-driven apps or canvas apps to generate the experience that people use.
+     Working with model-driven apps
+     Model-driven apps are built on Dataverse, and can only connect to a Dataverse environment.
+     Dataverse stores all the data that defines a model-driven app.
+     Model-driven apps use Solutions to share customizations and extensions.
+     Model-driven apps also have many points where developers can write code to extend them.
+     For information about what developers can do with model-driven apps, see Model-driven apps
+     Developer Guide.
+     Some examples of model-driven apps available from Microsoft are Dynamics 365 Customer
+     Service, Dynamics 365 Field Service, and Dynamics 365 Marketing.
+     Understand when to write code
+     Because Dataverse includes many capabilities for people to configure custom business logic
+     without writing code, the most common scenarios for developers involve filling gaps where
+     existing features don't provide the functionality you need. Fortunately, Dataverse provides
+     many points for developers to extend the common functionality by using code.
+     As a developer, it's important to understand what you can do without writing code. Familiarize
+     yourself with these capabilities. For more information, see What is Dataverse?
+     Content for on-premises deployments
+     Dataverse isn't available for on-premises deployments. Content in this guide doesn't include
+     information about options that are only available for on-premises or internet facing
+      deployments (IFD). For information related to these options, see the Developer Guide for
+      Dynamics 365 Customer Engagement (on-premises).
+       Get started
+      See also
+      Power Apps for developers
+      Model-driven apps Developer Guide
+       Last updated on 03/10/2026
+            Dataverse community tools
+            Article • 02/15/2022
+            View Layout Replicator and View Designer are a couple of the many tools available in a
+            Power Platform community developed app named XrmToolBox. XrmToolBox is a
+            Windows application that connects to Microsoft Dataverse.
+              ７ Note
+              These tools are provided by XrmToolBox and are not supported by Microsoft. If you
+              have questions pertaining to the tool, please contact the publisher. More
+              information: XrmToolBox  .
+            For more information about XrmToolBox and other Dataverse community tools, go to
+            Developer tools.
+       Live monitor overview
+       Article • 11/19/2024
+       Live monitor is a tool that offers makers the ability to view a stream of events from a
+       user's session to diagnose and troubleshoot problems. Makers of canvas apps can use
+       Live monitor either to view events while building a new app in Power Apps Studio or to
+       monitor published apps during runtime. Makers of model-driven apps can monitor page
+       navigation, command executions, form-related issues, and other major actions to
+       understand app behavior and make improvements.
+       Benefits
+       Live monitor can help you diagnose and troubleshoot problems faster, and build more
+       reliable apps. It provides a deep view of your app by logging all the key activities that
+       occur in the app as it runs. Live monitor also provides a better understanding of how the
+       events and formulas contained in your app work, so you can improve performance and
+       identify any errors or problems.
+       Debugging an app
+       The key to debugging a problem is to have a better understanding of what your app
+       does, and how it does it. Sometimes it's difficult to isolate a problem by just looking at
+       the app formulas, or even by reviewing runtime errors. Watching the events as they
+       occur in your app can help you understand the order of events and how your app is
+       performing, to spot errors and diagnose problems faster.
+       Some examples of problems and queries that you can uncover when using Live monitor
+       are:
+          A high number of network calls
+            Is the app fetching data too frequently?
+            Can you optimize the app to only fetch data when required?
+            Are timer controls firing too often?
+            Are too many events occurring when the app starts? Can fetching some of the
+            data be delayed?
+          Retrieve data from the same data source
+            Can you use different patterns such as caching data in collections or variables
+            instead of fetching the same data multiple times?
+                  The response data size
+                     Can you use query filters to reduce the amount of requested data?
+                  The duration of the request
+                     Are connectors and plug-ins optimized?
+                     Can you reduce the size of the response by using query filters?
+                  Errors
+                     Have you configured the required permissions to run the app correctly?
+                     Are your requests throttled by the platform?
+             Prerequisites
+             You'll need the following security role membership in the environment to use Live
+             monitor.
+                                                                                     ﾉ
+                                                                                        Expand table
+              App type           Required security role
+              Canvas app         Environment Admin or Environment Maker
+              Model-driven app   System Administrator or System Customizer for the Dataverse organization
+             More information: Configure user security to resources in an environment
+             Live monitor dashboard
+             You can review various properties for each event inside Live monitor. Depending on the
+             event category, some of these properties might not contain data. The following image
+             shows an example of the Live monitor dashboard for canvas apps.
+                                                                                          ﾉ
+                                                                                             Expand table
+               Column       Description
+               name
+               Id           The sequence number for the events.
+               Time         The time the event occurred.
+               Category     The type of event, such as Network.
+               Operation    The resulting internal operation name of the request inside the app. For
+                            example, createRow is the operation name from the Patch function.
+               Result       The text description of the status code. For example, a 429 status will appear as
+                            an "Error" in the result column. Row colors also help to identify any errors and
+                            warnings quickly.
+               Result Info  The detailed translation of error codes and results. For example, a 429 status code
+                            will appear as "Too many requests" in this column.
+               Status       The HTTP status code   of a network request. For example, a 2XX code represents a
+                            successful request, whereas a 4XX code represents an error.
+               Duration     Duration can mostly be used to understand the performance of network calls in the
+                            app, but it also depends on the type of event. For example, for a network request,
+                            duration is the time taken for the request to be sent and a response to be received.
+               Data         The name of the data source accessed by the raised event operation (for example,
+               Source       the name of a Microsoft Dataverse table).
+               Control      The control name associated with this event
+               Property     The active control property of the raised event.
+            Column    Description
+            name
+            Response  For a network request event, represents the size of the response received from the
+            size      sender to your app, in bytes.
+           When you select an event in the grid, a panel displays additional details about the event.
+           The panel has four tabs:
+               Details: Shows a high-level overview of the event that you select. Some of the data
+               might be collapsed in the tree view. You can expand and drill down to view
+               content.
+               Formula: Shows the related formula from your app for the selected event. The
+               name of the control property triggering the event is displayed on top of the tab
+               and inside the event table.
+               Request: Shows the HTTP request that was sent.
+               Response: Shows the HTTP response that was received. You can view the response
+               in JSON format.
+              Unsupported scenarios for Live monitor
+              To learn about unsupported scenarios for Live monitor, go to Advanced monitoring -
+              unsupported scenarios.
+              Next steps
+                    Monitor canvas apps using Monitor
+                    Monitor model-driven apps using Monitor
+              See also
+              Troubleshoot form issues in model-driven apps
+              Collaborative debugging with Live monitor
+              Advanced monitoring
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+             Debugging canvas apps with Live
+             monitor
+             Article • 11/19/2024
+             Live monitor is available by default for all canvas apps. Using Live monitor, you can trace
+             events as they occur in a canvas app during the authoring experience in Power Apps
+             Studio, or you can use Monitor to debug the published version of a canvas app. More
+             information: Live monitor overview
+             Get started with Live monitor in canvas apps
+             To open Monitor when authoring an app
+                1. Sign in to Power Apps  .
+                2. Create a new app, or edit an existing app.
+                3. On the left pane, select Advanced tools.
+                4. Select Open live monitor.
+             This action opens Live monitor in a new browser tab and connects it to your existing
+             Power Apps Studio session.
+             A notification appears at the top to show the current monitoring session as a Studio
+             session.
+                Tip
+               Live monitor has no impact on your app. You can use Live monitor with any app in
+               a test environment or in production.
+             Open Live monitor for a published app
+             You can also use Live monitor to debug the published app in the web player.
+             To open Live monitor for a published app
+                1. Sign in to Power Apps  .
+                2. On the left pane, select Apps.
+       3. Select an app from the list.
+       4. Select the drop-down menu next to Details and then select, Live monitor.
+       5. Select Play published app.
+      This action opens the published app in a new browser tab and connects it to your
+      current Live monitor session. You'll immediately see events in Live monitor when the app
+      is loaded in the web player, and as you interact with the published app.
+      Live monitor also displays a notification that the monitoring session that's currently
+      open is for the published version of the app.
+      For apps running on Power Apps mobile (preview)
+      Follow the above steps, but select Copy monitor link instead of Play published app. Use
+      the copied link on your device to open a monitored session for the published app. Make
+      sure the link is opened using Power Apps mobile, not a browser.
+       ７ Note
+       Copy monitor link is available in https://make.preview.powerapps.com
+      Setting: Debug published app
+      If you want to view the source expressions in Live Monitor for the published app, you
+      need to turn on the setting to publish the expressions with the app. This setting is
+      similar to generating a debug file in traditional development. Publishing source
+      expressions with your app is optional. Even when this setting is off, you'll be able to see
+      the events happening in your app, but you won't be able to map these events to specific
+      expressions or formulas.
+      To enable this setting, go to File > Settings, and then turn on Debug published app.
+       ７ Note
+       Enabling this setting has a detrimental impact on the performance of your app for
+       all your users. To minimize the impact, disable this setting as soon as you no longer
+       need to view source expressions when debugging your published app.
+       View events in Live monitor
+       To view events from your app, play the app in Power Apps Studio. Live monitor will then
+       display the table of events as they're occurring, along with specific details.
+       Example: Using Live monitor with canvas apps
+       In this example, you'll use the Northwind Sample Data app included with the Northwind
+       sample solution.
+       The Northwind sample solution is a canvas app that loads sample data into Microsoft
+       Dataverse. You can also create a new app or use an existing app instead.
+       Background
+       Consider the scenario where an app has been deployed, and the initial version of the
+       app experiences performance degradation. The app also intermittently generates errors
+       with no clear pattern. Loading data in the app succeeds most of the time, but fails
+       sometimes.
+       When you check Live monitor, you see data operations as expected. However, you also
+       see several responses that have HTTP status code 429, indicating that there have been
+       too many requests in a specific timeframe.
+       When you select such an event, you see the error as "Rate limit exceeded. Try again in
+       XX seconds."
+       Analysis
+       The problem needs further analysis to understand why requests are getting throttled. In
+       Live monitor, you see that for each createRow call, there are several getRows requests
+       from the ProgressCount.Text property, each to a different entity. These entities aren't
+       the entities the app is creating rows for. The ProgressCount.Text formula is seen in Live
+       monitor, as shown in the following image.
+              For each record added, the formula is evaluated again and CountRows is called on
+              several entities. This behavior results in getRows in the log, because CountRows isn't
+              delegated for Dataverse. For each single request to add a record, you're potentially
+              making 12 additional requests to count the rows in each entity.
+              These extra requests intermittently cause errors because the Dataverse platform is
+              throttling the requests to the service. This also explains the overall performance
+              problem.
+              Next steps
+              Collaborative debugging with Live monitor
+              See also
+              Advanced monitoring
+              Debugging model-driven apps with Monitor
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Debug a model-driven app with Live
+       monitor
+       Article • 11/19/2024
+       Live monitor can help you debug and diagnose problems and help you build faster,
+       more reliable apps. Live monitor provides a deep view into how an app runs by
+       providing a log of all key activities in your app as the app runs. You can also
+       collaboratively debug a published model-driven app with a support engineer or debug
+       issues of another user's session. For more information on how to collaboratively debug
+       a published model-driven app, go to Collaborative troubleshooting using Live monitor.
+        ） Important
+        Live monitor for model-driven app requires the client version of your model-driven
+        app to be 1.4.5973-2307.2 or later.
+       For more information about when you should monitor an app, see Monitor overview. To
+       run Live monitor with a canvas app, see Debugging canvas apps with Live monitor.
+       Use Live monitor to diagnose a model-driven
+       app
+        1. Sign into Power Apps, and then select Apps from the left navigation pane.
+        2. Select the model-driven app that you want to monitor, and then select Live
+          monitor on the command bar.
+        3. In the web page that opens, select Play model-driven app to open your app.
+          ７ Note
+          Alternatively, you can run a model-driven app and add “&monitor=true” to
+          the end of the URL in the browser. Then, select Live monitor on the command
+          bar to start a monitoring session in a new tab.
+        4. After the app is opened from Live monitor, you’ll see a Join monitor debug
+         session? dialog box. This lets you know that any data from the app will be sent to
+         the Live monitor owner. Select Join. Events begin to flow to the Live monitor
+         session screen as they occur in the app.
+        5. Select an event to display additional information in the right pane.
+       Events monitored
+       Page navigation, command executions, form saves, and other major actions will send
+       key performance indicators and network events to Live monitor.
+       FullLoad
+       FullLoad signifies the complete load of a page navigation, such as an edit form load. This
+       event waits for certain network requests to complete and all rendering to finish, so the
+       form can be ready before FullLoad completes.
+       Select a FullLoad event to display the Details tab.
+       The FullLoad event captures many statistics about the page load.  You can see the task
+       edit form loaded in 506 ms, and selecting the row reveals information in the property
+       pane. You can see details on customScriptTime (time spent execute custom
+       JavaScript), loadType (0 = first-time loading page type, 1 = first time loading entity, 2  =
+       first-time loading record, 3 = exact record has been visited), and FormId (form identifier
+       for further diagnosis).  Expanding Attribution gives a breakdown of custom JS execution
+       time by type, publisher, solution, version, web resource, and method.  This can help
+       identify bottlenecks in form load time.
+       Network
+       The Network events reveal details about each request made from the app.
+       Select a Network event to display the Details tab.
+       Earlier you learned about Live monitor and how to use it to model-driven apps. Let’s
+       look at a few scenarios where Live monitor can assist you in solving script errors,
+       unexpected behavior, and slowdowns.
+       Custom script errors
+       Sometimes, a bug in the custom JS causes a script error or functionality problem when
+       loading a page. While this usually produces a call stack in the dialog, it’s hard to always
+       know where it’s coming from or decode the error. Live monitor receives events from the
+       app with more details about the errors, so you can debug more quickly, and easily.
+            For example, imagine a user is experiencing a script error dialog on account form load. 
+            You can use Live monitor to get more details on the event.  Once the scenario is
+            reproduced, you can see the script error produces an error event highlighted in
+            red. Selecting this row gives you not only the call stack but the publisher
+            name, solution name/version, web resource name, and type (such as onload, onchange,
+            RuleEvaluation, and CustomControl). In this example, it looks like a typo in the script.
+            Slow performance
+            Browser developer tools can help profile slow page loads, but there's much data to filter
+            though and it’s not clear what is important to look at. Live monitor solves this problem
+            by showing relevant events that contribute to page load performance.
+            For example, imagine a user is experiencing slow account form loads, and the browser is
+            constantly freezing up. In this case, after you reproduce the issue, you can see a
+            performance warning telling you that a synchronous XMLHttpRequest was sent during
+            the load which degraded performance.
+            See previous blog post    for how to alleviate synchronous XMLHttpRequest (XHR)
+            performance problems.
+            For every page load, the data platform sends all KPI for the loading sequence as well as
+            network request details as mentioned earlier.
+            See also
+            Use Live monitor to troubleshoot model-driven app form behavior
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Use Live monitor to troubleshoot
+            model-driven app behavior
+            Article • 11/19/2024
+            Live monitor is a tool that can help app makers debug and diagnose problems, which
+            help them build faster, more reliable apps. Live monitor provides a deep view into how
+            an app runs by providing a log of all activities in the app as it runs.
+            To help you isolate certain model-driven app features, you can filter on specific
+            categories, such as forms or the Copilot control.
+            Create a Live monitor session
+            Sign in to Power Apps  , select Solutions on the left navigation pane, open the solution
+            that contains the app you want to monitor, select the app, and then select Live monitor
+            on the command bar.
+            On the Live monitor page, select Play model-driven app on the command bar. For more
+            information about creating a Live monitor session, go to Use Live monitor to
+            troubleshoot page behavior in model-driven apps.
+            Filter Live monitor for form-related issues
+            Filtering on model-driven app form-related events in Live monitor can provide
+            information about related tables, tables, controls, and components on a form in Live
+            monitor as your app runs.
+            There are many situations where Live monitor can help makers understand why a form
+            behaves a certain way. Many form issues are based on business rules, JavaScript, form
+            events, or client API that admins and makers set. Live monitor can also help identify
+            whether the issue experienced is designed out-of-the-box or is due to a customization.
+            It provides details that can help answer the following questions:
+                 Why aren't rows showing in the related menu of a table?
+                 Why a control is disabled/enabled or visible/hidden
+                 Why is a row in a read-only state?
+               1. On the browser window running Live monitor, select the Category column, and
+                 then select Filter by.
+       2. Select Equals or Contains from the dropdown list, and then enter formchecker in
+        the box. Select Apply.
+       3. The categories are now filtered. The Operation column can be expanded to see the
+        full name of the events that are tracked by selecting and holding the right side of
+        the column and dragging to the right. As you use the app and open and use a
+        form, Live monitor updates the list of events.
+                  4. While the app is running in the monitored session, perform actions within the
+                     model-driven app consistent with normal use of the app. For example, open and
+                     change data using a table form.
+              Use Live monitor to understand form behavior
+              For each row with Live monitor, detailed information about the form event can be
+              reviewed. For example, imagine you have a question about an error taking place within
+              the form. You go to that form in the app and select the appropriate form component.
+              Then return to the browser with Live monitor enabled and review the results either with
+              or without filtering. In this case, there's an error on the composite control. By expanding
+              areas of the Details, you can learn more about the event itself.
+              There are many types of events that are monitored, including the standard form events
+              like onload, onsave, and onclose.
+              As you continue to use the app that's being monitored, Live monitor updates the
+              information in the list of events. For forms, there are many different scenarios that you
+              can troubleshoot and find additional information on the form, control, or table currently
+              being worked on.
+              Form-checking areas and events
+              Areas for form monitoring include the following.
+                                                                                                 ﾉ
+                                                                                                     Expand table
+                App area              Description
+                Control state         Details about the state of the visible, enabled, and label source of a control
+                                      when the form is loaded.
+                Related menu          Details about the state of related menu items. Examples:
+                                      Why is a menu item not being displayed?
+                 App area               Description
+                                        Where does the menu item come from?
+                 Tab / section /        Details on who (via the callstack) has caused a form component—such as a
+                 control state          tab, section, or control—to change the component's visibility and enabled
+                 change                 state.
+                 Navigation             Details about what's causing navigation or unexpected dialogs by tracing
+                                        the callstack of these Xrm.Navigation client API methods:
+                                        openAlertDialog(), openConfirmDialog(), openDialog(),
+                                        openErrorDialog(), navigateTo(), openForm(), openTaskFlow(), openUrl(),
+                                        openWebResource()
+                 Unsupported            Details about unsupported client API access before the form is ready.
+                 customizations         Examples:
+                                        Accessing parent.Xrm.Page in iFrame before the form is fully loaded.
+                                        Accessing Xrm.Page in a form web resource outside of form handler
+                                        contexts using window.setTimeout() to periodically call the form client API.
+                                        Accessing Xrm.Page in updateView() method of the Power Apps control
+                                        framework control code.
+               Examples of the supported form-related events in Live monitor include:
+                      FormEvents.onsave
+                      XrmNavigation
+                      FormEvents.onload
+                      FormControls
+                      TabStateChange.visible
+                      RelatedMenu
+                      ControlStateChange.disabled
+                      ControlStateChange.visible
+                      SectionStateChange.visible
+                      UnsupportedClientApi
+               Filter Live monitor for Copilot control-related
+               issues
+                   1. On the browser window running Live monitor, select the Category column, and
+                      then select Filter by.
+                   2. Select Equals or Contains from the dropdown list, and then enter CopilotEvent in
+                      the box. Select Apply.
+               Copilot control events
+             Events for Copilot control monitoring include the following.
+                                                                                     ﾉ
+                                                                                         Expand table
+              Event name                                                  Description
+              AdaptiveCardActionData                                      Data sent to submit action for
+                                                                          adaptive card
+              adaptiveCardContent                                         Content of adaptiveCard
+              AISummarize                                                 This message is logged in case
+                                                                          the summarize feature is off
+                                                                          and logs the fcb status
+              AutoTriggerSummarizeHandler.isAutoTriggeredSummaryEnabled   Tells if auto trigger is enabled
+              ClientActionCalled                                          Logs the name of the client
+                                                                          action and payload passed ot
+                                                                          it
+              CopilotResponse                                             Response from the copilot
+              DVCopilotAction                                             isDVChatEnabled: if dv chat is
+                                                                          enabled for the org or not
+              DynamicContextSentToBot                                     Dynamics context sent to bot
+              EnvironmentHostedBotSchemaName                              Logs the environment bot
+                                                                          schema name
+              ExecutingAction                                             Adaptive card action is getting
+                                                                          executed
+              isSummaryEnabledForEntity                                   Tells if summarize is enabled
+                                                                          for the entity
+              queryStructuredDataRequest                                  Request sent to query
+                                                                          structure data
+              queryStructuredDataResponse                                 Response from query structure
+                                                                          data
+              SessionContextSentToBot                                     Session context sent to bot
+              SummarizeResponse                                           Logs the response for the
+                                                                          summarize
+              UserPrompt                                                  Prompt entered by the User
+              Close a monitoring session
+              To close the monitoring session, close the browser tab where the monitored model-
+              driven app is playing.
+              Next steps
+              For more information about how to troubleshoot issues with forms in a model-driven
+              app, see Troubleshoot form issues in model-driven apps.
+              Learn about Live monitor as a Power Apps tool
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Troubleshoot form issues in model-driven
+     apps
+     10/10/2025
+     This article has information to help fix some of the common issues you might encounter while
+     working with model-driven app forms.
+      ） Important
+         The tools described in this article are designed for troubleshooting purposes; they
+         aren't meant to be used in day-to-day production scenarios, even though you can
+         use them for troubleshooting issues in production environments.
+         These troubleshooting tools only affect the current user session unless otherwise
+         noted (for example, when a browser tab accesses the model-driven app). They don't
+         change system customizations or affect any other users or sessions. After the current
+         session is closed, the effect is no longer applied.
+         Most of the tools are available in all the production environments. Some of them
+         mentioned in the article might not be deployed to your organization yet; new tools
+         are added periodically.
+         Tools listed in this article are written in a scenario-driven way. You can use them
+         independently to troubleshoot different types of issues.
+         Use URL parameters to disable various form components and View registered
+         form event handlers and libraries in Monitor are critical and fundamental tools
+         you'll frequently use to troubleshoot many scenarios.
+         For more information on how to use Monitor, see Use Monitor to troubleshoot
+         model-driven app form behavior
+     Use URL parameters to disable various form
+     components
+     When you're troubleshooting issues with forms, you need to use the URL parameters to disable
+     components as you work to isolate the specific component that caused the issue. We
+     recommend that you use the flags one at a time to narrow down the cause of the issue. You
+     can use the following URL parameters:
+        DisableFormCommandbar
+        Disables the command bar on the form. It only disables the command bar on form pages
+        and not supports list (grid), dashboard, etc.
+          HTTP
+          https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+          000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+          000000000000**&flags=DisableFormCommandbar=true
+        DisableFormHandlers
+        Disables all the form handlers. If you use the DisableFormHandlers=true flag, it disables
+        the following event handlers: OnLoad, OnSave, business rule, OnChange, and
+        TabStateChange.
+        To learn more about obtaining event or library indices for granular controls, see View
+        registered form event handlers and libraries in monitor.
+          HTTP
+          https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+          000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+          000000000000**&flags=DisableFormHandlers=true
+          &flags=DisableFormHandlers=eventName
+          Disables the form handler by specifying the event name, for example,
+          **DisableFormHandlers=onload.
+           HTTP
+           https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+           000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+           000000000000**&flags=DisableFormHandlers=true
+          &flags=DisableFormHandlers=eventName_index
+          Disables the event handler at the specified index for any supported event name. For
+          example, DisableFormHandlers=true_0 disables all the event handlers at index 0.
+          DisableFormHandlers=onload_2 disables the OnLoad event handler at index 2.
+          &flags=DisableFormHandlers=eventName_startIndex_endIndex
+          Disables all the event handlers within the given range by specifying startIndex and
+          endIndex values (both are included). For example, DisableFormHandlers=true_0_2
+        disables all the event handlers of index 0, 1, and 2. DisableFormHandlers=onload_2_5
+        disables the OnLoad event handler of index 2, 3, 4, and 5. If you have more event
+        handlers, you can use this approach to narrow down problematic handlers quickly.
+         ７ Note
+         Business rules are authored in the business rule designer, compiled into the
+         client-side script, and registered in multiple form events, such as OnLoad, OnSave,
+         and OnChange. The way to disable business rules are similar to other form events.
+         However, there are a few key differences:
+          When you use DisableFormHandlers=true, businessrule, businessrule_*index*,
+          or businessrule_*startIndex_endIndex*, you're disabling all business rules in all
+          the form events they're registered to.
+          For example, the following image shows instructions on refreshing business
+          rules in the backend. You only need to do it once in your organization, and you
+          can revert your changes after troubleshooting.
+          After you perform the above action and refresh the form, you'll see different
+          message with additional information, as shown in the following image:
+       DisableFormLibraries
+       Disables form libraries and prevents the libraries from being loaded. To learn more about
+       obtaining event or library indices for granular controls, see View registered form event
+       handlers and libraries in monitor . The usage is similar to DisableFormHandlers, except it
+       doesn't take an event name as the value.
+          &flags=DisableFormLibraries=true: Disable all the form libraries.
+          &flags=DisableFormLibraries=index: Disable form libraries at the specified index.
+          &flags=DisableFormLibraries=startIndex_endIndex: Disable form libraries in the range
+          of startIndex and endIndex (both included).
+        DisableWebResourceControls
+        Disables all the web resource controls on the form.
+          HTTP
+          https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+          000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+          000000000000**&flags=DisableWebResourceControls=true
+        DisableFormControl
+        Disables a form control. Specify the control name to disable the control. If you see that
+        the issue goes away with &flags=DisableWebResourceControls=true, and there's more
+        than one web resource control on the form, you can use this flag to further identify the
+        control that's causing the issue.
+          HTTP
+          https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+          000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+          000000000000**&flags=DisableFormControl=controlname
+        DisableBusinessProcessFlow
+        Disables all the business process flows on the form.
+          HTTP
+          https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+          000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+          000000000000**&flags=DisableBusinessProcessFlow=true
+        navbar This isn't a flag parameter; instead, use navbar=off in the URL.
+     You can also add multiple URL parameters separated with a comma (,).
+       Http
+       https://myorg.crm.dynamics.crm/main.aspx?appid=00000000-0000-0000-0000-
+       000000000000&pagetype=entityrecord&id=00000000-0000-0000-0000-
+       000000000000**&flags=DisableFormHandlers=true,DisableWebResourceControls=true,Disa
+       bleFormCommandbar=true,DisableBusinessProcessFlow=true&navbar=off
+       ７ Note
+       The difference between DisableFormHandlers and DisableFormLibraries are:
+          The DisableFormHandlers flag disables form handlers regardless of the containing
+          form libraries. In contrast, the DisableFormLibraries flag disables the form libraries
+          (web resources) regardless of the functions (event handlers) included in the libraries.
+          Simply put, DisableFormLibraries makes sure the specified JavaScript web resource
+          files aren't loaded.
+          The DisableFormHandlers flag doesn't prevent the containing form library from
+          being loaded. Thus it doesn't stop the JavaScript code present in the library but not
+          registered as an event handler from being executed. For example, if a form library
+          new_myscript.js is written in the following way (not recommended practice):
+          You should start with DisableFormHandlers to see if the issue goes away, and if not,
+          you can try DisableFormLibraries. Disabling any script always involves some risks of
+          potentially breaking your form scenarios. However, the latter tend to have more side
+          effects because of the disablement of the entire JavaScript files.
+          Assuming the myOnloadHandler is registered as an OnLoad event handler, the
+          DisableFormHandlers=true flag only prevents the second alert, whereas the
+          DisableFormLibraries=true flag prevents both alerts.
+     View registered form event handlers and libraries
+     in monitor
+    To view registered form event handles and libraries, you can view the FormEvents operation in
+    Monitor.
+    You need the eventIndex and libraryIndex parameter values when using the
+    DisableFormHandlers or DisableFormLibraries URL flags. After an event or library is disabled,
+    you'll see the event enabled state in both FormEvents operation (an overall view of all
+    registered event handlers of all events), and FormEvents.eventName operation (details logged
+    when a specific event happens).
+     Unexpected behaviors when loading a form
+     Some common issues that can cause unexpected behavior when a model-driven app form is
+     loaded are:
+       Columns or controls don't have the values you expect.
+       Controls aren't disabled or aren't enabled.
+       Controls aren't shown or aren't hidden.
+     How to troubleshoot
+     There are multiple reasons why unexpected behaviors occur when a form opens. One of the
+     most common is the OnLoad scripts that run synchronously or asynchronously to change the
+     column or control behavior. To determine whether your script is causing the issue, you can
+     disable the form handlers by appending &flags=DisableFormHandlers=true at the end of your
+     app URL.
+     If the unexpected behavior stops occurring after you disabled the form handler, it's a strong
+     indication that the specific form handler is causing this behavior. When you identify the script
+     that's causing this behavior, follow up with the script owner to further troubleshoot this issue.
+      Saving in progress error message
+      Sometimes when you save a form, you see a Saving in Progress error message.
+      This error occurs when the form OnSave event is triggered before the previous OnSave event
+      completes. This behavior isn't supported, and the error appears by design because calling the
+      OnSave event before the previous OnSave event is complete causes recursive save loops with
+      unintended consequences.
+      A typical cause for this error is the script that calls the save() method in the OnSave event
+      handler. Another possible cause might be concurrent save() calls in the setTimeout() method,
+      which might cause the error to intermittently show up, depending on whether the prior save()
+      call was completed before another save() call was made.
+      How to troubleshoot
+      In Monitor, the FormEvents.onsave operation provides all the details that are causing the error
+      (this call stack is modified for demonstration purposes). The call stack tells what exact web
+      resource, function, line, and row number causing this error. The form checker can't detect the
+      error if the issue can't be reproduced.
+      Follow up with the script owner to further troubleshoot the issue.
+      Intermittent form errors
+      The most common cause of intermittent or random form errors is using unsupported client API
+      methods. These errors have the following characteristics:
+         They occur only for specific records, users, regions, or browsers, or only during periods
+         when the network or service load is high.
+         They rarely occur in support instances.
+         They might occur once on a computer, and the same error might occur again after you
+         clear the browser cache.
+       formContext.getControl or formContext.getControl(arg).getAttribute() randomly returns
+       null for a valid control or column.
+    There are many ways to write unsupported client API methods, and they all share a common
+    pattern: they cause a race condition in the form load pipeline. Because they introduce a race
+    condition, the issue only occurs when the custom script executes before the form is fully ready
+    to be accessed via the client API. Many factors can cause a race condition:
+       In the JavaScript web resource, code is put into a global scope executes immediately
+       when the web resource file is loaded, without waiting for the form to be accessible. Make
+       sure the code is executed inside a valid form handler, such as an OnLoad handler.
+       In the Power Apps component framework component script file, client API methods are
+       accessed inside the init or updateView function. The init() and updateView() functions
+       are executed immediately when the component is loaded, without waiting for the form to
+       be readily accessible. You can't use unsupported Client API methods in Power Apps
+       component framework components.
+    Client API is accessed inside a window.setTimeout() function in the web resource file. The page
+    state is unpredictable when the setTimeout() method executes the wrapped function. Due to
+    the nature of the timer function, when the execution occurs, the page might be in a transitional
+    state (during page load or save) that's not readily accessible by the Client API.
+    How to troubleshoot
+    Using Monitor, you can access information that helps you determine when the unsupported
+    client access occurred and when the access occurred at the wrong time due to a race condition.
+    However, Form Checker doesn't report such unsupported client access when the unsupported
+    code happens to execute at the right time that doesn't cause an issue.
+       ７ Note
+       The call stack is modified for illustration purposes. The call stack shows details like web
+       resource, function, and the line causing the error.
+     Follow up with the script owner to further troubleshoot the issue.
+     The form or record isn't saved when you try to save
+     the form
+     A common cause is an OnSave event handler that calls the
+     executionContext.getEventArgs().preventDefault() method to cancel the save operation.
+     How to troubleshoot
+     In Monitor, the FormEvents.onsave operation provides all the details of why the save event is
+     canceled details than that are available from the form UI itself.
+     Follow up with the script owner to further troubleshoot the issue.
+     Form freezes, loads slowly, or throws unexplained
+     errors
+     There are many possible reasons for a form to freeze, load slowly, or throw a "Web resource
+     method doesn't exist" script error or an error that isn't a common script error. Some of the
+     possible reasons include:
+        Bad OnLoad scripts.
+        Web resource controls.
+        Ribbon button scripts and rules.
+        Synchronous network requests.
+        Custom plug-ins.
+        Business process flow errors.
+     How to troubleshoot
+     Determine if the issue reproduces without involving forms. If it does, then there's a broader
+     issue that should be investigated out of the form's context. Actual ownership of the problem
+     depends on the particular details case by case.
+        If you believe this issue only occurs on forms, see Use URL parameters to disable various
+        form components to narrow down the component that's causing the issue.
+        If you identify that certain form libraries/script files caused the issue, follow up with the
+        owner who made these customizations to find out the root cause of the issue.
+        If you identify that web resource controls cause the issue with the
+        DisableWebResourceControls flag, then you can use the DisableFormControl flag to
+        disable each one-by-one until the problem is longer reproduced. The last disabled control
+        that doesn't reproduce the issue is the one that's causing the issue. Follow up with the
+        owner of the control to further troubleshoot the issue.
+        If you identify that the issue is caused by the command bar/ribbon with the
+        DisableFormCommandbar flag, it means this isn't an issue with the form but an issue
+        with the command bar. Use Command Checker  to troubleshoot individual commands
+        and identify which one is causing the issue.
+     A business rule or custom script isn't working
+     This issue occurs if a business rule or custom script that used to work in the legacy web client
+     stopped working in Unified Interface. One of the main reasons for this error to occur is when a
+     business rule or script in Unified Interface references a control that isn't available in Unified
+     Interface.
+     How to troubleshoot
+     One of the reasons that the business rule or script isn't working in Unified Interface is that the
+     controls that are part of them don't exist in Unified Interface. Composite controls exist in the
+     web client, but in Unified Interface composite control is broken down into parts and is stored
+     differently. For example, if the column fullname is part of the business rule or custom script,
+     columns firstname, middlename, or lastname should be used instead.
+     Once you launch form checker, you're able to see more details in the CompositeControl
+     operation including the composite control that's causing the problem, the columns that can be
+     used in the business rule or custom script instead and a full call stack (the call stack is modified
+     for demonstration purposes).
+     Follow up with the corresponding owner of the business rule or custom script to change the
+     control suggested by the form checker.
+     Related menu item doesn't appear in Related tab
+     Most forms have a Related tab. It opens the Related menu with Related menu items.
+         A Related menu item might not appear as expected.
+         How to troubleshoot
+         A related menu item might not appear because:
+         Relationship between the main and related table isn't configured
+         correctly
+         There should be a one-to-many or many-to-many relationship between the main table and the
+         related table. A form shows a row from the main table. The related table is the one that should
+         appear in the Related menu of the form. If these relationships don't exist, the related menu
+         item doesn't appear.
+         To verify, go to the Power Apps portal   , select Tables, and select the table that has the
+         relationships you want to view.
+         Dataverse created the relationship between the main and related table
+         and isn't customizable
+     The Related menu doesn't show related tables from certain relationships created by Dataverse.
+     These relationships are marked as noncustomizable.
+     The AssociatedMenuConfiguration.IsCustomizable property indicates whether the relationship
+     can be customized. The easiest way to check is by querying the relationship using Web API to
+     view the AssociatedMenuConfiguration complex type data.
+     Suppose you want to check whether the relationship between the Business Unit and Goal
+     tables is customizable. The SchemaName of this relationship is business_unit_goal. Enter this URL
+     in your browser:
+       HTTP
+       GET [Organization 
+       URI]/api/data/v9.2/RelationshipDefinitions(SchemaName='business_unit_goal')/Micros
+       oft.Dynamics.CRM.OneToManyRelationshipMetadata?$select=AssociatedMenuConfiguration
+     You can also get the same data by querying the table definition:
+       HTTP
+       GET [Organization 
+       URI]/api/data/v9.2/EntityDefinitions(LogicalName='businessunit')/OneToManyRelation
+       ships(SchemaName='business_unit_goal')/AssociatedMenuConfiguration
+     The response for either request might look like this:
+       JSON
+       {
+           "@odata.context": "[Organization 
+       URI]/api/data/v9.2/$metadata#RelationshipDefinitions/Microsoft.Dynamics.CRM.OneToM
+       anyRelationshipMetadata(AssociatedMenuConfiguration)/$entity",
+           "MetadataId": "2124b4bd-f013-df11-a16e-00155d7aa40d",
+           "AssociatedMenuConfiguration": {
+               "Behavior": "UseCollectionName",
+               "Group": "Details",
+               "Order": null,
+               "IsCustomizable": false,
+               "Icon": null,
+               "ViewId": "00000000-0000-0000-0000-000000000000",
+               "AvailableOffline": true,
+               "MenuId": null,
+               "QueryApi": null,
+               "Label": {
+                   "LocalizedLabels": [],
+                   "UserLocalizedLabel": null
+               }
+          }
+      }
+     Observe that IsCustomizable is false. Therefore, the relationship isn't customizable and Goal
+     doesn't appear in the Related menu.
+     Related table isn't enabled for Unified Client
+     If the table was created in Web Client (deprecated since 2019), it might not appear because it's
+     disabled for Unified Client.
+     To verify, go to Solution explorer and select the table (entity). Ensure that Enable for Unified
+     Client is checked.
+     Tables created with the modern designer don't have this issue. They're always enabled for
+     Unified Client.
+      ７ Note
+      Certain system tables can't be enabled for Unified Client. For example, Process Session
+      can't be used in model-driven apps.
+     Audit History doesn't appear in Related tab
+     Audit History isn't in the Related menu.
+     How to troubleshoot
+     Audit history isn't supported in these cases:
+        Tables that aren't enabled for auditing. Check the table's IsAuditEnabled property to
+        confirm.
+        System tables that don't support Audit History
+        Mobile apps
+        Offline mode
+        Dynamics for Outlook
+     Unexpected related menu item appears in related
+     tab
+     A Related menu item might appear when it shouldn't.
+     How to troubleshoot
+     A related menu item might appear because:
+     Related table has self-referencing many-to-many relationship with the
+     main table
+     The system ignores form XML customizations for self-referencing many-to-many relationships.
+     The system ignores these customizations because it isn't possible to indicate whether the
+     customizations are for the primary table or the related table, which are both the same table in
+     this case. Therefore, the system ignores these customizations.
+     If you modify the form XML to hide the related menu item, it still appears. Any form XML
+     customizations for self-referencing relationships are ignored, like changing the order or the
+     label of the related item.
+     Some system tables can't be hidden
+     For example, custom tables always show Activities related menu item. It isn't possible to hide it
+     with the form designer or by modifying the form XML.
+      Related menu items aren't translated as expected
+      The text for related menu items aren't in the expected language.
+      How to troubleshoot
+      If some related menu items are displaying in a different language from the user's language,
+      check whether the form XML is missing translated labels.
+      Check the form XML to see if there are labels defined for each language. For example, this form
+      XML shows that the navContacts item only has a US English (1033) label: Contacts.
+       XML
+       <NavBarByRelationshipItem Id="navContacts" Area="Sales" Sequence="10064" 
+       RelationshipName="contact_customer_accounts" Show="true">
+         <Titles>
+           <Title LCID="1033" Title="Contacts" />
+         </Titles>
+       </NavBarByRelationshipItem>
+      To fix this issue, add the translated labels to the form XML. For example, this form XML shows
+      that the navContacts item with both US English (1033) and German (1031) labels.
+       XML
+       <NavBarByRelationshipItem Id="navContacts" Area="Sales" Sequence="10064" 
+       RelationshipName="contact_customer_accounts" Show="true">
+         <Titles>
+           <Title LCID="1033" Title="Contacts" />
+           <Title LCID="1031" Title="Kontakte" />
+         </Titles>
+       </NavBarByRelationshipItem>
+      If the text for the user's language isn't defined, the system uses the organization's base
+      language. If that doesn't exist either, the system uses the US English text.
+      Why is a form showing or not showing in the form
+      selector?
+      The form selector is a dropdown that allows users to switch between different forms for a
+      particular table.
+     You need to understand the conditions that control whether the form is displayed.
+     How to troubleshoot
+     A form is available in the selector when all of these conditions are met:
+       1. User has permission to access the form.
+       2. Form is added to the app module.
+       3. Form isn't hidden with Client API.
+       4. For Dynamics Customer Service workspace forms, ShowInFormSelector is set to True.
+     If a form isn't showing in the form selector,
+       1. Check the affected user's security roles.
+       2. Check if the form is added to the app module.
+       3. Disable custom scripts.
+     Why an expected default form isn't shown by
+     default?
+     When there are multiple forms for a table, the desired one isn't used as the default.
+     How to troubleshoot
+     The following criteria determine the first form shown to the user:
+       1. If a formId is provided when opening a form, then that form is shown. A formId can be
+        provided through Client API functions like openForm or in a URL.
+       2. Otherwise, the most recent form that the user picked is shown. The system remembers
+        the latest selection from the form selector.
+       3. If the user hasn't used the form selector before, the system uses the form order.
+     If the form isn't available to the user, the system continues to find an appropriate form to
+     show.
+     A form is available to the user when:
+       1. User has permission to access the form.
+       2. Form is added to the app module.
+     If no forms are available to the user, then the the fallback form is used.
+     Why a control is disabled/enabled or
+     visible/hidden
+     There are many possible reasons why a control might be disabled or hidden when the form is
+     loaded.
+     How to troubleshoot
+     You can use Monitor to view the FormControls operation that includes all the details about the
+     initial control state when the form loads.
+     Another place to check is the ControlStateChange.visible or ControlStateChange.disabled
+     operation that explains why the control disable or visible state is changed at any time on the
+     form. This operation explains the control state before the change, intended state change that
+     might succeed, and the state after the change. Not all control state change attempts are
+     successful. For a control disabled by form XML, you can enable it through client API in an
+     OnLoad event handler. However, if control is disabled for security reasons, it's highly unlikely an
+     attempt to enable it through client API would successfully change the state.
+     A control can be disabled by using the following list of rules in order. If a rule is met, then the
+     following rules are ignored. If you want to change whether a control is disabled, you must
+     change the input to the rule used for the result or to a rule earlier in the list.
+        If the flags DisableWebResourceControls=true or DisableFormControl=<control name> are
+        passed and the control is affected by these flags, the control is disabled.
+        If the owning table is read-only in Unified Interface in table definitions, the control is
+        disabled.
+        If the table isn't available in offline mode, the control is disabled.
+        If the current user doesn't have write permissions on the record, the control is disabled.
+        If the column definition has IsValidforCreate set to false, the control is disabled.
+        If the column definition has IsValidforUpdate set to false, the control is disabled.
+        If the current user doesn't have Assign to privilege, the owner column is disabled.
+        If the user doesn't have write permissions on the column defined by field-level security,
+        the control is disabled.
+        If a client API script enables or disables the control, the control disabled state honors that
+        setting.
+        If the control is disabled in the form designer, the control is disabled.
+        If the user doesn't have Append To privilege for the lookup control's table, or Append
+        privilege on the current record's table, the lookup control is disabled
+      Finally, if the control passes all the above checks, the record state determines whether the
+      control is disabled. The control is enabled by default on active records and disabled on inactive
+      records.
+       ７ Note
+       The difference between FormControls and ControlStateChange is that the FormControls
+       operation reflects the initial control state when the form is loaded, while the
+       ControlStateChangeoperation reflects the state change at any time on the form, whether
+       it's during form load, in OnChange or OnSave events after the form is loaded.
+       ） Important
+       A control's disabled and hidden state can change multiple times when a form is first
+       loaded. To know the reason why a control is hidden or disabled, make sure to check the
+       last operation logged in the monitor. For example, if there are no
+       ControlStateChange.visible/ControlStateChange.hidden operations for the control being
+       investigated, the value and reasoning will be in the FormControls operation. Otherwise, it's
+       the value and reason in the last ControlStateChange.visible/ControlStateChange.hidden
+       operation. You can order logs by timestamp to search for the last operation.
+      Why a control has a certain value on form load
+      A control might not have a specific value on form load as the user expected.
+      How to troubleshoot
+      There are many possible reasons why control can have a value when a form loads. The
+      ControlDefaultValue operation in Monitor explains the source of the default values.
+    If multiple updates are happening to a control's value, an Update Sequence indicates the final
+    value. For example, here's a control with a default value and then overridden with a value
+    passed with a client API script. There's a call stack provided.
+    There are scenarios where columns are populated based on a relationship column mapping, in
+    which case the event shows that.
+          Verify where the value is coming from and take action based on the following table:
+                                                                                           ﾉ Expand table
+           Source                                How to fix
+           Client API script                     Contact the script owner.
+           Default value                         Check the control's configuration.
+           Relationship column mapping           Check the relationship configuration and update the column
+                                                 mapping.
+           Value passed by page input data       Check the API that opens the specific form with the issue, it's
+           passed via URL                        passing the value.
+          Why a tab or section is visible or hidden
+          There are many possible reasons why a tab or section might be hidden or visible.
+          How to troubleshoot
+          The TabStateChange or SectionStateChange operations in Monitor explain the visible state
+          change, as shown in the following image. If a script causes it, then the call stack would reveal
+          the web resource file, line number, and function name that caused this behavior.
+     Follow up according to the suggestion in the state reason or the owner of the web
+     resource/business rules to change or fix the behavior.
+     Unexpected dialogs or navigation
+     There are many possible reasons why a dialog appears, or navigation happens unexpectedly.
+     One of the common causes is the Xrm.Navigation API methods are called to open a record or a
+     form by a custom script. For example, when you open a form, an alert appears, as shown in the
+     following image.
+     How to troubleshoot
+     The XrmNavigation operation in Monitor contains call stack that helps you identify the script
+     that's causing unexpected behavior.
+     Follow up with the owner of the web resource to change or fix the behavior.
+     Opening another form instead of a quick create
+     form
+     When opening a quick create form from a lookup or a grid, another form might open (edit or
+     main form) instead of a quick create form. There are few reasons why this issue can happen:
+        The main form dialog force flag is being set.
+        Quick create form isn't available.
+     How to troubleshoot
+     You can use Monitor to view the FormType operation that includes all the reasons why a quick
+     create form isn't opened.
+     You need to follow up with the table owner who has disabled quick create through table
+     definitions (metadata).
+     Table doesn't appear in the quick create menu
+     flyout
+     When opening the global quick create menu, not all tables are available. Some possible
+     reasons:
+       Table isn't enabled for quick create. Check if the table supports quick create and that it's
+       enabled.
+       Table isn't added to the app. Ensure all required components are added to an app.
+       No quick create form is available for the table. Create a quick create form.
+       Table is read-only.
+       User doesn't have permission to access the quick create form. Check if the user has
+       appropriate security roles.
+       User doesn't have create privilege for the table.
+       Table doesn't support create privilege.
+     How to troubleshoot
+     You can use Monitor to view the QuickCreateMenu operation, which includes all the tables and
+     reasons why they're filtered from the quick create menu flyout.
+     See the following examples to understand the reasons for filtering. Based on the explanations,
+     contact the responsible party or make changes accordingly.
+     Unexpected unsaved changes message
+     When working on forms, you get the unsaved changes message on the form footer when you
+     navigate from the current form or save the form without any changes.
+     How to troubleshoot
+     The unsaved changes error appears when you change the form and when the changes aren't
+     saved. If you didn't make any changes manually, they could come from a JavaScript, plug-in, or
+    business rule. You can use Monitor to view the UnsavedChanges operation that helps find the
+    source of the changes. You can filter by OperationType UnsavedChanges.
+    The all attributes modified section includes a quick summary of the columns causing the
+    unsaved changes error and their values. The unsaved changes section shows what happened to
+    the columns in detail. For every column, you can see a list of controls that could be causing a
+    change. The value change is also displayed (previousValue, newValue), and a call stack.
+    The following screenshot shows the root cause of the issue. You can see that the change came
+    from the OnLoad script.
+     ７ Note
+     If the user has manually made the changes on the form, a call stack won't be provided.
+    Verify where the change is coming from and if the behavior is expected or not. If a script
+    causes the change, the original web resource can be traced back in the call stack. In most cases,
+     it's a script. Make a decision based on the web resource itself.
+     Business required column doesn't block saving
+     Business required columns is a usability feature that helps prevent users from saving a record
+     with an empty value in that column. In model-driven apps and Power Pages, the following
+     scenarios don't block saving a record when a required column has an empty value:
+        The column is hidden from the form, either because of column properties or a client-side
+        script using the control.setVisible Client API .
+        The column is on a hidden form tab or section.
+        A client-side script changes the column's required level using the setRequiredLevel Client
+        API.
+        The user isn't using model-driven apps or Power Pages to create the record. Client
+        applications using Dataverse APIs aren't blocked from saving records when column
+        AttributeMetadata.RequirementLevel is set to
+        AttributeRequiredLevel.ApplicationRequired. Learn more about column requirement level
+     When you need to enforce data integrity, you should use entity business rules and other
+     server-side validation instead, such as synchronous plug-ins.
+     How to troubleshoot
+     The RequiredFieldValidation operation is logged when a save is attempted, regardless of
+     whether save is successful or not. This operation explains why each business required column
+     blocks or doesn't block the save operation.
+     The following image is an example of this operation. The message explains how to read the
+     detailed reports of each required column. In this example, fax column is bound to one control,
+     and the control of the same name is read-only. Therefore it won't trigger required column
+     validation.
+     The following image is another example that jobtitle is a business required column on the
+     business process flow but not on the form, and the column isn't modified. Thus it doesn't block
+     the save operation even when it's empty.
+     Follow up
+     Most times, the behavior is by design, and the RequiredFieldValidation operation explains
+     why this column behaves in a certain way in form save operation. If the required column
+     validation is skipped on a column because the control is disabled or hidden, as the first
+     example illustrated, see the form checker suggestions for further analysis.
+     This might lead to another troubleshooting scenario such as Why a control is disabled/enabled
+     or visible/hidden.
+     Can't create a record because of insufficient
+     permissions to a secured field, even though that
+     field isn't in the form
+     This might happen when users create a record (row) from a different form. They get the error
+     message The user does not have create permissions to a secured field even though they
+     haven't entered a value for that field (column), or that field isn't on the form.
+     When table A has a lookup field to table B, creating a record A from record B automatically
+     sets lookup fields on it to B, even if those fields aren't on the form.
+     For example:
+       1. Account table has a lookup field, primarycontactid, to the contact table.
+       2. User opens a contact form for Robin Danielsen.
+       3. User opens the lookup field, parentaccountid, on the form and selects the button to
+        create a new account.
+       4. New account form opens, with the primarycontactid field automatically set to Robin
+        Danielsen.
+     If the primarycontactid field is secured and the user doesn't have permissions to edit it, they
+     get an error when they try to save the new account. They can clear the field before saving it.
+     However, if that field isn't on the form, they can't clear it. A workaround is to create the
+     account from the account page instead of from a contact form.
+     Some columns aren't displayed on the merge
+     dialog
+     The merge dialog uses the default main form definition for the table and selectively renders
+     most, but not all the columns in the dialog. This Form Checker operation explains why some of
+     the columns aren't displayed on the merge dialog, even that they might be displayed on the
+     main form.
+     How to troubleshoot
+     The following MergeDialog.load operation explains the reason why some columns aren't
+     displayed.
+     In this example, parentcustomerid column on the contact form isn't supported in the merge
+     dialog. The business card column isn't displayed because the containing section is hidden in
+     the main form XML definition. Even though showing the owning section in the main form via
+     client API is possible, the merge dialog honors the form XML configuration as event handlers
+     aren't supported on the merge dialog.
+       Collaborative troubleshooting using
+       Live Monitor
+       Article • 11/19/2024
+       Live monitor offers two features to enable collaborative troubleshooting and debugging
+       of canvas and model-driven app problems in Power Apps:
+           Invite enables makers to share a monitoring session by inviting other members
+           within the same organization to the same Live monitor session. For example, a
+           maker troubleshooting a performance problem with Power Apps can invite a
+           member from the technical support team to concurrently view all the events
+           flowing through the same troubleshooting Live monitor session.
+           Connect user enables makers and support teams to share a link with users to open
+           a published app and connect it to a Live monitor session so that support teams
+           can watch the sequence of events generated by the user's interaction.
+       Invite user
+       With canvas apps and published model-driven apps, makers can share a real-time Live
+       monitor session with others, such as support technicians, to help investigate problems.
+       When you invite other users to your Live monitor session, you can quickly collaborate
+       and debug an app together, without the need to share your screen. When you invite
+       others to participate in a session, they see the exact same app events in their own
+       browser without having to open the app or reproduce the specific scenario that you're
+       debugging. You and other participants can browse, view, and inspect the app events
+       independently, without stepping on each other or handing control back and forth to
+       identify the problem.
+       When using the Invite feature for a published app:
+               1. User A plays the published app from Power Apps  .
+               2. User A invites User B to a Live monitor session.
+               3. User B joins the Live monitor session with the link that User A sent.
+               4. User A interacts with the app.
+               5. User B watches the events generated from User A's interaction with the app in
+                 their own Live monitor window.
+              ７ Note
+              You can invite any user in your organization to a Live monitor session. Users joining
+              the session will see all the events generated by the app, including any data.
+            To invite a user to watch a monitoring session
+               1. Select Invite from the command bar.
+               2. Enter the Microsoft Entra user name or alias of the user whom you want to invite
+                 to the Live monitor session.
+               3. Select the user for whom you want to generate a link to the current Live monitor
+                 session.
+                    ７ Note
+          The link is unique for each user. It can't be shared between users. The link
+          expires after 60 minutes.
+        4. Select the link icon to copy the session link, and then send it to the user you've
+         invited to the session.
+       Repeat steps 2 through 4 for each user you want to invite.
+       The users who have received the link can use it to open the Live monitor and connect to
+       your Live monitor session.
+       Connect user
+       With Connect user, a maker can enable a user to open a published canvas or model-
+       driven app and connect by using a monitoring session. You can watch the sequence of
+       events the user generates while interacting with the app, and help with problem
+       investigation.
+        ７ Note
+         With Connect user, makers and support teams share a link with users to open
+         a published app and connect it to a Live monitor session, so support teams
+         can watch the sequence of events generated by the user's interaction with the
+         app.
+         Connect user requires that the app be published with Power Apps version
+         3.20042 or later for canvas apps and client version 1.4.5973-2307.2 or later for
+         model-driven apps. To make this feature available in earlier versions of a
+         canvas app, publish the app again.
+      When using the Connect user feature for a published app:
+       1. User A chooses the app to monitor and opens Live monitor.
+       2. User A selects Connect user, and share the generated session link with User B.
+       3. User B plays the published app by selecting the link that was shared by User A.
+       4. User A watches the monitored session as User B interacts with the app.
+      To connect a user to a monitoring session
+       1. Open Live monitor for the published app.
+       2. Select Connect user.
+       3. Search for and select the user who you want to connect to.
+        4. Copy the link, and share it with the user so they can play the app.
+        5. After you share the link, the user selects it to open the app and is notified that
+          they're joining a monitoring session. The same link can be used to open the app in
+          a monitored session on Power Apps mobile.
+       The user can now interact with the app, and Live monitor will show events for this
+       interaction.
+       Next steps
+              Advanced monitoring
+              See also
+              Troubleshoot form issues in model-driven apps
+              Debugging canvas apps with Live monitor
+              Debugging model-driven apps with Live monitor
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Advanced monitoring concepts
+       Article • 11/19/2024
+       In this article, you'll learn about downloading and uploading trace files in Live monitor,
+       events supported by Live monitor, and scenarios that Live monitor doesn't support.
+       Download and upload trace files
+       You can download the events listed in Supported events for offline analysis. Events can
+       be downloaded in .json or .csv format, and you can share them with others. The .csv files
+       can only be downloaded, not uploaded, but if you download the events in .json format,
+       you can upload them later into Live monitor for analysis. You can also attach a trace file
+       to support service requests, which can help speed up getting the solution to your
+       problem.
+       Select Upload to load a .json trace file to Live monitor. This option removes any events
+       currently displayed in the Live monitor table and replaces the details with events
+       contained in the trace file.
+              Supported events
+              Live monitor supports several events for canvas apps and model-driven apps. The
+              following table includes examples of the supported event categories and types.
+                                                                                                ﾉ Expand table
+                Canvas apps                                               Model-driven apps
+                      Data connectors                                           Form events, such as load and
+                      Network events (error status codes highlighted)           save
+                      Screen load metrics                                       Network
+                      Cross-screen dependency warning                           Page navigation
+                      User actions such as Navigate, Select, and                Command executions
+                      SetProperty
+                      Custom Trace()
+                      Delegated versus non-delegated queries
+                      Verbose switch (internal telemetry)
+                      Delegation
+                      Function
+                      Network
+                      Parsing
+                      Performance
+                      Scenario
+                      ScreenLoad
+                      Telemetry
+                      UserAction
+                      Verbose
+             Unsupported scenarios for Live monitor
+             Live monitor doesn't support the scenarios in the following table.
+                                                                                          ﾉ Expand table
+               Description                                                                        App
+                                                                                                  type
+               Live monitor connected to a canvas app embedded in a model-driven app or custom    Canvas
+               page.
+               Live monitor connected to a SharePoint custom form app.                            Canvas
+               Live monitor connected to a Microsoft Teams embedded app. As an alternative, you   Canvas
+               can play the app in a web player for diagnostics purposes.
+             See also
+             Debugging canvas apps with MonLive monitor
+             Debugging model-driven apps with Live monitor
+             Feedback
+             Was this page helpful?   Yes      No
+             Provide product feedback
+      Common issues and resolutions for Power
+      Apps
+        Summarize this article for me
+      ﾃ
+      Summary
+      This article provides solutions to common problems that you might encounter when you create
+      or use Power Apps. The article organizes problems by functional area, such as connectors,
+      Power Automate integrations, Power Fx, and Power Apps Studio. Each section includes
+      troubleshooting steps and links to related documentation.
+      Before you troubleshoot specific problems, review Power Apps troubleshooting strategies for
+      guidance on how to identify the source of a problem. That article outlines key principles for
+      debugging both functional and performance problems.
+      Common Power Apps issue areas
+         Connectors and delegation
+         Power Automate Integration
+         Power Fx
+         Regional performance issues
+         Power Apps Studio and Forms
+         Browser performance
+         Power Apps for Windows
+      Connectors and delegation
+      For an overview of how tabular and action connectors work, see Connections.
+      For details about delegation, see Understanding delegation in a canvas app.
+      For a description of how to monitor the data being sent and returned, see Debugging canvas
+      apps with Monitor.
+         You don't have the correct permissions to use a connection.
+         Users might encounter this message in two situations:
+           The application shares an implicit connection that isn't a secure implicit connection. To
+           resolve the problem, share the connection with the end user, but consider that this
+        approach isn't recommended. The author should convert all connections to secure
+        implicit connections.
+        The application uses a secure implicit connection. In this case, republishing the app
+        might resolve the problem.
+       Automatic Next links for galleries and grids don't work for action-based connectors.
+       Action-based connectors don't support next links. Next links are properties on query
+       results that allow a gallery or grid to automatically load the next set of results. For more
+       information, see Overview of connectors for canvas apps.
+       Sharing a Canvas app using SharePoint connector
+       For more information about how to share an app for SharePoint, see Connect to
+       SharePoint from a canvas app.
+       SQL data sources no longer add a [dbo] prefix to the data source name.
+       For more information about this change, see Connect to SQL Server from Power Apps.
+       Custom connectors and Microsoft Dataverse
+       You need to make adjustments if you built your app with Power Apps that:
+        Is version 2.0.540 or earlier.
+        Relies on a Dataverse database.
+        Uses at least one custom connector from a separate environment.
+       First, deploy the custom connector to the same environment as the database. Then,
+       update the app to use the newly deployed connector. Otherwise, a dialog notifies users
+       that the API wasn't found. For more information, see Environments overview.
+       Column names with spaces
+       If you're using a list created using Microsoft Lists, a SharePoint library, or an Excel table in
+       which a column name contains a space, use single quotes with the column name, for
+       example someList.'Color Tag'.
+       Apps that connect to on-premises SharePoint
+       If you share an app that relies on connections that aren't automatically shared (for
+       example, an on-premises SharePoint site), users who open the app in a browser see a
+       dialog box with no text when they select or tap Sign in. To close the dialog box, select or
+       tap the close (X) icon in the upper-right corner.
+       The dialog box doesn't appear if you open the app in Power Apps Studio or Power Apps
+       mobile. For more information about shared connections, see Share app resources.
+       For apps that are created from data, only the first 500 records of a data source can be
+       accessed.
+       Power Apps works with large data sources by delegating operations to the data source.
+       For operations that can't be delegated, Power Apps shows a warning at authoring time
+       and operates on only the first 500 records of the data source. For more information, see
+       the Delegation overview.
+       Excel data must be formatted as a table.
+       For information about limitations when you use Excel as a data source, see Cloud-storage
+       connections.
+       Microsoft Lists is supported but not SharePoint libraries, some types of list columns, or
+       columns that support multiple values or selections.
+       For more information, see SharePoint Online.
+       Sign-in issues on certain Android mobile devices when using authenticator
+       On certain devices and in certain scenarios, you might experience sign-in failures when
+       you use an authenticator. This problem happens because of a limitation that the OEM
+       imposes. For more information, see ADALError:
+       BROKER_AUTHENTICATOR_NOT_RESPONDING .
+       Apps cannot save null/blank values to data sources
+       If your app can't save null or blank values to data sources, the Formula-level error
+       management feature might be disabled. To fix this problem, go to Settings > Updates >
+       Retired and make sure the Formula-level error management feature is enabled.
+     Power Automate integration
+       Power Automate flows are orphaned in Power Apps.
+       Power Automate flows that you add by using an older version of the Power Apps panel
+       might become orphaned and removed. To fix this problem, re-add the flows manually.
+       Power Apps custom pages (in a model-driven app) are out of synchronization with
+       embedded Power Automate flow metadata.
+        The metadata for a Power Automate flow might get out of synchronization with a model-
+        driven app's custom page if you update the flow after embedding it. To update the
+        metadata, follow these steps for each embedded flow:
+         1. Edit the custom pages that use the flow.
+         2. Open the Power Automate pane and refresh the flow.
+         3. Save and republish the custom page.
+        When you're done, follow these steps:
+         1. Edit the model-driven app.
+         2. Make a minor change to trigger the save option.
+         3. Save and publish the model-driven app.
+     Power Fx
+     For more information about Power Fx, see Microsoft Power Fx.
+        Connection.Connected returns the wrong value during OnStart in Power Apps for
+        Windows.
+        While offline, the Connection.Connected formula might wrongly return true immediately
+        after starting an app in Power Apps for Windows. As a workaround, use a Timer control to
+        delay the execution of the logic depending on it.
+        Issues with Date-time
+        For more information about date and time problems, see:
+         Troubleshoot Canvas app date time issues
+         Troubleshoot Model driven app date time issues
+     Regional performance
+        Performance degradation when opening Power Apps Studio in China
+        Power Apps Studio might take more than 30 seconds to load in China. This problem
+        doesn't affect tenants that 21Vianet hosts locally.
+     Power Apps Studio and forms
+     The Power Apps Studio hosts the app editing and publishing experience.
+        Problems with startup
+       If you have trouble accessing or starting Power Apps, see Troubleshooting startup or sign-
+       in issues for Power Apps.
+       Problems changing dimensions or orientation of SharePoint forms
+       If you have problems with the Screen size + orientation settings for custom SharePoint
+       forms, use the Custom size to work around the problem:
+        1. Reset the setting by selecting the Small size.
+        2. Toggle Orientation to Portrait and then back to Landscape.
+        3. Select Custom and enter a desired screen size. For reference, the preset values are:
+          "Width: 270, Height: 480" for the Small Portrait size.
+          "Width: 720, Height: 480" for the Small Landscape size.
+       Copying and pasting screens across apps
+       Copying and pasting screens across apps isn't currently supported. To work around this
+       problem:
+        1. Add a new screen to your target app.
+        2. Copy the controls from the screen in your source app.
+        3. Paste the controls into the screen of your target app.
+       Changing the layout of SharePoint forms
+       When you customize SharePoint forms in certain languages, if you try to change the
+       layout from Portrait (default) to Landscape, the app might show multiple errors (yellow
+       triangles in controls). To resolve these errors and retain the landscape layout, select Undo.
+       Changing a flow in a shared app
+       If you add a flow to an app and share the app, and then make changes to the flow, such
+       as adding a service or modifying a connection, more steps are required. You must also
+       first remove the flow from the shared app. Next, re-add the flow to the app. Finally, re-
+       share the app.
+       Changing a "Title" field in a table
+       If you change the Title field for a table that other tables reference through one or more
+       lookups, an error occurs when you try to save the change. To work around this problem:
+        1. Remove any lookups to the table you want to change.
+        2. Change the table's Title field.
+        3. Re-create the lookups.
+       For more information about lookups, see Create a relationship between tables.
+       When Power Apps generates an app from data, the field used for sorting and searching
+       isn't automatically configured.
+       To configure the field, edit the Items formula for the gallery, as described in Filter and sort
+       a gallery.
+       It can sometimes take a moment before a newly shared app can be used.
+       In some cases, a newly shared app isn't immediately available. Wait a few moments, and it
+       should become available.
+       In the Form control, you can't change data by using a custom card.
+       The stock custom card is missing the Update property, which is required to write back
+       changes. To work around this problem:
+         1. Select the Form control, and insert a card by using the right-hand pane based on
+          the field that you want the card to show.
+         2. Unlock the card, as described in Understanding data cards.
+         3. Remove or rearrange controls within the card as you see fit, just as you would with
+          the custom card.
+       Card gallery is deprecated.
+       Existing apps that use this feature continue to run for now, but you can't add a card
+       gallery. Replace card galleries with the new Edit form and Display form controls.
+     Browser performance
+       Browser running out of memory
+       If you're using the 32-bit version of Google Chrome or Microsoft Edge and the browser
+       runs out of memory while you're using Power Apps, consider using the 64-bit version.
+     Power Apps for Windows
+       Power Apps mobile app for the Windows platform doesn't support the Dropbox
+       connector.
+       A pop-up dialog shows the following message in this situation:
+        We can't connect to the service you need right now. Check your network connection
+        or try again later.
+               When this issue occurs, consider using a web player on the Windows platform.
+               Microsoft Entra Conditional Access with the policy Require device to be marked as
+               compliant doesn't work in Power Apps for Windows.
+               When the Conditional Access policy is set to Require device to be marked as compliant in
+               Microsoft Entra ID, users receive the following sign-in error and can't access their Power
+               Apps.
+                  The application contains sensitive information and can only be accessed from devices
+                  or client applications that meet your enterprise management compliance policy.
+               To work around the issue, they can use a browser.
+          Next steps
+          If your issue isn't listed in this article, you can search for more support resources  , or contact
+          Microsoft support    . For more information, see Get Help + Support.
+           Last updated on 02/26/2026
+          Get session and app ID details
+          07/30/2025
+          If you find a problem with an app in Power Apps, you can help Microsoft troubleshoot the
+          problem much more effectively with a session ID, an app ID, or both.
+          Get the session ID for a canvas app
+          When editing a canvas app
+             1. Select Settings.
+             2. Select Support > Session details.
+             3. Select Copy details to copy all session to clipboard.
+          When running a canvas app in a browser
+             1. In the upper-right corner, select the Settings icon     .
+             2. Select Session details.
+    When running a canvas app on a phone or a tablet
+      1. In the upper-left corner, select your profile picture.
+      2. Select Session details.
+      When running an embedded canvas app or form
+       1. Do one of these steps:
+            While holding down the Alt key, right-click the app or form.
+            Tap the app or form with two fingers for 1-2 seconds, and then release.
+       2. Select Session details.
+     Get the session ID for a model-driven app
+     When editing a model-driven app
+       1. From the preview pane in app designer, on the command bar in the model-driven app
+        displayed, select Settings (gear).
+       2. Select About.
+     When running a model-driven app in a browser
+       1. On the command bar in a model-driven app, select Settings (gear).
+       2. Select About.
+    When running a model-driven app on a phone or a tablet
+      1. In the upper left corner, select the hamburger icon (the three lines).
+      2. Select the settings icon (gear) in the lower left corner of the screen.
+      3. Select Session Details at the bottom of the screen.
+       4. Review the session details. 
+     Get the session ID for Power Apps
+     (make.powerapps.com)
+       1. Sign into Power Apps (make.powerapps.com), and then, on the command bar, select
+        Settings (gear).
+            2. Select the Session details.
+         Get an app ID
+         Get the app ID for either a canvas or model-driven app:
+            1. Sign in to Power Apps   .
+            2. Near the left edge, select Apps.
+            3. Select     (More Commands).
+            4. Select Details.
+       The app ID appears at the bottom of the Details pane for that app.
+              Create an effective support request
+              Article • 07/09/2024
+              If an app isn't behaving as expected, it could be an issue with your Power Apps
+              configuration or a system outside of Power Apps.
+              Depending on the issue, you can get help from the following individuals or
+              organizations:
+                                                                                                ﾉ Expand table
+                Type of issue                                    Who can help best
+                App                                              Creators of the app, administrators
+                Power Apps                                       Microsoft
+                External data sources and integrations           Users responsible for the external system
+              Differences between app bugs and Power Apps
+              bugs
+              An app bug is unexpected behavior in a particular app. In comparison, a Power Apps bug
+              is unexpected behavior in the system that creates, runs, or manages the app. An
+              underlying Power Apps bug might cause an app bug, making it difficult to determine if
+              the bug is an app or Power Apps bug.
+              Here are some distinguishing signs.
+                                                                                                ﾉ
+                                                                                                    Expand table
+                App bug                                 Power Apps bug
+                Able to reproduce an issue in a         Able to create an app that reproduces an issue
+                specific app
+                Requires access to specific data        Any data connection reproduces the issue, which might
+                connections                             require a specific configuration of the data source
+                Affects only a single app in a single   Affects apps in multiple organizations or has the potential
+                organization                            to affect them
+                Complicated app with components         Minimal repro app that shows an issue with a few
+                not relevant to the issue               components
+               App bug                              Power Apps bug
+               Mentions custom features and code    Mentions specific Power Apps features
+               Microsoft documentation doesn't      Microsoft documentation exists for the affected feature
+               exist for the affected feature       and explains its expected behavior
+             Example app bugs
+             The following examples show app bugs and how users can describe them as steps to
+             app owners, so owners can reproduce and resolve the bugs.
+                 1. Canvas app doesn't show invoices.
+                    a. Sign in to your canvas app, such as Contoso.
+                   b. On your Home screen, select My Invoices.
+                            Expected behavior: Invoices created by the user are displayed.
+                            Actual behavior: No invoices are shown.
+                 2. Model-driven app doesn't show invoices.
+                    a. Sign in to the Contoso app in your environment.
+                   b. On the Dashboard page, select Invoices on the site map.
+                    c. On the Invoices page, set the view to My active invoices. The list of invoices are
+                      displayed.
+                            Expected behavior: Invoices created by the user are displayed.
+                            Actual behavior: No invoices are shown.
+             Bugs can have great variance because features, user interfaces, and tables are specific to
+             an app and organization, making the cause of bugs different for everyone. For example,
+             invoice isn't a built-in table in Power Apps. There isn't a specialized feature in canvas
+             apps for filtering records by a certain user, therefore the app maker must write Power Fx
+             expressions or configure data connectors. Similarly, the maker must configure Views in
+             model-driven apps to display desired records.
+             There isn't sufficient information in either of the examples to determine if there's a
+             Power Apps issue. The creators of the app are best suited to investigate app issues.
+             Example Power Apps bugs
+             If app creators investigate and find what they classify as a Power Apps bug, they might
+             report them similarly to the following examples.
+        1. Canvas app Filter function returns no results when filter text contains asterisk
+          character
+          a. A minimal repro app is attached to demonstrate the issue.
+          b. This app contains a simple collection: TestTable with data [{Name: "a"}, {Name:
+           "*b"}].
+          c. There are two Table controls in the app. Both controls are configured to show
+           the Name column.
+          d. Table1 has Items set to Filter(TestTable, Name="a").
+          e. Table2 has Items set to Filter(TestTable, Name="*b").
+              Expected behavior: Table1 shows the record {Name: "a"}, matching the
+              Filter function's condition Name="a". Table2 shows the record {Name:
+              "*b"}, matching the Filter function's condition Name="*b".
+              Actual behavior: Table1 shows expected record but Table2 doesn't show
+              any records.
+              Notes: Same behavior is observed with other dataset controls like Gallery,
+              when Items are set to the same expressions.
+        2. Model-driven app View returns no results when filter condition contains asterisk
+          character
+          a. Create a View for any table.
+          b. Remove all filters for the view.
+          c. Add a filter for the primary column, matching text that starts with *b.
+          d. Add this view and the table to any model-driven app.
+          e. Save and publish all changes.
+          f. Run the app.
+          g. Add a few records with different values for the primary column. Ensure one
+           column starts with *b.
+          h. Go to the table's page.
+          i. Change the view to the newly created view.
+              Expected behavior: Grid shows records with primary column values that
+              start with *b.
+              Actual behavior: No records shown.
+              Notes: When the filter condition doesn't use an asterisk, like b, the filter
+              works as expected.
+       These Power Apps bugs describe issues with specific Power Apps features: the Filter
+       function for the canvas app and View filters for the model-driven app.
+       A good support request provides enough information for anybody to reproduce the
+       issue easily. The author might mention the result of their investigative actions or
+       troubleshooting they tried when attempting to isolate the issue. For example, the author
+       might mention the issue only occurs in the Chrome browser but not in Firefox.
+       What makes a good Power Apps support
+       request
+       A good support request frames an issue as a Power Apps bug, not an app bug. Follow
+       these guidelines, where applicable, to help Microsoft understand and resolve the issue
+       quickly.
+       Have a descriptive title
+       The title should mention:
+        1. A specific Power Apps feature
+        2. The unexpected behavior
+        3. The conditions that cause the bug to happen
+       Example of a bad title: "Gallery control is blank"
+       Example of a good title: "Filter function returns no results when filter text contains
+       asterisk character"
+       Attach a simplified app, not the original app
+       For issues with running an app, provide a minimal repro app for canvas apps, or a vanilla
+       repro solution for model-driven apps.
+        ） Important
+        The goal of a good support request is to include enough information so that
+        anyone can reproduce the issue on their own device.
+        If you can show that the bug is a Power Apps bug instead of an app bug, with a
+        minimal or vanilla repro app, Microsoft can resolve it swiftly. Without these repro
+        apps, the resolution might be delayed or the support request might not be
+        accepted.
+       Exceptions
+      A minimal or vanilla repro app isn't always feasible or needed for these issues:
+        Data access and saves from a specific data source
+        Specific user data, such as user permissions
+        Licensing
+        Offline operation
+        General server issues
+      Regardless, simplify your app as much as possible and isolate the issue for canvas or
+      model-driven apps.
+      Attach a network trace
+      For data and server issues, examining network communications between the client and
+      server helps isolate the problematic layer. A record of network calls is known as a
+      network trace.
+      You can either use Monitor or browser development tools to record a network trace.
+      Be sure to start recording just before reproducing the issue and end the recording right
+      after you successfully reproduced it. This brief interval minimizes irrelevant information
+      in the trace that might cause delays in Microsoft's handling of the support request.
+      Provide detailed steps to reproduce the issue
+      If you created a minimal or vanilla repro app, describe how to reproduce the issue in that
+      app. Don't describe issues with the app where you originally found the problem.
+      Mention the observed behavior and the expected behavior.
+      Provide screenshots or videos
+      For user interface issues, screenshots or videos can more quickly clarify the steps to
+      reproduce the bug, rather than a written description.
+      Link to official documentation
+      Include links to Microsoft documentation to clarify the affected feature and its expected
+      behavior.
+      For issues with professional development features, provide a link to the documentation
+      for the API function that doesn't work.
+       Simplify code samples
+       If the issue involves coding and other professional development features, simplify the
+       code first. Usually, just a few lines of code are needed to demonstrate a Power Apps
+       bug. Deploy the app in a fresh environment with no other customizations. Verify the
+       issue occurs and attach a snippet of the problematic code.
+       Examples of professional development features in Power Apps:
+          Power Apps components
+          Custom form scripts in model-driven apps
+          Power Fx or JavaScript commands in model-driven apps
+          Web resources for model-driven apps
+       Mention specific configuration steps so that others can reproduce the issue in their own
+       environment.
+       Provide system info
+       An issue might happen only on a specific version of Power Apps, a browser, or an
+       environment. Provide the session ID so that Microsoft can use these details.
+       Add notes from your investigation
+       You might try different configurations to eliminate possible causes. Mention these
+       configurations in the support request. This inclusion helps others understand the issue
+       better and avoid repeating the same steps.
+       Submitting a Power Apps support request
+       Before submitting a support request, check if the bug is a known issue. If the bug isn't
+       already known, you can create a support request to report the bug.
+       See also
+          General Power Apps debugging strategies
+       Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+     Change authoring version for Power Apps
+     Studio
+     07/08/2025
+     The default version of a Power Apps Studio session is determined by your environment's
+     location and refresh cadence. This default version of Power Apps Studio changes when an
+     update is released for your environment based on configured refresh cadence.
+     You can now change the authoring version of your current Power Apps Studio session from the
+     version loaded by default, to an earlier or later version as available for your environment.
+      ） Important
+      Change the authoring version of a current Power Apps Studio session only when needed,
+      such as to work around an issue as instructed by Microsoft support.
+     How you check and change the authoring version of your current Power Apps Studio depends
+     on whether you have an app already open, or not.
+     Check Power Apps Studio version when an app is
+     open
+       1. Open an existing or a new app in Power Apps Studio.
+       2. Select Settings.
+       3. Select Support and review your existing Power Apps Studio version for the current
+        session.
+     Change Power Apps Studio version
+      1. If you're instructed to change the version of your current Power Apps Studio session,
+       follow the steps to see the current version.
+      2. From the list of available authoring versions, choose the version you want, and then select
+       Reload + apply version.
+          Tip
+         The default version for your environment will have (recommended) next to the
+         authoring version number.
+      3. (Optional) Save the app when you're prompted to save the changes if you had an app
+       already open that wasn't saved.
+      4. Select Open or New to work with the app inside Power Apps Studio using the version you
+       selected.
+     You're now editing the app in the Power Apps Studio version you've selected. Since the
+     authoring version change only persists for the current Power Apps Studio session, repeat the
+     above steps when you want to work with the same app again.
+      ７ Note
+      You can't change the authoring version of Power Apps Studio when a you author custom
+      page content or edit an existing custom page.
+     Known limitations and workarounds
+       Selecting Reload + apply version only changes the current authoring session to the
+       version you choose. This change doesn't persist for future sessions. New Power Apps
+       Studio sessions always start with the default Power Apps Studio version for your
+       environment.
+       To update the app with the Power Apps Studio version you selected, you must save the
+       app with the chosen Power Apps Studio version.
+       If you save an app using a version newer than the default for your environment, you
+       might not be able to open that app using the default version of Power Apps Studio. In
+       that case, you'll see the following dialog:
+        Select Open in new version to open your app for editing until your environment’s
+        default version gets updated to the app’s current version.
+        Select Restore previous version to see all versions for the app, and revert to an older
+        version saved with the default Power Apps Studio version associated with your
+        environment.
+         ７ Note
+         If you choose to restore the app to a previous version, you'll lose any changes
+         made between your latest and previous app versions.
+       You cannot change authoring versions if coauthoring is enabled.
+    See also
+       Setting an environment refresh cadence
+       Restore a canvas app to a previous version
+       Get session and app ID details
+         Troubleshooting startup or sign-in issues
+         for Power Apps
+              Summarize this article for me
+         ﾃ
+         This article helps you resolve some common issues or errors that might occur when starting up
+         or signing in to Power Apps  .
+         Common issues or errors
+         The following are some common issues or errors that might appear when you start up or sign
+         in to Power Apps.
+              You're prompted to sign in every time an app is embedded in another client such as
+              SharePoint and Microsoft Teams. The Power Apps opening experience starts and halts
+              until you sign in.
+              Error message related to cookie settings.
+                Hmmm... Something went wrong.
+                thirdPartyCookiesBlocked
+                Please enable third party-cookies and site data in your browser settings. If you are
+                using Chrome's Incognito mode, you can uncheck the 'Block third-party cookies'
+                option on the Incognito landing page.
+                Try again
+              "Sign in required" message when signing in to Power Apps, especially in InPrivate or
+              incognito mode.
+                Sign in required
+                Please select sign in to continue.
+                Session ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                AADSTS50058: A silent sign-in request was sent but no user is signed in. The cookies
+                used to represent the user's session were not sent in the request to Microsoft Entra
+                ID. This can happen if the user is using Internet Explorer or Edge, and the web app
+                sending the silent sign-in request is in different IE security zone than the Microsoft
+                Entra endpoint (login.microsoftonline.com).
+                Trace ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                Correlation ID: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                Timestamp: xxxx-xx-xx xx:xx:xxZ
+        "Hmmm … We couldn't sign you in" message.
+        "WebAuthoring abnormal termination" message.
+         WebAuthoring abnormal termination.
+         Client date/time: <Client Time>Thh:mm:ss.sssZ
+         Version: 2.0.602
+         Session ID: xxxx-xxxxx-xxxxxxx--xxxxxxxx
+         description: {"error":{"detail":{"exception":{}},"colno":0,"filename":"
+         <https://paaeuscdn.azureedge.net/v2.0.602.0/studio/openSource/modified/winjs/js/
+         base.js?v=39de0f2edf1>...",
+         "lineno":0,"message":"Script error","initErrorEvent":"
+         [function]","bubbles":false,"cancelBubble":false,"cancelable":false,"currentTarget":"
+         [window]", "defaultPrevented":true,
+         "eventPhase":2,"isTrusted":true,"srcElement":"[window]","target":"
+         [window]","timeStamp":1490711965955,"type":"error","initEvent":"
+         [function]","preventDefault":" [function]",
+         "stopImmediatePropagation":"[function]","stopPropagation":"
+         [function]","AT_TARGET":2,"BUBBLING_PHASE":3,"CAPTURING_PHASE":1},"errorLine":0,
+         "errorCharacter":0,
+         "errorUrl":"
+         <https://paaeuscdn.azureedge.net/v2.0.602.0/studio/openSource/modified/winjs/js/
+         base.js?v=39de0f2edf1>... error","setPromise":"[function]","exception":{}}
+         stack: null
+         errorNumber: 0
+         errorMessage: Script error
+        UserInterventionNeeded_CookiesBlocked
+        UserInterventionNeeded_StorageBlocked
+        UserInterventionNeeded_NavigateToAadTimeout
+        UserInterventionNeeded_NavigateToAadDenied
+        UserInterventionNeeded_StorageLost
+        AadError
+     Resolution
+     Try the following steps to resolve the issue:
+       1. Enable third-party cookies and local data in your browser or app.
+       2. Clear your browser's cache and cookies and try again. Cached data can sometimes
+        prevent you from signing in.
+       3. Try signing in with a different browser. For a list of supported browsers, see system
+        requirements.
+       4. Check your network connection to make sure it's stable.
+       5. If you're getting Microsoft Entra errors, they're usually related to user authentication and
+        authorization. The error page might contain additional information that can help
+        diagnose and fix the problem. To resolve Microsoft Entra errors, you might need
+        assistance from your IT department.
+       6. Check the "Third-party Storage Partitioning" setting in your browser to make sure it's
+        disabled.
+         ７ Note
+         Consider this resolution step only when you experience sign-in or sign-out issues
+         under one of the following conditions:
+            You use a device that has multiple Microsoft Entra identity sign-ins to access
+            different applications.
+               You access multiple applications using Microsoft Entra across more than one
+               tab. When you sign out of one tab, you observe that you aren't signed out of
+               the second tab.
+               You access Power Apps that are embedded via an iframe in a third-party
+               website.
+               You access a canvas app that's embedded in a model-driven app form.
+      Check the "Third-party Storage Partitioning" setting in
+      Microsoft Edge or Google Chrome
+                                                   edge://flags/#third-party-
+          In Microsoft Edge, you can check the setting by navigating to 
+          storage-partitioning using the address bar.
+          In Google Chrome, you can check the setting by navigating to chrome://flags/#third-
+          party-storage-partitioning using the address bar.
+      Enable storage of third-party cookies and local
+      data in your browser or app
+      Power Apps stores some data locally, such as user identity and preferences, using your
+      browser's capabilities. Problems occur if the browser blocks the storage of such local data, or
+      third-party cookies set by Power Apps.
+      Most browsers allow settings to reflect the changes immediately. You might also need to close
+      all the browser windows and reopen them instead.
+      To enable this setting for the Power Apps and Dynamics 365 mobile apps for iOS, you need to
+      work through the iOS settings linked to the app rather than through the browser settings for
+      iOS.
+      These instructions are shown on the following tabs.
+        Microsoft Edge
+         Option 1: Enable storage of third-party cookies and local data for all sites
+           1. Select Settings > Cookies and site permissions.
+           2. Expand Cookies and data stored.
+           3. Ensure the Block third-party cookies setting is disabled.
+           4. If present, remove the following sites from the site-specific cookie configuration
+            under Block and Clear on exit:
+              https://create.powerapps.com
+              https://*.create.powerapps.com
+              https://make.*.powerapps.com
+              https://make.powerapps.com
+              https://login.microsoftonline.com
+              https://apps.*.powerapps.com
+              https://apps.powerapps.com
+             (Only for sovereign clouds) US Government version URLs.
+         Option 2: Create exceptions to allow the storage of third-party cookies and local data
+         for Power Apps and associated services
+          ７ Note
+          The following steps require your Edge browser version to be 87 or above.
+           1. Select Settings > Cookies and site permissions.
+           2. Expand Cookies and data stored.
+           3. Select Add under Allow and add:
+              [*.]powerapps.com
+           4. Select Clear browsing data on close.
+           5. Ensure Cookies and other site data is disabled. If you want to keep it enabled,
+            select Add instead, and then add:
+              [*.]powerapps.com
+     Clear your browser cache
+     The browser cache is stored on your device's hard drive. When you visit a website, your
+     browser downloads certain information that allows it to load faster when you revisit the same
+     website in the future. Some Power Apps features use the browser cache to provide a faster user
+          experience. In some cases, you might want to clear your browser cache. Here are the
+          instructions for different browsers:
+               Microsoft Edge
+               Google Chrome
+               Safari on Mac
+          Next steps
+          If your issue isn't listed in this article, you can search for more support resources   or contact
+          Microsoft support    . For more information, see Get Help + Support.
+           Last updated on 03/12/2026
+     App access checker for model-driven apps
+     07/22/2025
+     Use the app access checker tool to identify common issues found for a specific user that can
+     occur when running a model-driven app.
+     Issues found by the app access checker include:
+        If an app is visible to the user or not.
+        The reason why an app is visible or not visible to the user.
+        If the user has the required license.
+     How to use the app access checker
+     Power Platform admins and makers can use the app access checker to search apps based on
+     user principal name (UPN) or email address.
+     Open the diagnostics page in your browser by typing
+     https://environmentURL/WebResources/msdyn_AppAccessChecker.html, such as
+     https://contoso.crm.dynamics.com/WebResources/msdyn_AppAccessChecker.html. Then enter the
+     UPN or email address in the box and then select Search.
+     How to interpret the results
+        Visible.
+          If the user doesn't have read privilege on the app module table, none of the apps are
+          visible to the user, and No is displayed.
+          If the user has read and/or write privilege on the app module table, then all the apps
+          are visible and Yes is displayed.
+        License.
+          If the user has appropriate licensing to play the app, Yes is displayed.
+          Select the details link on either Yes or No result for each app to get information on
+          how the user is or isn't able to access.
+        Security.
+          If the user has create or write privilege on the app module table, Yes is displayed. If the
+          user isn't associated to one or more security roles assigned to the app, check if the
+          user is member of a team and whether the team is associated with that security role.
+     Licensing terminology and how model-driven apps
+     are accessed
+     In order for an app to be visible to a user, both the results for License and Security must be
+     Yes. If a user doesn't have an appropriate license, the error message might give information
+     about what service plans could be used to give access to the app. Note that Licenses aren't
+     the same as service plans. A License is what is assigned to users in Microsoft Entra and usually
+     has multiple service plans. For a list of all licenses and what service plans are included, go to
+     the licensing service plan reference. Referencing the Microsoft Dataverse licensing error
+     message and the service plan reference list can help diagnose user licensing issues.
+     Also be aware that Dataverse caches the service plans that are assigned to users, so Microsoft
+     Entra License assignments might not immediately reflect in Dataverse. To update the cached
+     service plan assignments in Dataverse, have users sign out and sign back in. If the issue
+     persists, it could be a result of Microsoft Entra caching, and the user should wait about 30
+     minutes, then sign out and sign back in again.
+     Example results
+     User has access to all visible apps in the environment.
+                                                    
+     User doesn't have visibility or access to any apps in the environment because of missing
+     security role membership associated with each app.
+                                            
+    Two examples where the user has visibility to some apps but not others because of missing
+    security role membership associated with the app.
+                                            
+                                            
+    In this example, the user has the required security privilege for the app but doesn't have the
+    required license to access some of the apps.
+                                            
+     In this example, the user doesn't have the required security privilege, so the app access checker
+     isn't able to show licensing details.
+                                                        
+     If Security is Yes and License is No or Unknown contact Help + support. More information: Get
+     Help + support
+                                                        
+     Limitation
+        App access checker doesn't show details for the Outlook App. This is because that
+        information is only visible to Power Platform administrators.
+     Related articles
+     Share a model-driven app
+          Troubleshoot Power Query issues
+          When you use Power Query for Excel to create a custom table that contains data from external
+          sources, you may receive the following error:
+            "Your Microsoft Entra administrator has set a policy that prevents you from using this
+            feature. Please contact your administrator, who can grant permissions for this feature on
+            your behalf."
+          The error appears if Power Query can't access the organization's data in Power Apps or
+          Microsoft Dataverse. This situation arises under two sets of circumstances:
+               A Microsoft Entra tenant administrator has disallowed users' ability to consent to apps
+               that access company data on their behalf.
+               Using an unmanaged Active Directory tenant. An unmanaged tenant is a directory
+               without a global administrator that was created to complete a self-service signup offer. To
+               fix this scenario, users must first convert to a managed tenant and then follow one of the
+               two solutions to this issue. The solutions are described in the next section.
+          To resolve this issue, the Microsoft Entra administrator must follow either of the procedures
+          that are presented later in this article.
+          Allow users to consent to apps that access
+          company data
+          This approach is perhaps easier than the next, but it allows for broader permissions.
+             1. In the Azure portal  , open the Microsoft Entra ID pane, and then select User settings.
+             2. Next to Users can consent to apps accessing company data on their behalf, select Yes,
+               and then select Save.
+          Allow Power Query to access company data
+          As an alternative, the tenant administrator can give consent to Power Query without modifying
+          tenant-wide permissions.
+             1. Install Azure PowerShell.
+             2. Run the following PowerShell commands:
+                     Login-AzureRmAccount (and sign in as the tenant admin)
+           New-AzureRmADServicePrincipal -ApplicationId 00001111-aaaa-2222-bbbb-
+           3333cccc4444
+     The advantage of this approach (versus the tenant-wide solution) is that this solution is very
+     targeted. It provisions only the Power Query service principal, but no other permission changes
+     are made to the tenant.
+     Update personal data
+     Users can update mashups and other information (such as query names and mashup
+     metadata) through the Query Editor and through the Options dialog box that's accessible from
+     the Query Editor.
+     In Power Apps, you access the Query Editor by doing the following:
+       1. Go to the Data pane, expand it, and then select Tables.
+       2. Select the ellipsis (...), and then select Edit Queries.
+       3. In the ribbon, select Options, and then select Export Diagnostics.
+     Delete personal data
+     Most data is deleted automatically within 30 days. For data and metadata around mashups,
+     users must remove all their mashups through Power Apps. All of the associated data and
+     metadata will be deleted within 30 days.
+     To remove mashups from Power Apps:
+       1. Remove the Data Integrator projects, which can be removed from the namesake tab.
+       2. Select the ellipsis (...), and then select Delete.
+     If you created a mashup through the "New tables from data (Technical Preview)" feature, you
+     can remove it by doing the following:
+       1. Select the ellipsis (...), and then select Edit queries.
+       2. In the ribbon, select Options.
+       3. Select Remove all queries.
+        After you confirm that you want to delete your queries, they are deleted.
+     Export personal data
+     To export personal data, users can do the following:
+       1. Open the Query Editor.
+       2. In the ribbon, select Options.
+       3. Select Export Diagnostics.
+      In Power Apps, you can access the Query Editor by doing the following:
+       1. Go to the Data pane, expand it, and then select Tables.
+       2. Select the ellipsis (...), and then select Edit Queries.
+       3. In the ribbon, select Options, and then select Export Diagnostics.
+      System-generated logs about user actions on the user interface (UI) can be accessed in the
+      Azure portal.
+      Last updated on 04/02/2024
+         FAQ about using AI responsibly in Power
+         Apps
+              Summarize this article for me
+         ﾃ
+         An AI system includes not only the technology, but also the people who use it, the people
+         affected by it, and the environment in which it's deployed. Microsoft Responsible AI FAQs are
+         intended to help you understand how AI technology works, the choices system owners and
+         users can make that influence system performance and behavior, and the importance of
+         thinking about the whole system, including the technology, the people, and the environment.
+         You can use Responsible AI FAQs to better understand specific AI systems and features that
+         Microsoft develops.
+         Responsible AI FAQs are part of a broader effort to put our AI principles into practice. To find
+         out more, see Microsoft AI principles   .
+         AI-driven features in this app
+         This app contains a growing list of AI-driven features. To learn about the capabilities and
+         impact of specific features, select an article in the list.
+               Overview of the new Power Apps vibe experience (preview)
+               FAQ for Power Apps vibe experience (preview)
+               Build apps through conversation
+               FAQ about building apps through conversation
+               Create app description for canvas apps with Copilot (preview)
+               Create a model-driven app description with Copilot
+               FAQ about generating app descriptions with Copilot
+               Edit your app with Copilot (preview)
+               FAQ about editing your app with Copilot
+               Add the Copilot control to a canvas app (preview)
+               FAQ about using the Copilot control in canvas apps
+               Add Copilot to model-driven apps (preview)
+               FAQ about using Copilot in model-driven apps
+               Use Copilot in the rich text editor for email (preview)
+               FAQ about using Copilot in the rich text editor
+               Draft well-written, input text with Copilot
+               FAQ for drafting well-written, input text with Copilot
+               Use form filling assistance in model-driven apps
+               FAQs about form filling assistance
+               Use timeline highlights powered by generative AI
+         FAQs about using Copilot in timeline highlights
+         Create Power Fx formulas with Copilot
+         FAQs about using Copilot with Power Fx
+         Use field suggestions by Copilot
+         FAQs for field suggestions by Copilot
+         FAQ about filtering, sorting, and searching canvas galleries with Copilot
+         FAQ about agent builder in canvas apps
+         Build an agent to automate your business process (preview)
+         FAQ for the Plan designer
+         Overview of Plan designer
+         FAQ for rename controls in canvas apps with Copilot
+         Rename controls in canvas apps with Copilot (preview)
+         FAQ for Agent APIs
+         Bring intelligence into your component using Agent Xrm APIs (preview)
+         Bring intelligence into your app using Agent Xrm APIs (preview)
+         Use Agent Response component in the model-driven app forms (preview)
+      Last updated on 03/11/2026
+      FAQ for Power Apps vibe experience
+      (preview)
+        Summarize this article for me
+      ﾃ
+      What is Power Apps vibe?
+      Power Apps vibe is an AI-powered app creation experience that helps makers quickly build
+      functional business applications using natural language. Makers describe what they want to
+      build, and vibe translates those descriptions into working app experiences, including data,
+      screens, and logic. At a high level, Power Apps vibe takes maker prompts and optional context
+      as input and produces a draft app that makers can review, refine, and publish.
+      What can Power Apps vibe do?
+      Power Apps vibe helps makers create apps faster by generating a fully functional app
+      (including app structures, screens, and interactions) based on natural language descriptions.
+      Makers can iteratively refine their apps by adjusting prompts, editing generated outputs, and
+      previewing changes in real time. Power Apps vibe is designed to accelerate early app creation
+      and reduce the effort required to get from an idea to a usable application.
+      What is the intended use of Power Apps vibe?
+      Power Apps vibe is intended to support makers who want to quickly prototype, explore, and
+      build business applications without starting from scratch. It helps makers translate ideas into
+      working apps, learn app-building concepts through iteration, and accelerate time to value.
+      How was Power Apps vibe evaluated? What
+      metrics are used to measure performance?
+      Power Apps vibe is evaluated using a combination of qualitative and quantitative methods.
+      Evaluation includes user studies with makers to assess the quality of generated outputs,
+      usability of the experience, and how effectively Power Apps vibe supports app creation
+      workflows. Feedback from these studies helps identify strengths, gaps, and opportunities for
+      improvement.
+      In addition to qualitative feedback, telemetry data is monitored to understand how makers use
+      Power Apps vibe in practice. This data includes metrics such as feature usage, completion and
+         success rates, and the ratio of positive to negative feedback signals. Before release, Power Apps
+         vibe undergoes extensive functional testing to validate reliability and behavior across
+         supported scenarios. For more information, see the Privacy Statement   .
+         What are the limitations of Power Apps vibe? How
+         can users minimize the impact of Power Apps
+         vibe’s limitations when using the system?
+         Like other AI-powered experiences, Power Apps vibe has known limitations. Generated apps
+         might not always fully reflect a maker’s intent. They might require extra refinement or might
+         not be suitable for complex or highly customized production scenarios without further
+         modification. Outputs are based on the information provided by the maker and the capabilities
+         available in the platform.
+         Known limitations include:
+              Non-English languages aren't supported.
+              Supports image attachment up to 2 MB.
+              You can't access or edit apps created outside of Power Apps vibe.
+              If you export an app and edit it outside Power Apps vibe (for example, in VS Code),
+              redeploying via PAC CLI creates a new app, and it disconnects from the original plan.
+              Currently, you can only have one app per plan; multiple apps within a single plan aren't
+              supported.
+              You can't open preexisting plans in Power Apps vibe.
+              Canvas and model-driven apps aren't supported; you can't recommend, open, or edit
+              these app types in Power Apps vibe.
+              Existing tables aren't automatically recommended during data model proposal; you can
+              manually add existing tables to your plan.
+              Editing existing Dataverse tables via chat isn't currently supported; you can make changes
+              to these tables through the data editor manually.
+              Direct code edits in Code view or Split view aren't supported; you can't modify code
+              directly in these views.
+              You can't directly create proposed technologies (apart from code apps) from the plan;
+              you must add additional technologies manually.
+         Makers can minimize the impact of these limitations by:
+              Providing clear, specific descriptions of their app requirements.
+              Iterating on prompts and reviewing generated outputs carefully.
+              Testing app behavior and data interactions before publishing.
+              Treating generated apps as a starting point rather than a finished solution.
+      Makers are ultimately responsible for validating that their apps meet their functional, security,
+      and compliance requirements.
+      What operational factors and settings allow for
+      effective and responsible use of Power Apps vibe?
+      Effective and responsible use of Power Apps vibe depends on how makers configure and
+      interact with the system. Makers should:
+         Clearly describe business scenarios, users, and tasks when prompting
+         Review generated content before saving or sharing it
+         Test apps in appropriate environments prior to broader use
+         Follow organizational governance, data, and compliance policies
+      How do I provide feedback for Power Apps vibe?
+         Select the thumbs up or thumbs down in the chat pane to provide feedback on a specific
+         action.
+         Select the Give feedback icon in the command bar to provide general feedback, report an
+         issue, or share suggestions.
+      See also
+      Create apps, data, and plans together using vibe (preview)
+      Last updated on 03/11/2026
+     FAQ for Power Apps in agents
+     These frequently asked questions (FAQs) describe the AI impact of Power Apps in agents for
+     model-driven apps.
+     What is Power Apps in agents?
+     Power Apps in agents enables users to interact with data from Power Apps model-driven apps
+     directly in Microsoft 365 Copilot through natural language. When makers deploy a declarative
+     agent for a model-driven app, users can query records, view data in grids, create and edit
+     records, and receive AI-generated summaries, all through a Copilot conversation, without
+     switching to the app.
+     The agent connects to the model-driven app's underlying Dataverse tables and uses the same
+     data exploration capabilities that power the Grid view experience in model-driven apps.
+     What are the system's capabilities?
+     The system can:
+        Query and filter records across tables configured in the model-driven app using natural
+        language
+        Display results as an interactive grid, consistent with the Grid view in the app
+        Show individual record details using a Form, consistent with the Form experience in
+        model-driven apps
+        Create and update records using the Form widget in Copilot
+        Hand off to the full model-driven app for actions that require the complete app
+        experience
+     What is the system's intended use?
+     Power Apps in agents serves two audiences:
+        For makers: Extend the reach of an existing Power Apps model-driven app by making its
+        data accessible to users directly in Microsoft 365 Copilot. Deploy a declarative agent for
+        your app. No additional app development is required beyond the initial setup.
+        For end users: Help business users access and act on their organization's data without
+        leaving Microsoft 365 Copilot, reducing context-switching and enabling faster decisions
+        in the flow of work. It's not intended to replace the full model-driven app experience, but
+        to make common data tasks – querying, reviewing, and updating records – accessible
+        through Microsoft 365 Copilot. When more complex actions are needed, it also serves as
+        a handoff point directly to the model-driven app.
+     How was Power Apps in agents evaluated? What
+     metrics are used to measure performance?
+     The system was evaluated across a range of query types, table configurations, record volumes,
+     and user scenarios. Evaluation focused on query accuracy, widget render fidelity, and the
+     correctness of information presented in them.
+     If you encounter problems, submit feedback through Microsoft 365 Copilot. Microsoft uses
+     your feedback to improve products and services. For more information, see Data, privacy, and
+     security for Azure OpenAI Service.
+     What are the limitations of Power Apps in agents?
+     How can users minimize the impact of these
+     limitations?
+        Query accuracy: Data retrieval results might not always match the user's intent on the
+        first attempt. Iterate by using natural language to refine results, such as by guiding
+        Copilot on which column or field you meant in your original ask.
+        Unsupported field types in forms: The form fill experience doesn't support certain field
+        types. For those fields, open the full model-driven app to complete or edit the record.
+        Non-English languages are unsupported: Power Apps in agents currently supports
+        English-language queries and responses only. If you interact in other languages, you
+        might receive inaccurate or unexpected results.
+     What operational factors and settings allow for
+     effective and responsible use of the system?
+     Data retrieval is powered by the data exploration agent. Power Apps in agents leverages the
+     Data Exploration Agent, the same underlying AI capability that powers the Grid view
+     experience in Power Apps model-driven apps. As a result, the quality and accuracy of data
+     retrieval is benchmarked against and consistent with the data exploration experience users
+     already have in model-driven apps.
+      Form filling is powered by form fill assistance. Power Apps in agents leverages Form Fill
+      Assistance, the same underlying AI capability that powers field suggestions in Power Apps
+      model-driven app forms. As a result, the quality and accuracy of prefilled values is
+      benchmarked against and consistent with the form-filling experience users already have in
+      model-driven apps. Users should review prefilled values before saving.
+      How do I provide feedback?
+      Use the thumbs up or thumbs down controls in Microsoft 365 Copilot to provide feedback on
+      individual responses. Microsoft uses this feedback to improve products and services.
+      Related information
+         Set up App in Copilot
+         Find data in a view with AI
+         Use Copilot's form fill assistance feature in model-driven apps
+         Use grid filters and views in model-driven apps
+         FAQ for Copilot chat in model-driven apps
+         Responsible AI FAQs for Microsoft Power Platform
+         Data, privacy, and security for Azure OpenAI Service
+      Last updated on 04/02/2026
+         FAQ for building apps and tables through
+         conversation
+         05/28/2025
+         These frequently asked questions (FAQ) describe the AI impact of build apps and tables
+         through conversation feature.
+         What is build apps and tables through
+         conversation?
+         Build apps and tables through conversation is a feature in the Power Apps that allows you to
+         describe the app or table that you want to build, and AI will design it for you. To start, you use
+         natural language to tell the AI assistant what kind of information you want to collect, track, or
+         show. The assistant will generate a Dataverse table and use it to build your canvas app. The AI
+         assistant is available from the Power Apps home page.
+         What are the system’s capabilities?
+         This capability is powered by Azure OpenAI Service, which uses powerful language models.
+         These language models generate new text in English that looks and sounds like text written by
+         humans.
+         Using Azure OpenAI service as a foundation, build apps through conversation considers your
+         app description to propose relevant data tables on which to build your app. As part of data
+         generation, the system recommends relevant columns, sample row data, and data types that
+         you can customize. The sample data is for illustration only and is fictitious. No real association
+         is intended or inferred.
+         What is the system’s intended use?
+         Build apps and tables through conversation is intended to simplify your app creation process
+         by automatically generating a data table on which your app will be built. AI-generated content
+         may have mistakes. Make sure it's accurate and appropriate before using it. For more
+         information, read the full terms   .
+         How was build apps and tables through
+         conversation evaluated? What metrics are used to
+         measure performance?
+         Build apps and tables through conversation underwent substantial testing before the feature
+         was released. If you encounter issues with the content being generated, please submit
+         feedback. Your feedback will be used to improve Microsoft products and services. IT admins for
+         your organization will be able to view and manage your feedback data. 
+         For more information, see: Data, privacy, and security for Azure OpenAI Service
+         What are the limitations of build apps and tables
+         through conversation? How can users minimize the
+         impact of the build apps through conversation
+         limitations when using the system?
+         This capability is in the process of rolling out, and may not be available in your region yet.
+         This capability may be subject to usage limits or capacity throttling.
+         The following are requirements to access this feature:
+               Your account must have English (United States), French, German, Spanish, Dutch, Danish,
+               Italian, Japanese, or Portuguese (Brazil) as the browser language.
+               Have a Microsoft Dataverse database in your environment.
+               AI Builder must be enabled for your environment to use the AI models or controls
+               leveraging AI models:
+                  1. Sign in to the Power Platform admin center  .
+                  2. Go to Environments > [select an environment] > Settings > Features.
+                  3. On the Features settings page, under AI Builder, enable or disable AI Builder preview
+                    models.
+         For more information, see Copilot in Power Apps overview
+         What operational factors and settings allow for
+         effective and responsible use of the system?
+         Follow these procedures to make the most of the feature:
+        Use everyday words to describe what your app should collect, track, list, or manage such
+        as the following:
+          “Collect RSVPs for the team birthday party”
+          “Track sales leads”
+        Customize the data table with prompts such as:
+          “Add a column for …”
+          “Remove the … row”
+          “Change the data type for the … column to… “
+        When in doubt, you can ask the AI assistant for help by typing, “Give me suggestions”
+     See also
+        Build apps through conversation
+         FAQ for generate app descriptions with
+         Copilot
+         Article • 05/28/2025
+         These frequently asked questions (FAQ) describe the AI impact of Power Apps generate app
+         descriptions with Copilot feature.
+         What is generate app descriptions with Copilot?
+         With the AI-generated app descriptions feature, Makers can use AI to generate descriptions for
+         their canvas and model-driven apps. Makers can generate a description from app Settings or
+         when you publish the app. By using AI to generate descriptions, Makers can focus on building
+         their apps and allow AI to assist in summarizing the purpose of the apps for end-users.
+         What are the system’s capabilities?
+         It can take the contents of your app and provide a brief description of the app for makers to
+         share with their end-users.
+         What is the system’s intended use?
+         As an AI assistant to makers, it provides a brief description of your app that end-users can see.
+         How was generate app descriptions with Copilot
+         evaluated? What metrics are used to measure
+         performance?
+         We evaluate the feature both qualitatively and quantitatively. To assess the quality of the
+         feature, we're conducting user studies with makers to gather their feedback on their
+         experiences, thoughts about the feature's quality, and suggestions for improvement.
+         Additionally, we're monitoring telemetry data to track the number of makers who tried the
+         feature, the success rate of the feature, and the ratio of positive to negative feedback. Before
+         releasing the Copilot feature in preview, we conducted extensive testing to ensure its
+         functionality. If you encounter any issues with the content generated, provide feedback. Your
+         feedback is used to enhance Microsoft's products and services. Your organization's IT admins
+         have access to your feedback data for management purposes. For more information, read the
+         Privacy Statement  .
+         What are the limitations of generate app
+         descriptions with Copilot? How can users minimize
+         the impact of the generate app descriptions with
+         Copilot limitations when using the system?
+              To use this capability, you must be in a Managed Environment.
+              This capability is powered by Azure OpenAI Service.
+              This capability is in process of rolling out, and might not be available in your region yet.
+              This capability can be subject to usage limits or capacity throttling.
+         For canvas apps (preview)
+              Preview features aren’t meant for production use and might have restricted functionality.
+              These features are available before an official release so that customers can get early
+              access and provide feedback.
+              For more information, go to preview terms   .
+              Your environment must be in the United States region.
+              This feature doesn’t support non-English language browsers.
+         What operational factors and settings allow for
+         effective and responsible use of the system?
+         If you get this error, Something happened and we weren’t able to generate a description for
+         you, this might be due to capacity limits. We recommend you give the system some time
+         before trying again.
+         See also
+              Create a Canvas App description with Copilot (preview)
+              Create a model-driven app description with Copilot

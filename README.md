@@ -10,20 +10,37 @@ and Roads (DPWR), North West Province.
 | `*.csv` | **Single source of truth** for the SharePoint list schemas and seed data (Directorates, APP_Users, MonthlyReports, Activities, Projects, Programmes) |
 | `APP-MRMS_Project_app.msapp` | Original Power Apps package (importable into Power Apps) |
 | `src/` | Unpacked msapp source (`pac canvas unpack`, `SourceCode` layout): `App.pa.yaml`, `_EditorState.pa.yaml`, one `.pa.yaml` per screen, and the `.msapr` resources archive |
-| `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation |
+| `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation — **updated to match the CSV list schemas** (see CHANGES.md §4–5) |
 | `Project Instructions` | Working brief for the solution build |
+| `BEST_PRACTICES.md` | Distilled canvas-apps best practices + gap analysis of the current app (delegation, naming, collections, `App.Formulas`, source-format workflow) |
+| `CHANGES.md` | Change log: tooling, unpack/pack verification, doc updates, findings |
+| `update_docs_schema.py` | Script used to align the Word docs with the CSV schemas |
+| `reference/` | Permanent reference material for future work (msapp internals, official-docs extractions, doc text, round-trip proof) — see `reference/canvas-apps/README.md` |
+| `backup/` | Pristine pre-change snapshots of the original pack and unpacked source — see `backup/README.md` |
 
-## Workflow
+## Workflow (edit outside Studio → repack → import)
+
+The `SourceCode` layout is the current supported layout for editing canvas apps
+outside Power Apps Studio.
 
 ```bash
-# Unpack (SourceCode layout is the current supported layout)
+# Unpack
 pac canvas unpack --msapp APP-MRMS_Project_app.msapp --sources src --layout SourceCode
 
 # Edit screen .pa.yaml files under src/Src, then repack
 pac canvas pack --sources src --msapp APP-MRMS_Project_app.msapp --layout SourceCode --overwrite
 ```
 
-## SharePoint list schemas (from CSV exports)
+Round-trip is verified: pack → unpack yields byte-identical Src YAML and
+internal JSON (the only addition is `packed.json` with `LoadFromYaml: true`,
+which is expected). After importing a repacked app, open it once for edit in
+Studio to validate (it loads from embedded YAML). See CHANGES.md §6 for the
+full verification record.
+
+**Before making changes:** `backup/` holds pristine copies of the original
+`.msapp` and the unpacked source — restore from there if anything breaks.
+
+## SharePoint list schemas (from CSV exports — source of truth)
 
 ### Directorates.csv
 `DirectorateID` (text), `DirectorateName` (Title), `Programme` (text), `Director` (User),
@@ -45,14 +62,14 @@ Rejected / Escalated), `Version`, `SubmittedBy` (User), `SubmissionDate`, `Revie
 `ReasonForDeviation`, `RemedialAction`, `Output`
 
 ### Activities.csv
-`ID`, `Title` (e.g. ICTM-AC-0001), `ActivityCode`, `ActivityDescription`, 
+`ID`, `Title` (e.g. ICTM-AC-0001), `ActivityCode`, `ActivityDescription`,
 `ActivityShortDescription`, `Directorate`, `DirectorateLabel`, `ProgrammeLabel`, `Project`,
 `Project: Reference`, `Frequency` (Monthly / Quarterly / Annual), `Owner` (User),
 `ActivityOwner` (User), `Supervisor` (User), `StartDate`, `EndDate`, `DueDate`,
 `Active` (Boolean), `Status` (Active / Completed / Not Started)
 
 ### Projects.csv
-`ID`, `ProjectID` (Title, unique), `ProjectCode`, `PriorityChallenge`, 
+`ID`, `ProjectID` (Title, unique), `ProjectCode`, `PriorityChallenge`,
 `ProjectGoalDescription`, `KeyDeliverable`, `AnnualTarget`, `Reference`, `Budget`,
 `Directorate`, `Directorate: Title`, `Programme`, `Responsibility` (User), `StartDate`,
 `CompletionDate`, `FinancialYear` (2026/27 … 2022/23), `Status` (Active / Closed / Cancelled)
@@ -78,3 +95,5 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
 - `scr_Activities` currently duplicates the Projects form and its Save button still patches
   the `Projects` list (not yet reworked for Activities).
 - `scr_Reports_1` is a duplicate of `scr_Reports` (Form1_1, delete-confirm variant).
+
+See BEST_PRACTICES.md for how these should be addressed per canvas-apps best practice.

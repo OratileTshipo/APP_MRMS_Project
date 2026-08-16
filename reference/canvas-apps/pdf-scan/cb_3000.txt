@@ -1,0 +1,2120 @@
+                                                                                                            ﾉ Expand table
+                  Formula                                Description                                         Result
+                  Trim( "   Hello     World   " )        Removes all spaces from the start and end           "Hello World"
+                                                         of a string and extra spaces from within the
+                                                         string.
+                  TrimEnds( "   Hello     World   " )    Removes all spaces from the start and end           "Hello     World"
+                                                         of a string.
+                The following examples use a single-column collection, named Spaces, that contains
+                these strings:
+                                                                                                            ﾉ
+                                                                                                                Expand table
+                  Value
+                  "   Jane   Doe   "
+                  "    Jack   and   Jill"
+                  "Already trimmed"
+                  "   Venus,   Earth,   Mars  "
+                  "Oil and Water   "
+                To create this collection, set the OnSelect property of a Button control to this formula,
+                open Preview mode, and then click or tap the button:
+                ClearCollect( Spaces, [ "   Jane   Doe   ", "    Jack   and   Jill", "Already trimmed",
+                "   Venus,   Earth,   Mars  ", "Oil and Water   " ] )
+                                                                                                            ﾉ
+                                                                                                                Expand table
+                  Formula                 Description                        Result
+                  Trim( Spaces )          Trims all spaces from the          A single-column table with a Value column
+                                          start and end of each string       containing the following values: "Jane Doe",
+                                          and extra spaces from within       "Jack and Jill", "Already trimmed",
+                                          each string in the Spaces          "Venus, Earth, Mars", "Oil and Water"
+                                          collection.
+                  TrimEnds( Spaces )      Trims all spaces from the          A single-column table with a Value column
+                                          start and end of each string       containing the following values: "Jane   Doe",
+                                          in the Spaces collection.          "Jack   and   Jill", "Already trimmed",
+                                                                             "Venus,   Earth,   Mars", "Oil and Water"
+                ７ Note
+                Extra spaces don't appear if you display a collection by clicking or tapping
+                Collections on the File menu. To verify string length, use the Len function.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+          Int, Round, RoundDown, RoundUp, and
+          Trunc functions
+          Article • 04/20/2025
+          Applies to:      Canvas apps      Cards      Copilot Studio     Desktop flows      Dataverse
+          formula columns       Model-driven apps       Power Platform CLI       Dataverse functions
+          Power Pages
+          Rounds a number.
+          Round, RoundDown, and RoundUp
+          The Round, RoundDown, and RoundUp functions round a number to the specified number of
+          decimal places:
+               Round rounds up if the next digit is 5 or higher. Otherwise, this function rounds down.
+               RoundDown always rounds down to the previous lower number, towards zero.
+               RoundUp always rounds up to the next higher number, away from zero.
+          The number of decimal places can be specified for these functions:
+                                                                                           ﾉ
+                                                                                               Expand table
+           Decimal         Description                                          Example
+           places
+           Greater than 0  The number is rounded to the right of the decimal     Round( 12.37, 1 ) returns
+                           separator.                                           12.4.
+           0               The number is rounded to the nearest integer.         Round( 12.37, 0 ) returns
+                                                                                12.
+           Less than 0     The number is rounded to the left of the decimal      Round( 12.37, -1 ) returns
+                           separator.                                           10.
+          Int and Trunc
+          The Int and Trunc functions round a number to an integer (whole number without a decimal):
+               Int rounds down to the nearest integer.
+               Trunc truncates the number to just the integer portion by removing any decimal portion.
+      The difference between Int and Trunc is in the handling of negative numbers. For example, for
+      an argument of -4.3, Int will return the integer further away from zero, -5, while Trunc will
+      return the integer closer to zero, -4. Int returns values that are unique amongst the five
+      rounding functions, while Trunc returns the same values as RoundDown.
+      Use Trunc to extract the decimal portion of a number by subtracting it from the original, for
+      example X - Trunc(X).
+      Decimal places cannot be specified with Trunc as it can with Microsoft Excel. Use RoundDown
+      instead when this is needed.
+      Single-column tables
+      These functions support single-column tables. If you pass a single number, the return value is
+      the rounded version of that number. If you pass a single-column table that contains numbers,
+      the return value is a single-column table of rounded numbers. The DecimalPlaces parameter
+      can be a single value or a single-column table. If the single-column table has less values that
+      the Number, zero is used for the remaining values. Use ShowColumns and other table shaping
+      functions to extract a single-column table from a larger table.
+      Syntax
+      Round(Number, DecimalPlaces)
+      RoundDown(Number, DecimalPlaces)
+      RoundUp(Number, DecimalPlaces)
+         Number - Required. The number to round.
+         DecimalPlaces - Required. Number of decimal places to round to. Use a positive value to
+         indicate decimal places right of the decimal separator, a negative value to the left, and
+         zero for a whole number.
+      Int(Number)
+      Trunc(Number)
+         Number - Required. The number to be rounded to an integer.
+      Examples
+      Rounding to a whole number.
+                                                   ﾉ
+                                                     Expand table
+             X       Round( X, 0 )      RoundUp( X, 0 )        RoundDown( X, 0 )      Int( X )      Trunc( X )
+            7.9            8                   8                       7                  7             7
+            -7.9          -8                   -8                     -7                 -8             -7
+            7.5            8                   8                       7                  7             7
+            -7.5          -8                   -8                     -7                 -8             -7
+            7.1            7                   8                       7                  7             7
+            -7.1          -7                   -8                     -7                 -8             -7
+          Rounding to two decimal places to the right of the decimal separator (0.01).
+                                                                                               ﾉ
+                                                                                                   Expand table
+                 X              Round( X, 2 )              RoundUp( X, 2 )              RoundDown( X, 2 )
+              430.123               430.12                     430.13                         430.12
+              430.125               430.13                     430.13                         430.12
+              430.128               430.13                     430.13                         430.12
+          Rounding to two decimal places to the left of the decimal separator (100).
+                                                                                               ﾉ
+                                                                                                   Expand table
+                 X             Round( X, -2 )             RoundUp( X, -2 )              RoundDown( X, -2 )
+              430.123               400                         500                            400
+              449.942               400                         500                            400
+              450.000               500                         500                            400
+              450.124               500                         500                            400
+              479.128               500                         500                            400
+          Rounding a single-column table of values.
+                                                                                               ﾉ
+                                                                                                   Expand table
+                X        Int( X )     Round( X, 2 )      RoundDown( X, [ 0, 1, 2 ] )       RoundUp( X, [ 2 ] )
+            [ 123.456,     [ 123,        [ 123.46,                  [ 123,                      [ 123.46,
+             987.593,      987,          987.59,                    987.5,                        988,
+            542.639 ]      542 ]         542.64 ]                  542.63 ]                       543 ]
+             GroupBy and Ungroup functions
+             Article • 06/10/2024
+             Applies to:      Canvas apps       Model-driven apps        Power Pages
+             Groups and ungroups records of a table.
+             Description
+             The GroupBy function returns a table with records grouped together based on the
+             values in one or more columns. Records in the same group are placed into a single
+             record, with a column added that holds a nested table of the remaining columns.
+             The Ungroup function reverses the GroupBy process. This function returns a table,
+             breaking into separate records any records that were grouped together.
+             You can group records by using GroupBy, modify the table that it returns, and then
+             ungroup records in the modified table by using Ungroup. For example, you can remove
+             a group of records by following this approach:
+                   Use the GroupBy function.
+                   Use the Filter function to remove the entire group of records.
+                   Use the Ungroup function.
+             You can also aggregate results based on a grouping:
+                   Use the GroupBy function.
+                   Use the AddColumns function with Sum, Average, and other aggregate functions
+                   to add a new column, which is an aggregate of the group tables.
+                   Use the DropColumns function to drop the group table.
+             Ungroup tries to preserve the original order of the records that were fed to GroupBy.
+             This isn't always possible (for example, if the original table contains blank records).
+             A table is a value in Power Apps, just like a string or a number. You can specify a table as
+             an argument for a function, and a function can return a table. GroupBy and Ungroup
+             don't modify a table; instead they take a table as an argument and return a different
+             table. See working with tables for more details.
+                ７ Note
+          In Power Apps prior to version 3.24042, column names were specified with a text
+          string using double quotes, and if connected to a data source they also needed to
+          be logical names. For example, the logical name "cr43e_name" with double quotes
+          was used instead of the display name Name without quotes. For SharePoint and
+          Excel data sources that contain column names with spaces, each space was
+          specified with "_x0020_", for example "Column Name" as "Column_x0020_Name".
+          After this version, all apps were automatically updated to the new syntax described
+          in this article.
+         Syntax
+         GroupBy( Table, ColumnName1 [, ColumnName2, ... ], GroupColumnName )
+            Table - Required. Table to be grouped.
+            ColumnName(s) - Required. The column names in Table by which to group records.
+            These columns become columns in the resulting table.
+            GroupColumnName - Required. The column name for the storage of record data
+            not in the ColumnName(s).
+         Ungroup( Table, GroupColumnName )
+            Table - Required. Table to be ungrouped.
+            GroupColumnName - Required. The column that contains the record data setup
+            with the GroupBy function.
+         Examples
+         Create a collection
+           1. Add a button, and set its Text property so that the button shows Original.
+           2. Set the OnSelect property of the Original button to this formula:
+          Power Apps
+          ClearCollect( CityPopulations,
+              { City: "London",    Country: "United Kingdom", Population: 8615000},
+              { City: "Berlin",    Country: "Germany",        Population: 3562000},
+              { City: "Madrid",    Country: "Spain",          Population: 3165000},
+              { City: "Rome",      Country: "Italy",          Population: 2874000},
+              { City: "Paris",     Country: "France",         Population: 2273000},
+              { City: "Hamburg",   Country: "Germany",        Population: 1760000},
+              { City: "Barcelona", Country: "Spain",          Population: 1602000},
+              { City: "Munich",    Country: "Germany",        Population: 1494000},
+             { City: "Milan",     Country: "Italy",          Population: 1344000}
+         )
+          3. While holding down the Alt key, select the Original button.
+           You just created a collection, named CityPopulations, that contains this data:
+          4. To display this collection, select Collections on the File menu and then select the
+           CityPopulations collection. The first five records in the collection appear:
+        Group records
+          1. Add another button, and set its Text property to "Group".
+          2. Set the OnSelect property of this button to this formula:
+        ClearCollect( CitiesByCountry, GroupBy( CityPopulations, Country, Cities ) )
+       3. While holding down the Alt key, select the Group button.
+        You just created a collection, named CitiesByCountry, in which the records of the
+        previous collection are grouped by the Country column.
+       4. To display the first five records in this collection, select Collections on the File
+        menu.
+       5. To display the populations of cities in a country/region, select the table icon in the
+        Cities column for that country/region (for example, Germany):
+      Filter and ungroup records
+       1. Add another button, and set its Text property so that the button shows "Filter".
+       2. Set the OnSelect property of this button to this formula:
+        ClearCollect( CitiesByCountryFiltered, Filter( CitiesByCountry, "e" in Country ) )
+       3. While holding down the Alt key, select the button that you added.
+        You just created a third collection, named CitiesByCountryFiltered, that includes
+        only those countries that have an "e" in their names (that is, not Spain or Italy).
+       4. Add one more button, and set its Text property so that the button shows
+        "Ungroup".
+       5. Set the OnSelect property of this button to this formula:
+        ClearCollect( CityPopulationsUngrouped, Ungroup( CitiesByCountryFiltered,
+        Cities ) )
+        Which results in:
+      Aggregate results
+      Another operation we can perform on a grouped table is to compile the results. In this
+      example, we'll sum the population of the major cities in each country/region.
+       1. Add another button, and set its Text property so that the button shows "Sum".
+       2. Set the OnSelect property of the "Sum" button to this formula:
+        ClearCollect( CityPopulationsSum, AddColumns( CitiesByCountry, 'Sum of City
+        Populations', Sum( Cities, Population ) ) )
+        Which results in:
+        AddColumns starts with the base CitiesByCountry collection and adds a new
+        column Sum of City Populations. This column's values are calculated row-by-row,
+        based on the formula Sum( Cities, Population ). AddColumns provides the value
+        of the Cities column (a table) for each row, and Sum adds up the Population for
+        each row of this sub table.
+        Now that we have the sum that we want, we can use DropColumns to remove the
+        sub tables.
+       3. Add another button, and set its Text property so that the button shows
+        "SumOnly".
+       4. Set the OnSelect property of the "SumOnly" button to this formula:
+        ClearCollect( CityPopulationsSumOnly, DropColumns( CityPopulationsSum,
+        Cities ) )
+        Which results in:
+                    Note that we didn't need to ungroup this table.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+             Relate and Unrelate functions
+             Article • 03/22/2024
+             Applies to:      Canvas apps       Model-driven apps
+             Relate and unrelate records of two tables through a one-to-many or many-to-many
+             relationship.
+             Description
+             The Relate function links two records through a one-to-many or many-to-many
+             relationship in Microsoft Dataverse. The Unrelate function reverses the process and
+             removes the link.
+             For one-to-many relationships, the Many table has a foreign-key field that points to a
+             record of the One table. Relate sets this field to point to a specific record of the One
+             table, while Unrelate sets this field to blank. If the field is already set when Relate is
+             called, the existing link is lost in favor of the new link. You can also set this field by using
+             the Patch function or an Edit form control; you need not use the Relate function.
+             For many-to-many relationships, the system that links the records maintains a hidden
+             join table. You can't access this join table directly; it can be read only through a one-to-
+             many projection and set through the Relate and Unrelate functions. Neither related
+             table has a foreign key.
+             The data for the table that you specify in the first argument will be refreshed to reflect
+             the change, but the data for the table that you specify in the second argument won't.
+             That data must be manually refreshed with the Refresh function to show the result of
+             the operation.
+             These functions never create or delete a record. They only relate or unrelate two records
+             that already exist.
+             You can use these functions only in behavior formulas.
+                ７ Note
+                These functions are part of a preview feature, and their behavior is available only
+                when the Relational data, option sets, and other new features for CDS feature is
+                enabled. This is an app-level setting that's enabled by default for new apps. To find
+                this feature switch, select Settings, and then select Upcoming features. Your
+               feedback is very valuable to us - please let us know what you think in the Power
+               Apps community forums .
+             Syntax
+             Relate( Table1RelatedTable, Table2Record )
+                   Table1RelatedTable - Required. For a record of Table1, the table of Table2 records
+                   related through a one-to-many or many-to-many relationship.
+                   Table2Record - Required. The Table2 record to add to the relationship.
+             Unrelate( Table1RelatedTable, Table2Record )
+                   Table1RelatedTable - Required. For a record of Table1, the table of Table2 records
+                   related through a one-to-many or many-to-many relationship.
+                   Table2Record - Required. The Table2 record to remove from the relationship.
+             Examples
+             Consider a Products table with the following relationships as seen in the Power Apps
+             portal's table viewer:
+                                                                                       ﾉ Expand table
+              Relationship display name                Related table         Relationship type
+              Product Reservation                      Reservation           One-to-many
+              Product ↔ Contact                        Contact               Many-to-many
+             Products and Reservations are related through a One-to-Many relationship. To relate
+             the first record of the Reservations table with the first record of the Products table:
+             Relate( First( Products ).Reservations, First( Reservations ) )
+             To remove the relationship between these records:
+             Unrelate( First( Products ).Reservations, First( Reservations ) )
+             At no time did we create or remove or a record, only the relationship between records
+             was modified.
+       Products and Contacts are related through a Many-to-Many relationship. To relate the
+       first record of the Contacts table with the first record of the Products table:
+       Relate( First( Products ).Contacts, First( Contacts ) )
+       As Many-to-Many relationships are symmetric, we could also have done this in the
+       opposite direction:
+       Relate( First( Contacts ).Products, First( Products ) )
+       To remove the relationship between these records:
+       Unrelate( First( Products ).Contacts, First( Contacts ) )
+       or:
+       Unrelate( First( Contacts ).Products, First( Products ) )
+       The walk through that follows does exactly these operations on these tables using an
+       app with Gallery and Combo box controls for selecting the records involved.
+       These examples depend on the sample data being installed in your environment. Either
+       create a trial environment including sample data or add sample data to an existing
+       environment.
+       One-to-many
+       Relate function
+       You'll first create a simple app to view and reassign the reservations that are associated
+       with a product.
+         1. Create a tablet app from blank.
+         2. On the View tab, select Data sources.
+         3. In the Data pane, select Add data > select Products.
+          The Products table is part of the sample data loaded above.
+         4. On the Insert tab, add a blank vertical Gallery control.
+         5. Ensure that the control that you just added is named Gallery1, and then move and
+          resize it to fill the left-hand side of the screen.
+       6. On the Properties tab, set Gallery1's Items property to Products and its Layout to
+        Image and title.
+       7. In Gallery1, ensure that the Label control is named Title1, and then set its Text
+        property to ThisItem.Name.
+       8. Select the screen to avoid inserting the next item into Gallery1. Add a second blank
+        vertical Gallery control, and ensure that it's named Gallery2.
+        Gallery2 will show the reservations for whatever product the user selects in
+        Gallery1.
+       9. Move and resize Gallery2 to fill the upper-right quadrant of the screen.
+       10. (optional) Add the blue Label control above Gallery2, as the next graphic shows.
+       11. In the formula bar, set the Items property of Gallery2 to
+        Gallery1.Selected.Reservations.
+       12. In the properties pane, set Gallery2's Layout to Title.
+       13. In Gallery2, add a Combo box control, ensure that it's named ComboBox1, and
+        then move and resize it to avoid blocking the other controls in Gallery2.
+       14. On the Properties tab, set ComboBox1's Items property to Products.
+       15. Scroll down in the Properties tab and set ComboBox1's Allow multiple selection
+        property to Off.
+        16. In the formula bar, set ComboBox1's DefaultSelectedItems property to
+          ThisItem.'Product Reservation'.
+        17. In Gallery2, set NextArrow2's OnSelect property to this formula:
+           Power Apps
+            Relate( ComboBox1.Selected.Reservations, ThisItem )
+          When the user selects this icon, the current reservation changes to the product
+          that the user selected in ComboBox1.
+       18. Press F5 to test the app in Preview mode.
+      With this app, the user can move a reservation from one product to another. For a
+      reservation on one product, the user can select a different product in ComboBox1 and
+      then select NextArrow2 to change that reservation.
+      Unrelate function
+      At this point, you can move the relationship from one record to another, but you can't
+      remove the relationship altogether. You can use the Unrelate function to disconnect a
+      reservation record from any product.
+       1. On the View tab, select Data sources.
+       2. In the Data pane, select Add data source > Microsoft Dataverse > Reservations >
+        Connect.
+         3. In Gallery2, set the OnSelect formula for NextArrow2 to this formula:
+           Power Apps
+            If( IsBlank( ComboBox1.Selected ),
+                Unrelate( Gallery1.Selected.Reservations, ThisItem ),
+                Relate( ComboBox1.Selected.Reservations, ThisItem )
+            );
+            Refresh( Reservations )
+         4. Copy Gallery2 to the Clipboard by selecting it and then pressing Ctrl-C.
+         5. Paste a duplicate of Gallery2 to the same screen by pressing Ctrl-V, and then move
+          it to the lower-right quadrant of the screen.
+         6. (optional) If you added a label above Gallery2, repeat the previous two steps for
+          that label.
+         7. Ensure that the duplicate of Gallery2 is named Gallery2_1, and then set its Items
+          property to this formula:
+           Power Apps
+            Filter( Reservations, IsBlank( 'Product Reservation' ) )
+          A delegation warning appears, but it won't matter with the small amount of data in
+          this example.
+            With these changes, users can clear the selection in ComboBox1 for a contact if that
+            person hasn't reserved a product. Contacts who haven't reserved a product appear in
+            Gallery2_1 where users can assign each contact to a product.
+            Many-to-many
+            Create a many-to-many relationship
+            The sample data doesn't include a many-to-many relationship, but you'll create one
+            between the Products table and the Contacts table. Users can relate each product to
+            more than one contact and each contact to more than one product.
+               1. From this page   , select Data in the left navigation bar, and then select Tables.
+       2. Change the table filter to include all tables.
+        By default, sample tables don't appear.
+       3. Scroll down, open the Product table, and select Relationships.
+       4. Select Add relationship > Many-to-many.
+       5. Select the Contact table for the relationship.
+       6. Select Done > Save table.
+      Relate and unrelate contacts with one or more products
+      You'll create another app that resembles the one you created earlier in this topic, but the
+      new app will offer a many-to-many relationship. Each contact will be able to reserve
+      multiple products instead of only one.
+       1. In a blank app for tablets, create Gallery1 as the first procedure in this topic
+        describes.
+       2. Add another blank vertical Gallery control, ensure that it's named Gallery2, and
+        then move it into the upper-right corner of the screen.
+        Later in this topic, you'll add a Combo box control under Gallery2.
+       3. In the formula bar, set Gallery2's Items property to Gallery1.Selected.Contacts.
+       4. On the Properties tab, set Layout to Image and title.
+       5. In Gallery2, ensure that the Label control is named Title2, and then set its Text
+        property to ThisItem.'Full Name'.
+        No text will appear in that control until you finish this procedure and assign a
+        contact to a product.
+         6. Delete NextArrow2, insert a Cancel icon, and ensure that it's named icon1.
+         7. Set the Cancel icon's OnSelect property to this formula:
+           Power Apps
+            Unrelate( Gallery1.Selected.Contacts, ThisItem )
+         8. On the View tab, select Data sources.
+         9. In the Data pane, select Add data source > Microsoft Dataverse > Contacts >
+          Connect.
+        10. Under Gallery2, add a Combo box control, ensure that it's named ComboBox1,
+          and then set its Items property to Contacts.
+        11. On the Properties tab, set Allow multiple selection to Off.
+        12. Insert an Add icon, and set its OnSelect property to this formula:
+           Power Apps
+            Relate( Gallery1.Selected.Contacts, ComboBox1.Selected )
+       With this app, users can now freely relate and unrelate a set of contacts to each product.
+        To add a contact to a product, select the contact in the combo box at the bottom
+        of the screen, and then select the Add icon.
+        To remove a contact from a product, select the Cancel icon for that contact.
+        Unlike one-to-many, a many-to-many relationship allows users to associate the
+        same contact with multiple products.
+      In reverse: relate and unrelate products with multiple contacts
+      Many-to-many relationships are symmetric. You can extend the example to add
+      products to a contact and then flip between the two screens to show how the
+      relationship appears from either direction.
+       1. Set the OnVisible property of Screen1 to Refresh( Products ).
+        When you update a one-to-many or many-to-many relationship, only the data of
+        the first argument table of the Relate or Unrelate call is refreshed. The second
+        must be refreshed manually if you want to flip between the screens of this app.
+        2. Duplicate Screen1.
+          The duplicate will be named Screen1_1 and form the basis for looking at the
+          relationships from the contacts side.
+        3. To create the reverse view, change these formulas on the controls of Screen1_1:
+            Screen1_1.OnVisible = Refresh( Contacts )
+            Gallery1_1.Items = Contacts
+            Title1_1.Text = ThisItem.'Full Name'
+            Label1_1.Text = "Selected Contact Products"
+            Gallery2_1.Items = Gallery1_1.Selected.Products
+            Title2_1.Text = ThisItem.Name
+            Icon1_1.OnSelect = Unrelate( Gallery1_1.Selected.Products, ThisItem )
+            ComboBox1_1.Items = Products
+            Icon2_1.OnSelect = Relate( Gallery1_1.Selected.Products,
+            ComboBox1_1.Selected )
+        The result will look very similar to the previous screen but comes at the
+        relationship from the Contacts side.
+       4. Insert an Arrows up down icon and set its OnSelect property to Navigate(
+        Screen1, None ). Do the same thing on Screen1 with the formula Navigate(
+        Screen1_1, None ).
+      With this new screen, users can add a contact to a product and then flip to a view of
+      contacts and see the associated product. The relationships are symmetric and shared
+      between the two screens.
+          Update and UpdateIf functions
+          06/21/2025
+          Applies to:      Canvas apps      Model-driven apps
+          Updates records in a data source.
+          Description
+          Update function
+          Use the Update function to replace an entire record in a data source. In contrast, the UpdateIf
+          and the Patch functions modify one or more values in a record, leaving the other values alone.
+          For a collection, the entire record must match. Collections allow duplicate records, so multiple
+          records might match. You can use the RemoveFlags.All argument to update all copies of a
+          record; otherwise, only one copy of the record is updated.
+          If the data source generates a column's value automatically, the value of that column must be
+          reaffirmed.
+          UpdateIf function
+          Use the UpdateIf function to modify one or more values in one or more records that match
+          one or more conditions. The condition can be any formula that results in a true or false and
+          can reference columns of the data source by name. The function evaluates the condition for
+          each record and modifies any record for which the result is true.
+          To specify a modification, use a change record that contains new property values. If you
+          provide this change record inline with curly braces, property formulas can reference properties
+          of the record that's being modified. You can use this behavior to modify records based on a
+          formula.
+          Similar to UpdateIf, you can also use the Patch function to change specific columns of a record
+          without affecting other columns.
+          Both Update and UpdateIf return the modified data source as a table. You must use either
+          function in a behavior formula.
+          Delegation
+     These functions do not delegate to a data source. However, UpdateIf and RemoveIf work
+     locally to simulate delegation up to a limit of 500/2000 records. They progressively bring down
+     records beyond the non-delegation limit of 500/2000 records. Records that meet the If
+     condition are collected. Generally, a maximum of 500/2000 records are collected separately
+     and then modified per execution. However, more records may be updated if the existing local
+     data cache is large, as the function may have access to more records for evaluation. Only the
+     initial portion of the data source will be retrieved, and then the function will be applied. This
+     may not represent the complete picture. A warning may appear during authoring to remind
+     you of this limitation.
+     Syntax
+     Update(DataSource_, OldRecord, NewRecord [, RemoveFlags.All ] )
+       DataSource – Required. The data source that contains the record that you want to replace.
+       OldRecord – Required. The record to replace.
+       NewRecord – Required. The replacement record. This isn't a change record. The entire
+       record is replaced, and missing properties contain blank.
+       RemoveFlags.All – Optional. In a collection, the same record may appear more than once.
+       Specify the RemoveFlags.All argument to update all copies of the record.
+     UpdateIf(DataSource_, Condition1, ChangeRecord1 [, Condition2, ChangeRecord2, ... ] )
+       DataSource – Required. The data source that contains the record or records that you want
+       to modify.
+       Conditions – Required. A formula that evaluates to true for the record or records that you
+       want to modify. You can use column names of DataSource in the formula. In case multiple
+       Conditions are passed, only the ChangeRecord related to the first Condition that evaluates
+       to true is applied.
+       ChangeRecord(s) - Required. For each corresponding condition, a change record of new
+       property values to apply to records of DataSource that satisfy the condition. If you
+       provide the record inline using curly braces, property values of the existing record can be
+       used in the property formulas.
+     Examples
+     In these examples, you'll replace or modify records in a data source that's named IceCream and
+     that starts with the data in this table:
+                                                                                             ﾉ
+                                                                                                 Expand table
+           Formula                                              Description                     Result
+           Update( IceCream,                                    Replaces a record from the data
+           LookUp( IceCream, Flavor="Chocolate" ),              source.
+           { ID: 1, Flavor: "Mint Chocolate", Quantity:150 } )
+                                                                                                The IceCream
+                                                                                                data source
+                                                                                                has been
+                                                                                                modified.
+           UpdateIf( IceCream, Quantity > 175,                  Modifies records that have a
+           { Quantity: Quantity + 10 } )                        Quantity that is greater than
+                                                                175. The Quantity field is
+                                                                incremented by 10, and no       The IceCream
+                                                                other fields are modified.      data source
+                                                                                                has been
+                                                                                                modified.
+           Update( IceCream,                                    Replaces a record from the data
+           LookUp( IceCream, Flavor="Strawberry" ),             source. The Quantity property
+           { ID: 3, Flavor: "Strawberry Swirl"} )               hasn't been supplied in the
+                                                                replacement record, so that     The IceCream
+                                                                property will be blank in the   data source
+                                                                result.                         has been
+                                                                                                modified.
+           UpdateIf( IceCream, true, { Quantity: 0 } )          Sets the value of the Quantity
+                                                                property for all records in the
+                                                                data source to 0.
+                                                                                                The IceCream
+                                                                                                data source
+                                                                                                has been
+                                                                                                modified.
+          Step by step
+             1. Import or create a collection named Inventory, and show it in a gallery as Show data in a
+               gallery describes.
+             2. Name the gallery ProductGallery.
+      3. Add a slider named UnitsSold, and set its Max property to this expression:
+       ProductGallery.Selected.UnitsInStock
+      4. Add a button, and set its OnSelect property to this formula:
+       UpdateIf(Inventory, ProductName = ProductGallery.Selected.ProductName,
+       {UnitsInStock:UnitsInStock-UnitsSold.Value})
+      5. Press F5, select a product in the gallery, specify a value with the slider, and then select the
+       button.
+       The number of units in stock for the product you specified decreases by the amount that
+       you specified.
+             UpdateContext function
+             Article • 03/22/2024
+             Applies to:      Canvas apps
+             Creates or updates context variables of the current screen.
+             Overview
+             Use the UpdateContext function to create a context variable, which temporarily holds a
+             piece of information, such as the number of times the user has selected a button or the
+             result of a data operation.
+             Context variables are scoped to a screen, which means that you can't build a formula
+             that refers to a context variable on another screen. If you've used another programming
+             tool, you can think of a context variable as similar to a local variable. Use the Set
+             function to work with global variables that are available throughout your app.
+             Power Apps are based on formulas that automatically recalculate as the user interacts
+             with an app. Context variables don't offer this benefit and can make your app harder to
+             create and understand. Before you use a context variable, review working with variables.
+             Description
+             To create or update a context variable, pass a single record to the UpdateContext
+             function. In each record, specify the name of a column, which defines or matches the
+             name of the variable, and the value to which you want to set that variable.
+                   If you specify the name of a variable that you've previously defined,
+                   UpdateContext sets the value of the variable to the value that you specify.
+                   If you specify the name of a variable that doesn't yet exist, UpdateContext creates
+                   a variable with that name and sets the value of that variable to the value that you
+                   specify.
+                   If you've previously defined a variable but don't specify it in this particular
+                   UpdateContext formula, its value remains the same.
+             Context variables are implicitly created by using the UpdateContext or Navigate
+             function. There is no explicit declaration required. If you remove all the UpdateContext
+             and Navigate references to a context variable, then that context variable will cease to
+             exist. To clear a variable set its value to the result of the Blank function.
+       You can see your variables' values, definitions, and uses with the Variables view under
+       the File menu in the authoring environment.
+       You reference a context variable in a formula by using the variable's column name. For
+       example, UpdateContext( { ShowLogo: true } ) creates a context variable named
+       ShowLogo and sets its value to true. You can then use the value of this context variable
+       by using the name ShowLogo in a formula. You can write ShowLogo as the formula for
+       the Visible property of an image control and show or hide that control based on
+       whether the value of the context variable is true or false.
+       As the examples later in this topic show, context variables can hold several kinds of
+       information, including these:
+         a single value
+         a record
+         a table
+         an object reference
+         any result from a formula
+       A context variable holds its value until the app is closed. If you define a context variable
+       and set its value on a particular screen, that information remains intact even if the user
+       switches to a different screen. Once the app is closed, the context variable's value will be
+       lost and must be recreated when the app is loaded again.
+       Every context variable is scoped to a screen. If you want to define a context variable on
+       one screen and modify that variable from another screen, you must build a formula
+       that's based on the Navigate function. Or use a global variable.
+       UpdateContext has no return value, and you can use it only within a behavior formula.
+       Syntax
+       UpdateContext( UpdateRecord )
+         UpdateRecord – Required. A record that contains the name of at least one column
+         and a value for that column. A context variable is created or updated for each
+         column and value that you specify.
+       UpdateContext( { ContextVariable1: Value1 [, ContextVariable2: Value2 [, ... ] ] } )
+         ContextVariable1 - Required. The name of a context variable to create or update.
+         Value1 - Required. The value to assign to the context variable.
+         ContextVariable2: Value2, ... - Optional. Additional context variables to create or
+         update and their values.
+              Examples
+                                                                                               ﾉ
+                                                                                                   Expand table
+                Formula                                    Description             Result
+                UpdateContext( { Counter: 1 } )            Creates or modifies     Counter has the value 1. You
+                                                           the context variable    can reference that variable by
+                                                           Counter, setting its    using the name Counter in a
+                                                           value to 1.             formula.
+                UpdateContext( { Counter: 2 } )            Sets the value of the   Counter has the value 2.
+                                                           Counter context
+                                                           variable from the
+                                                           previous example to
+                                                           2.
+                UpdateContext(                             Creates or modifies     Name has the value Lily, and
+                { Name: "Lily", Score: 10 } )              the context variables   Score has the value 10.
+                                                           Name and Score,
+                                                           setting their values to
+                                                           Lily and 10
+                                                           respectively.
+                UpdateContext(                             Creates or modifies     Person has the value of
+                { Person: { Name: "Milton",                the context variable    record { Name: "Milton",
+                Address: "1 Main St" } } )                 Person, setting its     Address: "1 Main St" } }.
+                                                           value to a record. The
+                                                           record contains two     Reference this record as a
+                                                           columns, named          whole with the name Person,
+                                                           Name and Address.       or reference an individual
+                                                           The value of the        column of this record with
+                                                           Name column is          Person.Name or
+                                                           Milton, and the value   Person.Address.
+                                                           of the Address
+                                                           column is 1 Main St.
+                UpdateContext( { Person:                   Works with the Patch    Person now has the value of
+                Patch( Person, {Address: "2 Main St" } )   function to update      record { Name: "Milton",
+                } )                                        the Person context      Address: "2 Main St" } }.
+                                                           variable by setting
+                                                           the value of the
+                                                           Address column to 2
+                                                           Main St.
+              Step-by-step example 1
+                  1. Name the default screen Source, add another screen, and name it Target.
+       2. On the Source screen, add two buttons, and set their Text properties so that one
+        says English and the other says Spanish.
+       3. Set the OnSelect property of the English button to this expression:
+        Navigate(Target, ScreenTransition.Fade, {Language:"English"})
+       4. Set the OnSelect property of the Spanish button to this expression:
+        Navigate(Target, ScreenTransition.Fade, {Language:"Spanish"})
+       5. On the Target screen, add a label, and set its Text property to this expression:
+        If(Language="English", "Hello!", "Hola!")
+       6. On the Target screen, select Shapes on the Insert tab, and then select the Back
+        arrow.
+       7. Set the Back arrow's OnSelect property to this formula:
+        Navigate(Source, ScreenTransition.Fade)
+       8. From the Source screen, press F5, and then select the button for either language.
+        On the Target screen, the label appears in the language that corresponds to the
+        button that you selected.
+       9. Select the Back arrow to return to the Source screen, and then select the button
+        for the other language.
+        On the Target screen, the label appears in the language that corresponds to the
+        button that you selected.
+       10. Press Esc to return to the default workspace.
+      Step-by-step example 2
+       1. Open the canvas app where you want to use this formula.
+       2. Add a new blank screen by selecting New screen from the command bar.
+       3. Add a button, and set its OnSelect property to this formula:
+        UpdateContext( { Name: "Lily", Score: 10 } )
+          Update and UpdateIf functions
+          06/21/2025
+          Applies to:      Canvas apps      Model-driven apps
+          Updates records in a data source.
+          Description
+          Update function
+          Use the Update function to replace an entire record in a data source. In contrast, the UpdateIf
+          and the Patch functions modify one or more values in a record, leaving the other values alone.
+          For a collection, the entire record must match. Collections allow duplicate records, so multiple
+          records might match. You can use the RemoveFlags.All argument to update all copies of a
+          record; otherwise, only one copy of the record is updated.
+          If the data source generates a column's value automatically, the value of that column must be
+          reaffirmed.
+          UpdateIf function
+          Use the UpdateIf function to modify one or more values in one or more records that match
+          one or more conditions. The condition can be any formula that results in a true or false and
+          can reference columns of the data source by name. The function evaluates the condition for
+          each record and modifies any record for which the result is true.
+          To specify a modification, use a change record that contains new property values. If you
+          provide this change record inline with curly braces, property formulas can reference properties
+          of the record that's being modified. You can use this behavior to modify records based on a
+          formula.
+          Similar to UpdateIf, you can also use the Patch function to change specific columns of a record
+          without affecting other columns.
+          Both Update and UpdateIf return the modified data source as a table. You must use either
+          function in a behavior formula.
+          Delegation
+     These functions do not delegate to a data source. However, UpdateIf and RemoveIf work
+     locally to simulate delegation up to a limit of 500/2000 records. They progressively bring down
+     records beyond the non-delegation limit of 500/2000 records. Records that meet the If
+     condition are collected. Generally, a maximum of 500/2000 records are collected separately
+     and then modified per execution. However, more records may be updated if the existing local
+     data cache is large, as the function may have access to more records for evaluation. Only the
+     initial portion of the data source will be retrieved, and then the function will be applied. This
+     may not represent the complete picture. A warning may appear during authoring to remind
+     you of this limitation.
+     Syntax
+     Update(DataSource_, OldRecord, NewRecord [, RemoveFlags.All ] )
+       DataSource – Required. The data source that contains the record that you want to replace.
+       OldRecord – Required. The record to replace.
+       NewRecord – Required. The replacement record. This isn't a change record. The entire
+       record is replaced, and missing properties contain blank.
+       RemoveFlags.All – Optional. In a collection, the same record may appear more than once.
+       Specify the RemoveFlags.All argument to update all copies of the record.
+     UpdateIf(DataSource_, Condition1, ChangeRecord1 [, Condition2, ChangeRecord2, ... ] )
+       DataSource – Required. The data source that contains the record or records that you want
+       to modify.
+       Conditions – Required. A formula that evaluates to true for the record or records that you
+       want to modify. You can use column names of DataSource in the formula. In case multiple
+       Conditions are passed, only the ChangeRecord related to the first Condition that evaluates
+       to true is applied.
+       ChangeRecord(s) - Required. For each corresponding condition, a change record of new
+       property values to apply to records of DataSource that satisfy the condition. If you
+       provide the record inline using curly braces, property values of the existing record can be
+       used in the property formulas.
+     Examples
+     In these examples, you'll replace or modify records in a data source that's named IceCream and
+     that starts with the data in this table:
+                                                                                             ﾉ
+                                                                                                 Expand table
+           Formula                                              Description                     Result
+           Update( IceCream,                                    Replaces a record from the data
+           LookUp( IceCream, Flavor="Chocolate" ),              source.
+           { ID: 1, Flavor: "Mint Chocolate", Quantity:150 } )
+                                                                                                The IceCream
+                                                                                                data source
+                                                                                                has been
+                                                                                                modified.
+           UpdateIf( IceCream, Quantity > 175,                  Modifies records that have a
+           { Quantity: Quantity + 10 } )                        Quantity that is greater than
+                                                                175. The Quantity field is
+                                                                incremented by 10, and no       The IceCream
+                                                                other fields are modified.      data source
+                                                                                                has been
+                                                                                                modified.
+           Update( IceCream,                                    Replaces a record from the data
+           LookUp( IceCream, Flavor="Strawberry" ),             source. The Quantity property
+           { ID: 3, Flavor: "Strawberry Swirl"} )               hasn't been supplied in the
+                                                                replacement record, so that     The IceCream
+                                                                property will be blank in the   data source
+                                                                result.                         has been
+                                                                                                modified.
+           UpdateIf( IceCream, true, { Quantity: 0 } )          Sets the value of the Quantity
+                                                                property for all records in the
+                                                                data source to 0.
+                                                                                                The IceCream
+                                                                                                data source
+                                                                                                has been
+                                                                                                modified.
+          Step by step
+             1. Import or create a collection named Inventory, and show it in a gallery as Show data in a
+               gallery describes.
+             2. Name the gallery ProductGallery.
+      3. Add a slider named UnitsSold, and set its Max property to this expression:
+       ProductGallery.Selected.UnitsInStock
+      4. Add a button, and set its OnSelect property to this formula:
+       UpdateIf(Inventory, ProductName = ProductGallery.Selected.ProductName,
+       {UnitsInStock:UnitsInStock-UnitsSold.Value})
+      5. Press F5, select a product in the gallery, specify a value with the slider, and then select the
+       button.
+       The number of units in stock for the product you specified decreases by the amount that
+       you specified.
+         Lower, Upper, and Proper functions
+         Article • 04/20/2025
+                                                                                        ﾉ
+                                                                                           Expand table
+           Functions  Applies to
+           Lower           Canvas apps     Cards    Copilot Studio    Desktop flows    Dataverse formula
+           Upper      columns      Model-driven apps    Power Platform CLI    Dataverse functions 
+                      Power Pages
+           Proper          Canvas apps     Cards    Copilot Studio    Desktop flows    Model-driven apps
+                           Power Platform CLI   Dataverse functions   Power Pages
+         Converts letters in a string of text to all lowercase, all uppercase, or proper case.
+         Description
+         The Lower, Upper, and Proper functions convert the case of letters in strings.
+               Lower converts any uppercase letters to lowercase.
+               Upper converts any lowercase letters to uppercase.
+               Proper converts the first letter in each word to uppercase if it's lowercase and converts
+               any other uppercase letters to lowercase.
+         All three functions ignore characters that aren't letters.
+         If you pass a single string, the return value is the converted version of that string. If you pass a
+         single-column table that contains strings, the return value is a single-column table of
+         converted strings. If you have a multi-column table, you can shape it into a single-column
+         table, as working with tables describes.
+         Syntax
+         Lower( String )
+         Upper( String )
+         Proper( String )
+               String - Required. The string to convert.
+         Lower( SingleColumnTable )
+         Upper( SingleColumnTable )
+         Proper( SingleColumnTable )
+                SingleColumnTable - Required. A single-column table of strings to convert.
+          Examples
+          Single string
+          The examples in this section use a text-input control, named Author, as their data source. The
+          control contains the string "E. E. CummINGS".
+                                                                                                 ﾉ Expand table
+            Formula                Description                                                     Result
+            Lower( Author.Text )   Converts any uppercase letters in the string to lowercase.      "e. e.
+                                                                                                   cummings"
+            Upper( Author.Text )   Converts any lowercase letters in the string to uppercase.      "E. E.
+                                                                                                   CUMMINGS"
+            Proper( Author.Text )  Converts the first letter of each word to uppercase if it's     "E. E.
+                                   lowercase, and converts any other uppercase letters to          Cummings"
+                                   lowercase.
+          Single-column table
+          The examples in this section convert strings from the Address column of the People data
+          source, which contains this data:
+                                                                                                 ﾉ Expand table
+            Name                          Address
+            "Jean"                        "123 Main St NE"
+            "Fred"                        "789 SW 39th #3B"
+          Each formula returns a single-column table that contains the converted strings.
+                                                                                                 ﾉ Expand table
+            Formula                                Description                       Result
+            Lower(                                 Converts any letter that's        A single-column table with a
+            ShowColumns( People, "Address" ) )     lowercase to uppercase.            Value column containing the
+            Formula                                    Description                          Result
+                                                                                            following values: "123 main st
+                                                                                            ne", "789 sw 39th #3b"
+            Upper(                                     Converts any letter that's           A single-column table with a
+            ShowColumns( People, "Address" ) )         lowercase to uppercase.              Value column containing the
+                                                                                            following values: "123 MAIN
+                                                                                            ST NE", "789 SW 39TH #3B"
+            Proper(                                    Converts any first letter of a       A single-column table with a
+            ShowColumns( People, "Address" ) )         word that's lowercase to             Value column containing the
+                                                       uppercase, and converts any          following values: "123 Main St
+                                                       other letter that's uppercase to     Ne", "789 Sw 39th #3b"
+                                                       lowercase.
+           Step-by-step example
+               1. Add a Text input control, and name it Source.
+               2. Add a label, and set its Text property to this function:
+                 Proper(Source.Text)
+               3. Press F5, and then type WE ARE THE BEST! into the Source box.
+                 The label shows We Are The Best!
+             User function
+             Article • 11/24/2024
+             Applies to:      Canvas apps       Power Pages
+             Returns information about the current user.
+             Description
+             The User function returns a record of information about the current user:
+                                                                                       ﾉ Expand table
+              Property              Description
+              User().Email          Email address of the current user. The User().Email function returns the
+                                    user's UPN and not the SMTP email address.
+              User().EntraObjectId  Microsoft Entra Object ID of the current user, useful for calling APIs that
+                                    use this value. This is a GUID value and unique for each user.
+              User().FullName       Full name of the current user, including first and last names.
+              User().Image          Image of the current user. This will be an image URL of the form
+                                    "blob:identifier". Set the Image property of the Image control to this value
+                                    to display the image in the app.
+                ７ Note
+                The information returned is for the current Power Apps user. It will match the
+                "Account" information that is displayed in the Power Apps players and studio,
+                which can be found outside of any authored apps. This may not match the current
+                user's information in Office 365 or other services.
+                ７ Note
+                If you published your application with a User function prior to March 2020, you
+                may find that it, intermittently, will not retrieve photos. The issues were fixed in the
+                late March 2020 release. To take advantage of the updated implementation, simply
+                re-open your application, save it, and republish it.
+               Syntax
+               User()
+               Examples
+               The current Power Apps user has the following information:
+                     Full Name: "John Doe"
+                     Email address: "john.doe@contoso.com"
+                     Entra Object Id: aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb (GUID)
+                     Image: 
+                                                                                                    ﾉ
+                                                                                                        Expand table
+                Formula                  Description       Result
+                User()                   Record of all     { FullName: "John Doe", Email: "john.doe@contoso.com",
+                                         information       Image: "blob:1234...5678",
+                                         for the current   EntraObjectId: a90c6800‑e58c‑4495‑81f7‑55819b56fe2a }
+                                         Power Apps
+                                         user.
+                User().Email             The email         "john.doe@contoso.com"
+                                         address of the
+                                         current Power
+                                         Apps user.
+                User().FullName          The full name     "John Doe"
+                                         of the current
+                                         Power Apps
+                                         user.
+                User().EntraObjectId     Microsoft         aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb (GUID)
+                                         Entra Object
+                                         ID of the
+                                         current user.
+                User().Image             The image         "blob:1234...5678"
+                                         URL for the
+                                         current Power
+                                         Apps user. Set
+                                         the Image
+              Formula              Description     Result
+                                   property of     With ImageControl.Image:
+                                   the Image
+                                   control to this
+                                   value to
+                                   display the
+                                   image in the
+                                   app.
+             Feedback
+             Was this page helpful?  Yes      No
+             Provide product feedback
+         Now, Today, IsToday, UTCNow, UTCToday,
+         IsUTCToday functions
+         Article • 04/20/2025
+                                                                                        ﾉ Expand table
+           Functions  Applies to
+           Now             Canvas apps     Cards    Copilot Studio    Desktop flows    Dataverse formula
+                      columns      Model-driven apps    Power Platform CLI    Dataverse functions 
+                      Power Pages
+           Today           Canvas apps     Cards    Copilot Studio    Desktop flows    Model-driven apps
+           IsToday         Power Platform CLI   Dataverse functions   Power Pages
+           UTCNow          Dataverse formula columns    Power Pages
+           UTCToday
+         Returns the current date and time, and tests whether a date/time value is today.
+            ７ Note
+            PAC CLI pac power-fx commands do not support the UTCNow, UTCToday, and
+            IsUTCToday functions.
+         Description
+         The Now function returns the current date and time as a date/time value.
+         The Today function returns the current date as a date/time value. The time portion is midnight.
+         Today has the same value throughout a day, from midnight today to midnight tomorrow.
+         The IsToday function tests whether a date/time value is between midnight today and midnight
+         tomorrow. This function returns a Boolean (true or false) value.
+         Now, Today, and IsToday functions work with the local time of the current user.
+         UTCNow, UTCToday, and IsUTCToday functions are the same as their non-UTC counterparts
+         but work with time zone independent values and use Coordinated Universal Time (UTC).
+            ７ Note
+          UTCNow, UTCToday, and IsUTCToday are only available in Microsoft Dataverse for
+          Teams formula columns, and only for time-independent fields and values.
+          Now, Today, and IsToday are not available in Dataverse for Teams formula columns
+          as evaluations are done without the knowledge of the current user's local time zone.
+          More information: Work with formula table columns in Dataverse for Teams
+     See Date, Time, and DateTime in the data types documentation and working with dates and
+     times for more information.
+     Volatile Functions
+     Now, Today, UTCNow, and UTCToday are volatile functions. These functions return a different
+     value for each evaluation.
+     When used in a data flow formula, a volatile function will only return a different value if the
+     formula in which it appears is reevaluated. If nothing else changes in the formula then it will
+     have the same value throughout the execution of your app.
+     For example, a label control with Label1.Text = Now() will not change while your app is active.
+     Only closing and reopening the app will result in a new value.
+     The function will be reevaluated if it is part of a formula in which something else has changed.
+     For example, if we change our example to involve a slider control with Label1.Text = DateAdd(
+     Now(), Slider1.Value, Minutes ) then the current time is retrieved each time the Slider control's
+     value changes and the label's text property is reevaluated.
+     When used in a behavior formula, volatile functions will be evaluated each time the behavior
+     formula is evaluated. See below for an example.
+     Syntax
+     Using the user's local time
+     Now()
+     Today()
+     IsToday( DateTime )
+        DateTime - Required. The date/time value to test.
+           Using Coordinated Universal Time (UTC)
+           UTCNow()
+           UTCToday()
+           IsUTCToday( TimeZoneIndependentTime )
+                 TimeZoneIndependentDateTime - Required. The time zone independent date/time value
+                 to test.
+           Examples
+           For the examples in this section, the current time is 8:58 PM on July 11, 2021 in the Pacific Time
+           Zone (UTC-8) and the language is en-us.
+                                                                                                       ﾉ Expand table
+            Formula                             Description                                             Result
+            Text( Now(), "mm/dd/yyyy            Retrieves the current date and time in the user's       "07/11/2021
+            hh:mm:ss" )                         time zone, and displays it as a string.                 20:58:00"
+            Text( Today(), "mm/dd/yyyy          Retrieves the current date only, leaving the time       "07/12/2021
+            hh:mm:ss" )                         portion as midnight, and displays it as a string.       00:00:00"
+            IsToday( Now() )                    Tests whether the current date and time is between      true
+                                                midnight today and midnight tomorrow.
+            IsToday( Today() )                  Tests whether the current date is between midnight      true
+                                                today and midnight tomorrow.
+            Text( DateAdd( Now(), 12 ),         Retrieves the current date and time, adds 12 days to    "07/23/2021
+            "mm/dd/yyyy hh:mm:ss" )             the result, and displays it as a string.                20:58:00"
+            Text( DateAdd( Today(), 12 ),       Retrieves the current date, adds 12 days to the         "07/23/2021
+            "mm/dd/yyyy hh:mm:ss" )             result, and displays it as a string.                    00:00:00"
+            IsToday( DateAdd( Now(), 12 )       Tests whether the current date and time, plus 12        false
+            )                                   days, is between midnight today and midnight
+                                                tomorrow.
+            IsToday( DateAdd( Today(), 12 )     Tests whether the current date, plus 12 days, is        false
+            )                                   between midnight today and midnight tomorrow.
+            Hour( UTCNow() )                    Retrieves the current date and time in UTC and          4
+                                                extracts the hour only, which is 8 hours ahead of
+                                                local time.
+            Formula                            Description                                             Result
+            Day( UTCToday() )                  Retrieves the current date only in UTC and extracts     12
+                                               the day, which is 1 day ahead of local time.
+            IsUTCToday( UTCNow() )             Tests whether the current date and time is between      true
+                                               midnight today and midnight tomorrow, all in UTC
+                                               time.
+            IsUTCToday( UTCToday() )           Tests whether the current date is between midnight      true
+                                               today and midnight tomorrow, all in UTC time.
+           Display a clock that updates in real time
+              1. Add a Timer control, set its Duration property to 1000, and set its Repeat property to
+                 true.
+                 The timer will run for one second, automatically start over, and continue that pattern.
+              2. Set the control's OnTimerEnd property to this formula:
+                 Set( CurrentTime, Now() )
+                 Whenever the timer starts over (after each second), this formula sets the CurrentTime
+                 global variable to the current value of the Now function.
+              3. Add a Label control, and set its Text property to this formula:
+                 Text( CurrentTime, LongTime24 )
+                 Use the Text function to format the date and time however you want, or set this property
+                 to just CurrentTime to show hours and minutes but not seconds.
+      4. Preview the app by pressing F5, and then start the timer by clicking or tapping it.
+       The label continually shows the current time, down to the second.
+      5. Set the timer's AutoStart property to true and its Visible property to false.
+       The timer is invisible and starts automatically.
+      6. Set the screen's OnStart property so that the CurrentTime variable has a valid value, as in
+       this example:
+       Set(CurrentTime, Now())
+       The label appears as soon as the app starts (before the timer runs for a full second).
+         Now, Today, IsToday, UTCNow, UTCToday,
+         IsUTCToday functions
+         Article • 04/20/2025
+                                                                                        ﾉ Expand table
+           Functions  Applies to
+           Now             Canvas apps     Cards    Copilot Studio    Desktop flows    Dataverse formula
+                      columns      Model-driven apps    Power Platform CLI    Dataverse functions 
+                      Power Pages
+           Today           Canvas apps     Cards    Copilot Studio    Desktop flows    Model-driven apps
+           IsToday         Power Platform CLI   Dataverse functions   Power Pages
+           UTCNow          Dataverse formula columns    Power Pages
+           UTCToday
+         Returns the current date and time, and tests whether a date/time value is today.
+            ７ Note
+            PAC CLI pac power-fx commands do not support the UTCNow, UTCToday, and
+            IsUTCToday functions.
+         Description
+         The Now function returns the current date and time as a date/time value.
+         The Today function returns the current date as a date/time value. The time portion is midnight.
+         Today has the same value throughout a day, from midnight today to midnight tomorrow.
+         The IsToday function tests whether a date/time value is between midnight today and midnight
+         tomorrow. This function returns a Boolean (true or false) value.
+         Now, Today, and IsToday functions work with the local time of the current user.
+         UTCNow, UTCToday, and IsUTCToday functions are the same as their non-UTC counterparts
+         but work with time zone independent values and use Coordinated Universal Time (UTC).
+            ７ Note
+          UTCNow, UTCToday, and IsUTCToday are only available in Microsoft Dataverse for
+          Teams formula columns, and only for time-independent fields and values.
+          Now, Today, and IsToday are not available in Dataverse for Teams formula columns
+          as evaluations are done without the knowledge of the current user's local time zone.
+          More information: Work with formula table columns in Dataverse for Teams
+     See Date, Time, and DateTime in the data types documentation and working with dates and
+     times for more information.
+     Volatile Functions
+     Now, Today, UTCNow, and UTCToday are volatile functions. These functions return a different
+     value for each evaluation.
+     When used in a data flow formula, a volatile function will only return a different value if the
+     formula in which it appears is reevaluated. If nothing else changes in the formula then it will
+     have the same value throughout the execution of your app.
+     For example, a label control with Label1.Text = Now() will not change while your app is active.
+     Only closing and reopening the app will result in a new value.
+     The function will be reevaluated if it is part of a formula in which something else has changed.
+     For example, if we change our example to involve a slider control with Label1.Text = DateAdd(
+     Now(), Slider1.Value, Minutes ) then the current time is retrieved each time the Slider control's
+     value changes and the label's text property is reevaluated.
+     When used in a behavior formula, volatile functions will be evaluated each time the behavior
+     formula is evaluated. See below for an example.
+     Syntax
+     Using the user's local time
+     Now()
+     Today()
+     IsToday( DateTime )
+        DateTime - Required. The date/time value to test.
+           Using Coordinated Universal Time (UTC)
+           UTCNow()
+           UTCToday()
+           IsUTCToday( TimeZoneIndependentTime )
+                 TimeZoneIndependentDateTime - Required. The time zone independent date/time value
+                 to test.
+           Examples
+           For the examples in this section, the current time is 8:58 PM on July 11, 2021 in the Pacific Time
+           Zone (UTC-8) and the language is en-us.
+                                                                                                       ﾉ Expand table
+            Formula                             Description                                             Result
+            Text( Now(), "mm/dd/yyyy            Retrieves the current date and time in the user's       "07/11/2021
+            hh:mm:ss" )                         time zone, and displays it as a string.                 20:58:00"
+            Text( Today(), "mm/dd/yyyy          Retrieves the current date only, leaving the time       "07/12/2021
+            hh:mm:ss" )                         portion as midnight, and displays it as a string.       00:00:00"
+            IsToday( Now() )                    Tests whether the current date and time is between      true
+                                                midnight today and midnight tomorrow.
+            IsToday( Today() )                  Tests whether the current date is between midnight      true
+                                                today and midnight tomorrow.
+            Text( DateAdd( Now(), 12 ),         Retrieves the current date and time, adds 12 days to    "07/23/2021
+            "mm/dd/yyyy hh:mm:ss" )             the result, and displays it as a string.                20:58:00"
+            Text( DateAdd( Today(), 12 ),       Retrieves the current date, adds 12 days to the         "07/23/2021
+            "mm/dd/yyyy hh:mm:ss" )             result, and displays it as a string.                    00:00:00"
+            IsToday( DateAdd( Now(), 12 )       Tests whether the current date and time, plus 12        false
+            )                                   days, is between midnight today and midnight
+                                                tomorrow.
+            IsToday( DateAdd( Today(), 12 )     Tests whether the current date, plus 12 days, is        false
+            )                                   between midnight today and midnight tomorrow.
+            Hour( UTCNow() )                    Retrieves the current date and time in UTC and          4
+                                                extracts the hour only, which is 8 hours ahead of
+                                                local time.
+            Formula                            Description                                             Result
+            Day( UTCToday() )                  Retrieves the current date only in UTC and extracts     12
+                                               the day, which is 1 day ahead of local time.
+            IsUTCToday( UTCNow() )             Tests whether the current date and time is between      true
+                                               midnight today and midnight tomorrow, all in UTC
+                                               time.
+            IsUTCToday( UTCToday() )           Tests whether the current date is between midnight      true
+                                               today and midnight tomorrow, all in UTC time.
+           Display a clock that updates in real time
+              1. Add a Timer control, set its Duration property to 1000, and set its Repeat property to
+                 true.
+                 The timer will run for one second, automatically start over, and continue that pattern.
+              2. Set the control's OnTimerEnd property to this formula:
+                 Set( CurrentTime, Now() )
+                 Whenever the timer starts over (after each second), this formula sets the CurrentTime
+                 global variable to the current value of the Now function.
+              3. Add a Label control, and set its Text property to this formula:
+                 Text( CurrentTime, LongTime24 )
+                 Use the Text function to format the date and time however you want, or set this property
+                 to just CurrentTime to show hours and minutes but not seconds.
+      4. Preview the app by pressing F5, and then start the timer by clicking or tapping it.
+       The label continually shows the current time, down to the second.
+      5. Set the timer's AutoStart property to true and its Visible property to false.
+       The timer is invisible and starts automatically.
+      6. Set the screen's OnStart property so that the CurrentTime variable has a valid value, as in
+       this example:
+       Set(CurrentTime, Now())
+       The label appears as soon as the app starts (before the timer runs for a full second).
+             Validate function
+             Article • 03/22/2024
+             Applies to:      Canvas apps       Model-driven apps
+             The Validate function checks whether the value of a single column or a complete record
+             is valid for a data source.
+             Description
+             Before a user submits a data change, you can provide immediate feedback on the
+             validity of that submission, resulting in a better user experience.
+             Data sources can provide information on what constitutes valid values within a record.
+             This information can include many constraints, such as these examples:
+                   whether a column requires a value
+                   how long a string of text can be
+                   how high and low a number can be
+                   how early and late a date can be
+             The Validate function uses this information to determine whether a value is valid and to
+             return an appropriate error message if not. You can use the DataSourceInfo function to
+             view the same information that Validate uses.
+             Data sources vary in how much validation information they provide, including not
+             providing any at all. Validate can only verify values based on this information. Even if
+             Validate doesn't find a problem, applying the data change may still fail. You can use the
+             Errors function to obtain information about the failure.
+             If Validate finds a problem, the function returns an error message that you can show to
+             the user of the app. If all values are valid, Validate returns blank. When you work with a
+             collection that has no validation information, values are always valid.
+             Syntax
+             Validate( DataSource, Column, Value )
+                   DataSource – Required. The data source to validate with.
+                   Column – Required. The column to validate.
+                   Value – Required. The value for the selected column to be validated.
+               Validate( DataSource, OriginalRecord, Updates )
+                     DataSource – Required. The data source to validate with.
+                     OriginalRecord - Required. The record to which updates are to be validated.
+                     Updates - Required. The changes to apply to the original record.
+               Examples
+               For these examples, values in the Percentage column of the Scores data source must be
+               between 0 and 100, inclusive. If the data passes validation, the function returns blank.
+               Otherwise, the function returns an error message.
+               Validate with a single column
+                                                                                                  ﾉ
+                                                                                                      Expand table
+                Formula                   Description                                         Result
+                Validate( Scores,         Checks whether 10 is a valid value for the          blank
+                Percentage, 10 )          Percentage column in the Scores data source.
+                Validate( Scores,         Checks whether 120 is a valid value for the         "Values must be
+                Percentage, 120 )         Percentage column in the Scores data source.        between 0 and 100."
+               Validate with a complete record
+                                                                                                  ﾉ Expand table
+                Formula                      Description                                          Result
+                Validate( Scores,            Checks whether values in all columns are valid for   blank
+                EditRecord,                  the Scores data source. In this example, the value
+                Gallery.Updates )            in the Percentage column is 10.
+                Validate( Scores,            Checks whether values in all columns are valid for   "Values must be
+                EditRecord,                  the Scores data source. In this example, the value   between 0 and
+                Gallery.Updates )            in the Percentage column is 120.                     100."
+         Decimal, Float, and Value functions
+         06/19/2025
+                                                                                        ﾉ
+                                                                                           Expand table
+           Functions  Applies to
+           Decimal         Cards     Copilot Studio   Desktop flows    Dataverse formula columns 
+           Float      Power Platform CLI    Dataverse functions
+           Value           Canvas apps     Cards    Copilot Studio    Desktop flows    Dataverse formula
+                      columns      Model-driven apps    Power Platform CLI    Dataverse functions 
+                      Power Pages
+         Converts a string of text or other types to a number.
+         Description
+            ７ Note
+            Power Apps only supports the Value function and it returns a Float value. Support for the
+            Decimal and Float functions will be added soon.
+         Use the Decimal, Float, and Value functions to convert a string of text that contains number
+         characters to a numeric value. Use these function when you need to perform calculations on
+         numbers that were entered as text by a user. These functions can also be used to convert other
+         types to a number, such as date/time and Boolean.
+         The Value function will return the default numeric data type for the Power Fx host you are
+         using, which is usually Decimal and the best choice for most situations. Use the Decimal and
+         Float functions when you need a specific data type for a particular scenario, such as a scientific
+         calculation with a very large number. For more details on working with these data types, see
+         the Numbers section of Data types.
+         Different languages interpret , and . differently. By default, the text is interpreted in the
+         language of the current user. You can specify the language to use with a language tag, using
+         the same language tags that are returned by the Language function.
+         Notes on the format of the string:
+               The string may be prefixed with the currency symbol for the current language. The
+               currency symbol is ignored. Currency symbols for other languages aren't ignored.
+         The string may be include a percent sign (%) at the end, indicating that it's a percentage.
+         The number will be divided by 100 before being returned. Percentages and currency
+         symbols can't be mixed.
+                                        3
+         The string may be in scientific notation, with 12 x 10  expressed as "12e3".
+      If the number isn't in a proper format, these functions will return an error.
+      To convert date and time values, use the DateValue, TimeValue, or DateTimeValue functions.
+      Syntax
+      Decimal( String [, LanguageTag ] )
+      Float( String [, LanguageTag ] )
+      Value( String [, LanguageTag ] )
+         String - Required. String to convert to a numeric value.
+         LanguageTag - Optional. The language tag in which to parse the string. If not specified,
+         the language of the current user is used.
+      Decimal( Dynamic )
+      Float( Dynamic )
+      Value( Dynamic )
+         Dynamic - Required. Dynamic value that represents a number. Acceptable values are
+         dependent on the untyped provider. For JSON, the dynamic value is expected to be a
+         JSON number, boolean, or text that can be converted to a number. Keep in mind that
+         locale-related formats are important considerations when communicating with external
+         systems.
+      Examples
+      The user running these formulas is located in the United States and has selected English as
+      their language. The Language function is returning "en-US". The Power Fx host uses Decimal
+      by default.
+      Value and Decimal
+      Since we are using a host that has Decimal as the default, Value and Decimal will return the
+      same results.
+                                                     ﾉ Expand table
+            Formula                       Description                                                  Result
+            Value( "123.456" )            The default language of "en-US" will be used, which uses a   123.456
+            Decimal( "123.456" )          period as the decimal separator.                             (Decimal)
+            Value( "123.456", "es-ES" )   "es-ES" is the language tag for Spanish in Spain. In Spain,  123456
+            Decimal( "123.456", "es-      a period is a thousands separator.                           (Decimal)
+            ES" )
+            Value( "123,456" )            The default language of "en-US" will be used, which uses a   123456
+            Decimal( "123,456" )          comma as a thousands separator.                              (Decimal)
+            Value( "123,456", "es-ES" )   "es-ES" is the language tag for Spanish in Spain. In Spain,  123.456
+            Decimal( "123,456", "es-      a comma is the decimal separator.                            (Decimal)
+            ES" )
+            Value( "12.34%" )             The percentage sign at the end of the string indicates that  0.1234
+            Decimal( "12.34%" )           this is a percentage.                                        (Decimal)
+            Value( "$ 12.34" )            The currency symbol for the current language is ignored.     12.34
+            Decimal( "$ 12.34" )                                                                       (Decimal)
+                                                                       3
+            Value( "24e3" )               Scientific notation for 24 x 10 .                            24000
+            Decimal( "24e3" )                                                                          (Decimal)
+            Value( true )                 Converts a Boolean to a number, 0 for false and 1 for true   1 Decimal
+            Decimal( true )
+          Float
+          The Float function will have very close to the same results as above. Since 123.456 cannot be
+          precisely represented in Float, the result is an approximation that is very close
+          (123.456000000000003069544618484E2) and compounding rounding errors calculations could
+          result in an unexpected result. The resulting type will be Float instead.
+          Where things diverge is if larger or smaller numbers are used.
+                                                                                                    ﾉ Expand table
+            Formula                                  Description                          Result
+            Float( 1e100 )                           Because the literal number 1e100     error (overflow)
+                                                     is beyond the range of a Decimal,
+                                                     this results in an error before ever
+                                                     calling the Float function.
+            Decimal( 1e100 )                         Same problem as with the Float       error (overflow)
+                                                     function.
+            Formula                                    Description                          Result
+            Float( "1e100" )                           The number in the text string is     1e100 Float
+                                                       within the range of Float
+                                                       numbers.
+            Decimal( "1e100" )                         The number in the text string is     error (overflow)
+                                                       beyond the range of Decimal
+                                                       numbers.
+            Float( "10000000000.0000000001" )          The number in the text string is     1 (Float)
+                                                       within the range of Float
+                                                       numbers. However, the number
+                                                       requires more precision than a
+                                                       Float can provide and will be
+                                                       truncated.
+            Decimal( "10000000000.0000000001" )        The number in the text string is     10000000000.0000000001
+                                                       within both the range and            (Decimal)
+                                                       precision of a Decimal numbers.
+         Average, Max, Min, StdevP, Sum, and VarP
+         functions
+         Article • 04/20/2025
+                                                                                        ﾉ Expand table
+           Functions  Applies to
+           Average         Canvas apps     Cards    Copilot Studio    Desktop flows    Dataverse formula
+           Max        columns      Model-driven apps    Power Platform CLI    Dataverse functions 
+           Min        Power Pages
+           Sum
+           StdevP          Canvas apps     Cards    Copilot Studio    Desktop flows    Model-driven apps
+           VarP            Power Platform CLI   Dataverse functions   Power Pages
+         Aggregate functions that summarize a set of numbers.
+         Description
+         The Average function calculates the average, or arithmetic mean, of its arguments.
+         The Max function finds the maximum value.
+         The Min function finds the minimum value.
+         The Sum function calculates the sum of its arguments.
+         The StdevP function calculates the standard deviation of its arguments.
+         The VarP function calculates the variance of its arguments.
+         You can supply the values for these functions as:
+               Separate arguments. For example, Sum( 1, 2, 3 ) returns 6.
+               A table and a formula to operate over that table. The aggregate will be calculated on the
+               values of the formula for each record.
+         Fields of the record currently being processed are available within the formula. Use the
+         ThisRecord operator or simply reference fields by name as you would any other value. The As
+         operator can also be used to name the record being processed which can help make your
+         formula easier to understand and make nested records accessible. For more information, see
+         the examples below and working with record scope.
+     These functions operate on numeric values only. Other types of values, such as strings or
+     records, are ignored. Use the Value function to convert a string into a number.
+     The Average, Max, Min, and Sum functions can be delegated when used with a data source
+     that supports delegation for these functions. However, StdevP and VarP can't be delegated for
+     any data sources. If delegation is not supported, only the first portion of the data will be
+     retrieved and then the function applied locally. The result may not represent the complete
+     story. A delegation warning will appear at authoring time to remind you of this limitation and
+     to suggest switching to delegable alternatives where possible. For more information, see the
+     delegation overview.
+     Syntax
+     Average( NumericalFormula1, [ NumericalFormula2, ... ] )
+     Max( NumericalFormula1, [ NumericalFormula2, ... ] )
+     Min( NumericalFormula1, [ NumericalFormula2, ... ] )
+     Sum( NumericalFormula1, [ NumericalFormula2, ... ] )
+     StdevP( NumericalFormula1, [ NumericalFormula2, ... ] )
+     VarP( NumericalFormula1, [ NumericalFormula2, ... ] )
+       NumericalFormula(s) - Required. Numeric values to operate on.
+     Average( Table, NumericalFormula )
+     Max( Table, NumericalFormula )
+     Min( Table, NumericalFormula )
+     Sum( Table, NumericalFormula )
+     StdevP( Table, NumericalFormula )
+     VarP( Table, NumericalFormula )
+       Table - Required. Table to operate on.
+       NumericalFormula - Required. Formula to evaluate for each record. The result of this
+       formula is used for the aggregation. You can use columns of the table in the formula.
+     Examples
+     Step by step
+     Let's say that you had a data source named Sales that contained a CostPerUnit column and a
+     UnitsSold column, and you set the Text property of a label to this function:
+     Sum(Sales, CostPerUnit * UnitsSold)
+    The label would show total sales by multiplying the values in those columns for each record
+    and then adding the results from all records together:
+    As a different example, let's say that you had sliders that were named Slider1, Slider2, and
+    Slider3 and a label with its Text property set to this formula:
+    Sum(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the sum of all values to
+    which the sliders were set.
+    Average(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the average of all
+    values to which the sliders were set.
+    Max(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the maximum of all
+    values to which the sliders were set.
+    Min(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the minimum of all
+    values to which the sliders were set.
+    StdevP(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the standard
+    deviation of all values to which the sliders were set.
+    VarP(Slider1.Value, Slider2.Value, Slider3.Value): The label would show the variance of all
+    values to which the sliders were set.
+             EditForm, NewForm, SubmitForm,
+             ResetForm, and ViewForm functions
+             Article • 03/22/2024
+             Applies to:      Canvas apps
+             View, edit, or create an item, save the contents, and reset the controls in an Edit form
+             control.
+             Overview
+             These functions change the state of the Edit form control. The form control can be in
+             one of these modes:
+                                                                                        ﾉ
+                                                                                           Expand table
+              Mode              Description
+              FormMode.Edit     The form is populated with an existing record and the user can modify the
+                                values of the fields. Once complete, the user can save the changes to the
+                                record.
+              FormMode.New      The form is populated with default values and the user can modify the values
+                                of the fields. Once complete, the user can add the record to the data source.
+              FormMode.View The form is populated with an existing record but the user cannot modify the
+                                values of the fields.
+             Description
+             These functions are often invoked from the OnSelect formula of a Button or Image
+             control so that the user can save edits, abandon edits, or create a record. You can use
+             controls and these functions together to create a complete solution.
+             These functions return no values.
+             You can use these functions only in behavior formulas.
+             SubmitForm
+        Use the SubmitForm function in the OnSelect property of a Button control to save any
+        changes in a Form control to the data source.
+        Before submitting any changes, this function checks for validation issues with any field
+        that's marked as required or that has one or more constraints on its value. This behavior
+        matches that of the Validate function.
+        SubmitForm also checks the Valid property of the Form, which is an aggregation of all
+        the Valid properties of the Card controls that the Form control contains. If a problem
+        occurs, the data isn't submitted, and the Error and ErrorKind properties of the Form
+        control are set accordingly.
+        If validation passes, SubmitForm submits the change to the data source.
+           If successful, the Form's OnSuccess behavior runs, and the Error and ErrorKind
+           properties are cleared. If the form was in FormMode.New mode, it is returned to
+           FormMode.Edit mode.
+           If unsuccessful, the Form's OnFailure behavior runs, and the Error and ErrorKind
+           properties are set accordingly. The mode of the form is unchanged.
+        EditForm
+        The EditForm function changes the Form control's mode to FormMode.Edit. In this
+        mode, the contents of the Form control's Item property are used to populate the form.
+        If the SubmitForm function runs when the form is in this mode, a record is changed, not
+        created. FormMode.Edit is the default for the Form control.
+         ７ Note
+         When the form is in edit mode and Item is null, data card properties are not
+         evaluated and will return default values.
+        NewForm
+        The NewForm function changes the Form control's mode to FormMode.New. In this
+        mode, the contents of the Form control's Item property are ignored, and the default
+        values of the Form's DataSource property populate the form. If the SubmitForm
+        function runs when the form is in this mode, a record is created, not changed.
+        ResetForm
+             The ResetForm function resets the contents of a form to their initial values, before the
+             user made any changes. If the form is in FormMode.New mode, the form is reset to
+             FormMode.Edit mode. The OnReset behavior of the form control also runs. You can also
+             reset individual controls with the Reset function but only from within the form.
+             ViewForm
+             The ViewForm function changes the Form control's mode to FormMode.View. In this
+             mode, the contents of the Form control's Item property are used to populate the form.
+             The SubmitForm and ResetForm functions have no effect when in this mode.
+             DisplayMode Property
+             The current mode can be read through the Mode property. The mode also determines
+             the value of the DisplayMode property, which can be used by data cards and controls
+             within the form control. Often, the data card's DisplayMode property will be set to
+             Parent.DisplayMode (referencing the form) as will the control's DisplayMode property
+             (referencing the data card):
+                                                                                      ﾉ Expand table
+              Mode              DisplayMode        Description
+              FormMode.Edit     DisplayMode.Edit   Data cards and controls are editable, ready to accept
+                                                   changes to a record.
+              FormMode.New      DisplayMode.Edit   Data cards and controls are editable, ready to accept a
+                                                   new record.
+              FormMode.View DisplayMode.View       Data cards and controls are not editable and optimized
+                                                   for viewing.
+             Syntax
+             SubmitForm( FormName )
+                  FormName - Required. Form control to submit to the data source.
+             EditForm( FormName )
+                  FormName - Required. Form control to switch to FormMode.Edit mode.
+             NewForm( FormName )
+         FormName - Required. Form control to switch to FormMode.New mode.
+      ResetForm( FormName )
+         FormName - Required. Form control to reset to initial values. Also switches the
+         form from FormMode.New mode to FormMode.Edit mode.
+      ViewForm( FormName )
+         FormName - Required. Form control to switch to FormMode.View mode.
+      Examples
+      See Understand data forms for complete examples.
+        1. Add a Button control, set its Text property to show Save, and set its OnSelect
+         property to this formula:
+         SubmitForm( EditForm )
+        2. Set the OnFailure property of a Form control to blank and its OnSuccess property
+         to this formula:
+         Back()
+        3. Name a Label control ErrorText, and set its Text property to this formula:
+         EditForm.Error
+         When the user selects the Save button, any changes in the Form control are
+         submitted to the underlying data source.
+           If the submission succeeds, any changes are saved or, if the Form control is in
+           New mode, a record is created. ErrorText is blank and the previous screen
+           reappears.
+           If the submission fails, ErrorText shows a user-friendly error message, and the
+           current screen remains visible so that the user can correct the problem and
+           try again.
+        4. Add a Button control, set its Text property to show Cancel, and set its OnSelect
+         property to this formula:
+         ResetForm( EditForm ); Back()
+         When the user selects the Cancel button, the values in the Form control are reset
+         to what they were before the user started to edit it, the previous screen reappears,
+        and the Form control is returned to Edit mode if it was in New mode.
+       5. Add a Button control, set its Text property to show New, and set its OnSelect
+        property to this formula:
+        NewForm( EditForm ); Navigate( EditScreen, None )
+        When the user selects the New button, the Form control switches to New mode,
+        the default values for the Form control's data source populate that control, and the
+        screen that contains the Form control appears. When the SubmitForm function
+        runs, a record is created instead of updated.
+             Day, Month, Year, Hour, Minute, Second,
+             and Weekday functions
+             Article • 06/10/2024
+             Applies to:      Canvas apps       Dataverse formula columns         Desktop flows 
+             Model-driven apps        Power Pages        Power Platform CLI
+             Returns individual components of a Date/Time value.
+             Description
+             The Day function returns the day component of a Date/Time value, ranging from 1 to
+             31.
+             The Month function returns the month component of a Date/Time value, ranging from
+             1 to 12.
+             The Year function returns the year component of a Date/Time value, starting with 1900.
+             The Hour function returns the hour component of a Date/Time value, ranging from 0
+             (12:00 AM) to 23 (11:00 PM).
+             The Minute function returns the minute component of a Date/Time value, ranging from
+             0 to 59.
+             The Second function returns the second component of a Date/Time value, ranging from
+             0 to 59.
+             The Weekday function returns the weekday of a Date/Time value. By default, the result
+             ranges from 1 (Sunday) to 7 (Saturday). You can specify a different range with a
+             Microsoft Excel Weekday function code or a StartOfWeek enumeration value:
+                                                                                       ﾉ
+                                                                                           Expand table
+              Excel code   StartOfWeek enumeration      Description
+              1, 17        StartOfWeek.Sunday           Numbers 1 (Sunday) through 7 (Saturday). Default.
+              2, 11        StartOfWeek.Monday           Numbers 1 (Monday) through 7 (Sunday).
+              3            StartOfWeek.MondayZero       Numbers 0 (Monday) through 6 (Sunday).
+              12           StartOfWeek.Tuesday          Numbers 1 (Tuesday) through 7 (Monday).
+              Excel code   StartOfWeek enumeration      Description
+              13           StartOfWeek.Wednesday        Numbers 1 (Wednesday) through 7 (Tuesday).
+              14           StartOfWeek.Thursday         Numbers 1 (Thursday) through 7 (Wednesday).
+              15           StartOfWeek.Friday           Numbers 1 (Friday) through 7 (Thursday).
+              16           StartOfWeek.Saturday         Numbers 1 (Saturday) through 7 (Friday).
+             All functions return a number.
+             See working with dates and times for more information.
+             Syntax
+             Day( DateTime )
+             Month( DateTime )
+             Year( DateTime )
+             Hour( DateTime )
+             Minute( DateTime )
+             Second( DateTime )
+                   DateTime - Required. Date/Time value to operate on.
+             Weekday( DateTime [, WeekdayFirst ] )
+                   DateTime - Required. Date/Time value to operate on.
+                   WeekdayFirst - Optional. Excel code specifying which day starts the week. If not
+                   supplied, 1 (Sunday first) is used.
+             Examples
+             For the following example, the current time is 3:59:37 PM on Thursday, April 9, 2015.
+                                                                                       ﾉ
+                                                                                          Expand table
+              Formula                                    Description                             Result
+              Year( Now() )                              Returns the year component of the       2015
+                                                         current time and date.
+              Month( Now() )                             Returns the month component of the      4
+                                                         current time and date.
+               Formula                                      Description                              Result
+               Day( Now() )                                 Returns the day component of the         9
+                                                            current time and date.
+               Hour( Now() )                                Returns the hour component of the        15
+                                                            current time and date.
+               Minute( Now() )                              Returns the minute component of the      59
+                                                            current time and date.
+               Second( Now() )                              Returns the second component of the      37
+                                                            current time and date.
+               Weekday( Now() )                             Returns the weekday component of the     5
+                                                            current time and date, using the default
+                                                            start of the week as Sunday.
+               Weekday( Now(), 14 )                         Returns the weekday component of the     1
+                                                            current time and date, using an Excel
+                                                            code to specify the start of the week as
+                                                            Thursday.
+               Weekday( Now(), StartOfWeek.Wednesday )      Returns the weekday component of the     2
+                                                            current time and date, using a
+                                                            StartOfWeek enumeration to specify the
+                                                            start of the week as Wednesday.
+             Feedback
+                                                
+             Was this page helpful?      Yes       No
+             Provide product feedback
+         WeekNum and ISOWeekNum functions
+         Article • 04/20/2025
+                                                                                         ﾉ Expand table
+           Function       Applies to
+           ISOWeekNum          Canvas apps     Dataverse formula columns    Model-driven apps    Power
+                          Pages
+           WeekNum             Canvas apps     Cards    Copilot Studio    Desktop flows     Dataverse
+                          formula columns     Model-driven apps     Power Platform CLI   Dataverse
+                          functions    Power Pages
+         Returns the week number of a specific date.
+         Description
+         Use the WeekNum and ISOWeekNum functions to determine the week number of a date.
+         These functions differ in how they determine the first week of the year (week 1):
+               WeekNum uses the week containing January 1 as the first week of the year. The result
+               from this function can range from 1 to 54.
+               ISOWeekNum uses the week containing the first Thursday of the year as the first week of
+               the year. This follows the ISO 8601 date and time standard definition   for week
+               numbering. The result from this function can range from 1 to 53. It is possible that 52 or
+               53 may be returned for the first days of January since the dates could belong to the last
+               week of the previous year.
+         Use the second parameter to WeekNum to specify which day begins a week. You can provide
+         either an Excel code number or use the StartOfWeek enumeration:
+                                                                                         ﾉ Expand table
+           Excel code      StartOfWeek enumeration              Description
+           1, 17           StartOfWeek.Sunday                   Week begins on Sunday. Default.
+           2, 11           StartOfWeek.Monday                   Week begins on Monday.
+           12              StartOfWeek.Tuesday                  Week begins on Tuesday.
+           13              StartOfWeek.Wednesday                Week begins on Wednesday.
+           Excel code       StartOfWeek enumeration              Description
+           14               StartOfWeek.Thursday                 Week begins on Thursday.
+           15               StartOfWeek.Friday                   Week begins on Friday.
+           16               StartOfWeek.Saturday                 Week begins on Saturday.
+         ISOWeekNum always uses Monday as the start of the week. In Excel, the WeekNum function
+         supports an addition code 21 that is not supported here; use ISOWeekNum instead.
+         If you pass a single number to these functions, the return value is a single result. If you pass a
+         single-column table that contains numbers, the return value is a single-column table of results,
+         one result for each record in the argument's table. If you have a multi-column table, you can
+         shape it into a single-column table, as working with tables describes.
+         Syntax
+         WeekNum(DateTime [, StartOfWeek ])
+               DateTime - Required. Date/Time value to operate on.
+               StartOfWeek - Optional. Excel code or StartOfWeek enumeration that determines which
+               day the week begins.
+         ISOWeekNum(DateTime)
+               DateTime - Required. Date/Time value to operate on. The week always begins on Monday.
+         Examples
+         First and last calendar weeks of 2021
+                                                                                          ﾉ Expand table
+           Date                           WeekNum( Date )    ISOWeekNum( Date )          WeekNum( Date,
+                                                                                    StartOfWeek.Wednesday )
+           Friday, January 1, 2021                1                    53                        1
+           Saturday, January 2, 2021              1                    53                        1
+           Sunday, January 3, 2021                2                    53                        1
+           Monday, January 4, 2021                2                    1                         1
+           Tuesday, January 5, 2021               2                    1                         1
+          Date                       WeekNum( Date )  ISOWeekNum( Date )      WeekNum( Date,
+                                                                          StartOfWeek.Wednesday )
+          Wednesday, January 6, 2021        2                  1                     2
+          Thursday, January 7, 2021         2                  1                     2
+          Saturday, December 25, 2021       52                51                    52
+          Sunday, December 26, 2021         53                51                    52
+          Monday, December 27, 2021         53                52                    52
+          Tuesday, December 28, 2021        53                52                    52
+          Wednesday, December 29, 2021      53                52                    53
+          Thursday, December 30, 2021       53                52                    53
+          Friday, December 31, 2021         53                52                    53
+             With function
+             Article • 06/10/2024
+             Applies to:      Canvas apps       Desktop flows       Model-driven apps        Power
+             Pages       Power Platform CLI
+             Calculates values and performs actions for a single record, including inline records of
+             named values.
+             Description
+             The With function evaluates a formula for a single record. The formula can calculate a
+             value and/or perform actions, such as modifying data or working with a connection. Use
+             the ForAll function to evaluate a formula for all the records in a table of records.
+             Fields of the record currently being processed are available within the formula. Use the
+             ThisRecord operator or simply reference fields by name as you would any other value.
+             The As operator can also be used to name the record being processed which can help
+             make your formula easier to understand and make nested records accessible. For more
+             information, see the examples below and working with record scope.
+             Use With to improve the readability of complex formulas by dividing it into smaller
+             named sub-formulas. These named values act like simple local variables confined to the
+             scope of the With. The same inline record syntax that is used with the UpdateContext
+             function can be used with With. Using With is preferred over context or global variables
+             as it is self contained, easy to understand, and can be used in any declarative formula
+             context.
+             Use With to access the fields of the record that are returned by functions such as Patch
+             or Match. With holds the value from these functions long enough to be used in further
+             calculations or actions.
+             If the Record argument to With is an error, that error will be returned by the function
+             and the Formula will not be evaluated.
+             Syntax
+             With( Record, Formula )
+                   Record – Required. The record to be acted upon. For names values, use the inline
+                   syntax { name1: value1, name2: value2, ... }
+           Formula – Required. The formula to evaluate for Record. The formula can reference
+           any of the fields of Record directly as a record scope.
+        Examples
+        Simple named values
+         Power Apps
+         With( { radius: 10,
+                 height: 15 },
+             Pi() * (radius*radius) * height
+         )
+         // Result: 4712.38898038 (as shown in a label control)
+        This example uses a record of named values to calculate the volume of a cylinder. With
+        is being used to capture all the input values together, making it easy to separate them
+        from the calculation itself.
+        Nested With
+         Power Apps
+         With( { AnnualRate: RateSlider/8/100,        // slider moves in 1/8th 
+         increments and convert to decimal
+                 Amount: AmountSlider*10000,          // slider moves by 10,000 
+         increment
+                 Years: YearsSlider,                  // slider moves in single year 
+         increments, no adjustment required
+                AnnualPayments: 12 },                // number of payments per year
+              With( { r: AnnualRate/AnnualPayments,  // interest rate
+                      P: Amount,                     // loan amount
+                      n: Years*AnnualPayments },     // number of payments
+                    r*P / (1 - (1+r)^-n)             // standard interest 
+        calculation
+              )
+        )
+       This example nests With functions to create a two-tier calculation for monthly mortgage
+       payments . As long as there is no conflict, all of the outer With named values are
+       available within the inner With.
+       Since the slider controls can only move in increments of 1, the sliders are divided or
+       multiplied to create effectively a custom increment. In the case of the interest rate, the
+       RateSlider has its Max property set to 48, divided by 8 for a 1/8 percentage point
+       increment and divided by 100 to convert from a percentage to a decimal, covering the
+       range 0.125% to 6%. In the case of of the loan amount, the AmountSlider has its Max
+       property set to 60 and multiplied by 10,000, covering the range 10,000 to 600,000.
+       The With is automatically recalculated as the sliders move and the new loan payment
+       displayed. No variables are used and there is no need to use the OnChange property of
+       the slider controls.
+       Here are the detailed instructions for creating this app:
+        1. Create a new app.
+        2. Add a Slider control and name it RateSlider. Set its Max property to 48.
+        3. Add a Label control to the left of the slider control. Set its Text property to
+         "Interest Rate:".
+        4. Add a Label control to the right of the slider control. Set its Text property to the
+         formula RateSlider/8 & " %".
+        5. Add another Slider control and name it AmountSlider. Set its Max property to 60.
+        6. Add a Label control to the left of this slider control. Set its Text property to "Loan
+         Amount:".
+        7. Add a Label control to the right of this slider control. Set its Text property to the
+         formula AmountSlider/8 * 10000.
+        8. Add another Slider control and name it YearsSlider. Set its Max property to 40.
+        9. Add a Label control to the left of this slider control. Set its Text property to
+         "Number of Years:".
+        10. Add a Label control to the right of this slider control. Set its Text property to the
+         formula YearsSlider.
+        11. Add a Label control and set its Text property to the formula shown above.
+          12. Add a Label control to the left of the last label control. Set its Text property to
+            "Recurring Monthly Payment:".
+         Primary key returned from Patch
+          Power Apps
+          With( Patch( Orders, Defaults( Orders ), { OrderStatus: "New" } ),
+                ForAll( NewOrderDetails,
+                        Patch( OrderDetails, Defaults( OrderDetails ),
+                               { Order: OrderID,          // from With's first 
+          argument, primary key of Patch result
+                                 Quantity: Quantity,      // from ForAll's 
+          NewOrderDetails table
+                                 ProductID: ProductID }   // from ForAll's 
+          NewOrderDetails table
+                        )
+                )
+          )
+         This example adds a record to the Order table in SQL Server. It then uses the returned
+         primary key for the order, returned by the Patch function in the OrderID field, to create
+         related records in the OrderDetails table.
+         Extracted values with a regular expression
+          Power Apps
+          With(
+              Match( "PT2H1M39S", "PT(?:(?<hours>\d+)H)?(?:(?<minutes>\d+)M)?(?:(?
+          <seconds>\d+)S)?" ),
+              Time( Value( hours ), Value( minutes ), Value( seconds ) )
+          )
+          // Result: 2:01 AM (as shown in a label control, use the Text function to 
+          see the seconds)
+         This example extracts the hours, minutes, and seconds from an ISO 8601 duration value
+         and then uses these sub-matches to create a Date/Time value.
+         Note that although the sub-matches contain numbers they are still in a text string. Use
+         the Value function to convert to a number before performing mathematical operations.
+         Map a record in a component
+         See Map record.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+             Day, Month, Year, Hour, Minute, Second,
+             and Weekday functions
+             Article • 06/10/2024
+             Applies to:      Canvas apps       Dataverse formula columns         Desktop flows 
+             Model-driven apps        Power Pages        Power Platform CLI
+             Returns individual components of a Date/Time value.
+             Description
+             The Day function returns the day component of a Date/Time value, ranging from 1 to
+             31.
+             The Month function returns the month component of a Date/Time value, ranging from
+             1 to 12.
+             The Year function returns the year component of a Date/Time value, starting with 1900.
+             The Hour function returns the hour component of a Date/Time value, ranging from 0
+             (12:00 AM) to 23 (11:00 PM).
+             The Minute function returns the minute component of a Date/Time value, ranging from
+             0 to 59.
+             The Second function returns the second component of a Date/Time value, ranging from
+             0 to 59.
+             The Weekday function returns the weekday of a Date/Time value. By default, the result
+             ranges from 1 (Sunday) to 7 (Saturday). You can specify a different range with a
+             Microsoft Excel Weekday function code or a StartOfWeek enumeration value:
+                                                                                       ﾉ
+                                                                                           Expand table
+              Excel code   StartOfWeek enumeration      Description
+              1, 17        StartOfWeek.Sunday           Numbers 1 (Sunday) through 7 (Saturday). Default.
+              2, 11        StartOfWeek.Monday           Numbers 1 (Monday) through 7 (Sunday).
+              3            StartOfWeek.MondayZero       Numbers 0 (Monday) through 6 (Sunday).
+              12           StartOfWeek.Tuesday          Numbers 1 (Tuesday) through 7 (Monday).
+              Excel code   StartOfWeek enumeration      Description
+              13           StartOfWeek.Wednesday        Numbers 1 (Wednesday) through 7 (Tuesday).
+              14           StartOfWeek.Thursday         Numbers 1 (Thursday) through 7 (Wednesday).
+              15           StartOfWeek.Friday           Numbers 1 (Friday) through 7 (Thursday).
+              16           StartOfWeek.Saturday         Numbers 1 (Saturday) through 7 (Friday).
+             All functions return a number.
+             See working with dates and times for more information.
+             Syntax
+             Day( DateTime )
+             Month( DateTime )
+             Year( DateTime )
+             Hour( DateTime )
+             Minute( DateTime )
+             Second( DateTime )
+                   DateTime - Required. Date/Time value to operate on.
+             Weekday( DateTime [, WeekdayFirst ] )
+                   DateTime - Required. Date/Time value to operate on.
+                   WeekdayFirst - Optional. Excel code specifying which day starts the week. If not
+                   supplied, 1 (Sunday first) is used.
+             Examples
+             For the following example, the current time is 3:59:37 PM on Thursday, April 9, 2015.
+                                                                                       ﾉ
+                                                                                          Expand table
+              Formula                                    Description                             Result
+              Year( Now() )                              Returns the year component of the       2015
+                                                         current time and date.
+              Month( Now() )                             Returns the month component of the      4
+                                                         current time and date.
+               Formula                                      Description                              Result
+               Day( Now() )                                 Returns the day component of the         9
+                                                            current time and date.
+               Hour( Now() )                                Returns the hour component of the        15
+                                                            current time and date.
+               Minute( Now() )                              Returns the minute component of the      59
+                                                            current time and date.
+               Second( Now() )                              Returns the second component of the      37
+                                                            current time and date.
+               Weekday( Now() )                             Returns the weekday component of the     5
+                                                            current time and date, using the default
+                                                            start of the week as Sunday.
+               Weekday( Now(), 14 )                         Returns the weekday component of the     1
+                                                            current time and date, using an Excel
+                                                            code to specify the start of the week as
+                                                            Thursday.
+               Weekday( Now(), StartOfWeek.Wednesday )      Returns the weekday component of the     2
+                                                            current time and date, using a
+                                                            StartOfWeek enumeration to specify the
+                                                            start of the week as Wednesday.
+             Feedback
+                                                
+             Was this page helpful?      Yes       No
+             Provide product feedback
+              Create a canvas app from within a
+              solution
+              Article • 12/16/2022
+              Create an app from within a solution if, for example, you want to deploy the app to a
+              different environment. Solutions can contain not only apps but also customized tables,
+              choices, and other components. You can quickly customize an environment in a variety
+              of ways by creating apps and other components from within a solution, exporting the
+              solution, and then importing it into another environment.
+              For more information about solutions, see Solutions overview.
+              Prerequisite
+              To follow the steps in this topic, you must switch to an environment that contains a
+              Microsoft Dataverse database.
+                ７ Note
+                To use or run a flow in a canvas app that is included in a solution, you must be
+                assigned a Dataverse security role with the Read privilege on the Process
+                (Workflow) table. For more information about security roles and privileges in
+                Dataverse, see Security roles and privileges.
+              Create a solution
+              You can skip this procedure if you already have a solution in which you want to create
+              an app or to which you want to link an app.
+                 1. Sign in    to Power Apps, and then (if necessary) switch to the appropriate
+                    environment:
+                          If you want to create an app from within a solution, switch to any
+                          environment that contains a Dataverse database.
+                          If you want to link an existing app to a solution, switch to the environment
+                          that contains that app.
+                 2. In the left navigation bar, select Solutions.
+         3. In the banner under the title bar, select New solution.
+         4. In the window that appears, specify a display name, a publisher, and a version for
+          your solution.
+          A name (with no spaces) will be generated automatically based on the display
+          name that you specify, but you can customize the generated name if you want. You
+          can specify the default publisher for your environment and 1.0 for the version if
+          you don't have specific needs in those areas.
+         5. Near the upper-left corner, select Save and Close.
+       Create a canvas app in a solution
+       You can create a blank canvas app from within a solution. You can't automatically
+       generate a three-screen app or customize a template or sample app from within a
+       solution.
+                 1. Sign in    to Power Apps.
+                 2. If necessary, switch to the environment that contains the solution in which you
+                    want to create a canvas app.
+                 3. In the left navigation bar, select Solutions.
+                 4. In the list of solutions, select the solution in which you want to create a canvas app.
+                 5. In the banner under the title bar, select New > App > Canvas app, and then select
+                    the form factor (phone or tablet) of the app that you want to create.
+                    Power Apps Studio opens with a blank canvas in another browser tab.
+                 6. Create your app (or make at least one change), and then save your changes.
+                 7. On the browser tab where you selected your solution, select Done to refresh the
+                    list of components in your solution.
+                    Your new app appears in the list of components for that solution. If you save any
+                    changes to your app, they will be reflected in the version that's in the solution.
+              Add an existing canvas app to a solution
+              If you want to add an app to a solution, both must be in the same environment, and the
+              app must have been created from within a solution.
+                 1. Sign in    to Power Apps.
+                 2. If necessary, switch to the environment that contains the solution to which you
+                    want to link an app.
+                 3. In the left navigation bar, select Solutions.
+                 4. In the list of solutions, select the solution to which you want to link an app.
+        5. In the banner under the title bar, select Add existing > App > Canvas app.
+          A list of canvas apps that were created within a solution in this environment
+          appears.
+        6. In the list of apps, select the app that you want to link to the solution, and then
+          select Add.
+       Known limitations
+       For information about known limitations, see Solutions overview.
+       Next steps
+          Create or link more apps and other components, such as tables, flows, and
+          dashboards, to your solution.
+          Export your solution so that you can deploy it to another environment, on
+          AppSource, and so forth.
+      See also
+      Add canvas apps to solution by default (preview)
+         Add canvas apps and cloud flows to a
+         solution by default
+         You can create a canvas app in a solution in Power Apps or create a cloud flow in a solution in
+         Power Automate. Creating a canvas app or a cloud flow in a solution previously required
+         manual steps. Now you can create them in a solution by default.
+         Because canvas apps and cloud flows in a solution are defined in Microsoft Dataverse, you can
+         use Dataverse capabilities to manage them, including connection references, environment
+         variables, the Dataverse API, role-based security, and solution-based application lifecycle
+         management (ALM).
+            ） Important
+                 The canvas apps setting is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+         Prerequisites
+               Solutions are stored in Dataverse, so the environment must have a Dataverse database to
+               use this feature. If yours doesn't, add a Dataverse database.
+               To create canvas apps in solutions, you must have write privileges to the CanvasApp
+               table. To create cloud flows in solutions, you should have the Environment Maker role.
+               Learn more in Security roles and privileges.
+               A canvas app or cloud flow in a solution must be shared with you before you can view or
+               edit it.
+            ） Important
+            Before you enable the creation of canvas apps and cloud flows in solutions by default,
+            review the Considerations section in this article.
+         Supported creation methods and entry points
+         Several methods and entry points are available for creating canvas apps and cloud flows.
+          Canvas apps creation methods and entry points
+          The following table summarizes the methods that allow you to create canvas apps in a solution
+          by default.
+                                                                                                   ﾉ Expand table
+            Method                                                               Available for canvas apps in a
+                                                                                 solution by default?
+            Create a canvas app from Dataverse                                   Yes
+            Create a canvas app from other data sources, such as SharePoint,     Yes
+            Excel, Azure Blob Storage, and others
+            Create a blank canvas app                                            Yes
+            NOTE: Power Apps      > Apps > New app > Canvas also creates a
+            blank canvas app.
+            Create a canvas app from a template                                  No
+            Create a canvas app by customizing SharePoint forms                  No
+          Cloud flows creation methods and entry points
+          The following table summarizes the methods that allow you to create cloud flows in a solution
+          by default.
+                                                                                                   ﾉ
+                                                                                                       Expand table
+            Method                                                     Available for cloud flows in a solution by
+                                                                       default?
+            Create a cloud flow from blank in a portal                 Yes
+            Create a cloud flow from a template in a portal            Yes
+            Create a cloud flow from Power Automate Management         Yes
+            connector
+            Create a cloud flow from PowerShell                        Yes
+            Create a cloud flow from Power Apps                        Yes
+            Create a cloud flow from Teams                             Yes
+            Create a cloud flow from OneDrive                          Yes
+           Method                                                    Available for cloud flows in a solution by
+                                                                     default?
+           Create a cloud flow from Dynamics 365                     Yes
+           Create a cloud flow from the Excel add-in                 Yes
+           Create a cloud flow from the Power Automate mobile app    Yes
+           Create a cloud flow from SharePoint                       Yes
+           Create a cloud flow from Project Roadmap                  Yes
+             ） Important
+             Unsupported entry points will fail to create any cloud flow until that support is added to
+             create a solution cloud flow with that entry point. You must first create a cloud flow in a
+             solution using a supported method.
+          Manage feature settings for Cloud flows and
+          Canvas apps in Dataverse solutions
+          You can control whether makers can create new canvas apps and cloud flows directly in
+          Dataverse solutions.
+          Existing environments
+             1. Sign in to the Power Platform admin center and select an environment.
+             2. Go to Settings > Product > Features.
+             3. Under Create new canvas apps and cloud flows in Dataverse solutions, turn on Canvas
+                apps (Preview) or Cloud flows as desired.
+          New environments
+                All new environments provisioned with a Dataverse database have the Cloud flows
+                setting enabled by default.
+                The Canvas apps (Preview) setting is also enabled by default, though it remains in
+                preview.
+                If you prefer not to use these features, you must manually disable them in the
+                environment settings.
+          Learn more about managing feature settings in Manage feature settings.
+     View canvas apps and cloud flows in solutions
+     To view canvas app and cloud flow objects in a solution, use the solution view. You must have
+     access to the object added inside a solution to view it in a solution view.
+     Export and import using solutions
+     Once the feature is enabled, use solutions export and import instead of exporting and
+     importing legacy packages of canvas apps and flows. Legacy packages can be imported in
+     environments with the environment setting turned off.
+     Move flows into a solution with PowerShell
+     Use the Add-AdminFlowsToSolution cmdlet to move non-solution Power Automate flows into a
+     solution for better lifecycle management and deployment. This command lets you migrate
+     multiple flows by specifying environment and solution IDs, and targeting flows by name or ID.
+     For more information, see Microsoft.PowerApps.Administration.PowerShell Module.
+     Considerations
+     Take the following considerations into account before you decide to create canvas apps and
+     cloud flows in a solution by default.
+        Your Dataverse environment capacity consumption and related cost might increase.
+        Known solution limitations related to canvas apps still apply to canvas apps created in
+        solutions by default.
+        This feature automatically creates environment variables when you add data sources for
+        your apps.
+        By default, this feature saves all canvas apps to the default solution, Common Data
+        Services Default Solution, published by Microsoft Dataverse Default Publisher. However,
+        we recommend that you save your canvas apps to a different solution. Learn more about
+        adding existing canvas apps to solutions.
+        When you turn the feature on or off for canvas apps and cloud flows in the Power
+        Platform admin center, the Dataverse properties enablecanvasappsinsolutionsbydefault
+        and enableFlowsInSolutionByDefault in the organization table are updated. You can view
+        the value of these properties using the following sample ODATA snippet: [org
+        URI]/api/data/v9.0/organizations. Learn more in Organization table reference.
+        If you're planning to change the prefix for the default publisher or solution for your
+        environment, you can learn more in Solution publisher prefix, Create solution publisher
+        prefix and Change solution publisher prefix.
+        Non-solution canvas apps and non-solution cloud flows can be added into a solution to
+        add them into Dataverse, but there's no way to revert back.
+     Improvements
+     The following scenarios were improved to support cloud flows and canvas apps defined in
+     Dataverse:
+        The Monitor > Cloud flow activity page now supports solution cloud flows.
+        The List My Flows API doesn't return any solution cloud flows.
+        Audit log events for cloud flow permissions that provide visibility into sharing now
+        include solution cloud flows.
+        The List Flows as Admin API now returns solution cloud flows that weren't previously
+        turned on (published). This API now returns all non-solution and solution cloud flows.
+        Flows with delegated authentication to Roadmap can be added into a solution and
+        migrated to Dataverse.
+        Flows with delegated authentication to SharePoint can be added into a solution and
+        migrated to Dataverse.
+     Is this feature generally available or preview?
+     As of October 29, 2024, the cloud flows setting is generally available. The canvas apps setting
+     remains in preview.
+     The cloud flows setting continues to be off by default and optional.
+     Does putting flows into Dataverse use Dataverse
+     capacity?
+     Moderately. Flow definitions use a small amount of Dataverse storage. A large flow definition
+     could reach 10 KB. With this worst case scenario: 10,000 flows x 10 KB = 100 MB or 0.1 GB. The
+     small increase in Dataverse storage used provides significant benefits, since solution cloud
+     flows are needed to leverage capabilities including application lifecycle management (ALM),
+     governance with Dataverse, automation center, drafts and versioning, and expanded security
+     capabilities.
+     Related information
+        Solutions overview
+         Application lifecycle management (ALM) guide
+      Last updated on 11/07/2025
+             Install Northwind Traders database and
+             apps
+             Article • 03/11/2023
+             By following the steps in this series of topics, you can discover concepts about relational
+             data as implemented in a sample database in Microsoft Dataverse. You can also explore
+             sample business apps, both canvas and model-driven, for managing that data and earn
+             practical experience by creating such an app. This first topic explains how to install the
+             Northwind Traders database in your own environment and gain access to the sample
+             apps, which you can open for editing to reveal how they were built.
+             Northwind Traders is a fictitious organization that manages orders, products, customers,
+             suppliers, and many other aspects of a small business. This sample appeared with the
+             first versions of Microsoft Access and is still available as an Access template.
+             Prerequisites
+                  A Power Apps license that supports Dataverse. You can use a free trial license for
+                  30 days.
+                  An environment with a Dataverse database. You can create such an environment if
+                  you have appropriate permissions.
+             Download the solution
+              Download the Northwind Traders Solution File
+             This solution file (.zip) contains the definitions of tables, choices, and business processes;
+             the canvas and model-driven apps; and any other pieces that are used together.
+             Install the solution
+                1. Sign in to Power Apps  , and then ensure that you're working in an environment
+                  that contains a Dataverse database.
+                2. In the left navigation pane, select Solutions. If the item isn’t in the left navigation
+                  pane, select …More and then select the item you want. Then select Import in the
+                  toolbar near the top of the screen:

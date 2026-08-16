@@ -1,0 +1,2619 @@
+    Catalog in Power Platform
+    Building from scratch every time by recreating branding, layouts, links, complex connectors and
+    flows, and more is painful and error-prone. Organizations where developers and makers build
+    and share customized and reusable components and templates get more value from Power
+    Platform. Successful organizations adopt a fusion teams model where pro-developers, makers,
+    and admins all work together to deliver the best solutions for their users, and derive the
+    highest value possible from Power Platform.
+     ） Important
+        The catalog needs to be set up by an admin before you can use it, including
+        permissions. More information Administer the catalog.
+        The catalog only works with Microsoft Dataverse environments. Environments
+        without Dataverse aren't supported at this time.
+        You need a Managed Environment in order to submit solutions to the catalog.
+        However, you can install catalog items from any environment. More information:
+        Managed Environments overview
+    In any organization, there might be many components and templates distributed among many
+    environments. The catalog in Power Platform enables developers and makers to:
+       Crowd-source and find templates and components within their organization easily
+       Find and install the latest and authoritative version of a component
+       Get started with templates and components that provide immediate value
+    Components include things like:
+       AI prompts
+       Copilot app templates
+       AI plugins
+       Power Platform dataflows
+       Custom connectors
+       Power Apps component framework controls
+       Power Automate flows
+       Canvas apps
+       Model-driven apps
+    Templates are items that represent an advanced starting point for components. Templates
+    connect to their enterprise systems and resources and utilize an organization's themes.
+          Terminology
+          These terms are important to understand when using the catalog:
+                                                                                           ﾉ Expand table
+           Term           Description
+           Catalog Item   The unit of interaction with the catalog is called an item.
+                          - An item is what is being submitted to or installed from the catalog.
+                          - Typically, an item is a Dataverse solution or package deployer package. An item can
+                          contain a fully built application, a template for a Power App or flow, or a Power Platform
+                          code-first component such as a custom connector or Power Apps component framework
+                          (PCF) control.
+           Catalog        The owning entity of the application. For example, the publisher can be the human
+           Publisher      resources IT team or another line of business team.
+                          - A group of people in an organization that are responsible for managing its lifecycle.
+                          - Support and engineering contacts can be provided.
+                          - Note that the catalog publisher is different from the solution publisher.
+           Submission     The act of sharing an item involves submitting it to the catalog. This act creates a
+                          submission request in the system.
+           Submission     The result of a submission. This request can be approved or declined. When auto
+           Request        approval is configured for the catalog, no approval is required.
+           Discovery      Act of finding items within a catalog by authorized users.
+           Acquisition    Act of installing the item to a target environment by a developer.
+          Catalog basics
+          The catalog needs to be set up by an admin before you can use it, including privileges. More
+          information: Administer the catalog.
+          You might choose to have multiple catalogs across environments for different regions,
+          departments, or any group. Most organizations only need one catalog. A catalog admin can set
+          up new catalogs in the Power Platform admin center      .
+          You can submit unmanaged solutions to the catalog for other makers to install and use for
+          themselves, as one of these two catalog item types:
+               A template: A copy of your unmanaged solution that other makers can edit however they
+               choose. Updates to the original unmanaged solution won't update templates, as
+               templates are no longer "connected" to the solution it came from. If you want other
+        makers to have the ability to change the catalog components as they see fit, use a
+        template.
+         ７ Note
+         Currently, certain components aren't supported for use as templates. The supported
+         components for templates are:
+           Table and its sub components like forms, saved queries, relationships, table maps.
+           Environment variables.
+           Canvas apps.
+           Modern workflows.
+           AiModel and its subcomponents like AiConfig.
+           Web resources.
+           Power Apps component framework components. This includes modern solution
+           aware components created using the Power Apps component framework. For
+           example custom API, AiPlugin, and AIPlugin operation.
+        A managed item: Managed items can be updated with more versions as the original
+        solution is updated, but are generally restricted from editing. If you want makers to use
+        your solution as is and you also want to keep copies updated with your changes in the
+        future, use a managed item. Managed items are useful for a variety of scenarios for
+        makers:
+         Use the assets of the managed item as is and make no changes.
+         Build custom functionality on top of the assets in the managed item without changing
+         the original components.
+         Use the assets to assist with building your own solutions. For example, PCF
+         components, custom connectors, and so on.
+     Admins can administer catalogs, manage access and security, approve catalog items, and more
+     in the Catalog Manager, which is the dedicated workspace for admins of the catalog. The
+     catalog itself is designed for makers of any level of experience to publish, discover, and acquire
+     useful catalog items for themselves.
+     Discovery
+     The catalog area is available in Power Apps and Power Automate. On the catalog page are tiles
+     representing all catalog items available to your organization. This includes items published by
+     your organization, approved partners who have access to your environments, as well as many
+     published by Microsoft, such as AI prompts, Copilot app templates, dataflow templates,
+     enterprise templates, PCF controls, plug-ins, and more.
+                                                     
+     On the page itself are the following controls:
+        Search box (searches the titles of available catalog items)
+        Filters (filters for publisher, type, category, and more)
+        Catalog selector (some organizations might choose to create multiple catalogs for
+        regions or departments). Users can have access to one or more catalogs.
+     The list of Microsoft published catalog items that will be available in your catalog out of the
+     box are:
+        AI Prompts
+        Copilot app templates
+        Enterprise templates
+        Power Platform dataflows
+        PCF controls
+        Plug-ins
+        Retail cloud templates
+        Copilot agents
+     My Activity
+     Linked in the banner of the catalog page is the My Activity page. This shows useful info on
+     items you have submitted and acquired, including approval status.
+                                            
+    Filters on top of the page allow you to look at different date ranges, types of catalog items,
+    and across different catalogs (if you have multiple catalogs set up in your tenant).
+       Metrics on this page:
+        Total items submitted: Sum of all items you submitted.
+        Items approved: Sum of all items you submitted that were approved by your admin.
+        Items awaiting approval: Sum of all items you submitted that your admin has not
+        responded to yet.
+        Items acquired: Sum of all items you acquired from the catalog.
+       Catalog items acquired table:
+        Item ID: Unique identifier for the acquired item.
+        Item name: Display name for the acquired item.
+        Deployment type: Whether item is a template or managed.
+        Date acquired: Date item was last acquired.
+        Status: Current status of the acquired item, such as completed or failed.
+        Message: Status message, can explain why an item failed.
+       Catalog items submitted table:
+        Item ID: Unique identifier for the submitted item.
+        Item name: Display name for the submitted item.
+        Deployment type: Whether item is a template or managed.
+        Date submitted: Date item was last submitted.
+                Status: Current status of the submitted item, such as approved, rejected, or pending
+                approval.
+                Reject reason: Why a submitted item was rejected by an admin.
+        Frequently asked questions (FAQ)
+        The following are frequently asked questions related to catalog in Power Platform.
+        Where do I provide feedback on catalog?
+        Ask questions and submit feedback at: github.com/microsoft/PowerPlatform-
+        Catalog/discussions
+        What are the items in the catalog?
+        The catalog items are actually packages. A package contains one or more solutions and some
+        metadata. The Power Apps    experiences can submit individual solutions. The Power Platform
+        CLI experience can be used to create a package containing multiple solutions.
+        What are solution templates? What does it mean to install an
+        unmanaged solution?
+        The use of a solution as a solution template is a new scenario we're making available with the
+        catalog. When a maker acquires a solution template, they'll get a new unmanaged copy of that
+        solution. Multiple copies of that unmanaged solution can exist in the same environment and
+        each has a unique identifier.
+        Catalog item install looks a lot like solution import. Are they
+        the same thing?
+        A catalog item is a package that contains one or more solutions. Installation of a package
+        containing a single solution with no other package configuration looks similar to a solution
+        import.
+        Will the catalog support PCF components within solutions?
+        What about other solution component types?
+        Yes, distribution of PCF controls is made easier by using a catalog. Any solution component can
+        be contained in a solution in the catalog.
+      Can the templates have multiple owners so people know who
+      to reach out to for more information?
+      Yes, ownership information is part of the metadata for a catalog item. The ownership can be a
+      group with multiple people in it.
+      Is there a way to add documentation such as a user guide
+      when submitting a template?
+      Yes, documentation links are part of the metadata for a catalog item.
+      Can catalogs be shared to security groups?
+      Yes, catalog permissions can be targeted at specific security groups.
+      Next steps
+      Learn how to administer the catalog.
+       Administer the catalog
+      Learn how to view, submit, and install catalog items.
+       Submit and install catalog items
+      Ask questions or contact the project team on GitHub.
+       github.com/microsoft/PowerPlatform-Catalog/discussions
+       Last updated on 02/04/2026
+          View, submit, and install catalog items
+          Article • 11/14/2024
+          In any organization, there might be many components and templates distributed among
+          many environments. The catalog in Power Platform enables developers and makers to:
+              Crowd-source and find templates and components within their organization easily
+              Find and install the latest and authoritative version of a component
+              Get started with templates and components that provide immediate value
+           ） Important
+           You need a Managed Environment in order to submit items to the catalog. You can
+           however install catalog items from any environment. More information: Managed
+           Environments overview
+          Before reading this article, you should:
+              Learn about the catalog
+              Learn how administrators setup and configure the catalog
+           ７ Note
+           Developers can also use the Power Platform CLI, Dataverse SDK for .NET, and
+           Dataverse Web API to perform the operations described here. Catalog in Power
+           Platform for developers
+          Access controls
+          The catalog has a separate set of access controls from Power Platform. This means
+          makers in a given environment don't automatically get permissions to publish and
+          acquire items from the catalog. There are four access roles:
+                                                                ﾉ
+                                                                  Expand table
+           Role       Enables user to:
+           Catalog    Submit items to the catalog
+           Submitter
+              Role           Enables user to:
+              Catalog        Discover and install items from the catalog
+              Consumer
+              Catalog        Approve submissions to the catalog.
+              Approver       Catalog approvers can be users from your central IT department or line of
+                             business that your organization wants to empower to participate in the approvals
+                             process.
+              Catalog        Administer the catalog.
+              Admin
+             Any environment that has a catalog sees these roles inside of Power Platform admin
+             center, and can be assigned to groups or individuals just like any other security roles.
+             Power Platform admins and system customizers already have full access to the catalog.
+             However, don't assign these roles for generally managing catalog access, and instead
+             use one of the roles in the previous table.
+             Submission
+             Unmanaged solutions in your environment can be published to the catalog. In your
+             normal course of creating solutions, you might decide that what you're building would
+             be useful as a reusable artifact for yourself or others in your organization.
+             Navigate to your solutions page, and any unmanaged solution has a new option for
+             Publish to Catalog in the three vertical dots next to the solution display name. This
+             option is disabled for anyone without the Catalog Submitter role.
+                                           
+       ７ Note
+       This option is not enabled for managed solutions. You can't submit managed
+       solutions into the catalog.
+      You can't submit an app, flow, or other component directly into the catalog. You must
+      first ensure it exists in an unmanaged solution. You can add it to an unmanaged solution
+      by selecting New solution on top of the Solutions area or by selecting an existing one
+      from the list, and then selecting Add existing in the top menu in the solution itself, and
+      adding your desired component (such as an app or a flow).
+                                           
+       ７ Note
+       Any maker with the Catalog Submitter role in a given environment will be able to
+       publish. However, after a solution is published, a maker needs to be a part of the
+       publishing group to re-publish that same solution again. You see this error if you
+       don't have access, which you can request from your admin.
+                                           
+      When you select Publish to Catalog, there's a wizard with four steps:
+      Step 1: Add your solution
+       1. Select a catalog: If you have multiple catalogs set up, you can select which catalog
+        you would like to publish this item to.
+           2. Select managed item or template for your submission.
+                 Managed items can't be edited by other makers, your environment shares a
+                 single copy, and that copy can be versioned with updates over time. Makers
+                 can then update their solutions with your updates.
+                 A template is a standalone copy that can be edited, makers can have as many
+                 copies as they want, and won't automatically update solutions in
+                 environments when new updates are published.
+           3. Select a primary component: A solution might have many components in it. You
+             might want makers to open a specific component for editing after they install it,
+             such as opening Canvas Studio for your canvas app. Set the primary component to
+             whichever you think is the "focus" of the solution, otherwise, set Unspecified, and
+             installers go the solution itself.
+         Resubmitting items
+         If you're resubmitting an item, you get an alert message notifying you about the
+         resubmission. You're prompted with a version field. The last digit of the version number
+         is automatically incremented for you. You can modify the version number if you like, but
+         don't set the version number to a lower number from this interface. Updating the
+         version number in the catalog submission updates the version number in the original
+         solution as well.
+         Keep these points in mind when resubmitting items:
+             Resubmitting a template replaces the previous item in the catalog, and doesn't
+             affect any solutions already using the previous catalog item. Makers who now
+             install your resubmission get your newest version.
+             Resubmitting managed items will update the catalog item with your most recent
+             version, and the next time makers see your catalog item in an environment where
+             that catalog item was already installed, they'll see an Update button, which installs
+             the most recent changes to the managed item into that environment, and then all
+             solutions using that managed item will be updated as well.
+             You can't resubmit a managed item as a template, and vice versa.
+         Step 2: Catalog info
+         Enter the following information:
+                                                            ﾉ
+                                                              Expand table
+               Field           Instructions
+               Title           Rename the item if needed before it gets submitted to catalog. The default is
+                               the solution name. You can't edit title when submitted a managed item.
+               Description     Provide details on this catalog item. Makers read your description in the catalog
+                               gallery to find out more about it.
+               Business        By default, your admin must approve all catalog submissions before they're
+               justification   added to the catalog. This field provides a justification for your submission to
+                               your admin.
+               Works with      A flow that you're building might be intended to work with canvas apps and
+                               model apps, for example. Indicate here what your catalog item is intended to
+                               work with.
+               Business        Select up to five business categories that describe your catalog item. Makers use
+               categories      these categories to search for catalog items that are of interest to them.
+               Publisher       Select an existing publisher in this environment, or create a new publisher, to
+                               connect to this catalog submission. A maker can't resubmit a catalog item unless
+                               they're part of the publishing group that submitted the item the first time.
+               Author          This defaults to the current user, but you can change it if needed
+             Step 3: Solution info
+             Enter the following information:
+                                                                                          ﾉ
+                                                                                              Expand table
+               Field            Instructions
+               Solution icon    Attach an icon to your solution (216 x 216 pixel) to help identify it in the catalog
+                                gallery
+               template         Attach some screenshots or other visuals that can help makers understand more
+               images           details about this catalog item
+               Help link        Add the URL for any help documentation
+               Privacy policy   Add the URL for any privacy policy documentation
+               link
+               Legal terms      Add the URL for any legal terms documentation
+               link
+             Step 4: Review and finish
+       This last step provides a summary of all the info you provided. If everything looks good,
+       select Submit to publish to the catalog. As previously mentioned, if your catalog
+       requires an approver before submission can complete, you need to wait for approval.
+       Contact your admin or approver if you need the process accelerated.
+       Acquisition
+       As makers browse the Discover page and find catalog items that are useful for them,
+       they can acquire those artifacts and install a copy into their environment to start using
+       or building with. Selecting Get on any template or managed item opens a details popup
+       that contains information like description, links, included components, business
+       categories, expandable screenshots, and more.
+                            
+       If the details meet what the maker is looking for, they can select Get on the details
+       popup to start the acquisition wizard.
+        ７ Note
+        If the catalog item is a managed item, and has already been installed in the
+        environment, you can't install the managed item again, as the environment shares
+        that managed item. If the managed item has already been installed in an
+        environment, and an update has been published to the managed item, you see an
+        Update button instead of Get, which updates the shared managed solution in the
+        environment. If the managed item was already updated, and no new updates have
+        been published, the Update button is disabled until a new update is published.
+       The acquisition wizard has four steps:
+       Step 1: Check connections
+        This step checks the connections for the solution to make sure they're working for you
+        in your environment. If there are any connection issues, you see a red status notification,
+        and can resolve by selecting the ellipsis (…) next to the problematic connection to
+        update it.
+        Step 2: Environment variables
+        The publishing maker might decide some environment variables need to be specified
+        before you can acquire the solution. Typically, these variables are set to some default
+        value. If unsure of what to fill out, check with the author of the catalog item or in the
+        details of the catalog listing, available on the catalog details. More information: Step 2:
+        Catalog info
+        Step 3: Configuration
+        The publishing maker determines this step, if they want you to provide any additional
+        information for using the solution. This might include things like, "What days of the week
+        do you run a report?". If no additional information needed, this step is blank.
+        Step 4: Summary
+        When you reach the final step, the summary screen, you're now waiting for the catalog
+        item to install into your environment. Depending on the complexity, this might take
+        from less than a minute to several minutes. When complete, you're given several
+        options in the dropdown, depending on what's included in the catalog item, and if the
+        author set a primary component. The following is an example where a canvas app is the
+        primary component of the catalog item:
+                                           
+      In this example, you can:
+        Edit App: Opens the app in Canvas Studio
+        Go to App: Takes you to the app screen, if you aren't ready to edit yet
+        Go to Solutions: Opens the solution file
+      Depending on what is contained in the catalog item package, different options appear.
+      After the catalog item is installed, you can find the catalog item:
+        In the Unmanaged solutions list in the solutions page if the catalog item was a
+        template
+        In the Managed solutions list in the solutions page if the catalog item was a
+        managed item
+      As previously mentioned, templates can be acquired as many times as you like, each as
+      its own copy. The catalog appends a suffix to the unmanaged solution display name to
+      differentiate the different copies. Managed items can be acquired only once into the
+              managed solutions list, and all makers in the environment share the same managed
+              solution. This means you can't acquire a managed item back into the same environment
+              it was published from and the Update button is disabled.
+              See also
+              Catalog in Power Platform)
+              Administer the catalog
+              Catalog in Power Platform for developers
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Self-service data prep with dataflows
+       Article • 02/15/2022
+       As the volume of data continues to grow, so does the challenge of shaping that data
+       into well-structured, actionable information. You want data that’s ready for apps, AI
+       workloads, or analytics so that you can quickly turn volumes of data into actionable
+       insights. With self-service data prep in the Power Apps portal, you can transform and
+       load data to Microsoft Dataverse or your organization’s Azure Data Lake Storage Gen2
+       account with just a few clicks.
+       Dataflows were introduced to help organizations unify data from disparate sources and
+       prepare it for consumption. You can easily create dataflows using familiar, self-service
+       tools to ingest, transform, integrate, and enrich big data. When creating a dataflow, you
+       will define data source connections, ETL (extract, transform, load) logic, and destination
+       to load the resulting data to. Once created, you can configure a dataflow's refresh
+       schedule to indicate how frequently it should run. In addition, the new model-driven
+       calculation engine makes the process of data preparation more manageable, more
+       deterministic, and less cumbersome for dataflow customers. With dataflows, tasks that
+       once required a data IT organization to create and oversee (and many hours or days to
+       complete) can now be handled with a few clicks by individuals who aren’t even data
+       scientists, such as app creators, business analysts and report creators.
+       Dataflows store data in tables. An table is a set of rows used to store data, similar to
+       how a table stores data within a database. Customers can define custom table schema
+       or leverage the Common Data Model’s standard tables. The Common Data Model is a
+       shared data language for business and analytical applications to use. The Common Data
+       Model metadata system enables consistency of data and its meaning across applications
+       and business processes such as Power Apps, Power BI, some Dynamics 365 apps (model-
+       driven apps), and Azure, which store data in conformance with the Common Data
+       Model. A dataflow’s resulting tables can then be stored in either of the following:
+         Dataverse. Lets you securely store and manage data that's used by business
+         applications built using Power Apps and Power Automate.
+         Azure Data Lake Storage Gen2. Lets you collaborate with people in your
+         organization using Power BI, Azure Data, and AI services or custom-built line-of-
+         business applications that read data from the lake. Dataflows that load data to an
+         Azure Data Lake Storage Gen2 account store data in Common Data Model folders.
+         Common Data Model folders contain schematized data and metadata in a
+         standardized format to facilitate data exchange and to enable full interoperability
+         across services that produce or consume data stored in an organization’s Azure
+         Data Lake Storage account as the shared storage layer.
+       You can use dataflows to ingest data from a large and growing set of supported on-
+       premises and cloud-based data sources including Excel, Azure SQL Database,
+       SharePoint, Azure Data Explorer, Salesforce, Oracle database, and more.
+       After selecting the data source, you can use the Power Query low-code/no-code
+       experience to transform the data and map it to standard tables in the Common Data
+       Model or create custom tables. Advanced users can directly edit a dataflow’s M-
+       language to fully customize dataflows, similar to the Power Query experience that
+       millions of Power BI Desktop and Excel users already know.
+       Once you’ve created and saved a dataflow, you will need to run it in the cloud. You can
+       choose to trigger a dataflow to run manually or schedule the frequency for the Power
+       Platform Dataflow service to run it for you. When a dataflow completes a run, its data is
+       available to use. To get dataflow data loaded into Dataverse, the Common Data Service
+       connector can be used in Power Apps, Power Automate, Excel, and all other applications
+       that support the Dataverse connector. To get from dataflows stored in your
+       organization’s Azure Data Lake Storage Gen2 account, you can used the Power Platform
+       Dataflow connector in Power BI Desktop or access the files directly in the lake.
+       How to use dataflows
+       The previous section provided background on dataflows technology. In this section, you
+       get a tour of how dataflows can be used in an organization.
+        ７ Note
+        You must have a paid Power Apps plan to use dataflows, but you are not charged
+        separately for using dataflows.
+       Load data to Dataverse
+       Dataflows can be used to populate tables in the Common Data Service that are then
+       used in Power Apps applications. With a few clicks, you can integrate data from online
+       and on-premises data sources.
+       Extend the Common Data Model for your business needs
+       For organizations that want to extend and build upon the Common Data Model,
+       dataflows enable business intelligence professionals to customize the standard tables or
+       create new ones. This self-service approach to customizing the data model can then be
+       used with dataflows to build Power BI dashboards that are tailored to an organization.
+       Extend your capabilities with Azure Data and AI services
+       Power Platform dataflows can be configured to store dataflow data in your
+       organization’s Azure Data Lake Storage Gen2 account. When an environment is
+       connected to your organization's data lake, data scientists and developers can leverage
+       powerful Azure products such as Azure Machine Learning, Azure Databricks, Azure Data
+       Factory, and more.
+       For more information about Azure Data Lake Storage Gen2 and dataflows integration,
+       including how to create dataflows that reside in your organization's Azure Data Lake,
+       see Connect Azure Data Lake Storage Gen2 for dataflow storage.
+       Summary of self-service data prep for big data
+       in Power Apps
+       There are multiple scenarios and examples where dataflows can enable you to get better
+       control—and faster insights—from your business data. Other people in your
+       organization can leverage dataflows either via Dataverse, the Power Platform Dataflow
+       connector in Power BI, or via direct access to Dataflow’s Common Data Service folder in
+       your organization’s Azure Data Lake Storage Gen2 account. Using a standard data
+       model (schema) defined by the Common Data Model, business applications can depend
+       on a table’s schema, and be abstracted from how the data was created or from which
+       data source. When a dataflow completes a scheduled run, the data is ready for modeling
+       and creation of apps, flows, or BI insights in a very short period... in what used to take
+       months, or longer, to create.
+       The standardized format of the Common Data Model allows people in your organization
+       to create apps that generate quick, easy, and automatic visuals and reports. Those
+       include, but aren’t limited to:
+          Mapping your data from various sources to standard tables in the Common Data
+          Model to unify data and leverage the known schema to drive out-of-the-box
+          applications.
+          Creating your own custom tables to unify data across your organization.
+          Creating Power BI reports and dashboards that leverage dataflow data.
+          Creating integration with Azure Data and AI services via your organization’s Azure
+          Data Lake Storage Gen2 account.
+       Next steps
+       This article provided an overview of self-service data prep in the Power Apps portal, and
+       the ways you can use it. The following topics go into more detail about common usage
+       scenarios for dataflows:
+          Creating and using dataflows in Power Apps
+          Add data to a table in Dataverse
+          Connect Azure Data Lake Storage Gen2 for dataflow storage
+          Using an on-premises data gateway in Power Platform dataflows
+       For more information about Power Query and scheduled refresh, you can read these
+       articles:
+          Query overview in Power BI Desktop
+          Configuring scheduled refresh
+       For more information about the Common Data Model, you can read its overview article:
+          Common Data Model - overview
+     Create and use dataflows in Power Apps
+     With advanced data preparation available in Power Apps, you can create a collection of data
+     called a dataflow, which you can then use to connect with business data from various sources,
+     clean the data, transform it, and then load it to Microsoft Dataverse or your organization’s
+     Azure Data Lake Gen2 storage account.
+     A dataflow is a collection of tables that are created and managed in environments in the Power
+     Apps service. You can add and edit tables in your dataflow, as well as manage data refresh
+     schedules, directly from the environment in which your dataflow was created.
+     Once you create a dataflow in the Power Apps portal, you can get data from it using the
+     Dataverse connector or Power BI Desktop Dataflow connector, depending on which destination
+     you chose when creating the dataflow.
+     There are three primary steps to using a dataflow:
+       1. Author the dataflow in the Power Apps portal. You select the destination to load the
+        output data to, the source to get the data from, and the Power Query steps to transform
+        the data using Microsoft tools that are designed to make doing so straightforward.
+       2. Schedule dataflow runs. This is the frequency in which the Power Platform Dataflow
+        should refresh the data that your dataflow will load and transform.
+       3. Use the data you loaded to the destination storage. You can build apps, flows, Power BI
+        reports, and dashboards or connect directly to the dataflow’s Common Data Model folder
+        in your organization’s lake using Azure data services like Azure Data Factory, Azure
+        Databricks, or any other service that supports the Common Data Model folder standard.
+     The following sections look at each of these steps so you can become familiar with the tools
+     provided to complete each step.
+     Create a dataflow
+     Dataflows are created in one environment. Therefore, you'll only be able to see and manage
+     them from that environment. In addition, individuals who want to get data from your dataflow
+     must have access to the environment in which you created it.
+      ） Important
+         Creating dataflows is currently not available with Power Apps Developer Plan
+         licenses.
+        The Firefox web browser currently isn't supported for the "Download refresh history
+        file" action in Power Apps dataflows. More information: You receive the error
+        message "There was a problem refreshing the dataflow"
+      1. Sign in to Power Apps, and verify which environment you're in, find the environment
+       switcher near the right side of the command bar.
+      2. On the left navigation pane, select Dataflows. If the item isn’t in the side panel pane,
+       select …More and then select the item you want.
+      3. Select New dataflow. On the New Dataflow page, enter a Name for the dataflow. By
+       default, dataflows store tables in Dataverse. Select Analytical entities only if you want
+       tables to be stored in your organization's Azure Data Lake storage account. Select Create.
+        ） Important
+        There's only one owner of any dataflow—the person who created it. Only the owner
+        can edit the dataflow. Authorization and access to data created by the dataflow
+        depend on the destination you loaded data to. Data loaded into Dataverse will be
+        available via the Dataverse Connector and requires the person accessing the data to
+        be authorized to Dataverse. Data loaded into your organization’s Azure Data Lake
+        Gen2 storage account is accessible via the Power Platform Dataflow connector and
+        access to it requires membership within the environment it was created in.
+      4. On the Choose data source page, select the data source where the tables are stored. The
+       selection of data sources displayed allows you to create dataflow tables.
+                                            
+      5. After you select a data source, you’re prompted to provide the connection settings,
+       including the account to use when connecting to the data source. Select Next.
+       6. Once connected, you select the data to use for your table. When you choose data and a
+        source, the Power Platform Dataflow service will subsequently reconnect to the data
+        source in order to keep the data in your dataflow refreshed, at the frequency you select
+        later in the setup process.
+     Now that you've selected the data to use in the table, you can use the dataflow editor to shape
+     or transform that data into the format necessary for use in your dataflow.
+     Use the dataflow editor to shape or transform data
+     You can shape your data selection into a form that works best for your table using a Power
+     Query editing experience, similar to the Power Query Editor in Power BI Desktop. To learn more
+     about Power Query, see Query overview in Power BI Desktop.
+     If you want to see the code that Query Editor is creating with each step, or if you want to create
+     your own shaping code, you can use the advanced editor.
+     Dataflows and the Common Data Model
+     Dataflows tables include new tools to easily map your business data to the Common Data
+     Model, enrich it with Microsoft and non-Microsoft data, and gain simplified access to machine
+     learning. These new capabilities can be leveraged to provide intelligent and actionable insights
+     into your business data. Once you’ve completed any transformations in the edit queries step
+     described below, you can map columns from your data source tables to standard table
+     columns as defined by the Common Data Model. Standard tables have a known schema
+     defined by the Common Data Model.
+     For more information about this approach, and about the Common Data Model, see The
+     Common Data Model.
+     To leverage the Common Data Model with your dataflow, select the Map to Standard
+     transformation in the Edit Queries dialog. In the Map tables screen that appears, select the
+     standard table that you want to map.
+     When you map a source column to a standard column, the following occurs:
+       1. The source column takes on the standard column name (the column is renamed if the
+        names are different).
+       2. The source column gets the standard column data type.
+     To keep the Common Data Model standard table, all standard columns that aren't mapped get
+     Null values.
+     All source columns that aren't mapped remain as is to ensure that the result of the mapping is
+     a standard table with custom columns.
+     Once you’ve completed your selections and your table and its data settings are complete,
+     you’re ready for the next step, which is selecting the refresh frequency of your dataflow.
+     Set the refresh frequency
+     Once your tables have been defined, you should schedule the refresh frequency for each of
+     your connected data sources.
+     Dataflows use a data refresh process to keep data up to date. In the Power Platform Dataflow
+     authoring tool, you can choose to refresh your dataflow manually or automatically on a
+     scheduled interval of your choice.
+     Schedule a refresh automatically
+       1. Select Refresh automatically.
+       2. Enter the dataflow frequency:
+           Frequency-based refresh. Set how often in 30-minute increments, start date, and
+           time in UTC.
+           Refresh on specific days and times. Choose time zone, frequency (daily or weekly)
+           and time of day in 30-minute increments.
+       3. Select Publish.
+     Some organizations might want to use their own storage for creation and management of
+     dataflows. You can integrate dataflows with Azure Data Lake Storage Gen2 if you follow the
+     requirements to set up the storage account properly. More information: Connect Azure Data
+     Lake Storage Gen2 for dataflow storage
+     Troubleshooting data connections
+     There might be occasions when connecting to data sources for dataflows runs into issues. This
+     section provides troubleshooting tips when issues occur.
+        Salesforce connector. Using a trial account for Salesforce with dataflows results in a
+        connection failure with no information provided. To resolve this, use a production
+        Salesforce account or a developer account for testing.
+        SharePoint connector. Make sure you supply the root address of the SharePoint site,
+        without any subfolders or documents. For example, use a link similar to
+        https://microsoft.sharepoint.com/teams/ObjectModel.
+          JSON File connector. Currently you can connect to a JSON file using basic authentication
+          only. For example, a URL similar to https://XXXXX.blob.core.windows.net/path/file.json?
+          sv=2019-01-01&si=something&sr=c&sig=123456abcdefg is currently not supported.
+          Azure Synapse Analytics. Dataflows don't currently support Microsoft Entra
+          authentication for Azure Synapse Analytics. Use basic authentication for this scenario.
+        ７ Note
+        If you use data loss prevention (DLP) policies to block the HTTP with Microsoft Entra
+        (preauthorized) connector then SharePoint and OData connectors will fail. The HTTP with
+        Microsoft Entra (preauthorized) connector needs to be allowed in DLP policies for
+        SharePoint and OData connectors to work.
+      Troubleshoot the error: Connection to Dataverse failed. Please
+      check the link below on how to fix this issue
+      Users might receive an error message if the connection they're using for export requires a fix.
+      In this case, the user receives an error message that states Connection to Dataverse failed.
+      Please check the link below on how to fix this issue.
+      To resolve this issue:
+        1. In Power Apps (make.powerapps.com), select Connections from the left navigation pane.
+          If the item isn’t in the side panel pane, select …More and then select the item you want.
+        2. Locate the Microsoft Dataverse (legacy) connection.
+        3. Select the Fix connection link in the Status column, and follow the instructions on your
+          screen.
+      After the fix completes, retry the export.
+      You receive the error message "There was a problem
+      refreshing the dataflow"
+      This error occurs when you try to refresh the dataflow while using the Firefox web browser. To
+      work around this issue use a different web browser, such as Microsoft Edge or Google Chrome.
+      Next steps
+      The following articles are useful for further information and scenarios when using dataflows:
+         Add data to a table in Dataverse
+         Using an on-premises data gateway in Power Platform dataflows
+         Connect Azure Data Lake Storage Gen2 for dataflow storage
+         Use dataflows in solutions
+      For more information about the Common Data Model:
+         Common Data Model - overview
+         Learn more about the Common Data Model schema and tables on GitHub
+      Last updated on 01/09/2026
+       Get insights from your data
+       Article • 05/31/2024
+       Microsoft Dataverse is the intelligent data platform that powers Dynamics 365 apps and
+       the Power Platform. All Dynamics 365 data is hosted in Dataverse. The data included
+       data from finance and operations apps and customer engagement apps like Dynamics
+       365 Sales and Dynamics 365 Customer Service. Dynamics 365 applications can be
+       extended with Power Platform tools like Power Apps, Power Automate, and Power Pages
+       for low-code and pro-code extensions. Data from Power Platform apps is also hosted in
+       Dataverse.
+       When you understand the data and its intent, Dataverse provides turnkey capabilities in
+       a consistent manner for all your data. Dataverse isn't just a database or storage, it
+       encompasses everything needed to build integrated applications, processes, and in turn
+       provides insights from the data it hosts. Dataverse also provides a comprehensive
+       governance framework for your data including granular role based security and audit
+       and compliance. Because it's a low-code data platform, developers can spend more time
+       focusing on business needs through the configuration of the system and less time
+       building infrastructure.
+       There are several approaches to getting insights from your data hosted by Dataverse:
+         Quick view is a data exploration feature built into Power Apps. When you build a
+         low-code app, either by extending Dynamics 365 or with your own data, quick view
+         is enabled by default. There's no need to create reports to inquire and explore
+         data. You can save these reports as required and later extend them in Power BI
+         Desktop - the authoring tool for Power BI.
+         Power BI with Dataverse data. As a low-code maker or a business analyst, you can
+         use Power BI with Dataverse data to create rich reports and embed these reports
+         within pages and forms in Power Apps.
+         Link to Fabric feature provides a no-copy, no-ETL, fully managed software as a
+         service (SaaS) integration. The link to Microsoft Fabric feature enables data
+         engineers and business analysts to use all the tools of Microsoft Fabric to combine
+         Dataverse data with their own data.
+         Azure Synapse Link enables continuous export of data to your own Azure data lake
+         and enables IT admins and data integration specialists to create data pipelines.
+       Data export service, bring your own device (BYOD), and Export to Data Lake were
+       features introduced in Dynamics 365 apps to export data for analytics and data
+              integration scenarios. These services enabled IT admins and specialists to export data
+              into external databases or data lakes and build data integration pipelines. While we have
+              improved these services over the years with updates, as part of unification of Dynamics
+              365 with the Power Platform, we rearchitected the same capabilities of these disparate
+              services into simpler, unified experiences built into Power Apps (make.powerapps.com).
+              When you transition to Fabric link or upgrading to Azure Synapse Link, these features
+              provide you with an easy ramp to benefit from AI and Copilot investments in Dataverse
+              and Fabric. Go to the transition from legacy integration services article for more
+              information about how you can transition to Dataverse insights.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Use Power BI with Microsoft Dataverse
+       data
+       Article • 05/06/2022
+       Power BI is a comprehensive collection of services and tools that you use to visualize
+       your business data. The following connector, templates, and features are available that
+       make it easy to visualize and analyze Microsoft Dataverse data or the Dynamics 365
+       Sales and Dynamics 365 Customer Service apps data with Power BI.
+         Dataverse connector: Dataverse allows you to connect directly to your data using
+         Power BI Desktop to create reports and publish them to Power BI. From Power BI,
+         reports can be used in dashboards, shared to other users and accessed cross
+         platform on Power BI mobile apps. This connector is the most recent version and
+         uses the tabular data stream (TDS) protocol. More information: Create a Power BI
+         report
+         Common Data Service (legacy) connector: This is the earlier version of the
+         connector. Use this connector when the query results will be greater than 80 MB.
+         This version also supports paging of the query results and building reports that use
+         the image data type.
+         Dataflow templates: Dataflows help organizations unify data from disparate
+         sources and prepare it for consumption. You can easily create dataflows using
+         familiar, self-service tools to ingest, transform, integrate, and enrich big data. Once
+         you create a dataflow in Power Apps, you can get data from it using the Common
+         Data Service connector or Power BI Desktop Dataflow connector. More
+         information: Create and use dataflows in Power Apps
+         Power BI template apps: Power BI template apps are integrated packages of pre-
+         built Power BI dashboards and reports. Using Power BI template apps with
+         Dynamics 365 Sales provides a convenient, powerful, and quick way to access and
+         analyze your sales data. For more information, see these articles:
+           Sales analytics
+           Service analytics
+         Embed Power BI reports on a form: You can use Power BI reports in Power Apps
+         model-driven apps to bring rich reporting and analytics to your system forms and
+         empower your users to accomplish more. More information: Embed a Power BI
+         report in a model-driven system form
+         Embed Power BI reports on a system dashboard: Use can add Power BI reports to
+         the dashboards and include in the solution with Environment Variables for ALM.
+         More information: Create or edit a Power BI embedded system dashboard
+        Tabular Data Stream (TDS) endpoint: Use the TDS endpoint for Dataverse to view
+        table data in Power BI Desktop. More information: View table data in Power BI
+        Desktop
+      See also
+      Use Power BI
+       Create a Power BI report using data
+       from Dataverse
+       Microsoft Dataverse allows you to connect directly to your data using Power BI Desktop to create
+       reports and publish them to Power BI. From Power BI, reports can be used in dashboards, shared
+       to other users, and accessed cross platform on Power BI mobile apps.
+       Prerequisites
+       To use Power BI with Dataverse, you need the following items:
+            Download and install Power BI Desktop, which is a free application that runs on your local
+            computer. You can download Power BI desktop here   .
+            A Power Platform environment with the following privileges:
+               To access data in a table, you must have read privileges to the table.
+               To modify a table in Power Apps (make.powerapps.com), you must have a security role
+               that includes maker privileges, such as system customizer or environment maker.
+            You must have the appropriate Power BI license to build and share Power BI reports.
+        To use the Dataverse connector, the Enable TDS endpoint setting must be enabled in your
+        environment. More information: Manage feature settings
+      ７ Note
+      Most proxy servers don’t handle the Tabular Data Stream (TDS) protocol data used by the
+      Dataverse connector for Power BI.
+     Connect to Dataverse using a connector
+      Dataverse connector
+        1. Open Power BI Desktop. Select Get data from other sources.
+        2. In the Get Data list, select Dataverse, and then select Connect.
+        3. If you're prompted, select or enter your user credentials, and then select Connect.
+        4. The list of Power Platform environments with Dataverse appears. In the list of
+         environments, expand the environment you want, select the tables you want, and then
+         select Load.
+        5. Select from the following Data Connectivity mode options:
+            Import: We recommend that you import data to Power BI wherever possible. With
+            this mode, data is cached in the Power BI service and imported on a scheduled
+            interval.
+            DirectQuery: Connects directly to the data in Dataverse. Use this mode for real-
+            time data retrieval. This mode can also more strictly enforce the Dataverse
+            security model. More information: DirectQuery model guidance in Power BI
+            Desktop.
+        6. Select OK. You might be prompted to sign in using the same credentials you use to
+         connect to Power Apps and Dataverse. Select Connect.
+       ） Important
+       To use the Dataverse connector, TCP ports 1433 and/or 5558 need to be open to
+       connect. If only port 5558 is enabled, you must append that port number to the
+       environment URL, such as yourenvironmentid.crm.dynamics.com,5558.
+     Build reports using Dataverse tables
+     After loading the tables by using a connector, you can begin building reports, or repeat the
+     previous steps to add additional tables. For example, in the Columns pane, select the name
+     column and then select the numberofemployees column. In the Visualizations pane, select Pie
+     chart. These selections add a new visualization to your report canvas.
+                                                           
+     Special column types
+     Choice columns
+     Choice columns are used in tables to provide a drop-down list of items to a user to make a single
+     selection in apps and flows. When using the Dataverse connector, choice columns are presented
+     as two columns to show both the unique value, and the display item value.
+     For example, if you had a choice column on your table called approvalstatus, you would see two
+     columns in Power BI:
+        approvalstatus - This column shows a unique integer value for each item in your choice.
+        approvalstatus can help when you apply filters so the filters won't be impacted when you
+        make future changes to the display name.
+        approvalstatusname - This column shows the friendly display name of the item and is most
+        commonly used when presenting the option in a table or chart.
+                                                    ﾉ Expand table
+           approvalstatus              approvalstatusname
+          1                            Submitted
+          2                            In Review
+          3                            Approved
+          4                            Rejected
+      Performance impact and choice name columns
+      When retrieving the label name for a choice column, Dataverse makes a join with the internal
+      stringmap table (where localized labels are stored). This is executed for each label/name column.
+      Note that, this join and doing filters against the label name column, rather than the value column,
+      can significantly impact report query performance.
+      Choices columns
+      Choices are similar to choice columns with the difference being that users can select multiple
+      items from the list. Choices aren't currently fully supported with the Dataverse connector. When
+      you use the Dataverse connector with choices columns, you only receive the integer values, which
+      are comma separated. The item label name columns aren't returned. For more information about
+      the Dataverse data types not supported with the Dataverse connector, see Supported operations
+      and data types.
+      Lookups
+      Lookup columns use a many-to-one (N:1) table relationship between the table you’re working
+      with and the target row type defined for the lookup. Lookups are presented in Power BI Desktop
+      as two columns, lookupid and lookupid-name.
+      Navigating relationships
+      Relationships in Dataverse require you to create a relationship within Power BI desktop between
+      the two tables using a GUID column, this is a system-generated unique identifier that ensures
+      relationships are created for the create rows where ambiguity or duplication might exist with
+      other columns. You can read more about managing relationships in Power BI desktop here.
+      While some relationships might be automatically created, you can still review and ensure the
+      correct relationships are established when creating your report:
+            The lookup column on the table contains the GUID of the row in the related table.
+            The related table has a column in the format "[tableName]ID" that contains the GUID, for
+            example Accountid or MyCustomtableid
+            Using the Power BI desktop Manage Relationships feature, you would create a new
+            relationship between your lookup column, and the ID column on the related table.
+       Find your environment URL
+          1. Open Power Apps  , select the environment you're going to connect to, select Settings in
+            the top-right corner, and then select Session details.
+          2. In the Power Apps session details dialog box, select Copy Details.
+          3. Paste the session details somewhere such as Notepad so that you can copy only the
+            Instance url. The instance URL is the unique URL for your environment. The URL is in the
+            format: https://yourenvironmentid.crm.dynamics.com/. Keep this somewhere handy so you
+            can use it when creating your Power BI reports.
+       Troubleshooting
+       Error message: Return records size can't exceed 83886080
+       This error can occur with the Dataverse connector when you run or design a report with a result
+       set greater than 80 MB. TDS has a result set size limit of 80 MB.
+    To work around this limit, optimize the query adding filters and dropping columns so that the
+    query returns less data.
+    Workaround for very large number of lookups or choice columns
+    If the error message occurs in Power BI when you try to connect to a table with a very large
+    number of lookups or choice columns, the following manual workaround might allow you to
+    connect to the table. The account, contact, and opportunity table might encounter this issue
+    when they're extensively customized with additional lookups or choice columns.
+    Manually connect to the table in a Power BI report:
+      1. In Power BI desktop with the report loaded, select Transform Data to load Power Query.
+      2. Select New Source > Blank Query.
+      3. Name your query.
+      4. Select Advanced Editor on the Home tab of Power BI Desktop.
+      5. Replace the query text with this query text.
+        let
+            Source = CommonDataService.Database("<myenvironment.crmX>.dynamics.com"),
+            dbo_contact = Source{[Schema="dbo",Item="contact"]}[Data],
+            #"selectedcolumns" = Table.SelectColumns(dbo_contact,{"fullname", 
+        "emailaddress1"})
+        in
+            #"selectedcolumns"
+      6. Replace myenvironment.crmX in the query text with your environment domain value, such
+       as contoso.crm4.
+     7. Select Done.
+     8. Select Choose columns to add any additional needed columns.
+     9. Select Close and Apply to save model changes.
+     10. When prompted, select Direct Query for the new query.
+    The query can now be used in the report.
+    Error message: Unable to connect (provider Named Pipes
+    Provider, error: 40 – Could not open a connection to
+    SQL Server)
+    When this error message occurs, the connector fails to connect to the TDS endpoint. This can
+    occur when the URL used with the connector includes https:// and/or the ending /.
+    Remove the https:// and ending forward slash so that the URL is in the form
+    orgname.crm.dynamics.com.
+    Troubleshooting connection issues
+    For information about troubleshooting connection issues when using the TDS endpoint, see
+    Troubleshooting connection problems.
+     See also
+     Use composite models in Power BI Desktop
+     View Dataverse for Teams table data in Power BI Desktop
+      Last updated on 04/27/2026
+            View table data in Power BI Desktop
+            Article • 08/08/2024
+            Use Power BI Desktop to view tables in Microsoft Dataverse. The table row data that you
+            can access from your environment is read-only. Data access uses the Dataverse security
+            model that is the same used to access table row data using a Power Apps app.
+            Prerequisites
+                  Enable the Tabular Data Stream (TDS) endpoint (on by default). More information:
+                  Manage feature settings.
+                  Power BI Desktop. Get it now
+            View table data
+               1. Sign into Power Apps   , and then select the appropriate environment from the
+                  top-right corner.
+               2. On the left navigation pane select Tables. If the item isn’t in the side panel pane,
+                  select …More and then select the item you want.
+               3. Select Analyze > Analyze in Power BI on the command bar.
+                  The pbids file for your environment is downloaded to your browser’s default
+                  download folder.
+                    ７ Note
+                    To be able to download the file, you must have read access to the analysis
+                    component (msdyn_analysiscomponent) custom table privilege in Dataverse.
+                    Users with the environment maker security role have full access to this
+                    privilege.
+               4. Open the .pbids file to access it in Power BI Desktop.
+               5. The pbids file is loaded in Power BI Desktop. In the dialog box, select
+                  Organizational account, select Sign in, and then in the browser window that
+                  appears select or enter your credentials.
+       6. In the dialog box in Power BI Desktop, select Connect.
+        The environment appears in the Power BI Desktop Navigator window. Expand it to
+        view the tables available to analyze. Select a table to preview its data.
+       7. After you're finished selecting the tables you want to analyze, select Load to build
+        a report.
+      For more information about Power BI Desktop, see Get started with Power BI Desktop.
+       ７ Note
+       SQL options, such as a T-SQL queries aren’t supported.
+                 Tip
+                The Power BI modeling guidance for Power Platform article provides
+                implementation guidance and best practices on how to create a Power BI data
+                model that connects to Dataverse:
+                      Performance and security considerations when connecting Power BI to
+                      Dataverse.
+                      Dataverse connector best practices.
+                      Working with large datasets using Azure Synapse Link for Dataverse.
+                      Considerations for DirectQuery.
+              See also
+              Use SQL to query data
+              Dataverse SQL
+              Power Query Dataverse connector
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Transition from legacy data integration
+     services
+     Data export service, bring your own database (BYOD), and Export to Data Lake were features
+     introduced in Dynamics 365 apps to export data for analytics and data integration scenarios.
+     These services enabled IT admins and specialists to export data into external databases or data
+     lakes and build data integration pipelines. While we improved these services over the years
+     with updates as part of unification of Dynamics 365 with the power platform, we rearchitected
+     the same capabilities of these disparate services into simpler, unified experiences built into
+     Power Apps (make.powerapps.com). With a transition to Microsoft Fabric link or upgrade to
+     Azure Synapse Link, the rearchitected services provide you with an easy ramp to benefit from
+     AI and Copilot investments in Microsoft Dataverse and Fabric.
+     If you're a customer using any of the previous generation services, this article provides
+     guidance on upgrading to the new experiences, benefiting from innovations, as well as
+     reducing end-to-end expenses and effort.
+     Based on preview customer surveys, we also compiled a high level cost and benefits estimate
+     to help you with the transition. Links to more information and videos, links to join forums and
+     weekly office hour sessions to engage with the product team, Microsoft specialists, and fellow
+     users are also provided here. We strive to enhance these services with community participation.
+     Before transition
+     If you're a customer using legacy services BYOD, data export service, or Export to Data lake,
+     you might have a data integration architecture similar to the one shown here. The highlighted
+     box indicates the data pipelines your organization might have built to leverage the data
+     exported from Dynamics 365 and Dataverse. You can use a selection of tools from Microsoft, as
+     well as others, to copy and integrate Dynamics data with your own data. You can also
+     transform and aggregate data by copying into multiple stores – shown in the data prep box of
+     the diagram. You can use Power BI or another tool to visualize data and create actionable
+     insights. You might have pipelines built to export data to an on-premises system and other
+     clouds.
+                                                        
+     After transition
+     There are two data integration patterns enabled in Power Apps:
+        Azure Synapse Link enables continuous export of data similar to BYOD, Export to Data
+        Lake, or data export service. This option is enabled for IT admins and data integration
+        specialists.
+        Link to Fabric feature provides a no-copy, no-extract, transform, and load (ETL), fully
+        managed software as a service (SaaS) integration.
+     These options are complementary. Here's a detailed comparison of the data integration
+     services.
+     If you're a finance and operations apps customer currently using BYOD or Export to Data Lake
+     features, by upgrading to Azure Synapse Link or Fabric link, you can benefit from a simplified
+     data integration architecture resulting in reduced operational costs:
+        Easy to configure and maintain via Power Apps (make.powerapps.com). Built-in
+        integration with Azure Synapse and Fabric.
+        Azure Synapse Link and Fabric link are fully managed services. Each requires minimal
+        ongoing management overhead.
+        New services offer the same data shapes as previous services. Your existing downstream
+        integration pipelines can remain as-is.
+        Minimal impact to operational workloads, you don’t need to manage workloads and
+        schedule data exports.
+     Secure, end-to-end data integration pipelines:
+        With Fabric link, your data doesn’t leave the Dataverse governance boundary while
+        authorized Fabric users can securely access data that resides within Dataverse.
+                 Azure Synapse Link service enables you to restrict access to your storage accounts with
+                 firewalls while enabling Dataverse to export data with managed identities for Azure, a
+                 security feature built into Microsoft Entra.
+          If you're a Dynamics 365 customer engagement customer using data export service or classic
+          Azure Synapse Link with data exports in CSV format, you can benefit from efficient reporting
+          enabled with the industry standard Delta or Parquet data format:
+                 Built-in Delta Lake or Parquet conversion option reduces the need to build your own
+                 pipelines for analytics and operational reporting.
+                 Delta Lake or Parquet format enables faster, more responsive queries & reports and
+                 scales to larger datasets of any size.
+                 Data in lake is compressed to 1/3 to 1/8 the original size, resulting in smaller files that
+                 reduce data query and carrying costs.
+                                                                                                    ﾉ Expand table
+            Link to Fabric                               Azure Synapse Link
+            No copy, no ETL direct integration with      Export data to your own storage account and integrate with
+            Fabric.                                      Azure Synapse, Fabric, and other tools.
+            Data stays in Dataverse. Users get secure    Data stays in your own storage. You manage access to users.
+            access in Microsoft Fabric.
+            All tables chosen by default.                System administrators can choose required tables.
+            Consumes additional Dataverse storage.       Consumes your own storage and other compute and
+                                                         integration tools.
+          Which option should I use?
+          If your organization is already using Fabric or planning to transition in the coming months, we
+          recommend using the Fabric link feature. You can continue to use the Azure Synapse Link
+          service if your immediate focus is to upgrade from your current services.
+          Simplification with Fabric link
+          If you're already consuming data using Power BI, using a data warehouse, or using dataflows
+          and notebooks to transform data, the link to Fabric feature provides immediate value. You can
+          simplify your data integration architecture by removing the need to have your own storage
+          account or Synapse services for Dataverse data. Instead of paying for Azure resources like
+          storage and compute, you pay for the increase in Dataverse storage. Compute charges such as
+    near real-time data updates and management overhead is also factored into Dataverse
+    storage. Fabric link option is like having a near real time read-only replica of your data
+    optimized for insights.
+                                            
+    Query this replica using T-SQL, Apache Spark, Python as well as other workloads in Fabric. You
+    can also access this data using any tool that can consume T-SQL or can consume data from
+    Azure Data Lake Storage.
+    As a Dynamics or Power Apps customer, you get a Dataverse storage quota based on the
+    number of licenses you purchased. The Fabric link feature uses this database quota. You can
+    buy more storage add-ons if the data volume exceeds your quota.
+    You can continue to retain Azure platform as a service (PaaS) services, like Databricks and SQL
+    Database, in your own subscription. Recently announced Fabric features like data mirroring and
+    shortcuts can help you further simplify your data integration.
+    Examples of cost reductions achieved with the simplicity derived from Fabric integration
+    feature are described here.
+    Upgrading to Azure Synapse Link
+    By upgrading to Azure Synapse Link and enabling Delta or Parquet conversion, you can
+    eliminate Dataverse data prep pipelines in your solution. Azure Synapse Link service exports
+    the same data shapes into your storage account in a more performant Delta or Parquet format.
+    You can continue to use existing tools and Azure services like storage and Azure Synapse
+    Analytics query with minimal disruptions to your production environments.
+                                                    
+     Understanding benefits and cost reductions
+     Simplicity achieved with Fabric link and Azure Synapse Link yields reductions in end-to-end
+     costs. Consider the following examples that are based on preview customer experiences.
+     Example 1: Transition from BYOD or Export to Data Lake to
+     Fabric link
+     Consider the case where you transition to Fabric link from Export to Data Lake.
+                                                    
+     As indicated in the before and after diagrams in this article, customer retired export to data
+     lake service (1) as well as staging data stores (2) with Fabric link. For operational insights, (4),
+     they consumed data in OneLake directly in Power BI. Some of the insights require data merge,
+     transformation, and aggregation (3). Instead of using disparate Azure services, they
+     standardized on the same tools built into Fabric.
+     Innovations in Dataverse and Fabric enable simplifications and cost reductions:
+        Dataverse comes with a built-in OneLake store. Operational data from Dynamics 365 and
+        Power Apps are replicated to built-in lake store near real-time (to avoid influence to
+                operational workloads) and linked securely to Fabric via shortcuts. There's no need to
+                bring Azure storage and secure data that’s exported out. Your data doesn’t leave the
+                Dataverse governance boundary and authorized users in Fabric can work with data using
+                all Fabric workloads.
+                Export to data lake and data export service exports data in CSV format. CSV files aren't
+                suitable for direct consumption due to poor query performance as well as occasional
+                read/write contention issues. The before transition solution uses Azure Data Factory to
+                periodically ingest and convert raw data into an Azure SQL Database or an Azure data
+                warehouse. This layer isn't needed in the after transition solution since Dataverse built-in
+                OneLake data is maintained in Delta or Parquet format – the same open format that is
+                native to Microsoft Fabric. Delta or Parquet format, along with optimizations in Fabric
+                removes the need to maintain additional data stores for caching and improving query
+                performance while eliminating read/ write contention. You can create Power BI reports
+                using Direct Lake over data in OneLake without any additional data stages.
+                While operational insights can be performed using the data already available in OneLake,
+                you might have additional data from other systems. This data might need to be
+                combined, reshaped, and aggregated with Dataverse data. Fabric provides an integrated
+                environment, which provides best of breed tools like dataflows, Azure Data Factory, and
+                Spark. Use these tools as opposed to configuring and provisioning tools standalone,
+                where you adopt the tools of your choice. Integrated billing, source control, and security
+                enable simpler management and governance.
+                While you can continue to use Power BI service for reporting purposes, Fabric introduces
+                Direct Lake mode reporting, which leverages the in-memory indexes built into Delta or
+                Parquet format therefore removing the need to use Power BI import mode reports.
+          These innovations yield end-to-end cost savings in addition to the benefits discussed earlier.
+          The tables here outline the line items of costs along with a comparison of before and after
+          solutions. You can use this table as a guideline to estimate expected cost savings.
+                                                                                                ﾉ Expand table
+           Cost savings line    Before cost - export to    After cost - Fabric link
+           item                 data lake
+           Set-up and           Need to use multiple       Simpler configuration experience in Power Platform.
+           configuration        tools.
+                                - Pay for multiple         Purchase Fabric capacity and pay for use for all services.
+                                software licenses and      You only pay for what you use. In some cases, you're
+                                subscriptions.             billed by the second.
+                                - System configuration
+                                efforts.                   No ETL pipelines needed for Dataverse data.
+                                - Effort to build and
+                                validate data pipelines.
+                                - Continued governance,
+           Cost savings line    Before cost - export to    After cost - Fabric link
+           item                 data lake
+                                management, and
+                                monitoring.
+                                - Training of users.
+           Data staging (1, 2)  Cost incurred for Azure    Cost increase in Dataverse storage
+                                services.
+                                - Azure storage cost       For example, if you sync 500 GB of data from Dynamics
+                                including cost of IO.      365, Dataverse storage could increase by around 100
+                                - Synapse Analytics (SQL   GB (assuming five to eight times data compression).
+                                serverless query).
+                                - Azure Data Factory jobs
+                                to copy data.
+                                - Staging data stores,
+                                such as Azure SQL
+                                Database.
+           Operating Costs -    - Azure storage staging    Spending shifts to Fabric where you pay for
+           data prep (3)        area.                      consumption with a shared capacity.
+                                - Data pipelines.
+                                - Data ingestion into
+                                Azure SQL or data
+                                warehouse.
+                                - Development of
+                                maintenance data.
+           Operating costs –    Synapse analytics (SQL     As your data is compressed (for example 1/3 to 1/6
+           reporting (4)        query).                    original size), your reporting and query costs reduce
+           - Power BI           Power BI capacity and      accordingly.
+           datasets.            storage for import mode
+           - Reporting.         reports.                   New features, like Direct Lake reporting, reduce
+                                                           consumption of Power BI storage consumption.
+             ７ Note
+             These estimates are provided to enable estimating the spend after transition. While these
+             estimates are based on experience from preview customers, actual costs incurred in your
+             environment as well as data compression can vary depending on volume and composition
+             of data.
+          Example 2: Upgrade to Azure Synapse Link
+          Upgrading to Azure Synapse Link is an option to consider if you're not currently using Fabric –
+          or not planning to transition in the coming months.
+    As indicated in the before and after diagrams here, customer retired Export to Data Lake
+    service (1) as well as staging data stores (2) with Azure Synapse Link. Data stores used for data
+    staging, such as intermediate Azure SQL Databases, are retired as Dataverse data is saved in
+    Delta or Parquet format – a more performant and compressed data format. Downstream
+    pipelines used for data merge, transformation, and aggregation, (3), as well as presentation
+    tools (4), such as Power BI, remain unchanged.
+                                            
+    Azure Synapse Link provides an easy upgrade path for customers looking to extend their
+    existing investments with minimal changes. As we discuss here, innovations in Dataverse
+    enable easy transition from finance and operations apps services like Export to Data Lake and
+    BYOD.
+      1. Azure Synapse Link enables easy configuration of Azure storage and Synapse services
+       within the Power Apps (make.powerapps.com). Several limitations of Export to Data Lake
+       are removed:
+       a. A uniform experience enables choosing data from all Dynamics 365 apps including
+        both finance and operations and customer engagement apps. You can maintain a
+        single service to export data from all Dynamics 365 and Power Apps.
+       b. Table limitations present with Export to Data Lake go away. You can choose up to 1,000
+        tables for each Azure Synapse Link profile within a single storage account. You can
+        create multiple profiles (export pipelines) each with up to 1,000 tables.
+       c. Azure Synapse Link provides built-in support for using firewall restricted storage
+        accounts to export data.
+       d. No need to configure Azure resources. Azure Synapse Link provisions and configures
+        Azure resources on your behalf.
+       e. Azure Synapse Link exports data in the same format as Export to Data Lake or BYOD
+        enabling you to retain existing pipelines.
+      2. Both Export to Data Lake and data export service export data in CSV format. CSV files
+       aren't suited for direct consumption due to poor query performance as well as occasional
+       read/write contention issues. Before transition uses Azure Data Factory to periodically
+       ingest and convert raw data into a SQL Azure Database or an Azure data warehouse. This
+       layer isn't needed in the 'after transition since Azure Synapse Link exports data in Delta or
+                Parquet, which removes the need to maintain additional data stores for caching and
+                improving query performance while eliminating read/write contention.
+             3. Continue to use your existing data pipelines for combining, reshaping, and aggregating
+                additional data from other systems.
+             4. Continue to use Power BI service for reporting purposes. Fabric introduces Direct Lake
+                mode reporting that leverages the in-memory indexes built into Delta or Parquet format,
+                which removes the need to use Power BI import mode reports.
+          These innovations yield end-to-end cost savings in addition to the benefits discussed earlier.
+          The tables here outline the line items of costs along with a comparison of before and after
+          solutions. Use the table as a guideline to estimate expected cost savings.
+                                                                                                ﾉ Expand table
+           Cost savings line     Before cost - Export to Data    After cost - Azure Synapse Link
+           item                  Lake
+           Set-up and            Must use multiple tools.        Simpler configuration experience in Power
+           configuration         - Pay for multiple software     Platform.
+                                 licenses and subscriptions.     No ETL pipelines needed for Dataverse data.
+                                 - System configuration efforts.
+                                 - Effort to build and validate
+                                 data pipelines.
+                                 - Continued governance,
+                                 management, and monitoring.
+                                 - Training of users.
+           Data staging (1, 2)   Cost incurred for Azure         Azure Synapse Link requires you to provide a
+                                 services.                       Spark pool to convert data to Parquet format.
+                                 - Azure storage cost including
+                                 cost of IO.                     Depending on the frequency of data sync, as well
+                                 - Synapse Analytics (SQL        as the volume of data changes, Spark pool costs
+                                 serverless query).              can vary.
+                                 - Azure Data Factory jobs to
+                                 copy data.                      Small to medium data changes (per month):
+                                 - Staging data stores, such as  - $600 to $2,000 for hourly refresh.
+                                 Azure SQL Database.             - $1,200 to $4,100 for 15-minute refresh.
+                                                                 Medium to large data changes (per month):
+                                                                 - $1,200 to $2,500 for hourly refresh.
+                                                                 - $2,500 to $8,300 for 15-minute refresh.
+           Operating costs -     - Azure storage staging area.   Same costs as indicated above, however, you
+           data prep (3)         - Data pipelines.               might not need to aggregate Dataverse data due
+                                 - Data ingestion into Azure     to Parquet conversion.
+                                 SQL Database or data
+           Cost savings line     Before cost - Export to Data    After cost - Azure Synapse Link
+           item                  Lake
+                                 warehouse.
+                                 - Development and
+                                 maintenance data.
+           Operating costs -     Synapse Analytics (SQL query).  As your data is compressed, for example 1/3 to
+           reporting (4):        Power BI capacity.              1/6 original size, your reporting and query costs
+           - Power BI datasets.                                  reduce accordingly.
+           - Reporting.
+             ） Important
+             These estimates are provided to enable estimating the spend after transition. While these
+             estimates are based on experience from preview customers, actual costs incurred in your
+             environment as well as data compression can vary depending on volume and composition
+             of data.
+          Example 3: Incrementally ingesting data to a data warehouse
+          If you're currently consuming incremental data from Export to Data Lake feature to populate a
+          downstream data pipeline, you can continue to use the same pipeline. As shown here, Azure
+          Synapse Link service can export incremental data changes in the same format as changes feed
+          into Export to Data Lake.
+                                                                                                             
+          Azure Synapse Link service provides several enhancements over Export to Data Lake for
+          incremental data changes:
+                Initial data load is included within change folders. This makes it easy for the same pipeline
+                to consume both the initial load as well as incremental updates.
+                Change data isn't deleted in case of a reinitialization of a table.
+                System creates a time-stamped folder structure and metadata that helps you read the
+                changes in chronological order. Change data once written, is never updated. This
+        approach is better suited to process changes using big data ingestion tools like Azure
+        Data Factory.
+        You can configure how often you want the change feeds updated in folders with Azure
+        Synapse Link, as low as five minutes.
+     When you transition to Fabric or Azure Synapse Link, the change in cost is minimal for
+     incremental data changes.
+     Understanding benefits – more real-time reporting
+     Fabric not only simplifies your data integration architecture, but also reduces the need to copy
+     or replicate data. The underlying data format in Fabric, the industry standard Delta or Parquet
+     format, can be directly consumed by Power BI, dataflows, notebooks, and other workloads
+     eliminating the need for caching and staging areas.
+     If you upgrade to Azure Synapse Link and continue to export data, your data is saved in Delta
+     or Parquet format, which can reduce the steps in your own data pipelines for operational
+     reporting.
+     Consider the time taken to refresh an operational report, such as inventory analysis or month-
+     end financial analysis. These reports might require data aggregation of millions of rows of data
+     from multiple tables in Dynamics 365 Finance. Using Export to Data Lake service, CSV data is
+     exported within 10 minutes. This data might need to be imported into a Power BI report to
+     provide better response times. Power BI refresh can be performed up to 24 times a day (every
+     30 minutes). Depending on how the report is designed, refresh can take several minutes to
+     complete refresh. Using this approach, users can see data within 60 minutes of an update.
+     These timelines are indicative. Actual sync time depends on factors such as the initial data load
+     size, data churn rate, and the volume of change.
+     Operational reports that source data using Fabric link can leverage Direct Lake mode or
+     DirectQuery mode in Fabric, which leverages the in-memory index built into Delta or Parquet
+        files. In these modes, you don’t need to schedule refresh of Power BI reports as the report
+        always shows latest Dataverse data updated in Fabric.
+        The Fabric link service updates data in Dataverse OneLake within the hour as of this point in
+        time. Dataverse triggers data update jobs every 15 minutes and depending on the volume of
+        data changes, you might see updated Parquet files within 15 to 45 minutes. These timelines are
+        indicative. Actual sync time depends on several factors including the initial data load size, data
+        churn rate, and the volume of changes. In situations with high transaction volumes, such as
+        processes in Dynamics 365 finance and operations apps generating millions of records in a
+        short time, or processes like the master planning feature included with Dynamics 365 Supply
+        Chain Management that delete and re-create large volumes of records, Synapse Link must
+        synchronize all changes including deletes. In these high-volume scenarios, data availability
+        within the indicated timeframes can't be guaranteed.
+        If you're consuming incremental data feeds from Dynamics 365 with Export to Data Lake
+        service for near-real time data integration scenarios (example 3). Upgrade to Azure Synapse
+        Link enables you to run the same data pipelines.
+        Limitations and changes to behavior
+        You might find a few changes in table formats introduced that help avoid conflicts. More
+        information: Known limitations.
+        Also verify that you have the latest updates, which address some of the known issues. To learn
+        more about the upcoming roadmap and stay in touch with the product team, join the preview
+        Viva Engage group   .
+        Frequently asked questions
+      Questions? you can refer to the FAQ document published here. You can also join weekly office
+      hrs, stay in touch with the product team and the customer forum by joining Viva Engage
+      group .
+      See also
+      What is Azure Synapse Link for Dataverse?
+      Link your Dataverse environment to Microsoft Fabric and unlock deep insights
+      Last updated on 03/30/2026
+     Frequently asked questions when
+     transitioning from legacy data
+     integration services
+     This article discusses the frequently asked questions with transition from legacy data integration
+     services to Fabric link or Azure Synapse Link for Dataverse.
+     Data export service, bring your own database (BYOD), and export to data lake were features
+     introduced in Dynamics 365 apps to export data for analytics and data integration scenarios.
+     These services enabled IT admins and specialists to export data into external databases or data
+     lakes and build data integration pipelines. While we improved these services over the years with
+     updates, as part of unification of Dynamics 365 with the Power Platform, the same capabilities are
+     rearchitected for these disparate services into simpler, unified experiences built into Power Apps
+     (make.powerapps.com). The unified and improved service is called link to Azure Synapse.
+     Also available is a service named link to Microsoft Fabric where you can directly integrate
+     Microsoft Dataverse, the data platform behind Dynamics 365 as well as Power Apps with
+     Microsoft Fabric with no-copy, no-ETL required. Whether you link to Microsoft Fabric or upgrade
+     to Azure Synapse Link, the rearchitected services provide you with an easy ramp to benefit from
+     AI and Copilot investments in Dataverse and Fabric.
+     What is the difference between Link to Azure Synapse
+     and link to Fabric?
+     Link to Azure Synapse and link to Fabric services are built into Dataverse, the platform powering
+     Power Apps and all Dynamics 365 products.
+     Azure Synapse Link continuously exports data from Dynamics 365 and Power Apps to your own
+     storage account, allowing IT professionals to build and manage data integration pipelines with
+     Azure Synapse Analytics as well as other tools.
+     In contrast, link to Fabric offers a no-copy, no-ETL integration directly with Microsoft Fabric,
+     keeping data within the Dataverse governance boundary for enhanced security. Fabric Link uses
+     Dataverse managed storage, removing the need to configure and manage your own storage.
+     When using link to Fabric, you might notice an increase in Dataverse storage consumption.
+         Both these services operate across PowerApps, Dynamics 365 customer engagement apps like
+         Dynamics 365 Sales, Dynamics 365 Customer Service, as well as Dynamics 365 finance and
+         operations apps.
+                                                                                                       ﾉ Expand table
+           Link to Fabric                                  Azure Synapse Link
+           No copy, no extract, transform, load (ETL)      Export data to your own storage account and integrate with
+           direct integration with Fabric.                 Azure Synapse, Fabric, and other tools.
+           Data stays in Dataverse. Users get secure       Data stays in your own storage. You manage access to users.
+           access in Microsoft Fabric.
+           All tables chosen by default.                   System administrators can choose required tables.
+           Consumes additional Dataverse storage.          Consumes your own storage and other compute and
+                                                           integration tools.
+         What option should I consider if I want to use
+         Microsoft Fabric?
+         Fabric Link provides a seamless, no-copy integration with Dataverse and Microsoft Fabric,
+         eliminating the need to manage complex data export processes. With link to Microsoft Fabric,
+         your data stays securely within your Dataverse environment, while authorized users in Microsoft
+         Fabric can access the data, making it easier for your team to leverage data for insights without
+         the hassle of managing separate storage and integration solutions. This streamlined approach
+         can lead to cost savings and more efficient data utilization, especially if you’re already using
+         Power BI. [Go to this article](/powerapps-docs/maker/data-platform/azure-synapse-link-
+         transition-from-FnO.md#Simplification with Fabric link) for a comparison of total cost of
+         ownership (TCO) between link to Microsoft Fabric and link to Azure Synapse.
+         Using the Fabric Link transition tool provided by Dynamics 365 FastTrack team                , you can create
+         a Fabric data warehouse with the same data shapes as export to data lake feature and minimize
+         the effort to transition your existing reports and data pipelines.
+         What option should I consider if I want to keep the
+         data export solution?
+         Upgrading from export to data lake to Azure Synapse Link enables you to preserve your
+         investments with minimal changes. While Azure Synapse Link simplifies data integration by
+        continuously exporting data in a more efficient Delta Parquet format, it provides similar outputs
+        as export to data lake service therefore reducing the effort to switch. You can use Power BI,
+        Microsoft Fabric as well as many non-Microsoft tools that support Delta Parquet format to work
+        with your Dynamics 365 data. You can also secure your storage account with firewalls and enable
+        restricted access via managed identities, ensuring secure data access and compliance. Go to this
+        article for a comparison of total cost of ownership (TCO) between link to Fabric and link to Azure
+        Synapse.
+        Using the Synapse Link transition tool provided by Dynamics 365 FastTrack team   you can
+        create a Synapse workspace with similar data shapes as export to data lake feature and reduce
+        the effort to transition your existing reports and data pipelines.
+        We don’t use Power BI or Fabric with Dynamics 365
+        data, can I extract change data?
+        If you use Power BI or Microsoft Fabric to gain insights from your Dynamics 365 or Power Apps
+        data, Fabric Link provides the most benefits while simplifying data integration efforts. However, if
+        you're using non-Microsoft tools and/or use export to data lake change feeds to incrementally
+        export data to your downstream data warehouse, you can use Synapse Link incremental data
+        exports instead. More information
+        Using the The Data integration tool provided by Dynamics 365 FastTrack team    you can create a
+        pipeline to incrementally copy change data into an Azure SQL database, Synapse dedicated pool
+        or an on-premises database.
+        Are there differences in columns/schema between
+        Export to Data Lake and Fabric Link or Synapse Link?
+        Fabric Link and Synapse Link represent a unification of legacy services built into Dynamics 365.
+        The same capabilities are rearchitected to transform these disparate services into simpler, unified
+        experiences built into Power Apps (make.powerapps.com). In the process, to avoid conflicts,
+        minor changes are made to the schema. The underlying data engine behind Fabric Link and
+        Synapse Link is the same so the changes apply both to Fabric Link and Synapse Link options:
+             Renaming SQL reserved words such as Level_, Resource_.
+             ID field in export to data lake tables become FnO_Id.
+             Deleted rows are included. For example, Synapse Link and Fabric Link perform what is
+             referred to as a "soft delete." You can use the isDelete flag to identify deleted rows and
+             remove them.
+             TimeZoneID (TZID) fields are removed because these are legacy fields no longer used in
+             finance and operations apps.
+             Fields that contain binary data are removed.
+              nVarChar(max) fields are included but data is truncated at 2,000 characters.
+        For more information, go to working with Finance and Operations data and metadata.
+        Using the Fabric Link transition tool provided by Dynamics 365 FastTrack team   , you can create
+        a Fabric data warehouse with the same data shapes as export to data lake feature and minimize
+        the effort to transition your existing reports and data pipelines.
+        Using the Synapse Link transition tool provided by Dynamics 365 FastTrack team     you can
+        create a Synapse workspace with similar data shapes as export to data lake feature and reduce
+        the effort to transition your existing reports and data pipelines.
+        Using the data integration tools provided by Dynamics 365 FastTrack team     you can create a
+        pipeline to incrementally copy change data into an Azure SQL database, Synapse dedicated pool
+        or an on-premises database.
+        Why are all Dataverse tables auto selected with Fabric
+        Link, why can’t I select only the Dataverse tables
+        I need?
+        By selecting Link to Microsoft Fabric, the system adds all nonsystem Dataverse tables that have
+        the Track changes property enabled. You can’t remove these tables as some of these tables
+        might be used by Dynamics 365 as well as partner applications and removing them can cause the
+        applications to fail.
+        Enabling link to Fabric feature (or a Dynamics 365 application that contains insights features)
+        might result in an increase in Dataverse database storage consumption. You can view additional
+        storage consumption as additional files in the environment storage capacity details view in the
+        Power Platform admin center. For example, you might notice an additional file "Account-
+        Analytics" if you selected the "Account" table for Fabric link. Also note that the chart only displays
+        tables consuming highest storage. You can get a list of tables using the menu on top right of the
+        chart.
+        Export to data lake service is working well for us. Why
+        did you retire these services?
+        As part of the Dynamics 365 platform unification project, we consolidated several services that
+        “exported data” in Dynamics 365 applications to a single service under the brand name Synapse
+        Link for Dataverse. Using our learnings, many shortcomings of existing services were addressed in
+        Synapse Link while maintaining same data formats – so that you can upgrade your investments
+        with minimal disruptions. Fabric link service is a new, no-copy, no-ETL solution, which enables you
+        to leverage innovations in Fabric without having to invest in data pipelines. It’s a “read-replica” of
+        your data for authorized users in Fabric.
+        Why can't I find some Tables and Entities from Finance
+        and Operations in tables in Link to Fabric or Link to
+        Azure Synapse
+        Azure Synapse Link or Fabric link enables tables where the "change tracking" property is enabled.
+        Currently, change tracking can't be enabled for all finance and operations entities. The Track
+        changes option is unavailable for entities created in finance and operations in the past for data
+        migration. In some entities, enabling change tracking might fail with the error message chosen
+        entity doesn't pass the validation rules or the Track changes checkbox is disabled for some
+        entities.
+        For more information about entity validation rules and how you can fix them, go to Enable row
+        version change tracking for data entities. You might need developer assistance to complete the
+        steps. If the chosen entity is unavailable because of the change tracking limitation, choose the
+        tables that comprise the data from that entity.
+        You can use the EntityUtil    solution provided by the FastTrack team to create entity shapes using
+        tables.
+        Is BYOD service retired? Is there a retirement date?
+        As part of the Dynamics 365 platform unification project, several services that exported data in
+        Dynamics 365 applications are consolidated. BYOD is a service that exports entity data into a
+        customers own Azure SQL database. While a retirement date for BYOD service hasn't been
+        determined, we recommend that you transition to Synapse Link or Fabric link services. Fabric link
+        service is a new, no-copy, no-ETL solution, which enables you to query your data with SQL similar
+        to a “read-replica” of your data in Fabric.
+        Will you retire Synapse Link in the future?
+        As part of the platform unification project, we have consolidated several services that exported
+        data in Dynamics 365 applications to a service under the brand name Synapse Link for Dataverse.
+        Fabric link, a no-copy, no-ETL solution, which enables you to leverage innovations in Fabric
+        without having to invest in data pipelines is also available. Link to Fabric is a “read-replica” of
+        your data for authorized users in Fabric.
+        While many customers are excited to adopt Fabric, we also understand some customers want to
+        continue to export data and build their own integration pipelines. As such, we want to enable you
+        to export data well into the future.
+        Will export to data lake service stop since it's
+        deprecated after November 1, 2024?
+        Export to data lake service is deprecated as of November 1, 2024 and support will be limited. You
+        can reduce the risk by beginning the transition process now. We plan to decommission export to
+        data lake service beginning March 25, 2025 as customers transition to Synapse Link and Fabric
+        link services. We plan to start the decommissioning process with customers who have completed
+        the transition as well as customers who aren't actively using the service. You'll be notified before
+        the decommission process begins and have the option to ask for a past due extension via the link
+        aka.ms/SynapseLinkPastDue    .
+        My transition might run beyond deprecation date, is
+        there a process to get an extension?
+        Export to data lake service is deprecated as of November 1, 2024, but will continue to operate
+        under limited support until March 25, 2025. If you haven't done so already, you should begin the
+        transition process now.
+        To help customers who might need more time to complete their transition, we introduced an in-
+        product “past due extend” option. You can apply for a one-time “past due extension” by taking
+        the survey the Azure Synapse Link area in Power Apps (make.powerapps.com) or the link
+        aka.ms/SynapseLinkPastDue    . This option is available only to customers who are currently
+        validating either Synapse Link or Fabric Link services.
+        If a past due extension is approved, you receive a confirmation e-mail and the extended date is
+        shown within the product. You can join the community and stay in touch via the forum or weekly
+        office hours at aka.ms/SynapseLinkforDynamics  .
+     I have completed the transition, how can I uninstall
+     export to data lake feature?
+     If you aren't using this feature in your environment, ask your finance and operations apps
+     administrator to uninstall this feature. To uninstall, visit the environment page in life cycle services
+     (LCS), navigate to the Environment Add-ins section, and then select the Uninstall option in the
+     Export to Data lake environment add-in.
+     I received an email about transitioning Azure Synapse
+     Analytics workspaces to private links before 1 August
+     2026. What do I need to do?
+     The trusted services capability that allows Azure Synapse Analytics to access Azure Storage
+     accounts and Azure Key Vault by using a managed identity with a firewall exception was
+     previously scheduled for retirement on 1 August 2026.
+     To give organizations more time to assess their environments, validate migration approaches, test
+     affected workloads, and complete required changes, Microsoft extended the retirement date to 1
+     August 2027.
+     Use this additional time to review your current configurations and plan a transition to supported
+     networking options, such as private endpoints, managed virtual networks, or other recommended
+     access patterns for your environment. Start evaluation and testing early to help ensure a smooth
+     migration before the updated retirement date.
+     If you decide to transition your Synapse workspace to private links as described in the email,
+     complete the following steps to ensure Azure Synapse Link for Dataverse continues to work as
+     expected:
+       1. Create a Synapse workspace with a managed virtual network. A managed virtual network
+        isolates your Synapse workspace and is required to use managed private endpoints. Follow
+        the steps in Azure Synapse Analytics managed virtual network.
+       2. Create a managed private endpoint for your storage account (ADLS Gen 2). This replaces
+        the trusted services firewall exception with a private, secure connection. Follow the steps in
+        Create a managed private endpoint to your data source.
+       3. Enable these network settings:
+            On the storage account: enable Allow Azure services and resources to access this
+            storage account (under Networking > Firewalls and virtual networks).
+            On the Synapse workspace: enable Allow Azure services and resources to access this
+            workspace (under Networking).
+        Both settings must be enabled for Azure Synapse Link to connect successfully.
+     After completing these steps, your Synapse workspace connects to the storage account through
+     a private endpoint instead of the trusted services firewall exception.
+     Related articles
+     What is Azure Synapse Link for Dataverse?
+     Link your Dataverse environment to Microsoft Fabric and unlock deep insights
+      Last updated on 08/03/2026
+     Link your Dataverse environment to
+     Microsoft Fabric and unlock deep insights
+     Microsoft Dataverse direct link to Microsoft Fabric enables organizations to extend their Power
+     Apps and Dynamics 365 enterprise applications, and business processes into Fabric. The Link to
+     Microsoft Fabric feature built into Power Apps makes all your Dynamics 365 and Power Apps
+     data available in Microsoft OneLake, the built-in data lake for Microsoft Fabric.
+        No need to export data, build extract, transform, load (ETL) pipelines, or use our partner
+        integration tools.
+        With shortcuts from Dataverse directly into OneLake, your data stays in Dataverse while
+        authorized users get to work with data in Fabric.
+        Link data from all Dynamics 365 apps, including Dynamics 365 Finance and Operations
+        apps.
+        Build Power Apps and automations to drive action from insights in OneLake.
+     Microsoft OneLake, a data lake built into Fabric, helps eliminate data silos. Combine data from
+     your applications and devices web sites, mobile apps, sensors, and signals from your warehouse
+     and factories with data from your business processes in Dynamics 365, such as sales, cases,
+     inventory, and orders, to predict potential delays or shortages that affect keeping your promises
+     to customers. Dataverse creates shortcuts to OneLake, which enables you to work with data
+     without making multiple copies.
+     Dataverse also generates an enterprise-ready Microsoft Fabric Lakehouse and SQL endpoint and
+     a Power BI dataset for your Power Apps and Dynamics 365 data. This makes it easier for data
+     analysts, data engineers, and database admins to combine business data with data already
+     present in OneLake using Spark, Python, or SQL. As data gets updated, changes are reflected in
+     lakehouse automatically.
+     Low-code makers can build apps and automations to orchestrate business processes and react to
+     insights found in Fabric. By adding those insights back to Dataverse as virtual tables connected to
+     OneLake, makers build low-code apps with Power Apps, Power Pages, or Power Automate using
+     the design tools already available. Using connectors to over 1,000 apps, makers create business
+     processes that span Dynamics 365 as well as many other enterprise applications.
+     Link to Fabric from Power Apps
+    The primary way to create a Fabric link is from the Link data page in Power Apps
+    (make.powerapps.com): select + New link > Fabric link. You can also link to Fabric in context
+    from the Tables area by selecting Analyze > Analyze in Fabric on the command bar.
+    When you select the command for the first time, a wizard driven experience links your Dataverse
+    environment to a Fabric workspace. A Fabric Lakehouse, SQL endpoint, a Power BI dataset are
+    created and Dataverse tables are linked to the lakehouse via shortcuts.
+    Once the link is set up, you can grant other users access to the Fabric workspace so that they can
+    work with Dataverse data using all Fabric workloads. The lakehouse, SQL endpoint, and Power BI
+    dataset are updated with new data as changes occur in Dataverse. More information: Link to
+    Microsoft Fabric
+    Direct access to your data in Microsoft OneLake
+    Link to Fabric creates a direct and secure Link between your data in Dataverse and a Fabric
+    workspace. There's no need to provide a storage account or Synapse workspaces. When you link
+    to Fabric from Power Apps, the system creates an optimized replica of your data in delta parquet
+    format, the native format of Fabric and OneLake, using Dataverse storage such that your
+    operational workloads aren't impacted. This replica is governed and secured by Dataverse and
+    stays within the same region as your Dataverse environment while enabling Fabric workloads to
+    operate on this data.
+    Admins can manage tables linked to OneLake from the Link data page. By selecting the Fabric
+    link and opening Manage tables, admins view tables added by makers, add more tables, and
+    migrate the link to other environments. Tables added to OneLake consume Dataverse storage
+    and admins can see storage consumption in the Power Platform admin center.
+     ７ Note
+     Microsoft continues to invest in Link to Fabric as the primary sync path, including the low-
+     latency sync engine that's rolling out now. Today, a Dataverse environment links to a single
+     Fabric workspace. Easier table selection for large environments and support for multiple
+     Fabric links from a single environment to different Fabric workspaces are planned.
+     ７ Note
+     By selecting Link to Microsoft Fabric, the system adds all nonsystem Dataverse tables that
+     have the Track changes property enabled. You can add more tables later.
+            If you used this feature during public preview, you can continue to use the tables selected
+            earlier. If you choose the Link to Fabric option in new environments (or unlink and relink
+            existing environments), all tables are added.
+            Enabling this feature results in an increase in Dataverse database storage consumption. You
+            can view additional storage consumption in the environment storage capacity details view
+            in Power Platform admin center. For an example, you notice an additional file Account-
+            Analytics if you selected the Account table for Fabric link. Also note that the chart only
+            displays tables consuming the most storage. You can get a complete list of tables using the
+            menu on the top right of the chart.
+         Comparing Link to Fabric with Azure Synapse Link
+         for Dataverse
+         Azure Synapse Link for Dataverse enables IT admins to export data to their own storage and build
+         data integration pipelines. Azure Synapse Link assists with provisioning and configuring Azure
+         resources within an integrated experience.
+         Link to Fabric feature enables direct connectivity between your data in Dataverse with Microsoft
+         Fabric without the need to bring your own storage and Synapse workspaces. Link to Fabric
+         leverages storage built into Dataverse and removes the need to provision and manage your own
+         storage.
+         This table provides a comparison between the options.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Link to Fabric                               Azure Synapse Link
+           No copy, no ETL direct integration with      Export data to your own storage account and integrate with
+           Microsoft Fabric.                            Synapse, Microsoft Fabric, and other tools.
+           Data stays in Dataverse - users get secure   Data stays in your own storage. You manage access to users.
+           access in Microsoft Fabric.
+           All tables chosen by default.                System administrators can choose required tables.
+           Consumes additional Dataverse storage.       Consumes your own storage as well as other compute and
+                                                        integration tools.
+         You can connect existing Azure Synapse Links with Microsoft Fabric and benefit from Fabric
+         innovations like Power BI DirectLake mode reports and integrated Spark and data pipelines. You
+     must create an Azure Synapse Link for Dataverse profile and enable the Delta parquet
+     conversion for Fabric link option. This option isn't available for Azure Synapse Link for Dataverse
+     profiles that use the CSV output format.
+     Next steps
+     Link to Microsoft Fabric
+      Last updated on 07/20/2026
+     Link to Microsoft Fabric
+     Microsoft Fabric integration with Microsoft Dataverse allows you to seamlessly link your Power
+     Platform environment to Microsoft Fabric, enabling advanced data analysis and reporting
+     capabilities. This guide provides step-by-step instructions on configuring your environment,
+     linking it to Microsoft Fabric, and managing linked tables.
+     You can use an existing Dataverse environment or create a new developer environment if you
+     want to try this feature. More information: Create a developer environment
+     Prerequisites
+        You must have the System Administrator security role in the Power Platform environment to
+        enable Link to Fabric or Synapse Link. This role is also required to add application users in
+        your environment who need access to work with this feature by using the Power Platform
+        admin center.
+        You must be an administrator of the Power BI workspace.
+        If you want the system to create a Power BI workspace, you need to have Power BI Capacity
+        Administrator access to a capacity within the same region as the Dataverse environment.
+        A Power BI premium license or Fabric capacity within the same Azure geographical region as
+        your Dataverse environment is required. If you don’t have Power BI premium license or
+        Fabric capacity within the same geographical region, you can buy a capacity or sign up for a
+        free Fabric trial capacity. More information: Fabric (preview) trial
+        Your administrator needs to grant you access to create Fabric lakehouses and artifacts. You
+        can find these settings in the Fabric admin portal. Go to Tenant Settings > Microsoft Fabric
+        > Users can create Fabric items, Tenant settings > Workspace settings > Create
+        workspaces as well as Tenant settings > oneLake settings > Users can access data stored
+        in OneLake with apps external to Fabric.
+        If you plan to use workspace identity authentication, you must be a workspace admin to
+        create and manage a workspace identity. The workspace you're creating the identity for
+        can't be a My Workspace. More information: Workspace identity in Fabric
+        If you plan to use workspace identity authentication, the workspace identity must be
+        onboarded as an application user in the Dataverse environment and granted the
+        appropriate role (commonly System Administrator) so it can access Dataverse data on
+        behalf of Fabric.
+             You must have permissions in Fabric to manage connections via Settings > Manage
+             connections and gateways.
+             To confirm whether you have access to the required premium capacity, go to Power BI  ,
+             open the workspace, and select Workspace settings > Premium. Make sure that Trial or
+             Premium capacity is selected.
+                                                                                                 
+        Create a link to Fabric
+        The Link data page in Power Apps is the home for every way you move Dataverse data out for
+        analytics. It has two sections: Fabric Links for links to Microsoft Fabric, and Other Links for Azure
+        Synapse Link and other targets. Start a Fabric link from this page:
+           1. Sign in to Power Apps   and select the environment you want.
+           2. On the left navigation pane, select Link data. If the item isn’t in the side panel pane, select …
+             More and then select the item you want.
+                                             
+     3. Select + New link, and then in the Create new link pane, select the Link data via Fabric tile,
+      which is marked Recommended.
+                                             
+      Tip
+     You can also start a Fabric link in context from the Power Apps Tables area: select Analyze >
+     Analyze in Fabric on the command bar. This shortcut opens the same wizard. The Tables >
+     Analyze menu creates Fabric links only. You can no longer create an Azure Synapse Link
+     from Tables > Analyze. To create an Azure Synapse Link, use the Link data page and select
+     Other Links.
+    The Fabric link wizard guides you through four steps: Getting started, Setup Configuration,
+    Select Tables, and Review and create.
+    Step 1: Getting started
+    The wizard opens on a Getting started page that summarizes what the link does and checks your
+    prerequisites and Fabric capacity. If you don't have a Fabric capacity in the same geography or
+    region as your Dataverse environment, the wizard notifies you to get a capacity in the required
+    geography. Select Next to continue.
+                                             
+    Step 2: Set up configuration
+    On the Setup Configuration step, select the target Fabric workspace, and then create the
+    Connection that authenticates to Fabric. When you create the connection, choose one of three
+    authentication options. Workspace identity is the recommended option: it removes the need to
+    manage secrets and avoids the service principal misconfiguration that is the most common Fabric
+    link setup failure.
+     ） Important
+     Workspace identity is a property of the Fabric workspace, not the Dataverse link. A Fabric
+     workspace admin enables it once on the workspace, outside Dataverse. After it exists on the
+     workspace, every Dataverse link to that workspace can use it. To enable it, go to Create and
+     manage a workspace identity.
+      Workspace Identity:
+      To use this option, you must first create a workspace identity in Fabric:
+        1. In Fabric, open the target workspace.
+        2. Go to Workspace settings > Workspace Identity.
+        3. Select + Workspace Identity to create it.
+          Note the name of the workspace identity (it matches the workspace name).
+        4. For more information, go to Workspace identity in Fabric.
+      Create an application user with workspace identity:
+      After you create the identity, add it as an application user in Dataverse:
+        Go to Power Platform admin center > Users (See all) > App users list.
+        Select + New app user, then + Add an app, search for the workspace name you noted
+        earlier (srr-athena-test in the above example), and add it.
+        Assign the correct Business unit and System Administrator role, then select Create.
+        For detailed steps, go to the Create an application user in Dataverse step.
+      Service Principal:
+      To use this option, go to the create an application user with workspace identity previous
+      step to create a service principal. Then, follow these steps:
+        1. First, add the service principal as an application user in Dataverse following the same
+         process described in the Workspace Identity section.
+        2. After adding the application user, return to the Link to Fabric wizard.
+        3. In the connection setup, provide the following details for your service principal:
+          Tenant ID: Your Azure tenant identifier.
+          Client ID: The application (client) ID of your service principal.
+          Key: The client secret or certificate for authentication.
+        4. Save the connection to complete the setup.
+      Organizational Account:
+      Provide your credentials and save the connection. To change credentials later, select Switch
+      account and provide new credentials.
+    When the selected workspace has a workspace identity configured, the wizard recommends
+    selecting it as the authentication kind for the connection.
+                                             
+    If the selected workspace doesn't have a workspace identity yet, the wizard tells you so. You can
+    continue with an organizational account or service principal, or ask a Fabric workspace admin to
+    add a workspace identity to the workspace.
+                                             
+    When the connection is established, the step shows a success confirmation. Select Next to
+    continue.
+                                             
+     ７ Note
+     If you use workspace identity or service principal authentication, onboard the identity as an
+     application user in the Dataverse environment and grant the appropriate role (commonly
+     System Administrator) so it can access Dataverse data on behalf of Fabric. For more
+     information, see Create an application user in Dataverse.
+    Step 3: Select tables
+     1. On the Select Tables step, choose the Dataverse tables you want to sync to Fabric. If your
+      environment is linked to finance and operations apps, you can also select tables from those
+      apps. By default, the wizard selects Dataverse tables that have the Track changes property
+      enabled. Clear any tables you don't want to sync. Only selected tables consume storage in
+      Fabric, so you can optimize costs by excluding tables you don't need.
+     2. Select Next.
+                                             
+     ７ Note
+     You can change this selection any time after setup from the standalone Manage tables
+     surface. You no longer have to edit the link to add or remove tables. For more information,
+     see Add or remove tables linked to Fabric.
+    Step 4: Review and create
+    On the Review and create step, review your selections, and then select Finish. The wizard creates
+    the workspace artifacts, creates the shortcuts, and performs the first initialization. You can watch
+    the progress of each task on this step.
+                                             
+    When the link is created, it appears under Fabric Links on the Link data page. You land directly in
+    the standalone Manage tables surface for the new link, which you can also open at any time from
+    the command bar.
+                                             
+     ７ Note
+     It might take up to 60 minutes to update data in OneLake including the conversion to delta
+     parquet format. If you selected a table that contains a lot of data, the initial load time might
+     take longer. When you open Fabric lakehouse, the links appear as unidentified until the
+     initial sync is completed. More information: Troubleshooting common issues
+     When the initial sync is complete, the system continuously refreshes updates in Dataverse in
+     the lakehouse. It might take up to 60 minutes for the data to be refreshed especially during
+      peak load periods.
+      If you have more than 2,000 active Dataverse tables, Link to Fabric can fail with an error. Go
+      to Troubleshooting common issues for help with resolving issues.
+      The link was labeled as Microsoft OneLake and is now labeled Link to Fabric.
+      ） Important
+      The lakehouse created by Link to Fabric currently follows the naming pattern
+      <environmentname>_<internalprofile>_<workspace>_<uniquevalue> (for example, the
+      internalprofile portion appears as CDS2 or CDS3). Don't take a dependency on this
+      lakehouse name in your downstream code, queries, or pipelines. The name format is subject
+      to change without notice, and the historical significance of the CDS2 or CDS3 segment no
+      longer applies and is likely to be dropped in the future. Reference the lakehouse through
+      stable identifiers (such as the workspace and lakehouse ID) instead of parsing the display
+      name.
+     Low-latency sync
+     Low-latency sync is a faster sync engine for Link to Fabric. It writes data directly from the
+     Dataverse database to Delta Parquet, removing the intermediate CSV step used by the previous
+     pipeline.
+     Benefits:
+        Faster initial sync.
+        Faster delta sync for incremental changes.
+        Higher throughput for finance and operations apps tables, up to 1M or more records per
+        hour per table. Actual sync times depend on initial load, data churn, table sizes, and number
+        of columns.
+     Low-latency sync rolls out by station and is enabled automatically. There's no separate opt-in.
+     Once your station is enabled, new Link to Fabric setups use the new engine through the same
+     setup experience.
+     To confirm a profile is running on low-latency sync, select Link data from the left navigation, and
+     then select your Fabric link under Fabric Links. If you see the Low-latency mode flag on your
+     Fabric link in the link list, low-latency sync is enabled for that profile.
+                                             
+    Existing Fabric link profiles continue to use the previous sync engine. To move an existing profile
+    to low-latency sync after it's available in your station, unlink the profile and relink it.
+     ７ Note
+     Unlinking and relinking triggers a full initial sync for all configured tables. Initial sync can
+     copy large volumes of data, so schedule it during off-peak hours or on weekends when
+     traffic in your environment is lower.
+     ） Important
+     If you use long-term retention and currently see live and retained data together through
+     Fabric shortcuts, note the following before you unlink and relink for low-latency sync:
+       After you relink, the shortcuts include live data only. Retained data is no longer
+       surfaced through the shortcuts for the tables you relinked, so reporting on retained
+       data through Fabric isn't available for those tables.
+       Long-term retention itself isn't affected. Retention jobs continue to run as configured,
+       and your retained data is preserved. Only the shortcut-based reporting view of
+       retained data is impacted.
+       We're working on migrating retained data to the low-latency sync format. Once that
+       migration completes, your previously retained data starts appearing through the
+       relinked profile alongside live data, with no further action required from you.
+       Low-latency sync writes timestamp columns as INT64. The INT96 timestamp format
+       used by the previous Fabric link sync engine isn't supported. Review any downstream
+       dependencies such as queries, pipelines, semantic models, or external readers that
+       explicitly handle INT96 timestamps and update them to read INT64.
+        Prerequisites for finance and operations apps
+        If you're running finance and operations apps, your environment must be on a supported build
+        before low-latency sync works. The following table lists the minimum required builds by app
+        version.
+                                                                                            ﾉ Expand table
+          Finance and operations version       Minimum platform build         Minimum application build
+          10.0.47                              7.0.7858.157                   10.0.2527.192
+          10.0.48                              7.0.7996.100                   10.0.2645.108
+          10.0.49                              7.0.8199.19                    10.0.2790.30
+        To check your build, in your finance and operations environment, go to Help & Support > About
+        to see your current platform and application build numbers.
+        If your build is below the minimum listed for your app version, apply the latest quality update for
+        your version before setting up low-latency sync.
+           ７ Note
+           If you're not sure which app version you're on, contact your system administrator or
+           Microsoft support team.
+        Manage link to Fabric
+        This section describes how to add or remove tables linked to Fabric, configure the link to use
+        workspace identity, and share the data connection with other users.
+        Add or remove tables linked to Fabric
+        Manage the tables linked to Fabric from the standalone Manage tables surface. Open it from the
+        command bar on your Fabric link at any time. You don't need to edit the link to add or remove
+        tables. Your Fabric links appear under Fabric Links on the Link data page.
+                                                                                                   
+        Add tables to Fabric
+           1. Sign in to Power Apps   .
+                ７ Note
+                This feature is enabled by default on all environments. Power Platform admins can
+                disable this feature in the Power Platform admin center. More information:
+                Environment settings: Microsoft Fabric
+           2. Select Link data from the left navigation pane, and then select your Fabric link under Fabric
+             Links.
+           3. Open Fabric by selecting View in Microsoft Fabric.
+           4. Add more table links to Fabric by selecting Manage tables.
+           5. When you add a table, the system performs an initial sync and indexes the data. When the
+             initial sync is completed, a shortcut to OneLake is created. View the status of tables by
+             selecting Manage tables. Use the Refresh Fabric tables option to add the newly enabled
+             table in Fabric. You might need to review the report and downstream data flows to ensure
+             that they're not impacted by the change.
+                ７ Note
+       If your environment is linked to a Dynamics 365 finance and operations environment,
+       the add tables option enables you to include tables from finance and operations apps.
+       Learn more: Choose finance and operations data in Azure Synapse Link for Dataverse
+     6. When the sync status is Active, as data gets updated, your data changes are shown in
+      reports created in Fabric.
+     7. If you add a new column to a table that’s already part of the profile (also known as a
+      metadata change), use the Refresh Fabric tables option from the command bar to update
+      the change in Fabric. The update occurs after the next table data change is triggered. You
+      might need to review the report and downstream data flows to confirm that they're not
+      impacted by the change.
+     8. You can also Unlink, which removes the Fabric link to your Dataverse environment. When
+      unlinking, the Fabric lakehouse is also removed.
+     ７ Note
+     If you've installed Dynamics 365 apps such as Customer Insights, the tables required for the
+     app are also included in the Link to Fabric link.
+    Remove tables from Fabric
+    You can stop syncing specific Dataverse and finance and operations apps tables to reduce
+    storage costs and optimize your Fabric workspace. After accessing Manage tables (as described
+    in step 4 in Manage link to Fabric), follow these steps to unlink tables:
+     1. The Manage tables pane shows all Dataverse and finance and operations apps tables
+      currently linked to Fabric.
+     2. Tables that are already syncing are checked.
+     3. To stop syncing a table, clear the option to select it.
+                                          
+     4. To keep syncing, leave it checked.
+     5. After making your selections, select Save.
+     6. A confirmation dialog appears listing the tables that stop syncing.
+                                          
+     7. Review the list, and then select Confirm.
+    After confirmation:
+      Shortcuts for the unselected tables are removed from the Fabric lakehouse.
+      Selected tables are removed from the internal storage that are synchronized to Fabric via
+      shortcuts. This ensures that you're paying only for the storage of tables that you selected.
+      Synchronization stops immediately for those tables no longer selected.
+      Remaining tables continue syncing without interruption.
+     ） Important
+       Some system tables and tables required by Microsoft add-ins can't be removed. More
+       information: Are there system tables that are automatically synchronized and can't be
+       unlinked?
+       Removing a table doesn't delete the table in Dataverse; it only removes the OneLake
+       shortcut and stops data sync.
+       If you need to add tables later, repeat the same steps and check the tables you want to
+       include. More information: Manage link to Fabric.
+    Configure Fabric link to use workspace identity
+    If you linked your Dataverse environment to Fabric earlier using an organizational account, you
+    can switch to workspace identity or service principal. Workspace identity is a Fabric managed
+    service principal bound to a specific workspace; it removes the need to manage secrets and
+    enables secure, keyless authentication for Fabric items that connect to Dataverse.
+    Things to verify before you begin
+    Before proceeding, ensure you meet the requirements described in the Prerequisites section, and
+    specifically verify these three essential items:
+      Workspace identity exists: The target Fabric workspace must have a workspace identity
+      configured. Go to Workspace settings > Workspace Identity. If the identity doesn't exist,
+      create it first. More information: Workspace identity in Fabric
+      Dataverse application user: The same workspace identity must be onboarded as an
+      application user in the Dataverse environment and granted the appropriate role (commonly
+      System Administrator) so it can access Dataverse data on behalf of Fabric. This might
+      already be in place if you followed the Workspace Identity steps in the Create a link to
+      Fabric section previously.
+      Rights to edit connections: You must have permissions in Fabric to manage connections via
+      Settings > Manage connections and gateways.
+    What changes?
+    After you update the connection's authentication method to Workspace identity, all Fabric items
+    that use that connection (for example, Lakehouses via OneLake shortcuts, Dataflows Gen2,
+    pipelines, semantic models) authenticate with your workspace identity going forward.
+    Before you begin
+    Identify the connection name. When you used Link to Microsoft Fabric, the system created a
+    Dataverse connection that typically includes (or matches) your environment name. You update
+    this specific connection.
+    Switch to workspace identity authentication
+     1. Open Fabric settings
+         In Microsoft Fabric, select the gear icon (top right) and choose Settings > Manage
+         connections and gateways.
+                                          
+     2. Locate the Dataverse connection created by Link to Fabric
+         In Manage connections and gateways, open the Connections tab (if not already
+         selected).
+         Find the connection associated with your Dataverse environment. The Link to Fabric
+         wizard typically creates this connection and names it using your environment's name
+         so it's easy to recognize.
+     3. Open the connection's management pane
+         Select the ellipsis (⋮) next to the connection and choose Settings to open its settings.
+                                
+     4. Switch the authentication method to Workspace identity
+         In the connection's Settings pane, go to Authentication.
+         From the Authentication method dropdown, select Workspace identity.
+         Select Save to apply the change.
+      ７ Note
+      If your items run through a gateway, review your gateway and cloud connection policies as
+      applicable. Fabric's manage connections and gateways experience governs connection
+      usage, including gateway scenarios for shareable cloud connections.
+     Share the data connection with other users
+     The system creates a data connection between the Power Platform environment and Fabric
+     workspace using the credentials of the user at the time of link creation. If you use the Fabric link
+     option from the Power Apps Tables area, the system creates the connection and asks you to save
+     it. If you use the Synapse Link option, you must create a data connection yourself before
+     enabling the link.
+     The system uses this connection to enable Fabric users to connect to Dataverse - the data store
+     behind the Power Platform environment. If you want to enable other users to add or remove
+     tables to Fabric link, you need to share this data connection with other users.
+       1. Follow steps 1-2 from Switch to workspace identity authentication to access Manage
+        connections and gateways and locate your Dataverse connection.
+       2. Once you select the correct data connection, select ... > Manage users. Then you're shown
+        users who have access to this connection.
+       3. Enter the name or email of other users who need access to data. When you select a user,
+        specify either the Owner role or Reader role. You only need to provide reader role to enable
+        them to consume data. The users you specify receive an e-mail confirming access to data.
+     You might need to grant access to other users to this workspace so that they can work with data.
+     Depending on the need for data access, you might need to secure the data in this workspace
+     before you share this data with others. You can secure the lakehouse as well as tables within the
+     lakehouse using OneLake security. More information: OneLake security overview
+     You can only create user based connections at this time.
+     Link existing Azure Synapse Link for Dataverse links
+     with Fabric
+     You can link your existing Azure Synapse Link for Dataverse profiles with Fabric. These profiles
+     appear under Other Links on the Link data page. You need to select the Enable Parquet/Delta
+        lake option to enable the view in the Fabric feature for Azure Synapse Link for Dataverse profiles.
+        To enable an existing link, follow these steps:
+           1. Sign in to Power Apps   .
+           2. Select Link data from the left navigation, and then select Other Links.
+           3. Select an existing Azure Synapse Link for Dataverse profile, and then select Link to
+             Microsoft Fabric.
+           4. You're prompted to choose a Power BI premium workspace to continue. A list of workspaces
+             in the same region as your environment are displayed. If you don’t see a workspace in the
+             drop-down list, you might need to create one, and then return to this task. More
+             information Link to Microsoft Fabric
+           5. Select OK. Validations are performed and the required artifacts are created in Fabric.
+           6. Select View in Microsoft Fabric open Fabric lakehouse.
+           7. You can add or remove tables by selecting Manage tables. When you add a table, an initial
+             sync is performed. When the initial sync is completed, select Refresh Fabric tables to refresh
+             the Dataverse shortcut added to your Fabric lakehouse.
+          ７ Note
+                Select Enable Parquet/Delta lake to enable the view in Fabric.
+                Existing Azure Synapse Link for Dataverse profiles where the data is saved as CSV files
+                can't be linked to Microsoft Fabric.
+                Currently, Azure Synapse Link profiles secured with managed identities, formerly
+                Managed Service Identity (MSI), can't be linked to Microsoft Fabric.
+        Next steps
+        Work with Dataverse data and generate Power BI reports
+         Last updated on 08/11/2026
+     Work with Dataverse data and generate
+     Power BI reports
+     This section describes the different ways you can work with Microsoft Dataverse data in Microsoft
+     Fabric and generate reports in Power BI.
+     You can view the Fabric lakehouse, SQL endpoint, and the default dataset generated by Dataverse
+     in the Fabric workspace you chose earlier.
+     When you select Link to Microsoft Fabric, a Dataverse generated Fabric lakehouse opens. You
+     can go to other Fabric features and work with Fabric and Power BI.
+     Explore the Dataverse generated Fabric lakehouse
+     The tables you selected are added to the Fabric lakehouse and displayed in Power BI as shown
+     here. These tables are linked to your Power Platform environment using Dataverse shortcuts. As
+     data changes in Dataverse, the Dataverse shortcuts in Fabric reflect the latest data.
+     Note that Dataverse manages these shortcuts. You shouldn't delete or remove these shortcuts in
+     Fabric. If you accidentally delete a link, you can go to the Azure Synapse Link for Dataverse area
+     in Power Apps and select Refresh Fabric links to re-create the links.
+     Explore data with SQL endpoint
+     You can open SQL endpoint and query Dataverse data with SQL and generate views in Fabric.
+     In Power BI, select SQL endpoint from the top right context menu. The data is displayed in a SQL
+     friendly experience where you can create SQL queries and views.
+     Autocreate a Power BI report
+     Choose the default dataset generated by Dataverse, and then select Auto-create report. A Power
+     BI report with the data you have selected is created.
+     Related articles
+     Link your Dataverse environment to Microsoft Fabric and unlock deep insights
+      Last updated on 04/30/2026
+    Build apps and automations, and drive
+    action with insights from Microsoft Fabric
+    Link to Microsoft Fabric in Microsoft Dataverse enables extending your data and insights in
+    Dynamics 365 and Power Apps in Fabric. Bring your own data into Fabric and combine, reshape,
+    and aggregate data with data from Dataverse. Use Fabric tools such as SQL, Spark, and dataflows
+    to work with your data within Fabric. For example:
+       Combine financial data from Dynamics 365 with financial data from other systems to derive
+       consolidated insights.
+       Merge historical data ingested into Microsoft OneLake from legacy systems with current
+       business data from Dynamics 365 and Dataverse.
+       Combine weblogs and telemetry data from your website with product and order details
+       from Dynamics 365.
+       Apply machine learning to detect anomalies and exceptions within your data.
+    Insights aren't complete unless you can drive action and business processes. Bring insights you
+    found in Fabric to build apps, drive business processes with Power Automate without data copy,
+    no-ETL (extract, transform, load), or non-Microsoft integration tools.
+    With Dataverse virtual tables sourced with Fabric, your low-code app builders connect to data in
+    OneLake and build Power Apps and drive business actions. Additionally, with Power Pages, low-
+    code makers can build external facing websites and drive action from OneLake insights with
+    partners, suppliers, and customers.
+        Prerequisites
+             An existing Dataverse environment or you can create a new developer environment. More
+             information: Create a developer environment
+             Contributor or administrator access to a Fabric workspace with data.
+        If you don’t have Power BI premium license or Fabric capacity, you can sign up for a free Fabric
+        trial capacity.
+        If you don't have a workspace with data, create a workspace with sample data using the
+        lakehouse tutorial.
+        Create a virtual table with Fabric data
+        Follow these steps to create a virtual table using Fabric data.
+          ７ Note
+          This feature is enabled by default with all environments. Admins can disable this feature in
+          the Power Platform admin center in the environment feature settings.
+           1. Sign into Power Apps  , and then select Tables on the left navigation pane.
+           2. On the command bar, select New table > Create a virtual table.
+       3. Select Microsoft Fabric as the connection, and then select Next.
+       4. Select a Microsoft Fabric workspace from the available list of workspaces. All workspace
+        where you have access are available in the list.
+       5. Choose a Microsoft Fabric Lakehouse from the drop-down list. All lakehouses and data
+        warehouses within the workspace selected previously are available to choose.
+       6. On the Data page, select a table from the list of tables shown from the lakehouse. Select
+        Configure table and column names that will be used in Dataverse if you want to rename
+        any of the fields or tables in Dataverse or to specify additional properties available for you
+        in Dataverse. Select Next.
+       7. If you selected the Configure table and column names that will be used in Dataverse
+        checkbox, you're shown the table and column properties and you can modify them here.
+        When you're done modifying them select Next.
+       8. Verify that the field chosen for primary key field is a unique field. You might need to verify
+        the default field selected by the system as the primary key.
+         ７ Note
+         While the table you selected from Fabric Lakehouse might not have a primary key
+         defined, you need to select a field that is unique to continue. If you don't select a
+         unique field, the table might not show all the records. While the wizard selects a field
+         based on metadata available, the selection might not be accurate.
+       9. Review the information shown, and then select Finish.
+     A new Dataverse virtual table is created with data from Fabric.
+     Building apps and taking action with insights
+     You can build an app with the virtual table sourced with Fabric data in Power Apps
+     (make.powerapps.com). From the Home page, select Start with data > Select an existing table,
+     select the virtual table created earlier, and then select Create app. Provide a name for your app
+     and build the app by following the wizard.
+      ７ Note
+      Virtual tables created with data from Microsoft Fabric OneLake are read-only. Currently, you
+      can't modify the data in Fabric OneLake with Power Apps.
+     See also
+     Create and edit virtual tables that contain data from an external data source
+      Last updated on 04/09/2026
+     Microsoft Fabric Link for Dataverse FAQ
+     This article provides information about frequently asked questions when you link Microsoft
+     Dataverse to Microsoft Fabric.
+     General
+     What authentication methods are supported for
+     Fabric link?
+     Fabric link supports three authentication methods when creating a connection:
+        Organizational Account: Provide your credentials and save the connection.
+        Service Principal: Provide Tenant ID, Client ID, and Key for authentication.
+        Workspace Identity: Uses a Fabric-managed service principal bound to a specific
+        workspace.
+     What happens when I unlink from Fabric?
+     When you unlink, the Fabric lakehouse is removed along with all shortcuts to your Dataverse
+     tables.
+     Table support and limitations
+     Which Dataverse tables are selected by default when
+     linking to Fabric?
+     During the initial Link to Fabric setup, the Select Entities step shows all Dataverse tables where
+     the Track changes property is enabled. By default, all these tables are selected. You can clear any
+     tables you don't want to sync before completing the wizard. Only selected tables are linked to
+     Fabric and consume storage, so you can optimize costs by excluding tables you don't need. You
+     can change your selection anytime after setup by using Manage Tables.
+     Which Dataverse tables aren't supported for
+     Fabric link?
+     Any table that doesn't have change tracking enabled isn't supported. Additionally, certain
+     Dataverse tables, such as postcomment, postregarding, postlike, post, and postrole, aren't
+     available for customers to enable synchronization through Fabric link. In some cases, these tables
+     might appear when Dataverse long term retention is enabled. If that happens, a subset or all
+     records from these tables might be exported. This is expected behavior for long term retention
+     scenarios.
+      ） Important
+         These tables shouldn't be selected for synchronization.
+         Their presence doesn't indicate full support for incremental sync.
+     Can I add or remove specific tables from Fabric link?
+     Yes, you can manage which tables are linked:
+        Add more table links to Fabric by selecting Manage tables.
+        To stop syncing specific tables, clear them in the Manage tables pane and then select Save
+        After confirmation, shortcuts for unselected tables are removed from the Fabric Lakehouse
+        and sync stops immediately.
+      ） Important
+      Removing a table doesn't delete the table in Dataverse; it only removes the OneLake
+      shortcut and stops data sync.
+     Are elastic tables supported for Fabric link?
+     Yes, elastic tables are supported with Fabric link. Ensure that change tracking is enabled for elastic
+     tables in Dataverse for the sync to happen.
+     Are Finance and Operations apps tables supported?
+     If your environment is linked to a Dynamics 365 finance and operations environment, the add
+     tables option enables you to include tables from finance and operations apps. Finance and
+     operations apps tables aren't autoselected when creating the initial Fabric link.
+     Are there system tables that are automatically
+     synchronized and can't be unlinked?
+     Yes, certain system tables are automatically synchronized in Link to Fabric and can't be unlinked
+     by users. Examples of these system tables include:
+        bot
+        msdyn_copilotknowledgeinteraction
+        desktopflowmodule
+        flowmachine
+        flowmachinegroup
+        workflow
+     These tables are essential for system functionality and are always included in the synchronization
+     process.
+     Microsoft provided add-ins and table selection
+     Fabric link table selection is also dependent on Microsoft provided add-ins such as Business
+     Process Advisor (BPA) and Customer Insights - Journeys. These products use the same pipeline to
+     export data from Dataverse to provide transformed insights.
+     The tables that you can't unselect depends on which add-on products you enabled. When you
+     enable an add-in (for example, Customer Insights - Journeys), the specific tables required by that
+     add-in are added to the entityanalyticsconfig table in Dataverse.
+     Any table that has isenabledforadls set to true in the entityanalyticsconfig table can't be selected
+     from the Fabric link.
+     What happens when I add a new column to a
+     linked table?
+     If a new column is added to a table that's already part of the profile (metadata change), you can
+     use the Refresh Fabric tables option from the command bar to update the change in Fabric. The
+     update occurs after the next table data change is triggered.
+     Data Synchronization
+     How long does initial data synchronization take?
+     Initial sync time depends on several factors including table size, number of updates and
+     transactions happening in the environment, number of tables, and row count. The data is
+     converted to delta parquet format during this process. When you open Fabric Lakehouse, the
+     links appear as unidentified until the initial sync is completed.
+     How often is data refreshed in Fabric?
+     When the initial sync is complete, the system continuously refreshes updates in Dataverse in the
+     lakehouse. Incremental updates typically take up to one hour to appear, though actual timing
+     depends on table size, number of updates and transactions happening in the environment,
+     number of tables, row count, and system load periods.
+     Why am I seeing differences in `SinkModifiedOn` and
+     `ModifiedOn` columns?
+     This is expected behavior. ModifiedOn is the date and time a record was last changed in
+     Dataverse, while SinkModifiedOn is the date and time the record was written to the Dataverse
+     data lake from where Fabric shortcuts point to. SinkModifiedOn is typically later than ModifiedOn,
+     and the difference depends on factors such as batch size, system load, and the number of
+     records being processed.
+      ） Important
+      In the case of long-running transactions in finance and operations apps, a record might be
+      synchronized multiple times to ensure no data loss. In this scenario, SinkModifiedOn reflects
+      the last synchronization time, not the first. For example, if a record is synced 10 times within
+      an hour, SinkModifiedOn shows the time of the 10th sync even though the data was
+      available from the first sync itself. Use caution when building latency reports based on the
+      difference between SinkModifiedOn and ModifiedOn, as it can give a misleading impression
+      of actual data availability.
+     Limitations and Errors
+     What are the limits for Fabric Link?
+     If you have more than 2,000 active Dataverse tables, Link to Fabric can fail with an error.
+     Are there per-record size limits when using Link
+     to Fabric?
+     Yes. Link to Fabric reads rows through Dataverse, so every Dataverse per-record limit applies to
+     sync. The most common limit is the 200 MiB cap on the uncompressed size of a single record
+     returned by the server.
+     This limit typically applies to tables that store large free-form content or binary data. For
+     example:
+        email holds the full message body.
+        activitypointer holds long descriptions.
+        activitymimeattachment holds inline and attached files.
+     This is a Dataverse platform limit and can't be raised on request. The service doesn't truncate or
+     modify customer data. To resolve, reduce the oversized record in Dataverse by deleting it,
+     clearing the large field, or moving the content out of Dataverse.
+     Can I link existing Azure Synapse Link profiles
+     to Fabric?
+     You can link your existing Azure Synapse Link for Dataverse profiles with Fabric if you select the
+     Enable Parquet/Delta lake option. However:
+        Existing profiles where the data is saved as CSV files can't be linked to Fabric.
+        Azure Synapse Link profiles secured with managed identities currently can't be linked to
+        Fabric.
+     See also
+     Link to Microsoft Fabric
+     Troubleshooting common issues with link to Fabric
+     Work with Dataverse data and generate Power BI reports
+      Last updated on 06/11/2026
+         Troubleshooting common issues with link
+         to Fabric
+         If you experience an error message when using link to Fabric with Microsoft Dataverse, here are
+         suggestions and more information about how to resolve the issue.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Error message                                         How to resolve
+           You must have Power BI premium or Fabric              You need a Power BI premium of a Fabric capacity in
+           capacity in the same region {Region}. You can also    the same region as your Dataverse environment.
+           get a Fabric trial.                                   Power BI premium per user capacity isn't sufficient.
+                                                                 You can get a free trial capacity by visiting Fabric
+           You won't receive this error after April 30, 2024.    (preview) trial.
+           Instead, you're shown an error if you don't have      More information: Prerequisites
+           capacity in the same geography.
+           Creation of Fabric workspace failed. You can try      You must be a Power BI Capacity Administrator or
+           again. If this issue persists contact Microsoft       have contributor access to a capacity within the same
+           customer support with the corelation ID.              geography as your Dataverse environment.
+                                                                 Currently, the system supports these premium
+                                                                 capacity SKUs described in the Prerequisites.
+                                                                 Verify with your Power BI Tenant admin that you have
+                                                                 permissions to create workspaces. You can find this
+                                                                 setting in Power BI Admin portal under Tenant
+                                                                 settings > workspace settings > Create workspaces.
+                                                                 If the issue isn't resolved, contact Microsoft customer
+                                                                 support with the provided reference ID
+           Creation of Fabric lakehouse failed. You can try      Verify with your Power BI Tenant admin that you have
+           again. If this issue persists contact Microsoft       permissions to create OneLake shortcuts. You can find
+           customer support with the corelation ID.              this setting in Power BI Admin portal under Admin
+                                                                 Portal > Tenant Settings > Microsoft Fabric > Users
+                                                                 can create Fabric items.
+                                                                 More information: Prerequisites
+                                                                 If the issue isn't resolved after several retries, you can
+                                                                 contact Microsoft customer support with the provided
+                                                                 reference ID.
+           We ran into an issue, Creaton of Fabric Lakehouse     Verify with your Power BI tenant admin that you have
+           failed.                                               permissions to create artifacts in Fabric. You can find
+                                                                 this setting in Power BI admin portal under Tenant
+                                                                 settings > oneLake settings > Users can access data
+                                                                 stored in OneLake with apps external to Fabric.
+           Error message                                             How to resolve
+                                                                     More information: Prerequisites
+                                                                     If the issue isn't resolved after several retries, you can
+                                                                     contact Microsoft customer support with the provided
+                                                                     reference ID.
+           Your organization doesn't appear to have                  Contact your administrator or get a trial version of
+           Microsoft Fabric. You can get a trial.                    Microsoft Fabric.
+           You need to get a trial version of Fabric to get          You need a Power BI premium of a Fabric capacity.
+           started.                                                  Power BI premium per user capacity isn't sufficient.
+                                                                     You can get a free trial capacity by visiting: Fabric
+                                                                     (preview) trial
+           You need to be a system administrator to link to          You need the system administrator security role in
+           Fabric.                                                   Dataverse to perform this operation. More
+                                                                     information: Security roles and privileges
+           Newly added fields in tables aren't reflected in          When a new field is added to a Dataverse table, the
+           Fabric Lakehouse.                                         newly added column isn't added to Fabric Linked
+                                                                     workspaces automatically. To include newly added
+                                                                     columns, select Synapse Link in Power Apps
+                                                                     (make.powerapps.com), select the Microsoft OneLake
+                                                                     or the Azure Synapse Link profile and select Refresh
+                                                                     Fabric tables. This action refreshes the table metadata
+                                                                     in Fabric Lakehouse.
+           Error message "Unauthorized. Access to target             This error message indicates that the user accessing
+           location https://[...].crm3.dynamics.com/ denied"         tables in Fabric doesn't have the required permissions
+           when accessing Dataverse tables in Fabric                 to access Dataverse tables. This error might be shown
+           Lakehouse.                                                even if the same user has access to the tables in
+                                                                     Dataverse.
+                                                                     The Link to Fabric wizard in Power Apps creates a data
+                                                                     connection at the time of creating the Link to Fabric.
+                                                                     This data connection uses credentials of the user, it's
+                                                                     possible that:
+                                                                     - The password of the user who created the
+                                                                     connection has changed or has expired.
+                                                                     - The user account of the user who created the Fabric
+                                                                     link is inactive.
+                                                                     - Other users who need to access Dataverse tables in
+                                                                     Fabric Lakehouse don't have access to the data
+                                                                     connection. More information: Share the data
+                                                                     connection with other users
+           Error message "A back end error occurred. The             This error message indicates that the user selecting
+           Fabric to Dataverse connection ID ... is not valid for    the Refresh Fabric tables option in the Azure Synapse
+           this user. Please check that you have access to this      Link page doesn't have the required permissions. This
+           connection, and that the connection is connected          error might be shown even when the user has access
+                                                                     to the tables in Dataverse and is a system
+           Error message                                             How to resolve
+           to this organization, with URL ... You can try again,     administrator.
+           if this issue persists please contact support.            The link to Fabric wizard in Power Apps creates a data
+                                                                     connection at the time of creating the link to Fabric.
+                                                                     This data connection uses credentials of the user, it's
+                                                                     possible that:
+                                                                     - The password of the user who created the
+                                                                     connection has changed or has expired.
+                                                                     - The user account of the user who created the Fabric
+                                                                     link is inactive.
+                                                                     - The user performing the Refresh Fabric tables
+                                                                     option doesn't have access to the data connection.
+                                                                     More information: Share the data connection with
+                                                                     other users
+           All tables from Dataverse show as Unidentified in         You might see this error message while your data is
+           Fabric Lakehouse.                                         being initialized for the first time. If this issue persists
+                                                                     for more than several hours, go to Synapse Link in
+                                                                     Power Apps (make.powerapps.com), choose the
+                                                                     Microsoft OneLake or the Azure Synapse Link profile
+                                                                     and select Refresh Fabric Links. This refreshes the
+                                                                     table metadata in Fabric Lakehouse.
+           Tables from Dynamics 365 finance and operations           System auto selects nonsystem tables with Change
+           apps are missing.                                         tracking property set to Yes when creating a Fabric
+                                                                     Link. To select more tables, open Microsoft OneLake
+                                                                     profile in Synapse Link and select Manage Tables. If
+                                                                     you have a finance and operations environment linked
+                                                                     to this Power Platform environment, you can also
+                                                                     select tables from finance and operations apps.
+                                                                     Finance and operations apps tables aren't
+                                                                     autoselected with Fabric Link.
+                                                                     More information: Add Finance and Operations tables
+           There are {.. #tables} tables enabled for change          Fabric link feature currently can't be enabled on
+           tracking in your environment. Addition of more            environments with more than 2,000 change tracking
+           than 2,000 tables isn't supported.                        enabled tables.
+          See also
+          Link your Dataverse environment to Microsoft Fabric and unlock deep insights
+          Link to Microsoft Fabric
+           Last updated on 04/27/2026
+    What is Azure Synapse Link for Dataverse?
+    Azure Synapse Link for Dataverse enables you to get near real-time insights over your data in
+    Microsoft Dataverse. With a tight seamless integration between Dataverse and Azure Synapse
+    Analytics, Azure Synapse Link enables you to run analytics, business intelligence and machine
+    learning scenarios on your data.
+     ７ Note
+     Azure Synapse Link for Dataverse was formerly known as Export to data lake. The service was
+     renamed May 2021 and continues to export data to Azure Data Lake as well as Azure
+     Synapse Analytics.
+    Using Azure Synapse Link, continuously export data from Dataverse to:
+      Azure Synapse Analytics
+      Azure Data Lake Storage Gen2
+    The Azure Synapse Link for Dataverse is a service designed for enterprise big data analytics by
+    delivering scalable high availability with disaster recovery capabilities. Data is stored in the
+    Common Data Model format, which provides semantic consistency across apps and deployments.
+    The Azure Synapse Link for Dataverse provides these features:
+      Linking or unlinking the environment to Azure Synapse Analytics and/or Azure Data Lake
+      Storage Gen2 in your Azure subscription.
+      Continuous replication of tables to Azure Synapse Analytics and/or Azure Data Lake Storage
+      Gen2 in your Azure subscription.
+      Replication of both standard and custom tables as well as create, update, and delete (CUD)
+      transactions.
+      Fewer clicks to process, transform, and visualize your data in Azure Synapse Analytics.
+        Serverless data lake exploration, data integration, and big data processing in Azure Synapse
+        Analytics.
+        Facilitated metadata discovery and interoperability between data producers and consumers
+        such as Apache Spark, Power BI, Azure Data Factory, Azure Databricks, and Azure Machine
+        Learning.
+     The Azure Synapse Link for Dataverse service supports initial and incremental writes for table
+     data and metadata. Any data or metadata changes in Dataverse are automatically pushed to the
+     Azure Synapse metastore and Azure Data Lake, depending on the configuration, without any
+     additional action. This is a push, rather than pull, operation. Changes are pushed to the
+     destination without you needing to set up refresh intervals.
+     Both standard and custom tables can be exported. Notice that the change tracking table attribute
+     in Dataverse is used to keep the data synchronized in an efficient manner by detecting what data
+     has changed since it was initially extracted or last synchronized.
+     All create, update, and delete operations are exported from Dataverse to the data lake. For
+     example, when a user deletes an Account table row in Dataverse, the transaction is replicated in
+     the destination location.
+     Rapidly analyze your Dataverse data in Azure
+     Synapse Analytics
+     Azure Synapse Analytics is a limitless analytics service that brings together data integration,
+     enterprise data warehousing, and big data analytics. It gives you the freedom to query data on
+     your terms, using either serverless or dedicated resources—at scale. It also allows you to build
+     analytics solutions on top of the Apache Spark engine. With Azure Synapse you can ingest,
+     explore, prepare, manage, and serve data for immediate business intelligence and machine
+     learning needs all from a single service.
+     Flexibly analyze your Dataverse data with Azure Data
+     Lake Storage Gen2
+     Azure Data Lake is a storage solution that allows you to process data on demand, scale instantly,
+     and only pay per job. It provides enterprise-grade security, auditing and support. Azure Data Lake
+     is a great landing page for your Dataverse data before being utilized in another service or
+     application. Each business is different and has different scenarios; Azure Data Lake gives you the
+     flexibility to customize consumption and transition your data to other destinations.
+     See also
+     Configure Azure Synapse Link for Dataverse with your Azure Synapse Workspace
+     Configure Azure Synapse Link for Dataverse with Azure Data Lake
+     Blog: Announcing Azure Synapse Link for Dataverse
+     Blog: Exporting CDS data to Azure Data Lake
+      Last updated on 04/27/2026
+     Create an Azure Synapse Link for Dataverse
+     with your Azure Synapse Workspace
+     You can use the Azure Synapse Link to connect your Microsoft Dataverse data to Azure Synapse
+     Analytics to explore your data and accelerate time to insight. This article shows you how to
+     perform the following tasks:
+       1. Connect your Dataverse data to your Azure Synapse Analytics workspace with the Azure
+        Synapse Link service.
+       2. Manage Dataverse tables included in the Azure Synapse Link.
+       3. Monitor your Azure Synapse Link.
+       4. Unlink your Azure Synapse Link.
+       5. Relink your Azure Synapse Link.
+       6. View your data in Azure Synapse Analytics.
+      ７ Note
+      Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data lake. The
+      service was renamed effective May 2021 and will continue to export data to Azure Data Lake
+      as well as Azure Synapse Analytics.
+      In Power Apps, Azure Synapse Link is now part of the Link data page and appears under
+      Other Links. Your existing links keep running with no migration or relink required.
+      To create a new Azure Synapse Link, go to Link data and select Other Links > + New link.
+      You can no longer create an Azure Synapse Link from the Tables > Analyze menu.
+     Prerequisites
+        Dataverse: You must have the Dataverse system administrator security role.
+        The tables you want to export via Azure Synapse Link must have the Track changes property
+        enabled. More information: Advanced options
+        The Azure Synapse Workspace that you link with can't have data exfiltration protection
+        enabled. More information: Create a workspace with data exfiltration protection enabled
+     Azure Data Lake Storage Gen2 requirements
+    You must have an Azure Data Lake Storage Gen2 account and the following roles:
+      Owner
+      Storage Blob Data Contributor
+      Storage Blob Data Owner
+    Owner role requirement: The Owner role is required because adding the managed identity of the
+    Azure Synapse Link service to the storage account is a privileged operation. This managed
+    identity enables the service to perform synchronization from Dataverse to Synapse. Currently, the
+    Owner role is required and custom roles with similar privileges aren't supported for this step.
+    Privileges for managed identity:
+      Owner and Storage Account Contributor: Required only during first-time setup to create
+      the filesystem in the storage account and are assigned on the storage account. After the
+      setup, these privileges can be removed without impacting sync operations.
+      Storage Blob Data Contributor: Required for normal blob operations during regular sync.
+      Storage Blob Data Owner: Currently required for managing both data and access
+      permissions in scenarios involving Azure Data Lake Storage Gen2.
+    Your storage account must enable Hierarchical namespace for both initial setup and delta sync.
+    Allow storage account key access is required only for the initial setup because the service uses
+    Shared Key authorization to perform privileged operations such as creating the filesystem and
+    establishing the link before switching to managed identity authentication. After setup, key-based
+    access is no longer needed.
+    Your storage account must have permitted scope for copy operations set to From any storage
+    account.
+      Synapse workspace: You must have a Synapse workspace and the Synapse Administrator
+      role access within the Synapse Studio. The Synapse workspace must be in the same region
+      as your Azure Data Lake Storage Gen2 account. The storage account must be added as a
+      linked service within the Synapse Studio. To create a Synapse workspace, go to Creating a
+      Synapse workspace.
+     ７ Note
+       The storage account and Synapse workspace must be created in the same Microsoft
+       Entra tenant as your Power Apps tenant.
+                To set Enabled from selected virtual networks and IP addresses for linked storage
+                account and workspace, you must create an Azure Synapse Link with managed
+                identities. More information: Use managed identities for Azure with your Azure data
+                lake storage (without managed identities set up, you must enable public network
+                access for Azure resources for both initial setup and delta sync.)
+                Synapse workspaces featuring managed private endpoints, data exfiltration protection,
+                or managed virtual networks aren't supported.
+                You must have Reader role access to the resource group with the storage account and
+                Synapse workspace.
+                When you add multiple users to the synapse workspace, they must have the Synapse
+                Administrator role access within the Synapse Studio and the Storage Blob Data
+                Contributor role on the Azure Data Lake Storage Gen2 account.
+                The creation of Synapse Link profiles under a single DV environment is limited to a
+                maximum of 10.
+        Connect Dataverse to Synapse workspace
+           1. Sign in to Power Apps    and select your preferred environment.
+           2. On the left navigation pane, select Link data, and then select Other Links. Existing Azure
+             Synapse Links appear in this section. If Link data isn't visible in the side pane, select …More
+             and choose Discover all, then select Link data in the Data Management section.
+           3. On the command bar, select + New link, and then select Azure Synapse.
+           4. Select the Connect to your Azure Synapse workspace option.
+           5. Select the Subscription, Resource group, Workspace name, and Storage account. Ensure
+             that the Synapse workspace and storage account meet the requirements specified in the
+             Prerequisites section. Select Next.
+       ７ Note
+       As part of linking the environment to a data lake, you grant the Azure Synapse Link
+       service access to your storage account. Ensure that you followed the prerequisites of
+       creating and configuring the Azure data lake storage account, and granting yourself an
+       owner role on the storage account. Additionally, you grant the Power Platform
+       Dataflows service access to your storage account. More information: Self-service data
+       prep with dataflows.
+     6. Choose the tables you want to export either by selecting them one by one or by entering a
+      comma separated list of tables in the search box, and then select Save. Only tables with the
+      Track changes property enabled can be exported. More information: Advanced options.
+     You can follow the steps above to create a link from one environment to multiple Azure Synapse
+     Analytics workspaces and Azure data lakes in your Azure subscription by adding an Azure data
+     lake as a linked service on a Synapse workspace. Similarly, you could create a link from multiple
+     environments to the same Azure Synapse Analytics workspace and Azure data lake, all within the
+     same tenant.
+      ７ Note
+      The Azure Synapse Link for Dataverse service is seamlessly integrated into the Power
+      Platform as an out-of-the-box feature. It meets the security and governance standards set
+      for the Power Platform data storage and governance. More information: Data storage and
+      governance
+      The data exported by Azure Synapse Link service is encrypted at transit using Transport
+      Layer Security(TLS) 1.2 or higher and encrypted at rest in Azure Data Lake Storage Gen2.
+      Additionally, transient data in the blob storage is also encrypted at rest. Encryption in Azure
+      Data Lake Storage Gen2 helps you protect your data, implement enterprise security policies,
+      and meet regulatory compliance requirements. More information: Azure Data Encryption-
+      at-Rest More information: Configure Azure Storage firewalls and virtual networks
+     Manage table data to the Synapse workspace
+     After you set up the Azure Synapse Link, you can manage the tables that are exported in one of
+     two ways:
+        In Power Apps (make.powerapps.com) go to Link data > Other Links, and then select
+        Manage tables on the command bar to add or remove one or more linked tables.
+        On the Power Apps maker portal Tables area, select … next to a table, and then select the
+        linked data lake where you want to export table data.
+     Monitor your Azure Synapse Link
+     After you set up the Azure Synapse Link, you can monitor the Azure Synapse Link on the Tables
+     tab.
+        There will be a list of tables that are a part of the selected Azure Synapse Link.
+        There are different stages the sync status circulates through. NotStarted indicates that the
+        table is waiting to be synced. Once the table initial sync is Completed, there's a post
+        processing stage where incremental updates won't take place. This might take several hours
+        depending on the size of your data. As the incremental updates start taking place, the date
+        for the last sync will be regularly updated.
+        The Count column shows the number rows written. When Append only is set to No, this is
+        the total number of records. When Append Only is set to Yes, this is the total number of
+        changes.
+        The Append only and Partition strategy columns show the usage of different advanced
+        configurations.
+     Unlinking an Azure Synapse Link
+      1. Select the desired Azure Synapse Link to unlink.
+      2. Select Unlink from the command bar.
+      3. To delete both the data lake file system as well as the Synapse Database, type the link name
+        to confirm.
+      4. Select Yes, and allow a few minutes for everything to be unlinked and deleted.
+      ） Important
+      The custom database objects you create within the Azure Synapse Link database are deleted
+      once the unlink is completed.
+      You need to implement your own version control for your custom database objects scripts to
+      ensure you have a backup.
+     Relinking an Azure Synapse Link
+     If you deleted the file system when unlinking, follow the steps above to relink the same Synapse
+     workspace and data lake. If you didn't delete the file system when unlinking, you must clear the
+     data to relink:
+      1. Navigate the Azure Synapse Analytics.
+      2. Select the ... for the unlinked database and select New notebook > Empty notebook.
+      3. Attach the notebook to an Apache Spark pool by selecting a pool from the drop-down
+        menu. If you don't have an Apache Spark pool, select Manage pools to create one.
+      4. Enter the following script, replace <DATABASE_NAME> with the name of the database to
+        unlink, and run the notebook.
+      SQL
+          %%sql
+          DROP DATABASE <DATABASE_NAME> CASCADE
+      5. After running the notebook, refresh the database list from the left panel. If the database still
+        exists, try right clicking on the database and selecting Delete.
+      6. Navigate to Power Apps, and relink the Synapse workspace and data lake.
+     Access near real-time data and read-only snapshot data
+     After creating an Azure Synapse Link, two versions of the table data will be synchronized in Azure
+     Synapse Analytics and/or Azure Data Lake Storage Gen2 in your Azure subscription by default to
+     ensure you can reliably consume updated data in the lake at any given time:
+      Near real-time data: Provides a copy of data synchronized from Dataverse via Azure
+      Synapse Link in an efficient manner by detecting what data has changed since it was initially
+      extracted or last synchronized.
+      Snapshot data: Provides a read-only copy of near real-time data that is updated at regular
+      intervals (in this case every hour).
+     ７ Note
+       Near real-time sync performance depends on several factors including the initial data
+       load size, data churn rate, and the volume of changes. In situations with high
+       transaction volumes, such as processes in Finance and Operations apps generating
+       millions of records in a short time, or processes like the master planning feature
+       included with Dynamics 365 Supply Chain Management that delete and re-create large
+       volumes of records. Synapse Link must synchronize all changes including deletes. In
+       these high-volume scenarios, data availability in near real-time can't be guaranteed. 
+       To create read-only snapshot data, ensure that the Permitted scope for copy
+       operations setting is configured to From any storage account. More information:
+       Configure the permitted scope for copy operations
+     1. Select the desired Azure Synapse Link, and then select the Go to Azure Synapse Analytics
+      workspace from the top panel.
+     2. Expand Lake Databases from the left panel, select dataverse-environmentName-
+      organizationUniqueName, and then expand Tables.
+    All Near Real-Time Data Tables are listed and available for analysis with the naming convention
+    DataverseTableName. All Snapshot Data Tables are listed and available for analysis with the
+    naming convention DataverseTableName_partitioned.
+    See also
+    Configure Azure Synapse Link for Dataverse with your Azure Data Lake
+     Azure Synapse Link for Dataverse Advanced Configuration
+     Azure Synapse Link FAQ
+     Blog: Announcing Azure Synapse Link for Dataverse
+      Last updated on 07/20/2026
+     Create an Azure Synapse Link for Dataverse
+     with Azure Data Lake
+     You can use the Azure Synapse Link to connect your Microsoft Dataverse data to Azure Data Lake
+     Storage Gen2 to enable various analytics scenarios. This article shows you how to perform the
+     following tasks:
+       1. Connect your Dataverse data to your Azure Data Lake Storage Gen2 account with the Azure
+        Synapse Link service.
+       2. Manage Dataverse tables included in the Azure Synapse Link.
+       3. Monitor your Azure Synapse Link.
+       4. Unlink your Azure Synapse Link.
+       5. Relink your Azure Synapse Link.
+       6. View your data in Azure Data Lake and understand the file structure.
+      ７ Note
+      Azure Synapse Link for Dataverse was formerly known as Export to data lake. The service was
+      renamed effective May 2021 and will continue to export data to Azure Data Lake as well as
+      Azure Synapse Analytics.
+      In Power Apps, Azure Synapse Link is now part of the Link data page and appears under
+      Other Links. Your existing links keep running with no migration or relink required.
+      To create a new Azure Synapse Link, go to Link data and select Other Links > + New link.
+      Azure Synapse Link creation is no longer available from the Tables > Analyze menu.
+     Prerequisites
+        Azure Data Lake Storage Gen2: You must have an Azure Data Lake Storage Gen2 account
+        and Owner and Storage Blob Data Contributor role access. Your storage account must
+        enable Hierarchical namespace for both initial setup and delta sync. Allow storage account
+        key access is required only for the initial setup. Your storage account must have Permitted
+        scope for copy operations set to From any storage account.
+      ７ Note
+                The storage account must be created in the same Microsoft Entra tenant as your Power
+                Apps tenant.
+                To set Enabled from selected virtual networks and IP addresses for linked storage
+                account to grant access from selected IP addresses, you must create an Azure Synapse
+                Link with managed identities.Use managed identities for Azure with your Azure data
+                lake storage (without managed identities set up, you must enable public network
+                access for Azure resources for both initial setup and delta sync.)
+                We strongly recommend that you enable the soft delete feature on the storage
+                account selected for this purpose. Enabling soft delete enables you to recover from
+                accidental data deletes faster.
+                You must have Reader role access to the resource group with the storage account.
+                To link the environment to Azure Data Lake Storage Gen2, you must have the
+                Dataverse system administrator security role.
+                Only tables that have change tracking enabled can be exported.
+                The creation of Azure Synapse Link profiles under a single Dataverse environment is
+                limited to a maximum of 10.
+        Connect Dataverse to Azure Data Lake Storage Gen2
+           1. Sign in to Power Apps    and select your preferred environment.
+           2. On the left navigation pane, select Link data, and then select Other Links. Existing Azure
+             Synapse links appear in this section. If Link data isn't visible in the side panel, select …More
+             and select Discover all. Link data is in the Data Management section.
+           3. On the command bar, select + New link to data lake.
+           4. Select the Subscription, Resource group, and Storage account. Ensure that storage account
+             meets the requirements specified in the Prerequisites section. Select Next.
+                ７ Note
+                As part of linking the environment to a data lake, you grant the Azure Synapse Link
+                service access to your storage account. Ensure that you followed the prerequisites of
+                creating and configuring the Azure data lake storage account, and granting yourself an
+                owner role on the storage account. Additionally, you grant the Power Platform

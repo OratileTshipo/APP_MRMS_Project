@@ -1,0 +1,2898 @@
+       3. In the Select Solution Package page, select Browse.
+       4. Find the file that you downloaded, and then select Open.
+        Unless you selected a different location, the file will be in your Downloads folder.
+       5. If you have the correct file (the version number might vary), select Next:
+       6. In the Solution Information page, select Next if the name of the solution and the
+        publisher are correct.
+       7. In the Import Options page, select Import to confirm SDK message handling,
+        which the sample requires:
+        Another page appears and shows progress as the solution is installed over the next
+        few minutes:
+         When the installation finishes, the original page shows the result:
+        8. Select Close.
+       Load the sample data
+        1. Select Apps, and then select Northwind Sample Data.
+         Wait a few minutes if the Northwind apps don't appear immediately after you
+         install the solution:
+       2. When the app asks for permission to interact with Dataverse, select Allow:
+       3. After the app loads and shows that the sample tables contain no records, select
+        Load Data to populate the tables:
+        As the app loads the data, dots march across the top of the app, and the number
+        of records increases.
+        Tables are loaded in a specific order so that relationships can be established
+        between records. For example, the Order Details table has a many-to-one
+        relationship with the Orders and Order Products tables, which are loaded first.
+        You can cancel the process at any time by selecting Cancel, and you can remove
+        the data at any time by selecting Remove Data:
+        When the data finishes loading, the last row (Many to Many Relationships) shows
+        Done, and the Load Data and Remove Data buttons are enabled again:
+       Sample apps
+       The Northwind solution includes these apps for interacting with this data:
+          Northwind Orders (Canvas)
+          Northwind Orders (Model-driven)
+       You open these apps the same way that you opened the app in the previous procedure.
+       Canvas
+       This single-screen app offers a simple master-detail view of the Orders table, where you
+       can view and edit a summary of the order and each line item for an order. A list of
+       orders appears near the left edge, and you can select an arrow in that list to show a
+       summary and the details of that order. More information: Overview of the canvas app
+       for Northwind Traders.
+       Model-driven
+       This app operates on the same data (in the Orders table) as the canvas app. In the list of
+       orders, show more information about an order by selecting its number:
+       A summary of the order appears on a separate form:
+       If you scroll down the form, it shows the same line items as the canvas app does:
+       Do it yourself
+       You can follow step-by-step instructions to create the canvas app shown earlier in this
+       topic. The instructions are divided into three parts:
+         1. Create an order gallery.
+         2. Create a summary form.
+         3. Create a detail gallery.
+      If you want to skip ahead, the solution contains a starting-point app for each part. In the
+      list of apps, look for Northwind Orders (Canvas) - Begin Part 1 and so on.
+      This overview of the app explains the user interface, data sources, and how relationships
+      are used.
+       Start by reading the overview
+        Overview of the canvas app for
+        Northwind Traders
+        Article • 12/16/2022
+        Learn about the canvas app for managing relational data in the Northwind Traders
+        database that you installed in your environment. Then follow step-by-step instructions
+        in subsequent topics to build this app from scratch, thereby gaining hands-on
+        experience working with relational data.
+        In this topic, discover:
+            How an app user shows and manages relational data in the app.
+            Which types of data drive the app.
+            How relationships between those types of data were created.
+        In a single screen, the app user can show, update, create, and delete orders.
+        Explore the user interface
+        Order gallery
+        On the left edge of the app, a gallery shows a list of orders, including the order number,
+        the status, the name of the customer, and the total cost of the order. The user can scroll
+        through the list to find an order and then show more information about it by selecting
+        the order's arrow. More information: Create the order gallery.
+       Summary form
+       In the upper-right corner, a form summarizes the order that the user selected in the
+       order gallery. The summary includes much of the same information as that gallery does,
+       but the summary also shows the dates when the order was created and paid, as well as
+       the name and the picture of the employee who managed the order. The user can
+       change the data in the form, save those changes, cancel them, or delete the order by
+       selecting an icon near the right edge of the title bar. More information: Create the
+       summary form.
+       Detail gallery
+       In the lower-right corner, another gallery shows information about which products the
+       selected order contains and in what quantities. Each item in this gallery is known as an
+       order detail. The app user can add and delete any item in that gallery by using controls
+       in and under it. More information: Create the detail gallery.
+       Explore the data sources
+       To create this app, you'll show data from five tables and an choice. In fact, most areas of
+       this app show data from multiple tables. For example, the order gallery contains this
+       information:
+          The order number is a field in the Orders table.
+          The status is another field in the Orders table, an option from the Orders Status
+          choice.
+            The customer name is a field in the Customers table.
+            The total cost is calculated based on data in the Order Details table.
+         The summary contains some of the same information as the list of orders, but it also
+         contains the name and the picture of the employee who managed the order. That
+         information is pulled from fields in the Employees table. The detail gallery shows
+         records in the Order Details table, and each product in those details is a record in the
+         Order Products table.
+         Explore the relationships
+         You can show data from different sources (for example, tables) in the same gallery or
+         form because those tables have relationships that were created for you in the database.
+         Many-to-one relationships
+         For example, information about the customer and the employee for each order resides
+         in the Customers and Employees tables. Therefore, the Orders table has many-to-one
+         relationships with those tables because there are many orders, each of which can be
+         placed by only one customer and managed by only one employee.
+         Each order also has one or more line items that represent the products that the order
+         contains and their quantities. Each line item is a record in the Order Details table, which
+         pulls information about each product from the Order Products table. Each detail
+         identifies only one product, but each product can appear in multiple details. Therefore,
+         the Order Details table has a many-to-one relationship with the Order Products table.
+         One-to-many relationships
+         Each order can contain multiple line items, but each line item relates to only one order.
+         Therefore, the Orders table has a one-to-many relationship with the Order Details table.
+         Dot notation for relationships
+         To show data based on a relationship between tables, you can use the dot property
+         selector to walk across a relationship from one table to another. For example, each
+         record in the Orders table pulls information from the Customers table so that the order
+         gallery can show the customer names. In that gallery, you configure this behavior by
+         setting the Text property of a label to this expression: 
+         ThisItem.Customer.Company
+       ThisItem specifies a record in the Orders table and pulls information from the
+       Customers table about the customer who placed the order. In this case, the expression
+       specifies that the customer's company name appears. However, the entire record for
+       that customer is pulled, so you could just as easily show, for example, an email address
+       for that customer instead.
+       As another example of walking from one table to another, you can specify that a gallery
+       should show records in one table based on a record that the user selected in another
+       gallery and that's in another table. To show the order details, you'll set the detail
+       gallery's Items property to this expression: 
+       Gallery1.Selected.'Order Details'
+       In this case, Gallery1.Selected specifies a record in the Orders table, just as ThisItem did
+       in the previous example. However, this expression doesn't pull just one record as the
+       previous expression did. Instead, it pulls an entire table of records to show the name
+       and per-unit cost of each product (as reflected in the Order Products table) and the
+       quantity (as reflected in the Order Details table).
+       Do it yourself
+       You can follow step-by-step instructions to create the Northwind Orders canvas app.
+       The instructions are divided into three parts:
+         1. Create an order gallery.
+         2. Create a summary form.
+         3. Create a detail gallery.
+       If you want to skip ahead, the solution contains a starting-point app for each part. In the
+       list of apps, look for Northwind Orders (Canvas) - Begin Part 1 and so on.
+        Continue by creating the order gallery
+       Create an order gallery in a canvas app
+       Article • 12/16/2022
+       Follow step-by-step instructions to create an order gallery in a canvas app for managing
+       fictitious data in the Northwind Traders database. This topic is part of a series that
+       explains how to build a business app on relational data in Microsoft Dataverse. For best
+       results, explore these topics in this sequence:
+         1. Create an order gallery (this topic).
+         2. Create a summary form.
+         3. Create a detail gallery.
+       Prerequisites
+          Install the Northwind Traders database and apps.
+          Read through the overview of the canvas app for Northwind Traders.
+       Create a blank app
+       Create a blank canvas app, and give it a name such as "My Northwind Orders (Canvas
+       app)".
+       Add the data
+       1. On the left-pane, select Data > Add data > search for, and select Orders table.
+        The Orders table contains many fields of various types:
+        Each field has a Display name and a Name, which is sometimes called the logical
+        name. Both names refer to the same thing. In general, you'll use the display name
+        when you build an app, but some cases require the more cryptic Name, as noted
+        in a procedure.
+       2. As we will be working with screens and controls next, in Power Apps Studio switch
+        back to the Tree View on the left hand side by pressing the three stacked squares
+        icon. You can return to the Data Sources at any time by pressing the cylinder icon.
+       Create the order gallery
+         1. On the Insert tab, select Gallery > Blank vertical to add a Gallery control, which
+          will show the orders.
+          The control will be placed on the canvas and a fly out dialog will appear asking
+          which data source to connect to.
+         2. We could connect it directly to Orders here, but instead we'd like to control the
+          sort order of the gallery. Ignore the fly out dialog and in the formula bar set the
+          gallery's Items property to this formula:
+           Power Apps
+            Sort( Orders, 'Order Number', Descending ) 
+          The Sort function orders the list so that the newest order (which has the highest
+          order number) appears first.
+       3. After a few moments the Result View will appear below the formula bar. Pull down
+        on the arrow at the left to see the result of our formula. Scroll to the right to see
+        the Order Number column and ensure it is sorted the way want (highest to
+        lowest).
+       4. In the Properties tab near the right edge, open the Layout list:
+       5. In the list of options, select Title and subtitle:
+          Two Label controls are added in the gallery's template. By default, these controls
+          show two columns of the Orders table, which you'll change next. The gallery's
+          template is replicated vertically for each record in the table.
+         6. Select Edit (next to Fields) in the Properties tab near the right edge.
+         7. In the Data pane, select Title1 (or select the upper label in the gallery's template).
+         8. In the formula bar, set the label's Text property to this expression:
+           Power Apps
+            "Order " & ThisItem.'Order Number' 
+          The order number appears at the top of each gallery item. In the gallery template,
+          ThisItem grants access to all fields in the Order table.
+         9. In the Data pane, select Subtitle1 (or select the lower label in the gallery's
+          template):
+        10. In the formula bar, set the label's Text property to this expression:
+           Power Apps
+            ThisItem.Customer.Company 
+          After you enter this formula, it may show a red squiggly error for a moment. The
+          error should clear if you select anything outside the formula bar and then return
+          the cursor to the formula bar. If the error persists or you don't see a value, select
+          the View tab, select Data sources, and then refresh the Orders table by selecting
+          the ellipsis (...) to the right of the data-source name.
+          When you specify ThisItem.Customer, you're leveraging a many-to-one
+          relationship between the Orders and Customers tables and retrieving the
+          customer record that's associated with each order. From the customer record,
+          you're extracting data in the Company column for display.
+          You can show all the relationships from the Orders table to other tables, including
+          the Customer table:
+        11. Close the Data pane by selecting the close icon (x) in its upper-right corner.
+       Show each order's status
+       In this procedure, you'll add space in the gallery for a label and configure it to show
+       each order's status in a different color based on the data.
+        1. In the gallery's template, reduce the width of the first label, Title1:
+        2. Repeat the previous step with the second label, Subtitle1:
+       3. With the gallery template (or a control in the template) selected, select Label on
+        the Insert tab:
+       4. Move the new label to the right of the Title1 label:
+         5. Set the Text property of the new label to this expression:
+           Power Apps
+            ThisItem.'Order Status' 
+          In the Orders table, the Order Status field holds a value from the Orders Status
+          choice. A choice is similar to an enumeration in other programming tools. Each set
+          of options is defined in the database, so users can specify only those options that
+          are in the set. The Orders Status choice is also global, not local, so you can use it in
+          other tables:
+          Each option in a set has a name that appears if you show it in a label. These names
+          can be localized, and the app recognizes the same option whether an English user
+          selects Apple, a French user selects Pomme, or a Spanish user selects Manzana.
+          For this reason, you can't create a formula that relies on a hard-coded string for an
+          option, as this topic demonstrates later.
+          In formulas, you must surround Order Status with single quotation marks because
+          it contains a space. However, that name functions the same way as any other name
+          in Power Apps, such as Customer or Company, does.
+         6. On the Home tab, increase the font size of the status label to 20 points, and right
+          align the text:
+         7. In the formula bar, set the Color property of the status label to this formula:
+           Power Apps
+            Switch( ThisItem.'Order Status', 
+                'Orders Status'.Closed, Green, 
+                'Orders Status'.New, Black, 
+                'Orders Status'.Invoiced, Blue, 
+                'Orders Status'.Shipped, Purple 
+            ) 
+          Power Apps prevents you from creating a formula that relies on a hard-coded
+          string for each option in a set because such formulas could produce inappropriate
+          results if the option names are localized. Instead, the Switch function determines
+          the color based on whatever string appears in the label based on the user's
+          settings.
+          With this formula in place, different status values appear in different colors, as the
+          previous graphic shows.
+       Display each order's total
+         1. Select the first item in the gallery, which is the gallery's template:
+       2. On the Insert tab, select Label to add another label:
+       3. Move the new label so that it appears under the status label:
+         4. In the formula bar, set the new label's Text property to this formula:
+           Power Apps
+            Text( Sum( ThisItem.'Order Details', Quantity * 'Unit Price' ), "[$-en-
+            US]$ #,###.00" ) 
+          In this formula, the Sum function adds up the records in the Order Details table
+          that are associated with each record in the Order table through a one-to-many
+          relationship. These line items make up each order, and you'll use the same one-to-
+          many relationship to show and edit the line items in the lower-right area of the
+          screen.
+          This formula shows a blue underline and a delegation warning because Dataverse
+          doesn't support delegation of complex aggregate functions (for example, the sum
+          of a multiplication). You can ignore this information because no order in this
+        example will contain more than 500 line items. If necessary for a different app, you
+        can increase that limit in App settings.
+        The Text function in this formula adds a currency symbol and formats the result
+        with thousands and decimal separators. As written, the formula includes the
+        language tag for U.S. English ([$-en-US]) and a dollar symbol ($). If you remove the
+        language tag, it will be replaced with one based on your language settings, and
+        the label will show the appropriate formats for that tag. If you leave the dollar
+        symbol, the label will show the appropriate currency symbol based on the user's
+        settings. However, you can force a different symbol to appear by replacing the
+        dollar symbol with the one that you prefer.
+       5. On the Home tab, change the font size of the newest label to 20 points, and right
+        align its text:
+       6. Move the gallery to the left edge of the screen, and decrease the gallery's width to
+        close up some space.
+       7. Increase the gallery's height so that it's almost as tall as the screen, but leave a
+        little room at the top for a title bar, which you'll add at the start of the next topic:
+       Summary
+       To recap, you started to build a single-screen canvas app by adding the order gallery,
+       which includes these elements:
+          An expression to show the order number: "Orders " & ThisItem.OrderNumber
+          A field in a many-to-one relationship: ThisItem.Customer.Company
+          A label that shows the name of an option in a set: ThisItem.'Order Status'
+          A label that changes format based on which option in a set the label shows:
+          Switch( ThisItem.'Order Status', 'Orders Status'.Closed, Green, ...
+          A complex aggregate function over a one-to-many relationship: Sum(
+          ThisItem.'Order Details', Quantity * 'Unit Price' )
+       Next topic
+       In the next topic, you'll add an Edit form control to display and edit an summary of
+       whatever order the user selects in the gallery that you just created.
+        Create the summary form
+       Create a summary form in a canvas app
+       Article • 12/16/2022
+       Follow step-by-step instructions to create a summary form in a canvas app for
+       managing fictitious data in the Northwind Traders database. This topic is part of a series
+       that explains how to build a business app on relational data in Microsoft Dataverse. For
+       best results, explore these topics in this sequence:
+         1. Create an order gallery.
+         2. Create a summary form (this topic).
+         3. Create a detail gallery.
+       Prerequisites
+         1. Install the Northwind Traders database and apps.
+         2. Review the overview of the canvas app for Northwind Traders.
+         3. Create the order gallery yourself, or open the Northwind Orders (Canvas) - Begin
+          Part 2 app, which already contains that gallery.
+       Add a title bar
+       Across the top of the app, create a title bar, which will hold action buttons by the end of
+       this topic.
+       1. In the Tree view pane, select Screen1 to ensure that you don't accidentally add a
+        control to the order gallery:
+       2. On the Insert tab, select Label to insert a Label control:
+        The new label should appear only once, above the gallery. If it appears in each
+        item of the gallery, delete the first instance of the label, ensure that the screen is
+        selected (as the previous step describes), and then insert the label again.
+       3. Move and resize the new label to span the top of the screen:
+       4. Double-click the text of the label, and then type Northwind Orders.
+        As an alternative, modify the Text property in the formula bar to achieve the same
+        result:
+       5. On the Home tab, format the label:
+           Increase the font size to 24 points.
+           Make the text bold.
+           Make the text white.
+           Center the text.
+           Add a dark-blue fill to the background.
+       Add an Edit form control
+       In this section, you'll add controls to show a summary of any order that the user selects
+       in the gallery.
+        1. On the Insert tab, insert an Edit form control:
+          By default, the form appears in the upper-left corner, where other controls might
+          make it difficult to find:
+        2. Move and resize the form to cover the upper-right corner of the screen under the
+          title bar:
+        3. In the Properties pane, select the Data source drop down.
+        4. Select the Orders data source.
+       Add and arrange fields
+       1. In the Properties tab near the right edge, select Edit fields to open the Fields
+        pane.
+       2. If the Fields pane is not empty, remove the fields that have already been inserted.
+       3. After the fields list is empty, select Add field, and then select the check boxes for
+        the Customer and Employee fields.
+       4. Scroll down until these fields appear, and then select their check boxes:
+           Notes
+           Order Date
+           Order Number
+           Order Status
+           Paid Date
+       5. At the bottom of the Fields pane, select Add, and then close the Fields pane.
+        The form shows seven fields, which may be in a different order:
+         ７ Note
+         If any field shows a red error icon, a problem might have occurred when data
+         was pulled from the source. To resolve the error, refresh the data:
+          a. On the View tab, select Data sources.
+          b. In the Data pane, select Data sources.
+          c. Next to Orders, select the ellipsis (...), select Refresh, and then close the
+           Data pane.
+         If the combo box for the customer or employee name still shows an error,
+         check the Primary text and SearchField of each box by selecting it and then
+         opening the Data pane. For the customer box, both fields should be set to
+         nwind_company. For the employee box, both fields should be set to
+         nwind_lastname.
+       6. With the form selected, change the number of columns in the form from 3 to 12 in
+        the Properties tab near the right edge.
+        This step adds flexibility as you arrange the fields:
+        Many UI designs rely on 12-column layouts because they can evenly accommodate
+        rows of 1, 2, 3, 4, 6, and 12 controls. In this topic, you'll create rows that contain 1,
+        2, or 4 controls.
+       7. Move and resize the fields by dragging their handles, just as you would any other
+        control, so that each row contains these data cards in the specified order:
+           First row: Order Number, Order Status, Order Date, and Paid Date
+           Second row: Customer and Employee
+           Third row: Notes
+         ７ Note
+         You might find it easier to widen the Notes, Customer, and Employee data
+         cards before you arrange them.
+          More information about how to arrange fields in a form: Understand data-form
+          layout for canvas apps.
+       Hide time controls
+       In this example, you don't need the time portions of the date fields because that level of
+       granularity can distract the user. If you delete them, you might cause problems in
+       formulas that rely on those controls to update date values or determine the position of
+       another control in the data card. Instead, you'll hide the time controls by setting their
+       Visible property.
+         1. In the Tree view pane, select the Order Date data card.
+          The card might have a different name, but it contains Order Date.
+         2. While holding down the Shift key, select the hour, minute, and colon-separator
+          controls in the Order Date data card.
+         3. Set the controls' Visible property to false.
+          All selected controls disappear from the form:
+       4. Resize the Date picker control to show the complete date:
+        Next, you'll repeat the last few steps for the Paid Date field.
+       5. In the Tree view pane, select the time controls in the Paid Date data card:
+       6. Set the selected controls' Visible property to false:
+       7. Resize the date picker in the Date Paid card:
+       Connect the order gallery
+         1. In the Tree view pane, collapse the form to more easily find the name of the order
+          gallery, and then, if necessary, rename it to Gallery1.
+         2. Set the summary form's Item property to this expression:
+            Power Fx
+            Gallery1.Selected
+          The form shows an summary of whatever order the app user selects in the list.
+       Replace a data card
+       Order number is an identifier that Dataverse assigns automatically when you create a
+       record. This field has a Text input control by default, but you'll replace it with a label so
+       that the user can't edit this field.
+         1. Select the form, select Edit fields in the Properties tab near the right edge, and
+          then select the Order number field:
+         2. Open the Control type list:
+       3. Select the View text data card:
+       4. Close the Fields pane.
+        The user can no longer change the order number:
+       5. On the Home tab, change the order number's font size to 20 points so that the
+        field is easier to find:
+       Use a many-to-one relationship
+       The Orders table has a many-to-one relationship with the Employees table: each
+       employee can create many orders, but each order can be assigned to only one
+       employee. When the user selects an employee in the Combo box control, its Selected
+       property provides that employee's entire record from the Employees table. As a result,
+       you can configure an Image control to show the picture of whatever employee the user
+       selects in the combo box.
+        1. Select the Employee data card:
+        2. In the Advanced tab near the right edge, unlock the data card so that you can edit
+          formulas that were previously read-only:
+       3. In the data card, reduce the width of the combo box to make room for the
+        employee picture:
+       4. On the Insert tab, select Media > Image:
+          An image appears in the data card, which expands to accommodate it:
+         5. Resize the image, and move it to the right of the combo box:
+         6. Set the Image property of the image to this formula, replacing the number at the
+          end of DataCardValue if necessary:
+            Power Fx
+            DataCardValue7.Selected.Picture
+          The picture of the selected employee appears.
+        7. While holding down the Alt key, select a different employee in the combo box to
+          confirm that the picture also changes.
+       Add a Save icon
+        1. In the Tree view pane, select Screen1, and then select Insert > Icons > Check:
+        The Check icon appears in the upper-left corner by default, where other controls
+        might make the icon difficult to find:
+       2. On the Home tab, change the Color property of the icon to white, resize the icon,
+        and move it near the right edge of the title bar:
+         3. In the Tree view pane, confirm that the form's name is Form1, and then set the
+          icon's OnSelect property to this formula:
+            Power Fx
+            SubmitForm( Form1 )
+          When the user selects the icon, the SubmitForm function gathers any changed
+          values in the form and submits them to the data source. Dots march across the top
+          of the screen as the data is submitted, and the order gallery reflects the changes
+          after the process finishes.
+         4. Set the icon's DisplayMode property to this formula:
+            Power Fx
+            If( Form1.Unsaved, DisplayMode.Edit, DisplayMode.Disabled )
+          If all changes in the form have been saved, the icon is disabled and appears in the
+          DisabledColor, which you'll set next.
+         5. Set the icon's DisabledColor property to this value:
+            Power Fx
+            Gray
+          The user can save changes to an order by selecting the Check icon, which is then
+          disabled and dimmed until the user makes another change:
+       Add a Cancel icon
+        1. On the Insert tab, select Icons > Cancel:
+          The icon appears in the upper-left corner by default, where other controls might
+          make the icon difficult to find:
+         2. On the Home tab, change the icon's Color property to white, resize the icon, and
+          move it to the left of the Check icon:
+         3. Set the Cancel icon's OnSelect property to this formula:
+            Power Fx
+            ResetForm( Form1 )
+          The ResetForm function discards all changes in the form, which returns it to its
+          original state.
+         4. Set the Cancel icon's DisplayMode property to this formula:
+            Power Fx
+            If( Form1.Unsaved Or Form1.Mode = FormMode.New, DisplayMode.Edit, 
+            DisplayMode.Disabled )
+          This formula differs slightly from the one for the Check icon. The Cancel icon is
+          disabled if all changes have been saved or the form is in New mode, which you'll
+          enable next. In that case, ResetForm discards the new record.
+         5. Set the Cancel icon's DisabledColor property to this value:
+            Power Fx
+            Gray
+          The user can cancel changes to an order, and the Check and Cancel icons are
+          disabled and dimmed if all changes have been saved:
+       Add an Add icon
+         1. On the Insert tab, select Icons > Add.
+        The Add icon appears in the upper-left corner by default, where other controls
+        might make it difficult to find:
+       2. On the Home tab, set the Color property of the Add icon to white, resize the icon,
+        and move it to the left of the Cancel icon:
+         3. Set the Add icon's OnSelect property to this formula:
+            Power Fx
+            NewForm( Form1 )
+          The NewForm function shows a blank record in the form.
+         4. Set the Add icon's DisplayMode property to this formula:
+            Power Fx
+            If( Form1.Unsaved Or Form1.Mode = FormMode.New, DisplayMode.Disabled, 
+            DisplayMode.Edit )
+          The formula disables the Add icon under these conditions:
+             The user makes changes but doesn't save or cancel them, which is the
+             opposite behavior from the Check and Cancel icons.
+             The user selects the Add icon but makes no changes.
+         5. Set the Add icon's DisabledColor property to this value:
+            Power Fx
+            Gray
+          The user can create an order if they make no changes or they save or cancel any
+          changes they've made. (If the user selects this icon, they can't select it again until
+          they make one or more changes and then save or cancel those changes):
+        ７ Note
+        If you create and save an order, you might need to scroll down in the order gallery
+        to show your new order. It won't have a total price because you haven't added any
+        order details yet.
+       Add a Trash icon
+        1. On the Insert tab, select Icons > Trash.
+          The Trash icon appears in the upper-left corner by default, where other controls
+          might make it difficult to find:
+        2. On the Home tab, change the Trash icon's Color property to white, resize the icon,
+          and move it to the left of the Add icon:
+         3. Set the Trash icon's OnSelect property to this formula:
+            Power Fx
+            Remove( Orders, Gallery1.Selected )
+          The Remove function removes a record from a data source. In this formula, the
+          function removes the record that's selected in the order gallery. The Trash icon
+          appears near the summary form (not the order gallery) because the form shows
+          more details about the record, so the user can more easily identify the record that
+          the formula will delete.
+         4. Set the Trash icon's DisplayMode property to this formula:
+            Power Fx
+            If( Form1.Mode = FormMode.New, DisplayMode.Disabled, DisplayMode.Edit )
+          This formula disables the Trash icon if the user is creating a record. Until the user
+          saves the record, the Remove function has no record to delete.
+         5. Set the Trash icon's DisabledColor property to this value:
+            Power Fx
+            Gray
+          The user can delete an order.
+       Summary
+       To recap, you added a form in which the user can show and edit a summary of each
+       order, and you used these elements:
+          A form that shows data from the Orders table: Form1.DataSource = Orders
+          A connection between the form and the order gallery: Form1.Item =
+          Gallery1.Selected
+          An alternate control for the Order number field: View text
+          A many-to-one relationship to show the employee's picture in the Employee data
+          card: DataCardValue1.Selected.Picture
+          An icon to save changes to an order: SubmitForm( Form1 )
+          An icon to cancel changes to an order: ResetForm( Form1 )
+          An icon to create an order: NewForm( Form1 )
+          An icon to delete an order: Remove( Orders, Gallery1.Selected )
+       Next step
+       In the next topic, you'll add another gallery to show the products in each order, and
+       you'll change those details by using the Patch function.
+        Create the detail gallery
+       Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Create a detail gallery in a canvas app
+       Article • 12/16/2022
+       Follow step-by-step instructions to create a detail gallery in a canvas app for managing
+       fictitious data in the Northwind Traders database. This topic is part of a series that
+       explains how to build a business app on relational data in Microsoft Dataverse. For best
+       results, explore these topics in this sequence:
+         1. Create an order gallery.
+         2. Create a summary form.
+         3. Create a detail gallery (this topic).
+       Prerequisites
+       Before you start this topic, you must install the database as described earlier in this
+       topic. You must then either create the order gallery and the summary form or open the
+       Northwind Orders (Canvas) - Begin Part 3 app, which already contains that gallery and
+       that form.
+       Create another title bar
+         1. At the top of the screen, select the Label control that acts as a title bar, copy it by
+          pressing Ctrl-C, and then paste it by pressing Ctrl-V:
+         2. Resize and move the copy so that it appears just under the summary form.
+         3. Remove the text from the copy in either of these ways:
+             Double-click the text to select it, and then press Delete.
+             Set the label's Text property to an empty string ("").
+       Add a gallery
+         1. Insert a Gallery control with a Blank vertical layout:
+          The new gallery, which will show order details, appears in the upper-left corner.
+         2. Close the fly out data source dialog, and then resize and move the detail gallery to
+          the lower-right corner, below the new title bar:
+         3. Set the Items property of the detail gallery to this formula:
+            Power Fx
+            Gallery1.Selected.'Order Details'
+         If an error appears, confirm that the order gallery is named Gallery1 (in the Tree
+         view pane near the left edge). If that gallery has a different name, rename it
+         Gallery1.
+         You've just linked the two galleries. When the user selects an order in the order
+         gallery, that selection identifies a record in the Orders table. If that order contains
+         one or more line items, the record in the Orders table is linked to one or more
+         records in the Order details table, and data from those records appears in the
+         detail gallery. This behavior reflects the one-to-many relationship that was created
+         for you between the Orders and Order Details tables. The formula that you
+         specified "walks" that relationship by using dot notation:
+      Show product names
+       1. In the detail gallery, select Add an item from the Insert tab to select the gallery
+         template:
+          Ensure that you've selected the gallery template instead of the gallery itself. The
+          bounding box should be slightly inside the gallery's boundary and probably
+          shorter than the gallery's height. As you insert controls into this template, they are
+          repeated for each item in the gallery.
+         2. On the Insert tab, insert a label into the detail gallery.
+          The label should appear within the gallery; if it doesn't, try again, but make sure to
+          select the gallery's template before you insert the label.
+         3. Set the new label's Text property to this formula:
+            Power Fx
+            ThisItem.Product.'Product Name'
+        If no text appears, select the arrow for Order 0901 near the bottom of the order
+        gallery.
+       4. Resize the label so that the full text appears:
+        This expression walks from a record in the Order Details table. The record is held
+        in ThisItem over to the Order Products table through a many-to-one relationship:
+        The Product Name column (and other columns that you're about to use) are
+        extracted:
+      Show product images
+        1. On the Insert tab, insert an Image control into the detail gallery:
+        2. Resize and move the image and the label to be side by side.
+           Tip
+          For fine-grained control over the size and the position of a control, start to
+          resize or move it without pressing the Alt key, and then continue to resize or
+          move the control while you hold down the Alt key:
+         3. Set the image's Image property to this formula:
+            Power Fx
+            ThisItem.Product.Picture
+          Again, the expression references a product that's associated with this order detail
+          and extracting the Picture field to display.
+         4. Reduce the height of the gallery's template so that more than one Order Detail
+          record appears at a time:
+       Show product quantity and cost
+         1. On the Insert tab, insert another label into the detail gallery, and then resize and
+          move the new label to the right of the product information.
+         2. Set the new label's Text property to this expression:
+            Power Fx
+            ThisItem.Quantity
+          This formula pulls information directly from the Order Details table (no
+          relationship required).
+         3. On the Home tab, change the alignment of this control to Right:
+         4. On the Insert tab, insert another label into the detail gallery, and then resize and
+          move the label to the right of the quantity label.
+         5. Set the new label's Text property to this formula:
+            Power Fx
+            Text( ThisItem.'Unit Price', "[$-en-US]$ #,###.00" )
+          If you don't include the language tag ([$-en-US]), it will be added for you based on
+          your language and region. If you use a different language tag, you'll want to
+          remove the $ just after the close square bracket (]), and then add your own
+          currency symbol in that position.
+         6. On the Home tab, change the alignment of this control to Right:
+         7. On the Insert tab, insert another label control into the detail gallery, and then
+          resize and move the new label to the right of the unit price.
+         8. Set the new label's Text property to this formula:
+            Power Fx
+            Text( ThisItem.Quantity * ThisItem.'Unit Price', "[$-en-US]$ #,###.00" 
+            )
+          Again, if you don't include the language tag ([$-en-US]), it will be added for you
+          based on your language and region. If the tag is different, you'll want to use your
+          own currency symbol instead of the $ just after the close square bracket (]).
+         9. On the Home tab, change the alignment of this control to Right:
+          You're done adding controls to the detail gallery for now.
+        10. In the Tree view pane, select Screen1 to ensure that the detail gallery is no longer
+          selected.
+       Add text to the new title bar
+         1. On the Insert tab, insert another label on to the screen:
+         2. Resize and move the new label above the pictures of the products in the second
+          title bar, and then change the text's color to white on the Home tab.
+         3. Double-click the label's text, and then type Product:
+       4. Copy and paste the product label, and then resize and move the copy above the
+        quantity column.
+       5. Double-click the new label's text, and then type Quantity:
+       6. Copy and paste the quantity label, and then resize and move the copy above the
+        unit-price column.
+       7. Double-click the new label's text, and then type Unit Price:
+         8. Copy and paste the unit-price label, and then resize and move the copy above the
+          extended-price column.
+         9. Double-click the text of the new label, and then type Extended:
+       Display order totals
+         1. Reduce the height of the detail gallery to make room for the order totals at the
+          bottom of the screen:
+       2. Copy and paste the title bar in the middle of the screen, and then move the copy
+        to the bottom of the screen:
+       3. Copy and paste the product label from the middle title bar, and then move the
+        copy to the bottom title bar, just to the left of the Quantity column.
+       4. Double-click the new label's text, and then type this text:
+        Order Totals:
+         5. Copy and paste the order-totals label, and then resize and move the copy to the
+          right of the order-totals label.
+         6. Set the new label's Text property to this formula:
+            Power Fx
+            Sum( Gallery1.Selected.'Order Details', Quantity )
+          This formula shows a delegation warning, but you can ignore it because no single
+          order will contain more than 500 products.
+         7. On the Home tab, set the new label's text alignment to Right:
+         8. Copy and paste this label control, and then resize and move the copy under the
+          Extended column.
+         9. Set the copy's Text property to this formula:
+            Power Fx
+            Text( Sum( Gallery1.Selected.'Order Details', Quantity * 'Unit Price' 
+            ), "[$-en-US]$ #,###.00" )
+          This formula shows a delegation warning, but you can ignore it because no single
+          order will contain more than 500 products.
+       Add space for new details
+       In any gallery, you can show data but you can't update it or add records. Under the
+       detail gallery, you'll add an area where the user can configure a record in the Order
+       Details table and insert that record into an order.
+         1. Reduce the height of the detail gallery enough to make room for a single-item
+          editing space under that gallery.
+          In this space, you'll add controls so that the user can add an order detail:
+       2. On the Insert tab, insert a label, and then resize and move it under the detail
+        gallery.
+       3. Double-click the text of the new label, and then press Delete.
+       4. On the Home tab, set the new label's Fill color to LightBlue:
+       Select a product
+         1. On the Insert tab, select Controls > Combo box:
+          The Combo box control appears in the upper-left corner.
+         2. In the fly out dialog, select the Order Products data source.
+         3. In the Properties tab for the combo box, select Edit (next to Fields) to open the
+          Data pane. Ensure that the Primary text and SearchField are set to
+          nwind_productname.
+          You specify the logical name because the Data pane doesn't support display
+          names in this case yet:
+       4. Close the Data pane.
+       5. In the Properties tab near the right edge, scroll down, turn off Allow multiple
+        selection, and ensure that Allow searching is turned on:
+       6. Resize and move the combo box to the light-blue area, just under the product-
+        name column in the detail gallery:
+         In this combo box, the user will specify a record in the Product table for the Order
+         Details record that the app will create.
+        7. While holding down the Alt key, select the combo box's down arrow.
+           Tip
+          By holding down the Alt key, you can interact with controls in Power Apps
+          Studio without opening Preview mode.
+        8. In the list of products that appears, select a product:
+      Add a product image
+        1. On the Insert tab, select Media > Image:
+          The Image control appears in the upper-left corner:
+         2. Resize and move the image to the light-blue area under the other product images
+          and next to the combo box.
+         3. Set the Image property of the image to:
+            Power Fx
+            ComboBox1.Selected.Picture
+          You're using the same trick as you used to show the employee picture in the
+          summary form. The Selected property of the combo box returns the entire record
+          of whatever product the user selects, including the Picture field.
+       Add a quantity box
+        1. On the Insert tab, select Text > Text input:
+          The Text input control appears in the upper-left corner:
+       2. Resize and move the text-input box to the right of the combo box, under the
+        quantity column in the detail gallery:
+        By using this text-input box, the user will specify the Quantity field of the Order
+        Details record.
+       3. Set the Default property of this control to "":
+        4. On the Home tab, set the text alignment of this control to Right:
+       Show the unit and extended prices
+        1. On the Insert tab, insert a Label control.
+          The label appears in the upper-left corner of the screen:
+         2. Resize and move the label to the right of the text-input control, and set the label's
+          Text property to this formula:
+            Power Fx
+            Text( ComboBox1.Selected.'List Price', "[$-en-US]$ #,###.00" )
+          This control shows the List Price from the Order Products table. This value will
+          determine the Unit Price field in the Order Details record.
+            ７ Note
+            For this scenario, the value is read-only, but other scenarios might call for the
+            app user to modify it. In that case, use a Text input control, and set its Default
+            property to List Price.
+         3. On the Home tab, set the text alignment of the list-price label to Right:
+         4. Copy and paste the list-price label, and then resize and move the copy to the right
+          of the list-price label.
+         5. Set the new label's Text property to this formula:
+            Power Fx
+            Text( Value(TextInput1.Text) * ComboBox1.Selected.'List Price', "[$-en-
+            US]$ #,###.00" )
+          This control shows the extended price based on the quantity that the app user
+          specified and the list price of the product that the app user selected. It's purely
+          informational for the app user.
+         6. Double-click the text-input control for quantity, and then type a number.
+         The Extended price label recalculates to show the new value:
+      Add an Add icon
+        1. On the Insert tab, select Icons > Add:
+         The icon appears in the upper-left corner of the screen.
+         2. Resize and move this icon to the right edge of the light-blue area, and then set the
+          icon's OnSelect property to this formula:
+            Power Fx
+            Patch( 'Order Details',
+                Defaults('Order Details'),
+                {
+                    Order: Gallery1.Selected,
+                    Product: ComboBox1.Selected,
+                    Quantity: Value(TextInput1.Text),
+                    'Unit Price': ComboBox1.Selected.'List Price'
+                }
+            );
+            Refresh( Orders );
+            Reset( ComboBox1 );
+            Reset( TextInput1 )
+        In general, the Patch function updates and creates records, and the specific
+        arguments in this formula determine the exact changes that the function will make.
+           The first argument specifies the data source (in this case, the Order Details
+           table) in which the function will update or create a record.
+           The second argument specifies that the function will create a record with the
+           default values for the Order Details table unless otherwise specified in the
+           third argument.
+           The third argument specifies that four columns in the new record will contain
+           values from the user.
+            The Order column will contain the number of the order that the user
+            selected in order gallery.
+            The Product column will contain the name of the product that the user
+            selected in the combo box that shows products.
+            The Quantity column will contain the value that the user specified in the
+            text-input box.
+            The Unit Price column will contain the list price of the product that the
+            user selected for this order detail.
+         ７ Note
+         You can build formulas that use data from any column (in the Order Products
+         table) for whatever product the app user selects in the combo box that shows
+         products. When the user selects a record in the Order Products table, not only
+         does the product’s name appear in that combo box but also the product’s
+         unit price appears in a label. Each lookup value in a canvas app references an
+         entire record, not just a primary key.
+        The Refresh function ensures that the Orders table reflects the record that you’ve
+        just added to the Order Details table. The Reset function clears the product,
+        quantity, and unit-price data so that the user can more easily create another order
+        detail for the same order.
+       3. Press F5, and then select the Add icon.
+        The order reflects the information that you specified:
+        4. (optional) Add another item to the order.
+        5. Press Esc to close Preview mode.
+       Remove an order detail
+        1. In the center of the screen, select the template of the detail gallery:
+        2. On the Insert tab, select Icons > Trash:
+          The Trash icon appears in the upper-left corner of gallery's template.
+         3. Resize and move the Trash icon to the right side of the detail gallery's template,
+          and set the icon's OnSelect property to this formula:
+            Power Fx
+            Remove( 'Order Details', ThisItem ); Refresh( Orders )
+          As of this writing, you can't remove a record directly from a relationship, so the
+          Remove function removes a record directly from the related table. ThisItem
+          specifies the record to remove, taken from the same record in the detail gallery
+          where the Trash icon appears.
+          Again, the operation uses cached data, so the Refresh function informs the Orders
+          table that the app has changed one of its related tables.
+         4. Press F5 to open Preview mode, and then select the Trash icon next to each Order
+          Details record that you want to remove from the order.
+         5. Try adding and removing various order details from your orders:
+       In conclusion
+              To recap, you added another gallery to show order details and controls adding and
+              removing an order detail in the app. You used these elements:
+                    A second gallery control, linked to the order gallery through a one-to-many
+                    relationship: Gallery2.Items = Gallery1.Selected.'Order Details'
+                    A many-to-one relationship from the Order Details table to the Order Products
+                    table: ThisItem.Product.'Product Name' and ThisItem.Product.Picture
+                    The Choices function to get a list of products: Choices( 'Order Details'.Product'
+                    )
+                    The Selected property of a combo box as the complete many-to-one related
+                    record: ComboBox1.Selected.Picture and ComboBox1.Selected.'List Price'
+                    The Patch function to create an Order Details record: Patch( 'Order Details',
+                    Defaults( 'Order Details' ), ... )
+                    The Remove function to delete an Order Details record: Remove( 'Order Details',
+                    ThisItem )
+              This series of topics has been a quick walkthrough of using Dataverse relationships and
+              choices in a canvas app for educational purposes. Before you release any app to
+              production, you should consider field validation, error handling, and many other factors.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+        Build global support into canvas apps
+        Article • 12/16/2022
+        Power Apps is a global product. You can build and use canvas apps in many different
+        languages and regions.
+        Both while building and running apps, the text displayed by Power Apps has been
+        translated into different kinds of languages. You'll see menu items, dialog boxes, ribbon
+        tabs, and other text in your native language. Typing in and displaying dates and
+        numbers is also adapted for your particular language and region. For example, some
+        regions of the world use a . (dot or period) as the decimal separator while others use a ,
+        (comma).
+        The apps you create can be globally aware as well. Use the Language, Text, Value,
+        DateValue, and other functions to adapt what is displayed and used as input in different
+        languages.
+        Language settings
+        When using the native studio or a native player, the language used is provided by the
+        host operating system. For Windows, this setting can be controlled under "All Settings"
+        and then "Time & language" settings. Windows also allows you to specify the characters
+        to use for the decimal separator, overriding the language setting.
+        When using the web experiences, the language used is provided by the browser. Most
+        browser default to the host operating system's setting with some also providing a way
+        to set the language manually.
+        Authoring environment
+        The authoring environment adapts to the language setting of the author. The app itself
+        is stored in a language agnostic manner, so that authors using different languages can
+        edit the same app.
+        Names in formulas
+        Most elements in formula are always in English:
+           Function names: If, Navigate, Collect, and so on.
+           Control property names: Screen.Fill, Button.OnSelect, Textbox.Font, and so on.
+        Enumeration names: Color.Aqua, DataSourceInfo.MaxValue, FontWeight.Bold,
+        and so on.
+        Signal records: Compass.Heading, Location. Latitude, App.ActiveScreen, and so
+        on.
+        Operators: Parent, in, exactIn, and so on.
+      As the authoring experience is localized, control and other object names will appear in
+      the native language of the author. In Spanish, some of the control names appear as:
+      When you insert one of these controls into your app, their name will default to English.
+      This change is done for consistency with the control property names and the rest of the
+      formula. For example, Casilla listed above is inserted as Checkbox1.
+      After a control is inserted, you can change the name to whatever you like. While
+      selected, the far left-hand side of the "Content" ribbon displays the name of the control.
+      Selecting this name drops down a text box where you can edit the name:
+      If you like, here you can rename the control to Casilla1. The red squiggly, in this case
+      displayed by a browser, is because the name isn't a Spanish word and is of no concern.
+      You can use whatever names you like for:
+                  Control names
+                  Collection names
+                  Context variable names
+             Formula separators and chaining operator
+             Some separators and operators will shift based on the decimal separator of the author's
+             language:
+                                                                                    ﾉ Expand table
+              Author's language        Power Apps decimal    Power Apps list    Power Apps
+              decimal separator        separator             separator          chaining operator
+              . (dot or period)        . (dot or period)     , (comma)          ; (semi-colon)
+              , (comma)                , (comma)             ; (semi-colon)     ;; (double semi-colon)
+             The change in the Power Apps list separator is consistent with what happens to the Excel
+             list separator. It impacts:
+                  Arguments in function calls.
+                  Fields in a record.
+                  Records in a table.
+             For example, consider the following formula expressed in a language and region that
+             uses dot or period as the decimal separator, such as Japan or the United Kingdom:
+             Now view this same formula in a language and region where a comma is used for the
+             decimal separator, such as France or Spain:
+             The highlight shows the operators that change between the two versions. The property
+             selection operator . (dot or period) in Slider1.Value is always the same, no matter what
+             the decimal separator is.
+        Internally the formula doesn't change, all that changes is how it's displayed and edited
+        by the author. Two different authors using two different languages can view and edit the
+        same formula, with each seeing the appropriate separators and operators for their
+        language.
+        Creating a global app
+        The app you create can adapt to different languages, providing a great user experience
+        for your users around the world.
+        Language function
+        The Language function returns the language tag of the current user. For example, this
+        function returns "en-GB" for users in Great Britain and "de-DE" for users in Germany.
+        Among other things, you can use Language to display translated text for your users.
+        Your app can include a table of translated values in your app:
+        And then use a formula such as the following to pull translated strings from the table:
+          Power Fx
+          LookUp( Table1, TextID = "Hello" && (LanguageTag = Left( Language(), 2 ) || 
+          IsBlank( LanguageTag ))).LocalizedText
+        Translated strings in other languages could be longer than they are in your language. In
+        many cases, the labels and other elements that display the strings in your user interface
+        will need to be wider to accommodate.
+        For more information, see the documentation for the Language function.
+        Formatting numbers, dates, and times
+      Numbers, dates, and times are written in different formats in different parts of the world.
+      The meaning of commas, decimals, and the order of month, date, and year vary from
+      location to location.
+      The Text function formats numbers and dates using the language setting of the user.
+      Text requires a format string to know how you want to format the number or date. This
+      format string can take one of two forms:
+        A global aware enumeration. For example, Text( Now(),
+        DateTimeFormat.LongDate ). This formula will format the current date in a
+        language appropriate format. This method is the preferred way to specify the
+        format string.
+        A custom format string. For example, Text( Now(), "[$-en-US]dddd, mmmm dd,
+        yyyy" ) displays the same text as the enumeration when used in the language "en-
+        US". The advantage of the custom format string is that you can specify exactly
+        what you want.
+      The "[$-en-US]" on the front of the custom format string tells Text in which language to
+      interpret the custom format string. This string is inserted for you and defaults to your
+      authoring language. Normally you won't need to change this string. It's useful when
+      authors from different languages are editing the same app.
+      The third argument to Text specifies which language to use for the result of the
+      function. The default is the language setting of the current user.
+      For more information, see the documentation for the Text function.
+      Reading numbers, dates, and times
+      There are four functions for reading numbers, dates, and times provided by the user:
+        Value: Converts a number in a text string to a number value.
+        DateValue: Converts a date value in a text string to a date/time value. Anytime
+        specified in the text string is ignored.
+        TimeValue: Converts a time value in a text string to a date/time value. Any date
+        specified in the text string is ignored.
+        DateTimeValue: Converts a date and time value in a text string to a date/time
+        value.
+      If you have used Excel, all of these functions are combined in the single Value function.
+      They're broken out here since Power Apps has separate types for date/time values and
+      numbers.
+              All of these functions have the same arguments:
+                    String, required: A string from the user. For example, a string types into a Text
+                    input control and read from the control with the Text property.
+                    Language, optional: The language in which to interpret the String. By default, the
+                    language setting of the user.
+              For example:
+                    Value( "12,345.678", "en-US" ) or Value( "12,345.678" ) when located where "en-
+                    US" is the user's language returns the number 12345.678, ready for calculations.
+                    DateValue( "1/2/01", "es-ES" ) or DateValue( "1/2/01" ) when located where "es-
+                    ES" is the user's language returns the date/time value February 1, 2001 at
+                    midnight.
+                    TimeValue( "11:43:02", "fr-FR" ) or TimeValue( "11:43:02" ) when located where "fr-
+                    FR" is the user's language returns the date/time value January 1, 1970 at 11:43:02.
+                    DateTimeValue( "11:43:02 1/2/01", "de-DE" ) or DateTimeValue( "11:43:02 1/2/01" )
+                    when located where "de-DE" is the user's language returns the date/time value
+                    February 1, 2001 at 11:43:02.
+              For more information, see the documentation for the Value and DateValue, TimeValue,
+              and DateTimeValue functions and working with dates and times.
+              Calendar and Clock information
+              The Calendar and Clock functions provide calendar and clock information for the user's
+              current language.
+              Among other things, use these functions to provide a Dropdown control with a list of
+              choices.
+              For more information, see the documentation for the Calendar and Clock functions.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Build a multi-language app
+             Article • 03/03/2023
+             In this article, you'll learn how to create a multi-language app with localized experience.
+             With this method, you can use canvas app components and make translations available
+             in an app using a uniform formula syntax.
+               ） Important
+               The method described in this article use components for canvas apps which is in
+               public preview. For more information, see Create a component for canvas apps
+             Create a translation component
+             When working with a multi-language app, the first step is to create a reusable
+             component for translation. In this component, you'll store a table that acts as the
+             dictionary of all translations you'll need. An output property will be used to provide
+             output strings from this dictionary table based on the language of the user running the
+             app that uses this component.
+                1. Sign in to Power Apps  .
+                2. On the left pane, select Apps.
+                3. Under Apps, select Component libraries (preview).
+                4. Select + New component library (preview).
+               5. Enter a name, such as "Translation components", and select Create to open the
+                 component in Power Apps Studio.
+               6. Rename "Component1" by selecting ... on the left pane, and then select Rename as
+                 "Translation component".
+               7. From the property pane on the right-side of the screen, select + New custom
+                 property.
+               8. Set the following property values:
+                                                                               ﾉ Expand table
+                  Property name       Value
+                  Display name        Language
+                  Name                Language
+                  Description         The language that you want to translate the text to.
+                  Property type       Input
+                  Data type           Text
+               9. Select Raise OnReset when value changes checkbox.
+           10. Select Create.
+                ７ Note
+                This input property will receive the current locale ID (LCID) of the logged-in
+                user.
+           11. From the property pane on the right-side of the screen, select + New custom
+              property.
+           12. Set the following property values:
+                                                                ﾉ Expand table
+               Property name                 Value
+               Display name                  Labels
+          Property name       Value
+          Name                Labels
+          Description         Translated labels.
+          Property type       Output
+          Data type           Record
+        13. Select Create.
+           ７ Note
+           This output property exposes the translated labels based on the input locale
+           ID.
+        14. On the upper-left side of the screen, select the property list drop-down and
+          choose OnReset property for the component.
+        15. Copy and paste the following formula in the formula bar for the OnReset property.
+            Power Fx
+            Set(
+             varTranslations,
+             Table(
+                     {
+                         Language: "en-us",
+                         Labels: {
+                             Title: "UI Tips for building canvas apps",
+                             JobTitle: "Power Platform Specialist"
+                         }
+                     },
+                     {
+                         Language: "pt-br",
+                         Labels: {
+                             Title: "Dicas de UI para construir canvas apps",
+                             JobTitle: "Especialista de Power Platform"
+                         }
+                     }
+                 )
+                )
+          The formula uses Set() function to create a table with the labels in different
+          languages as a dictionary. To customize this table as the dictionary for your
+          translations, change the control names such as Title, JobTitle, Platform, Close, Open,
+          Cancel, and so on. You can add, or remove translations for control names
+          depending on your business requirement.
+          The table should also have an entry for each language that your app supports.
+          Each entry will have a Labels property that will contain the translated content of all
+          possible buttons, inputs, and labels in your app.
+        16. On the upper-left side of the screen, select the property list drop-down and
+          choose Labels property for the component.
+        17. Copy and paste the following formula in the formula bar for the Labels property.
+            Power Fx
+               LookUp(
+                varTranslations,
+                Language = Lower(
+                    Coalesce(
+                        Self.Language,
+                        Language()
+                    )
+                )).Labels
+          The formula finds the right translation entry based on the input Language using
+          the Lookup() function. In case where the language isn't set, the formula uses the
+          current user's language as the filter through Coalesce function.
+        18. Select File -> Save to save the component library.
+        19. Select Publish to publish the component library.
+             Tip
+            To learn more about creating, saving, and publishing component library, go to
+            Create an example component library
+       Your translation component library is created, saved, and published for use.
+       Use the translation component in your app
+       Previously, you created the translation component library for reuse. In this section, you'll
+       create an app that uses the translation component library and demonstrate the
+       language translation based on the selected language.
+        1. Start by creating a blank canvas app with Phone layout.
+        2. On the left-side of the screen, select + (Insert).
+        3. On the bottom-left side of the screen, select Get more components.
+        4. Select Translation component.
+           ７ Note
+           The name might be different if you saved the component library created
+           earlier with a different name.
+        5. Select Import.
+        6. On the left-side of the screen, select + (Insert).
+        7. Under Library components, select Translation component to add the component
+          to this app.
+        8. On the left-side of the screen, select the tree view.
+        9. Select the translation component.
+        10. On the upper-left side of the screen, select the property list drop-down and
+          choose Visible property for the component.
+        11. Set the value of the Visible property to false to make the component invisible on
+          the app.
+        12. Under Input in the list of controls, select Toggle.
+        13. On the upper-left side of the screen, select the property list drop-down and
+          choose OnChange property for the component.
+        14. Update the formula for the OnCheck property of the toggle control to the
+          following.
+            Power Fx
+                Set(varLanguage,"pt-br")
+          In this formula, the toggle sets a variable called varLanguage with the value of "pt-
+          br" using the function Set(), for Portuguese (BR) language code.
+        15. Update the formula for the OnUncheck property of the toggle control to the
+          following.
+            Power Fx
+                Set(varLanguage,"en-us")
+          In this formula, the toggle sets a variable called varLanguage with the value of "en-
+          us" using the function Set(), for English (US) language code.
+        16. On the left-side of the screen, select the translation component.
+        17. On the upper-left side of the screen, select the property list drop-down and
+          choose Language property for the component.
+        18. Set the formula value for Language property to varLanguage. The variable
+          varLanguage is determined by the toggle configured earlier. When the toggle is
+          checked, the language is set to "pt-br". When unchecked, the language is set to
+          "en-us".
+        19. On the left-side of the screen, select + (Insert).
+        20. Select Text label.
+        21. Update the label control name to Title from the right-side of the screen using the
+          property pane.
+              22. Select Text label again to add one more label.
+              23. Update the label control name to JobTitle.
+              24. Set the Title, and JobTitle labels below the toggle control so that both labels are
+                 visible.
+              25. Set the Text property for Title, and JobTitle labels from the upper-left side of the
+                 screen to the following.
+                                                                                ﾉ
+                                                                                   Expand table
+                  Label          Formula
+                  Title          'Translation component_1'.Labels.Title
+                  JobTitle       'Translation component_1'.Labels.JobTitle
+                   ７ Note
+                   Replace 'Translation component_1' in this formula to the name of the
+                   component in your app, if different.
+                 Similarly, you can use different labels, and properties, as defined in the component
+                 that you created earlier to pass more property values. For example, in addition to
+                 Title, and JobTitle, you can create more properties such as Description, or
+                 Instructions in the component library with the translated text. And then, use such
+                 properties on the respective labels, as 'Translation component_1'.Labels.Description,
+                 or 'Translation component_1'.Labels.Instructions.
+              26. Select File -> Save, update the name for your app, and then select Save to save
+                 your app. More information: Save and publish an app
+            Test your app with language translation
+            Now your app is using the translation component. Go to Power Apps   and select the
+            app to run.
+            When the toggle is selected, the language is changed to Portuguese (BR) for the labels.
+            When unchecked, the language is set back to English (US).
+              With this approach, you can now create your own component having the translations
+              dictionary that fits your business requirement. And then, create more canvas apps that
+              use the component that gives the business users the ability to use different languages.
+              See also
+              Add and configure controls
+              Understand variables
+              Formula reference
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Create accessible canvas apps
+       Article • 12/16/2022
+       An accessible canvas app will allow users with vision, hearing, and other impairments to
+       successfully use the app. In addition to being a requirement for many governments and
+       organizations, following the below guidelines increases usability for all users, regardless
+       of their abilities.
+       Use the Accessibility Checker to help review potential accessibility issues in your app.
+       Layout and color
+       Common sense and uncomplicated design helps apps be more accessible to all users.
+       When doing heavy customization of apps take note of the below suggestions. Power
+       Apps themes are designed to meet accessibility standards.
+          Ensure all elements are clearly visible and text is of sufficient size. All content must
+          be easily read and understood by the naked eye.
+          Ensure input elements are labeled on the screen. AccessibleLabel property defines
+          what the screen reader will announce.
+          If customizing colors, ensure the contrast ratio of text to background is 4.5:1 or
+          greater. Software tools that assist this process are readily available.
+          Ensure layout follows a logical flow when read from top to bottom, left to right.
+          Create a responsive app so that low-vision users can zoom in and use it without
+          scrolling back and forth.
+       Keyboard
+       When testing your app's accessibility, ensure the app can be used by keyboard only,
+       with or without a screen reader.
+       The Tab key should navigate to interactive elements in a logical order. You can create
+       this with a logical app structure and by setting each control's TabIndex property
+       accordingly.
+          Label, Image, Icon, Shape controls: Set TabIndex to 0 if they are meant to be
+          interactive. Otherwise, set TabIndex to -1.
+          Do not set TabIndex greater than zero.
+          Ensure that the Simplified tab index app setting is enabled.
+       Screen readers
+       The following screen readers have been verified to work with Power Apps:
+          JAWS: Microsoft Edge
+          Narrator: Microsoft Edge
+          NVDA: Google Chrome, Firefox
+          TalkBack: Google Chrome, Power Apps mobile
+          VoiceOver: Power Apps mobile, Safari (macOS, iOS, iPadOS)
+       To ensure a satisfying experience with the screen reader it is recommended to:
+          Ensure all input controls have the AccessibleLabel property set.
+          For images, set AccessibleLabel to an appropriate description.
+           If a picture is not used as a button or a link (i.e. icon is there just for the
+           decoration) and should not be read by the screen reader, make sure the
+           AccessibleLabel is empty or not set.
+           If a picture or an icon is used as a button, then set TabIndex to 0 and
+           AccessibleLabel to the link description.
+       Control type and structure
+       Using the right controls and grouping them will help screen reader users understand the
+       structure of the app.
+          Include at least one heading on each screen of the app. You can create headings
+          by setting the Role property of a Label.
+          Use a Button instead of a Label for interactive text.
+          Group related content in Containers.
+          Be aware of unsupported design patterns.
+       Multimedia
+       Ensure all videos are captioned and a transcript of all audio recordings is available to the
+       user. Video control supports closed captions in WebVTT format via the
+       ClosedCaptionsUrl property.
+       With the screen reader enabled, Timer does not announce button text, but how much
+       time has passed. Announcements can't be turned off, even if timer is hidden with low
+       opacity.
+       Working with signatures
+       If you have a signature field that uses the PenInput control, you need to enable an
+       alternative method of signature input. The recommended way is to show a TextInput
+       control where a user can type their name. Ensure the signing instructions are placed in
+       the AccessibleLabel property and the control is placed close to the Pen input - to the
+       right or immediately below.
+       Next steps
+       Accessible app structure
+       See also
+          Accessible colors in Power Apps
+          Show or hide content from assistive technologies for canvas apps
+          Announce dynamic changes with live regions for canvas apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+             Organize controls in accessible canvas
+             apps
+             Article • 07/13/2024
+             Controls in an app should be organized to help screen reader users navigate
+             sequentially. A logical order also reduces confusion for keyboard users and helps them
+             be more productive.
+             Meaningful screen name
+             When a screen is loaded, screen readers will say its name. Pick a meaningful name to
+             orientate users.
+             You can change the screen name in the controls tree or properties panel in Power Apps
+             Studio. Select the screen, and then select     to rename the screen.
+             The first element on a screen is its name. It's visually hidden and accessible only to
+             screen reader users.
+             When a new screen loads, Power Apps focuses the screen name. If you use SetFocus
+             immediately when the screen loads, the screen name won't be read. Consider creating a
+             visible title and making it a live region to announce the change in context.
+             Logical control order
+             Screen reader users can navigate content sequentially. The order is determined by the
+             position of controls, starting from top to bottom, then left to right. The size of the
+             control doesn't matter, only its X and Y properties matter.
+             In this example, A appears first in the sequence since it's closest to the top. B and C have
+             the same vertical position, but since B is closer to the left, and hence, it appears before
+       C. D appears last since it's furthest from the top.
+        ７ Note
+           In Preview mode when editing an app, the control order is not updated for
+           performance reasons. The order will be correct when the app is published and
+           run.
+           Control order is not the same as that shown in the tree view of controls in
+           Power Apps Studio. The tree view sorts controls according to when they were
+           added to the app. It does not affect the order of controls when the app is run.
+           When a control's X or Y value is set to an expression, the control order is not
+           updated when the result of the expression changes. The order is computed
+           and fixed when the app is saved, using the initial state of the app to evaluate
+           expressions.
+            If you're changing its position because other controls are being hidden or
+            shown, you can use auto-layout containers to manage X and Y for you.
+            You can also position all controls in a logical way regardless of expression
+            values. For example, if control A should always be below control B and B
+            may be hidden sometimes, set A's Y to be If(B.Visible, B.Y + B.Height,
+            B.Y + 1). The addition of 1 ensures that A is always below B, even if B is
+            hidden.
+      Grouped controls
+      The default order is suitable for isolated content but not for grouped content. Consider
+      two tiles side by side, drawn with Rectangle controls. Each tile has a heading. Below the
+      heading are two buttons stacked vertically: A and B for the first tile and C and D for the
+      other.
+      The default order goes from top to bottom, then left to right. Hence, the order of
+      controls is:
+       1. Left Rectangle
+       2. Right Rectangle
+       3. Left heading
+       4. Right heading
+       5. A
+       6. C
+       7. B
+       8. D
+      This structure doesn't convey that A and B are together, and similarly, C and D are
+      together.
+      Use Containers to group related content. All controls in a Container will appear
+      together in sequence. Within a container, controls are ordered with the same rule: top to
+      bottom, then left to right.
+      Replacing the Rectangles of the previous example with Containers, the control order is
+      now logical for screen reader users:
+       1. Left Container
+       2. Left heading
+       3. A
+       4. B
+       5. Right Container
+       6. Right heading
+       7. C
+       8. D
+      All controls in a Form Card and Gallery are automatically grouped, so you don't have to
+      use a Container. However, if there are subgroups, you should still use Containers for
+      them.
+      In this example, a Gallery row has a thumbnail and two pieces of text on the left. On the
+      right are two buttons. Visually and logically, the two sets of controls should be grouped.
+      This ensures that screen reader users will encounter the left group first before the right.
+       Logical keyboard navigation order
+       Keyboard navigation is an important aspect of any app. For many, the keyboard is more
+       efficient than using touch or a mouse. The navigation order should:
+          Follow the visual flow of controls.
+          Follow either an intuitive across and then down "Z" order or a down and then
+          across "reverse-N" order.
+          Only have a tab stop at controls that are interactive.
+       AcceptsFocus specifies whether controls can be reached by keyboard. For classic
+       controls, the equivalent property is TabIndex.
+       Navigation order follows control order: from left-to-right, then top-to-bottom, in a "Z"
+       pattern. You can customize it the same way as with control order. For example, controls
+       in Containers, Form Cards and Galleries are automatically grouped. The Tab key will
+       navigate through all elements inside the container before proceeding to the next
+       control outside of the container.
+       If the navigation order is unexpected, you should first check if the app structure is
+       logical.
+        ７ Note
+        When controls are dynamically moved on the screen, for example, by having its X
+        or Y value change according to a Power Fx expression, the navigation order will not
+        be updated.
+       Workaround for custom tab sequence
+       For rare scenarios where the keyboard navigation order should be different from visual
+       order, you can position container controls carefully to have the same effect.
+       In the example below, button A is above button B. The natural tab navigation order is A,
+       then B.
+      To reverse the tab navigation order, put B in a Container control. Set the Y value of the
+      Container to be above A. The app structure now has the Container (and B) before A.
+      Hence, the tab navigation order is B, then A.
+      With this technique, screen reader users will also encounter B before A when navigating
+      without the Tab key.
+      Custom tab indexes (retired feature)
+      Custom tab indexes are those that are greater than zero. They are no longer supported.
+      All TabIndex values greater than zero will be treated as zero.
+      Custom tab indexes are almost always a sign of bad design. There are better alternatives
+      like creating an appropriate app structure or using SetFocus to change focus.
+      Some problems with custom tab indexes:
+      Accessibility
+      It's a serious accessibility issue to have custom tab indexes. Screen reader users navigate
+      an app using its logical structure. Custom tab indexes ignore that structure. Since screen
+      reader users can also navigate using Tab key, they'll be confused when they get a
+      different order from other methods of navigation.
+       Usability
+       Users can be confused when some items appear to be skipped. They can be disoriented
+       when focus moves in an unpredictable order. This is even more problematic for users
+       with cognitive disabilities.
+       Maintenance
+       App makers have to manually update the TabIndex of multiple controls whenever a new
+       one is inserted. It's easy to miss an update or get the order wrong.
+       Performance
+       To support custom tab indexes, the Power Apps system has to examine all controls on
+       the page and compute the appropriate order. This computation is an intensive process.
+       Container controls like Gallery have complicated rules on how TabIndex works for child
+       controls. The system maps the app maker's desired TabIndex to a different value to
+       obey these rules. This is why even if TabIndex is set to zero for all controls, the actual
+       HTML tabindex will be some positive number.
+       Integration with other components
+       Custom tab indexes only work with built-in controls. Controls that aren't integrated into
+       Power Apps' tab index system will have an unexpected navigation order. This can be a
+       problem for code components. Developers of these components have to keep track of
+       interactive elements and set tab index on them. They might use third-party libraries,
+       which may not even provide a way to customize tab indexes. On the other hand, when
+       all tab indexes are either 0 or -1, there's no need to involve Power Apps' tab index
+       system. Any third-party component embedded in the app will automatically get the
+       correct tab sequence.
+       In the other direction, when canvas apps are embedded in another web page, custom
+       tab indexes don't work. For example, in custom pages. Power Apps can't control the
+       elements outside the canvas app, so the overall tab navigation order will be illogical.
+       Next steps
+       Accessible colors in Power Apps
+       See also
+                    Create accessible apps
+                    Show or hide content from assistive technologies for canvas apps
+                    Announce dynamic changes with live regions for canvas apps
+                    Use the Accessibility checker
+                    Accessibility limitations in canvas apps
+                    Accessibility properties
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+          Improved canvas keyboard navigation in
+          canvas apps (experimental)
+          Article • 11/13/2024
+          [This article is pre-release documentation and is subject to change.]
+           ） Important
+                This is an experimental feature, and will be deprecated soon. Instead of using
+                this experimental feature, consider structuring an app appropriately to
+                achieve the desired tab navigation order.
+                Experimental features aren’t meant for production use and may have
+                restricted functionality. These features are available before an official release
+                so that customers can get early access and provide feedback.
+          When you're nesting controls such as containers and component instances, the user
+          input value for TabIndex isn't respected sometimes. Improved canvas keyboard
+          navigation experimental setting improves the navigation experience in this situation
+          when Tab key is pressed on the keyboard helping focus on the desired container or
+          control precisely and predictably.
+          This feature also adds support for handling accessibility for keyboard tabs inline with
+          rest of the controls in canvas apps. And addresses manual TabIndex assignments for all
+          controls.
+           ７ Note
+           This feature is added as "Experimental" to maintain backward compatibility and
+           maintain existing app functionality.
+          When this feature is turned on, it also enables the following boolean properties for all
+          child controls for the selected container or component instance in canvas apps:
+                                                                ﾉ
+                                                                  Expand table
+                Property         Description
+                Name
+                Prioritize       Determines the order of navigation (Z-order) for child controls on canvas when
+                child controls   pressing tab key on the keyboard.
+                                       On (Default): Pressing the tab key on the keyboard will first progress
+                                       through all child controls before moving the focus outside of the selected
+                                       container or component instance. This option is recommended for similarly
+                                       nested HTML elements.
+                                       Off: Pressing the tab key on the keyboard will progress through all controls
+                                       only based on Z-order, ignoring parent-child relationship between controls
+                                       or containers for keyboard navigation.
+                                 Note: This property isn't applicable to responsive or autolayout containers.
+                Enable child     Determines the value of TabIndex for child controls on canvas when pressing tab
+                control focus    key on the keyboard.
+                                       On (Default): Pressing the tab key behaves as per TabIndex values defined
+                                       on each control.
+                                       Off: Pressing the tab key doesn't move focus to any child control within the
+                                       selected container or component instance. Sets the TabIndex value to -1 for
+                                       all child controls.
+              Configure improved canvas keyboard
+              navigation in your app
+              If not already enabled, follow these steps to enable this feature in your app, and set the
+              properties mentioned earlier.
+                  1. Sign in to Power Apps       .
+                  2. Select Apps from the left-pane.
+                  3. Select your app, and then select Edit.
+                  4. In Power Apps Studio, select Settings > Upcoming features > Experimental.
+                  5. Select Improved canvas keyboard navigation to turn on the feature.
+       6. Close settings.
+      Now that you've enabled the experimental feature, you'll see two new properties for
+      controls and containers—Prioritize child controls, and Enable child control focus.
+      Change the property values as appropriate.
+      Examples
+      Now that you understand the new feature with improved canvas keyboard navigation,
+      let's take a look at a few examples to understand the behavior when the tab key is
+      pressed.
+      Default improved canvas keyboard navigation behavior
+      The following example shows multiple Text input controls, and several nesting scenarios.
+      The number displayed in the input represents the value of the TabIndex property. There
+      are two nested containers, and component controls overlaid on top of each other.
+      The default order is determined by the relative position of the controls. When focus
+      enters a container or a component, tabs first traverse the children of the container
+      before moving on to the next available control.
+      When Prioritize child controls is set to Off
+      In the following example, each container and component control has the Prioritize child
+      controls property set to "Off". All inputs are therefore considered to be on the same
+      level of nesting, so the order is determined purely by their X/Y position relative to the
+      screen.
+      Advanced configuration with mixed settings
+      In the following example, the orange outlined containers have Prioritize child controls
+      property set to "Off". All others controls have this property set to "On". Also, a custom
+      TabIndex property has been set for some inputs, indicated by the number shown in each
+      input.
+      Tab order first proceeds through the containers and controls with TabIndex value of
+      greater than 0, and then proceeds through all others with value of 0. This behavior was
+      also the in the earlier implementation.
+              See also
+                    Create accessible apps
+                    Accessible app structure
+                    Accessible colors in Power Apps
+                    Use the Accessibility checker
+                    Accessibility limitations in canvas apps
+                    Accessibility properties
+                    Improved canvas keyboard navigation in canvas apps (video)
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+        Accessible colors for canvas apps
+        Article • 12/16/2022
+        Colors used in a canvas app should be accessible to color-blind and low-vision users. All
+        Power Apps themes are accessible by default. When modifying colors used in an app,
+        follow these guidelines to ensure that they remain accessible. There are several tools
+        available online which can help you identify color contrast issues.
+        Minimum contrast for text
+           Text and its background must have a contrast ratio of at least 4.5:1
+           Large text must have a contrast ratio of at least 3:1
+           Disabled text has no contrast requirements
+        In practical terms, all interactive controls must have adequate color contrast between:
+           Color and Fill
+           PressedColor and PressedFill
+           HoverColor and HoverFill
+        Minimum contrast for non-text
+           Non-text components, such as icons and borders, must have a contrast ratio of at
+           least 3:1 with the colors outside of them.
+           Disabled and decorative components have no contrast requirements.
+        User interface components
+        All interactive controls must have adequate color contrast between:
+           FocusedBorderColor and color outside the control
+        Additional color contrast checks apply for controls where the entire area is interactive or
+        informative. For example, a Button or an Icon used as a button. This ensures that the
+        boundaries of the control are clear and users know where they can click or tap.
+        If there is a border for such controls, there should be adequate color contrast between:
+           BorderColor and color outside the control
+           PressedBorderColor and color outside the control
+           HoverBorderColor and color outside the control
+       If there is no border, there should be adequate color contrast between:
+          Fill and color outside the control
+          PressedFill and color outside the control
+          HoverFill and color outside the control
+       Graphical objects
+       If an image conveys important information, consider checking it for contrast issues. This
+       applies to controls where an image can be shown: Audio, Image, Microphone, and
+       Video.
+       For video content, consider checking it for contrast issues. Alternatively or additionally,
+       provide closed captions that describe the video.
+       Provide other visual cues
+       Ensure that the app does not convey information with just color. For example, users with
+       red-green color blindness will not be able to distinguish a red error message from a
+       green success message.
+       Additional cues like an Icon or text styles like Italic and Underline can help convey
+       meaning.
+       Next steps
+       Show or hide content from assistive technologies for canvas apps
+       See also
+          Create accessible apps
+          Accessible app structure
+          Announce dynamic changes with live regions for canvas apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+       Show or hide content from assistive
+       technologies for canvas apps
+       Article • 12/16/2022
+       In most cases, all users should be able to access all content, but you might occasionally
+       want to show content only to sighted users or only to screen-reader users. For example,
+       you might want only screen-reader users to access descriptions of chart trends that are
+       obvious to sighted users. You might also want to hide an icon from screen-reader users
+       if an adjacent label describes it. Another description on the icon would be unnecessarily
+       verbose.
+       Hide content from all users
+          Set Visible to false.
+       Hide content from sighted users and show it to
+       screen-reader users
+       Use one or more techniques listed below:
+          Set Size to 0.
+          Set Width and Height to 1.
+          Set X, Y, or both properties such that the control is outside the screen.
+          Set Color and related properties to transparent.
+          Position a rectangle Shape above the content, and set Fill to the same color as the
+          background color of the screen.
+        ７ Note
+        Users can still use a keyboard to access an interactive control, such as a Button,
+        even if you hide it by using one of the techniques in the previous list. Set TabIndex
+        to -1 if you want to prevent users from accessing the control by pressing the Tab
+        key.
+       Hide content from screen-reader users and
+       show it to sighted users
+          For Image, Icon, and Shape controls, set AccessibleLabel to the empty string "".
+       Next steps
+       Announce dynamic changes with live regions for canvas apps
+       See also
+          Create accessible apps
+          Accessible app structure
+          Accessible colors in Power Apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+             Announce dynamic changes with live
+             regions for canvas apps
+             Article • 12/16/2022
+             Dynamic changes pose challenges to the visually-impaired. Users who access an app
+             through a screen reader are focused on one part of the app. If a change happens
+             elsewhere, those users won't be aware of it.
+             You can solve this problem by adding live regions, which screen readers track. If content
+             changes in a live region, a screen reader will announce that change.
+             The underlying mechanism for live regions are aria-live regions  , so the same
+             guidelines apply.
+             Example uses of live regions
+             You can use live regions to notify users when events such as these occur:
+                  A validation error occurs in a form.
+                  An action triggered by a button is successful. For example, a user might select a
+                  button to add an item to a collection, and a live region could show the message
+                  "Item added".
+                  The user selected a different tab.
+                  A background timer refreshes a news feed.
+             Create and configure a live region
+             You can configure only a Label control as a live region. Its Live property determines
+             what type of live region it is.
+                  Off: Not a live region. Screen readers don't announce changes.
+                  Polite: Screen readers announce changes after finishing speaking. Use this value
+                  for non-critical notifications that don't require immediate attention.
+                  Assertive: Screen readers interrupt themselves to announce changes immediately.
+                  Use this for critical notifications that require immediate attention.
+             If the text content of a live region changes, screen readers will announce the entire text
+             content, not just the changed portion. If the value of the Text property is set to the
+             empty string "", the screen reader doesn't announce anything.
+       To repeat a message, clear text contents by setting the value of the Text property to the
+       empty string "" and then set the value to the message again.
+       Best practices
+          Always set Visible to true. Some screen readers don't detect live regions that
+          disappear and reappear.
+          Avoid changing the value of Live. Some screen readers don't detect when a non-
+          live region becomes live and vice-versa.
+          Position the live region in a logical position in the app, even if it isn't visible. Ensure
+          that its contents are sensible in context with the elements before and after it. Users
+          can access a live region anytime through regular navigation with a screen reader,
+          not just when changes happen.
+       Next steps
+       Use the Accessibility checker
+       See also
+          Create accessible apps
+          Accessible app structure
+          Accessible colors in Power Apps
+          Show or hide content from assistive technologies for canvas apps
+          Accessibility limitations in canvas apps
+          Accessibility properties
+        Review a canvas app for accessibility in
+        Power Apps
+        Article • 12/16/2022
+        Users who have vision, hearing, or other impairments can use your canvas app more
+        easily and successfully if you consider accessibility as you design how the app looks and
+        behaves. If you're not sure how to make your app more accessible, you can run the
+        Accessibility checker in Power Apps Studio. This tool not only finds potential accessibility
+        issues but also explains why each might be a potential problem for users who have a
+        specific disability and offers suggestions on how to resolve each issue. The Accessibility
+        checker detects screen-reader and keyboard issues for you, and you can find
+        information about how to fix color-contrast issues by using accessible colors.
+        The Accessibility checker helps you identify settings that you might want to change, but
+        you should always consider the suggestions in the context of what your app needs to
+        do. Many suggestions may be worthwhile, but you can ignore any that might do more
+        harm than good.
+        Find accessibility issues
+         1. In the upper-right corner of Power Apps Studio, select the icon for the App
+           checker.
+         2. In the menu that appears, select Accessibility.
+           A list of issues appears, sorted first by severity and then by screen.
+       3. Select the arrow next to an item to show details about it.
+         4. Select the back arrow to return to the list of items.
+         5. If you decide to address an issue, select it to open the affected property.
+         6. After you change one or more properties, select Re-check to update the list of
+          issues.
+          Resolved items disappear from the list, and new items may appear.
+       Severity of issues
+       The Accessibility checker classifies each issue as an error, a warning, or a tip based the
+       issue's severity.
+                       Errors identify issues that make the app difficult or impossible to use and
+                       understand for users who have a disability.
+                       Warnings identify issues that make the app difficult to use or understand for most
+                       but not all users who have a disability.
+                       Tips help you improve the experience of users who have a disability.
+                Types of issues
+                  Issue         Severity     Issue Description            How to fix                     Why fix
+                  Title
+                  Missing       Error        When the accessible-         Edit the accessible-label      If the accessible-
+                  accessible                 label property of an         property to describe the       label property
+                  label                      interactive control          item.                          contains no text,
+                                             contains no text. An                                        people who can’t
+                                             interactive control can                                     see the screen
+                                             be inherently                                               won't understand
+                                             interactive, as a button                                    what’s in images
+                                             is, or it has interactive                                   and controls.
+                                             properties. For
+                                             example, you might
+                                             have set the OnSelect
+                                             property of an image
+                                             or set its TabIndex
+                                             property to 0 or
+                                             higher.
+                  Focus         Error        When the                     Change the                     If the focus isn't
+                  isn't                      FocusBorderThickness         FocusedBorderThickness         visible, people who
+                  showing                    of a control is set to 0.    property to a value that's     don't use a mouse
+                                             It is good practice to       higher than 0.                 can't see it when
+                                             ensure a proper color-                                      they interact with
+                                             contrast ratio between                                      the app.
+                                             the focus border and
+                                             the control itself so it's
+                                             clearly visible.
+                  Missing       Warning      When the                     Set the                        Without captions,
+                  captions                   ClosedCaptionsURL            ClosedCaptionsURL              people who have
+                                             property of an Audio         property to the URL for        disabilities might
+                                             or Video control is          captions.                      not get any
+                                             empty.                                                      information from a
+                                                                                                         video or audio
+                                                                                                         segment.
+               Issue       Severity   Issue Description       How to fix                Why fix
+               Title
+               Missing     Warning    When any of several     Select the warning, and   By changing this
+               helpful                settings (such as       then set the property to  property setting,
+               control                showing labels and      true.                     you give the user
+               settings               markers for charts and                            better information
+                                      showing default                                   about how the
+                                      controls for Audio,                               controls in your app
+                                      Video, and Pen input                              function.
+                                      controls) are turned
+                                      off.
+               HTML        Warning    When a control other    Use a method other than   Your app won't
+               won't be               than an HTML text       HTML, or remove the       work correctly or be
+               accessible             control contains        HTML from this element.   accessible if you
+                                      HTML. In that case,                               add interactive
+                                      Power Apps doesn't                                HTML elements.
+                                      support accessibility of
+                                      custom HTML
+                                      elements.
+               Turn off    Warning    When an Audio or        Set the control's         Video and audio
+               autostart              Video control's         Autostart property to     files that play
+                                      Autostart property is   false.                    automatically can
+                                      set to true.                                      distract users. Let
+                                                                                        them choose
+                                                                                        whether to play a
+                                                                                        clip.
+               Revise      Tip        When a screen has a     Give the screen a name    People who are
+               screen                 default name, which     that describes what's on  blind, have low
+               name                   will be read out by     the screen or what it's   vision, or a reading
+                                      screen readers when     used for.                 disability rely on
+                                      users navigate the                                screen names to
+                                      app.                                              navigate using the
+                                                                                        screen reader.
+               Add State   Tip        When a control that     Set the ShowValue         Users won't get
+               indication             has a state, such as a  property of the control   confirmation of
+               text                   toggle, but the value   to true to show its       their actions if the
+                                      labels are turned off.  current state.            state of the control
+                                                                                        doesn't appear.
+                Issue        Severity    Issue Description         How to fix                  Why fix
+                Title
+                Check the    Tip         When the TabIndex         Set all                     The navigation
+                order of                 property is greater       TabIndex properties to 0    order should mirror
+                the                      than 0. App creators      or -1 whenever possible.    the order in which
+                screen                   can set custom tab        Instead of using            controls appear on
+                items                    orders by setting         TabIndex, use the           the screen, which is
+                                         the TabIndex property     Enhanced group control      the default. If
+                                         to a value greater than   to change the navigation    manual adjustments
+                                         0 but it is highly        order from the default. If  are made, it is
+                                         discouraged as it is      values of TabIndex          difficult to maintain
+                                         hard to get right,        greater than 0 must be      the correct order
+                                         maintain, and can         used, make sure that        especially in the
+                                         break screen readers.     your screen elements        presence of the
+                                                                   match the order in which    browser's address
+                                                                   you'd want to tab           bar and other
+                                                                   through them.               controls outside of
+                                                                                               the app. This can
+                                                                                               make a screen
+                                                                                               reader very difficult
+                                                                                               to use. When read
+                                                                                               by the screen
+                                                                                               reader, the controls
+                                                                                               should be
+                                                                                               presented in the
+                                                                                               same order in which
+                                                                                               they are seen on
+                                                                                               the screen, instead
+                                                                                               of an order that's
+                                                                                               less intuitive. 
+                Add          Tip         When an app contains      Add a Text input control    Some users can't
+                another                  a Pen control. This tip   in addition to the Pen      use a pen and
+                input                    reminds you to            control for an accessible   require another way
+                method                   include a separate        experience.                 to provide
+                                         method of input.                                      information (for
+                                                                                               example, by typing
+                                                                                               a signature).
+               Next steps
+               Accessibility limitations in canvas apps
+               See also
+                     Create accessible apps
+        Accessible app structure
+        Accessible colors in Power Apps
+        Show or hide content from assistive technologies for canvas apps
+        Announce dynamic changes with live regions for canvas apps
+        Accessibility properties
+       Accessibility limitations in canvas apps
+       Article • 03/05/2024
+       You can design and build accessible canvas apps with built-in controls. Sometimes, the
+       combination of app design, use of various controls, and the configured control
+       properties may result in an app to have an inaccessible user interface.
+       In this article, you'll learn about these accessibility limitations in canvas apps, and how
+       can you improve the app interface to make it more accessible.
+       Dialogs and overlays
+       Dialogs and user interfaces that appear on top of other content are not supported.
+       These overlays require focus management, hiding background content from screen
+       readers, and appropriate control roles.
+       Consider the following:
+          Use separate screens for each “dialog”.
+          Use the Notify function.
+          Create a code component that implements an accessible dialog.
+       Tabbed interfaces
+       A tabbed interface is made up of a list of tabs and a panel that shows content
+       associated with the selected tab.
+       The only built-in control that supports tabbed interfaces is the Tab list. Avoid using
+       Galleries to create tabs. The list of tabs should be navigable with arrow keys.
+       Appropriate control roles and states are required.
+       Consider the following:
+          Use the built-in Tab list.
+          Create a code component that implements an accessible tabbed interface.
+       Custom tables
+       The only built-in control that supports two-dimensional data is the Data Table. Avoid
+       using Galleries to present data in rows and columns. Rows and columns have to be
+       annotated so that screen reader users can understand their structure and navigate cells.
+       Consider the following:
+          Use the built-in Data Table.
+          Present data in one direction only with a Gallery.
+          Create a code component that implements an accessible table.
+       Custom combo boxes
+       It is possible to emulate a combo box by combining a Text Input and a Gallery.
+       However, combo boxes assembled from built-in controls are not accessible. Combo
+       boxes must handle arrow keys and set appropriate roles and states on its components.
+       Consider the following:
+          Use the built-in Combo box or Drop down.
+          Create a code component that implements an accessible combo box.
+       Scrollable content
+       Keyboard users can't scroll Forms, Scrollable screens, and Containers if there are no
+       interactive controls inside them.
+       For Galleries with no interactive content, you can set TabIndex on the Gallery itself so
+       that keyboard users can focus on it and use arrow keys to scroll it.
+       For Labels, setting TabIndex will make them focusable for keyboard scrolling. However,
+       it will also turn them into buttons. Don't making labels scrollable if they're not meant to
+       be buttons. Ensure the Label is large enough to fit text. The AutoHeight property can be
+       used to automatically adjust the control's size when it is inside a Form, Scrollable
+       screen, or Gallery.
+       Expandable sections
+       Expandable sections, also known as disclosures, contain content that is hidden until the
+       user presses a button. There is no built-in support for these elements but there is a
+       workaround.
+       Mention the expanded state in the AccessibleLabel of the button. For example, “Show
+       more details. Collapsed.”.
+       Update the AccessibleLabel when the expanded state changes. Position the expanded
+       content immediately after the button so that screen reader users can logically navigate
+            to it. Push other content down when the section expands.
+            Landmarks
+            You can create headings with Label controls. Navigation, banner, and other landmarks
+            are not supported. Power Apps automatically sets the main landmark to the app screen.
+            For other landmarks, use a heading as a workaround.
+            Custom roles and states
+            There is no built-in support for custom roles and states. Hence, it's not recommended to
+            create composite check boxes, sliders, and toggles from built-in controls.
+            Consider the following:
+                 Mention the control's role and state in its AccessibleLabel. For example, if an Icon
+                 is used as a check box, its label could be “Enable notifications. Check box.
+                 Checked.”.
+                 Create a code component that sets WAI-ARIA roles   and states  as appropriate.
+            Custom keyboard handling
+            It is not possible to react to specific key presses. For example, you can't have custom
+            behavior for arrow keys or the Escape key. Hence, it is not possible to compose list-like
+            controls like radio buttons from built-in controls. Nor can you create overlays that can
+            be dismissed with the Escape key.
+            Enter or Space key handling is supported with OnSelect. However, this property is also
+            triggered by other input methods like mouse clicks. There is no way to distinguish the
+            source of the event.
+            Focus management
+            SetFocus function can be used to change focus but it only works in limited scenarios.
+            It is not possible to detect when controls receive or lose focus.
+            Hide content from screen reader users only
+             There is no aria-hidden   equivalent to show content to sighted users but hide it for
+             screen reader users. Only a few scenarios are supported.
+             Next steps
+             Accessibility properties
+             See also
+                  Create accessible apps
+                  Accessible app structure
+                  Accessible colors in Power Apps
+                  Show or hide content from assistive technologies for canvas apps
+                  Announce dynamic changes with live regions for canvas apps
+                  Use the Accessibility checker
+            Send notification from an app
+            Article • 11/11/2023
+            You can send a push notification from one app to another or to the same app. In canvas
+            apps, you can send notifications by using the Power Apps Notification connector.
+            In this article, the sample app used for notifications is built from the default Case
+            Management app template.
+              ７ Note
+              Before you begin, create push notifications for the Power Apps mobile app. More
+              information: Create push notifications for the Power Apps mobile app.
+               1. In Power Apps  , go to the app to which you want to send push notifications.
+               2. Copy the app ID. More information: Get an app ID
+               3. In the left pane, select Data - Connections.
+               4. Edit the app. More information: Edit an app
+               5. Select View - Data sources.
+               6. Select Add data source.
+               7. Select New Connection.
+               8. Select Power Apps Notification.
+               9. Paste the app ID copied from the previous step.
+       10. Select Connect.
+       11. Add the push notification connection to the trigger app using the similar steps.
+        In our example, we use the same app as the trigger app. The user who reassigns
+        the case also triggers a push notification to the new case owner.
+       12. From the push notification connection, call the SendPushNotification method.
+         In our example, we trigger this notification by using the OnSuccess property in a
+         form.
+       Syntax
+                                                                                                    ﾉ Expand table
+                Name                      Description
+                SendPushNotification      Sends a push notification to the app that's specified in the connection
+                                          settings for the notification.
+               Parameters
+                                                                                                    ﾉ
+                                                                                                        Expand table
+                Name         Type               Description
+                recipients   String array,      A list of:
+                             required                 Email addresses for users or security groups
+                                                      Object IDs for users or security groups in Microsoft Entra ID
+                message      String, required   The message body of the push notification.
+                openApp      Boolean,           Whether to open the app when the user taps the push notification.
+                             optional
+                params       Parameters,        Key-value parameters to pass with the notification. These can be
+                             optional           further processed in the app to open a specific page and load a
+                                                specific state.
+               Sample formulas
+               Send a basic notification.
+                  Power Apps
+                  PowerAppsNotification.SendPushNotification(
+                       {
+                            recipients: ["f60ccf6f-7579-4f92-967c-2920473c966b", "72f988bf-86f1-
+                  41af-91ab-2d7cd011db47"],
+                            message: "A new case was assigned to you."
+                       }
+                  )
+               Send a notification that opens an app and passes along specific parameters.
+                  Power Apps
+                  PowerAppsNotification.SendPushNotification(
+                       {
+                recipients: ["email1@contoso.com", "email2@contoso.com"],
+                message: "message in the notification toast",
+                params: Table({key:"notificationKey", value:"The value for 
+          notificationKey"}),
+                openApp: true
+             }
+          )
+        See also
+            Create push notifications for the Power Apps mobile app
+            Power Apps Notification reference
+         Disconnect Git version control to edit
+         canvas apps
+         Article • 05/14/2025
+         Git version control for editing apps has been removed and is no longer supported.
+         If your app currently uses this feature, follow these steps to disconnect it:
+            1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+               Settings.
+            2. Select Git version control and then select Disconnect.
+         If you are using PASopa, download your app from your Git provider and pack the .zip file to an
+         .msapp file   . Once your .msapp file is uploaded to Power Apps, follow the steps above to
+         disconnect.
+            ７ Note
+            Git version control is replaced with the source control integration feature. More
+            information: Source code integration
+         Understand new, preview, experimental,
+         and retired features in canvas apps
+         Article • 04/29/2025
+         With every release, we make changes and add features to make Power Apps the best tool to fit
+         your needs. We move the product forward.
+         At the same time, keeping your apps running smoothly is our top priority. Despite our best
+         efforts, any change or improvement might unintentionally introduce a side effect, and your app
+         might not work exactly the way it did before.
+         To ensure enhancements don't adversely affect current apps, we take features through a
+         progression of stages. These stages give you a chance to try out the feature and provide us
+         with feedback, and for us to gradually roll out the feature while watching for any problems.
+         This article describes this process and how you can control your exposure to features that are
+         under development.
+         At each stage, the number of people who use the feature increases, helping us to validate that
+         the feature is what you need and that we're not introducing an unintended side effect.
+         Your feedback is critical throughout this process. Post your feedback in the Power Apps
+         Community Forum .
+         Feature roll out stages
+         In short, the stages are:
+              New: These features are new and generally available (GA), fully supported, and
+              documented. Generally these features are on by default for new apps, but might take
+              time to deploy everywhere. Enable for existing apps on your own schedule.
+              Preview: These features are almost done and will be New soon. But at this stage there still
+              might be some changes made. This stage is the last opportunity for feedback. These
+              features are generally turned off by default and are documented. These features aren't
+              GA, shouldn't be used in production, and are covered by the Preview terms of service   .
+              Experimental: An early stage "Preview," these features truly are experiments and might
+              never reach GA. We're assessing the value proposition and design of the feature, and the
+              feature might radically change or be removed completely at any time. These features are
+              off by default and aren't generally documented. These features aren't GA, shouldn't be
+              used in production, and are covered by the Preview terms of service   .
+              Retired: These features are GA features but are on their way to being removed from the
+              product. They're still fully supported and document, but we either have a new, better way
+               to do the same thing or usage is low. Disable for existing apps on your own schedule.
+               Generally, these features are off by default.
+         How long does a feature remain in each stage? It varies from feature to feature. We look at
+         many factors, including the number of apps that use the feature, the number of issues
+         reported, and how urgently the feature is needed. Features can remain in a stage for weeks to
+         many months. We might also skip some stages if we don't believe it would be helpful.
+         New
+         Enable New features for all your new apps, and enable for existing apps when you're ready.
+         New features are recently added to the product. They're generally available and fully
+         supported. You can use New features with confidence.
+         In general, New features are enabled by default when you create a new app. When a New
+         feature is first introduced, it might not be enabled in all regions initially, allowing us time to
+         deploy and gather information on usage and any problems. If you run into a problem with a
+         feature, the switch can be used as a workaround to disable it until we can correct the problem.
+         Eventually, New features are no longer "new". If there's no breaking change, the switch is
+         removed and the feature is enabled for all apps. If there's a breaking change, the old behavior
+         is available in the app settings under Retired as a disable switch.
+         New features are fully documented in the Power Apps documentation.
+         Preview
+         Enable Preview features if you want to test upcoming functionalities before the feature is
+         enabled for everyone.
+         Preview features are well on their way to being a valued part of the product. But, they aren't
+         generally available yet and aren't fully supported, instead offered under the preview terms of
+         service   . Preview features shouldn't be used in production.
+         In general, Preview features aren't enabled by default when creating a new app. You should
+         only enable a Preview feature for testing purposes and to provide feedback before the feature
+         becomes generally available. This stage is the last stop for feedback before the feature is
+         finalized.
+         Generally, Preview features graduate to New.
+         Preview features are documented in the Power Apps documentation. Use the Power Apps
+         Experimental Features forum    or Power Apps blog   for more information. Use the
+         "Experimental" forum as many Preview features start out as Experimental features and there
+         may already be information or comments there that can be helpful to you.
+         Provide feedback on Preview features in the Power Apps Experimental Features forum  .
+         Again, "Experimental" also covers Preview features in the forum.
+         Experimental
+         Enable Experimental features if you're an early adopter, see something useful to you, and
+         would like to help test the feature.
+         Experimental features are in an early-stage preview that is true to the name "experiment". This
+         feature might significantly change or be removed at any time. These features are far from
+         being generally available, aren't fully supported, and are offered under the preview terms of
+         service  . Experimental features shouldn't be used in production.
+         Experimental features are never enabled by default when creating a new app. You should only
+         enable an Experimental feature for testing purposes and to provide feedback. If you don't
+         know what the feature is referring to or its possible impact, you likely shouldn't turn it on.
+         Eventually Experimental features either graduate to Preview or are removed from the product.
+         Experimental features typically aren't documented. The short description in the App settings
+         pane might be the only information about them. Use the Power Apps Experimental Features
+         forum  or Power Apps blog  for more information.
+         Provide feedback on Experimental features in the Power Apps Experimental Features forum   .
+         Retired
+         Enable Retired features only if you need an old behavior. When appropriate, disable these
+         features in your existing apps.
+         Retired features, while fully supported and widely available, might be phased out in favor of
+         newer, improved methods or due to low usage. Maintaining every feature alongside ongoing
+         product updates incurs overhead.
+         When a feature moves from New to Retired, the meaning of its switch is often inverted. For
+         example, where "Delayed load" was on by default as a New feature, the Retired version
+         becomes "Disable delayed load" and is off by default.
+     Retired features are generally not enabled when creating a new app. They're provided for
+     existing apps that still depend on the old behavior.
+     Retired features will eventually be removed from the product after enough time has passed
+     and usage is low. Removals are well communicated ahead of time for breaking changes.
+     Retired features are fully documented in the Important changes (deprecations) coming in
+     Power Platform.
+     Defaults
+     In general, when creating a new app:
+        New switches are On. These features are generally available and fully supported. There
+        might be a small delay for the switch to be turned on by default as we continue rolling
+        out.
+        Preview switches are Off, but can be enabled for testing and feedback. Enable the
+        features that are interesting to you before they're enabled for all apps, for testing and
+        feedback. Preview features aren't ready for production.
+        Experimental switches are Off. These features are for early adopters and should only be
+        used with caution; they can be changed or removed at any time. Experimental features
+        aren't ready for production.
+        Retired switches are Off. These features are generally available and fully supported, but
+        will eventually be removed from the product. Avoid using these features.
+     As existing apps go through their lifecycle, you might want to take advantage of new features
+     or to remove dependencies on retired features by adjusting these switches in your app.
+     Turning New switches On and Retired switches Off brings existing apps into alignment with
+     new apps and the future of the product.
+     Controlling which features are enabled
+     Experimental and preview features are listed in the app's Settings > Updates. From within the
+     app, select Settings, and then select Updates. Select New, Preview, Experimental, or Retired
+     features using the available tabs.
+     Each feature has a toggle switch. Off generally means that the feature is disabled, except in the
+     Retired section where the title of the feature indicates if the switch disables the feature.
+     In some cases, you might need to close and reopen the app after you change a setting. The
+     feature description should indicate when you must perform this step.
+     At the top of the Settings panel, General settings provide control over fully shipped, generally
+     available features that don't belong in any of these feature categories and are a stable part of
+     the product. We limit the number of these settings as much as possible to keep things simple
+     and to reduce the size of our testing matrix.
+     These settings are specific to each app, so changing a toggle switch affects only the app that's
+     currently open. If you create an app, these switches revert to their default settings for that app.
+     Preview and Experimental features without a
+     switch
+     Sometimes a tag is added in the product to indicate that a particular feature is Preview or
+     Experimental without having a switch in Updates. For example, a control in an Insert menu
+         might have the name Grid (Preview) or the entry point for the Monitor was once Monitor
+         (Preview). In these cases, the feature can't be used without first seeing this tag.
+         Like the Preview and Experimental feature categories previously described, these features
+         shouldn't be used in production and are offered under the preview terms of service   .
+            Preview an app
+            Article • 05/19/2023
+            When you create an app, it's helpful to preview your app and see how it will look for
+            your users. Use the preview app feature to see how your app appears on various devices
+            and in different sizes. Previewing an app is especially beneficial when you're building a
+            responsive app.
+            To preview an app, open the app for editing in Power Apps Studio   , in the actions
+            menu, select     Preview the app.
+            Use the preview options to see how your app looks on different devices using the device
+            picker.
+            Legend:
+               1. Tablet Devices: Allows you to select from common tablet devices from several
+                  manufacturers, along with the ability to select a custom size based on your needs.
+                  This option shows a device frame and device safe zone, which is shown as the
+                  black area either on the top and bottom or sides depending on the orientation of
+                  the device. It also shows a black area with the home bar at the bottom.
+               2. Mobile devices: Lets you select from common phones from different
+                  manufacturers, along with the ability to select a custom size based on your needs.
+                  This option shows a device frame and device safe zone, which is shown as the
+          black area either on the top and bottom or sides depending on the orientation of
+          the device. It also shows a black area with the home bar at the bottom.
+         3. Web view: See how your app looks like on a web browser. You can select a window
+          size to fill the browser window, or you can select canvas size to see how the app
+          looks while authoring without leaving the preview.
+         4. Orientation Switcher: Switch between vertical and horizontal orientation. The
+          Orientation Switcher option is disabled if the Lock Orientation setting turned on.
+       If you're developing a responsive app, the content within the app adjusts to fit the
+       screen size of the device being used.
+       Watch this video to learn how the device picker helps you confirm that your app is
+       adjusting correctly.
+       https://learn-video.azurefd.net/vod/player?id=6fb4ee34-2393-4bf2-b3b9-
+       749b8a7cd257&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+       apps%2Fpreview-app
+       Display settings
+       The way your app behaves with each preview option is determined by app type and
+       your display settings.
+          If an app is created using the phone layout, you can still preview it on the web and
+          tablet devices using the device picker. However, if an app isn't created using a
+          responsive layout, it then appears in a phone shape on the web and selected tablet
+          device. You get a message explaining why the preview is narrow. If you’d like an
+          app to be responsive to phone, tablet, and web sizes then we recommend
+          selecting the tablet option when you create an app. You can use responsive auto
+          layout containers to determine the flow of the content for different screen sizes
+          including phones. More information: Building responsive canvas apps
+          Under Display settings:
+            Scale To Fit: When set to On your entire app is scaled to fit the available space.
+            If a smaller space is available to the app, you may notice empty space on the
+            sides to accommodate the scaling. When a user plays the app, they will also see
+            the empty space.
+            Lock Orientation: When set to On, the Switch Orientation button in the device
+            picker is disabled.
+       Known Issues
+                    If Scale To Fit setting is on and Lock Aspect Ratio is off, your preview won't be
+                    accurate. This configuration isn't recommended. More information: Change screen
+                    size and orientation of canvas apps
+                    If Scale to Fit is off and you resize your browser window while in preview mode,
+                    the preview won't be accurate. To address the issue, close and reopen the preview
+                    once your browser window is in the desired size.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+        Save and publish canvas apps
+        Saving and publishing an app are two different actions:
+             Save stores your latest changes so you and other app editors can keep working on them.
+             Saving doesn't change what end users see.
+             Publish makes your saved changes available to everyone the app is shared with.
+        Use this article to save your work, turn AutoSave on or off, publish updates, and manage app
+        versions. To share an app with users, see Share a canvas app.
+        Save your app
+        Open your app for editing in Power Apps  , and then save your work in one of these ways:
+             Select Save    on the command bar to save any unsaved changes. Each save creates a new
+             entry in the app's version history.
+             Select the dropdown arrow next to Save and choose one of the following options:
+                                                                                    ﾉ
+                                                                                        Expand table
+              Option                What it does
+              Save with version     Saves the app and lets you add notes that describe what changed in this
+              notes                 version.
+              Save as               Creates a copy of the app with a different name.
+              Download a copy       Downloads a local .msapp file of the app for backup or offline editing.
+        Turn AutoSave on or off
+        By default, Power Apps saves your work automatically every two minutes. AutoSave helps prevent
+        lost changes if your browser or device closes unexpectedly.
+        To change the setting:
+           1. On the command bar, select Settings, and then go to the General tab.
+           2. In the Auto save section, set the Auto save toggle to On or Off.
+       Tip
+      Even with AutoSave on, select Save before you close the browser tab to make sure your
+      most recent changes are captured.
+     Publish your app
+     Publishing your app pushes your latest saved changes to the users you've shared the app with.
+      1. On the command bar, select Publish. If you have unsaved changes, you're prompted to save
+        first. After you save, select Publish again.
+      2. (Optional) Enter a description of what's new in this version.
+      3. Select Publish this version.
+     Users see the new version the next time they open or refresh the app.
+      ７ Note
+         When you publish a canvas app, the app runs on the latest version of Power Apps and
+         picks up the newest features and performance improvements. If you haven't published
+               in several months, you usually see an immediate performance benefit when you
+               republish.
+               To make app startup faster, Power Apps caches some details (such as environment and
+               connection information) in the user's browser. Cached data stays until the browser
+               clears it. For steps, see Clear your browser cache.
+        Create an app description with Copilot (preview)
+        If your app is in a managed environment, you can use AI to help create a description for your
+        app.
+        In the Publishing dialog box, select Create descriptions using AI when you save and publish your
+        app.
+        You can also generate an app description by going to Settings > General. Under Description,
+        select Create descriptions using AI.
+        Admins can disable this feature for managed environments in Power Platform admin. For more
+        information, see Managed Environments panel.
+          ７ Note
+          If you don't add a description before publishing the app, Copilot generates one after the
+          app is published. Makers can edit this description if Copilot doesn't generate it correctly.
+          ） Important
+               To use this capability, your app must be in a managed environment.
+               Preview features aren't meant for production use and can have restricted functionality.
+               These features are available before an official release so customers get early access and
+               provide feedback.
+               For more information, go to our preview terms   .
+               This capability is powered by Azure OpenAI Service.
+               This capability isn't available in all regions yet and can be subject to usage limits or
+               capacity throttling.
+               To learn about capabilities and limitations of AI-powered and Copilot features in Power
+               Apps, see Responsible AI FAQs for Power Apps.
+        Identify and manage app versions
+        Each time you save the app, Power Apps adds a new entry to the version history. The version
+        marked Live is the one your shared users currently run. Other versions are saved drafts that you
+        can review or restore.
+        To view all versions of an app:
+          1. Go to Power Apps   , and in the left pane, select Apps.
+          2. Select the More commands icon     next to the app name.
+          3. Select Details > Details.
+          4. Go to the Versions tab.
+                                                                                             
+        From this tab you can:
+             See which version is Live.
+             Select an earlier version and publish it to roll back. For details, see Restore a canvas app to a
+             previous version.
+        To publish the most recent saved version, open the app in the studio and select the publish icon
+           .
+          ７ Note
+               Newly published changes can take a few seconds to appear when users launch the app.
+               Publishing time depends on app complexity and can take a few minutes for large apps.
+               If users already have the app open when you publish, they need to reload the app to
+               see the new version.
+            App preload is on by default to reduce wait time. You can turn it off if needed. For
+            more information, see Create performant apps.
+      In-app notifications for new versions
+      When you publish an update, users who currently have the app open see two notifications:
+         1. A new version of this app is coming. We'll let you know when it's available. — appears
+          while the new version is being prepared.
+         2. You're using an old version of this app. Refresh to use the latest version. — appears when
+          the new version is ready. Users select Refresh to load it.
+      Where these notifications appear
+                                                                    ﾉ Expand table
+       Scenario                                       Notification available?
+       Canvas app on web                              Yes
+       Canvas app embedded in an iframe               Yes
+       Customized SharePoint forms                    No
+       Canvas app embedded in Microsoft Teams         No
+       Canvas app embedded in Power BI                No
+       Power Apps web part                            No
+      Related information
+          Run an app in a browser or on a mobile device.
+          Rename a canvas app.
+          Restore a canvas app to an earlier version.
+          Share a canvas app with other users.
+       Last updated on 05/27/2026
+         Share a canvas app with your organization
+         10/10/2025
+         When you create a canvas app, you can define which users in your organization can use the
+         app, modify it, and even re-share it. You can specify individual users by name or designate a
+         security group in Microsoft Entra ID.
+         Prerequisites
+         Before you share an app, you must save it (not locally) and then publish it.
+              Give your app a meaningful name and a clear description, so that people know what your
+              app does and they can easily find it in a list. Select Settings > specify a name, and then
+              enter a description.
+              Whenever you make changes, you must save and publish the app again if you want
+              others to see those changes.
+            ） Important
+            For a shared app to function as you expect, you must also manage permissions for the
+            data source or sources on which the app is based, such as Microsoft Dataverse or Excel.
+            You might also need to share other resources on which the app depends, such as flows,
+            gateways, or connections.
+         Share an app from Power Apps
+            1. Sign in to Power Apps   .
+            2. On the left navigation pane, select Apps.
+            3. Select the app that you want to share.
+            4. On the command bar, select Share. Or select the Commands menu next to your app
+              name and then select Share.
+            5. In the Share dialog box, type the names or alias of the user or security groups in
+              Microsoft Entra ID.
+            6. Select the down arrow to choose permissions for the app. Options include:
+                    User: Can use the app only.
+         Co-Owner: Can use, edit, and share the app but not delete or change owners.
+         If your app connects to a Dataverse table, the permissions dropdown will display a
+         More security roles option. Select the appropriate security roles, and those roles will
+         be automatically assigned to users when you share the app.
+         If your admin enabled app level security roles in Power Platform Admin, makers with
+         the System Administrator security role can give collaborators app-level privileges
+         when sharing. Makers assign privileges from the security role picker, with App
+         reader, App user, App maker, or App admin as the security role options. To edit
+         assigned security roles, unshare and reshare the app to assign the appropriate
+         security role under Manage Access.
+          App reader: This role gives read privilege for both user or team owned tables and
+          org owned tables.
+          App user: This role gives full access to only their own records in user or team
+          owned tables, and read privilege to org owned tables.
+          App maker: This role gives create and read privilege for all records in user or
+          team owned tables, but only write, delete, assign, share, append, and append to
+          privileges for their own records in user or team owned tables. Additionally, it
+          gives read privilege to org owned tables.
+          App admin: This role gives full access to all records in user or team owned tables
+          and org owned tables.
+      7. Optional steps:
+         Select the overflow menu (...) at the top-right corner and then select Upload app
+         image to include an image of the app in the email.
+         Select Manage access to displays app access details, including current users and co-
+         owners. You can also edit user access and assign security roles here. The Additional
+         data access tab shows app connections to data sources like Dataverse tables or
+         Excel files on OneDrive for Business. To manage security roles for data sources other
+         than Dataverse, such as Excel files on OneDrive, ensure you share these data sources
+         with the app users.
+            8. Add an optional message and then select Share.
+            ７ Note
+                 To learn about sharing apps outside of your organization, see Share a canvas app
+                 with guest users.
+                 To learn about sharing limits applicable to canvas apps in managed environments,
+                 see Sharing limits.
+         Classic app sharing experience
+         You can still use the classic app sharing experience by selecting the classic sharing option.
+            1. Sign in to Power Apps   .
+            2. On the left navigation pane, select Apps.
+            3. Select the app that you want to share.
+            4. On the command bar, select Share. Or select the Commands menu next to your app
+              name and then select Share
+            5. Select the overflow menu (...) at the top-right corner and then select Use classic sharing.
+      6. Specify the name or alias the users or security groups in Microsoft Entra ID with whom
+       you want to share the app.
+       You can share an app with a list of aliases, friendly names, or a combination of those (for
+       example, Meghan Holmes <meghan.holmes@contoso.com>) if the items are separated
+       by semicolons.
+       If several people have the same name but different aliases, the first person found is added
+       to the list. A tooltip appears if a name or alias already has permission or can't be resolved.
+        ７ Note
+        You can't share an app with a distribution group in your organization or with a group
+        outside your organization.
+        ） Important
+        To avoid degraded experiences, use a security group when sharing the app with over
+        100 users.
+      7. If your app contains premium components, such as a map or address input, users must
+       have a Power Apps license to use the app. To request licenses for the users of your app,
+       select Request licenses, which submits the request to your admin.
+        ７ Note
+        You can't request licenses for security groups or distribution lists. For more
+        information about requesting licenses, see Request Power Apps licenses for your
+        app users.
+      8. If you want to allow users to edit and share the app, select the Co-owner check box.
+       In the sharing interface, you can't grant Co-owner permission to a security group if you
+       created the app from within a solution. However, its possible to grant co-owner
+       permission to a security group for apps in a solution by using the Set-
+       PowerAppRoleAssignment cmdlet.
+      9. If your app connects to data for which users need access permissions, specify security
+       roles as appropriate.
+       For example, your app might connect to a table in a Dataverse database. When you share
+       such an app, the sharing panel prompts you to manage security for that table.
+             For more information about managing security for a table, go to Manage table
+             permissions.
+             If your app uses connections to other data sources—such as an Excel file hosted on
+             OneDrive for Business—ensure that you share these data sources with the users you
+             shared the app with.
+             For more information about sharing canvas app resources and connections, go to Share
+             canvas app resources.
+          10. If you want to help people find your app, select the Send an email invitation to new
+             users check box.
+          11. At the bottom of the share panel, select Share.
+             Users can now run the app by using Power Apps Mobile on a mobile device or from
+             AppSource on Microsoft 365    in a browser. Co-owners can edit and share the app in
+             Power Apps .
+             If you sent an email invitation, users can also run the app by selecting the link in the
+             invitation email:
+                  If a user selects the Open the app link on a mobile device, the app opens in Power
+                  Apps Mobile.
+                  If a user selects the Open the app link on a desktop computer, the app opens in a
+                  browser.
+                  If a user selects the Microsoft Teams link, the app opens in Microsoft Teams.
+             If you selected Co-owner while sharing, the recipients will see a link for Power Apps
+             Studio that will open the app for editing using Power Apps Studio.
+     To change permissions for a user or a security group
+        To allow co-owners to run the app but no longer edit or share it, clear the Co-owner
+        check box.
+        To stop sharing the app with that user or group, select the Remove (x) icon.
+     Share apps using Teams
+     You can share a link to your app in a Teams chat. The user that you share the app with needs to
+     be on the same tenant and have access to the app that you're sharing.
+      ７ Note
+         To add canvas apps to Teams using the web player:
+          Your organization must have Allow interaction with custom apps turned on.
+          More information: Manage custom app policies and settings in Microsoft Teams
+          Your organization must allow Shared Power Apps. More information: Manage
+          Microsoft Power Platform apps in the Microsoft Teams admin center
+         If you're the sender or receiver and get a This app cannot be found error when you
+         select Add app to Teams, this means you don't have access to the app. To get
+         access, contact your admin.
+         If you're the sender and you don't have the Power Apps personal app installed in
+         Teams, then a preview card will appear with a Show Preview button. To unfurl the full
+         adaptive card, select Show Preview.
+     To share the app, copy the app link from your web browser and paste it into the Teams chat.
+     Before you send the link, you'll see a preview of your message.
+     Legend:
+       1. Link to app: Select the web link to open the app.
+       2. Collapse preview: Select to close the preview. When you collapse the preview then the
+        user that you send the link to will only get a web link to open the app. They won't see the
+        buttons to add the App to Teams or Launch app in web.
+       3. Name of app: Shows the name of the app.
+       4. Add app to Teams: Select to add the app to Teams.
+       5. Launch app in Web: Open the app directly in your browser.
+     Request licenses for your users
+     When sharing an app that requires a license for use, you can request Power Apps licenses for
+     your users. For more information, see Request Power Apps licenses for your app users.
+     Security group considerations
+        All existing members of the security group inherit the app permissions. New users joining
+        the security group will inherit the security group permissions on the app. Users leaving
+        the group will no longer have access through that group, but those users can continue to
+        have access either by having permissions assigned to them directly or through
+        membership in another security group.
+        Every member of a security group has the same permissions for an app as the overall
+        group does. However, you can specify greater permissions for one or more members of
+        that group to allow them greater access. For example, you can give Security Group A
+        permission to run an app. And then, you can also give User B, who belongs to that group,
+        Co-owner permission. Every member of the security group can run the app, but only User
+        B can edit it. If you give Security Group A Co-owner permission and User B permission to
+        run the app, that user can still edit the app.
+        Users must explicitly be a member of the security group. If a user is an owner of the
+        group, they must also assign themselves as a member of the group to inherit app
+        permissions.
+     Share an app with Microsoft 365 groups
+     You can share an app with Microsoft 365 groups. However, the group must have security
+     enabled. Enabling security ensures that the Microsoft 365 group can receive security tokens for
+     authentication to access apps or resources.
+     Using Microsoft Graph:
+       1. Install the Microsoft Graph module.
+          PowerShell
+          Install-Module Microsoft.Graph -Scope CurrentUser
+       2. Connect to Microsoft Graph. For information about the administrator roles required to
+        manage groups, see Microsoft Entra roles for managing groups.
+          PowerShell
+          Connect-MgGraph -Scopes "Group.ReadWrite.All"
+       3. Set the Object ID of Microsoft 365 group.
+          PowerShell
+          $ObjectID = "<ObjectID>"
+       4. Enable security.
+          PowerShell
+          Update-MgGroup -GroupId $ObjectID -BodyParameter @{ SecurityEnabled = $true }
+       5. Verify the update.
+          PowerShell
+          Get-MgGroup -GroupId $ObjectID | Select-Object DisplayName, SecurityEnabled
+       ７ Note
+       You must be the owner of the Microsoft 365 group to enable security. Setting the
+       SecurityEnabled property to True doesn't affect how Power Apps and Microsoft 365
+       features work. This command is required because the SecurityEnabled property is set to
+       False by default when Microsoft 365 groups are created outside of Microsoft Entra ID.
+     After a few minutes, you can discover this group in the Power Apps sharing panel and share
+     apps with this group.
+     Manage table permissions for Dataverse
+     If you create an app based on Dataverse, you must also ensure that the users you share the
+     app with have the appropriate permissions for the table or tables used by the app. Particularly,
+     those users must belong to a security role that can do tasks such as creating, reading, writing,
+     and deleting relevant records. In many cases, you'll want to create one or more custom security
+     roles with the exact permissions that users need to run the app. You can then assign the role to
+     each user as appropriate.
+      ７ Note
+         You can assign security roles to individual users and security groups in Microsoft
+         Entra ID, but not to Microsoft 365 groups.
+         If a user isn't in the Dataverse root business unit, you can share the app without
+         providing a security role, and then set the security role directly.
+         After a security role is assigned to a user or group, you can't unassigned it when you
+         share an app. However, you can still unassign security roles through the admin
+         portal.
+     Prerequisite
+     To assign a role, you must have System Administrator permissions for a Dataverse database.
+     To assign a security group in Microsoft Entra to a role
+       1. In the sharing panel under Data permissions, select Assign a security role.
+       2. Select the Dataverse roles that you want to apply to the selected Microsoft Entra users or
+        groups.
+      ７ Note
+      When you share an app that's based on an older version of Dataverse, you must share the
+      runtime permission to the service separately. If you don’t have permission to do this, see
+      your environment administrator.
+     Next steps
+     Share a canvas app with guest users
+     See also
+     Edit an app
+     Restore an app to a previous version
+     Export and import an app
+     Delete an app
+     Share a canvas app with guest users
+     06/27/2025
+     Canvas apps can be shared with guest users of a Microsoft Entra tenant. You can invite external
+     business partners, contractors, and third parties to run your company's canvas apps.
+     Watch this video to learn how to share an app with guests:
+     https://learn-video.azurefd.net/vod/player?id=84cd1908-2ca9-415b-a819-
+     3ffb61e55eca&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+     apps%2Fshare-app-guests
+     Prerequisites
+        In Microsoft Entra ID, enable B2B external collaboration for the tenant. More information:
+        Configure external collaboration settings for B2B in Microsoft Entra External ID
+          ７ Note
+          B2B external collaboration is enabled by default. However, you need to verify that
+          the settings weren't changed by a tenant admin. For more information about
+          Microsoft Entra B2B, see Overview: B2B collaboration with external guests for your
+          workforce.
+        Access to an account that can add guest users to a Microsoft Entra tenant. Admins and
+        users with the Guest Inviter role can add guests to a tenant.
+        To access an app that connects to Dataverse, the guest user must have a license with
+        Power Apps use rights that matches the capability of the app. The exception to this
+        prerequisite is when an app is hosted in a Microsoft Dataverse for Teams environment.
+       ７ Note
+       Ensure that you perform these steps on the resource tenant, and not on the home tenant.
+          A resource tenant is where the app is expected to exist, and where the user is
+          expected to create the app using Power Apps as a guest.
+          A home tenant is where the user's account resides and authenticates against.
+     Steps to grant guest access
+       1. In Microsoft Entra ID, select New guest user. More information: Quickstart: Add a guest
+        user and send an invitation
+       2. If the guest user doesn't already have a license in their home tenant, assign a license to
+        the guest user.
+           To assign guest users from admin.microsoft.com, go to Add users and assign
+           licenses at the same time.
+           To assign guest users from portal.azure.com, go to Assign or remove licenses.
+         ） Important
+         You might need to disable the Microsoft 365 admin center preview to assign a
+         license to a guest.
+       3. [Share an app from Power Apps](Share an app from Power Apps)
+     Considerations and limitations for guest access
+        Users accessing web experiences in different Microsoft Entra tenants must access Power
+        Apps in a standalone browser session (different browser or InPrivate browser session).
+        The standalone browser session insures that Power Apps picks up the correct Azure B2B
+        user identity for the app being accessed.
+        Power Apps guest access uses Azure B2B.
+        Power Apps Mobile doesn't support authentication using Microsoft Entra direct
+        federation. More information: Sign in using Power Apps Mobile
+        Power Apps per app plans are scoped to apps in a specific environment, so they can't be
+        recognized across tenants.
+        Power Apps included with Office and Power Apps per user plans have the following
+        characteristics:
+          In the Azure public cloud, they're recognized across tenants in guest scenarios because
+          they aren't bound to a specific environment.
+          In Azure national or sovereign clouds, they're recognized across tenants in guest
+          scenarios. For more information, see National clouds, Azure geographies
+          Licenses aren't recognized across tenants in difference Azure clouds.
+          Not all connectors create connections in the resource tenant by default.
+          A user that signs in to an app using Azure B2B, doesn't see their identity information in
+          My account.
+      Frequently asked questions
+      What's the difference between canvas app guest access and
+      Power Pages?
+      With canvas apps, you can build an app tailored to digitizing business processes, without
+      writing code in a traditional programming language such as C#. Guest access for canvas apps
+      enables teams of individuals made up of different organizations participating in a common
+      business process to access the same app resources that might be integrated with a wide variety
+      of Microsoft and partner sources. More information: Overview of canvas-app connectors for
+      Power Apps
+      Power Pages provide you with the ability to build low-code, responsive websites that allow
+      external users to interact with the data stored in Dataverse. With Power Pages, organizations
+          can create websites and share them with users external to their organization either
+          anonymously or through the sign-in provider of their choice, such as LinkedIn, Microsoft, or
+          other commercial sign-in provider.
+          The following table outlines a few core capability differences between Power Pages and canvas
+          apps.
+                                                                                               ﾉ Expand table
+           Guest        Interface         Authentication                Accessible data sources
+           access in
+           Power        Browser-only      Allows anonymous and          Dataverse
+           Pages        experience        authenticated access
+           Canvas       Browser and       Requires authentication via   Any of approximately 150 out-of-the-box
+           apps         mobile apps       Microsoft Entra ID            connectors and any custom connector
+          Can guests access customized forms in SharePoint?
+          See What license must be assigned to my guest so they can run an app shared with them?
+          Why is a guest who accesses a customized form in SharePoint
+          prompted for a trial?
+          If the custom form uses a premium connector, a guest must have a Power Apps license to
+          access the custom form. If the custom form only uses standard connectors, your tenant must
+          allow Microsoft Power Platform internal consent plans to be assigned to users. For more details
+          about Power Platform internal consent plans, read block trial license commands.
+          Can guests access apps embedded in SharePoint?
+          Yes. However, access to canvas standalone apps requires a user license with Power Apps user
+          rights that matches the capability of the app, including embedded apps. When embedding a
+          canvas app in SharePoint with the Power Apps embed control, enter the app ID in the App web
+          link or ID box.
+         When embedding a canvas app in SharePoint via the iFrame HTML tag, reference the app by
+         using the full web URL. To find the URL, sign in to Power Apps   , select an app, and then select
+         the Details tab. The URL is displayed under Web link.
+         How is it that guests can open the app shared with them, but
+         no data connections are created?
+         As is the case with nonguests, the underlying data sources accessed by the app must also be
+         made accessible to the guest.
+         What license must be assigned to my guest so they can run an
+         app shared with them?
+         The following table explains whether the guests can run (use) customized Microsoft Lists or
+         SharePoint library forms, canvas apps, and model-driven apps using the referenced license.
+                                                                                                 ﾉ Expand table
+            Plan           Customized             Customized          Canvas app         Canvas app       Model-
+                           Microsoft Lists or     Microsoft Lists     (using             (using           driven
+                           SharePoint library     or SharePoint       nonpremium         premium          app
+                           form (using            library (using      connectors)        connectors)
+                           nonpremium             premium
+                           connectors)            connectors)
+            No license     ✓                      ✗                   ✗                  ✗                ✗
+            SharePoint     ✓                      ✗                   ✗                  ✗                ✗
+            user (without
+            Power Apps
+            license)
+            Power Apps     ✓                      ✗                   ✓                  ✗                ✗
+            included with
+            Office
+            Power Apps     ✓                      ✓                   ✓                  ✓                ✓
+            per app plan
+            Power Apps     ✓                      ✓                   ✓                  ✓                ✓
+            per user plan
+          For more information about pricing and the capabilities of various plans, go to Microsoft Power
+          Apps and Power Automate Licensing Guide            .
+          In Power Apps Mobile, how does a guest see apps for their
+          home tenant?
+          When users access a canvas app through a mobile device and the app is published in a non-
+          home Microsoft Entra tenant, they can switch to a different directory.
+          In Power Apps Mobile, how does a guest see apps in the
+          guest tenant?
+          The guest user opens the email they received when an app in the guest tenant is shared and
+          selects Open the app. This view applies to both Microsoft Entra and Microsoft account users.
+          You can also create a deep link. For more information, see Use deep links with Power Apps
+          mobile.
+    Must a guest accept the Microsoft Entra guest invitation
+    before an app can be shared with them?
+    No. If a guest opens an app shared with them before they accept a guest invitation, the guest
+    is prompted to accept the invitation as part of the sign-in experience while opening the app.
+    In which Microsoft Entra tenant are connections created for a
+    guest user?
+    Connections for an app are always made in the context of the Microsoft Entra tenant the app is
+    associated with. For example, if an app is created in the Contoso tenant, the connections made
+    for Contoso internal and guest users are made in the context of the Contoso tenant.
+    Can guests use Microsoft Graph with Power Apps?
+    By default, Azure B2B users have limited permission to access information from Microsoft
+    Graph. A user’s permission in Microsoft Graph determines what's returned when using
+    connectors such as Microsoft Security Graph, Office 365 Users, Office 365 Groups, and custom
+    connectors using Microsoft Graph APIs. For more information about Microsoft Graph
+    permissions, see Default user permissions and Working with users in Microsoft Graph.
+    Which Intune policies apply to guests who are using my apps?
+    Intune only applies the policies of a user's home tenant. For instance, if Lesa@Contoso.com
+    shares an app with Wanda@Fabrikam.com, Intune continues to apply Fabrikam.com policies on
+    Wanda's device, regardless of the apps Wanda runs.
+    Can I disable cross tenant license recognition?
+    No. Authorization capabilities can and should be used to control which users access a resource.
+    For instance, Dataverse environments can be bound to a security group that excludes Azure
+    B2B guest users.
+    Why can an Azure B2B user without a license access a model
+    driven app?
+    The detection of a previously licensed user no longer having a license isn't immediate. If you
+    expect a user to lose access to an app using Dataverse, then their authorization to the app or
+          data should be updated. For example, the app should be unshared with the user or Dataverse
+          security roles should be removed from the user.
+          Which connectors create connections in the resource tenant
+          by default?
+          Users relying on Azure B2B to access an app only has implications on connectors that use
+          Microsoft Entra ID for authentication. Some Microsoft Entra ID based connectors default to
+          creating a connection in the resource tenant, while others default to creating a connection in
+          the home tenant. Connectors that don't use any type of Microsoft Entra ID authentication work
+          the same for guests and members in a tenant. The following table enumerates all connectors
+          that do use Microsoft Entra ID authentication and default creates connections in the resource
+          tenant. For more information on each connector as there might be restriction, see List of all
+          Power Apps connectors
+                                                                                                ﾉ
+                                                                                                    Expand table
+           Connector                            Creates connection in resource tenant by default
+           Microsoft Entra                      Yes
+           Azure Automation                     Yes
+           Azure Container Instance             Yes
+           Azure Data Factory                   Yes
+           Azure Data Lake                      Yes
+           Azure IoT Central                    Yes
+           Azure Kusto                          Yes
+           Azure Log Analytics                  Yes
+           Azure Resource Manager               Yes
+           Microsoft Dataverse                  Yes*
+           Dynamics 365 AI for Sales            Yes
+           Microsoft Teams                      Yes
+           Office 365 Groups                    Yes
+           Office 365 Users                     Yes
+           Outlook Tasks                        Yes
+       Connector             Creates connection in resource tenant by default
+       Power BI              Yes
+       SharePoint            Yes
+      * When using the Microsoft Dataverse as the data source, ensure that the guest user is licensed
+      from the same tenant where you have Dataverse data located.
+      See also
+      Edit an app
+      Restore an app to a previous version
+      Export and import an app
+      Delete an app
+       Share Excel data used by your app
+       Article • 12/16/2022
+       You can share Excel data with your app users in a cloud account, such as OneDrive.
+       For example, you might create an app that shows the names and phone numbers of the
+       technical-support group at your company. The information is stored in an Excel
+       spreadsheet, which you put in a folder in Dropbox. You then share the folder with your
+       app users so that they can see the names and phone numbers.
+       You must share the data so that users can run and even modify your app. Users who
+       aren't given the sharing permissions won't see the data in the Excel file.
+       This topic shows you how to share data in an Excel spreadsheet using Dropbox,
+       OneDrive, and Google Drive. To create an app that displays data from an Excel file, see
+       Create an app from a set of data.
+       Share data in Dropbox
+        1. Sign in to Dropbox using the same account that you used to create a connection
+         from Power Apps to Dropbox.
+        2. Select the folder that contains the Excel file, and then select Share:
+        3. In the dialog box, enter the email addresses with which your app users sign in to
+         Dropbox.
+        4. If your app users will add, modify, or delete data in your app, select Can edit.
+         Otherwise, select Can view.
+        5. Select Share.
+            For more information, see Sharing folders on Dropbox  .
+            Share data in OneDrive
+               1. Sign in to OneDrive using the same account that you used when you created a
+                 connection from Power Apps to OneDrive.
+               2. Select the folder that contains the file, and then select Share:
+                    ７ Note
+                    In OneDrive for Business, share the file itself, not the folder that contains the
+                    file.
+               3. In the dialog box, select Email.
+               4. Specify the email addresses with which your app users sign in to OneDrive, and
+                 then select Share.
+             For more information, see Share OneDrive files and folders  .
+             Share data in Google Drive
+                1. Sign in to Google Drive using the same account with which you created a
+                  connection from Power Apps to Google Drive.
+                2. Right-click the folder that stores your Excel file, and then select Share.
+                3. In the dialog box, enter the email addresses with which your app users sign in to
+                  Google Drive:
+                4. If your app users will add, modify, or delete data in your app, then select Can edit
+                  in the list of permissions. Otherwise, select Can view.
+                5. Select Done.
+             For more information, see Share Google Drive files and folders  .
+             Known limitations
+             For information about how to share Excel data within your organization, review these
+             limitations.
+     Share resources used by canvas apps
+     07/08/2025
+     Before you share a canvas app, consider the types of resources on which it relies, such as one
+     or more of the following:
+        Tables in Microsoft Dataverse.
+        For information about giving users access to this data, see Manage table permissions.
+        A connection to a data source.
+        An on-premises data gateway.
+        A custom connector.
+        An Excel workbook or other service.
+        A flow.
+     Some of these resources are shared automatically when you share the app. Other resources
+     require you or the people with whom you share the app to take extra steps so that the app
+     works as you expect.
+     You can also share your connections, custom connectors and on-premises data gateway with
+     your entire organization.
+     Connections
+     Some connections (such as SQL Server with SQL or Windows authentication) are implicitly
+     shared with the app when you share the app with other users. Other connections require users
+     to create their own connections and explictly grant security privileges (such as security roles for
+     the Dataverse, OneDrive for Business, SQL Server with Microsoft Entra authentication).
+     You can determine whether a connection is automatically shared as part of the app when you
+     share the app with other users; allowing you to update sharing permissions. To do this, go to
+     make.powerapps.com and select Data -> Connections from left navigation. Then select the
+     required connection. If the Share button appears on top navigation or if the Share option
+     displays when you select More Commands (...), the selected connection can be shared with
+     other users.
+    Implicit sharing
+    When you share an app that uses a connection that can be shared, the app connection is
+    implicitly shared along with the app. For example, following message appears when you go to
+    make.powerapps.com, select Apps, choose an app that uses such connection, select More
+    Commands (...) and then select Share:
+    If you select Confirm and share the chosen app with other users, the app connection is
+    implicitly shared with those users along with the app.
+      ７ Note
+      To ensure the app works properly, the user who is sharing the app needs to have sharing
+      permission for all connections used by the app. Without these permissions, the user won't
+      be able to access or use the connections correctly. This applies to all app-sharing
+      activities, including app sharing, app publishing, and solution import.
+     On-premises data gateways
+     If you create and share an app that includes data from an on-premises source, the on-premises
+     data gateway itself and certain types of connections to that gateway will be shared
+     automatically. For any connection that isn’t shared automatically, you can share it manually (as
+     the previous section shows) or let the app prompt users to create their own connections. To
+     show the connection or connections with which a gateway has been configured:
+      1. Open powerapps.com , click or tap Manage in the left navigation bar, and then click or
+       tap Gateways.
+      2. Click or tap a gateway, and then click or tap the Connections tab.
+      ７ Note
+      If you share one or more connections manually, you might need to reshare them under
+      these circumstances:
+       You add an on-premises data gateway to an app that you’ve already shared.
+       You change the set of people or groups with whom you’ve shared an app that has an on-
+       premises data gateway.
+     Custom connectors
+     When you share an app that uses a custom connector, it is automatically shared, but users
+     must create their own connections to it.
+     On powerapps.com , you can view or update permissions for a custom connector. In the left
+     navigation bar, click or tap Manage, click or tap Connections, and then click or tap New
+     connection (in the upper-right corner). Click or tap Custom, and then click or tap a custom
+     connector to display details about it.
+     Excel workbooks
+     If a shared app uses data to which not all users have access (such as an Excel workbook in a
+     cloud-storage account), share the data.
+     Flows
+     If you share an app that includes a flow, users who run the app will be prompted to confirm or
+     update any connections on which the flow relies. In addition, only the person who created the
+     flow can customize its parameters. For example, you can create a flow that sends mail to an
+     address that you specify, but other users can’t change that address.
+         Tutorial: Embed a Power Apps visual in a
+         Power BI report
+         APPLIES TO:       Power BI Desktop       Power BI service
+         In this tutorial, you use the Power Apps visual to create a new app that is embedded in a
+         sample Power BI report. This app interacts with other visuals in that report.
+         If you don't have a Power Apps subscription, create a free account    before you begin.
+         In this tutorial, you learn how to:
+          ＂Add a Power Apps visual to a Power BI report
+          ＂Work in Power Apps to create a new app that uses data from the Power BI report
+          ＂View and interact with the Power Apps visual in the report
+         Prerequisites
+               Google Chrome  or Microsoft Edge  browser
+               A Power BI subscription, with the Opportunity Analysis Sample installed
+               An understanding of how to create apps in Power Apps and how to edit Power BI reports
+         Create a new app
+         When you add the Power Apps visual to your report, it launches Power Apps Studio with a live
+         data connection between Power Apps and Power BI.
+            1. Open the Opportunity Analysis sample report and select the Upcoming Opportunities
+               page.
+            2. Open the report in Editing mode by selecting Edit from the Options bar.
+            3. Move and resize some of the report tiles to make space for the new visual.
+      4. From the Visualizations pane, select the Power Apps icon, then resize the visual to fit the
+       space you made.
+      5. In the Fields pane, select Opportunity > Name, Product > Product Code, and SalesStage
+       > Sales Stage.
+      6. On the Power Apps visual, select the Power Apps environment where you want to create
+       the app, then select Create new.
+       In Power Apps Studio, you see that a basic app is created, with a gallery that shows one of
+       the fields you selected in Power BI.
+      7. In the left pane, select Screen1, then set the screen's Fill property to "LightBlue" (so it
+       shows up better in the report).
+       8. Select Gallery1 and make some room for a label control by changing Properties > Size >
+        Height to 964.
+         ７ Note
+         If you can't edit the Height field, try adjusting the size of the visual on the canvas
+         first. Select the visual and drag one of the handles. Now edit the Height field.
+       9. Expand the left navigation menu, choose + Insert, and select Classic > Text label from the
+        list of controls.
+      10. Drag the label to the bottom of your visual. Set the Text property to "Opportunity Count:
+        " & CountRows(Gallery1.AllItems). The visual on the canvas now shows a total of 487
+        opportunities in the dataset.

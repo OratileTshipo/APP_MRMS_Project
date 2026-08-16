@@ -1,0 +1,2272 @@
+      Import and use a canvas component in a custom page
+      Custom pages can use the components from the canvas component library created or
+      imported in the current environment. You can select Get more components at the
+      bottom of the add control left navigation area.
+      The canvas component is available under the Library components section and can be
+      added to the custom page.
+        Component updates to the custom page
+        When the component is added to the custom page via the component library, it
+        maintains the reference to the library. When the library owner publishes the newer
+        library version with updated components, the custom page inline with the canvas app
+        displays an update available message. This message is displayed when the custom page
+        is opened for editing.
+      Select Review to review the updates, and then select ok to get the component refreshed
+      with the latest changes from the canvas library.
+       ７ Note
+       Individual custom pages present in a model-driven app should be opened
+       individually for editing inside canvas app studio to get the latest updates from the
+       shared component library.
+             You can now publish the custom page and model-driven app to get the latest changes
+             reflected.
+             Additional canvas component resources
+             You can evaluate and use canvas component samples from Microsoft and other Power
+             Apps community developers, which are hosted on the Canvas app components
+             gallery   .
+      See also
+      Model-driven app custom page overview
+      Add a custom page to your model-driven app
+      Using PowerFx in custom page
+      Overview of Power Apps connectors
+      Add data connection in canvas designer
+       Add code components to a custom
+       page for your model-driven app
+       Article • 06/03/2022
+       This article outlines the use of code components built by professional developers using
+       Power Apps component framework within a custom page. For low-code custom UX
+       extensibility, see add canvas components to a custom page for your model-driven app.
+        ） Important
+           Custom pages are a new feature with significant product changes and
+           currently have a number of known limitations outlined in Custom Page
+           Known Issues.
+        ７ Note
+           Custom pages support all the component framework APIs that are currently
+           supported for canvas apps.
+           Certain model-driven app specific APIs like WebAPI and Navigation have
+           published app support for custom pages. These APIs can be used in the code
+           component for custom pages and works on the final published app.
+           For individual API support status on each platform, see Power Apps
+           component framework API reference
+       Code components provide professional developers the ability to create custom code
+       components for use within an app. This pro-code extensibility mechanism provides first-
+       class application lifecycle management (ALM) to seamlessly extend the components
+       available to all the app makers across the organization. Code components can be reused
+       across custom pages, canvas, and model-driven apps. They can be centrally updated,
+       packaged, and moved using standard Microsoft Dataverse solutions. More information:
+       Power Apps component framework overview
+       Enabling Power Apps component framework
+       for custom pages
+       To use code components inside a custom page, you need to enable Power Apps
+       component framework feature. More information: Enable the Power Apps component
+       framework feature
+                                                 
+       Create code components for use in a custom
+       page
+       This section outlines how to create, import, and test code components.
+       Creating and importing code components in Dataverse
+       Code components for custom pages follow the same pattern as they do with canvas
+       app. Code components need to be implemented first before they can be added to a
+       custom page. To create a code component, see Create your first component.
+       You can also try OOB sample components to jump-start. Once you are done
+       implementing your code component, it can be packaged into a solution and added to
+       Dataverse, making it available for use in all the custom pages in line with model-driven
+       and canvas apps. More information: Code components application lifecycle
+       management (ALM).
+       Importing and using code component in a custom page
+       In an environment, custom pages can use all the code components previously imported
+       into Dataverse using solutions. On the left pane, select Add (+), and then select Get
+       more components at the bottom of the page. You will see a code tab on the Import
+       components pane showing all code components present in the environment.
+                                           
+       ７ Note
+         If the code tab doesn't show up in the Import component pane, verify that
+         the Power Apps component framework feature setting for canvas apps is
+         enabled. More information: Enable Power Apps component framework
+         feature
+         Also, ensure that you are working on the latest canvas app studio authoring
+         version.
+      The newly added code components are now available under the Code components
+      section. It can be added to a custom page.
+                                           
+        Testing the code component inside the studio and
+        published app
+        Like canvas apps, code components are interactive and can be tested in the custom
+        page studio authoring environment. However, specific APIs like Web APIs and
+        Navigation, which only have the custom page runtime support when invoked, will show
+        the error message "Method not implemented".
+                                                            
+        You can dismiss this error and publish the custom page. Then, add this custom page to
+        the model-driven app and publish the app to see the custom page web API in action.
+        The image below shows the standard Web API sample control and Navigation API
+        control added to custom page working inside a published model-driven app.
+        Additional code component resources
+        You can also use other sample components from Microsoft.
+      Or try some from the Power Apps community gallery.
+      See also
+      Model-driven app custom page overview
+      Add a custom page to your model-driven app
+      Using PowerFx in custom page
+      Overview of Power Apps connectors
+      Add data connection in canvas designer
+     Overview of connectors for canvas apps
+     Data is at the core of most apps, including apps you build in Power Apps. You store data in a
+     data source, and you bring that data into your app by creating a connection. The connection
+     uses a specific connector to talk to the data source. Power Apps has connectors for many
+     popular services and on-premises data sources, including SharePoint, SQL Server, Office 365,
+     Salesforce, and Twitter. To get started adding data to a canvas app, see Add a data connection
+     in Power Apps.
+     A connector might provide tables of data or actions. Some connectors provide only tables,
+     some provide only actions, and some provide both. Also your connector might be either a
+     standard or custom connector.
+      ７ Note
+      Keep the number of connectors in a canvas app to a maximum of 10, and connection
+      references to no more than 20. Going beyond these limits can lead to longer loading
+      times for users when launching the app and can cause problems when saving the app.
+     Tables
+     If your connector provides tables, add your data source, and then select the table in the data
+     source that you want to manage. Power Apps retrieves table data into your app and updates
+     data in your data source automatically. For example, add a data source that has a table named
+     Lessons, and then set the Items property of a control, such as a gallery or a form, to this value
+     in the formula bar:
+     Specify the data that your app retrieves by customizing the Items property of the control that
+     shows your data. Continuing the previous example, sort or filter the data in the Lessons table
+     by using that name as an argument for the Search and SortByColumn functions. In this
+     graphic, the formula set for the Items property specifies that the data is sorted and filtered
+     based on the text in TextSearchBox1.
+     For more information about customizing your formula with tables, see these articles:
+     Understand data sources in Power Apps
+     Generate an app from Excel data
+     Create an app from scratch
+     Understand tables and records in Power Apps
+      ７ Note
+      To connect to data in an Excel workbook, host it in a cloud storage service like OneDrive.
+      For more information, see Connect to cloud-storage from Power Apps.
+     Actions
+     If your connector provides actions, select your data source as you did before. Instead of
+     selecting a table as the next step, manually connect a control to an action by editing the Items
+     property of the control that shows your data. The formula you set for the Items property
+     specifies the action that retrieves data. For example, the app doesn't retrieve any data if you
+     connect to Yammer and then set the Items property to the name of the data source. To
+     populate a control with data, specify an action such as
+     GetMessagesInGroup(5033622).messages.
+     To handle custom data updates for action connectors, build a formula that includes the Patch
+     function. In the formula, identify the action and the fields that bind to the action.
+      ７ Note
+      For action-based connectors, galleries and other controls don't automatically page in
+      more data like they do for tabular connectors. For example, if you bind a tabular data
+      source to a gallery, it retrieves the first set or page of records (for example, 100 records),
+      and then it pages in more data as the control requests it. For an action-based connector, it
+      retrieves a "page" of data, but if the data requested exceeds the page size, the control
+      doesn't automatically get the next page.
+     For more information about how to customize your formula for custom updates, see these
+     articles:
+     Patch
+     Collect
+     Update
+       Dynamic schema is a common type of result for action based connectors. Dynamic schema
+       refers to the possibility that the same action might return a table with different columns
+       depending on how it's called. Conditions that might cause the columns in the table to differ
+       include input parameters, the user or role executing the action, and the group in which the
+       user is working, among others. For example, SQL Server stored procedures might return
+       different columns if run with different inputs, or an Azure DevOps instance might use custom
+       fields that aren't available by default.
+         ７ Note
+         The connector documentation shows dynamic schema results with this message "The
+         outputs of this operation are dynamic." as the return value.
+       For more information about how to work with dynamic schema in Power Apps, see Working
+       with Dynamic values for an overview and Connect to Azure DevOps from Power Apps for a
+       detailed example.
+       Popular connectors
+       This table links to more information about popular connectors. For a complete list, see All
+       connectors.
+                                                                  ﾉ
+                                                                     Expand table
+                                              
+        Microsoft Dataverse                  Cloud storage **
+        Dynamics AX                          Excel
+        Microsoft Translator                 Office 365 Outlook
+        Office 365 Users                     Oracle
+        Power BI                             SharePoint
+        SQL Server                           Twitter
+       ** Applies to Azure Blob, Box, Dropbox, Google Drive, and OneDrive.
+       Standard and custom connectors
+         Power Apps provides standard connectors for many commonly used data sources. If Power
+         Apps has a standard connector for the type of data source you want to use, use that connector.
+         To connect to other types of data sources, like a service you built, see Register and use custom
+         connectors.
+         All standard connectors
+         Standard connectors don't require special licensing. For more information, see Power Apps
+         plans  .
+         Ask questions about a specific connector in the Power Apps forums  , and suggest connectors
+         you want to add or other improvements in Power Apps Ideas    .
+         Security and types of authentication
+         As you author your app and create a connection to a data source, you might see that your
+         choice of connector offers different ways to authenticate. For instance, the SQL Server
+         connector allows you to use Microsoft Entra Integrated, SQL Server Authentication, and
+         Windows Authentication. Each type of authentication has different levels of security.
+         Understand what information and rights you share with users who use your application. The
+         primary example in this article is SQL Server. However, the principles apply to all types of
+         connections.
+           ７ Note
+                For detailed information about security considerations when using a relational
+                database server, such as Microsoft SQL Server or Oracle, as the data source for an
+                app, see Use Microsoft SQL Server securely with Power Apps.
+                Power Apps doesn't support External member identities. For more information, see
+                Properties of a Microsoft Entra B2B collaboration user.
+                Gateway selection isn't supported for custom connectors that use the anonymous
+                authentication type.
+         Microsoft Entra ID
+         This authentication is a secure type of connection. For example, SharePoint uses this type of
+         authentication. SQL Server also allows for this type of authentication. When you connect, the
+         Microsoft Entra service identifies you separately to SharePoint on your behalf. You don't have
+         to supply a username or password. As an author, you can create and work with the data source
+    by using your credentials. When you publish your application, your application user signs in by
+    using their credentials. If the data is appropriately secured on a back-end, your users can only
+    see what they're authorized to see based on their credentials. This type of security allows you
+    to change rights for specific application users on the back-end data source after the
+    application is published. For instance you can grant access, deny access, or refine what a user
+    or set of users can see all on the back-end data source.
+    Open-standard authorization (OAuth)
+    This type of connection is also secure. For example, Twitter uses this type of authentication.
+    When you connect, you must supply your user name and password. As an author, you can
+    create and work with the data source by using your credentials. When you publish your
+    application and your application user signs in, they must also supply their credentials.
+    Therefore this type of connection is secure as your users must use their own credentials to
+    access the data source service.
+    Shared connections and secure implicit connections
+    In a shared connection, the Power Apps author provides the user name and password for the
+    connection when creating the data source in the application. The connection authentication to
+    the data source is then implicitly shared with end users. Once the application is published, the
+    connection is also published and available to your users.
+    Before January 2024, your end users could take the connection that you shared with them and
+    create separate new applications. Your users can't see the user name or password, but the
+    connection is available to them. However, after January 2024, all newly created shared
+    connections are secured. To secure existing apps, republish them. The connection is no longer
+    shared with end users. The published Power App talks to a connection proxy. The connection
+    proxy only talks to the specific Power App for which it's linked. The connection proxy limits the
+    actions that are sent to the connections to the ones in the Power App {Get, Put/Patch, Delete}
+    for a given data source. If you have an app using the connections published before January
+    2024, republish your application and unshare any connections with end users that shouldn't
+    have them.
+    In SQL Server, an example of this type of connection is SQL Server Authentication. Many other
+    database data sources provide a similar capability. When you publish your application, your
+    users don't need to supply a unique user name and password.
+     ７ Note
+     Your end-users might encounter the error message You do not have correct permissions
+     to use this connection in the consent dialog. Two situations might cause this error. First,
+     the application might have a shared implicit connection that isn't a secure implicit
+     connection. Sharing the connection with the end user resolves this issue but isn't
+     recommended because all shared connections should be secure implicit connections. The
+     author should convert all connections in the application to be secure implicit connections
+     to resolve this issue. Second, the connection might already be a secure implicit
+     connection. Republishing might resolve this issue. If it doesn't, then a product bug should
+     be filed.
+    Notification to update your apps (secure implicit connections)
+    If you have applications that might be upgraded to use this feature, you see a message on the
+    Apps page. It indicates the number of apps that need your attention.
+    Select the link and it opens a side panel that lists all of the apps that need attention.
+    Select the open icon to the right of the app name to open and republish it. Continue with the
+    following directions.
+    Enable secure implicit connections for an existing app
+    Open an existing app open for editing with implicitly shared connections already published:
+      1. On the command bar, select Settings and search for "Secure".
+      2. Update the feature switch appropriately to enable secure implicit connections.
+      3. Save and publish the app.
+    Unsharing
+    Once you publish the app, follow these steps to verify that sharing works correctly:
+       Check if connections are shared with co-owners. If you don't want an end-user to get a
+       connection, then uncheck the Co-owner checkbox.
+       To verify the feature works correctly, share the app with a different user who isn't an
+       owner. Once you share the app, check the Connections list in the Dataverse tab in Power
+       Apps  for that user. Verify that the user doesn't have a connection available.
+       Open the Sharing panel to change the end-user's right to the connection. Choose the X
+       to remove the user's access to the connection.
+    Use apps with a new secure implicit connection
+    When you republish and share your app, end-users don't have access to the connection but
+    work with the hidden proxy connection. Users can't create a new app based on your original
+    connection.
+      Limitations
+       1. All types of implicitly shared connections work, such as action and tabular.
+       2. Server and database names are hidden in network traces but visible in the consent dialog.
+         Column names aren't hidden.
+       3. For tabular connectors, the feature only limits CRUD actions such as Get, Post, Put, or
+         Delete. If you have permissions to Put, then you have access to Post.
+       4. Action based connectors limit based on the specific API being used in the application.
+       5. Warnings are still enabled in sharing. The warning around implicitly shared connections
+         still warns while in preview. However, your connection with this feature is secure – despite
+         the warning.
+       6. Publishing to an entire tenant, as opposed to specific groups or individuals isn't
+         supported.
+       7. There's a known issue when importing an implicitly shared secure connection via a
+         connection reference. The security isn't set properly in the target environment.
+       8. There's a known issue importing a solution using a service principal, causing import
+         failure. A workaround is to share the connection with the service principal.
+      Windows Authentication
+      This type of connection isn't secure because it doesn't rely on end-user authentication. Use
+      Windows authentication when you need to connect to a data source that is on-premises. An
+      example of this type of connection is to an on-premises server that has a SQL Server. The
+      connection must go through a gateway. Since it goes through a gateway, the connector has
+      access to all of the data on that data source. As a result, any information that you can access
+      with the Windows credentials you supply is available to the connector. When you publish the
+      application, you also publish the connection and make it available to your users. This behavior
+      means that your end users can create applications by using this same connection and access
+      the data on that machine. Connections to the data source are also Implicitly Shared with users
+      that the app is shared with. This type of connection might be valid when your data source only
+      lives on an on-premises server and the data on that source is freely shareable.
+      Data sources in solutions
+      Solutions help with application lifecycle management and offer other ways to manage the
+      lifecycle of data sources. If a canvas app is in a solution, you can create connection references
+      and environment variables to store information about the data sources. This setup makes it
+      easy to change or reconnect data sources when you move solutions to different environments.
+      Rename data sources in apps
+     Learn how to rename data sources in an app, and understand the difference between tabular
+     and action-based data sources. For more information, see Rename Power Apps action-based
+     data sources.
+     Connection consent dialog
+     When users open an app that uses connectors for the first time, they see a connection consent
+     dialog for the following purposes.
+      1. To inform users about the data sources accessed by the app.
+      2. To outline the actions a connector might or might not perform in an app. For example, for
+        apps using the Office 365 Users connector:
+        This app is able to:
+         Read your full user profile
+         Read the full profile of all users
+        The app can't:
+         Modify or delete any user-profile information
+      1. To capture end-user consent to connect to the data sources that the app uses.
+      2. To facilitate manual end-user authentication, when needed.
+     For some connections, Power Platform can automatically authenticate a user to access a data
+     source. However, if the automatic sign-in fails, this dialog prompts users to fix a connection by
+     manually signing in. Power Platform can only attempt automatic sign-in for a connection when
+     a data source preauthorizes Microsoft’s Azure API connections service principal, granting it
+     permission to perform single sign-on for a user when a connection is created. For more
+     information on single sign-on, see What is single sign-on (SSO)?
+     For model-driven apps that use custom pages, when there are multiple custom pages in an
+     app, the consent dialog asks for data permissions for all of the connectors in all the custom
+     pages even if users don't open them.
+     The following image is an example of the connection consent dialog for an app connecting to
+     a SharePoint site.
+       For select connectors, admins can suppress this dialog and consent on behalf of end users to
+       connect to a data source. The following table explains which types of connectors the consent
+       dialog might be suppressed for an app.
+         ７ Note
+         If an admin suppresses the consent dialog but the platform can’t perform single sign-on
+         for an end-user, the dialog is presented to the user when they launch the app.
+                                                                  ﾉ Expand table
+            Connector type                                                       Consent dialog       Reference
+                                                                                 suppressible?
+            Microsoft connectors that support single sign-on (such as            Yes                  Power Apps
+            SharePoint, Office 365 users)                                                             admin cmdlet
+            Connector accessing a non-Microsoft, partner service, such as        No                   Not applicable
+            Salesforce
+            Custom connectors using OAuth with Microsoft Entra ID as the         Yes                  Manage
+            identity provider. These custom connectors are built by                                   Connections
+            organizations, and are only accessible by the users within the
+            organization (for example, built by Contoso for only Contoso
+            users)
+          Microsoft Power Platform can only suppress the consent dialog for connections to data sources
+          where all the following conditions are true:
+              1. The data source doesn't require an explicit consent UI.
+              2. The data source preauthorizes Microsoft’s Azure API connections service principal to
+                enable single sign-on.
+              3. An admin configures an app to suppress the consent for the preceding connections.
+          Microsoft’s Azure API connections service principal preauthorization exists for Microsoft's first-
+          party data sources. Custom applications registered in a Microsoft Entra tenant that are used by
+          custom connectors might configure this preauthorization. An admin manages consent
+          suppression on a per-app basis (as opposed to connector basis), so suppression is managed at
+          the most granular app experience level. This level of granularity prevents consent suppression
+          for an organization’s "approved apps" from inadvertently suppressing consent for apps that
+          aren't approved or reviewed.
+            Last updated on 01/13/2026
+       Localize labels, messages, and tooltips
+       on a custom page
+       Article • 03/13/2023
+       [This topic is pre-release documentation and is subject to change.]
+       This article outlines how to add localized content to a custom page by uploading web
+       resource RESX files for each language into your solution.
+       This article shows you how to use Power Fx to set the content of a control on a custom
+       page. You can use similar steps for tooltips and any messages that use a text control on
+       the custom page.
+       Localizing labels on a custom page
+       Providing localized content on a custom page in a model-driven app is vital when
+       building apps that support global users or a multilingual organization. Translation can
+       be done by uploading text files in a .resx format as a web resource. The files contain the
+       translated text that you want to use for labels on your custom pages.
+       The process has the following steps:
+         1. Enable languages for your environment.
+         2. Add localized RESX web resource files into your solution.
+         3. Add the localized files to your custom page.
+         4. Manage localized web resources.
+         5. Add the localized strings to your controls.
+         6. Run your app with localized content.
+       Enable languages for your environment
+       To add languages for a custom page, you need to first enable the languages you want
+       to support in the model-driven app where your custom page will run. Make sure you
+       have enabled languages from the Power Platform admin center. More information:
+       Enable the language
+       After completing the steps to enable languages in the environment, create a RESX file
+       for each language in the proper format for the strings you want localized on your
+       custom page for your model-driven app.
+           After you have the created the RESX files with the localized strings, add them into your
+           solution as a web resource. There are two ways to accomplish this task, the first is to
+           open your solution in make.powerapps.com and select the option to add a web
+           resource to your solution in your environment or you can add a web resource while
+           working on a custom page. More information: RESX web resources
+           Adding a web resource while working on a custom page is covered later in this article in
+           the section Add localized files to your custom page.
+           Localized content will be based on the user or organizational locale for the application
+           the custom page is running. The language for your application is based on user or
+           admin defined language preferences in the user app settings or admin settings in the
+           Power Platform admin center. If neither has been set, the base language set when the
+           environment was created is used.
+              ７ Note
+              Content shown in a Power Apps Control Framework (PCF) control will localize to the
+              applications locale language without additional changes needed on the custom
+              page. More Information Localizing PCF Controls
+           Add localized RESX Web resource files to your
+           solution
+              1. Go to make.powerapps.com  , select the Solutions area, and then open the
+                solution you want.
+              2. On the command bar, select New > More > Web Resource. This opens a panel to
+                add your RESX web resource file.
+           All files added to your solution need to follow a specific format that includes
+           {filename}.LanguageID.resx, where the language ID is the numeric value for that
+           language. This format is necessary because the framework relies on the naming
+           convention to identify which resource file should be used to associate the appropriate
+           localized string to a label control.
+              ） Important
+              The RESX {filename} must be the same for all your files.
+       For example, all localized string files have the name CustomPageLoc.LanguageID.resx,
+       which means for English it is CustomPageLoc.1033.resx, for French
+       CustomPageLoc.1036.resx, and for Arabic CustomPageLoc.1025.resx. The display name for
+       every file added must also be the same name.
+       In the example below all files have CPLoc as the display name. The display name must be
+       the same to ensure all localized content is used properly on a custom page for each
+       language. We recommend that you add the corresponding name for the language in the
+       Description field to help identify the content when you view the files in the custom page
+       designer. Also, you'll need to add the same language's RESX file that you're working in.
+       For example, if you are authoring in English, be sure to add the English RESX file.
+       After you have added your web resource to your solution, make sure to publish the
+       changes. Publishing ensures the file is available to add to your custom page. Here's an
+       example of the web resource RESX files that have been added to a solution and are now
+       available to add to a custom page.
+       Add localized files to your custom page
+       Add localized files to your custom page when you're creating or editing a page.
+      To add a language to your page, select the Resources icon on the left to open the
+      Resources pane.
+      Select Add resource in either one of two places.
+      A dialog opens that lists all the available web resources in your solution. To find your
+      files quickly, you can use the search at the top of the dialog to search for the Display
+      name that displays all your localized RESX files. You only need to select and add the file
+      that matches the language that you are using to author your page. In this example, the
+      English file is the only file you need to add.
+       ７ Note
+       It isn't necessary to add every file-you only need to add one. The solution and
+       platform maps the uploaded languages based on the display name to the language
+       web resource files that you added to your solution. When you add multiple files, a
+       dialog is displayed with an error message, which states that files have already been
+       loaded to your page.
+      If you don't see the RESX web resource with the language you want to add in the dialog,
+      you'll need to add the file to your solution using the steps described earlier in this
+      article.
+      After selecting Add, the panel closes, and the web resource is listed in the Resources
+      pane.
+       Manage localized web resources
+       After a web resource language has been added to your page, you can manage the file
+       by selecting the ... ellipses next to the file. A flyout opens where you can refresh the web
+       resource if it has been updated. You can also remove the resource from your page. You'll
+       need to refresh the RESX resources on your page if the display name has changed or
+       any of the string keys have been updated in the RESX file that's been published to your
+       solution. Note that updating the translations in the RESX file and publishing the solution
+       doesn't require the RESX on your page to be refreshed.
+       Add the localized string to your label controls
+       To add localized content to your label control, select the label and set the function to
+       the resource using the Power Fx text function of the control. To do this, select the label
+       control, and then select the Text function.
+      Using the text function, set the value to the web resource and the value you want that is
+      in your web resource RESX file. After setting the expression, the content will appear in
+      the preview for the page.
+      Save and publish your changes to the page.
+       ７ Note
+       Make sure you also save and publish your changes to the app. Saving and
+       publishing both the page and app are needed to ensure your localized labels
+       render with the appropriate strings at runtime.
+       ） Important
+       When you add form controls, make sure you localize the labels. They do not
+       automatically pull localized labels when you bind the control to a Microsoft
+       Dataverse table. Currently, you'll need to add strings for the labels to your resx files,
+       unlock the form control, and then set the displayName property to your localized
+        string using the same expression for your custom labels, text, tooltips, etc.
+       Run your app with the localized content
+         1. After publishing your page and your app, select Play in the app designer to open
+          the app in a separate browser tab.
+         2. Select your custom page on the site map.
+         3. The labels for your controls display the localized content. Test each language
+          added to your app and pages by selecting Personalization Settings under Settings
+          (gear icon) at the top of the app.
+         4. Then, on the Languages tab, set the User Interface Language to the language you
+          would like to test.
+       Right-to-left support for custom pages
+       With localized content, there are several languages that require a right-to-left
+       orientation for content rendered on your page. Right-To-Left (RTL) is fully supported for
+       languages like Arabic and Hebrew and the page will change at runtime automatically for
+       these languages.
+        ） Important
+        Right-to-left orientation for icons, shapes, and images aren't currently supported in
+        custom pages. If you add an icon, shape, or image it may not behave as expected,
+        so please be careful when using these types of controls on your custom page.
+       To review RTL when building a custom page, you will need to go to the page settings,
+       select upcoming features, search for RTL, and enable the setting. Setting this option
+       shows an RTL or LTR button in the preview window where you can switch between
+       orientation without having to run your app. If you would like to see your custom page
+       running RTL, you can add &flags=isRTL=true to the end of the URL in your browser
+       when running your app to test RTL for your page.
+       Known limitation for exporting solutions with
+       resx files
+       Resx files don't automatically get added when you export your solution and import it
+       into a new environment.  This is a known limitation and will require you to upload your
+       resx files into your new environment.  So, if you have a developer environment, and you
+       export your solution and import into a production environment, you'll need to add your
+       resx localization files into your production environment solution.
+       See also
+       Create or edit model-driven app web resources to extend an app
+       Overview of custom pages for model-driven apps
+     Known issues with custom pages in a
+     model-driven app
+     Custom pages bring the power of canvas apps into model-driven apps. Below are the known
+     issues to be aware of.
+      ） Important
+      Using custom pages with mobile devices is currently in public preview. Offline and device
+      capability controls like barcode scanning, capturing photos from device, or attaching files
+      isn't supported.
+      Custom pages aren't supported within App for Outlook and return an error on loading.
+     Maker-related issues
+        When a custom page is modified, such as saved and published, the model-driven app isn't
+        aware of the change. The model-driven app continues to use the last version of the custom
+        page when the model-driven app was published. A model-driven app published through
+        app designer, solution explorer, or Publish all updates all custom pages in the model-driven
+        app.
+        Images, icons, and shapes aren't currently supported with Right-To-Left (RTL) languages.
+        The App.ConfirmExit property isn't supported in custom pages.
+        The ability to get the current data formats from users settings including date, time,
+        numbers, and currency isn't supported.
+        Custom pages use a canvas app hosting session that can time out after 8 hours. However,
+        the Unified Interface session has a longer timeout. When the timeout happens, an error
+        message bar appears that prompts the user to refresh the browser.
+            When a custom page with code component is opened for editing, a security dialog is
+            shown. Selecting Go back on the security dialog doesn't navigate back to the parent
+            context. The user can close the browser tab to leave Power Apps Studio.
+            Not all canvas app controls are available with custom pages. However, custom pages
+            support the most common canvas app controls and custom pro-dev components. For more
+            information about what is available, see Design a custom page for your model-driven app
+            Makers need to share custom pages to allow another maker to make changes, which is a
+            different behavior than the typical model-driven app components. If a custom page can't be
+            shared from the Solutions area, open the environment in Power Platform admin center, and
+            then open Resources > Power Apps > Page > Share. Similarly, to reuse the canvas app
+            components inside the custom page, the corresponding canvas app component library also
+            needs to be shared with the custom page makers.
+            The maker experience for the custom page doesn't have support for certain Power Apps
+            component framework APIs like Navigation and Web APIs, which is in line with the stand-
+            alone canvas apps. However, these APIs are available in the published app where the
+            custom page is added to model-driven apps. More information: Add code components to a
+            custom page for your model-driven app.
+            The maker experience for the custom page is currently not enabled in sovereign clouds. If
+            you would like to enable it for a maker session, append
+            "powerappsPortalApps.enableEditInShellAppDesigner=true" as a query parameter to the
+            https://make.powerapps.com/   url.
+            Makers can't use cross-environment Dataverse references in a custom page.
+       User-related issues
+            When a user with no Power Apps user privileges opens a custom page in the model-driven
+            app, they see an error mentioning no active entitlements to use Power Apps. More
+            information: Licensing overview for Microsoft Power Platform and the associated licensing
+            guide.
+            Custom pages require third-party cookies to be enabled, which is required by the canvas
+            app runtime.
+            When a user is prompted for consent with connectors and selects Don't allow, the custom
+            page renders but without data. The user doesn't get notified that data retrieval is skipped.
+       After a model-driven app or custom page is changed and published, loading a custom page
+       can take longer than normal, and no page loading spinner is shown.
+       Native player support is available for iOS, Android, and Windows in online-only mode.
+       Offline support currently isn't supported.
+       When you go back to a custom page from another page, the page state isn't restored so
+       the page appears like a new navigation. State is also not persisted when switching between
+       multi-session tabs in multi-session apps. For more information about multi-session support
+       with model-driven apps, go to Customer Service workspace sessions and tabs.
+       While attempting to sign in, the current behavior caused by a user selecting anywhere away
+       from the sign in box causes the pop out window for sign in to shift behind the app browser.
+       When a user runs an app that isn't compliant with their organization's Data Loss Prevention
+       (DLP) policies, they see an error dialog and the 'Technical details' reflects the app isn't DLP
+       compliant.
+       When there are multiple custom pages in an app, the consent dialog asks for data
+       permissions for all of the connectors in all the custom pages even if they haven't yet been
+       opened.
+    Connections
+       All custom pages share the connection infrastructure, as if they were part of the same
+       canvas app. For instance, if a model-driven app has two custom pages and one is connected
+       to SQL Server while the other isn't, the consent dialog will still appear and require
+       permission for SQL access even if the page being opened doesn't require it.
+        Custom pages in model-driven apps don't support connection detection through the
+        Connected.connected property.
+        The number of connectors in a model-driven app, across all custom pages, shouldn't exceed
+        10. The number of connection references, across all custom pages, shouldn't exceed 20. The
+        number of connectors and connection references can increase the wait time an app user
+        experiences when the user plays an app with custom pages.
+        The App Permissions dialog is not opened when a custom page is first opened by a user in
+        the Power Apps mobile app. This behavior can cause the page to appear frozen, but is
+        expected behavior. To resolve this issue, open the app in a browser to approve the
+        permissions before playing it in the Power Apps mobile app. You can also run the
+        AdminPowerAppApisToBypassConsent PowerShell command to bypass the need for the
+        permissions dialog by a Power Platform administrator.
+     See also
+     Model-driven app custom page overview
+      Last updated on 08/06/2026
+         Use live monitor to troubleshoot page
+         behavior in model-driven apps
+         07/19/2025
+         Live monitor can help you debug and diagnose problems, which help you build faster, more
+         reliable model-driven apps. Live monitor provides a deep view into how an app runs by
+         providing a log of all activities in your app as it runs.
+            ） Important
+            Live monitor must be run on the model-driven app and not directly on a custom page.
+         Start a live monitor session
+         There are two ways to open a live monitor session.
+              From Power Apps
+              From a model-driven app
+         From Power Apps
+            1. Sign in to Power Apps   , select Apps.
+            2. Select ... next to the model-driven app or on the global command bar, and then select
+              Live monitor.
+      3. On the Live monitor browser tab that opens, select Play model-driven app on the
+       command bar.
+      4. When prompted, select Join.
+      5. The app loads in a new browser tab with a message indicating the monitoring session.
+       Switch back to the live monitor tab to view activity.
+                                            
+    From a model-driven app
+      1. Play your model-driven app.
+      2. Add &monitor=true to the end of the URL in your web browser, and then refresh the
+       page.
+      3. Select Live monitor on the command bar.
+     Filter monitored activity
+     When you filter on a model-driven app custom page-related events in live monitor, you can
+     get information about related tables, tables, controls, and components, such as on a custom
+     page, in live monitor as your app runs.
+                                                        
+     For example, to filter on the custom page that uses the Gallery1 control, select the Control
+     column header > Filter by, enter Gallery1, and then select Apply.
+     For more information about model-driven app monitoring, go to Debug a model-driven app
+     with live monitor
+     Close a live monitor session
+     To close the monitoring session, close the browser tab where the monitored model-driven app
+     is playing.
+     Next steps
+     Use live monitor to troubleshoot model-driven app form behavior
+        Generate a page using natural language
+        Use natural language to build a generative page that's created using AI. Generative pages are an
+        AI-driven experience designed to simplify, accelerate, and improve your app design process in
+        model-driven apps. By interacting with the app agent, you create fully functional pages in your
+        model-driven apps by describing what you need in natural language and specifying which
+        Microsoft Dataverse tables to reference. You can even attach an image of what you'd like the
+        page to look like.
+        After you describe the page, the system then processes your requirements and specifications and
+        intelligently generates React code that covers both the front-end user experience by selecting the
+        right components and determining the best layout, and the corresponding business logic.
+        Through an interactive, conversational experience, you can refine the page design in real time,
+        adjusting elements, layout, and functionality to perfectly match your vision.
+        Development approaches
+        You can create generative pages using two approaches:
+             Power Apps (make.powerapps.com): As described in this article, makers can create and
+             iterate on generative pages directly in the browser by using a conversational UI experience.
+             Available in the United States, Great Britain, Australia, and Singapore.
+             AI code generation tools: Developers who prefer working with local development tools and
+             direct access to TypeScript and React code can use external tools like Claude Code to
+             develop generative pages locally with a code-first approach and CLI-based deployment.
+             Available worldwide on public clouds. More information: Create and edit generative pages
+             with AI code generation tools
+        Prerequisites
+             The Power Platform environment must be located in one of the following regions: United
+             States, Great Britain, Australia, or Singapore.
+        Create a generative page in model-driven apps
+           1. Sign in to Power Apps   .
+           2. Open a model-driven app for editing.
+           3. In the app designer, select Add page > Generative page.
+             A dialog opens. To create a new page, select Describe a page. A full-page generative page
+             experience opens.
+                ７ Note
+                The same dialog also lists existing generative pages in your environment that you can
+                add to this app. By default the list is filtered to Published pages; switch the filter to All
+                if you don't see the page you're looking for.
+           4. In the text box, type a description of the type of page you want to create. Include functional
+             requirements and optionally any UX specifications. For example, you could enter Build a
+             page showing Account records as a gallery of cards using a modern look and feel. Include
+             name, entityimage on the top, and website, email, phone number. Make the gallery scrollable
+             by using data from the Account table. If you want the page to support multiple languages,
+             follow the guidance in Localize a generative page.
+                 Tip
+                Not sure where to start? The Intelligent Apps Catalog   includes a Prompt Catalog
+                with pre-built prompt templates and reference images for common page patterns
+                (galleries, Kanban boards, dashboards, and more) that you can use as a starting point.
+           5. Add tables and images as appropriate by selecting Add data > Add table. You can link up
+             to six Dataverse tables. In the screenshot, the account table is added.
+                                             
+     6. Optionally upload one or more images to guide the UI of your generated page by selecting
+      Add data > Attach image. This can be a rough napkin sketch or a higher resolution image.
+      The image can represent the structure or layout of the entire page you want to create or it
+      can be visuals for a certain section or component you want to mimic.
+       ７ Note
+       If you want the generated page to display a particular image, instead of attaching the
+       image to the prompt, you can (1) include the image in a referenced Datatable table
+       and have the agent retrieve the image from there, (2) host the image publicly and give
+       the agent the URL, or (3) add the image as a web resource and give the agent the URL
+       for the web resource.
+     7. Optionally enable or disable the Include images (preview) tool to allow the agent to utilize
+      images from a curated, safe library of 25,000 stock images to support use cases like
+      default/placeholder images, decorative backgrounds, static content blocks, and richer
+      empty or error states.
+     8. Optionally choose the AI model you want to use to generate the page.
+                                             
+       ７ Note
+       GPT-4.1 is currently the only available model in the Power Apps maker experience for
+       generative pages.
+        Tip
+       Want to use the latest AI models? You can do so by creating and editing generative
+       pages with AI code generation tools, which give you access to newer frontier models.
+     9. When you're finished describing the page, select Generate page.
+     The agent begins a multistep build process that you can observe in real time:
+        Thought streaming: The agent first outlines its interpretation of your prompt, listing
+        requirements, assumptions, and an execution plan.
+        Code generation: Next, it writes the underlying code for your page based on the plan.
+        Transpilation: The generated code is then transpiled to ensure compatibility and proper
+        rendering.
+        Final rendering: Finally, the completed user experience is displayed.
+     If the user experience isn't displayed at the end of this process, you can view it by selecting the
+     Preview tab.
+     View the generated code, iterate, and publish
+     After generating your page, you have several options to refine and finalize it:
+       1. View and edit the generated code Select the Code tab to view the code generated by the
+        app agent.
+      You can refine the output in two ways:
+         Iteratively chat with the app agent to fix errors, adjust layout, or add functionality.
+         Manually edit the code by selecting Edit on the Code tab. After making some edits,
+         you can select Save to commit your changes as a new iteration, or Cancel to discard
+         your changes.
+      Learn about the dataApi object methods used for data operations
+     2. Compare iterations After completing two or more iterations with the agent, you can select
+      Compare on the Code tab to view a code diff between the current and previous iteration.
+       ７ Note
+       This capability is currently only available starting with the second iteration in the
+       current session.
+     3. Attach a screenshot for quick reference In the chat experience, select Attach > Add
+      screenshot to include a screenshot of the current preview with your next interaction with
+      the app agent. A screenshot is useful for helping to adjust the visuals of the page. You can
+      alternatively attach other images to help refine the visuals of the entire page or a particular
+      piece of the page.
+     4. Check for accessibility issues (new) After each iteration of code generation, the
+      Accessibility assistant at the bottom of the screen scans the generated code assessing it
+         with respect to accessibility. You can see a high level status update directly on screen and
+         can choose to open the detailed results in a panel. Select Auto fix to pass any violations
+         directly to the agent for it to try to automatically resolve.
+       5. Save and publish In the command bar, select Save to avoid losing progress on your page.
+         When you're satisfied with your page, select Save and Publish to publish all pending
+         changes for the app, including any generative pages.
+       ） Important
+       While the agent makes a best-effort attempt to generate complete, production-ready code,
+       including considerations for accessibility and security best practices, you're ultimately
+       responsible for validating the code. Ensure the generated code meets your organization's
+       standards and compliance requirements.
+     Common tasks with generative pages
+     This section covers common scenarios and tasks when working with generative pages in your
+     model-driven apps.
+     Set up a page to accept input parameters
+     Generative pages can accept the input parameters recordId, entityName, and data enabling
+     them to receive contextual data when navigated to. To configure a page to accept parameters,
+     describe what the page should accept in your prompt and the agent wires up the initialization
+     code automatically. For example:
+       Set up the page to accept an account recordId. When the page loads, use these to fetch 
+       and display the corresponding account details.
+       Configure this page to accept a data parameter containing a custom filter object. Use 
+       it to filter the displayed records when the page loads.
+     Go to a generative page
+     You can navigate to a generative page programmatically using Xrm.Navigation.navigateTo,
+     passing input parameters if the target page is set up to receive them. For examples and full API
+     details, see Navigate to and from a generative page using Client API.
+     Use specific images in a page
+     Use one of these three approaches to use specific images in your generative pages.
+     Store images in a Dataverse table
+     Include the image in a Dataverse table that's referenced by your generative page, and instruct the
+     agent to retrieve the image from there. When creating your page, tell the agent how to get the
+     right image from your table.
+       Build a product catalog page showing products from the Product table. Display the 
+       product image from the ProductImage column, along with the name, description, and 
+       price.
+     Host images externally and reference by URL
+     Host your images on an external server or content delivery network (CDN) and provide the agent
+     with the URL to the image:
+       Display the company logo using this URL: https://example.com/images/logo.png at the 
+       top of the page.
+     Add images as web resources
+     Upload the image as a web resource in your solution and reference it by its web resource URL:
+       1. Add the image as a web resource in your solution.
+       2. Note the web resource name (for example, new_/images/banner.png).
+       3. Reference it in your prompt or code using the web resource URL format described here:
+       Use the banner image from web resource new_/images/banner.png as the page header 
+       background.
+     Adding generative pages to solutions
+     Generative pages are solution-aware and can be added to a solution (via an app) to facilitate
+     moving between environments. To add a generative page to a solution, do the following:
+      ） Important
+      If your generative page was created during the preview phase, you must load the generative
+      page in the model app designer to initiate a one-time migration to the new solution-aware
+      data model. When the page loads in the designer, you observe an "Upgrading your page"
+      progress message. Don't close the window until migration completes.
+      1. Add the app containing your generative pages to a solution
+           In Power Apps, select Solutions on the left navigation pane, and open the desired
+           solution.
+           Select Add existing > App > Model-driven app.
+           Select the app that contains the generative pages.
+      2. Export the solution (as managed or unmanaged)
+           Ensure the app sitemap is included in the solution. If not, it should be requested
+           during dependency checks.
+           Generative pages (shown as UX Agent Project rows) are also requested based on their
+           dependency on the sitemap.
+      ７ Note
+      Check these items if no generative pages are requested during dependency checks:
+         Pages created during preview will only appear if they've been migrated. Load them in
+         the designer to trigger migration.
+         If the sitemap is included in the solution and your generative pages have been
+         migrated, try making a minor change to the sitemap, such as reordering or renaming a
+         page, republishing the app, and then trying the export again.
+     After export, you can import the app and generative pages into another environment. When
+     opened in the designer in the target environment, only the first prompt and published code are
+     available. The full agent conversation doesn't transfer with the page.
+        Localize a generative page
+        To localize a generative page, ensure your prompt covers the follow items:
+             Specify your languages. Tell the agent which languages you want the page to support,
+             ideally language name and LCID.
+             Request translated text. Ask the agent to create a translation dictionary for all user-visible
+             labels and text in the page for each language.
+             Enable RTL support. If your environment includes an RTL language like Arabic or Hebrew,
+             ask the agent to implement the appropriate right-to-left layout support.
+             Use regional formatting. Ask the agent to format dates, numbers, and currency using each
+             user's preferences from their Dataverse user settings, rather than using hardcoded formats
+             or locale codes.
+        For detailed implementation guidance and code patterns, go to the localization instructions    in
+        the Power Platform Skills repository.
+           ７ Note
+           The sitemap entry for a generative page isn't localized by default. Sitemap localization needs
+           to be handled separately in the app designer.
+        Limitations
+        These are the current limitations of generative pages:
+             Your page can connect to only Dataverse tables (up to 6 for a single page). No other data
+             sources can be used.
+             Your prompt can have a maximum of 50,000 characters.
+             When you create generative pages through in Power Apps (make.powerapps.com), only US
+             English is a supported prompting language.
+             Collaboration isn't supported. Ensure only one maker is working on a generative page at a
+             time to avoid unintended conflicts.
+             Only these data types are supported:
+                Choice
+                Currency
+                Customer
+                Date and Time
+         Date Only
+         Decimal Number
+         Floating Point Number
+         Image
+         Lookup
+         Multiline Text
+         Status
+         Status Reason
+         Text
+         Whole Number
+         Yes/No
+         Unique Identifier
+     Frequently asked questions
+     Can I start designing my app in Plan Designer and then use
+     generative pages?
+     Yes, while there's currently no direct integration between plans and generative pages, you can
+     use plans to define your tables and apps, and then switch to the model-driven app designer to
+     create any desired generative pages.
+     Are there any additional fees or credits needed to use
+     generative pages?
+     No, the maker experience for generative pages (and plans) don't require any additional AI or
+     message credits.
+     What kind of images work best for guiding the UI generation?
+     It depends on your goal. If you know exactly how you want the final page to look, clear and
+     detailed sketches or wireframes (whether hand-drawn or digital) are most effective. If you only
+     have a general concept and want the agent to fill in the details, quick whiteboard sketches or
+     even napkin drawings can work well.
+     Can I use generative pages with canvas apps or other
+     app types?
+     No, generative pages are currently only supported in model-driven apps.
+     Is there a way to reuse or clone a generative page
+     across environments?
+     Yes, generative pages are solution-aware elements that can be moved across environments. Only
+     the last published version of the code and the first prompt are maintained with the solution; the
+     full revision history remains on the original environment.
+     Can I edit the generated code manually?
+     Yes. You can manually edit the generated code by selecting Edit on the Code tab. Your changes
+     are saved as a new iteration. Select Cancel to cancel your edits if you choose not to keep them.
+     Is the code generated by generative pages guaranteed
+     to be production-ready and compliant with my
+     organization's standards?
+     No. While the agent makes a best-effort attempt to produce high-quality, production-ready code
+     with accessibility and security best practices in mind, it's your responsibility to validate the
+     output. Always review the generated code to ensure it aligns with your organization's standards,
+     policies, and compliance requirements.
+     How do I give feedback on the feature?
+     The best way to give feedback on generative pages is to use the thumbs up/down buttons in the
+     chat experience that are available after each iteration. We also strongly encourage you to select
+     Yes on Share relevant content samples and additional log files so that we can debug or attempt
+     to recreate any issues you encountered with the feature.
+     What if I don't see generative pages enabled in
+     my environment?
+     Confirm that your environment is in one of the supported regions for the Power Apps maker
+     studio experience: United States, Great Britain, Australia, or Singapore. If your region isn't listed,
+     you can still create and edit generative pages using AI code generation tools, which are available
+     worldwide on public clouds. More information: Create and edit generative pages with AI code
+     generation tools
+     Related articles
+        Create and edit generative pages with AI code generation tools
+        FAQ about generative pages in model-driven apps
+        Intelligent Apps Catalog (prompt templates for generative pages)
+        Legal terms
+      Last updated on 06/25/2026
+     Create and edit generative pages with AI
+     code generation tools
+     This article describes how to use AI code generation tools, such as GitHub Copilot CLI and Claude
+     Code, to create and edit generative pages for model-driven apps in Power Apps. This approach
+     allows you to integrate advanced code generation capabilities directly into your development
+     workflow, allowing you to create new generative pages or iterate on existing ones using natural
+     language instructions.
+     Using AI code generation tools with generative pages provides an alternative development
+     approach that complements the UI-based experience in Power Apps (make.powerapps.com). This
+     code-first approach is designed for developers and technical makers who prefer working with
+     local development tools and CLI-based workflows.
+     What you can do with code generation tools
+        Create one or more generative pages in a single run from plain-language requirements
+        Create the supporting Microsoft Dataverse tables your pages need, or reuse existing ones,
+        including sample data for new tables
+        Place artifacts into a new or existing app and solution, including creating an app or solution
+        on the fly
+        Update existing generative pages by requesting changes or enhancements through your AI
+        tool
+        Deploy directly to your Power Apps environment using PAC CLI commands
+        Work locally with your preferred IDE and development tools, with npm install and
+        IntelliSense support for the generated code
+     How it works
+      1. You describe what you want to build in natural language, for example, "Create a generative
+        page dashboard showing top accounts by revenue."
+      2. A planner agent analyzes your request and proposes a plan. The plan might include one or
+        more pages, the Dataverse tables the pages need (new or existing), and the app and
+        solution where the artifacts live. The planner then delegates to specialized agents to build
+        what the plan describes. For example, a table builder and a page builder.
+              3. You review and adjust the plan before building. You can change the number of pages, swap
+                 or add tables, target a different app, or place the artifacts in a different solution.
+              4. The agents generate production-ready TypeScript and React code for your page or pages,
+                 along with supporting files for local development.
+              5. The tool deploys the artifacts to your environment using generative page PAC CLI
+                 commands, and optionally runs a verify-in-browser step that exercises the page with
+                 generated tests.
+              6. Your generative page appears in your model-driven app.
+          Prerequisites
+          Before you start, ensure you have the required software and permissions described here.
+          Software requirements
+                                                                                                              ﾉ Expand table
+           Component                                                   Minimum               More information
+                                                                       version
+           Node.js                                                     18.0 or later         Download Node.js
+           Power Platform CLI (PAC CLI)                                Latest                Install PAC CLI
+           GitHub Copilot CLI, Claude Code, or other code              Latest                GitHub Copilot CLI      or Claude
+           generation tool                                                                   Code
+          Additional requirements
+                 A Power Platform environment with a model-driven app to deploy pages.
+                 An authenticated PAC CLI session connected to your target environment.
+                    Go to Authenticate Power Platform CLI for more details on getting connected.
+             ７ Note
+             This capability is available worldwide in public clouds.
+          Install the plugin
+          Run the installer to set up all Power Platform plugins in either PowerShell or a Windows
+          command window.
+       PowerShell
+       iwr https://raw.githubusercontent.com/microsoft/power-platform-
+       skills/main/scripts/install.js -OutFile install.js; node install.js; del install.js
+       dos
+       curl -fsSL https://raw.githubusercontent.com/microsoft/power-platform-
+       skills/main/scripts/install.js | node
+      The installer automatically:
+         Detects available tools (Claude Code, GitHub Copilot CLI)
+         Registers the plugin marketplace and installs all plugins
+         Enables auto-update so plugins stay current
+      After installation, restart your AI tool if needed.
+      Install only the generative page plugin
+      To install only the generative page plugin for GitHub Copilot CLI or Claude Code:
+        1. Add the Power Platform Skills marketplace plugin: /plugin marketplace add
+         microsoft/power-platform-skills
+        2. Install the Power Apps plugin: /plugin install model-apps@power-platform-skills
+       ７ Note
+       For Claude Code, you can install the plugin with different scopes, such as global, local, or
+       user. Depending on the scope, you need to be in the correct directory for Claude Code to
+       use the plugin. Go to Extend Claude with skills
+      Once installed, you can use the plugin by either:
+         Running the /genpage command explicitly.
+         Describing the page you want to create. The tool automatically detects and uses the plugin.
+        Tip
+       Turn on auto-update to automatically receive updates to the marketplace and skills. Use the
+       /plugin command, navigate to Marketplaces, choose the marketplace, and turn on auto-
+           update.
+        Using other AI code generation tools
+        For other AI code generation tools, ensure your tool has access to the generative page resources
+        from the Power Platform skills    GitHub repository. The model-apps plugin folder includes
+        component documentation, sample code, PAC CLI command reference, and workflow instructions
+        necessary to create code adhering to generative page requirements, including how to create
+        pages that support multiple languages and regions. Consult the repository readme       for
+        information about accessing and using these resources with your preferred tool.
+        Skills overview
+        The Power Apps plugin provides this skill for working with generative pages.
+                                                                                          ﾉ Expand table
+         Skill              Command      Description
+         Generative pages    /genpage    Create code for generative pages (for creation or editing scenarios)
+        This skill enables you to describe what you want to build and have the AI tool generate complete
+        TypeScript and React code for your generative page, then deploy it directly to your Power Apps
+        environment.
+        Create a new generative page
+        Follow this workflow when building a new page or set of pages from scratch.
+           1. Start a conversation with your AI tool. Describe what you want to create. Be as specific or as
+              open-ended as you want — the more vague the request, the more the agent fills in itself.
+              You can also attach an image or other materials to guide visuals, theming, and layout. For
+              example:
+                   "Create a generative page dashboard showing our top 10 accounts by revenue using
+                   the Account table"
+                   "Build two pages for managing my volunteer signups — one to browse open shifts
+                   and one to confirm a signup — using sample data"
+                   "Make a generative page for displaying incident reports on a map using the Incident
+                   table"
+       2. Choose create or edit if asked. If the planner agent isn't sure whether you want a new page
+        or to update an existing one, it asks. To follow this workflow, choose to create a new page.
+        For editing, go to Edit an existing generative page.
+       3. Answer questions about what to build. The planner might ask what kind of page you want,
+        offering a few examples and accepting a custom description, such as what data to use,
+        layout, what information to display, interactions, and so on. Be specific about business
+        needs and data requirements, identify mobile requirements early, and mention any UI
+        components or layout preferences. The planner might also ask clarifying questions such as
+        whether to use Dataverse tables or hard-coded sample data, and whether to add the page
+        to an existing app or create a new app.
+       4. Review and adjust the plan. The planner presents a plan that includes the page or pages it
+        intends to build, the Dataverse tables to use or create (with the columns it plans to use), the
+        app to host the page (new or existing), and the solution where the artifacts live. Iterate with
+        the agent to adjust anything you want changed — for example, the number of pages, which
+        tables are used or created, the target app, or the target solution. Confirm the plan when it
+        matches your intent.
+       5. Let the agents build and deploy. The specialized agents generate the page or pages,
+        supporting tables, and code, then deploy to your environment.
+       6. Optionally verify in browser. After the build, the agent might offer to run a verify-in-browser
+        step that runs automatically generated Playwright tests against the page to confirm it loads
+        and functions correctly. Use this to catch obvious issues before testing manually.
+       7. Test and iterate. Open your model-driven app in Power Apps and navigate to the new page.
+        If you need to make changes, return to your AI tool and describe the updates in natural
+        language.
+      ７ Note
+      You can change the name or position of the generative page in the sitemap at any time from
+      the model-driven app designer.
+     Edit an existing generative page
+     Use this workflow to update a page that already exists in your environment.
+      1. Retrieve the existing page. In your AI code generation tool, request to retrieve the existing
+        generative page by providing the page ID (GUID) or the page name in the sitemap and the
+        app it's in. For example, "I want to update the Pet Adoption generative page from the Demo
+        app."
+      2. Describe your updates. Tell the AI tool what changes you want to make. For example:
+           "Add a filter to show only active records"
+           "Change the layout to display cards in a grid instead of a list"
+           "Add a chart showing adoption trends over time"
+           "Update the form to include the new custom field for pet temperament"
+      3. Review, publish, test, and iterate. The AI tool generates updated TypeScript code based on
+        your requested changes. Follow the same review, publish, and test process described in the
+        "Create a new generative page" section. Continue iterating with natural language
+        instructions until the page meets your requirements.
+     Local development files
+     When the AI tool generates a page, it also writes two supporting files to your local workspace to
+     make reviewing and iterating on the code easier:
+        package.json — declares the runtime and development dependencies the generated page
+        compiles against. Run npm install after generation to install these dependencies.
+        genpage.d.ts — ambient TypeScript declarations for objects that aren't installed via npm,
+        such as dataApi and pageInput.
+     With both files in place and npm install complete, your editor's IntelliSense, such as in VS Code,
+     works against the generated code, so you can review or hand-edit the page without seeing red
+     squiggles for unresolved types.
+     Set up a page to accept input parameters
+     Generative pages can accept the input parameters recordId, entityName, and data, enabling
+     them to receive contextual data when navigated to from other pages or code. When you instruct
+     the AI tool to configure input parameters, it generates the appropriate initialization code so the
+     page reads and uses those values when it loads.
+     Describe the parameters you want in your prompt:
+              "Set up the page to accept an Account recordId and entityName. When the page loads, use
+              these parameters to fetch and display the corresponding account details."
+              "Configure this page to accept a data parameter containing a custom filter object. Use it to
+              filter the displayed records when the page loads."
+        To navigate to the page and pass these parameters, see Navigate to and from a generative page
+        using Client API.
+        Localization
+        When you create a generative page using the Power Apps plugin for Claude Code or GitHub
+        Copilot CLI, localization is handled automatically. The agent detects all languages enabled in your
+        environment and generates code so that the page works with all of those languages. The page
+        respects each user's preferred language and regional formatting preferences for dates, numbers,
+        and currency.
+        If you want to target a different set of languages than those enabled in your environment, you
+        can ask the agent to adjust, for example:
+           "Update this page to support English, French, and Spanish only."
+           ７ Note
+           The sitemap entry for a generative page isn't localized by default. To localize sitemap entries,
+           update them separately in the app designer.
+        For more information, go to the localization instructions    in the Power Platform Skills repository.
+        Troubleshooting
+        Page fails to load in Power Apps
+        If you navigate to your generative page and observe an error message or blank screen:
+           1. Open browser developer tools (F12 in most browsers).
+           2. Select the Console tab.
+           3. Copy the complete error message, including the stack trace.
+       4. Return to your AI code generation tool and paste the error with context:
+        "I'm getting this error when opening the page: [paste error here]. Please fix the issue."
+        The AI tool analyzes the error, identifies the root cause, and generates a fix.
+       5. Review the fix and ask the tool to republish the page.
+     Reverting to a working version
+     If recent changes broke your page or made issues worse, you can ask the AI tool to roll back to a
+     previous working version:
+     "The recent changes broke the page. Please revert to the last working version."
+     The AI tool then:
+       1. Identifies the changes that were made
+       2. Restores the previous working code
+       3. Redeploys the stable version
+     Best practices
+        Start simple. Begin with a basic version of your page and iterate to add complexity.
+        Test frequently. Deploy and test your page after each significant change.
+        Be specific. Provide detailed requirements to get better initial results.
+        Use existing patterns. Reference similar pages or UI patterns when describing your
+        requirements.
+        Validate generated code. Always review the generated code to ensure it meets your
+        organization's standards and compliance requirements.
+      ） Important
+      While AI code generation tools make a best-effort attempt to generate complete,
+      production-ready code with accessibility and security best practices, you're ultimately
+      responsible for validating the code. Ensure the generated code meets your organization's
+      standards, policies, and compliance requirements.
+     Limitations
+     The limitations for generative pages created with AI code generation tools are the same as those
+     for generative pages created in the Power Apps maker portal:
+        Your page can connect to only Dataverse tables.
+        Collaboration isn't supported—ensure only one maker is working on a generative page at a
+        time.
+        Only these data types are supported: Choice, Currency, Customer, Date and Time, Date
+        Only, Decimal Number, Floating Point Number, Image, Lookup, Multiline Text, Status, Status
+        Reason, Text, Whole Number, Yes/No, Unique Identifier.
+     Related content
+        Generate a page using natural language with model-driven apps
+        Navigate to and from a generative page using Client API
+        dataApi object methods for generative pages
+        Power Platform CLI reference
+      Last updated on 06/06/2026
+     Navigate to and from a generative page
+     using client API
+     This article provides examples of navigating to generative pages in model-driven apps by using
+     the client API navigateTo method. Learn how to open generative pages inline or in a dialog,
+     and how to pass input parameters such as a record ID or custom data.
+      ７ Note
+      This method is supported only on Unified Interface.
+     Find the page ID
+     Each of the following examples requires the ID of the target generative page. To find the page
+     ID:
+       1. Open the model-driven app containing the generative page in the app designer.
+       2. Select the generative page in the pages list.
+       3. In the properties pane, copy the GUID shown in the Generative page field.
+     Open a generative page inline without parameters
+     Opens a generative page as a full-page inline view with no input parameters.
+      JavaScript
+      var pageInput = {
+          pageType: "generative",
+          pageId: "<genPageID>"
+      };
+      var navigationOptions = {
+          target: 1
+      };
+      Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+          .then(
+              function () {
+                  // Called when page opens
+              }
+          ).catch(
+              function (error) {
+                  // Handle error
+              }
+          );
+     Open a generative page inline with record context
+     Passes a recordId and entityName to the generative page so the page can load and display a
+     specific record. The target generative page must be set up to accept these parameters.
+      JavaScript
+      var pageInput = {
+          pageType: "generative",
+          pageId: "<genPageID>",
+          entityName: "account",
+          recordId: "00aa00aa-bb11-cc22-dd33-44ee44ee44ee" // replace with actual record 
+      GUID
+      };
+      var navigationOptions = {
+          target: 1
+      };
+      Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+          .then(
+              function () {
+                  // Called when page opens
+              }
+          ).catch(
+              function (error) {
+                  // Handle error
+              }
+          );
+     Open a generative page inline with custom data
+     Passes a data object containing custom key-value pairs to the generative page. The target
+     generative page must be set up to accept these parameters.
+      JavaScript
+      var pageInput = {
+          pageType: "generative",
+          pageId: "<genPageID>",
+          data: { status: "active", category: "premium" }
+      };
+      var navigationOptions = {
+          target: 1
+      };
+      Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+          .then(
+              function () {
+                  // Called when page opens
+              }
+          ).catch(
+              function (error) {
+                  // Handle error
+              }
+          );
+     Open a generative page as a centered dialog
+     Opens a generative page in a centered dialog, passing both record context and custom data.
+     Adjust width and height as needed.
+      JavaScript
+      var pageInput = {
+          pageType: "generative",
+          pageId: "<genPageID>",
+          entityName: "account",
+          recordId: "00aa00aa-bb11-cc22-dd33-44ee44ee44ee", // replace with actual record 
+      GUID
+          data: { view: "summary" }
+      };
+      var navigationOptions = {
+          target: 2,
+          position: 1,
+          width: { value: 70, unit: "%" },
+          height: { value: 80, unit: "%" },
+          title: "<dialog title>"
+      };
+      Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+          .then(
+              function () {
+                  // Called when the dialog closes
+              }
+          ).catch(
+              function (error) {
+                  // Handle error
+              }
+          );
+     Open a generative page as a side dialog
+     Opens a generative page as a side dialog using position: 2.
+      JavaScript
+       var pageInput = {
+           pageType: "generative",
+           pageId: "<genPageID>"
+       };
+       var navigationOptions = {
+           target: 2,
+           position: 2,
+           width: { value: 500, unit: "px" },
+           title: "<dialog title>"
+       };
+       Xrm.Navigation.navigateTo(pageInput, navigationOptions)
+           .then(
+               function () {
+                   // Called when the dialog closes
+               }
+           ).catch(
+               function (error) {
+                   // Handle error
+               }
+           );
+      Unsupported: Open a generative page in a side
+      pane
+       ） Important
+       Opening a generative page by using Xrm.App.sidePanes.createPane() isn't currently
+       supported.
+        JavaScript
+        // Not supported — page content doesn't render
+        const pane = await Xrm.App.sidePanes.createPane({
+            title: "My Generative Page",
+            paneId: "GenPage",
+            canClose: false,
+            width: 400
+        });
+        pane.navigate({ pageType: "generative", pageId: "<genPageID>" });
+       Use a centered or side dialog via Xrm.Navigation.navigateTo instead.
+      Navigate from within a generative page using
+      client API
+      When you navigate from inside a generative page component, use (window as any).Xrm to
+      access the Xrm object, since the React component scope doesn't provide direct access to it.
+      Navigate to another generative page with record context and
+      custom data
+       TypeScript
+       const xrm = (window as any).Xrm;
+       xrm.Navigation.navigateTo({
+           pageType: "generative",
+           pageId: targetPageId,
+           entityName: "account",
+           recordId: selectedRecordId,
+           data: { view: "summary" }
+       });
+       ７ Note
+       When you navigate within model-driven apps, avoid constructing raw URLs or
+       manipulating window.location.
+      Navigate to a generative page via URL (external
+      callers only)
+      You can navigate to a generative page by constructing a URL with the following structure:
+       https://<your-org>.crm.dynamics.com/main.aspx?appid={app-id}&pagetype=genux&id=
+       {page-id}&recordid={recordId}&entityname={entityName}&data={encoded-json}
+      You must URL-encode the data parameter as JSON. For example, to pass a custom filter object:
+       https://<your-org>.crm.dynamics.com/main.aspx?appid={app-id}&pagetype=genux&id=
+       {page-id}&data=%7B%22status%22%3A%22active%22%7D
+      You must set up the target generative page to accept these parameters.
+      Related articles
+         Generate a page using natural language
+         navigateTo (Client API reference)
+      Last updated on 04/10/2026
+       Add or remove forms, views, or charts
+       Article • 07/11/2024
+       Add or remove one or more forms, views, or charts for a model-driven app.
+       Add or remove forms from an app
+       To add or remove forms for a model-driven app, follow these steps:
+        1. In the app designer, on the left navigation pane select Pages and then select a
+         table form, such as the Contact form.
+        2. On the right forms pane, the list of available forms is displayed. Forms that are
+         available in the app appear under In this app. Forms available to add but not
+         displayed in the app appear under Not in this app. To remove a form that's
+         displayed, select ... > Remove. To add a form that isn't displayed, select ... > Add.
+                                                 
+           ７ Note
+           By default, all forms are selected and made available in the app. Select specific
+           forms to enable only those forms you want available in the app.
+        3. Select Publish to make the changes available to other users.
+       Manage views and charts
+       To add or remove one or more views or charts for a model-driven app, follow these
+       steps:
+                 1. In the app designer, on the left navigation pane select Pages and then select the
+                    table you want to update, such as the Accounts view.
+                 2. On the right properties pane, select the Views or Charts tab.
+                 3. Next to the views or charts you want to add or remove, select ..., and then select
+                    Remove, or if the item is under Not in this app, select Add.
+                 4. Select Save.
+                 5. Select Publish to make the changes available to app users.
+                ７ Note
+                By default, all views and charts are selected and made available in the app. Select
+                specific views or charts to enable only those components you want available in the
+                app.
+              See also
+              Create and design model-driven app forms
+              Understand model-driven app views
+              Create a model-driven app system chart
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+        Enable your app and custom tools in
+        Microsoft 365 Copilot
+        [This topic is pre-release documentation and is subject to change.]
+        Power Apps in Microsoft 365 Copilot lets users interact with your model-driven app directly from
+        Copilot. When a user talks to the agent, it can surface your app's data as interactive UI, a grid for
+        browsing records or a form for viewing, editing, or creating them, all without leaving the Copilot
+        experience. Additionally, you can add custom MCP tools and interactive UI to the app’s
+        declarative agent. This functionality is achieved via MCP apps    which is an extension to MCP
+        that enables MCP servers to deliver interactive user interfaces to hosts. The feature works by
+        generating an MCP server and declarative agent from your app.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and may have restricted functionality.
+                These features are available before an official release so that customers can get early
+                access and provide feedback.
+        Prerequisites
+              A model-driven app. Currently, this feature is only available with model-driven apps.
+              Microsoft 365 Copilot license. Required for both the maker deploying the agent and end
+              users interacting with it.
+              Permission to upload custom apps in Microsoft Teams. Your Microsoft 365 admin might
+              need to enable this. Check your Teams admin settings if the upload option is not visible.
+        Set up Power Apps in Copilot
+           1. Go to Power Apps    , select the environment you want, and then open the desired model-
+              driven app.
+           2. Select the App MCP icon on the left navigation bar, and then select Set up MCP. This action
+              sets up the MCP server for the app, which provides MCP tools for Copilot conversations.
+              This is a one-time step and may take a few seconds to complete.
+     3. Save and Publish the app.
+     4. Select Download app package to download declarative agent generated by your app’s
+      MCP. This package contains the agent definition, built-in tools for record and data along
+      with the configuration needed to deploy your app’s experience to Microsoft 365 copilot.
+           5. Upload the compressed file that is named similar to declarative-agent-app name.zip to
+             Microsoft Teams or Microsoft 365 Agents:
+                   Teams: Upload for personal use as a custom app in Teams. More information Upload
+                   your app in Teams
+                   Microsoft 365 Agents: Publish the package for a team or group from the Microsoft 365
+                   admin center. More information: Publish agents
+        You can now ask questions about the tables in the app from this declarative agent. Built-in tools
+        can show an interactive grid   for the dataset queries.
+        Additionally, intelligent forms    can be used to create, view, and edit records within the Microsoft
+        365 Copilot context.
+      ７ Note
+      You can customize the declarative agent included in the app package at you own discretion.
+      To reduce the possibility of unexpected behavior when using AI agents, use caution when
+      you customize the declarative agent code. More information: Declarative Agents for
+      Microsoft 365 Copilot.
+     Create custom tools
+     In addition to the built-in tools available within the app’s declarative agent, its functionality can
+     be extended by incorporating custom tools and widgets. A prompt builder–based designer can
+     be used to integrate custom MCP tools and interactive UI components into the app’s declarative
+    agent. For example, in the Zava Airlines app, a custom tool can be added to display the flight
+    map alongside the flight timeline as a Gantt chart in a side-by-side view.
+      ） Important
+         If you encounter the error message while creating a custom tool: “This feature has
+         been disabled,” it indicates that the AI prompts environment setting isn't enabled. For
+         more information, see AI prompts environment setting.
+         Custom tools and UX is based on Microsoft 365 Copilot extensibility for declarative
+         agents. More information: Microsoft 365 Copilot Extensibility and Supported
+         capabilities
+      1. Select Create custom tool under the Tools section of the App MCP tab.
+      2. Provide a clear, descriptive name and description for the tool, as Microsoft 365 Copilot uses
+       this information to determine when to invoke it.
+      3. Add the instructions to output data for the tool that defaults to JSON format. You can
+       change it to text if the tool doesn't have UX associated with it. Instructions can include
+       queries for specific records of the table in the app or it could be an input parameter to the
+       tool to be used in tool-chaining. Make sure to experiment and choose the right prompt AI
+       model.
+      4. Select Test to check and validate tool's output and then select Next. You can now create
+       and paste optional custom HTML specific to this tool. This HTML can be created using the
+       /generate-mcp-apps-ui skill or your own development tool. Select Save.
+     5. Download the updated app package zip and upload the latest version to Microsoft Teams or
+      Microsoft 365 agents.
+     6. Invoke the tool by issuing the relevant query in the app agent to see the custom UI in
+      action.
+     ７ Note
+     You can issue '-developer on' command to Microsoft 365 Copilot to see agent debug info
+     and tools invoked. For troubleshooting common issues, see Troubleshoot MCP apps in
+     Microsoft 365 Copilot
+    Dynamic tool chaining
+    Tool chaining in Power Apps declarative agents uses the Microsoft 365 Copilot orchestrator to
+    reason over user intent and dynamically invoke multiple MCP-powered actions (tools) in
+    sequence to complete a task. The orchestrator selects, parameterizes, and executes the right
+    combination of MCP app actions based on context and function descriptions, enabling
+    end‑to‑end workflows across Power Apps and enterprise systems. Here’s how to create a tool
+    with parameterized input.
+     1. Select Create custom tool under the Tools section of the App MCP tab.
+     2. Provide a clear, descriptive name and description for the tool, as Microsoft 365 Copilot uses
+      this information to determine when to invoke it.
+     3. In this example, we use a Sankey chart visualizer. First, define the JSON input schema
+      required to generate a Sankey chart. Next, create a prompt for the Sankey chart visualizer
+      tool. The tool exposes an input parameter named SankeyDiagramVisualizationInputData.
+      This parameter is interpreted by the tool and transformed into the JSON structure expected
+      by the visualizer. Choose a clear and descriptive input parameter name so the LLM can
+      correctly identify and invoke the tool.
+                                             
+     4. You can now create and paste custom HTML specific to this tool. This HTML can be created
+      using the /generate-mcp-apps-ui skill or your own development tool. Select Save.
+     5. Download the updated app package zip and upload the latest version to Microsoft Teams or
+      Microsoft 365 Agents.
+     6. Copilot can now use natural language queries to fetch the data and pass it to the tool for
+      visualization. For example you can use a complex query to dynamically get inputs from the
+      'issues' table data and visualize them using Sankey Chart Visualizer tool.
+                                                                
+       7. You can further refine the Sankey chart by continuing the conversation.
+                                                                
+     Full screen example
+     In this example, an expand button is rendered only if the host supports fullscreen mode.
+       js
+       function renderExpandButton(app) {
+         const ctx = app.getHostContext();
+         // Don't render the button if the host doesn't support fullscreen
+         if (!ctx?.availableDisplayModes?.includes('fullscreen')) {
+           return null;
+         }
+         const btn = document.createElement('button');
+         btn.addEventListener('click', async () => {
+           const result = await app.requestDisplayMode({ mode: 'fullscreen' });
+           // Always use result.mode — the host may grant a different mode than requested
+           console.log('Granted mode:', result.mode);
+         });
+         return btn;
+       }
+     The same guard applies to any host capability. Check getHostContext() before use:
+       js
+       const ctx = app.getHostContext();
+       // Theme
+       if (ctx?.theme) applyTheme(ctx.theme);
+       // Current display mode
+       if (ctx?.displayMode === 'fullscreen') { /* adjust layout */ }
+       // Available modes
+       if (ctx?.availableDisplayModes?.includes('inline')) { /* show collapse option */ }
+     React to capability changes at runtime via onhostcontextchanged — the host context can update
+     after connect():
+       js
+       app.onhostcontextchanged = (ctx) => {
+         if (ctx.theme) applyTheme(ctx.theme);
+         if (ctx.displayMode) updateLayout(ctx.displayMode);
+       };
+     Using fullscreen mode with tool results
+     A common pattern is to switch to fullscreen automatically when the widget receives data, giving
+     the content more space to render.
+       js
+       app.ontoolresult = async (result) => {
+         const data = result.structuredContent;
+         if (!data) return;
+         // Expand to fullscreen when data arrives, if the host supports it
+         const ctx = app.getHostContext();
+         if (ctx?.availableDisplayModes?.includes('fullscreen') && currentMode !== 
+      'fullscreen') {
+          const granted = await app.requestDisplayMode({ mode: 'fullscreen' });
+          currentMode = granted.mode;
+          document.body.classList.toggle('mode-fullscreen', currentMode === 'fullscreen');
+        }
+        renderData(data);
+      };
+     You can also let the user decide — render into the current mode first, then offer the expand
+     button:
+      js
+      app.ontoolresult = (result) => {
+        const data = result.structuredContent;
+        if (!data) return;
+        renderData(data);        // render in whatever mode is active
+        updateExpandBtn();       // show the expand button now that there is content
+      };
+     Related articles
+     Generate MCP app widgets with AI code generation tools
+     FAQ for Power Apps in agents
+      Last updated on 05/21/2026
+           Generate MCP app widgets with AI code
+           generation tools
+           [This topic is pre-release documentation and is subject to change.]
+           This article explains how to use AI code generation tools like GitHub Copilot CLI or Claude
+           Code to generate interactive model context protocol (MCP) apps for your model-driven Power
+           Apps MCP tools. MCP apps are self-contained HTML files that render a tool's JSON output
+           visually as cards, charts, dashboards, or maps inside any MCP Apps compatible host, including
+           Microsoft 365 Copilot, Claude, and Visual Studio Code.
+           If you have an MCP tool that returns JSON data, the generate-mcp-app-ui skill can produce a
+           polished, theme-aware widget that displays that data in a compact visual format directly inside
+           a chat conversation.
+             ） Important
+                  This is a preview feature.
+                  Preview features aren’t meant for production use and may have restricted
+                  functionality. These features are available before an official release so that customers
+                  can get early access and provide feedback.
+                  MCP apps support in Microsoft 365 Copilot Chat is generally available as of March
+                  2026. Power Apps support for MCP apps in declarative agents is currently in public
+                  preview. For the full announcement, see MCP Apps now available in Copilot Chat   .
+           What you can do with the generate-mcp-app-ui skill
+                Create visual widgets for any MCP tool by describing what you want and pasting the
+                tool's JSON output.
+                Choose the right visual for your data, such as charts for numeric trends, cards for
+                structured records, tables for comparisons, maps for coordinates, and so on.
+                Support light and dark themes automatically through Fluent UI design tokens.
+                Add interactivity so widgets can call your tool again at runtime (for example, a refresh
+                button).
+                Refine the UX iteratively by describing changes in natural language. For example, "make
+                the gallery compact," "add a chart," or "use a card layout."
+             Prerequisites
+             Software requirements
+                                                                                                    ﾉ Expand table
+              Component                                           Minimum           More information
+                                                                  version
+              GitHub Copilot CLI, Claude Code, or other code      Latest            Claude Code    , GitHub Copilot
+              generation tool                                                       CLI
+              A modern browser                                    Any               For previewing generated
+                                                                                    widgets locally
+             Additional requirements
+                   An MCP tool that returns JSON output. Your tool's output type must be set to JSON.
+                   A working internet connection. Widgets load Fluent UI and other libraries from the
+                   Content Delivery Network (CDN) at runtime.
+             Install the plugin
+             Run the following installer command from GitHub Copilot CLI or Claude Code. The installer
+             automatically detects available tools and installs all Power Platform plugins, including
+             generate-mcp-app-ui.
+               /plugin marketplace add microsoft/power-platform-skills
+             To install only the MCP App widget skill:
+               /plugin install mcp-apps@power-platform-skills
+                Tip
+               Turn on auto-update to automatically receive skill updates. Use the /plugin command,
+               navigate to Marketplaces, choose the marketplace, and turn on auto-update.
+             Skills overview
+                                                                                       ﾉ Expand table
+            Skill                Command           Description
+            MCP Apps widget      /generate-mcp-    Generate a self-contained MCP app widget (HTML file) for
+            generator            app-ui            an MCP tool's JSON output
+           The skill is also triggered by natural language phrases such as "create a widget," "build a
+           widget for my tool," or "make an MCP app."
+           Generate a widget
+           Follow these steps to create a new widget for an MCP tool.
+              1. Create and test a custom tool from model-driven app designers and copy the full JSON
+                output. Make sure the tool's output type is set to JSON. More information: Create custom
+                tools
+              2. Invoke the skill and describe what you want displayed, pasting the JSON output into the
+                conversation:
+                  /generate-mcp-app-ui Visualizes flights using an animated arc map for routes 
+                  and a synchronized Gantt timeline for departure and arrival schedules, 
+                  enabling quick understanding of flight coverage, timing, and overlaps. Here's 
+                  an example of the tool's output: {"flight_records":[{"Departure Time":"2024-
+                  07-02T05:00:00Z","Arrival Time":"2024-07-02T07:30:00Z","Flight Name":"Zava 
+                  1001","Status":"Active","Airport":"Seattle-Tacoma","Airport1":"Los Angeles 
+                  Intl"},{"Departure Time":"2024-07-02T03:00:00Z","Arrival Time":"2024-07-
+                  02T10:00:00Z","Flight Name":"Zava 103","Status":"Active","Airport":"Seattle-
+                  Tacoma","Airport1":"Hartsfield-Jackson"}]}
+              3. Review the generated HTML file. The skill writes a self-contained HTML file, for example,
+                 flight-map.html, to your working directory.
+              4. Preview in a browser. Open the HTML file locally as widget has the fallback option for
+                testing. You can ask chat agent to add standalone HTML preview if missing.
+              5. Iterate. Describe any changes directly in the chat:
+                     "Make the map larger"
+                     "Add tool tips on the Chart"
+                     "Decrease the height and fit in 250 pixels with responsive layout and no scroll bars"
+             ７ Note
+             The skill requires actual JSON from your tool—not sample or mock data. The data shape
+             drives the widget generation. If you paste mock data, the generated widget might not
+             work correctly when connected to the real tool.
+           Deploy your widget
+           Once your widget is ready, copy the HTML file to the UX input for corresponding tool and it
+           will be returned as the tool's UI response. Refer to your create custom tools documentation for
+           details.
+           Add interactivity with callServerTool
+           If you also provide your tool's name when invoking the skill, the generated widget can include
+           interactive tool-call integration. This allows the widget to call your tool again at runtime. For
+           example a refresh button on the tool UX can call itself.
+             /generate-mcp-app-ui Show the current weather conditions with a refresh button. 
+             Tool name: get_weather. Tool output: 
+             {"city":"Seattle","temp_f":54,"condition":"Overcast","humidity":78,"forecast":
+             [...]}
+           The skill wires up app.callServerTool in the widget so that when users select Refresh, the
+           widget fetches updated data directly from your tool. If you don't provide a tool name, the
+           widget is read-only and renders only the data delivered through the ontoolresult callback.
+                Microsoft 365 Copilot chat: See MCP apps in Copilot Chat    for deployment paths
+                including sideloading for testing, deploying through the Microsoft 365 admin center for
+                organizational use, and publishing to the Microsoft 365 agent store.
+                Power Apps declarative agents: See Power Apps MCP declarative agent documentation
+                for how to connect MCP tools with model-driven apps.
+                Other MCP hosts: Consult your host's documentation for the MCP apps widget
+                registration process.
+           Widget technical details
+           MCP apps protocol
+           Widgets communicate with the chat host using the App class from the
+           @modelcontextprotocol/ext-apps package. The protocol manages these callbacks and methods.
+                                                                                                  ﾉ Expand table
+              Callback / method                 Description
+              app.ontoolresult                  Fires when the host delivers tool data. Your data is always at
+                                                result.structuredContent—not result.data or result itself.
+              app.onhostcontextchanged          Fires when the host context changes, including theme (ctx.theme is
+                                                'light' or 'dark').
+              app.onteardown                    Fires when the widget is removed from the conversation.
+              app.connect()                     Establishes communication with the host. All event handlers must be
+                                                registered before calling connect().
+              app.getHostContext()              Returns the current host context (including initial theme) after
+                                                connect() completes.
+              app.callServerTool({ name,        Calls a tool interactively. Returns result.isError and
+              arguments })                      result.structuredContent.
+            CDN imports
+            Widgets load all dependencies from CDN. No build step or local installation is required.
+            Dependencies come in two formats:
+                  ECMAScript Modules (ESM) — imported inside <script type="module"> using a URL
+                  ending in /+esm
+                  Universal Module Definition (UMD) — loaded via a plain <script src> tag; registers
+                  itself globally as a side effect
+                                                                                                  ﾉ
+                                                                                                     Expand table
+                    Library                      Format   URL                                               Purpose
+                    @modelcontextprotocol/ext-   ESM       cdn.jsdelivr.net/npm/@modelcontextprotocol/ext-  MCP apps
+                                                                                                             App class
+                    apps                                  apps/+esm
+                    @fluentui/tokens             ESM       cdn.jsdelivr.net/npm/@fluentui/tokens/+esm        webLightTheme
+                                                                                                            /
+                                                                                                             webDarkTheme
+                                                                                                            token sets
+                    @fluentui/web-               UMD       unpkg.com/@fluentui/web-                         Fluent UI
+                    components@beta                       components@beta/dist/web-components.min.js        custom
+                                                                                                            elements
+            Visual states
+            Every widget handles three states:
+                                                                                               ﾉ Expand table
+             State     Guidance
+             Loading   Show a <fluent-spinner> with a contextual message ("Finding attractions…" not just
+                       "Loading…").
+             Loaded    Render the content compactly. Use the full available width.
+             Error     Show a friendly message and a "Try again" button. If the widget uses callServerTool, the
+                       button re-invokes the tool.
+            Fluent UI components
+            The following Fluent UI web components are available in widgets:
+            <fluent-card>, <fluent-button>, <fluent-text-input>, <fluent-textarea>, <fluent-dropdown>,
+            <fluent-listbox>, <fluent-option>, <fluent-checkbox>, <fluent-spinner>, <fluent-divider>,
+            <fluent-badge>, <fluent-switch>, <fluent-tooltip>
+            Theme support
+            Widgets support light and dark themes through Fluent UI design tokens. The widget applies
+            the correct token values when the host's theme changes via onhostcontextchanged. Always use
+            token variables, for example, var(--colorNeutralForeground1), rather than hardcoded color
+            values to ensure correct rendering in both themes.
+            Color tokens
+                                                                                               ﾉ Expand table
+             Use                                     Token
+             Primary text                            var(--colorNeutralForeground1)
+             Secondary text                          var(--colorNeutralForeground2)
+             Primary background                      var(--colorNeutralBackground1)
+             Card/hover background                   var(--colorNeutralBackground2)
+             Brand/accent                            var(--colorBrandBackground)
+             Text on brand surface                   var(--colorNeutralForegroundOnBrand)
+        Use                   Token
+        Borders               var(--colorNeutralStroke1)
+        Error text            var(--colorStatusDangerForeground1)
+        Success text          var(--colorStatusSuccessForeground1)
+       Never use hardcoded hexidecimal or RGB values. Don't invent token names not listed here.
+       Best practices
+          Provide real test data. The skill analyzes the actual JSON structure to select the right
+          visual. Mock data produces widgets that break when connected to the real tool.
+          Be specific about the visual. Describe the format you want, such as map, chart, table, or
+          card layout. Vague descriptions lead to generic results.
+          Start with one view. Widgets are compact conversation cards, not full applications. No
+          tabs, page navigation, or search bars that duplicate the chat input.
+          Test with both themes. Preview in light and dark mode to verify contrast and readability.
+          Match the visual to the data. Maps for coordinates, charts for numeric or trend data, cards
+          for structured records, tables for comparisons.
+       Limitations
+          Widgets must load all external libraries from CDN. An internet connection is required at
+          runtime.
+          Full screen display mode requires additional implementation beyond what the skill
+          generates.
+          The skill doesn't handle MCP server registration or deployment to the Microsoft 365
+          admin center. You must complete those steps separately.
+          Authentication (OAuth 2.1, Microsoft Entra SSO) is handled by the MCP host environment,
+          not the widget HTML itself.
+       Related documentation
+       Microsoft 365 developer documentation
+          MCP Apps now available in Copilot Chat
+          Microsoft 365 Agents Toolkit
+       Power Platform documentation
+           Create and edit generative pages with AI code generation tools
+           Power Platform CLI reference
+        External references
+           Model Context Protocol (MCP) specification
+           Fluent UI Web Components
+           Power Platform Skills repository
+        Last updated on 04/22/2026
+    Understand model-driven app views
+    Model-driven apps use views to define how a list of records for a specific table are displayed in
+    an application.
+    A view defines:
+       The columns to display.
+       The order of the columns.
+       How wide each column should be.
+       How the list of records should be sorted by default.
+       The default filters applied to restrict the records that appear.
+    Once a view is available to the app, the user can select it.
+    When makers design an app, they decide which of the public views to make available to app
+    users. These decisions are typically based on the type of user, such as sales or marketing, that
+    use the app.
+    Views can be developed through the table designer or the app designer.
+                                                    
+     Types of views
+     There are three types of views: personal, system, and public.
+        Personal view - Personal views are owned by individuals and only visible to that person
+        unless they share their personal views with others.
+        System view - As a system administrator or system customizer, you can edit system views.
+        System views are special views the application depends on, which exist for system tables
+        or are automatically created when you create custom tables. These views have specific
+        purposes and some additional capabilities.
+        Public view - Public views are general purpose views that you can customize as you see
+        fit. They're important because all app users can access them, when they're made available,
+        by using the view selector. It's possible to use public views in subgrids on a form or as a
+        list in a dashboard.
+     Views within model-driven apps
+     Users might want to view data in relation to a table in a range of ways. A drop-down list of
+     views is frequently displayed in the application so these can be selected.
+    Personal views are included above the list of system or public views that are available in the
+    app. This makes it easier for users to find the data that is important to them.
+    The records that are visible in views are displayed in a list. Views frequently provide options for
+    users to change the default sorting, column widths, and filters to more easily find the data
+    that's important to them.
+    Views aren't only used by users within model-driven apps. Views can also be used to define the
+    data source in, for example, charts that are used in the application.
+    Personal views
+    Personal views can be created by following these steps:
+      1. Select Create view from the command bar in your model-driven app.
+             2. Define the view filters.
+             3. Select Save.
+             ７ Note
+             While you can create a new personal view based on a system or public view, you can't
+             create a system or public view based on a personal view.
+          Personal views can be created by users who have at least User level access to actions for the
+          Saved View table.
+          As system administrator, you can modify the access level for each action in the security role to
+          control the depth to which people can create, read, write, delete, assign, or share personal
+          views.
+          System views
+                                                                                               ﾉ Expand table
+           System        Description
+           views
+           Quick Find    The default view used when searches are performed using Quick Find. This view also
+                         defines which columns are searched when using search capabilities of Quick Find and
+                         Lookup column views.
+           Advanced      The default view used to display results when using Advanced Find. This view also defines
+           Find          the columns used by default when new custom public views or personal views are created
+                         without defining a view to use as a template.
+           Associated    The default view that lists the related tables for a record.
+           Lookup        The view that is displayed when you select a record to set for a Lookup column.
+          System views aren't shown in the view selector and you can't use them in sublists in a form or
+          as a list in a dashboard. You can't delete or deactivate these views. However, Power Platform
+          admins can control whether system views are available or not to users with security roles. More
+          information: Manage access to public system views (preview)
+          For information about removing views, go to Remove views.
+          System views are owned by the organization so that everyone can view them. For example,
+          everyone has organization-level access to read records for the view (savedquery) table. These
+       views are associated with specific tables and are visible within the Solutions area in Power Apps
+       (make.powerapps.com). You can include these views in solutions because they're associated
+       with the table.
+         ７ Note
+         System views are cached for performance optimization purposes and therefore plug-ins
+         on the savedquery table aren't supported.
+       Public views
+       Some public views exist by default for system tables and for any custom table. For example,
+       when you create a new custom table, it has the following combination of public and system
+       views.
+                                                                  ﾉ Expand table
+        Name                                             Type
+        Active table plural name                         Public
+        Inactive table plural name                       Public
+        Quick Find Active table plural name              Quick Find
+        Table name Advanced Find View                    Advanced Find
+        Table name Associated View                       Associated
+        Table name Lookup View                           Lookup
+       You can create custom public views. You can delete any custom public views you create in an
+       unmanaged solution.
+       You can't delete any system-defined public views.
+       Custom public views added by a managed solution should only be deleted by uninstalling or
+       updating the managed solution.
+       How to access the view editor to create or edit
+       views
+                 App designer: If you're working in an app, you might want to use the app designer, which
+                 provides a simple and intuitive user interface with drag-and-drop capabilities for creating
+                 views. More information: Tutorial: Create and edit public or system views by using the app
+                 designer
+                 Solution area: In Power Apps, go to Solutions > open the solution you want > open the
+                 table you want, and then select the Views area. Selecting a view opens it in the view
+                 designer.
+           Customize views
+           As a system customizer you can customize views and subgrids through controls by making
+           them read-only or editable as well as display an alphabetic list at the bottom of views or
+           subgrids (jump bar).
+           The following controls are available:
+                                                                                                     ﾉ
+                                                                                                         Expand table
+            Grid control name      Read-only       Description
+                                   or editable?
+            Power Apps grid        Read-only or    This grid control includes accessibility enhancements and will
+            control                editable        become the default grid control used in views and subgrids. This
+                                                   control will eventually replace all other grid controls. More
+                                                   information: Power Apps grid control
+            Power Apps read-       Read-only       Modern grid with accessibility enhancements released in October
+            only grid                              2021 and became the default read-only grid experience in April
+            (deprecated)                           2022. More information: Power Apps read-only grid control
+            Editable grid          Editable only   Legacy grid control. More information: Make model-driven app
+            (deprecated)                           views editable using the editable grid control
+            Read-only grid         Read-only       Legacy grid control that is deprecated. More information: The
+            (deprecated)                           legacy read-only grid in model-driven apps is deprecated
+           Next steps
+           Opening the view designer
+           Manage access to system views (preview)
+            Last updated on 04/03/2026
+         Open the view designer
+         09/09/2025
+         In this article, a view definition is opened that displays properties and options to configure a
+         table view using the view designer for use with model-driven apps.
+         Open a view for editing in Power Apps
+            1. Sign in to Power Apps   .
+            2. Select Solutions on the left navigation pane, and then open the solution that needs to be
+              modified. If the item isn’t in the side panel pane, select …More and then select the item
+              you want.
+            3. Select the table that contains the required view, such as the Account table.
+            4. Select the Views area.
+            5. Select the view, such as the account table All Accounts view.
+            6. From the view editor, the following tasks can be performed:
+              Sort rows in a view
+              Choose and configure columns in views
+              Filtering data within views
+         Next steps
+         Creating and editing public views
+         Create and edit public or system views
+         Model-driven apps can contain a range of views, so that app users can open the most suitably
+         presented and filtered version of the table. Views can be Personal, **System, or Public.
+            ７ Note
+            Views are tied to a given table. However, you can select views during the process of
+            creating a model-driven app. By default, ALL views are made available in an app.
+             Tip
+            For a general introduction into views, go to Understand views in model-driven apps
+         Create a public view in Power Apps
+         Public views are available for users to display table records. App makers can create and
+         configure public views using Power Apps.
+            1. Sign in to Power Apps    and select an environment
+            2. On the left navigation pane, select Solutions, and open the solution you want. If the item
+              isn’t in the side panel pane, select …More and then select the item you want.
+            3. Open a table, such as the account table, and then select the Views area.
+            4. Select New view on the command bar, and then enter a View name, and optionally enter
+              a Description.
+            5. If you want to have suggestions from Copilot for the columns to create for the form
+              based on the View name and Description values, select Get AI-generated column
+              suggestions. For more information about using this AI feature, go to Column suggestions
+              by Copilot.
+            6. Select Create.
+            ７ Note
+            Public views created in Power Apps that include Contains data or Does not contain data
+            filters don't appear in the list of saved views in Advanced Find.
+         Edit public views from a table
+         In the solution that you opened earlier, create a new table or find an existing table where the
+         public views need to be edited.
+            1. Sign in to Power Apps    and select an environment
+            2. On the left navigation pane, select Solutions, and open the solution you want. If the item
+              isn’t in the side panel pane, select …More and then select the item you want.
+            3. Open a table, such as the account table, and then select the Views area, and then open
+              the view you that want to edit.
+            4. In the view designer, select + View column to add additional columns needed within the
+              view. Or, in the Table columns left navigation pane drag the table columns onto your
+              view.
+                  Tip
+                 Only include the specific columns you need for the view, as larger numbers of
+                 columns in a view can cause degradation of grid performance.
+         Tip
+        The Default view in the Add column pane displays all columns. If preferred, select
+        Standard or Custom to display a subset of columns.
+      5. In the view designer, the following tasks can be performed:
+         To change the column filtering select the header of the column where the filter is
+         required, and then in the dropdown list select Filter by.
+         To change the column sorting select the header of the column where sorting is
+         needed then select Sort A-Z, Sort Z-A, Sort descending, or Sort ascending.
+          You can configure multi-column sorts by holding Shift when selecting a sort
+          option to add a sort condition to the set of the existing sorts.
+               Configure column width by selecting and dragging the column to the desired
+               position.
+               Reorder columns by dragging a column to the desired position.
+             ７ Note
+             Depending on the data type of the column the term Sort A-Z/Sort Z-A or Sort
+             ascending/Sort descending is used
+              Tip
+             It is also possible to change column order by selecting the column header and then
+             selecting Move Right or Move Left.
+         6. Select Save and publish to save the view and make it available for other users in your
+           organization.
+       Next steps
+       How to configure view columns
+       Learn about sorting within views
+       Learn about filtering views
+       Make views editable using sub-grids
+        Last updated on 01/09/2026
+         Choose and configure columns in model-
+         driven app views
+              Summarize this article for me
+         ﾃ
+         Along with the filter criteria, the columns visible in a Power Apps view are very important to the
+         value provided by the view. In this article, you create or edit views by performing the following
+         tasks:
+            ） Important
+            The latest version of the view designer is currently in preview. Some features, like enabling
+            or disabling presence for a column and adding a find column, aren't yet supported. To
+            accomplish these tasks, open the view in the classic view designer.
+                 Enable or disable presence for a column
+                 Add find columns
+         Opening the view editor
+            1. Sign in to Power Apps   .
+            2. Select Tables, and then open the table that you want. If the item isn’t in the side panel
+              pane, select …More and then select the item you want.
+            3. Select Views. The list of views for the table is displayed. You can also navigate to the table
+              and views via solutions as shown below.
+            4. Select an existing view to open it or on the toolbar select New view.
+     Adding columns
+     You can include columns from the current table or any of the related tables that have a 1:N
+     table relationship with the current table.
+     For example, you might want to display the owner of a user-owned table in a column. You can
+     choose the Owner column of the current table to display the name of the owner. This appears
+     as a link to open the User row for the person who is the owner.
+     If you want to display the phone number for the owner of the row, you must select Owning
+     User (User) from the Row type drop-down and then select the Main Phone column.
+       Tip
+      Only include the specific columns you need for the view. A larger numbers of columns in a
+      view can cause degradation of view and grid performance.
+     Add columns to views
+      1. While creating and editing views, ensure that the Table columns panel is open. If it isn't,
+       select View column on the toolbar.
+      2. Select the columns you want to add to the view designer. This adds the column as a
+       column on the right-hand of the view.
+      3. Select the Related tab to see related tables and their corresponding columns.
+     As you add columns, you increase the width of the view. If the width of the view exceeds the
+     space available to show it in the page, horizontal scrollbars appear to allow people to scroll
+     and view the hidden columns.
+       Tip
+      If your view filters on data for a certain column so that only rows with a certain value are
+      shown, don’t include that column in the view. For example, if you are only showing active
+      rows, don’t include the status column in the view. Instead, name the view to indicate that
+      all the rows shown in the view are active.
+      ７ Note
+      When you add columns to Lookup views for updated tables, only the first three columns
+      are displayed.
+     Removing columns
+      1. Select the header of the column you want to remove.
+      2. In the dropdown, select Remove.
+     Changing column widths
+      1. Hover over the area between columns in the view.
+      2. A line appears and your cursor becomes a double sided arrow.
+      3. Drag the column to the appropriate width.
+     Moving a column
+     Click and drag the column header to the correct position.
+       Tip
+      You can also select the header of the column you want to move and from the dropdown
+      select Move Right or Move Left.
+     Next steps
+     Create or edit view filters
+      Last updated on 02/21/2026
+        Create or edit filters in model-driven
+        app views
+        The filters in a Power Apps view define the records that a user is able to see when selecting the
+        view for the current table. You can add or edit a filter for the columns that you include in a view
+        by selecting the column and selecting Filter by in the view designer.
+        You can also use the expression builder in the view designer. Use the expression builder to add or
+        edit filters for any columns of the table in the current view or any columns in a related table.
+        In this article, you create or edit filters by performing the following tasks:
+             Edit or remove a filter condition
+             Open the expression builder
+             Add conditions to a filter
+             Add a group condition to a filter
+             Add a related table to a condition
+             Group conditions of a filter
+        Edit or remove a filter condition
+           1. Sign in to Power Apps   .
+           2. On the left pane, select Solutions, and then open the solution you want.
+           3. Open the table that you want, and then select the Views area.
+           4. Open the view that you want to edit. The view properties panel lists existing filters.
+     5. On the view properties panel, select a filter condition.
+     6. Select the conditional operator that you want to use.
+     7. Type or select the comparison value for the condition.
+     8. Select Apply or to remove a condition, select Close and the condition is removed without
+      confirmation.
+     9. To save the filter select Save or to save the filter and make available to users select Save and
+      publish.
+    Open the expression builder
+    Use the expression builder to redefine existing filters and add additional clauses.
+    On the view properties right panel in the view designer, select Edit filters.
+    Add conditions to a filter
+     1. In the expression builder, select Add > Add row.
+     2. Select a column for the condition.
+     3. Select a conditional operator.
+     4. Select a comparison value.
+      Some filter conditions don't require a comparison value for the condition. For example, the
+      operator Contains data doesn't require a comparison value. With other filter conditions, you
+      choose the comparison value from an option set. For example, the Status column has the
+      values Active and Inactive.
+     5. Select OK.
+    Add a group condition to a filter
+     1. In the expression builder, select Add > Add group.
+     2. Select the relational operator Or for the group. And is the default relational operator.
+     3. Specify the first clause of the grouped condition. Select the column, conditional operator,
+      and comparison value.
+     4. Select Add > Add group.
+     5. Specify the second clause of the grouped condition.
+      You can select Collapse to display the group as a conditional expression.
+    Add a related table to a condition
+     1. In the expression builder, select Add > Add related table.
+     2. Select a column from the current table that is related to another table. The table related to
+      the column is shown in parenthesis. You can select columns that have a many-to-one, one-
+      to-many, or many-to-many relationship with the related table.
+     3. Select a column of the related table for the condition.
+     4. Select a conditional operator.
+       ７ Note
+       Contains data is the only conditional operator that can be used with a related table in
+       a view filter.
+     5. Select or enter a comparison value.
+    Group conditions of a filter
+     1. In the expression builder, select the check box for the conditions that you want to group.
+     2. Select More commands (...) for one of the conditions, and then select Make group.
+     3. To ungroup a group, select More commands (...) for the group, and then select Ungroup
+     Next steps
+     Configure sorting in views
+     Converting views into editable grids
+      Last updated on 08/03/2026
+             Sort rows in a model-driven app view
+             Article • 11/12/2024
+             When you create or edit a view, you can configure the sort order for either ascending or
+             descending.
+             To change the sort order in the view designer, go to Create a public view in Power Apps.
+             Change the sort order of a view
+                1. Sign in to Power Apps  .
+                2. Select Solutions, and then open the solution you want. If the item isn’t in the side
+                  panel pane, select …More and then select the item you want.
+                3. Select Tables, open the table you want, and then select the Views area.
+                4. Select a view to open it in the view designer.
+                5. Select the leftmost column head, such as Account Name in the example here, and
+                  from the column menu, select Sort A to Z or Sort Z to A. The sort order is
+                  indicated in the column head with an up arrow or a down arrow.
+                 6. If a sort order hasn't been set for the view, select Sort by, and then select the
+                    primary sort by column.
+                 7. To sort the view by additional columns, select Then sort by on the view properties
+                    pane on the right, and then select a sort by column for the view.
+                 8. To remove a filter expression, under Filter by in the view properties pane, select X
+                    next to the filter expression you want to remove.
+                 9. Select Save and publish to save the view and make it available to apps that include
+                    the table.
+              Next steps
+              Table views overview
+              Setting managed properties for views
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Power Apps read-only grid control
+      ） Important
+      The Read-only Grid control is deprecated. Use the Power Apps grid control instead. More
+      information: Deprecation of Editable Grid and Power Apps Read-Only Grid controls
+     The Power Apps read-only grid control lets users view and open records from views and subgrids.
+     The control supports the latest Microsoft accessibility standards and is built to be performant and
+     easily extensible for the future. The Power Apps read-only grid control also aligns with the latest
+     Microsoft design guidance for fonts, sizing, and styling.
+      ７ Note
+      As of April 2022, the Power Apps read-only grid control is the default control for all read-
+      only views and subgrids.
+     Add the Power Apps read-only grid as a subgrid on
+     a form
+     When you add a subgrid to a form, the subgrid only appears on that form and not other forms or
+     views.
+     More information: Add and configure a subgrid component on a form
+     Add the Power Apps read-only grid control to views for
+     a table
+     When you configure the Power Apps read-only grid control for a table, all views for that table
+     display using that grid.
+      1. Open solution explorer.
+      2. Expand Entities, in the list of tables, open the table you want, select the Controls tab, and
+        then select Add Control.
+      3. In the Add Control dialog box, select Power Apps Read-only Grid, and then select Add.
+     Configure the Power Apps read-only grid control
+      1. In the Power Apps Read-Only Grid row, select the app types you want to apply the grid to.
+        This selection makes the control the default control for the selected clients.
+      2. Select the pencil icon next to the following properties to make the changes you want:
+           Jump bar: By default, the jump bar is disabled. To display an alphabetic list at the
+           bottom of views or subgrids (the jump bar), select the pencil icon in the Jump bar row.
+           Under Bind to static options, select Enable in the dropdown list. Below is a screenshot
+           of the jump bar enabled for the contact table in a model-driven app.
+           Reflow behavior: Use this parameter to specify when the grid reflows into a list format
+           or a grid format. Reflowing the control into a list is often better suited for small
+           displays such as a mobile device. The default value is Reflow.
+            Reflow: Allows the grid to render into list mode when there’s not enough display
+            space.
+            Grid only: Displays only as a grid even on smaller displays such as a mobile device.
+            List only: Displays only as a list even when there's enough space to display as grid.
+           Allow filtering: Determines whether filtering options are available to users in the grid
+           column header dropdowns. The default value is Enable.
+            Enable: Filtering options are available to users.
+            Disable: Filtering options aren’t available to users.
+           Allow range selection: Controls whether users can select a subset of the grid and copy
+           that data to another application like Excel. The default value is Yes.
+            Yes: Users can select and copy data from the grid.
+            No: Users can’t select and copy data from the grid.
+           Navigation types allowed: Determines which lookup controls in the grid render as
+           hyperlinks. The default value is All.
+            All: All table lookup columns render in the grid as a hyperlink.
+            Primary only: Suppresses hyperlinks on all lookup fields except the primary column
+            for the selected table.
+                                                        
+      3. To save your changes, select Save on the command bar. When you're ready to make the
+        changes available to app users, select Publish on the command bar.
+     Add the Power Apps read-only grid control to a subgrid
+      1. Open solution explorer.
+      2. Open the form that contains the subgrid.
+      3. Select the subgrid where you want to configure this grid, and then select Change
+        Properties on the command bar.
+      4. In the Set Properties dialog box, select the Controls tab, select Add Control, and then
+        select Power Apps Read-only Grid.
+      5. To continue with configuring and publishing the control, see Configure the Power Apps
+        read-only grid control.
+     Opt out of the Power Apps read-only grid control
+     While the Power Apps read-only grid control became the default grid experience in April 2022,
+     you can opt your organization out of the automatic switch to this grid by following the steps
+        here.
+           1. Go to the Power Platform Admin Center   Manage > Environments. Select Settings on the
+             command bar, and then select Product > Features.
+           2. Turn off the Enable the modern read-only grid experience option in the Grids and views
+             section.
+          ７ Note
+          As the legacy read-only grid is deprecated, this toggle to opt out of the automatic switch to
+          the Power Apps read-only grid is eventually be removed.
+        Known issues and limitations
+        Grid rendering performance
+        In general, grid performance can be increased by limiting the number of records fetched at once
+        and limiting the number of columns in a view.
+        If the page size is sufficiently large, the grid might take a long time to render. The current
+        recommendation is to ensure the page size isn't too large, ideally no more than 25 rows.
+        UI limitations and differences
+             The grid doesn't currently support any theme customizations
+             Cells with no data are blank instead of displaying three dashes ---.
+             The owner column doesn't show online status and a people card for the user.
+             Reordering columns from the grid column headers isn't supported.
+             If the dataset displayed in the grid contains duplicate rows, the duplicates might not display
+             in the grid. This can lead to the reported record count showing more records than are
+             actually in the grid, or more records appearing when exporting the data to Excel or viewing
+             the data in legacy Advanced Find. This behavior applies to all grid controls, not just the
+             Power Apps read-only grid.
+        Limitations with card form lists
+        When a view or subgrid is narrow, it changes into a card list format that is better for small
+        screens, such as mobile devices. The Power Apps read-only grid control displays the following
+        behavior in a card list:
+      Sort isn't currently available in a card list view. To work around this, create views with the
+      sort order you want.
+      Select all and Clear all aren't available in a card list view.
+      The jump bar isn't available in a card list view. To work around this, select Search to filter
+      records. Type the desired letter, and then press Enter.
+      Images on a record in the list don't display in a card list view. This includes table icons, web
+      resource images, custom images, and conditional images. The only image displayed for a
+      record in the list are the initials of the record.
+      There are no icons for context menu commands in a card list view.
+      When there are no records, some lists have a prompt to create a new item. This button isn't
+      displayed in a card list view that uses the Power Apps read-only grid control.
+    The list view doesn’t display custom cards for the table
+    To work around this issue, display a custom card by configuring the table to use the card form of
+    the legacy read-only grid control.
+     1. Go to Power Apps (make.powerapps.com) > Settings > Advanced Settings > Settings >
+      Customizations > Customize the System > expand Entities > select the entity you want to
+      customize > Controls tab > Add Control.
+     2. Select Read Only Grid, and then select Add. Choose to display that grid on one or more
+      client form factors.
+     3. Select Configure property (pencil icon) for the Card Form property, and select the custom
+      card form from the drop-down list.
+     4. Select OK, and then Publish the customization.
+    See also
+     Explore data in a view on a grid page
+      Last updated on 08/07/2026
+    Power Apps grid control
+    The Power Apps grid control represents the next evolution of the classic Power Apps read-only
+    grid control, allowing users to view, open, and edit records from views and subgrids. In addition
+    to inline editing, the control provides a number of other powerful capabilities including infinite
+    scrolling, nested grids, grouping, aggregation, and is customizable. Like the read-only grid
+    control, this control supports the latest Microsoft accessibility standards and aligns with the latest
+    Microsoft design guidance. This control eventually replaces all read-only and editable grids in
+    model-driven apps.
+      Infinite scroll: A modern data browsing experience in which users can scroll indefinitely
+      through data until they find the records they're interested in. Since there are no page
+      boundaries, users can select more rows at once (up to 1,000 rows) to facilitate taking action
+      against a set of records or perform bulk editing.
+      Inline editing: This singular grid control can be utilized for read-only or edit scenarios.
+      Nested grids: Makers can configure the grid to show surface related records. When
+      configured, users can expand a row to see a subgrid of related records. Multiple rows in the
+      grid can be expanded simultaneously. This functionality is an improvement over older grid
+      experiences.
+      Grouping: Users can organize tabular data in interesting ways by grouping the data based
+      on a single column. Each group is collapsed initially, but users can expand and collapse the
+      groups as desired. Grouping is exposed on most data types with the notable exception of
+      lookup columns. Grouping isn't supported when paging on the grid is enabled.
+      Aggregation: Users can surface meaningful insights from their data by enabling
+      aggregation on one or more numeric columns in a grid. For each column, users can choose
+      to see the total, minimum value, maximum value, or average of values from that column. If
+      grouping is applied, this aggregate value is also displayed for each group.
+      Customizable: Makers have the ability to modify various experiences inside the grid
+      component.

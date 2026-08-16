@@ -1,0 +1,2727 @@
+     up as top-level identifiers. You can also reference control properties and other values from
+     throughout your app.
+     For example, consider a table of Products:
+     To create this example table in your app, insert a button, set its OnSelect property to this
+     formula, and then select the button (click it while you hold down the Alt key in Power Apps
+     Studio):
+      Power Fx
+      Set( Products,
+          Table(
+              { Product: "Widget",    'Quantity Requested': 6,  'Quantity Available': 3 },
+              { Product: "Gadget",    'Quantity Requested': 10, 'Quantity Available': 20 
+      },
+              { Product: "Gizmo",     'Quantity Requested': 4,  'Quantity Available': 11 
+      },
+              { Product: "Apparatus", 'Quantity Requested': 7,  'Quantity Available': 6 }
+          )
+      )
+     To check if any of these products have more requested than is available, use this formula:
+     Filter( Products, 'Quantity Requested' > 'Quantity Available' )
+     The first argument to Filter is the table of records to work on. The second argument is a
+     formula. Filter makes a record scope for evaluating this formula. The fields of each record are
+     available, like Product, Quantity Requested, and Quantity Available. The result of the
+     comparison decides if each record should be part of the function's result:
+     You can add to this example by calculating how much of each product to order:
+      Power Fx
+      AddColumns( 
+          Filter( Products, 'Quantity Requested' > 'Quantity Available' ), 
+          "Quantity To Order", 'Quantity Requested' - 'Quantity Available'
+      )
+     Here, you add a calculated column to the result. AddColumns uses its own record scope to
+     calculate the difference between what you requested and what is available.
+     Finally, you can reduce the result table to just the columns that you want:
+      Power Fx
+      ShowColumns(
+          AddColumns(
+              Filter( Products, 'Quantity Requested' > 'Quantity Available' ),
+              "Quantity To Order", 'Quantity Requested' - 'Quantity Available'
+          ),
+          "Product",
+          "Quantity To Order"
+      )
+     In the preceding example, you used double quotes (") in some places and single quotes (') in
+     other places. You need single quotes when you reference the value of an object, such as a field
+     or table, and the name of the object contains a space. Use double quotes when you're not
+     referencing the value of an object but instead talking about it. Use double quotes especially in
+     situations where the object doesn't yet exist, as in the case of AddColumns.
+     Disambiguation
+     Field names you add with the record scope override the same names from elsewhere in the
+     app. When this happens, you can still access values from outside the record scope by using the
+     @ disambiguation operator:
+        To access values from nested record scopes, use the @ operator with the name of the
+        table you're operating upon, using this pattern:
+        Table[@FieldName]
+        To access global values, such as data sources, collections, and context variables, use the
+        pattern [@ObjectName] (without a table designation).
+     If the table you're operating upon is an expression, such as Filter( Table, ... ), you can't use the
+     disambiguation operator. Only the innermost record scope can access fields from this table
+     expression, by not using the disambiguation operator.
+     For example, imagine having a collection X:
+     You create this collection by using ClearCollect( X, [1, 2] ).
+     And another collection Y:
+     You create this collection by using ClearCollect( Y, ["A", "B"] ).
+     In addition, define a context variable named Value with this formula: UpdateContext( {Value:
+     "!"} )
+     Let's put it all together. In this context, the following formula:
+      Power Fx
+      Ungroup(
+          ForAll( X,
+              ForAll( Y,
+                  Y[@Value] & Text( X[@Value] ) & [@Value]
+              )
+          ),
+          "Value"
+      )
+     produces this table:
+     What's going on here? The outermost ForAll function defines a record scope for X, allowing
+     access to the Value field of each record as it processes. You can access it by simply using the
+     word Value or by using X[@Value].
+     The innermost ForAll function defines another record scope for Y. Since this table also has a
+     Value field defined, using Value here refers to the field in Y's record and no longer the one
+     from X. To access X's Value field, you must use the longer version with the disambiguation
+     operator.
+     Since Y is the innermost record scope, accessing fields of this table doesn't require
+     disambiguation, so you can use this formula with the same result:
+      Power Fx
+      Ungroup(
+          ForAll( X,
+              ForAll( Y,
+                  Value & Text( X[@Value] ) & [@Value]
+              )
+          ),
+          "Value"
+      )
+     All the ForAll record scopes override the global scope. The Value context variable you defined
+     isn't available by name without the disambiguation operator. To access this value, use
+     [@Value].
+     Ungroup flattens the result because nested ForAll functions result in a nested result table.
+     Single-column tables
+     To operate on a single column from a table, use the ShowColumns function as in this example:
+      Power Fx
+      ShowColumns( Products, "Product" )
+     This formula produces this single-column table:
+      For a shorter alternative, specify Table.Column, which extracts the single-column table of just
+      Column from Table. For example, this formula produces exactly the same result as using
+      ShowColumns.
+      Power Fx
+      Products.Product
+      Inline records
+      Express records by using curly braces that contain named field values. For example, you can
+      express the first record in the table at the start of this topic by using this formula:
+      { Name: "Chocolate", Price: 3.95, 'Quantity on Hand': 12, 'Quantity on Order': 10 }
+      You can also embed formulas within other formulas, as this example shows:
+      { Name: First(Products).Name, Price: First(Products).Price * 1.095 }
+      You can nest records by nesting curly braces, as this example shows:
+      { 'Quantity': { 'OnHand': ThisItem.QuantOnHand, 'OnOrder': ThisItem.QuantOnOrder } }
+      Enclose each column name that contains a special character, such as a space or a colon, in
+      single quotes. To use a single quote within a column name, double it.
+      Note that the value in the Price column doesn't include a currency symbol, such as a dollar
+      sign. That formatting is applied when the value is displayed.
+      Inline tables
+      Create a table by using the Table function and a set of records. You can express the table at the
+      start of this topic by using this formula:
+      Power Fx
+       Table( 
+         { Name: "Chocolate", Price: 3.95, 'Quantity on Hand': 12, 'Quantity on Order': 
+       10 },
+         { Name: "Bread", Price: 4.95, 'Quantity on Hand': 34, 'Quantity on Order': 0 },
+         { Name: "Water", Price: 4.95, 'Quantity on Hand': 10, 'Quantity on Order': 0 } 
+       )
+      You can also nest tables:
+       Power Fx
+       Table( 
+         { Name: "Chocolate", 
+           'Quantity History': Table( { Quarter: "Q1", OnHand: 10, OnOrder: 10 },
+                                      { Quarter: "Q2", OnHand: 18, OnOrder: 0 } ) 
+         }
+       )
+      Inline value tables
+      Create single-column tables by specifying values in square brackets. The resulting table has a
+      single column, named Value.
+      For example, [ 1, 2, 3, 4 ] is equivalent to Table( { Value: 1 }, { Value: 2 }, { Value: 3
+      }, { Value: 4 } ) and returns this table:
+      Last updated on 01/14/2026
+            Understand record references and
+            polymorphic lookups in canvas apps
+            Article • 12/16/2022
+            When you wrote a research paper in school, you probably provided a list of your
+            references at the end. You didn't include a copy of the actual background material you
+            used but rather a web link, book title and author, or other information so that someone
+            could track down the original source. You mixed different kinds of sources in a single
+            list, newspaper articles next to audio recordings, each with their own specific details for
+            a proper citation. For example, Wikipedia articles often include a long list of
+            references   .
+            In canvas apps, you often work with copies of records downloaded from data sources.
+            You use the LookUp and Filter functions and the Gallery control's Selected property to
+            identify the specific record that you want. All the records from Filter or Selected will be
+            of the same table type, so you can use fields with a simple .Field notation. These copies
+            often include reference information so you can use the Patch function to update the
+            original source.
+            Canvas apps also support record references. Much like a research-paper reference, a
+            record reference refers to a record without including a complete copy of it. Such a
+            reference can refer to a record in any table. Also like research-paper references, you can
+            mix records from different tables in a single column.
+            Many operations on record references are identical to working with records. You can
+            compare record references to each other and to full records. You can set a record
+            reference's value with the Patch function just as you would a lookup with a full record.
+            There is one important usage difference: you can't directly access the fields of a record
+            reference without first establishing to which table it refers. This is because canvas apps
+            require that all types be known when you write formulas. Because you don't know the
+            type of a record reference until the app is running, you can't use the simple .Field
+            notation directly. You must first dynamically determine the table type with the IsType
+            function and then use .Field notation on the result of the AsType function.
+            Table type refers to the schema of each record in a table. Each table has a unique set of
+            fields with different names and data types. Each record of the table inherits that
+            structure; two records have the same table type if they come from the same table.
+               ７ Note
+               You can choose from many different connectors to connect to different types of
+               data sources for canvas apps. However, when working with canvas apps inside
+               Power Apps Studio, columns in Microsoft Dataverse are referred to as fields similar
+               to all other data sources. Column is only used when referring to a column inside
+               Dataverse. More information: Dataverse terminology updates
+             Polymorphic lookups
+             Microsoft Dataverse supports relationships between records. Each record in the
+             Accounts table has a Primary Contact lookup column to a record in the Contacts table.
+             The lookup can only refer to a record in Contacts and can't refer to a record in, say, the
+             Teams table. That last detail is important because you always know what columns will be
+             available for the lookup.
+             Dataverse also supports polymorphic lookups, which can refer to a record from any
+             table in a set. For example, the Owner column can refer to a record in the Users table or
+             the Teams table. The same lookup column in different records could refer to records in
+             different tables. In this case, you don't always know what columns will be available.
+             Canvas record references were designed for working with polymorphic lookups in
+             Dataverse. You can also use record references outside of this context, which is how the
+             two concepts differ.
+             In the next section, you'll start to explore these concepts by working with the Owner
+             lookup.
+             Show the columns of a record owner
+             Every table in Dataverse includes an Owner column. This column can't be removed, you
+             can't add another, and it always requires a value.
+             To show that column in the Account table:
+                1. Sign in to Power Apps  .
+                2. In the left pane bar, select Data > Tables.
+                3. In the list of tables, select Account.
+                4. In the upper-right corner, open the filter list (which is set to Default by default),
+                  and then select All.
+                5. Scroll down until the Owner column appears.
+      This lookup column can refer to a record from either the Teams table or the Users table.
+      Not every record in these tables has permission to be an Owner; check the supported
+      roles if you run into a problem.
+      This graphic shows a simple gallery of Accounts, where the Accounts table has been
+      added to the app as a data source:
+       ） Important
+       Throughout this topic, the graphics show some names and other values that aren't
+       part of the sample data that ships with Dataverse. The steps accurately
+       demonstrate how to configure controls for a particular result, but your experience
+       will vary based on the data for your organization.
+      To show the owner of each account in the gallery, you might be tempted to use the
+      formula ThisItem.Owner.Name. However, the name field in the Team table is Team
+      Name, and the name field in the User table is Full Name. The app can't know which type
+       of lookup you're working with until you run the app, and it can vary between records in
+       the Accounts table.
+       You need a formula that can adapt to this variance. You also need to add the data
+       sources for the table types that Owner could be (in this case, Users and Teams). Add
+       these three data sources to your app:
+       With these data sources in place, use this formula to display the name of either a user or
+       a team:
+         Power Fx
+         If( IsType( ThisItem.Owner, Teams ),
+             "Team: " & AsType( ThisItem.Owner, Teams ).'Team Name',
+             "User: " & AsType( ThisItem.Owner, Users ).'Full Name' )
+       In this formula, the IsType function tests the Owner field against the Teams table. If it's
+       of that table type, the AsType function casts it to a Team record. At this point, you can
+       access all the fields of the Teams table, including Team Name, by using the .Field
+       notation. If IsType determines that the Owner isn't a record in the Teams table, that field
+       must be a record in the Users table because the Owner field is required (can't be blank).
+       To use any fields of a record reference, you must first use the AsType function to cast it
+       to a specific table type. You can't access fields directly from the Owner field because the
+       system doesn't know what table type you want to use.
+       The AsType function returns an error if the Owner field doesn't match the table type
+       being requested, so you can use the IfError function to simplify this formula. First, turn
+       on the experimental feature Formula-level error management:
+       Then replace the previous formula with this one:
+         Power Fx
+         IfError(
+             "Team: " & AsType( ThisItem.Owner, Teams ).'Team Name',
+             "User: " & AsType( ThisItem.Owner, Users ).'Full Name' )
+       Filter based on an owner
+       Congratulations—you've finished the hardest aspect of working with a record reference.
+       Other use cases are more straightforward because they don't access fields of the record.
+       As a case in point, take filtering, which you'll explore in this section.
+       Add a Combo box control above the gallery, and set these properties of the new
+       control:
+          Items: Users
+          SelectMultiple: false
+       To filter the gallery by a specific user selected from this combo box, set the gallery's
+       Items property to this formula:
+         Power Fx
+         Filter( Accounts, Owner = ComboBox1.Selected )
+         ） Important
+         The instructions in this topic are accurate if you follow the steps exactly. However,
+         any formula that refers to a control by its name fails if the control has a different
+         name. If you delete and add a control of the same type, the number at the end of
+         the control's name changes. For any formula that shows an error, confirm that it
+         contains the correct names of all controls.
+       You don't need to use IsType or AsType because you're comparing record references to
+       other record references or to full records. The app knows the table type of
+       ComboBox1.Selected because it's derived from the Users table. Accounts for which the
+       owner is a team won't match the filter criterion.
+       You can get a little fancier by supporting filtering by either a user or a team.
+         1. Make some space near the top of the screen by resizing the gallery and moving
+          the combo box, insert a Radio control above the gallery, and then set these
+          properties for the new control:
+             Items: [ "All", "Users", "Teams" ]
+             Layout: Layout.Horizontal
+         2. For the Combo box control, set this property (if the combo box disappears, select
+          Users in the radio control):
+             Visible: Radio1.Selected.Value = "Users"
+         3. Copy and paste the Combo box control, move the copy directly over the original,
+          and then set these properties for the copy:
+             Items: Teams
+             Visible: Radio1.Selected.Value = "Teams"
+          The app will display only one combo box at a time, depending on the state of the
+          radio control. Because they're directly above one another, they'll appear to be the
+          same control that changes its contents.
+         4. Finally, set the Items property of the Gallery control to this formula:
+            Power Fx
+            Filter( Accounts,
+                Radio1.Selected.Value = "All"
+                Or (Radio1.Selected.Value = "Users" And Owner = ComboBox1.Selected)
+                Or (Radio1.Selected.Value = "Teams" And Owner = 
+            ComboBox1_1.Selected)
+            )
+      With these changes, you can show all records or filter them based on either a user or a
+      team:
+      The formula is fully delegable. The portion that's comparing the radio-button values is a
+      constant across all records and is evaluated before the rest of the filter is sent to
+      Dataverse.
+      If you want to filter on the type of the owner, you can use the IsType function, but it's
+      not yet delegable.
+       Update the owner by using Patch
+       You can update the Owner field in the same manner as any other lookup. To set the
+       currently selected account's owner to the first team:
+         Power Fx
+         Patch( Accounts, Gallery1.Selected, { Owner: First( Teams ) } )
+       This approach doesn't differ from a normal lookup because the app knows the type of
+       First( Teams ). If you want the first user instead, replace that portion with First( Users ).
+       The Patch function knows that the Owner field can be set to either of these two table
+       types.
+       To add this capability to the app:
+         1. In the Tree view pane, select the Radio control and the two Combo box controls at
+          the same time.
+         2. On the ellipsis menu, select Copy these items.
+       3. On the same menu, select Paste.
+       4. Move the copied controls to the right of the gallery.
+         5. Select the copied Radio control, and then change these properties:
+             Items: [ "Users", "Teams" ]
+             Default: If( IsType( Gallery1.Selected.Owner, Users ), "Users", "Teams" )
+         6. In the Radio control, select Users so that the Combo box control that lists users is
+          visible.
+         7. Select the visible Combo box control, and then set the DefaultSelectedItems
+          property to this formula:
+            Power Fx
+            If( IsType( Gallery1.Selected.Owner, Users ),
+                AsType( Gallery1.Selected.Owner, Users ),
+                Blank()
+            )
+         8. In the Radio control, select Teams so that the Combo box control that lists teams
+          is visible.
+         9. Select the Radio control to take selection away from the now-invisible Combo box
+          control for users.
+        10. Select the visible Combo box control for teams, and then set its
+          DefaultSelectedItems property to this formula:
+            Power Fx
+            If( IsType( Gallery1.Selected.Owner, Teams ),
+                AsType( Gallery1.Selected.Owner, Teams ),
+                Blank()
+            )
+        11. Insert a Button control, move it under the Combo box control, and then set the
+          button's Text property to "Patch Owner".
+        12. Set the OnSelect property of the button to this formula:
+            Power Fx
+            Patch( Accounts, Gallery1.Selected,
+                { Owner: If( Radio1_1.Selected.Value = "Users",
+                             ComboBox1_2.Selected,
+                             ComboBox1_3.Selected ) } )
+       The copied Radio and Combo box controls show the owner for the currently selected
+       account in the gallery. With the same controls, you can set the owner of the account to
+       any team or user by selecting the button:
+       Show the owner by using a form
+       You can show an Owner field inside a form by adding a custom card. As of this writing,
+       you can't change the value of the field with a form control.
+        1. Insert an Edit form control, and then resize and move it to the lower-right corner.
+        2. On the Properties tab near the right side of the screen, open the Data source list,
+         and then select Accounts.
+        3. Set the form's Item property to Gallery1.Selected.
+       4. On the Properties tab near the right side of the screen, select Edit fields.
+       5. In the Fields pane, select the ellipsis, and then select Add a custom card.
+        The new card appears at the bottom of the form control.
+       6. Resize the card as needed to show all the text.
+         7. Insert a Label control into the custom card, and then set the label's Text property
+          to the formula that you used in the gallery:
+            Power Fx
+            If( IsType( ThisItem.Owner, Teams ),
+                "Team: " & AsType( ThisItem.Owner, Teams ).'Team Name',
+                "User: " & AsType( ThisItem.Owner, Users ).'Full Name' )
+       For each selection in the gallery, more fields of the account, including the record's
+       owner, appear in the form. If you change the owner by using the Patch button, the form
+       control also shows that change.
+       Show the columns of a customer
+      In Dataverse, the Customer lookup column is another polymorphic lookup that's very
+      similar to Owner.
+      Owner is limited to one per table, but tables can include zero, one, or more Customer
+      lookup column. The Contacts system table includes the Company Name column, which
+      is a Customer lookup column.
+      You can add more Customer lookup columns to a table by selecting the Customer data
+      type for a new column.
+      A Customer lookup field can refer to a record from either the Accounts table or the
+      Contacts table. You'll use the IsType and AsType functions with these tables, so now is a
+      good time to add them as data sources (you can leave Teams and Users in place).
+              The treatment of the Customer and Owner fields is so similar that you can literally copy
+              the app (File > Save as, and then specify a different name) and make these simple
+              replacements:
+                                                                                                 ﾉ
+                                                                                                     Expand table
+                Location                             Owner sample                 Customer sample
+                Throughout                           Owner                        'Customer Name'
+                Throughout                           Users                        Accounts
+                Throughout                           Teams                        Contacts
+                Gallery's Items property             Accounts                     Contacts
+                Form's Items property                Accounts                     Contacts
+                The first argument of Patch          Accounts                     Contacts
+                in the button's OnSelect property
+                Filter radio's Items property        [ "All", "Users", "Teams" ]  [ "All", "Accounts", "Contacts" ]
+                Patch radio's Items property         [ "Users", "Teams" ]         [ "Accounts", "Contacts" ]
+                Combo box's Visible property         "Users" and "Teams"          "Accounts" and "Contacts"
+              For example, the new gallery should have this Items property:
+                 Power Fx
+                 Filter( Contacts,
+                     Radio1.Selected.Value = "All"
+                     Or (Radio1.Selected.Value = "Accounts" And 'Company Name' = 
+                 ComboBox1.Selected)
+                     Or (Radio1.Selected.Value = "Contacts" And 'Company Name' = 
+                 ComboBox1_1.Selected)
+                 )
+       Two important differences between Customer and Owner require an update to the
+       formulas inside the gallery and the form:
+         1. One-to-many relationships between Accounts and Contacts take precedence
+          when you refer to these table types by name. Instead of Accounts, use
+          [@Accounts]; instead of Contacts, use [@Contacts]. By using the global
+          disambiguation operator, you ensure that you're referring to the table type in
+          IsType and AsType. This problem exists only in the record context of the gallery
+          and form controls.
+         2. The Owner field must have a value, but Customer fields can be blank. To show the
+          correct result without a type name, test for this case with the IsBlank function, and
+          show an empty text string instead.
+       Both of these changes are in the same formula, which appears in the custom card in the
+       form, as well as in the Text property of the gallery's label control:
+         Power Fx
+         If( IsBlank( ThisItem.'Company Name' ), "",
+             IsType( ThisItem.'Company Name', Accounts ),
+                 "Account: " & AsType( ThisItem.'Company Name', Accounts ).'Account 
+         Name',
+             "Contact: " & AsType( ThisItem.'Company Name', Contacts ).'Full Name'
+         )
+       With these changes, you can view and change the Company Name field in the Contacts
+       table.
+       Understand Regarding lookup columns
+       The Regarding lookup column differs a little from those that you've already worked with
+       in this topic. You'll start by applying the patterns that this topic described earlier, and
+       then you'll learn other tricks.
+       You can start simply with the Faxes table. This table has a polymorphic Regarding
+       lookup column, which can refer to Accounts, Contacts, and other tables. You can take
+       the app for Customers and modify it for Faxes.
+                                                 ﾉ
+                                                   Expand table
+             Location                                  Customer sample        Faxes sample
+             Throughout                                'Customer Name'        Regarding
+             Gallery's Items property                  Contacts               Faxes
+             Form's Items property                     Contacts               Faxes
+             The first argument of Patch               Contacts               Faxes
+             in the button's OnSelect property
+            Again, you'll need to add a data source: this time for Faxes. On the View tab, select Data
+            sources:
+            An important difference for Regarding is that it isn't limited to Accounts and Contacts.
+            In fact, the list of tables is extensible with custom tables. Most of the app can
+            accommodate this point without modification, but you must update the formula for the
+            label in the gallery and the form:
+              Power Fx
+              If( IsBlank( ThisItem.Regarding ), "",
+                  IsType( ThisItem.Regarding, Accounts ),
+                      "Account: " & AsType( ThisItem.Regarding, Accounts ).'Account Name',
+                  IsType( ThisItem.Regarding, Contacts ),
+                      "Contacts: " & AsType( ThisItem.Regarding, Contacts ).'Full Name',
+                  ""
+              )
+       After you make these changes, you work with the Regarding lookup just as you did the
+       Owner and Customer lookups.
+       Understand Regarding relationships
+       Regarding differs from Owner and Customer because the former involves a many-to-
+       one relationship. By definition, a reverse, one-to-many relationship allows you to write
+       First( Accounts ).Faxes.
+       Let's back up and look at the table definitions. In Dataverse, tables such as Faxes, Tasks,
+       Emails, Notes, Phone Calls, Letters, and Chats are designated as activities. You can also
+       create your own custom activity tables. When you view or create an activity table, its
+       settings appear under More settings.
+      Other tables can be related to an activity table if they're enabled as an activity task in
+      the table's settings. Accounts, Contacts, and many other standard tables are so
+      designated (again, under More settings).
+      All activity tables and activity-task tables have an implied relationship. If you change the
+      filter to All at the top of the screen, select the Faxes table, and then select the
+      Relationships tab, all tables that can be a target of a Regarding lookup appear.
+      If you show the relationships for the Accounts table, all the tables that can be a source
+      of a Regarding lookup field appear.
+      What does it all mean?
+        When you write formulas, you must consider that the list of activity tables isn't
+        fixed, and you can create your own. The formula must appropriately handle an
+        activity table that you didn't expect.
+        Activity tasks and activities have a one-to-many relationship. You can easily ask for
+        all faxes that relate to an account.
+      To explore this concept in the app:
+       1. Add another screen.
+       2. Insert a gallery control, resize it, and then move it to the left side of the screen.
+       3. On the Properties tab near the right side of the screen, set the gallery's Items to
+        Accounts.
+       4. Set the gallery's layout to Title, and then set the title field to Account Name.
+       5. Add a second gallery, resize it, and then move it to the right side of the screen.
+       6. Set the new gallery's Items property to Gallery2.Selected.Faxes.
+        This step returns the filtered list of faxes for a given account.
+       7. Set the gallery's layout to Title and subtitle, and then set the title field to show the
+        Subject field (which might be lowercase subject).
+      As you select an item in the list of accounts, the list of faxes shows faxes for only that
+      account.
+       Activity table
+       As the previous section describes, you can show all the faxes for an account. However,
+       you can also show all the activities for an account, including faxes, email messages,
+       phone calls, and other interactions.
+       For the latter scenario, you use the Activity table. You can show this table by turning on
+       All in the upper-right corner to remove the filter from the list of tables.
+       The Activity table is special. Whenever you add a record to the Faxes table, the system
+       also creates a record in the Activity table with the columns that are common across all
+       activity tables. Of those columns, Subject is one of the most interesting.
+       You can show all activities by changing only one line in the previous example. Replace
+        Gallery2.Selected.Faxes with Gallery2.Selected.Activities.
+       Records are coming from the Activity table, but you can nevertheless use the IsType
+       function to identify which kind of activity they are. Again, before you use IsType with a
+       table type, you must add the data source.
+       By using this formula, you can show the record type in a label control within the gallery:
+         Power Fx
+         If( IsType( ThisItem, Faxes] ), "Fax",
+             IsType( ThisItem, 'Phone Calls' ), "Phone Call",
+             IsType( ThisItem, 'Email Messages' ), "Email Message",
+             IsType( ThisItem, Chats ), "Chat",
+             "Unknown"
+         )
+       You can also use AsType to access the fields of the specific type. For example, this
+       formula determines the type of each activity and, for phone calls, shows the phone
+       number and call direction from the Phone Numbers table:
+         Power Fx
+         If( IsType( ThisItem, Faxes ), "Fax",
+             IsType( ThisItem, 'Phone Calls' ),
+                "Phone Call: " &
+                AsType( ThisItem, 'Phone Calls' ).'Phone Number' &
+                " (" & AsType( ThisItem, 'Phone Calls' ).Direction & ")",
+             IsType( ThisItem, 'Email Messages' ), "Email Message",
+             IsType( ThisItem, Chats ), "Chat",
+             "Unknown"
+         )
+       As a result, the app shows a complete list of activities. The Subject field appears for all
+       types of activities, whether the formula takes them into account or not. For types of
+       activities that you know about, you can show their type names and type-specific
+       information about each activity.
+       Notes table
+       So far, all of the Regarding examples have been based on activities, but the Notes table
+       represents another case.
+       When you create a table, you can enable attachments.
+       If you select the check box for enabling attachments, you'll create a Regarding
+       relationship with the Notes table, as this graphic shows for the Accounts table:
+       Other than this difference, you use the Regarding lookup in the same manner in which
+       you use activities. Tables that are enabled for attachments have a one-to-many
+       relationship to Notes, as in this example:
+       First( Accounts ).Notes
+        ７ Note
+        As of this writing, the Regarding lookup isn't available for the Notes table. You
+        can't read or filter based on the Regarding column, and you can't set the column
+        by using Patch.
+        However, the reverse Notes one-to-many relationship is available, so you can filter
+        a list of notes for a record that's enabled for attachments. You can also use the
+        Relate function to add a note to a record's Notes table, but the note must be
+        created first, as in this example:
+                 Relate( ThisItem.Notes, Patch( Notes, Defaults( Notes ), { Title: "A new note"
+                } ) )
+              Activity parties
+              As of this writing, canvas apps don't support activity parties.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Tutorial: Customize a gallery in Power
+       Apps
+       Article • 03/03/2023
+       In this tutorial, you'll customize a list of records, called a gallery, and make other
+       changes in an app that was generated automatically in Microsoft Power Apps. Users can
+       manage data in the app even if you don't make these changes, but the app will be
+       easier to use if you customize it for your organization's needs.
+       For example, the gallery for this tutorial matches this graphic by default. The email
+       address is featured more prominently than other types of data, and users can sort and
+       filter the gallery based on text in that address:
+       However, your users might be more interested in the account name more than the email
+       address, so you'll reconfigure the gallery to highlight, sort, and filter based on the key
+       data for your organization. In addition, you'll change the title of the default screen to
+       differentiate it from the other screens in the app.
+             You'll also add a scroll bar so that users who don't have touch screens or mouse wheels
+             can browse the entire gallery.
+              ＂Change the layout of the gallery
+              ＂Change the type of data that appears in the gallery
+              ＂Change the columns by which users can sort and search the data
+              ＂Change the screen title
+              ＂Show a scroll bar
+             This tutorial starts with an app that was generated from a specific data source. However,
+             the same concepts apply to any app that you generate in Power Apps, whether from a
+             list created using Microsoft Lists, a SharePoint library, an Excel table, or some other data
+             source.
+             If you're not signed up for Power Apps, sign up for free   before you start.
+             Prerequisites
+             Generate an app from the Accounts table of Microsoft Dataverse.
+             Open the generated app
+                1. Sign in to Power Apps   , and then select Apps near the left edge.
+                2. Find the app that you generated, select the ellipsis icon (...) for it, and then select
+                  Edit.
+        3. If the Welcome to Power Apps Studio dialog box appears, select Skip.
+       Change the layout
+        1. In the left navigation pane, select BrowseGallery1.
+         When the gallery is selected, a selection box with handles surrounds it.
+        2. On the Properties tab of the right-hand pane, open the list of options under
+         Layout, and then select the option that shows only a title.
+        3. Next to Fields, select Edit, and then select the down arrow for the title box.
+         The name of this control will end in a numeral, such as Title1, but the numeral
+         might differ based on other actions you might have taken.
+        4. In the list of options, select Account name, and then close the Data pane.
+         The gallery shows the name of each account.
+       Change sort and search columns
+        1. Select the gallery as the previous section describes.
+        2. Near the upper-left corner, confirm that the property list shows Items.
+          The value of this property appears in the formula bar. You set this property to
+          specify not only the data source for the gallery but also the columns by which
+          users can sort and search the data.
+        3. Copy this formula, and then paste it in the formula bar.
+          SortByColumns(Search(Accounts, TextSearchBox1.Text, "name"), "name",
+          If(SortDescending1, Descending, Ascending))
+          By using this formula, you ensure that:
+            If a user types one or more characters in the search bar, the gallery shows
+            only those account names that contain the text that the user typed.
+            If a user selects the sort icon, the gallery is sorted alphabetically by account
+            name in either ascending or descending order, depending on how many
+            times the user selects the icon.
+          For more information about these and other functions, see the formula reference.
+       Test sorting and searching
+         1. Open Preview mode by pressing F5 (or by selecting the play button near the
+          upper-right corner).
+         2. Near the upper-right corner of the browse screen, select the sort icon one or more
+          times to change the alphabetical sort order between ascending and descending.
+         3. In the search box, type k to show only those account names that contain the letter
+          that you typed.
+         4. Remove all text from the search bar, and then close Preview mode by pressing Esc
+          (or by selecting the close icon near the upper-right corner).
+       Change the screen title
+         1. Select the title of the screen by clicking or tapping it.
+         2. Ensure that the property list shows Text and then, in the formula bar, replace
+          Accounts with Browse (retaining the double quotation marks).
+          The screen reflects your change.
+       Show a scrollbar
+       If your users might have neither touch screens nor mouse wheels, configure the gallery
+       to show a scrollbar when the user hovers over it with the mouse. That way, users can
+       show all accounts even if the screen can't show them all at once.
+         1. Select the gallery as the first procedure describes.
+                 2. Set the gallery's Show scrollbar property to true.
+              Next steps
+              In this tutorial, you've customized the gallery and made other changes to the default
+              screen for browsing records in a generated app. You can also customize the default
+              screens for displaying details and creating or updating accounts. As the browse screen
+              contains a gallery, the other two screens in the app contain forms. You can change, for
+              example, which types of data the forms show and in which order.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+             Customize forms in canvas apps
+             Article • 03/03/2023
+             In a canvas app, customize a Display form control and an Edit form control so that they
+             show the data that matters most and in the most intuitive order to help users easily
+             understand and update the data.
+             Each form comprises one or more cards, each of which shows data from a particular
+             column in the data source. By following the steps in this topic, you can specify which
+             cards appear in a form and move cards up and down within a form.
+             If you're unfamiliar with canvas-pps, see What are canvas apps?.
+             Prerequisites
+             Generate an app from the Microsoft Dataverse, and then customize the gallery in that
+             app.
+             Show and hide cards
+                1. Sign in to Power Apps  , and then open the app that you generated and
+                  customized.
+                2. In the left navigation bar, type or paste D in the search bar to filter the list of
+                  elements, and then select DetailForm1.
+                3. On the Properties tab of the right-hand pane, select Edit fields to open the Fields
+                  pane.
+        4. Hide a field, such as Description, by hovering over it, selecting the ellipsis (...) that
+          appears, and then selecting Remove.
+        5. Show a field by selecting Add field, typing or pasting the first few letters of the
+          field's name in the search box, selecting the field's check box, and then selecting
+          Add.
+       Reorder the cards
+        1. In the Fields pane, drag the Account Name field to the top of the list of fields.
+         The cards in DetailForm1 reflect the change.
+        2. (optional) Reorder the other cards into this sequence:
+            Account Name
+            Number of Employees
+            Annual Revenue
+            Main Phone
+            Address 1: Street 1
+            Address 1: Street 2
+            Address 1: City
+            Address 1: ZIP/Postal Code
+        3. In the left navigation bar, type or paste Ed in the search bar, and then select
+         EditForm1 to select it.
+        4. Repeat the steps in the previous procedure and this one so that the fields in
+         EditForm1 match those in DetailForm1.
+      Run the app
+        1. In the left navigation bar, type or paste Br in the search bar, and then select
+         BrowseScreen1 to select it.
+        2. Open Preview mode by pressing F5 (or by selecting the Preview icon near the
+          upper-right corner).
+        3. In the upper-right corner, select the plus icon to add a record in EditScreen1.
+        4. Add whatever data you want, and then select the checkmark icon in the upper-
+          right corner to save your changes and return to BrowseScreen1.
+        5. Select the arrow for the item that you just created to show details about that item
+          in DetailScreen1.
+        6. In the upper-right corner, select the edit icon to update the record in EditScreen1.
+        7. Change the information in one or more fields, and then select the check mark in
+          the upper-right corner to save your changes and return to DetailScreen1.
+        8. Near the upper-right corner, select the trash-can icon to delete the record that you
+          just updated and to return to BrowseScreen1.
+        9. Close Preview mode by pressing Esc (or by selecting the close icon near the upper-
+          left corner).
+       Next steps
+          Save and publish your app.
+                    Customize a card in your app.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Customize a card in a canvas app
+       Article • 03/03/2023
+       Perform basic customization (without unlocking a card) by, for example, changing its
+       control. Perform advanced customization by unlocking the card and, for example,
+       adding a control that isn't available for that card by default.
+       For an overview, see Understand data cards.
+       Prerequisites
+          Learn how to add and configure controls.
+          You can review this topic for general concepts only, or you can follow it step by
+          step if you first complete the procedures in these topics:
+            1. Generate an app.
+            2. Customize its gallery.
+            3. Customize its forms.
+       Customize a locked card
+       In this procedure, you'll replace a Text-input control with a Slider control without
+       unlocking the card.
+         1. In the app that you generated and customized, select EditForm1 in the left
+          navigation bar, and then select Edit fields on the Properties tab of the right-hand
+          pane.
+         2. In the list of fields, select the down arrow for Number of Employees, and then
+          open the list under Control type.
+        3. Select Edit Slider.
+          The screen reflects your change.
+       Unlock and customize a card
+       In this procedure, you'll unlock a card and update the Max property of the Slider control
+       that you just added.
+        1. In EditForm1, select the Slider control in the Number of Employees card.
+        2. On the Advanced tab of the right-hand pane, select the lock icon to unlock the
+          card.
+        3. Set the Max property of the Slider control to 10,000.
+          The Slider control shows a more accurate value.
+       Next steps
+       Now that you have a basic understanding of how to generate an app and customize a
+       gallery, a form, and a card, you can build your own app from scratch.
+     Understand Power Apps Studio
+     Power Apps Studio is the integrated development environment where you design, build, and
+     manage canvas apps. Learn about its key components including the command bar, formula
+     bar, canvas, and authoring tools to create effective business applications.
+     Overview of Power Apps Studio
+                                                 
+      1. Power Apps Studio modern command bar: Dynamic command bar that shows a different
+       set of commands based on the control selected.
+      2. App actions: Options to view properties, add comments, run the app checker, share,
+       preview, save, or publish the app.
+      3. Properties list: List of properties for the selected object, such as fill or height.
+      4. Formula bar: Compose or edit a formula for the selected property with one or more
+       functions.
+      5. App authoring menu: Selection pane to switch between data sources and allows you to
+       insert options.
+      6. App authoring options: This pane reveals the corresponding authoring feature when a
+       feature is selected from the app authoring menu.
+      7. Canvas/screen: Primary canvas for composing the app structure.
+       8. Properties pane: Properties list for the selected object in Tree view.
+       9. Settings: Configure your app in settings.
+       10. Screen selector: Switch between different screens in your app. Tree view selections display
+         here.
+       11. Change canvas screen size: Change the display size of the canvas as you author your app.
+      Let's understand each option in Power Apps Studio in detail.
+      1 – Power Apps Studio modern command bar
+      The command bar provides Power Apps Studio options. These options are relevant to the
+      current session and app-related settings.
+                                                          
+      Modern command bar
+      The modern command bar displays the relevant set of commands depending on the control
+      that you select. For example, if you select an item to insert like a text label, you see the modern
+      command bar change to accommodate your selection. The bar now has font type, size, color,
+      and other text label controls.
+                                                          
+      The command bar changes when you select one of the following controls or objects:
+       1. App object
+       2. Screen
+       3. Button
+       4. Shape
+       5. Icon
+       6. Blank form
+       7. Form with data
+       8. Blank gallery
+      9. Gallery with data
+     10. Label
+     11. Text input
+     12. Date picker
+    When you select more than one type of control, the command bar shows the common
+    commands between the selected controls.
+    Back
+    Takes you back to the build hub, closing the current Power Apps Studio session.
+    Undo and redo
+       Undo: Undo the last action.
+       Redo: Repeat the last action.
+     ７ Note
+     You can't undo or redo data operations, such as insert or delete a data source.
+    Cut, copy, and paste
+       Cut: Cut the selection, and store it in the clipboard.
+       Copy: Copy the selection, and store it in the clipboard.
+       Paste: Paste the last cut or copied selection from the clipboard.
+    Insert
+      You can access the Insert menu from the command bar and from the app authoring menu.
+      Insert shows all the popular objects or controls that you can add on the selected screen in your
+      canvas app. You can also expand other choices or use the components option to insert controls
+      from a component library.
+      To insert controls on the canvas, drag the control to the canvas or select the control.
+      Popular controls to insert
+                                                   ﾉ
+                                                     Expand table
+      Name     Description
+      Form     Display, edit, or create a record in a data source.
+      Input >  A control that the user can select to interact with the app.
+      Button
+           Name            Description
+           Input > Date    A control that the user can select to specify a date.
+           picker
+           Input > Text    A text box that allows user input.
+           input
+           Shapes >        A rectangular shape to configure the canvas appearance.
+           Rectangle
+           Text            A box that displays data such as text, numbers, dates, or currency.
+           Vertical        A control that you can add other controls to and display a set of data. For example, list
+           gallery         items made up of an image, title, and description is contained within a vertical gallery.
+          For more information about the controls you can insert, including their properties and
+          definitions, see Controls and properties in canvas apps.
+          Add data
+          Add, refresh, or remove data sources from your canvas app. You can add one or more
+          connections by using data sources.
+    From the Add data menu, you can:
+       Select any other existing tables from the current environment.
+       Search for and select a connector, such as SharePoint or SQL Server.
+    Connectors
+    In addition to data stored within tables, many connectors are available to interact with data in
+    popular software as a service (SaaS), services, and systems.
+    To choose other connectors such as SharePoint, OneDrive, or SQL Server, enter text in the data
+    source search box or select from the list of connectors.
+    For more information, see List of all Power Apps connectors.
+    New screen layouts
+    Add a new screen to your app from the New screen option in the command bar.
+    You can also add a new screen from the tree view.
+      1. From the Screens tab, select + New screen.
+      2. Select from the list of available screen layouts such as Sidebar, new layouts in preview
+       such as Header and form, or templates like Email.
+    Background color
+    Select a background color for a screen. You can select from the list of standard colors or select
+    the Custom tab and choose your own color.
+    Background image
+    Select Upload to upload images to set as the background image.
+    Settings
+    Configure the app's settings from the General, Display, Updates, or Support tab.
+                                            
+    General
+       Edit the app Name and Description.
+       Add or update the App icon. Add a custom icon by selecting + Add image.
+       Select an Icon background fill or Icon fill color.
+       Toggle Auto save to save every two minutes automatically.
+       Configure offline use.
+       Set your Data row limit.
+       Include debug information when you publish.
+       Enable autocreation of environment variables.
+       Enable the App.OnStart property.
+    To edit the app Name, go to the General tab in Settings.
+    Display
+       Select the Orientation and screen Size.
+       Scale to fit: Scales the app to fit available space.
+       Lock aspect ratio: Locks the height and width ratio.
+       Lock orientation: Maintains app orientation when device rotates.
+       Show mobile device notifications area: Displays notifications at the top of the screen.
+    For more information, see Change screen size and orientation.
+    Updates
+    Configure advanced settings for the app that include features under preview, experimental, or
+    retired features.
+    For more information, see Understand experimental, preview, and retired features in Power
+    Apps.
+    Support
+    Access current Power Apps Studio information such as environment, authoring version, session
+    ID, and session details. This information is useful for Microsoft Support sessions.
+    2 – App actions
+    To perform app-specific actions, use the options such as Properties, Comments, App checker,
+    Share, Preview the app, Save, and Publish.
+         Share
+         When you select the Share app action, a new window opens where you can share the app. You
+         can share with other users or add them as co-owners of your app. For more information, see
+         Share an app.
+             Tip
+            You must save the app before you can share it.
+         App checker
+         Select App checker to run a check.
+         For more information, see PowerApps checker now includes App checker results for canvas
+         apps in solutions   .
+                                                        
+     Comments
+     Comments are notes associated with items in your app. Use comments to help your team
+     review the app and provide feedback, or provide additional information on implementation
+     details in your app.
+     Preview
+     Select Preview the app to go into preview mode. Here you can view and interact with the
+     current version of the app.
+     Save
+     You can save your app in different ways, such as Save, Save with version notes, Save as, or
+     Download a copy. The save options dropdown is located next to the Save app action.
+     Save options include:
+        Save: Saves recent and unsaved changes you made to the app. Each time you save
+        changes, a new version is created.
+       Save with version notes: Save and add notes about your updates.
+       Save as: Duplicate the app by saving it with a different name.
+       Download a copy: Download a local copy of the app.
+    Publish
+    Select Publish to publish the app’s current version. For more information, see Save and publish
+    canvas apps.
+                                            
+    3 – Properties list
+    When you select an object in your canvas, you can choose one of the object's properties from
+    its properties list. For a complete list of all possible properties, see All properties.
+    4 – Formula bar
+    The formula bar lets you add, edit, or remove functions of a property from your selected
+    object. For example, select the app screen to update the background color by using the RGBA
+    function.
+    The formula bar is IntelliSense-enabled. When you start entering text that matches one or
+    more functions, the formula bar shows a list of functions.
+                                            
+    When you select a function, the formula bar shows inline function help and highlights help text
+    relevant to the cursor position.
+                                        
+    If a formula returns an error, you can view the error details in App checker or directly from the
+    app view in the canvas.
+                                            
+    Similarly, you find help when working with complex functions, nested functions, or when
+    correcting a formula syntax.
+    For a complete list of all canvas app functions, see Formula reference - Power Apps.
+    5 – App authoring menu
+    Switch between various authoring options while working with the app.
+       Tree view: Shows a tree view of all screens and controls in the current app.
+       Insert: Add different controls to the screen.
+       Data: Add data and other connectors, such as tables that connect to your app.
+       Variables: Work with variables and collections while editing your app.
+       Search: Select to search for media, formulas, text, and more in your app.
+       Themes: Choose a colored theme for the Power Apps UI.
+       Media: Insert or remove media from the app.
+       Power Automate: Add a flow by using the Power Automate pane.
+       Advanced tools: Access the Monitor and Test tools to debug and test your app.
+    The options for working with canvas apps change depending on your selection from the
+    authoring menu. For example, when you select the Tree view menu option, you see a Tree view
+    pane appear.
+    6 – App authoring options
+    Tree view
+    Select the tree view to show the screens available in the app.
+      Tip
+     Select App in the tree view to work with app-specific controls. You can change app
+     behavior, such as adding a formula for the OnStart event of the app.
+    Switch to the Components tab of Tree view to work with component library features. You can
+    add new components or reuse ones from the published component libraries. For more
+    information, see Component library.
+    For more information on adding components by selecting + New component, see the Insert
+    section.
+    Variables
+    You can save data such as resulting values from a data set into temporary storage by using
+    variables. This section lists variables used by the current app. For more information, see
+    Variables in canvas apps.
+    A collection is a group of items that are similar, such as products in a product list. For more
+    information, see Collections in canvas apps.
+    Search
+    You can find components in your app or find and replace them.
+    Themes
+    You can choose a premade colored theme or custom-make your own colored theme by
+    selecting + Add a theme.
+    Media
+    Select Media to add images, video, or audio files to your app. Adding media directly to your
+    app uploads the files to the app and uses the app storage.
+      Tip
+        Each file uploaded to the app as media must be 64 MB or smaller.
+        The size of all media files uploaded to an app can't exceed 200 MB.
+    If you want to reference more media, consider using audio and video controls with URLs,
+    media from Azure Media Services.
+    For more information, see Using multimedia files in Power Apps.
+    Power Automate
+    Create a new flow with Power Automate, or select a flow you added previously.
+    For more information, see Use Power Automate pane.
+    Advanced tools
+    Advanced tools include Monitor and Tests, where you can track and test your app.
+    7 – Canvas/screen
+    The canvas shows the currently selected screen in the Tree view from the authoring menu.
+    When you edit a canvas app, you can Use inline actions in Power Apps Studio so you don't
+    have to leave your current view. Inline actions make the development process more efficient.
+    8 – Properties pane
+    The properties pane shows properties and options for the currently selected object on the
+    canvas.
+       The Display tab shows generic options such as the name, description, exit or exit
+       message, and more.
+       The Advanced tab shows options for customization with key value pairs in areas of action,
+       data, and design in your app.
+         Tip
+        The advanced properties might be locked for editing, such as when working with
+        data cards. Select Unlock to change properties in such situations.
+    9 – Settings
+    Access Settings at the bottom of the app authoring menu or from the command bar as
+    previously described.
+    10 – Screen selector
+    Use the screen selector to switch between screens when your canvas app has multiple screens.
+    You can also select a screen from the authoring menu by selecting the tree view. If the current
+    selection is inside a container, or inside an individual cell in a gallery, the selector shows the
+    breadcrumbs for the parent elements at each level.
+                                            
+    11 – Change canvas screen size
+    You can zoom in or out while authoring the canvas app. Select Ctrl+0 (zero) to fit to window,
+    which fits the canvas to the current authoring window size.
+    The following image shows what the canvas looks like when fit to window. You can also use the
+    controls to zoom further in or out to view your canvas.
+                                            
+     ７ Note
+     The zoom percentage or screen size you use when authoring a canvas app doesn't affect
+     the aspect ratio you configure for the app. When you preview your app or play a
+       published app, your screen size is temporary.
+      Last updated on 03/25/2026
+       Use inline actions in Power Apps Studio
+       Article • 10/29/2024
+       Inline actions are hidden menus that appear when you hover over screen layouts such as
+       a blank screen and gallery or form controls. For example, if you hover over the canvas of
+       a blank screen of your app, you see the Copilot and Templates inline actions appear.
+       Use inline actions to update layouts, work with data, collaborate with your colleagues,
+       and use Copilot directly on the canvas for specific controls. This means you can build
+       and modify your app without navigating away from your current view in Power Apps
+       Studio. Inline actions provide a more streamlined and efficient way to work.
+       Use Copilot inline
+       Use Copilot inline to help you write Power Fx formulas. Use Copilot to apply conditional
+       formatting, sort and filter your data, and more with the help of Power Apps Ideas. The
+       Copilot button appears where applicable, offering suggestions for supported controls
+       such as Gallery, Data table, Text input, Drop down, Combo box, and Text label. For
+       more information, see Power Apps Ideas.
+       Choose a layout
+       Inline actions can help you with layout options to create the look you want.
+       Blank screens
+       You can use inline actions to apply a layout to blank screens. For example, if you add a
+       new blank screen to your app and hover over the canvas, you can select the inline action
+       Templates and then select one of more than one dozen layouts.
+        ７ Note
+        Once you add content to a screen, the Templates button is no longer available
+        unless you remove the content.
+                                           
+      Gallery control (classic) layouts
+      You can insert a gallery control, hover over the control, and then use the Layout inline
+      action to change the layout for that control. Different layout options appear when you
+      add a Vertical gallery or Horizontal gallery.
+       ７ Note
+       When you change or remove controls after applying a layout, your customizations
+       are removed.
+       Form control (modern or classic) layouts
+       When you add a modern or classic Form control, you're prompted to add a data source.
+       Once the control is linked to data and added to your screen, you can see the Layout
+       inline action appear when hovering over the control.
+       You can then use the Layout option to select whether the labels and inputs are arranged
+       vertically or horizontally.
+          Select the Vertical layout to place the label above the corresponding input control.
+          For example, you might want a title displayed with a description below the title.
+          Select the Horizontal layout to place the label to the left of the input control. For
+          example, you might want an image on the left side of your list item and a name on
+          the right side of your list item.
+       Add Data and Fields
+       When you link any control with data, you see the Fields inline action fill with fields from
+       the data. For example, linking a Table control with data populates the Fields inline
+       action with fields directly from the data such as Account Number, Address 1, and
+       Account Name. You can choose which fields you want to display or add a new field.
+      Gallery, Table, and Form
+      When you add a Gallery, Table, or Form control, you're prompted to add a data source
+      through the Select a data source popup. Once you add a data source, the control
+      displays the data. Use the Fields inline action to select which fields are shown on the
+      control from the selected data source.
+        In a Table control, you can drag and drop the fields to change the order that they
+        appear in the table.
+        In a Form control, if you choose a new data source, you're prompted to replace the
+        data card. When you confirm your selection, it removes any customizations and
+        generates a new form with fields corresponding to the new data source.
+      This form control has the Accounts data set as a data source. If you change that source
+      by selecting the Data inline action, all customized fields are removed or replaced with
+      fields from the new data.
+        Tip
+       You can always access the Data and Fields inline actions to modify data used in the
+       Form, Gallery, or Table control. These inline actions are available when hovering,
+       whether or not you've selected a data source already.
+      Add comments
+      Comments allow you to tag peers in your app to ask questions, leave instructions, and
+      propose next steps. You can add and read comments on a screen and any control from
+      inline actions.
+      To add a comment, select the Comments icon in the command bar to show the
+      Comments pane. Select the New button to start writing a comment.
+              Once the comment is posted, you see a comment icon in the inline action menu, when
+              you hover over a control.
+              If you remove all comments from a control, the comment icon in the inline action menu
+              is removed too.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Add comments when you're building a
+       canvas app
+       Article • 03/07/2025
+       Easily add comments when you’re building a canvas app in Power Apps Studio. Use
+       comments to help your team review the app and provide feedback, or provide
+       additional information on implementation details in your app. To allow other makers to
+       add comments, make sure to share the app with them.
+       You can add comments to different components or pages.
+                                                 
+       Legend
+        1. Tree view: Select a screen from the tree view and right-click to add a New
+          comment.
+        2. Component: In the canvas area, right-click on a component to add a New
+          comment.
+        3. App actions: Select Comments > New and then add your comments.
+       Use @mention in comments to tag someone
+       for feedback
+       Connect with other makers in your organization as you collaborate on creating your
+       app. You can tag people in the comments by using @+ their name.
+       If you tag a maker that doesn’t have access to your app, then you're prompted to share
+       the app with them.
+       When someone tags you in a comment, you receive an email that lets you know which
+       app you're tagged in and the person who tagged you. It also includes the comment text
+       and a direct link to that comment.
+       Edit or delete a comment
+       You can edit your comments or remove existing comments from appearing in the app.
+       In the Comments pane, next to a comment, select ..., and then select Edit comment or
+       Delete comment.
+       Resolve a comment
+       Comments are commonly questions, feedback, or ideas that are important context to
+       live alongside your app. But they might not be active discussions anymore. You can
+       resolve a comment or reopen a resolved comment thread to better track the active
+       comments.
+        1. In the Comments pane, next to a comment, select ..., and then select Resolve
+          comment.
+                 2. The comment thread appears as Resolved.
+                 3. Select one to remove the comment:
+                           Reopen a thread.
+                          Delete a thread.
+              Limitations
+                 1. The numbers of users who can access an app in edit mode is limited. If you have
+                    an app open and tag someone, the user receives an email notification. The user
+                    must wait for you to exit the app in order to see the comment and resolve it.
+                 2. Comments aren't supported when you're working on an app using Git.
+                 3. @mention isn't supported for SharePoint custom Power Apps. Learn more in
+                    Customize a form for a SharePoint list.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+      Understand coauthoring and copresence in
+      canvas apps
+        Summarize this article for me
+      ﾃ
+      Collaborate on canvas apps in Power Apps Studio by using copresence and coauthoring. These
+      features let you work with other makers in real time, improving productivity and teamwork.
+      https://learn-video.azurefd.net/vod/player?id=719b89e6-32ce-498b-9597-
+      600d91019ec4&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+      apps%2Fcopresence-power-apps-studio
+      What you'll learn:
+         How to see who's working on your app and work together effectively
+         When to use copresence vs. coauthoring for your collaboration needs
+         Step-by-step instructions to enable and use these features
+      Key differences:
+         Copresence shows who else is working on the same app, but only one person can edit
+         the app at a time. The first person who opens the app gets editing control.
+         Coauthoring lets multiple people edit the app at the same time and see each other's
+         changes in real time.
+      Use copresence to see who's working on the same
+      app
+      When you open an app for editing in Power Apps Studio, indicators might show that other
+      people are also working on the app. These indicators are part of the copresence feature.
+      The first person who opens the app gets editing control. If another person opens the app, a
+      notification lets them know that someone else is editing the app, and they're viewing it in read-
+      only mode. In read-only mode, you can't add new screens, edit control properties, or use the
+      command bar. You can save a copy of the app.
+      The command bar shows the names and icons of other makers who are editing or viewing the
+      app. The left navigation pane shows the app's structure and highlights which part of the app
+      someone else is editing. You also get a notification to refresh the app when someone saves
+      changes to the app.
+                                                    
+     Legend:
+       1. The command bar shows the names and icons of other makers who are editing or
+        viewing the app.
+       2. A Read-only warning appears if someone already has editing control elsewhere. You can
+        select Override to become the main author and regain editing rights.
+       3. In Tree view, you see the app's structure and other people's profile pictures on the part of
+        the app someone else is editing.
+       Tip
+      If you're inactive for two hours while editing an app, Power Apps asks if you want to keep
+      editing or switch to read-only mode. If you don't respond, the system puts you in read-
+      only mode so other makers can become the editor.
+      If autosave is on, your changes are automatically saved. If autosave isn't on, Power Apps
+      notifies you that you're no longer editing and lets you save a copy of your changes.
+     Use coauthoring to edit the same app together
+     Coauthoring lets multiple makers edit a canvas app at the same time. When you use
+     coauthoring, you can see where other makers are working on the app and view their changes
+     in real time.
+                                                  
+     When multiple editors work on the app, their avatars appear.
+        The left navigation pane shows the app's structure in Tree view and shows which part of
+        the app someone else is editing. For example, you might edit Screen 1, while someone
+        else edits Screen 2.
+        The area that another maker edits is highlighted and shows their initials. For example,
+        someone else might edit a part of a form, which is highlighted for the first user.
+      ） Important
+      Multiple makers can select and edit a control at the same time. Be careful not to overwrite
+      each other's changes.
+     Turn on coauthoring
+     To use coauthoring, turn it on for each app. When you turn on coauthoring, it overrides the
+     copresence feature.
+       1. Open your app for editing in Power Apps Studio.
+       2. Go to Settings > Updates > New.
+       3. In the search box, type coauthor.
+       4. Turn on the Coauthoring toggle.
+     Limitations of coauthoring
+        When more than one maker edits an app, the following actions aren't available:
+          Search
+          Save as
+          Open another or new app
+          Undo and redo
+          Switch authoring versions
+        The maximum number of coauthors is 10, either in one session or across a total of 10
+        tabs, depending on which limit you reach first. Any other coauthors or tabs beyond 10 are
+        in copresence and can't edit the app or view real-time updates.
+        The app language is locked to the locale of the first maker who opens the app for editing.
+        Opening the same app in a different locale can lead to errors in formulas.
+        Cut isn't available.
+        Coauthoring is turned off in the Monitor tool.
+        You can encounter a problem with the following actions:
+           Renaming a control
+           Adding AI Builder components
+           Adding geospatial controls
+           Running a flow that another coauthor added, without refreshing the app first
+           Viewing errors from one author's actions on all other coauthors' screens
+           Copying and pasting
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 02/25/2026
+             Add and configure controls in canvas
+             apps
+             Article • 10/29/2024
+             Add a variety of UI elements to your canvas app, and configure aspects of their
+             appearance and behavior directly, from the toolbar, in the Properties tab, or in the
+             formula bar. These UI elements are called controls, and the aspects that you configure
+             are called properties.
+             Prerequisites
+                1. If you don't already have a Power Apps license, sign up, and then sign in   .
+                2. Create a blank canvas app.
+                   You can always take the tour later by selecting the question-mark icon near the
+                   upper-right corner of your screen and then selecting Take the intro tour.
+             Add and select a control
+             Let's add a new screen and a button control. However, you can add any type of control.
+                1. Select Insert from the authoring menu, then select New screen.
+                2. Choose Blank to add a blank screen to your app. (Screens are a type of control
+                   that can contain other types of controls.)
+        The new screen is named Screen2 and appears in the Tree view. This pane shows a
+        hierarchical list of controls in your app so that you can easily find and select each
+        control.
+       3. With Screen2 selected, select Insert again.
+       4. Select the Button control. The new control appears under Screen2 in the
+        hierarchical list of Tree view.
+         In the screen, a box with six handles surrounds the button by default. These
+         handles surround any control selected and are used to size the control.
+        5. Select the screen (outside the button) and the box handles disappear. To select the
+         control again, select it directly on the canvas or from the Tree view list.
+          ） Important
+          You must always select a control before you can configure it.
+       Rename a control
+        1. In the list of controls, hover over the control that you want to rename to reveal the
+         overflow menu (ellipsis).
+        2. Select the ellipses.
+        3. Select Rename. Add a unique, memorable name to make building your app easier.
+       Delete a control
+       You can delete a control either through control in the Tree view list or directly from the
+       canvas.
+       Delete a control from Tree view
+         1. In the list of controls, hover over the control that you want to delete to reveal the
+          overflow menu (ellipsis).
+         2. Select the ellipses.
+         3. Select Delete.
+       Delete a control from the canvas
+       Select the control on the canvas, then press the Delete key.
+       Reorder screens
+        1. In Tree view, hover over a screen that you want to move up or down to reveal the
+          overflow menu (ellipses).
+        2. Select the ellipsis, then choose Move up or Move down. If you don't see a Move
+          down option, your screen is at the lowest point in the list already.
+        ７ Note
+        When the app is opened, the screen at the top of the list of controls usually
+        appears first. However, you can specify a different screen by setting the OnStart
+        property to a formula that includes the Navigate function.
+       Move and resize a control
+       To move a control, select it, hover over its center so that the four-headed arrow appears,
+       and then drag the control to a different location.
+       To resize a control, select it, hover over any handle in the selection box so that the two-
+       headed arrow appears, and then drag the handle.
+        ７ Note
+        As this topic describes later, you can also move and resize a control by modifying
+        any combination of its X, Y, Height, and Width properties in the formula bar.
+       Configure a control in the Properties pane
+       By using the Properties pane, specific to the control you select, you can specify a wide
+       variety of options.
+       For example, if you select a button control, you can replace the value of the text
+       displayed through the control's Properties pane.
+        ７ Note
+        You can alternatively change display text by modifying its Text property in the
+        formula bar.
+       Configure a control in the formula bar
+      You can configure a control by selecting a property in the property list and then
+      specifying a value in the formula bar. Autocomplete can be helpful in the formula bar to
+      see values you can use for a control.
+      Change the font color of a control
+      For example, if you want to change the font color for your control's text. You see many
+      color options.
+      Change the position on the canvas of a control
+      You can set the X and Y coordinates for the position of the control using the formula
+      bar. Setting coordinates in the formula bar gives you greater precision of control
+      placement.
+      For example, if you select X or Y in the properties list and specify a number in the
+      formula bar, you see the control move to that coordinate. In this case, the button moves
+      to position 100 on the X axis, assuming the far left side of the canvas is the zero point.
+      Change the control's size
+      You can resize a control by selecting Height or Width in the properties list and then
+      specifying a different number in the formula bar.
+      Change the control's display text
+      You can change a control's display text by selecting Text in the properties list and then
+      specifying any combination of a literal string, an expression, or a formula in the formula
+      bar.
+      Literal string
+      A literal string is surrounded by quotation marks and appears exactly as you type it.
+      "Hello, world" is a literal string.
+       ７ Note
+       When you add text that is longer than the width of your control, the control doesn't
+       change its width to accomodate the text. You must manually change the control's
+       size to fit the text.
+      Expression
+      An expression is often based on a property of another control. Screen2.Height is an
+      expression that shows the height of Screen2 where the display text is shown for a
+      button control.
+      Using an expression, for example, you can set a background image or icon as the fill for
+      your button.
+      Formula
+      A formula includes one or more functions. The Now function returns the current date
+      and time in your local time zone, and the Text function formats values such as dates,
+      times, and currency.
+      For example, you can display the date and time in a Label:
+                                                                                                        
+              Formulas are usually much more complex than this example so that they can update
+              data, sort it, filter it, and perform other operations. For more information, see the
+              formula reference.
+              Related information
+                    Find step-by-step procedures for configuring common controls such as screens,
+                    lists, galleries, forms, and charts.
+                    Find reference information about each type of control in the control reference.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+    Add and navigate screens in canvas apps
+    Create modern, responsive apps by adding prebuilt screens for common app scenarios. The
+    screens feature responsive containers and modern controls that adapt to different screen sizes.
+    You can also add custom screens with different layouts and controls.
+    The following new prebuilt screens are available:
+       Approval request
+       Welcome screen
+       Header and gallery
+       Header and form
+       Header and table
+   Add a new screen
+            1. Sign in to Power Apps   .
+            2. Create a canvas app or open one for editing.
+            3. On the command bar, select New screen, and then select a screen layout.
+            4. Preview the app to determine how it looks on different devices. For more information, see
+              Preview an app.
+             Tip
+            To make the app adapt to the size of the device display it's running on, turn off the Scale
+            to fit option.
+         Welcome screen
+         The Welcome screen works well as the first screen of an app. You can customize each tile with
+         an image, a title, and a description. Add or remove tiles in the main container to change the
+         number of tiles. Use the tiles to guide users to other parts of the app.
+         The Welcome screen template includes the following controls:
+              Screen container
+                 Header container
+                    Header
+                 Main container
+                    Container
+                       Image container
+                          Image
+                       Title container
+                          Feature item button
+                          Description text
+                                            
+    Add and customize the Welcome screen
+      1. Select New screen > Welcome screen.
+      2. To change the image of a tile, select it and then select Edit.
+      3. Select the Feature Item button control and add your own text in the Properties pane.
+      4. Select the Short description or engaging message text and add your own.
+      5. Add and remove tiles if needed.
+         To add tiles in the tree view, copy and paste a Container item.
+         To remove a tile in the tree view, right-click a Container, and then select Delete.
+     Header and gallery screen
+     Use the Header and gallery screen to show a range of product or service information, like a
+     product catalog. When you connect a gallery control to a data source, a catalog is
+     automatically created with little customization required.
+     The gallery control in the Header and gallery screen is a classic control. When the modern
+     gallery control is released, the Header and gallery screen uses it. For more information, see
+     Overview of modern controls and themes in canvas apps.
+     The Header and gallery screen has the following template for controls:
+        Screen container
+         Header container
+           Header
+         Main container
+           Gallery
+            Gallery container
+              Image container
+               Image
+              Title container
+               Title text
+               Description text
+              Button container
+               Button
+                                                    
+     Add and customize the header and gallery screen
+       1. Select New Screen > Header and gallery.
+       2. In the tree view, select Gallery and connect it to a data source such as Dataverse.
+       3. Select specific controls inside the gallery, such as the image, title text, and text
+        description. In the control's properties, use the ThisItem syntax to set the desired image,
+        title text, and description.
+        For example, to add the Account name to the title text control, find it by typing ThisItem
+        in the formula bar to see a list of available items to add from your data set.
+                                              
+     Approval request screen
+     The Approval request screen has a header, a form with a submit button, and a gallery with
+     predefined stages. The Approval request screen is useful for scenarios where actions are
+     triggered by form submissions, such as submitting an approval request or displaying a
+     workflow process for a business.
+       Tip
+      When you add an approval request screen, connect it to a data source. The data source
+      determines the field names in the request form.
+     The Approval request screen has the following template for controls:
+        Screen container
+        Header container
+         Header
+        Main container
+         Form container
+           Form title text
+           Approval form
+           Submit button
+         Sidebar container
+           Reviewers text
+           Reviewers gallery
+                                            
+    Add and customize the Approval request screen
+      1. Select New Screen > Approval request.
+      2. In the tree view on ApprovalForm, connect to a data source such as Dataverse.
+      3. Choose a data source.
+      4. To view the details of the approval stages, select ReviewersGallery under the
+       SidebarContainer node in the tree view. Then, in the properties pane, select the
+       Advanced tab and go to Items.
+       The approval stages have the following details:
+         Name: Name of the stage or approver
+         Title: Subtitle of the stage or approver
+         Status: Stage status
+          Current: Whether this stage is the current stage of the approval request
+     To notify the approver, add a Power Automate approval workflow in the button. For more
+     information, see Create and test an approval workflow with Power Automate.
+     Header and form
+     The Header and form screen has a header, a form, and two buttons to submit the form or
+     cancel form submission. This screen is great for using a full-screen form.
+     The Header and form screen has the following template for controls:
+       Screen container
+         Header container
+          Header
+         Main container
+          Form container
+           Form
+          Button container
+           Cancel button
+           Submit button
+                                                  
+     Add and customize the Header and form screen
+      1. Select New Screen > Header and form.
+      2. In the tree view, you see Form selected and a prompt appears for you to connect the
+        form to a data source.
+      3. Choose a data source.
+      4. Optionally, to ensure the best screen responsiveness, select each data card on the form
+        and set its Width Fit property to On in the Display tab of the Properties pane.
+     Header and table
+     The Header and table screen has two controls: a header control and a table control. This
+     template is great for showing a detailed data table on a screen.
+     The Header and table screen has the following controls:
+        Header container
+         Header
+        Main container
+         Table
+     Add and customize the Header and table screen
+      1. Select New Screen > Header and table.
+      2. In the tree view, select Table and connect it to a data source.
+     Table and form
+     The Table and form screen contains two main controls: the modern table control and the
+     modern form control. This template has built-in Power Fx formulas to make data connection
+     and customization easy. This template is ideal for selecting and editing a record by using a
+     form.
+     The Table and form screen contains the following controls:
+        Screen container
+         Header container
+          Header control
+         Body container
+          Text input (Search)
+          Table control
+          Form control
+          Button
+            New
+            Edit
+            Delete
+            Submit
+            Cancel
+                                                  
+     Add and customize Table and form screen
+     In Power Apps Studio:
+      1. Select New Screen > Table and form.
+      2. Select Data in the inline action bar.
+      3. Select the data source you want.
+       When you connect, the table and form controls both connect to the data source.
+    You can select a record in the table control, and the form shows the details of the selected
+    record.
+    All buttons in this template have prebuilt Power Fx, so you don't need to customize them.
+    When you connect the screen to the selected data source, the screen becomes fully functional.
+                                            
+     Reorder screens
+     When your app has more than one screen, you can change their order in the tree view.
+     Select the overflow menu of a screen that you want to reorder, and then select Move up or
+     Move down.
+     Use the StartScreen property to set the screen that displays first.
+     Add navigation
+     When your app has more than one screen, add navigation so your users can move between
+     them.
+       1. Select the screen. Select Insert. In the search box, type Next arrow and then select it.
+       2. Move the arrow to where you want it to appear on the screen.
+       3. Select the arrow. Set the OnSelect property to the Navigate function. For example, use
+        Navigate(Target, Fade).
+        Replace Target with the name of the screen where you want to navigate.
+                                                   
+        In this example, when a user selects the arrow, the target screen fades in.
+       4. On the Target screen, add a Back arrow icon the same way. Set its OnSelect property, for
+        example, Navigate(Target, ScreenTransition.Fade).
+        Replace Target with the name of the screen where you want to return.
+      Related information
+      Screen-control reference
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 01/14/2026
+        Add Microsoft 365 Copilot for app users in
+        canvas apps (preview)
+        [This article is prerelease documentation and is subject to change.]
+        Microsoft 365 Copilot makes it easier for users to work with canvas apps by offering AI-powered
+        insights through natural language conversations. By using this feature, users can quickly find
+        information, navigate apps more easily, and get help to boost their productivity. App makers can
+        enable Microsoft 365 Copilot to give users access to conversational AI that understands app data
+        and provides helpful, contextual answers. Users can ask questions about their Microsoft
+        Dataverse table or SharePoint list data in plain language and receive immediate, relevant
+        responses.
+        This article shows you how to enable and configure Microsoft 365 Copilot for your canvas apps,
+        both at the environment level and for individual apps.
+        When enabled, users can open Microsoft 365 Copilot in their canvas app by selecting Copilot on
+        the upper-right corner. For more information, see Use Microsoft 365 Copilot in canvas apps.
+           ） Important
+                This feature is in preview.
+                Preview features aren't meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  . They're
+                available before an official release so that customers can get early access and provide
+                feedback.
+                This feature is in the process of rolling out and might not be available in your region
+                yet.
+        Prerequisites
+        To use Microsoft 365 Copilot in canvas apps, make sure the following prerequisites are met:
+             You must enable the feature using https://make.preview.powerapps.com/      .
+             Your tenant must be set to allow Dataverse data available in Microsoft 365 Copilot. For
+             more information, see Enable Microsoft 365 admin center Copilot Dataverse settings.
+             Dataverse Search must be set to Default or On for the environment. For more information,
+             see Understand what this means for generative AI experiences.
+             To use the Microsoft 365 Copilot feature in your app, users must have a Microsoft 365
+             Copilot license.
+          ７ Note
+                Microsoft 365 Copilot for canvas apps with Dataverse relies on Dataverse Search
+                indexes. Enabling this feature might increase your environment’s Dataverse capacity
+                consumption. For more information, see What actions can makers or admins take to
+                manage Dataverse Search efficiently.
+                Sufficient Dataverse database capacity must be available to support indexing, semantic
+                search, and Copilot operations. For more information, see Capacity page details.
+        Enable Microsoft 365 Copilot for your environment
+        To manage Microsoft 365 Copilot for canvas apps, start by learning how to manage Microsoft
+        365 Copilot.
+        Power Platform administrators can set up and configure the Microsoft 365 Copilot feature for
+        users in their environment.
+           1. Sign in to the Power Platform admin center  .
+           2. In the navigation pane, go to Copilot > Settings. Under Power Apps, expand Chat Agent
+             and choose M365 Copilot.
+           3. Select an environment group or an environment name, and then select Edit Setting.
+           4. Select On and then select Save to enable Microsoft 365 Copilot for your canvas apps in the
+             selected environment group or environment.
+        Enable Microsoft 365 Copilot in a canvas app
+        Makers can enable or disable Microsoft 365 Copilot for a specific canvas app.
+           1. Sign in to Power Apps   .
+           2. Open a canvas app for editing.
+           3. Select Settings in the command bar.
+           4. On the left, select General.
+           5. To enable Microsoft 365 Copilot, set M365 Copilot in canvas apps (Preview) to On. To
+             disable it, set the option to Off.
+           6. Select Save and then publish the app for the changes to take effect.
+        Microsoft 365 Copilot vs. Copilot chat
+        Microsoft 365 Copilot is replacing Copilot chat in canvas apps.
+        Known limitations
+             Agents you author can't yet use in‑app user context to optimize their responses.
+        M365 Copilot in canvas apps supports apps that use either SharePoint or Dataverse as a
+        data source but not both within the same app.
+        During the initial preview phase, for SharePoint, only applications containing a single
+        SharePoint list will return answers to questions.
+        If your canvas app connects to a SharePoint list through an environment variable, Microsoft
+        365 Copilot won't reference data from that SharePoint list.
+        Microsoft 365 Copilot for canvas apps allows users to view data by using read-only
+        operations. This capability means that users can only view data that matches their queries
+        and can't make any changes. To make changes, customization with an agent is required.
+        Microsoft 365 Copilot for canvas apps isn't available in the Power Apps mobile app.
+     Related information
+        Use Microsoft 365 Copilot in canvas apps (preview)
+        Customize Microsoft 365 Copilot with an agent in canvas apps (preview)
+        Add Microsoft 365 Copilot to model-driven apps
+        Use Microsoft 365 Copilot in model-driven apps
+        Customize Microsoft 365 Copilot in model-driven apps
+      Last updated on 06/16/2026
+         Customize Microsoft 365 Copilot with an
+         agent (preview)
+         Microsoft 365 Copilot in Power Apps lets users interact with custom agents that extend what
+         Copilot can do. By customizing an agent, you can create tailored experiences that fit your
+         organization's business processes and data. For more information, see Use agents in Microsoft
+         365 Copilot.
+         This article describes the types of agents you can build for Microsoft 365 Copilot in Power Apps
+         and helps you choose the right approach for your scenario.
+         Choose an agent type
+         The following table compares the agent types you can build.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Agent type       Description                                         Common use cases
+           Declarative      Built with low-code tools and templates for quick   Automate routine tasks, answer FAQs,
+           agent            setup of common scenarios in Microsoft 365          and provide guided workflows.
+                            Copilot.
+           Custom           Built with custom logic and integrations for        Complex business processes, custom
+           engine agent     advanced capabilities tailored to your business.    data integrations, and specialized
+                                                                                automation.
+           Copilot Studio   Built and managed in Microsoft Copilot Studio,      Interactive chatbots, team
+           agent            with integration to Teams and Microsoft 365 for     collaboration, and personalized
+                            conversational experiences.                         support within Microsoft 365 apps.
+         To find the best option for your organization, use these resources:
+               Get an overview and guidance on how to choose what type of agent to build in Microsoft
+               365 Copilot agents overview.
+               Build a declarative agent for Microsoft 365 Copilot or a custom engine agent for Microsoft
+               365.
+               Use Microsoft Copilot Studio to connect and set up an agent for Teams and Microsoft 365
+               so it's available in Microsoft 365 Copilot.
+        Review the guidance on how to choose between Microsoft 365 Copilot and Copilot Studio
+        to build your agent.
+     Related information
+        Add Microsoft 365 Copilot for app users in canvas apps (preview)
+        Use Microsoft 365 Copilot in canvas apps (preview)
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 06/16/2026
+         Add a Copilot control to a canvas app
+         (preview)
+              Summarize this article for me
+         ﾃ
+         [This article is prerelease documentation and is subject to change.]
+         The Copilot control is an AI assistant that you can add to your canvas apps. By using Copilot,
+         app users can get insights about the data in your app through natural language conversations
+         with an AI-powered copilot. Makers can add the control to any canvas app and choose which
+         data provide answers.
+            ） Important
+            Starting February 2, 2026, you can't add the Copilot control to new canvas apps. Existing
+            apps with this control will remain functional for a limited time but will eventually no longer
+            be supported. Microsoft 365 Copilot Chat in canvas apps      is the new the recommended
+            solution for natural language interactions in canvas apps. To ensure a smooth transition
+            and prevent any disruption, we recommend that you migrate to Microsoft 365 Copilot
+            chat as soon as it becomes available in your environment.
+            ７ Note
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 This feature is powered by Azure OpenAI Service.
+         Prerequisites
+         Ensure you meet the prerequisites and region availability in Copilot in Power Apps overview
+         (preview).
+         Copilot doesn't work in environments that use a customer-managed key or Customer Lockbox.
+         Set up Copilot for your environment
+         To let app users use the Copilot chat experience in a canvas app, a Power Platform admin
+         needs to enable Allow users to analyze data using an AI-powered chat experience in canvas
+         and model-driven apps in the Power Platform admin center     . Learn more in Manage feature
+         settings.
+         Set up Copilot for your canvas app
+         To add a Copilot control to your canvas app, turn on Copilot component and Edit in Copilot
+         Studio in the app settings in Power Apps  .
+         Copilot component: Turns on the Copilot feature in your canvas app so you can add the
+         Copilot control and connect it to a copilot.
+         Edit in Copilot Studio: Lets you customize the copilot using Copilot Studio. If you turn off this
+         option, only the default copilot is available.
+            1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+              Settings > Updates.
+            2. On the Preview tab, turn on the Copilot component and Edit in Copilot Studio settings.
+     Add the Copilot control to your canvas app
+     With your canvas app open for editing, and all settings configured:
+       1. In the app authoring menu, select Insert, and then select Copilot (preview).
+       2. When prompted to add a data source to Copilot, select a Dataverse table as the data
+        source.
+      ７ Note
+      The Copilot control only supports Dataverse tables for the data source.
+     Customize the copilot by using Copilot Studio
+     Copilot Studio is an app that you use to create and edit copilots for your apps. Define your
+     copilot's articles, actions, and other features. For example, make your copilot respond to
+     specific questions about your app's data or perform actions like opening a screen or sending
+     an email.
+     Customize your newly connected copilot in Power Apps through the properties menu.
+       1. Select the Copilot control on your canvas. Select Edit next to the Customize copilot field
+        in Properties.
+       2. If you don't have a copilot, select Create new copilot in the Customize Copilot pane. The
+        Copilot control in Power Apps Studio doesn't support enabling an existing Copilot from
+        Copilot Studio.
+                                                                                                 
+              Copilot Studio    opens in a new tab. Any changes you make in Copilot Studio appear in
+              your connected copilot in your canvas app.
+         Learn more in Quickstart: Create and deploy a copilot.
+         Collect feedback from app users
+         Makers and app users provide feedback on copilot responses by selecting the Like (thumbs up)
+         or Dislike (thumbs down) button for each response. Enter detailed feedback in the text box,
+         and then select Submit.
+         Feedback goes to Microsoft to help improve the Copilot control.
+         Disallow feedback from app users
+         If you don't want your app users to provide feedback to Microsoft, turn off the feedback
+         option.
+            1. Sign in to Power Apps  , and select Tables from the left navigation pane.
+       2. Select the Organization table from the list.
+       3. In the Organization columns and data section, select the column headers list. The Show
+         existing column popup appears.
+       4. Search for Allow users to provide feedback for App Copilot, and make sure the check
+         box is unchecked.
+       5. Select Save.
+                                                           
+      Related information
+         Build apps through conversation (preview)
+         Use your prompt in Power Automate
+         Add Copilot for app users in model-driven apps
+         Power Apps Copilot control (video)
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 02/24/2026
+         Add a custom Copilot to a canvas app
+         (preview)
+              Summarize this article for me
+         ﾃ
+         [This article is prerelease documentation and is subject to change.]
+         You can integrate a custom Copilot created in Microsoft Copilot Studio and enable it for your
+         canvas app. This lets users interact with Copilot to ask questions about the data in your app.
+         With just a few simple steps, you can embed a custom Copilot across all your canvas app
+         screens without changing the app's design.
+            ） Important
+            Starting February 2, 2026, adding a custom Copilot to new canvas apps will be
+            discontinued. Existing apps using this feature will remain functional for a limited time but
+            will eventually no longer be supported. Microsoft 365 Copilot Chat in canvas apps     is
+            the new the recommended solution for natural language interactions in canvas apps. To
+            ensure a smooth transition and prevent any disruption, we recommend that you migrate
+            to Microsoft 365 Copilot chat as soon as it becomes available in your environment.
+            ７ Note
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 App Copilot for canvas apps is currently rolling out and might not yet be available in
+                 your region. App Copilot may be available on Power Apps mobile for mobile devices
+                 before it becomes available on the web browser during rollout.
+         Availability
+               This capability might not be available in your region yet. Learn more in Explore Copilot
+               features by geography and languages     .
+               During the rollout, this capability might be accessible on the Power Apps mobile app
+               before it becomes available on web browsers.
+        To use copilots in Power Apps, you must enable data movement across regions for
+        generative AI features. This is crucial if your organization and environment are located in
+        different regions. For more information, see Enable copilots and generative AI features.
+     Prerequisites
+     Before using this feature, make sure the following prerequisites are met:
+        Create a custom Copilot in Copilot Studio and publish it in the same environment as your
+        canvas app.
+        Configure the custom Copilot with user authentication in Microsoft Entra ID.
+        Give makers and users access to the Copilot within the environment.
+     Connect Copilot to your app
+     Open your canvas app for editing in Power Apps Studio:
+       1. In the command bar, go to Settings > Updates > Preview tab, and set the toggle for App
+        Copilot to On.
+        You see a Copilot tab appear in Settings.
+       2. Select the Copilot tab. In the drop-down list under Connect a copilot, select a custom
+        copilot published and shared in the same environment as your canvas app.
+                                                       
+        3. Once you select a Copilot, close the settings dialog box and publish the app. Once the
+         app is published, users are able to use Copilot within it.
+      Copilot isn't visible when previewing an app in Power Apps Studio. To see Copilot in action,
+      save and publish your app, and then open it using the Power Apps mobile app or a web
+      browser.
+        Tip
+       Removing the custom Copilot from the app will disable its functionality.
+      Use Copilot in your app
+         Open your canvas app in a web browser. On the command bar, select Copilot.
+                                                
+         In the Power Apps mobile app on iOS or Android devices, select the floating button to
+         access Copilot. You can reposition the button or dismiss it. To use Copilot again after
+         dismissing it, close and reopen the app.
+      Difference between this feature and the Copilot
+      control
+      This feature lets you add a custom Copilot created in Microsoft Copilot Studio to a canvas app.
+      It doesn't require any changes to the app's layout. It's available both on the web and natively
+      on mobile devices, and it can connect to existing custom Copilots created in Copilot Studio.
+      When you add a Copilot control to a canvas app, makers need to update the app's layout to
+      accommodate the control, which is only available on the web. This control supports asking
+      questions about your data or connecting to a new custom copilot from Copilot Studio.
+      See Also
+      FAQ for Copilot
+       Last updated on 02/24/2026
+       Create and edit tables using the table
+       designer
+       Article • 10/29/2024
+       Create and edit Dataverse tables in canvas apps using the table designer inside Power
+       Apps Studio. You can also work with the data that's in the table without leaving the app
+       that you're working on.
+       Create a table
+         1. Create a new or open an existing app in Power Apps Studio.
+         2. In the app authoring menu, select Data.
+         3. On the Data pane, select Add Data > Create new table.
+           ７ Note
+           If the Create new table button is disabled then review Required permissions
+           and limitations.
+                                           
+       4. You see Choose an option to create tables. For example, you can choose to Start
+        from blank or Start with Copilot to create a new table.
+       5. A new table is created for you in the canvas. Enter a name for the table directly
+        where you see the table name.
+        You can also expand the Properties pane found in the table's overflow menu (the
+        ellipses) to edit the table properties, such as the plural name for the table. For
+        example, a table name can be Ticket, and the plural table name can be Tickets.
+                                           
+        Can you also add columns or sample data to the table.
+         6. When you're done editing, select Save and exit.
+       Edit an existing table
+       Once a Dataverse table is created, you can start editing the table. You can also add
+       existing Dataverse tables to your app and edit those tables using the table designer.
+         1. From the app authoring menu, select Data.
+         2. On the Data pane, select Add data.
+         3. In the Select a data source dialog box, from the list of Dataverse tables, select a
+          table to add to your app.
+         4. On the newly added table select, More actions > Edit data.
+       5. The selected table is ready for editing in the table designer.
+         ７ Note
+         Some system tables might not be available for editing, or some editing
+         actions may be disabled.
+      Edit the table properties
+      After selecting Edit data, you see the Edit table designer.
+       1. Select Edit table properties.
+             You can edit the following table properties.
+                                                                                    ﾉ Expand table
+              Property          Description
+              Display name      The singular name for the table shown in the app. The display name can be
+                                changed later.
+              Plural display    The plural name for the table shown in the app. The plural display name can
+              name              be changed later.
+              Description       Provide a meaningful description of the purpose of the table.
+             Select Enable Attachments to append notes and files to records for this table.
+             Select the Primary column tab if you want to change its Display Name or Description.
+             The primary column is used by lookup fields when establishing relationships with other
+             tables.
+             Advanced options
+             Select Advanced options to see the optional properties you can set. Otherwise some are
+             already set for you.
+                                                                                              ﾉ Expand table
+               Property               Description
+               Schema name            By default, the schema name is automatically created for you based on the
+                                      display name, but you can change it. The schema name can't contain
+                                      spaces and includes the customization prefix for the Dataverse solution
+                                      publisher. You can't change the schema name after the table is saved.
+               Logical name           A unique identifier for the entity. This name can't be changed once the
+                                      entity is created.
+               Type                   Select the type of table. Use standard for most tables. Activity tables are
+                                      special tables that can only be owned by a user or team, but can't be
+                                      owned by an organization. Virtual tables require the table be populated
+                                      with data from an external source.
+               Record ownership       Switch the table type to Activity table, so you can create tables that can
+                                      manage tasks. The type of Ownership defines who can perform operations
+                                      on a record.
+               Color                  You can select your table color using words or hex codes.
+               Primary row image      You can choose whether to display an image for the table. This image is
+                                      displayed in Power Apps in some design areas. Notice that the image
+                                      doesn't appear in apps using the table. To display images in apps, use the
+                                      image column. Learn more in Image columns.
+               Apply duplicate        If duplicate detection is enabled for your organization, enabling allows you
+               detection rules        to create duplicate detection rules for this table.
+               Track changes          Enables data synchronization in a performant way by detecting what data
+                                      changed since the data was initially extracted or last synchronized.
+               Provide custom         When selected, set a Help URL to control what page users see when they
+               help                   select the help button in the application. Use help to provide guidance
+                                      specific to your company processes for the table.
+               Audit changes to its   When auditing is enabled for your organization, table records can change
+               data                   to be captured over time. When you enable auditing for a table, auditing is
+                                      also enabled on all its fields. You can select or clear fields that you want to
+                                      enable auditing on.
+               Leverage quick         After you create and publish a Quick Create Form for this table, people can
+               create form if         create a new record using the Create button in the navigation pane. Learn
+               available              more in Create and design model-driven app forms.
+                                      If enabled for a custom activity table, the custom activity is visible in the
+                                      group of activity entities when people use the Create button in the
+                                      navigation pane. However, because activities don't support quick create
+                                      forms, the main form is used when the custom table icon is selected.
+               Property              Description
+               Enable long term      Table can be included in the configuration of data retention, which moves
+               retention             certain records to long term storage.
+               Creating a new        Associate activities to records for this table.
+               activity
+               Doing a mail merge    App users can use this table with mail merge.
+               Setting up            After other tasks are performed to enable document management for your
+               SharePoint            organization, enabling this feature allows for this table to participate in
+               document              integration with SharePoint.
+               management
+               Can have              Use the connections feature to show how records for this table have
+               connections           connections to records of other tables that also have connections enabled.
+               Can have a contact    Send emails using an email address stored in one of the fields for this
+               email                 table. If a Single Line of Text column with format set to email doesn't
+                                     already exist for this table, a new one is created when you enable sending
+                                     email.
+               Have an access        Create team templates for this table.
+               team
+               Can be linked to      Let app users write feedback for any table record, or rate table records
+               feedback              within a defined rating range. Learn more in Configure a table for
+                                     feedback/ratings.
+               Appear in search      Enable so that table records can be included in search results when using
+               results               an app.
+               Can be taken          Makes data in this table available while the Power Apps application isn't
+               offline               connected to a network.
+               Can be added to a     Use the table with queues. Queues improve routing and sharing of work by
+               queue                 making records for this table available in a central place that everyone can
+                                     access.
+             Add and edit columns
+             You can create and edit columns in the table editor.
+             Learn more in How to create and edit columns.
+             Editing other table properties
+       For more advanced table editing scenarios, using the table hub is required. Some
+       examples of these kinds of edits are table relationships, keys, and deleting the table.
+       Learn more in Create and edit tables using Power Apps.
+       Add and edit data
+       The table designer for canvas apps allows you to add new rows to a Dataverse table or
+       edit rows inside Power Apps Studio using the table designer. You can start typing
+       directly into the grid or select, New row.
+       Learn more in Create your first table.
+       Remove a table
+       To remove a table from your app, select More options to the right of the table name
+       then select, Remove.
+        ７ Note
+        When you remove a table, the table is removed and not deleted.
+       Required permissions and limitations
+          To create a table in Dataverse, the environment must have a Dataverse database
+          provisioned. You must have system customizer or system administrator
+                    permissions for the environment where you'd like to build a table. If these
+                    conditions aren't met, the Create New Table button is disabled.
+                    You can only create and edit tables in the current Dataverse environment. If you
+                    changed your Dataverse environment using the environment picker, then the
+                    Create new table and Edit table options is disabled.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+          Show a list of items in canvas apps
+          05/31/2025
+          Show a list of items from any data source by adding a Gallery control to your canvas app. This
+          topic uses Excel as the data source. Filter the list by configuring the Gallery control to show
+          only those items that match the filter criterion in a Text input control.
+          Prerequisites
+               Learn how to add and configure a control in Power Apps.
+               Set up the sample data:
+                  1. Download this Excel file   , which contains sample data for this tutorial.
+                  2. Upload the Excel file to a cloud-storage account, such as OneDrive for Business.
+               Open a blank app:
+                  1. Create a blank canvas app.
+                  2. Add a connection to the FlooringEstimates table in the Excel file.
+          Add a gallery to a blank screen
+             1. On the Insert tab, select Gallery, and then select Vertical.
+             2. On the Properties tab of the right-hand pane, open the Items list, and then select
+               Flooring Estimates.
+       3. (optional) In the Layout list, select a different option.
+     Add a gallery in a screen
+       1. On the Home tab, select New screen > List screen.
+        A screen that contains a Gallery control and other controls, such as a search bar, appears.
+       2. Set the gallery's Items property to FlooringEstimates.
+        The Gallery control shows the sample data.
+     Add a control to the Gallery control
+     Before you do any other customization, ensure that the layout for your Gallery control most
+     closely matches what you want. From there, you can further modify the Gallery template, which
+     determines how all data in the Gallery control appears.
+       1. Select the template by clicking or tapping near the bottom of the Gallery control and
+        then selecting the pencil icon in its upper-left corner.
+       2. With the template still selected, add a Label control, and then move and resize it so that it
+        doesn't overlap with other controls in the template.
+      3. Select the gallery, and then select Edit next to Fields on the Properties tab of the right-
+       hand pane.
+      4. Select the label that you added earlier in this procedure, and then open the highlighted
+       list in the Data pane.
+       5. In that list, click or tap Price.
+         The Gallery control shows the new values.
+      Filter and sort a gallery
+      The Items property of a Gallery control determines which items it shows. In this procedure, you
+      configure that property so that it also determines which records appear based on filter criteria
+      and in what order.
+       1. Set the Items property of the Gallery control to this formula:
+          Power Fx
+           Sort(
+               Filter(
+              FlooringEstimates,
+              IsBlank(TextSearchBox1.Text) or TextSearchBox1.Text in Text(Name)
+               ),
+               Name,
+               If(
+                   SortDescending1,
+                   SortOrder.Descending,
+                   SortOrder.Ascending
+               )
+           )
+        For more information about the functions in this formula, see the formula reference.
+       2. Double-click the search box, and then type part or all of a product name in it.
+        Only those items that meet the filter criterion appear.
+       3. While pressing the Alt key, select the sort icon one or more times to switch the sort order.
+        The records toggle between ascending and descending alphabetical order based on the
+        product name.
+     Highlight the selected item
+     Set the Gallery control's TemplateFill property to a formula that's similar to this example, but
+     you can specify different colors if you want:
+     If(ThisItem.IsSelected, LightCyan, White)
+     Change the default selection
+     Set the Gallery control's Default property to the record that you want to select by default. For
+     example, you can specify the fifth item in the FlooringEstimates data source:
+     Index(FlooringEstimates, 5)
+     In this example, you specify the first item in the Hardwood category of the FlooringEstimates
+     data source:
+     LookUp(FlooringEstimates, Category = "Hardwood")
+     Next steps
+    Learn how to work with forms and formulas.
+     Show items of different heights in a canvas
+     app gallery
+     If different items in your data set contain different amounts of data in the same field, you can
+     display items that contain more data without adding extra empty space after items with less data.
+     Add and configure a Flexible height gallery control so that you can:
+        Configure Label controls to expand or shrink based on their contents.
+        Position each control so that it automatically appears just below the control above it.
+     In this article, you show data about flooring products in a Flexible height gallery control. The
+     image of each product appears 5 pixels below the overview text, whether that overview is two
+     lines or five.
+      ７ Note
+      If you've never added controls to a gallery, complete the steps in Show a list of items in a
+      gallery before you proceed.
+     Add data to a blank app
+            1. Download this Excel file  , which contains names, overviews, and image links for flooring
+              products.
+            2. Upload the Excel file to a cloud-storage account such as OneDrive, SharePoint, Dropbox, or
+              Google Drive.
+            3. Create a blank app with Phone layout.
+            4. Add a connection to the FlooringEstimates table in the Excel file.
+              For more information, see Add a data connection.
+        Add data to a gallery
+            1. On the Insert tab, select Gallery > Flexible height.
+            2. Resize the gallery to fill the entire screen.
+            3. Set the gallery's Items property to FlooringEstimates.
+        Show the product names
+            1. In the upper-left corner of the gallery, select the pencil icon to enter template editing mode.
+            2. With the gallery template selected, add a Label control.
+            3. Set the Text property of the Label control to:
+                Power Apps
+        ThisItem.Name
+     Show the product overviews
+      1. With the gallery template selected, add a second Label control and move it below the first.
+      2. Set the Text property of the second Label to:
+        Power Apps
+        ThisItem.Overview
+      3. With the second Label selected, rename it to OverviewText using the name-tag icon on the
+       Content tab.
+      4. Set the AutoHeight property of OverviewText to true.
+          Tip
+         Setting AutoHeight to true on a label causes it to grow or shrink to fit its content. This
+         is the key to making the flexible height gallery work correctly—without it, all items
+         render at the same fixed height.
+     Show the product images
+      1. Make the template taller by dragging its bottom edge down to roughly double its current
+       height.
+       You can add controls to the template more easily as you build the app. This change doesn't
+       affect how the app looks when it runs.
+      2. With the gallery template selected, add an Image control and position it below the
+       OverviewText label.
+      3. Confirm that the Image property of the Image control is set to:
+        Power Apps
+        ThisItem.Image
+      4. Set the Y property of the Image control to position it dynamically below the overview text:
+         Power Apps
+         OverviewText.Y + OverviewText.Height + 5
+        Apply the same concept for any additional controls: set each control's Y property based on
+        the Y and Height of the control immediately above it.
+     Next steps
+        Add and configure a gallery control
+        Best practices for working with galleries
+        Get started with formulas in canvas apps
+      Last updated on 05/14/2026
+     Best practices for using the Gallery control
+     in canvas apps
+     The Gallery is the only control in canvas apps that can create other controls. It has its own scope.
+     These advanced features can lead to unexpected behavior when the Gallery isn't configured
+     correctly. This article covers best practices and recommendations when you work with Gallery
+     controls.
+       Tip
+      Consider using modern controls in your gallery items where possible. Modern controls are
+      designed to minimize common pitfalls like unintended OnChange triggers and provide better
+      accessibility and styling options. You can also use Copilot in Power Apps to generate a
+      gallery layout and data connection automatically.
+     Don't change gallery items from within the gallery
+     It's easy to create unstable behavior if OnChange or OnSelect of child controls modifies the Items
+     of the parent gallery. For example, a Text input in a gallery can have its OnChange property set to:
+      Power Fx
+      Patch(GalleryData, ThisItem, {Name: TextInput.Text})
+     This is usually fine. Most controls only trigger OnChange when users change their value directly.
+     However, the following controls can cause issues because they also trigger OnChange when the
+     system changes their value:
+        Combo box
+        Date picker
+        Slider
+        Toggle
+     For example, when ComboBox.DefaultSelectedItems changes, it triggers OnChange. Consider a
+     Combo box in a Gallery with DefaultSelectedItems set to First(ThisItem.A) and its OnChange
+     property set to:
+      Power Fx
+      UpdateIf(GalleryData, Name = ThisItem.Name, {
+          A: Table({
+              B: First(Self.SelectedItems).B
+          })
+      })
+     This expression updates a record in the gallery's data source that matches the current item's
+     name, replacing the A column with a new table.
+     This causes an infinite loop. When the user changes the Combo box value, OnChange fires, which
+     updates GalleryData, which changes DefaultSelectedItems (because First(ThisItem.A) refers to
+     a new table), which triggers OnChange again—and so on.
+     To avoid infinite loops, use modern controls or other controls that don't trigger OnChange when
+     their data changes.
+     Slow performance from patching items
+     Even if you avoid unwanted loops, patching or updating Gallery items can be slow if the gallery
+     has many items. The Gallery doesn't just update the rows associated with the changed records—
+     in some cases, it reloads all items. This happens because of the loosely structured nature of data
+     sources, which makes it hard for the Gallery to determine whether a single record or the entire
+     data source changed.
+     Gallery.Selected can change unexpectedly
+     The Selected property of the Gallery is a moving target. It can change without user interaction
+     when any of the following occur:
+        Gallery.Default changes
+        Gallery.Items changes
+        Data sources are refreshed or updated
+     If you want a stable copy of the item the user selected, store it in a variable. For example, set the
+     OnSelect property of the Gallery to:
+      Power Fx
+      Set(CurrentItem, Self.Selected)
+     Then use CurrentItem elsewhere in the app to refer to the most recently user-selected item,
+     rather than the system-updated Selected property.
+     Don't use Gallery.Selected in a child control's event
+     The Selected property of the Gallery changes when a user selects an item. However, this event
+     isn't synchronized with child control events. Referring to Gallery.Selected in a child control's
+     events can lead to unexpected results.
+     For example, when a user selects a Checkbox in a Gallery, the following events occur in an
+     unspecified order:
+         Checkbox.OnSelect
+         Checkbox.OnCheck
+         Gallery.Selected changes to the newly selected row
+     Because the order of these events isn't fixed, using Gallery.Selected in Checkbox.OnSelect might
+     still refer to the previously selected row.
+     To avoid timing issues, don't use Gallery.Selected in child control events. If you must respond to
+     changes in Gallery.Selected, use the Gallery's own OnSelect event.
+     Ensure that the Gallery knows the schema of its items
+     Setting Gallery.Items to a variable or the output of a Canvas component can produce
+     unexpected results, depending on when the variable is set or changed.
+     Galleries must know the schema of their Items when the app loads. A schema (also called a
+     shape) defines the name and type of columns in a data source. For example, this table:
+      Power Fx
+      [{A: "abc", B: 123}, {A: "def", B: 456}]
+     has a schema with a text column A and a number column B.
+     Most of the time, the Gallery can infer the schema from the data source and expressions used in
+     the app. However, if the Items property is set to the output of a Canvas component or Import
+     control, the Gallery can't determine its schema at load time so the output table might not be
+     available yet, and the schema might change. The Gallery won't render any items when it doesn't
+     know its schema.
+     The same issue can occur when Items is set to a variable that isn't initialized when the app loads.
+     As a workaround, hint the expected schema to the Gallery using a variable. Set App.OnStart to:
+      Power Fx
+      If(false, Set(GalleryData, [{A: "abc", B: 123}]), Set(GalleryData, []))
+     This lets the system infer the schema of GalleryData. Set the Items property of the Gallery to
+     GalleryData, then update it to the actual data source as needed.
+     Don't assume AllItems contains all items of its dataset
+     The AllItems property contains the items currently loaded into the visible area of the gallery—not
+     all items in Items. AllItems can change as the user scrolls to load more items. Typically, this
+     property is used to access values of child controls that the user is currently interacting with, which
+     guarantees those items are loaded.
+     Don't refer to an item in AllItems if you're not sure whether the user has scrolled to that item.
+     Similarly, AllItemsCount is the count of items loaded into view, not the total record count in
+     Items. To get the total number of records in Items, use CountRows(<expression used for Items
+     property>).
+     Next steps
+        Add a gallery to show a list of items
+        Understand gallery dynamic sizing
+        Isolate issues in canvas apps
+        Overview of modern controls in canvas apps
+      Last updated on 05/14/2026
+             Show, edit, or add a record in a canvas
+             app
+             Article • 01/19/2023
+             In a canvas app, add and configure a Display form control to show all fields in a record.
+             You can also add and configure an Edit form control to edit any field in a record, add a
+             record, and save your changes back to a data source.
+             Prerequisites
+                  Learn how to add and configure a control in Power Apps.
+                  Download this Excel file   , which contains sample data for this tutorial.
+                  Upload the Excel file to a cloud-storage account, such as OneDrive for Business.
+                  Create or open an app for phones, add a connection to the FlooringEstimates
+                  table in the Excel file.
+                  You can add a form to a tablet app, but it won't match this article because the form
+                  will have three columns by default.
+                  If you open an existing app, add a screen to it.
+             Add a form, and show data
+                1. On a blank screen, add a Drop down control, and name it ChooseProduct.
+                     ７ Note
+                     If you're not sure how to add a control, rename it, or set a property, see Add
+                     and configure controls.
+                2. On the Properties tab of the right-hand pane, set Items to FlooringEstimates and
+                  Value to Name.
+        The list shows names of flooring products from the data source.
+       3. Add an Edit form control, move it below ChooseProduct, and then resize the form
+        to cover most of the screen.
+         ７ Note
+         This topic describes the Edit form control, but similar principles apply to the
+         Display form control.
+        4. Set the form's DataSource property to FlooringEstimates and its Item property to
+          this formula:
+          ChooseProduct.Selected
+          This formula specifies that, after you finish configuring the form, it will show the
+          record that the user selects in ChooseProduct.
+        5. On the Properties tab of the right-hand pane, select Edit fields.
+        6. In the Fields pane, select Add field, select the check box for each field, and then
+          select Add.
+        7. Select the ellipsis (...) next to Add field, select Collapse all, and then drag Name to
+          the top of the list.
+           The Edit form control reflects your change.
+       Set the card type for a field
+         1. In the Fields pane, expand the Price field by selecting its down arrow.
+         2. Open the Control type list, and then select Edit slider.
+          In the form, the Price field shows a Slider control instead of a Text input control.
+         3. (optional) Follow the same process to change the control for the Overview field to
+          an Edit multi-line text control.
+       (Edit form only) Save changes
+         1. Rename the form EditForm.
+         2. Add a Button control, and set its OnSelect property to this formula:
+          SubmitForm(EditForm)
+         3. Press F5 to open Preview, change the name of a product, and then select the
+          button that you created.
+          The SubmitForm function saves your changes to the data source.
+         4. (optional) Close Preview by pressing Esc (or by selecting the close icon in the
+          upper-right corner).
+       Next steps
+       Learn more about working with forms and formulas.
+         Understand canvas-app forms
+         Add three types of controls to a canvas app so that the user can browse for a record, display
+         details about that record, and edit or create a record:
+                                                                                                   ﾉ Expand table
+          Activity         Control        Description
+          Browse for a     Gallery        Filter, sort, search, and scroll through records in a data source, and select a
+          record           control        specific record. Display only a few fields from each record to show several
+                                          records at a time, even on a small screen.
+          Show details     Display        For a single record, display many or all fields in that record.
+          of a record      form
+                           control
+          Edit or create   Edit form      Update one or more fields in a single record (or create a record starting with
+          a record         control        default values), and save those changes back to the underlying data source.
+         Put each control on a different screen to make them easier to distinguish:
+         As this article describes, combine these controls with formulas to create the overall user
+         experience.
+        Prerequisites
+             Sign up for Power Apps, and then sign in    by providing the same credentials that you used
+             to sign up.
+             Learn how to configure a control in Power Apps.
+        Explore a generated app
+        Power Apps can automatically generate an app based on a data source that you specify. Each app
+        contains three screens with the controls described earlier and formulas that connect them. Run
+        these apps "out of the box," customize them for your specific goals, or examine how they work so
+        that you can learn useful concepts that apply to your own apps. In the following sections, inspect
+        the screens, controls, and formulas that drive a generated app.
+        Browse screen
+        This screen features these key formulas:
+                                                                                                             ﾉ Expand table
+           Control                  Supported behavior                                Formula
+           BrowseGallery1           Display records from the Assets data              The Items property of the gallery is set
+                                    source.                                           to a formula that's based on the
+                                                                                      Assets data source.
+           ImageNewItem1            Display the Edit and Create screen with           The OnSelect property of the image is
+                                    each field set to a default value, so that the    set to this formula:
+                                    user can easily create a record.                  NewForm( EditForm1 );
+                                                                                      Navigate( EditScreen1, None )
+           NextArrow1 (in the       Display the Details screen to view many or        The OnSelect property of the arrow is
+           gallery)                 all fields of the currently selected record.      set to this formula:
+                                                                                      Navigate( DetailScreen1, None )
+          The primary control on this screen, BrowseGallery1, covers most of the area of the screen. The
+          user can scroll through the gallery to find a specific record to display more fields or to update.
+          Set the Items property of a gallery to show records from a data source in it. For example, set that
+          property to Assets to show records from a data source of that name.
+             ７ Note
+             In a generated app, Items is set to a significantly more complicated formula by default so
+             that the user can sort and search for records. You'll learn how to build that formula later in
+             this topic; the simpler version is enough for now.
+          Instead of finding a record to display or edit, the user can create a record by selecting the "+"
+          symbol above the gallery. Create this effect by adding an Image control, showing a "+" symbol in
+          it, and setting its OnSelect property to this formula:
+          NewForm( EditForm1 ); Navigate( EditScreen1, None )
+          This formula opens the Edit and Create screen, which features an Edit form control named
+          EditForm1. The formula also switches that form into New mode, in which the form shows default
+          values from the data source so that the user can easily create a record from scratch.
+          To examine any control that appears in BrowseGallery1, select that control in the first section of
+          that gallery, which serves as a template for all other sections. For example, select the middle
+          Label control on the left edge:
+    In this example, the control's Text property is set to ThisItem.AssignedTo, which is a field in the
+    Assets data source. The Text property of the other three Label controls in the gallery are set to
+    similar formulas, and each control shows a different field in the data source.
+    Select the Shape control (the arrow), and confirm that its OnSelect property is set to this formula:
+    Navigate( DetailScreen1, None )
+    If the user finds a record in BrowseGallery1, the user can select the arrow for that record to show
+    more information about it in DetailScreen1. By selecting an arrow, the user changes the value of
+    the Selected property of BrowseGallery1. In this app, that property determines which record
+    appears in not only DetailScreen1 but also, if the user decides to update the record, the Edit and
+    Create screen.
+    Detail screen
+         This screen features these key formulas:
+                                                                                                     ﾉ
+                                                                                                         Expand table
+           Control             Supported behavior                        Formula
+           DetailForm1         Displays a record in the Assets data      Set the DataSource property to Assets.
+                               source
+           DetailForm1         Determines which record to display. In    Set the Item property of this control to this
+                               a generated app, displays the record      value:
+                               that the user selected in the gallery.    BrowseGallery1.Selected
+           Card controls       In a Display form control, displays a     Set the DataField property to the name of a
+                               single field in a record.                 field, enclosed in double quotation marks (for
+                                                                         example, "Name").
+           ImageBackArrow1     When the user selects this control,       Set the OnSelect property to this formula:
+                               opens BrowseScreen1.                      Back()
+           ImageDelete1        When the user selects this control,       Set the OnSelect property to this formula:
+                               deletes a record.                         Remove( Assets, BrowseGallery1.Selected )
+           Control              Supported behavior                         Formula
+           ImageEdit1           When the user selects this control,        Set the OnSelect property to this formula:
+                                opens the Edit and Create screen to        Navigate( EditScreen1, None )
+                                the current record.
+         At the top of the screen, three images sit outside of DetailForm1 and act as buttons,
+         orchestrating between the three screens of the app.
+         DetailForm1 dominates this screen and displays the record that the user selected in the gallery
+         (because the form's Item property is set to BrowseGallery1.Selected). The DataSource property
+         of the form also provides metadata about the data source, such as a user-friendly display name
+         for each field.
+         DetailForm1 contains several Card controls. You can select either the Card control itself or the
+         control that it contains to discover additional information.
+         The DataField property of a Card control determines which field the card displays. In this case,
+         that property is set to AssetID. The card contains a Label control for which the Text property is
+         set to Parent.Default. This control shows the Default value for the card, which is set through the
+         DataField property.
+         In a generated app, Card controls are locked by default. When a card is locked, you can't modify
+         some properties, such as DataField, and the formula bar is unavailable for those properties. This
+    restriction helps ensure that your customizations don't break the basic functionality of the
+    generated app. However, you can change some properties of a card and its controls in the right-
+    hand pane:
+    In the right-hand pane, you can select which fields to display and in which kind of control each
+    field displays.
+    Edit/Create screen
+         This screen features these key formulas:
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Control          Supported behavior                          Formula
+           EditForm1        Displays a record in the Assets data        Set the DataSource property to Assets.
+                            source.
+           EditForm1        Determines which record to display. In a    Set the Item property to this value:
+                            generated app, displays the record that     BrowseGallery1.Selected
+                            the user selected in BrowseScreen1.
+           Card controls    In a Edit form control, provides controls   Set the DataField property to the name of a
+                            so that the user can edit one or more       field, enclosed in double quotation marks (for
+                            fields in a record.                         example, "Name").
+           ImageCancel1     When the user selects this control,         Set the OnSelect property to this formula:
+                            discards any changes in progress, and       ResetForm( EditForm1 ); Back()
+                            opens the Details screen.
+           ImageAccept1     When the user selects this control,         Set the OnSelect property to this formula:
+                            submits changes to the data source.         SubmitForm( EditForm1 )
+           Control          Supported behavior                           Formula
+           EditForm1        If changes are accepted, returns to the      Set the OnSuccess property to this formula:
+                            previous screen.                             Back()
+           EditForm1        If changes aren't accepted, remain on the    Leave the OnFailure property blank.
+                            current screen so that the user can fix any
+                            issues and try to submit again.
+           LblFormError1    If changes aren't accepted, shows an         Set the Text property to this value:
+                            error message.                               EditForm1.Error
+         As in the Details screen, a form control, named EditForm1, dominates the Edit and Create screen.
+         In addition, the Item property of EditForm1 is set to BrowseGallery1.Selected, so the form
+         displays the record that the user selected in BrowseScreen1. While the Details screen shows each
+         field as read-only, the user can update the value of one or more fields by using the controls in
+         EditForm1. It also uses the DataSource property to access metadata about this data source, such
+         as the user-friendly display name for each field and the location where changes should be saved.
+         If the user selects the "X" icon to cancel an update, the ResetForm function discards any unsaved
+         changes, and the Back function opens the Details screen. Both the Details screen and the Edit
+         and Create screen show the same record until the user selects a different one on BrowseScreen1.
+         The fields in that record remain set to the values that were most recently saved, not any changes
+         that the user made and then abandoned.
+         If the user changes one or more values in the form and then selects the "checkmark" icon, the
+         SubmitForm function sends the user's changes to the data source.
+                If the changes are successfully saved, the form's OnSuccess formula runs, and the Back()
+                function opens the detail screen to show the updated record.
+                If the changes aren't successfully saved, the form's OnFailure formula runs, but it doesn't
+                change anything because it's blank. The Edit and Create screen remains open so that the
+                user can either cancel the changes or fix the error. LblFormError1 shows a user-friendly error
+                message, to which the form's Error property is set.
+         As with a Display form control, an Edit form control contains Card controls, which contain other
+         controls that show different fields in a record:
+    In the previous image, the selected card shows the AssetID field and contains a Text input
+    control so that the user can edit the value of that field. (In contrast, the detail screen shows the
+    same field in a Label control, which is read-only.) The Text input control has a Default property,
+    which is set to Parent.Default. If the user were creating a record instead of editing one, that
+    control would show an initial value that the user can change for the new record.
+    In the right-hand pane, you can show or hide each card, rearrange them, or configure them to
+    show fields in different types of controls.
+     Build an app from scratch
+     By understanding how Power Apps generates an app, you can build one yourself that uses the
+     same building blocks and formulas discussed earlier in this topic.
+     Identify test data
+     To get the most from this article, start with a data source with which you can experiment. It
+     should contain test data that you can read and update without concern.
+      ７ Note
+      If you use a list created using Microsoft Lists, a SharePoint library, or an Excel table that
+      contains column names with spaces as your data source, Power Apps will replace the spaces
+      with "_x0020_". For example, "Column Name" in SharePoint or Excel will appear as
+      "Column_x0020_Name" in Power Apps when displayed in the data layout or used in a
+      formula.
+     To follow the rest of this article exactly, create a list named "Ice Cream" that contains this data:
+       Create an app from blank, for phones, and connect it to your data source.
+         ７ Note
+         Tablet apps are very similar, but you may want a different screen layout to make the
+         most of the extra screen space.
+       The examples in the rest of the topic are based on a data source named Ice Cream.
+     Browse records
+     Get a quick piece of information from a record by finding it in a gallery on a browse screen.
+      1. Add a Vertical gallery, and change the layout to Title only.
+     2. Set the gallery's Items property to Ice Cream.
+     3. Set the Text property of the first label in the gallery to ThisItem.Title if it's set to something
+      else.
+      The label now shows the value in the Title field for each record.
+     4. Resize the gallery to fill the screen, and set its TemplateSize property to 60.
+      The screen resembles this example, which shows all records in the data source:
+     View details
+     If the gallery doesn't show the information that you want, select the arrow for a record to open
+     the details screen. A Display form control on that screen shows more, possibly all, fields for the
+     record that you selected.
+     The Display form control uses two properties to display the record:
+        DataSource property. The name of the data source that holds the record. This property
+        populates the right-hand panel with fields and determines the display name and data type
+        (string, number, date, etc.) of each field.
+        Item property. The record to display. This property is often connected to the Selected
+        property of the Gallery control so that the user can select a record in the Gallery control
+        and then drill into that record.
+     When the DataSource property is set, you can add and remove fields through the right-hand
+     pane and change how they're displayed.
+     On this screen, users can't intentionally or accidentally change any values of the record. The
+     Display form control is a read-only control, so it won't modify a record.
+     To add a Display form control:
+       1. Add a screen, and then add a Display form control to it
+       2. Set the DataSource property of the form control to 'Ice Cream'.
+     In the right-hand pane, you can select the fields to display on your screen and which type of card
+     to display for each field. As you make changes in the right-hand pane, the DataField property on
+     each Card control is set to the field that the user will interact with. Your screen should resemble
+     this example:
+    Finally, we need to connect the Display form control to the Gallery control so that we can look at
+    details for a specific record. As soon as we complete setting the Item property, the first record
+    from the gallery will appear in our form.
+      Set the Item property of the Display form control to Gallery1.Selected.
+      The details for the selected item appear in the form.
+    Great! We now turn to navigation: how a user opens the details screen from the gallery screen
+    and opens the gallery screen from the details screen.
+      Add a Button control to the screen, set its Text property to show Back, and set its OnSelect
+      property to Back().
+      This formula returns the user back to the gallery when they finish viewing details.
+    Now, let's return to the Gallery control and add some navigation to our detail screen.
+     1. Switch to the first screen, which is hosting our Gallery control, and select the arrow in the
+      first item in the gallery.
+     2. Set the OnSelect property of the shape to this formula:
+      Navigate( Screen2, None )
+     3. Select the play button (or press F5), and then select an arrow in the gallery to show the
+      details for an item.
+     4. Select the Back button to return to the gallery of products, and then press Esc.
+    Editing details
+    Finally, our last core activity is changing the contents of a record, which users accomplish in an
+    Edit form control.
+    The Edit form control uses two properties to display and edit the record:
+      DataSource property. The name of the data source that holds the record. Just as with the
+      Display form control, this property populates the right-hand panel with fields and
+      determines the display name and data type (string, number, date, etc.) for each field. This
+      property also determines whether each field's value is valid before submitting it to the
+      underlying data source.
+      Item property. The record to edit, which is often connected to the Selected property of the
+      Gallery control. That way, you can select a record in the Gallery control, show it in the
+      details screen, and edit it in the Edit and Create screen.
+    To add an Edit form control:
+     1. Add a screen, add an Edit form control, and then set the form's DataSource property to 'Ice
+      Cream'.
+     2. Set the Item property to Gallery1.Selected.
+    You can now select the fields to display on your screen. You can also select which type of card to
+    display for each field. As you make changes in the right-hand pane, the DataField property on
+    each Card control is set to the field your user will interact with. Your screen should resemble this
+    example:
+    These two properties are the same as the properties on the Display form control. And with these
+    alone, we can display the details of a record.
+    The Edit form control goes further by offering the SubmitForm function to write back changes to
+    the data source. You use this with a button or image control to save a user's changes.
+      Add a Button control, set its Text property to show Save, and set its OnSelect property to
+      this formula:
+      SubmitForm( Form1 )
+    To add navigation to and from this screen:
+     1. Add another Button control, set its Text property to show Cancel, and set its OnSelect
+      property to this formula:
+      ResetForm( Form1 ); Back()
+      This formula discards any unsaved edits and opens the previous screen.
+     2. Set the OnSuccess property of the form to Back().
+      When updates are successfully saved, the previous screen (in this case, the details screen)
+      opens automatically.
+     3. On the Display screen, add a button, set its Text property to show Edit, and set its OnSelect
+      property to this formula:
+      Navigate( Screen3, None )
+     You've built a basic app with three screens for viewing and entering data. To try it out, show the
+     gallery screen, and then select the play button (or press F5 on your keyboard). The pink dot
+     indicates where the user selects the screen at each step.
+     Create a record
+     The user interacts with the same Edit form to both update and create records. When the user
+     wants to create a record, the NewForm function switches the form to New mode.
+     When the form is in New mode, the value of each field is set to the defaults of the data source.
+     The record that's provided to the form's Item property is ignored.
+     When the user is ready to save the new record, SubmitForm runs. After the form is successfully
+     submitted, the form is switched back to EditMode.
+     On the first screen, you'll add a New button:
+       1. On the screen with the gallery, add a Button control.
+       2. Set the button's Text property to New and its OnSelect property to this formula:
+        NewForm( Form1 ); Navigate( Screen3, None )
+        This formula switches the Edit form control on Screen3 to New mode and opens that
+        screen so that the user can fill it in.
+     When the Edit and Create screen opens, the form is empty, ready for the user to add an item.
+     When the user selects the Save button, the SubmitForm function ensures that a record is created
+     instead of being updated. If the user selects the Cancel button, the ResetForm function switches
+     the form back to Edit mode, and the Back function opens the screen for browsing the gallery.
+     Delete a record
+       1. On the Display screen, add a button, and set its Text property to show Delete..
+      2. Set the button's OnSelect property to this formula:
+        Remove( 'Ice Cream', Gallery1.Selected ); Back()
+     Handling errors
+     In this app, an error occurs when the value of a field is not valid, a required field is blank, you're
+     disconnected from the network, or any number of other problems pop up.
+     If SubmitForm fails for any reason, the Error property of the Edit form control contains an error
+     message to show the user. With this information, the user should be able to correct the issue and
+     resubmit the change, or they can cancel the update.
+      1. On the Edit and Create screen, add a Label control, and move it just below the Save button.
+        Any error will be easy to see after the user selects this control to save changes.
+      2. Set the Text property of the Label control to show Form1.Error.
+    In an app that Power Apps generates from data, the AutoHeight property on this control is set to
+    true so that no space is consumed if no error occurs. The Height and Y properties of the Edit
+    form control are also adjusted dynamically to account for this control growing when an error
+    occurs. For more details, generate an app from existing data, and inspect these properties. The
+    text-box control for errors is very short when no error has occurred, you may need to open the
+    Advanced view (available on the View tab) to select this control.
+     Refresh data
+     The data source is refreshed whenever the user opens the app, but the user might want to refresh
+     the records in the gallery without closing the app. Add a Refresh button so that the user can
+     select it to manually refresh the data:
+       1. On the screen with the Gallery control, add a Button control and set its Text property to
+        show Refresh.
+       2. Set the OnSelect property of this control to this formula:
+        Refresh( 'Ice Cream' )
+     Search and sort the gallery
+     In the app that Power Apps generated from data, we neglected to discuss two controls at the top
+     of the Browse screen. By using these controls, the user can search for one or more records, sort
+     the list of records in ascending or descending order, or both.
+    When the user selects the sort button, the sort order of the gallery reverses. To create this
+    behavior, we use a context variable to track the direction in which the gallery is sorted. When the
+    user selects the button, the variable is updated, and the direction reverses. The OnSelect property
+    of the sort button is set to this formula: UpdateContext( {SortDescending1: !SortDescending1} )
+    The UpdateContext function creates the SortDescending1 context variable if it doesn't already
+    exist. The function will read the value of the variable and set it to the logical opposite by using
+    the ! operator. If the value is true, it becomes false. If the value is false, it becomes true.
+    The formula for the Items property of the Gallery control uses this context variable, along with
+    the text in the TextSearchBox1 control:
+     Power Fx
+     Sort( 
+       If( IsBlank(TextSearchBox1.Text),
+          Assets,
+             Filter( Assets, TextSearchBox1.Text in Text(ApproverEmail) ) 
+       ),
+       ApproverEmail,
+         If(SortDescending1, Descending, Ascending) 
+     )
+     Let's break this down:
+        On the outside, we have the Sort function, which takes three arguments: a table, a field on
+        which to sort, and the direction in which to sort.
+         The sort direction is taken from the context variable that toggles when the user selects
+         the ImageSortUpDown1 control. The true/false value is translated to the constants
+         Descending and Ascending.
+         The field to sort on is fixed to ApproverEmail. If you change the fields that appear in the
+         gallery, you'll need to change this argument too.
+        On the inside, we have the Filter function, which takes a table as an argument and an
+        expression to evaluate for each record.
+         The table is the raw Assets data source, which is the starting point before filtering or
+         sorting.
+         The expression searches for an instance of the string in TextSearchBox1 within the
+         ApproverEmail field. Again, if you change the fields that appear in the gallery, you'll also
+         need to update this argument.
+         If TextSearchBox1 is empty, the user wants to show all records, and the Filter function is
+         bypassed.
+     This is but one example; you can craft your own formula for the Items property, depending on
+     the needs of your app, by composing Filter, Sort, and other functions and operators together.
+     Screen design
+     So far, we haven't discussed other ways to distribute controls across screens. That's because you
+     have many options, and the best selection depends on your specific app's needs.
+     Because real estate on phone screens is so limited, you probably want to browse, display, and
+     edit/create on different screens. In this topic, the Navigate and Back functions open each screen.
+     On a tablet, you can browse, display, and edit/create on two or even one screen. For the latter, no
+     Navigate or Back function would be required.
+     If the user is working on the same screen, you need to be careful that the user can't change the
+     selection in the Gallery and potentially lose edits in the Edit form control. To keep the user from
+     selecting a different record when changes to another record haven't been saved yet, set the
+     Disabled property of the gallery to this formula:
+     EditForm.Unsaved
+      Troubleshoot common form issues
+      SubmitForm doesn't save changes
+      If SubmitForm runs but changes aren't saved, check the following:
+         Validation errors: The form's Error property contains an error message when submission
+         fails. Add a Label control and set its Text property to Form1.Error to surface the error to the
+         user.
+         Missing required fields: If the data source marks fields as required, the form won't submit
+         until those fields have values. Check the DataSourceInfo function or validate fields with
+         Validate.
+         Permissions: Make sure the signed-in user has write access to the data source (for example,
+         the SharePoint list or Dataverse table).
+         Data source connection: If the app lost its connection, SubmitForm can't reach the data
+         source. Use the Connection signal to check connectivity and display a message to the user.
+      Gallery doesn't show new or updated records after saving
+      After SubmitForm succeeds, the form's data source is automatically refreshed. However, if the
+      gallery is connected to a different variable or filtered view, it may not immediately reflect the
+      change. Use the Refresh function in the form's OnSuccess formula to force the gallery to reload:
+       Power Fx
+       SubmitForm(Form1);
+       Refresh(MyDataSource)
+      Form shows data from the wrong record
+      The form's Item property controls which record is displayed. Make sure it's set to the Selected
+      property of your gallery (for example, Gallery1.Selected). If it's set to a static record or a
+      variable, the form may show stale data.
+      Form fields are empty after switching records in the gallery
+      If the form's Item property is correctly set to Gallery1.Selected and fields still appear empty,
+      make sure the form is in Edit mode, not New mode. Calling NewForm switches the form to New
+      mode and clears all fields. Call EditForm to return the form to Edit mode before navigating to the
+      edit screen.
+     Column names show x0020 in the form
+     If your SharePoint list or Excel table has column names with spaces, Power Apps encodes those
+     spaces as _x0020_ in formulas. This is expected. Rename the column in your data source to
+     remove the spaces, or continue using the encoded name in your formulas.
+     Related information
+        Display form and Edit form controls reference
+        SubmitForm, EditForm, NewForm, ResetForm functions
+        Understand data sources for canvas apps
+        Add a gallery control to a canvas app
+        Add and configure controls in canvas apps
+        Understand variables in canvas apps
+      Last updated on 05/04/2026
+       Understand data-form layout for canvas
+       apps
+       Article • 12/16/2022
+       Easily create an attractive and efficient form when you build a canvas app in Power
+       Apps. For example, consider this basic form for recording sales orders:
+       In this tutorial, we'll walk through the steps to create this form. We'll also look at some
+       advanced topics, such as dynamic sizing of fields to fill available space.
+       Before you start
+       If you're new to Power Apps (or have only generated apps automatically), you'll want to
+       build an app from scratch before you dive into this article. By building an app from
+       scratch, you'll become familiar with required concepts, such as adding data sources and
+       controls, that are mentioned but not explained in this article.
+       This article is written as though you have a data source that's named Sales order and
+       that contains the fields in the previous graphic. If you have a Power Apps per user, per
+       app, or trial license and system administrator or system customizer permissions, you can
+       create a table in Microsoft Dataverse and add similar fields.
+       Add a gallery
+         1. Create a tablet app from scratch, and add your data source.
+          Everything discussed in this article also applies to phone layouts, but phone apps
+          often have only one vertical column.
+         2. Add a vertical Gallery control, and set its Items property to 'Sales order'.
+          (optional) To match the examples in this tutorial, change the gallery's Layout to
+          show only Title and subtitle.
+         3. In the gallery, click or tap SO004.
+          This record will appear in the form that you build by following steps later in this
+          article.
+       Add a title bar
+         1. Add a blank screen where you'll put the form.
+          Outside of this tutorial, you can put the Gallery and Edit form controls on the
+          same screen, but you'll have more room to work with if you put them on separate
+         screens.
+        2. At the top of the new screen, add a Label control, and set its Text property to this
+         expression:  
+         "Sales Order " & Gallery1.Selected.SalesOrderId
+         The label shows the sales-order number of the record that you selected in the
+         gallery.
+        3. (optional) Format the label as follows:
+         a. Set its Align property to Center.
+         b. Set its Size property to 20.
+         c. Set its Fill property to Navy.
+         d. Set its Color property to White.
+         e. Set its Width property to Parent.Width.
+         f. Set its X and Y properties to 0.
+      Add a form
+        1. Add an Edit form control, and then move and resize it to fill the screen under the
+         label.
+         In the next step, you'll connect the form control to the Sales order data source by
+         using the right-hand pane, not the formula bar. If you use the formula bar, the
+         form won't show any fields by default. You can always show any fields that you
+         want by selecting one or more check boxes in the right-hand pane.
+        2. In the right-hand pane, click or tap the down arrow next to No data source
+         selected, and then click or tap Sales order.
+         A default set of fields from the Sales order data source will appear in a simple,
+         three-column layout. However, many are blank, and they may take a few moments
+         to settle into their final positions.
+        3. Set the form's Item property to Gallery1.Selected.

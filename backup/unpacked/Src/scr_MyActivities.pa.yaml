@@ -1,0 +1,832 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_MyActivities:
+    Properties:
+      Fill: =varBgLight
+      LoadingSpinner: =LoadingSpinner.Data
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =// ============================================================
+        // scr_MyActivities.OnVisible — PRODUCTION VERSION
+        // Purpose: initialise filter state and load user's assigned activities
+        // with their latest report status for the current reporting period
+        // ============================================================
+
+        // ------------------------------------------------------------
+        // 1. FILTER STATE — reset every visit
+        // ------------------------------------------------------------
+        Set(varActFilterFY, varCurrentFY);
+        Set(varActFilterMonth, "All");
+        Set(varActFilterStatus, "All");
+
+        // ------------------------------------------------------------
+        // 2. LOAD MY ACTIVITIES — this user's own assigned activities
+        // ------------------------------------------------------------
+        ClearCollect(
+            colMyActivities,
+            Filter(Activities, ActivityOwner.Email = varUserEmail, 'Active ' = true)
+        );
+
+        // ------------------------------------------------------------
+        // 3. BUILD ACTIVITY STATUS — join each activity with its latest
+        //    report for the selected FY/month, derive RAG and action label
+        // ------------------------------------------------------------
+        ClearCollect(
+            colMyActivityStatus,
+            ForAll(
+                colMyActivities As Act,
+                With(
+                    {
+                        latestReport: First(
+                            Filter(
+                                MonthlyReports,
+                                Activity.Id = Act.ID,
+                                'FinancialYear '.Value = varCurrentFY,
+                                ActivityOwner.Email = varUserEmail
+                            )
+                        )
+                    },
+                    {
+                        ActivityID: Act.ID,
+                        ActivityName: Act.'Activity: ActivityShortDescription'.Value,
+                        ProjectName: Act.Project.Value,
+                        ProgrammeName: Act.ProgrammeLabel,
+                        DirectorateName: Act.DirectorateLabel,
+                        Frequency: Act.'Frequency ',
+                        DueDay: Act.DueDay,
+                        ReportStatus: Coalesce(latestReport.Status.Value, "Not Started"),
+                        ReportID: Coalesce(latestReport.ID, Blank()),
+                        RAG: Switch(
+                            Coalesce(latestReport.Status.Value, "Not Started"),
+                            "Approved", "Green",
+                            "Draft", "Amber",
+                            "Submitted", "Amber",
+                            "Rejected", "Red",
+                            "Green"
+                        ),
+                        ActionLabel: Switch(
+                            Coalesce(latestReport.Status.Value, "Not Started"),
+                            "Not Started", "Start Report",
+                            "Draft", "Continue",
+                            "Submitted", "Submitted ✓",
+                            "Rejected", "Resubmit",
+                            "Approved", "View",
+                            "Start Report"
+                        ),
+                        ActionDisabled: Coalesce(latestReport.Status.Value, "Not Started") = "Submitted",
+                        IsOverdue: Coalesce(latestReport.IsOverdue, false),
+                        IsFlagged: Coalesce(latestReport.isFlagged, false)
+                    }
+                )
+            )
+        );
+
+        // ------------------------------------------------------------
+        // 4. SET RESULT COUNT
+        // ------------------------------------------------------------
+        Set(varActResultCount, CountRows(colMyActivityStatus));
+
+        // ============================================================
+        // END OF scr_MyActivities.OnVisible
+        // ============================================================
+    Children:
+      - scr_Activities_con:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =App.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Vertical
+            Width: =App.Width
+          Children:
+            - ActivitiesHomeHeader_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.Semilight
+                  Fill: =varNavy
+                  FillPortions: =0
+                  Height: =App.Height * 0.13
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =20
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =App.Width - ActivitiesSidebar_con.Width
+                Children:
+                  - HomeHeaderLeft_con_3:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        FillPortions: =0
+                        Height: =Parent.Height
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingLeft: =8
+                        PaddingTop: =8
+                        Width: =Parent.Width * .55
+                      Children:
+                        - HomeDashboard_lbl_3:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =Parent.Height * .5
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =25
+                              Text: '="Home Dashboard"  '
+                        - HomeDashboardSubtitle_lbl_3:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              Height: =Parent.Height * .5
+                              Size: =12
+                              Text: =varUserDirectorate & " · " & varUserProgramme  //
+                              X: =40
+                              Y: =40
+                  - HomeHeaderCenter__con_3:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =Parent.Height
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutJustifyContent: =LayoutJustifyContent.End
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        Width: =Parent.Width / 3
+                      Children:
+                        - SearchBox_con_3:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Center
+                              Fill: =varBgLight
+                              Height: =Parent.Height * .4
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =10
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width - 50
+                            Children:
+                              - Search_ico_3:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(153, 153, 153, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * 0.65
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Search
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =Parent.Width * 0.08
+                              - SearchBox_txt_3:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    BorderThickness: =0
+                                    Clear: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    Default: =
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    DisabledFill: =RGBA(242, 242, 241, 0)
+                                    Fill: |
+                                      =varBgLight
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * 0.65
+                                    HintText: ="Search projects, activities, reports"
+                                    HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                    HoverColor: =RGBA(50, 49, 48, 1)
+                                    HoverFill: =RGBA(255, 255, 255, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varHomeSearchTerm, SearchBox_txt_3.Text)
+                                    PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                    PressedColor: =RGBA(50, 49, 48, 1)
+                                    PressedFill: =RGBA(255, 255, 255, 1)
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Size: =15
+                                    Width: =Parent.Width - Search_ico_3.Width - 25
+                        - HomeBell_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height * .4
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Bell
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width / 15
+            - ActivitiesMainScreen_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  Width: =App.Width
+                Children:
+                  - ActivitiesSidebar_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Fill: =varBgLight
+                        FillPortions: =0
+                        Height: =App.Height
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =30
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =20
+                        PaddingLeft: =10
+                        PaddingRight: =10
+                        PaddingTop: =20
+                        Width: =App.Width * 0.05
+                      Children:
+                        - Home_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Home
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Projects_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Manufacture
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Projects,ScreenTransition.Cover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Activities_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.RadarActivityMonitor
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Cover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - MonthlyReports_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.CalendarBlank
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Activitiessds_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.ListWatchlistRemind
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Fade)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Trending_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Trending
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Users_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.People
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Users,ScreenTransition.UnCover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - SidebarSpacer_con_2:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                        - Settings_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Settings
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Support_ico_2:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Support
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                  - ActivitiesMainContent_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Fill: =RGBA(204, 218, 228, 1)
+                        Height: =App.Height
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =12
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        Width: =App.Width -ActivitiesSidebar_con.Width
+                      Children:
+                        - ActFilterBar_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.Semilight
+                              Fill: =varBgLight
+                              FillPortions: =0
+                              Height: =56
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =24
+                              PaddingRight: =24
+                              Width: =Parent.Width
+                            Children:
+                              - ActFYFilter_drp:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    AccessibleLabel: ="Financial Year"
+                                    Fill: =varBgLight
+                                    Height: =34
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =Choices(MonthlyReports.'FinancialYear ')
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varActFilterFY, ActFYFilter_drp.Selected.Value)
+                                    Width: =180
+                              - ActMonthFilter_drp:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    AccessibleLabel: ="Month"
+                                    Fill: =varBgLight
+                                    Height: =34
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =["All", "April", "May", "June", "July", "August", "September", "October", "November", "December", "January", "February", "March"]
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varActFilterMonth, ActMonthFilter_drp.Selected.Value)
+                                    Width: =150
+                              - ActStatusFilter_drp:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    AccessibleLabel: ="Status"
+                                    Fill: =varBgLight
+                                    Height: =34
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =["All", "Not Started", "Draft", "Submitted", "Approved", "Rejected"]
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varActFilterStatus, ActStatusFilter_drp.Selected.Value)
+                                    Width: =150
+                              - ActResultCount_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =1
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =varActResultCount & " activities"
+                                    Width: =Parent.Width
+                        - ActTableHeader_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =36
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =24
+                              PaddingRight: =24
+                              Width: =Parent.Width
+                            Children:
+                              - ActHdrRAG_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 0, 0, 0)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.CircleFill
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =28
+                              - ActHdrActivity_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =3
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =4
+                                    Size: =11
+                                    Text: ="ACTIVITY"
+                              - ActHdrFrequency_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="FREQUENCY"
+                                    Width: =120
+                              - ActHdrDue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="DUE"
+                              - ActHdrStatus_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Align: =Align.Center
+                                    FillPortions: =0.8
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="STATUS"
+                                    Width: =130
+                              - ActHdrAction_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Align: =Align.Center
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="ACTION"
+                                    Width: =130
+                              - ActHdrChevron_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 0, 0, 0)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.ChevronRight
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =24
+                        - ActGallery_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              LayoutOverflowY: =LayoutOverflow.Scroll
+                              PaddingLeft: =24
+                              PaddingRight: =24
+                              Width: =Parent.Width
+                            Children:
+                              - ActItems_gal:
+                                  Control: Gallery@2.15.0
+                                  Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
+                                  Properties:
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    Items: |-
+                                      =// ActItems_gal.Items — filtered by FY, Month, Status
+                                      /*Filter(
+                                          colMyActivityStatus,
+                                          (varActFilterFY = "All" || true),
+                                          (varActFilterMonth = "All" || true),
+                                          (varActFilterStatus = "All" || ReportStatus = varActFilterStatus)
+                                      )
+                                      */
+                                      colActivities
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    TemplateSize: =90
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ActRowFrequency_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          OnSelect: =
+                                          Size: =10.5
+                                          Text: =ThisItem.ActivityShortDescription
+                                          Width: =250
+                                          X: =40
+                                          Y: =40
+                                    - ActRowChevron_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(204, 204, 204, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =90
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.ChevronRight
+                                          OnSelect: =Select(Parent)
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =24
+                                          X: =1200
+                                    - ActRowAction_btn:
+                                        Control: ModernButton@1.0.0
+                                        Properties:
+                                          OnSelect: |-
+                                            =// Navigate to report form based on status
+                                            If(
+                                                ThisItem.Status.Value = "Not Started",
+                                                Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID}),
+                                                ThisItem.Status.Value = "Active" || ThisItem.Status.Value = "Rejected",
+                                                Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID, editReportID: ThisItem.ReportID}),
+                                                ThisItem.Status.Value = "Completed",
+                                                Navigate(scr_ReportView, Fade, {viewReportID: ThisItem.ReportID})
+                                            )
+                                          RadiusBottomLeft: =6
+                                          RadiusBottomRight: =6
+                                          RadiusTopLeft: =6
+                                          RadiusTopRight: =6
+                                          Text: =ThisItem.'Active '
+                                          Width: =130
+                                          X: =1060
+                                          Y: =30
+                                    - ActRowStatus_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          FontWeight: =FontWeight.Bold
+                                          OnSelect: =
+                                          Size: =12
+                                          Text: =ThisItem.Status.Value
+                                          Width: =100
+                                          X: =930
+                                          Y: =30
+                                    - ActRowDue_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          OnSelect: =
+                                          Size: =11.5
+                                          Text: ="Day " & ThisItem.DueDate
+                                          X: =300
+                                          Y: =40
+                                    - Text2:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Text: =CountRows( colMyActivities)
+                                          X: =280
+                                          Y: =40
+                                    - ActRowProject_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          OnSelect: =Select(Parent)
+                                          Size: =11.5
+                                          Text: =ThisItem.ActivityShortDescription
+                                          Width: =200
+                                          X: =40
+                                    - ActRowName_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          FontWeight: =FontWeight.Bold
+                                          OnSelect: =Select(Parent)
+                                          Size: =13.5
+                                          Text: =ActItems_gal.Selected.ActivityCode
+                                          Width: =300
+                                          X: =260
+                                          Y: =40
+                                    - ActRowRAG_rec2:
+                                        Control: Circle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(245, 245, 245, 1)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(0, 120, 212, 1)
+                                          Fill: =RGBA(0, 120, 212, 1)
+                                          Height: =13
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =13
+                                          X: =40
+                                          Y: =40

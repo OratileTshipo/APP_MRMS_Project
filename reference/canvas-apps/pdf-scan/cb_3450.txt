@@ -1,0 +1,1799 @@
+        colNFCScan. This collection will have four fields: RTD, Text, TNF, and URI. While a full
+        explanation of these fields is beyond the scope of this article, some explanation may be
+        helpful. TNF stands for Type Name Format and is used to define the structure of the
+        Record Type Definition, or RTD, which in turn defines the type of record contained in
+        the Text and/or URI fields. URI stands for Uniform Resource Identifier, which is
+        essentially the address of a resource. For the NFC tags being used in this example, in
+        addition to the Text field containing the example text from the introduction of this topic,
+        they would contain a TNF value of 1, an RTD value of T, and a blank URI value.
+        Add HTML text control to display the NFC scan
+        information
+        Add a second HTML text control and use the following formula in the HTMLText
+        property:
+          Power Fx
+          "<b><u>Next Destination</u></b><br>
+          <br>" &
+          First(colNFCScan).Text
+        Change the following properties in the Advanced pane:
+                                                     ﾉ
+                                                        Expand table
+         Property                   Value
+         Size                       21
+         BorderStyle                BorderStyle.Solid
+         BorderThickness            2
+         Width                      560
+         Height                     248
+         PaddingTop                 16
+         PaddingRight               16
+         PaddingBottom              16
+         PaddingLeft                16
+       Without any NFC data present, the control will display Next Destination. When an NFC
+       tag is scanned, it'll display Next Destination, and then the data from the Text field in the
+       data collected from the scan.
+       Assuming the data for the NFC tags has been configured as described in the
+       introduction, the user will see the next compass heading, latitude, and longitude values
+       for the next scavenger hunt location after scanning one of those tags.
+       Test the app
+       Save and publish the app. On a mobile device with the necessary sensors, open the app
+       and observe the compass heading, latitude, longitude, and altitude values. Try walking
+       around while turning in various directions to see changes in the various sensor readings.
+      Press the Scan NFC Tag button to observe the NFC reader control. If you have an NFC
+      tag that can produce a Text value, scan the tag to observe the text in the app. If not,
+      select Cancel.
+       Add and configure second screen
+       Add a new Blank screen for the angle measurement portion of the app.
+       After adding the screen, go back to the first screen and add a Next Arrow icon from +
+       Insert > Icons > choose the Next Arrow icon. Position it in the top-right corner of the
+       screen, and change the following properties in the Advanced pane:
+                                                 ﾉ
+                                                   Expand table
+        Property         Value
+        OnSelect         Navigate(Screen2)
+        Color            RGBA(255, 255, 255, 1)
+       If you have renamed the second screen that was just added, substitute that name for
+       Screen2 in the Navigate function.
+       Preview the app, selecting the icon that was just added to verify that it navigates you to
+       the blank screen that was just added.
+       Add configuration for X and Y angles
+       Add a Text label to the screen by dragging and dropping it from the Insert pane.
+       Position it at the top-left corner of the screen and modify the following properties in the
+       Properties pane:
+                                                 ﾉ Expand table
+        Property             Value
+        Text                 "2 Axis Level"
+        Font size            24
+        Font weight          FontWeight.Semibold
+        Text alignment       Align.Center
+        Width                Parent.Width
+       Then in the Advanced pane, modify the following properties:
+                                                 ﾉ Expand table
+        Property         Value
+        Color            RGBA(255, 255, 255, 1)
+        Fill             RGBA(56, 96, 178, 1)
+       This will provide a header for the second screen.
+       Next, add a Back Arrow icon from + Insert > Icons > choose the Back Arrow icon.
+       Position it in the top-left corner of the screen and change the following properties in the
+       Advanced pane:
+                                                 ﾉ Expand table
+        Property         Value
+        OnSelect         Navigate(Screen1)
+        Color            RGBA(255, 255, 255, 1)
+       If you've renamed the first screen that was just added, substitute that name for Screen1
+       in the Navigate function.
+       Finally, add an HTML text control. This will be used to display all the device sensor
+       outputs in one place. Use the following formula in the HTML Text property:
+         Power Fx
+         "<b><u>Angles:</u></b><br>
+         <br>
+         <table width='100%'>
+         <tr>
+         <td width='50%'><b>X: </b>" & Abs(Round(Acceleration.X * (90 / 9.81),
+         0)) & Char(0176) & "</td>
+         <td width='50%'><b>Y: </b>" & Abs(Round(Acceleration.Y * (90 / 9.81),
+         0)) & Char(0176) & "</td>
+         </tr>
+         </table>"
+       Change the following properties in the Advanced tab:
+                                                 ﾉ
+                                                   Expand table
+        Property                 Value
+        Size                     21
+        BorderStyle              BorderStyle.Solid
+        BorderThickness          2
+        Width                    560
+        Height                   168
+        PaddingTop               16
+        PaddingRight             16
+        PaddingBottom            16
+        PaddingLeft              16
+       Position this control near the top of the app screen.
+       If you examine what was put in the HtmlText, you may notice that it is using the
+       Acceleration sensor, with X and Y properties. There is also a Z property that we are not
+       using in this scenario.
+       This sensor detects gravitational forces on the device over three planes. Using a mobile
+       phone as an example, imagine a line extending out of the sides of the phone. This
+       would be the X plane. Lifting the right side of the phone will produce a positive value
+       and lifting the left side will produce a negative value. A line extending out of the top
+       and bottom of the phone would represent the Y plane. Lifting the top of the phone will
+       produce a positive value and lifting the bottom will produce a negative value. Finally, a
+         line coming out of the screen and back of the phone would represent the Z plane.
+         Causing the screen to face upwards will produce a positive value and facing it
+         downward will result in a negative value.
+         The accelerometer will measure forces acting on the device both in motion, such as if
+         you dropped the device, and at rest, such as tilting the device on one or more of the
+         axes described earlier. At rest, the theoretical values should be between 0 and +/- 9.81
+         m/s2, with 0 indicating that the relative axis is parallel to the Earth with no gravity acting
+         on the sensor and a reading of 9.81 indicating that the relative axis is perpendicular to
+         the Earth and the full force of gravity is acting on the sensor.
+         Looking at the code in the HTML text control you just added, notice the following
+         section:
+           Power Fx
+           Abs(Round(Acceleration.X * (90 / 9.81), 0))
+         In this formula, from inside-out, first, the Acceleration on the X plane is being multiplied
+         by (90 / 9.81). This is using the theoretical maximum at-rest value to convert the sensor
+         reading into degrees. The value of 90 is present because at the maximum theoretical
+         value, the device would be perpendicular to the Earth on that plane, giving a measure of
+         90 degrees.
+         That value in degrees is then rounded to zero decimal places to provide a whole
+         number degree value. Last, the absolute value of that rounded number is calculated to
+         give a positive reading. This is so it will not matter if the angle is measured from one
+         side or another.
+           ７ Note
+           The values shared above are approximates, and don't represent exact
+           measurement.
+         Add the level visuals
+         In this step, we're going to use some controls in unconventional ways to achieve a visual
+         goal.
+         Circular bubble level-like visual
+             To begin, add a Button control to the screen, renaming it to btnCircleLevel and change
+             the following properties in the Advanced pane:
+                                                                                       ﾉ Expand table
+              Property                                 Value
+              Text                                     ""
+              BorderColor                              RGBA(56, 96, 178, 1)
+              FocusedBorderThickness                   2
+              Fill                                     Transparent
+              DisabledFill                             Self.Fill
+              X                                        (Parent.Width - Self.Width) / 2
+              Y                                        (Parent.Height - Self.Height) / 2
+              Width                                    400
+              Height                                   Self.Width
+             The result of these changes should produce a circular button in the center of the screen
+             that cannot be pressed due to being disabled.
+             Next, add a Circle shape, set it's Border Radius to 400 and change the following
+             properties in the Advanced pane:
+                                                                                       ﾉ Expand table
+              Property                 Value
+              FocusedBorderThickness   0
+              X                        (Parent.Width - Self.Width) / 2 + (Round(Acceleration.X / 9.81 * 90, 0) /
+                                       90 * btnCircleLevel.Width / 2)
+              Y                        (Parent.Height - Self.Height) / 2 - (Round(Acceleration.Y / 9.81 * 90, 0) /
+                                       90 * btnCircleLevel.Width / 2)
+              Width                    42
+              Height                   Self.Width
+              Width                    400
+              Height                   Self.Width
+         The X and Y properties allow the Circle shape to move about the center of the app
+         screen, relative change in the Acceleration sensor values but contained within the
+         circular area of btnCircleLevel.
+         X and Y Axis bubble level-like visuals
+         Add a Slider control to the app, rename it to sldXValue, and change the following
+         properties in the Advanced pane:
+                                                          ﾉ Expand table
+          Property    Value
+          Min         -90
+          Max         90
+          Default     Round(Acceleration.X * (90 / 9.81), 0)
+          ValueFill   Self.RailFill
+          X           (Parent.Width - Self.Width) / 2
+          Y           btnCircleLevel.Y + btnCircleLevel.Height + 30
+          Width       btnCircleLevel.Width
+          Height      70
+         This Slider control will display the angle similar to how a bubble level does: the Handle
+         will move towards the raised side of the device, similar to the air bubble in a bubble
+         level.
+         Next, copy btnCircleLevel by selecting it, pressing Ctrl + C and then Ctrl + V. Rename
+         the control to btnXValueOverlay and change the following properties in the Advanced
+         pane:
+                                                          ﾉ Expand table
+          Property     Value
+          X            sldXValue.X - sldXValue.HandleSize / 2
+          Y            sldXValue.Y
+          Width        sldXValue.Width + sldXValue.HandleSize
+        Property   Value
+        Height     sldXValue.Height
+       These changes will position it over the sldXValue control, preventing the user from
+       changing its value and providing a visual border.
+       Copy and paste sldXValue, using the same method used to copy btnCircleLevel.
+       Rename it to sldYValue and change the following properties:
+                                                 ﾉ
+                                                   Expand table
+        Property     Value
+        Layout       Layout.Vertical
+        X            btnCircleLevel.X - Self.Width - 30
+        Y            (Parent.Height - Self.Height) / 2
+        Width        sldXValue.Height
+        Height       sldXValue.Width
+       Copy and paste btnXValueOverlay, renaming it to btnYValueOverlay, changing the
+       following properties:
+                                                 ﾉ Expand table
+        Property   Value
+        X          sldYValue.X
+        Y          sldYValue.Y - sldYValue.HandleSize / 2
+        Width      sldYValue.Width
+        Height     sldYValue.Height + sldYValue.HandleSize
+       This completes the bubble level-like visuals.
+       Test the level app
+              Save and publish the app. On a mobile device with the necessary sensors, open the app
+              and navigate to screen with the bubble level visuals. Tilt the device from left to right,
+              then up and down, and finally in all directions, noting the changes in angle properties as
+              well as the changes in the visuals. Find an angled surface to place the device on and
+              again note the angles and visuals.
+              See also
+                    Acceleration, App, Compass, Connection, and Location signals in Power Apps
+                    Mixed reality controls in Power Apps
+                    Geospatial controls in Power Apps
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+            Create an app with 3D and mixed reality
+            controls
+            Article • 12/16/2022
+            You can use the 3D object and View in MR controls to view items in 3D, or to see how a
+            particular item might fit within a specified space.
+            In this article, you'll learn how to use the 3D and mixed reality controls in Power Apps.
+            Watch this video to learn how to build mobile apps with View in MR control:
+            https://learn-video.azurefd.net/vod/player?id=7651a5f3-4886-4910-97b0-
+            290116a9fa89&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fbuild-view-in-mr-3d-apps
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Create an app with View in MR control
+            The View in MR control creates a button in your app. When app users selects the
+            button, it overlays a selected 3D model (in the .glb file format) or image (in .jpg or .png
+            file formats) onto the live camera feed of the device.
+               Tip
+              You can also take photos and upload them to OneDrive.
+            In this section, we will build a screen in an app that will allow a user to view the selected
+            item in mixed reality using the View in MR control.
+               1. Open an app in Power Apps Studio  .
+               2. Select the OnStart property of the app, copy and paste the following:
+                   Power Fx
+                   ClearCollect(
+                       col3dObjects,
+                       {
+                           ObjectName: "Forklift",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/forklift.glb"
+               },
+               {
+                   ObjectName: "HVAC",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/hvac.glb"
+               },
+               {
+                   ObjectName: "Machine",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/machine.glb"
+               },
+               {
+                   ObjectName: "Pallet w/ Boxes",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/pallet_with_boxes.glb"
+               },
+               {
+                   ObjectName: "Robot Arm",
+                   ObjectURL: 
+           "https://raw.githubusercontent.com/microsoft/experimental-pcf-control-
+           assets/master/robot_arm.glb"
+               }
+           )
+         This formula will create a collection containing the names and links of the 3D
+         objects to be viewed in mixed reality.
+        3. Add a Text label to the screen by dragging and dropping it from the Insert tab.
+        4. Position the added text label at the top-left corner of the screen, and modify the
+         following properties in the Properties tab:
+                                                  ﾉ Expand table
+            Property             Value
+            Text                 "View In MR"
+            Font size            24
+            Font weight          FontWeight.Semibold
+            Text alignment       Align.Center
+            Width                640
+          5. In the Advanced tab, modify the following properties for the text label:
+                                                  ﾉ Expand table
+            Property       Value
+            Color          RGBA(255, 255, 255, 1)
+            Fill           RGBA(56, 96, 178, 1)
+           This change provides a header for the screen.
+          6. Insert a Blank vertical gallery from the Layout section of the Insert tab.
+          7. Position the gallery below the "View in MR" header you added earlier and expand
+           it to use rest of the screen.
+          8. Change the following properties of the gallery:
+                                                  ﾉ Expand table
+            Property                Value
+            Data source             col3dObjects
+            Template size           80
+            X                       0
+            Y                       92
+            Width                   640
+            Height                  1044
+          9. Select Edit gallery to edit the gallery.
+         10. Insert a Text label into the gallery.
+         11. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property        Value
+            Text            ThisItem.ObjectName
+            X               10
+            Y               5
+            Width           540
+         12. Edit the gallery again.
+         13. From the Mixed Reality section of the Insert tab, drag and drop the View in MR
+           control into the gallery.
+         14. Change the following properties of the View in MR control.
+                                                  ﾉ Expand table
+        Property      Value
+        Text          "View In MR"
+        Display type  Icon
+        Source        ThisItem.ObjectURL
+        X             Parent.TemplateWidth - Self.Width - 5
+        Y             5
+       Property    Value
+       Width       70
+       This change will provide a gallery that has a list of 3D objects and a button to press for
+       the user to view those objects in mixed reality.
+       Test the mixed reality control
+       Now that all the controls have been added, save and publish the app. On a mixed-reality
+       capable device, open the app, and press the button that corresponds with the object
+       you would like to view. This will open the View in MR experience.
+       Follow the on-screen instructions to calibrate the device by slowly moving it left and
+       right while pointing the camera at a surface to be measured. Once the calibration is
+       complete, you'll see an array of dots on the surface as well as a circle near the center of
+       the screen. This circle shows where the 3D object can be placed initially. Once the cube
+       has been placed it can be moved or rotated by using touch controls.
+       To move the object, press on it and slide it to where you would like it to be placed. To
+       rotate the object, press one finger to the screen then swipe with another finger right or
+        left.
+        Use the back button in the top left corner to return to the app screen and select another
+        object. Repeat this process as desired to view each of the objects.
+        Create an app with 3D object control
+        The 3D object control allows you to view an item in 3D inside Power Apps. When app
+        loads, it shows the 3D models (in the .glb file format) or image (in .jpg or .png file
+        formats) inside the app through the control. You can select the 3D model to rotate,
+        zoom in or out.
+        In this section, we will build a screen in an app that will allow a user to view the selected
+        items in 3D using the 3D object control.
+          1. Follow the steps 1 and 2 from the Create an app with View in MR control section to
+           create an app with the collection of 3D objects for the app.
+          2. Add a Text label to the screen by dragging and dropping it from the Insert tab.
+          3. Position the added text label at the top-left corner of the screen, and modify the
+           following properties in the Properties tab:
+                                                  ﾉ Expand table
+            Property             Value
+            Text                 "3D object"
+            Font size            24
+            Font weight          FontWeight.Semibold
+            Text alignment       Align.Center
+            Width                640
+          4. In the Advanced tab, modify the following properties for the text label:
+                                                  ﾉ
+                                                    Expand table
+            Property       Value
+            Color          RGBA(255, 255, 255, 1)
+            Fill           RGBA(56, 96, 178, 1)
+           This change provides a header for the screen.
+          5. Insert a Blank vertical gallery from the Layout section of the Insert tab.
+          6. Position the gallery below the "View in MR" header you added earlier and expand
+           it to use rest of the screen.
+          7. Change the following properties of the gallery:
+                                                  ﾉ Expand table
+            Property                Value
+            Data source             col3dObjects
+            Template size           80
+            X                       0
+            Y                       92
+            Width                   640
+            Height                  1044
+          8. Select Edit gallery to edit the gallery.
+          9. Insert a Text label into the gallery.
+         10. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property        Value
+            Text            ThisItem.ObjectName
+            Width           640
+          11. Edit the gallery again.
+          12. From the Media section of the Insert tab, drag and drop the 3D object control into
+            the gallery.
+          13. Change the following properties of the View in MR control.
+                                                        ﾉ
+                                                           Expand table
+         Property             Value
+         Source               ThisItem.ObjectURL
+         X                    18
+         Y                    138
+         Width                600
+         Height               550
+         This change will provide a gallery that has a list of 3D objects that you can view in 3D.
+         Test the 3D control
+         Now that all the controls have been added, save and publish the app. On a mixed-reality
+         capable device, open the app, touch the screen to zoom in, zoom out, or turn the object
+         being viewed in 3D.
+              Since the gallery contains several objects in 3D, swipe down on the screen to see other
+              objects and use the zoom or turn capabilities to work with the objects in 3D.
+              See also
+                    3D object control
+                    Measuring Camera control
+                    View shape in MR control
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+            Create an app to view a shape in mixed
+            reality
+            Article • 12/16/2022
+            You can use the View Shape in MR control in your app to let users see if a simple cube
+            might fit within a specified space. They might want to do this to see how a certain object
+            that you provide would fit in their space. If you have a 3D model or a head-on picture
+            for the object, you'd like to fit test consider using the View in MR instead.
+            The control creates a button in your app. When app users select the button, it overlays a
+            cube onto the live camera feed of the device. You set up the dimensions of the cube
+            when you edit the control in Power Apps.
+            Watch this video to learn how to build mobile apps with View Shape in MR control:
+            https://learn-video.azurefd.net/vod/player?id=2b6080fd-8236-48a5-b9b2-
+            48285eccdba6&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fmobile-apps-view-shape-in-mr
+            In this article, we'll create a screen in an app that will allow users to create a custom
+            cube shape by inputting unit to be used (centimeters, feet, inches, or meters), and
+            defining the height, width, and depth of the cube.
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Add controls for cube’s dimensions and units
+            Add header and labels to define cube's dimensions and units to the app screen.
+            Header label
+            With an app open for editing in Power Apps Studio   , add a text label to the screen.
+            Position it at the top-left corner of the screen and modify the following properties in the
+            Properties tab:
+                                                                                  ﾉ Expand table
+         Property                 Value
+         Text                     "Place A Cube"
+         Font size                24
+         Font weight              FontWeight.Semibold
+         Text alignment           Align.Center
+         Width                    Parent.Width
+        Then in the Advanced tab, modify the following properties:
+                                                        ﾉ Expand table
+         Property          Value
+         Color             RGBA(255, 255, 255, 1)
+         Fill              RGBA(56, 96, 178, 1)
+        This change will provide a header for the screen.
+        Labels and controls to specify cube properties
+          1. Add four text labels to the screen. These labels will be used to identify the controls
+            we'll add later. For each label, modify the Text property to one of the following:
+                Unit Type
+                Width
+                Height
+                Depth
+          2. Set the Width property of these labels to 160 and position them so they're stacked
+            vertically in the order described above, near the top of the screen and to the left
+            side.
+          3. Add a dropdown control and three text entry controls. The dropdown will be used
+            to select a unit type for the cube dimensions and the three text entry controls will
+            be used to enter the width, height, and depth of the cube.
+          4. Select the drop-down, rename it to drpUnitType, and change the following
+            properties:
+                                                  ﾉ Expand table
+            Property Value
+            Items     ["Centimeters", "Feet", "Inches", "Meters"]
+            Default   "Feet"
+            Width     280
+          5. Position the control to the right of the Unit Type label.
+          6. Add three text input controls, and rename them to txtShapeHeight, txtShapeWidth,
+           and txtShapeDepth. Change the following properties for all three controls:
+                                                  ﾉ Expand table
+            Property         Value
+            Default           2
+            Format            TextFormat.Number
+            Width             144
+          7. Position the text input control named txtShapeWidth to the right of the Width
+           label. Likewise, position the controls named txtShapeHeight and txtShapeDepth to
+           the right of the Height and Depth labels, respectively.
+        Next, you'll add the View Shape in MR control and configure it to use the controls that
+        were created to provide dynamic dimensions to the MR cube it'll generate.
+        Insert the View Shape in MR control
+        Insert the control into your app.
+          1. Open the Insert tab.
+          2. Expand Mixed Reality.
+          3. Select the control View Shape in MR to place it in the center of the app screen, or
+           drag and drop it to position it anywhere on the screen.
+          4. Once the control has been added, position it near the bottom of the screen and
+           change the following properties:
+                                                  ﾉ Expand table
+            Property        Value
+            Text            "Place a cube"
+            ShapeWidth      txtShapeWidth.Text
+            ShapeHeight     txtShapeHeight.Text
+            ShapeDepth      txtShapeDepth.Text
+            Units           drpUnitType.Selected.Value
+            Width           280
+              Test the app
+              Now that all the controls have been added, save and publish the app. On a mixed-reality
+              capable device, open the app, and press the Place a cube button. This will open the
+              View Shape in MR experience, allowing the user to define an area to be measured.
+              Follow the on-screen instructions to calibrate the device by slowly moving it left and
+              right while pointing the camera at a surface to be measured. Once the calibration is
+              complete, you'll see an array of dots on the surface and a circle near the center of the
+              screen. This circle shows where the cube can be placed initially. Once the cube has been
+              placed, it can be moved or rotated by using touch controls.
+              To move the cube, press on it and slide it to where you would like it to be placed. To
+              rotate the cube, press one finger to the screen, and then swipe with another finger right
+              or left.
+              Use the back button in the top-left corner to return to the app screen and change one
+              or more of the width, height, depth, or unit type settings. Select the Place a cube button
+              and place the new cube.
+              See also
+                    3D object control
+                    Measuring Camera control
+                    View shape in MR control
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Create an app with address input and
+       map controls
+       Article • 12/16/2022
+       There are many scenarios where users are expected to enter addresses in an app.
+       Historically, there have been multiple fields capturing each element of an address where
+       the user provides the street address, city and the postal code, and selects state. Entering
+       addresses can be frustrating and error-prone, particularly in mobile scenarios.
+       The address input control presents the user with dynamic address suggestions as they
+       type. Using fuzzy matching logic, the control suggests multiple potential address
+       matches from which the user can select—making it quicker and easier to enter accurate
+       addresses.
+       The control returns the address as structured data, allowing the application to extract
+       information like city, street, municipality, and even latitude and longitude. The data is in
+       a format friendly to many locales and international address formats.
+       To use the control, you need to enable the Geospatial Services for the environment.
+          Watch this video to learn how to use the address input control:
+          https://learn-video.azurefd.net/vod/player?id=ff56e551-756f-4796-8af9-
+          419b40b1dbfd&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+          apps%2Fhow-to%2Fmobile-apps-address-map
+          Watch this video to learn how to use the map control:
+          https://learn-video.azurefd.net/vod/player?id=c62bc98b-cf1f-4289-af11-
+          82618c5e6d02&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+          apps%2Fhow-to%2Fmobile-apps-address-map
+       In this article, we'll learn how to use the address input control in canvas apps.
+       Prerequisites
+       To complete this lesson, you'll need a Power Apps environment with a Microsoft
+       Dataverse database. If you don't have a license, you can sign up for the Power Apps
+       Developer Plan or use a Power Apps trial.
+       Create a trial environment
+            An environment in Power Apps is a space to store, manage, and share your
+            organization’s business data, apps, chatbots, and flows. It also serves as a container to
+            separate apps that might have different roles, security requirements, or target
+            audiences.
+            Each environment can have one Dataverse database.
+            To make sure that you have what you need to complete this lesson, we're going to
+            create a new environment that includes a Dataverse database. This is a 30-day trial that
+            will go away at the end of the 30 days, but you can upgrade it to a sandbox or
+            production environment if you want to keep it.
+            We're going to create a trial environment that will include a Dataverse database, and the
+            sample data used in this topic.
+               1. Go to Power Platform admin center   in a web browser.
+               2. Select Environments.
+               3. Select New.
+               4. Enter a name, for example "Dataverse Trial".
+               5. Select Trial for the environment type.
+               6. Toggle Create Database to Yes.
+               7. Select Next.
+         8. Toggle Deploy Sample Apps and Data to Yes.
+         9. Select Save.
+       Your trial environment will now be created, including a Dataverse database and sample
+       data in Dataverse tables.
+       Enable the Geospatial Services for the
+       environment
+       Before we can use the Geospatial Services in canvas apps, an admin must enable access
+       to the features for the environment where we want to create the app.
+       To learn about how to enable Geospatial services in your environment, see Enable the
+       geospatial features for the environment.
+       Build a canvas app
+      We'll start with creating an app and then, we'll create a header control to use within the
+      app to standardize the look and feel of the header on different screens.
+       1. Create a blank canvas app in the environment you created earlier.
+       2. Select Insert > New Screen > Scrollable to add a new screen.
+       3. Change the label text to "New Account".
+       4. Select Insert > Forms > Edit to add a form to the screen.
+           The form control gets added
+         5. Update the following properties of the form:
+                                                 ﾉ Expand table
+           Property                Value
+           Data source             Accounts
+            Property                Value
+            Columns                 2
+            DefaultMode             FormMode.New
+          6. Select Edit next to fields to add more fields to the form, and select the following
+           address fields:
+              Address 1: Street 1
+              Address 1: City
+              Address 1: State
+              Address 1: Zip/Postal Code
+              Address 1: Country/Region
+              Address 1: Latitude
+              Address 1: Longitude
+          7. Adjust the order of the fields as shown below.
+       Address Input control
+       In this section, we'll add the Address Input control to the app.
+        1. Select Insert > Input > Address Input to add the control to the screen.
+        2. Move the control to the top-right side of the screen.
+             Configure properties for the Address Input control
+             In this section, we'll review and if necessary, set various properties of the address
+             control. There are a few Address Input control-specific properties.
+                                                                                       ﾉ Expand table
+              Property       Description
+              Search result  The number of suggested addresses the control displays. We've set it to 5 in this
+              limit          example, so not more than five addresses will show up in search.
+              Search         Whether the control should suggest addresses within the user-defined Radius of
+              within radius  the Latitude and Longitude. We've set it to Yes in this example.
+              Property       Description
+              Latitude       The latitude of the center point used to geo-bias address suggestions. Requires
+                             Search within radius to be on. We've set it to the formula Location.Latitude in
+                             this example to return the latitude of the current location.
+              Longitude      The longitude of the center point used to geo-bias address suggestions. Requires
+                             Search within radius to be on. We've set it to the formula Location.Longitude in
+                             this example to return the latitude of the current location.
+              Radius         The radius, in meters, around Latitude and Longitude to constrain the address
+                             suggestions. Requires Search within radius to be On. We've set it to 100000 in
+                             this example.
+              Language       The language the address suggestions are returned in. We've left it with the
+                             default - "English (United States)".
+              Country set    Comma-separated list of countries/regions to constrain the address suggestions
+                             to, in ISO 3166 alpha-2 country codes. Examples: "US", "FR", "KW". We've it as US
+                             in this example.
+             Configure output properties for the Address Input control
+             The control outputs various properties when a user interacts with it inside an app. You
+             can use these outputs in other controls or to customize the experience.
+             The following table lists the output properties available.
+                                                                                       ﾉ
+                                                                                          Expand table
+              Property                      Description
+              UserInput                     Text the user has typed in the input box.
+              SelectedLatitude              Latitude of the user-selected address in the input field.
+              SelectedLongitude             Longitude of the user-selected address in the input field.
+              SearchResultJson              The search result (based on the UserInput property), displayed as
+                                            a string in JSON format.
+              FreeformAddress               Selected address from the list of suggested addresses.
+              LocalName                     An address control that represents the name of a geographic
+                                            area or locality that groups multiple addressable objects for
+                                            addressing purposes, without being an administrative unit.
+              PostalCode                    Postal code.
+              Property                     Description
+              ExtendedPostalCode           Extended Postal Code.
+              CountryCode                  Country code.
+              Country                      Country.
+              CountryCodeISO3              Country code in ISO alpha-3 format.
+              CountrySubdivisionName       Country subdivision name.
+              StreetName                   Street name.
+              StreetNumber                 Street number.
+              Municipality                 Municipality.
+              MunicipalitySubdivision      Municipality subdivision.
+              CountryTertiarySubdivision   Country tertiary subdivision.
+              CountrySecondarySubdivision  Country secondary subdivision.
+              CountrySubdivision           Country subdivision.
+             When you run the app and start typing an address, it will show addresses that match the
+             entered value and are located only within 100,000 meters of the current location. Also,
+             notice that it doesn't show more than five address suggestions at a time when you start
+             typing in the address.
+               Using the above control, we'll capture the address in the address fields of the form to
+               create a new account. This step is useful so that the user doesn't have to type in each of
+               the address elements individually.
+               We'll set the data card values to the appropriate property value from the address input.
+                  Tip
+                 The default values of the data card might be locked. To unlock them, select the data
+                 card and go to the Advanced properties, and then select Unlock to change
+                 properties.
+                                                                                                   ﾉ
+                                                                                                       Expand table
+                Data card                             Value
+                Address 1: Street 1                    AddressInput1.StreetNumber & " " &
+                                                      AddressInput1.StreetName
+                Address 1: City                        AddressInput1.Municipality
+                Address 1: State/Province              AddressInput1.CountrySubdivision
+                Address 1: Zip/Postal Code             AddressInput1.PostalCode
+                Address 1: Country/Region              AddressInput1.Country
+                Data card                            Value
+                Datacard
+                Address 1: Latitude                   AddressInput1.SelectedLatitude
+                Address 1: Longitude                  AddressInput1.SelectedLongitude
+              Example for Address 1: Street 1 data card:
+              The form gets populated with all the address fields when an address is selected in the
+              Address Input control.
+              Map control
+              In this section, we'll see how to add the Map control on the app to show the selected
+              location on the map.
+         1. Before adding the Map control, we need to create a collection to capture the
+          address from the address input – this collection will be used as the data source for
+          the map.
+          On the OnAddressSelect property of the Address Input control, enter the
+          following formula to create a collection that captures the address data.
+            Power Fx
+            ClearCollect(
+                colSelectedAddress,
+                {
+                    Street: AddressInput1.StreetNumber & " " & 
+            AddressInput1.StreetName,
+                    City: AddressInput1.Municipality,
+                    State: AddressInput1.CountrySubdivision,
+                    Zip: AddressInput1.PostalCode,
+                    Country: AddressInput1.Country,
+                    Latitude: AddressInput1.SelectedLatitude,
+                    Longitude: AddressInput1.SelectedLongitude
+                }
+            )
+         2. Select an area outside of the Address Input control, and select Insert > Media >
+          Map to add the map control to the screen.
+       3. Select the collection as the data source.
+       4. Move the map below the address input section.
+              Configure properties for the Map control
+              In this section, we'll review and if necessary, set various properties of the map control.
+              The following table lists the properties available.
+                                                                                             ﾉ Expand table
+               Property                     Description
+               Data source(Items)           Data source (table) that lists a predefined set of longitudes and
+                                            latitudes to display as map pin on the map when it's loaded. Map
+                                            each of the columns in your data by using the ItemAddresses,
+                                            ItemLongitudes, ItemLatitudes, and ItemLabels.
+               Use default location         Whether the map initializes at a default location set by the user.
+               Default longitude            Longitude the map would go to when it's loaded if Use default
+                                            location is enabled.
+               Default latitude             Latitude the map would go to when it's loaded if Use default
+                                            location is enabled.
+               Default zoom level           Zoom level the map would be set to when it's loaded if Use default
+                                            location is enabled.
+               Show current location        Whether the map should display the current location of the user.
+               Current location latitude    The latitude of the current location of the user if Show Current
+                                            Location is enabled.
+                Property                     Description
+                Current location longitude   The longitude of the current location of the user if Show Current
+                                             Location is enabled.
+                Satellite view               Whether the style of the map is a satellite view or a road view.
+                Cluster pins                 Whether the map pins are clustered.
+                Zoom control                 Whether the zoom control appears on the map.
+                Compass control              Whether the compass control appears on the map.
+                Pitch control                Whether the pitch control appears on the map.
+                Pin color                    The color of the pins.
+                ItemsLabels                  A column in Items with the strings you want to use as labels for the
+                                             pins.
+                ItemsAddresses               A column in Items with the strings that represent the location of the
+                                             pins.
+                ItemsLongitudes              Name of the column in the table in your data source with floating-
+                                             point numbers that represent the longitude position of the pins.
+                ItemsLatitudes               Name of the column in the table in your data source with floating-
+                                             point numbers that represent the latitude position of the pins.
+                ItemsColors                  Color of the pins.
+                ItemsIcons                   Icon of the pins.
+                Items                        Name of the table in your data source that contains all the records
+                                             that you want to plot in the map by using pins. Each row must have
+                                             an entry for the label, longitude, and latitude for each row.
+                OnMapClick                   How the map responds when any location is selected.
+                OnSelect                     How the app responds when a map pin is selected.
+                OnLoad                       How the app responds when the map finishes loading.
+                OnItemsChange                How the app responds when the map pins change.
+                Show info cards              Whether the informational cards appear on the pins of the map.
+                Show shapes                  Whether the shapes in Shapes_Items appear on the map.
+                Show shape labels            Whether the labels appear on the shapes of the map.
+                Enable shape drawing         Whether the drawing tools control appears on the map.
+               Property                    Description
+               Enable shape deleting and   Whether shapes can be deleted and their labels can be edited on
+               label editing               the map.
+               Shapes_Items                Name of the table in your data source that contains all the records
+                                           with the GeoJSON objects that you want to show in the map as
+                                           shapes.
+               ShapeGeoJSONObjects         Name of the column in the table in your data source with strings
+                                           that represent the GeoJSON objects of the shapes.
+               ShapeLabels                 A column in Shapes_Items with the strings you want to use as labels
+                                           for the shapes.
+               ShapeColors                 Color of the shapes.
+               OnShapeSelected             How the app responds when a shape on the map is selected.
+               OnShapeCreated              How the app responds when a shape on the map is created.
+               OnShapeEdited               How the app responds when a shape on the map is edited.
+               OnShapeDeleted              How the app responds when a shape on the map is deleted.
+              Configure output properties for the Map control
+              The Map control outputs various properties when a user interacts with it inside an app.
+              You can use these outputs in other controls or to customize the experience.
+              The following table lists the output properties available.
+                                                                                           ﾉ
+                                                                                               Expand table
+               Property               Description
+               CenterLocation         Center location of the map as either .Latitude or .Longitude. The
+                                      output will be an integer. For example, calling
+                                       Map1.CenterLocation.Latitude will output a single integer such as
+                                      "47.60357".
+               Selected               The selected pin on the map.
+               SelectedItems          The selected pin or pins of the selected cluster on the map.
+               GeocodedItems          The geo-coded locations of the pins on the map.
+               ClickedLocation        The last clicked location on the map as either .Latitude or .Longitude.
+              Property               Description
+              Shapes_Selected        The record of the selected shape from Shapes_Items.
+              Shapes_SelectedItems   The records of the selected overlapping shapes from Shapes_Items.
+              SelectedShape          The selected shape on the map with .Perimeter and .Area.
+              DeletedShape           The last deleted shape on the map with .Perimeter and .Area.
+              GeoJSON                The list of shapes on the map in Feature Collection GeoJSON format.
+             To drop a pin on the address entered in the address input, we'll use the collection we
+             created on the OnAddressSelect property and use that in the map control.
+                                                                                       ﾉ Expand table
+              Property                         Value
+              Items                            colSelectedAddress
+              ItemsLatitudes                   colSelectedAddress.Latitude
+              ItemsLongitude                   colSelectedAddress.Longitude
+             Some of the properties of the pin can be customized per location pin are explained
+             below:
+                1. ItemsColors - To update the color of the pin to a different color for each location,
+                   add a column to the collection Color: Red, and use that in the ItemsColors data
+                   property of the Map control.
+         2. ItemsLabels - To update the label of the pin to a different label showing the
+          address for each location, add a column to the collection
+          Label:AddressInput1.FreeformAddress, and use that in the ItemsLabels data
+          property of the Map control.
+         3. ItemsIcons - To change the icon of the pin for each location, add a column to the
+          collection and use that in the ItemsIcons data property of the Map control. In this
+          example, we'll add a triangle icon with the formula as Icon: triangle.
+             Tip
+            For the complete list of icons, go to List of image templates.
+            Power Fx
+            ClearCollect(
+                colSelectedAddress,
+                {
+                    Street: AddressInput1.StreetNumber & " " & 
+            AddressInput1.StreetName,
+                    City: AddressInput1.Municipality,
+                    State: AddressInput1.CountrySubdivision,
+                    Zip: AddressInput1.PostalCode,
+                    Country: AddressInput1.Country,
+                    Latitude: AddressInput1.SelectedLatitude,
+                    Longitude: AddressInput1.SelectedLongitude,
+                    Label: AddressInput1.FreeformAddress,
+                    Color: Red,
+                    Icon: Triangle
+                }
+            );
+       After adding these to the collection, go to the Advanced tab of the Map control, and
+       update the ItemsColors, ItemsLabels and ItemsIcons properties.
+      Run the app in preview mode to test. The map shows the location selected in the
+      address input with a triangle icon and the address shows up as a label on the map.
+              See also
+              Interactive map control
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Create an app using the Measuring
+            Camera control
+            Article • 12/16/2022
+            You can use the Measuring Camera control in your app to let users measure distance,
+            area, and volume. During the measurement, you create two-dimensional and three-
+            dimensional polygons that can be used to confirm how a certain-sized object would fit
+            within a space.
+            The control creates a button in your app. When app users select the button, it shows a
+            live camera feed of the device. App users can then specify a starting point, and one or
+            multiple sequential endpoints to measure between. The instances of measured
+            segments are shown directly on the live camera feed.
+            When the user exits the control, the measurements that were taken are captured in the
+            Measurements property so they can be saved or stored.
+            Screenshots taken during the mixed reality experience are stored in the Photos property
+            for viewing within the app.
+            In this article, we'll create a screen in an app to use the Measuring camera control to
+            measure the area of a user-defined space as well as view a photo of the space that was
+            measured.
+            Watch this video to learn how to build mobile apps with Measuring Camera control:
+            https://learn-video.azurefd.net/vod/player?id=94d7ae60-3cb4-41e5-80bd-
+            d8212fa3e4a8&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+            apps%2Fhow-to%2Fbuild-apps-measure-in-mr
+            Prerequisites
+            See prerequisites for mixed-reality capable devices.
+            Create the app with Measuring Camera control
+               1. Open an app in Power Apps Studio  .
+               2. Select the Insert tab.
+               3. Expand Media.
+         4. Select the Measuring camera control to insert it on the screen.
+         5. Position the control near the bottom of the screen.
+         6. Change the following properties for the control using the property pane on the
+           right-side of the screen.
+                                                 ﾉ
+                                                   Expand table
+           Property                     Value
+           Text                         Measure Area
+           Unit of measurement          Feet
+           Measurement type             Area
+         7. Select the Advanced tab and change the OnMixedRealitySelect property to the
+           following formula:
+            Power Fx
+            ClearCollect(colMRMeasurements, Self.Measurements);  
+            ClearCollect(colMRPhotos, Self.Photos)  
+           This formula will allow the user to define areas to be measured in square feet and
+           store the most recent results of the measurements in a collection named
+           colMRMeasurements, and the most recent photos in a collection named
+           colMRPhotos.
+          8. Add a text label to the screen and move it to the top-left corner of the screen.
+          9. Change the following properties of the added text label:
+                                                  ﾉ
+                                                    Expand table
+            Property           Value
+            Text               Measure Area
+            Font size          24
+            Font weight        Semibold
+            Text alignment     Center
+            Width              Parent.Width
+            Color              RGBA(255, 255, 255, 1)
+            Fill               RGBA(56, 96, 178, 1)
+           This label provides a header for the screen.
+         10. Add an image control, and move it just below the header label.
+         11. Change the following properties for the image control:
+                                                  ﾉ Expand table
+            Property          Value
+            Image              First(colMRPhotos).ImageURI
+            Border Thickness  2
+           The image control will display the first image taken from the Measuring camera
+           control.
+        12. Add another label to the screen, positioning it below the image control.
+        13. Change the Text property of the label to the following formula:
+            Power Fx
+            "Area: " & If(IsEmpty(colMRMeasurements), "no area measured", 
+            First(colMRMeasurements).Area & " sq. " & 
+            First(colMRMeasurements).Unit)
+          This label will display the first area measurement and unit type that is collected
+          from the Measuring camera control. If there's no measurement to be returned, the
+          text will show Area: no area measured to let the user know that no value is
+          present.
+       Test the app
+          Tip
+         Watch the video embedded at the top of this article to see how the app works.
+      Now that all the controls have been added, save and publish the app. On a mixed-reality
+      capable device (as defined in the Prerequisites section), open the app, and press the
+      Measure Area button. This action will open the Measuring camera experience, allowing
+      the user to define an area to be measured.
+      Follow the on-screen instructions to calibrate the device by slowly moving it left and
+      right while pointing the camera at a surface to be measured. Once the calibration is
+      complete, you'll see an array of dots on the surface as well as a circle and dot reticle in
+      the center of the screen. This reticle is used to define lengths, areas, and volumes by
+      using the + button to add points and line segments.
+      Photos can be captured using the camera button. These photos will show the lengths,
+      areas, and volumes defined by the user.
+      There's an undo button to undo any placed points.
+      Begin by placing a point using the + button. You'll notice that an orange line and
+      measurement now appear connected to the point you placed. Place a second point and
+      notice how a line with measurement appears between the two points you place.
+      Continue placing points until the desired shape has been fully defined. To close a shape,
+      place the reticle on the first point made and use the + button. You'll notice that the
+      center point of the reticle changes color from white to green, indicating that the shape
+      can be closed. If two of the sides of the shape intersect, or you try to close a shape using
+      any other point than the first one. You'll notice that the center point of the reticle
+      changes from white to red, indicating that a point cannot be placed there.
+      Once an area has been fully defined, position the device so that a picture can be taken
+      of the area you defined and use the camera button to do so. The select the Submit
+      button. A confirmation dialog will appear, asking if you've finished with your
+      measurements. If you have more measurements to enter, select Cancel to return to the
+      MR environment. If you're finished, select Submit to be taken back to the app screen.
+      You'll see the first picture taken as well as the calculated area of the shape you defined
+      as well as the units, in this case square-feet.
+      The measurement and photo can then be used like any other photo or text field in
+      Power Apps, for instance to be sent in an email or stored in a table in Microsoft
+      Dataverse.
+      See also
+        Measuring Camera control
+        Add mixed reality controls to your canvas app
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Create a canvas app with deep link to a
+            specific screen
+            Article • 12/16/2022
+            A common scenario when building apps is the need to share a "deep link" to a specific
+            screen. Deep links are useful when you want to get users straight to a specific screen
+            and data rather than asking them to navigate from the "home" screen of your app.
+            To deep link into Power Apps, you'll use this URL syntax:
+            https://apps.powerapps.com/play/{App ID}?{Query}.
+            In this syntax:
+                App ID—ID of the app. Go to Power Apps    > Apps > Select your app > Details.
+                Query—The query text allows you to supply the data to deep link to. You'll need to
+                make some code changes to your canvas app to use the provided parameters to
+                open the app using the query URL.
+            In this article, you'll learn about how to:
+                Set up a canvas app to handle the query parameter.
+                Create a UI for emailing a deep link directly from a screen of your app.
+                Use the app to browse to a specific account, send an email with the deep link, and
+                use the link from the received email to open the app directly to that account.
+            Prerequisites
+                Power Apps license
+                If you're new to Power Apps, familiarize yourself with Power Apps basics by
+                generating an app and then customizing that app's controls, gallery, forms, and
+                cards.
+                To create an app, you must be assigned to the Environment Maker security role.
+            Create the app
+            Create an app using the Accounts table in Microsoft Dataverse.
+            Your app opens to the BrowseScreen, that shows a list of accounts in a gallery. By
+            default, this gallery shows an email address, a city, and an account name. The app also
+            contains DetailScreen and EditScreen.
+       Update navigation
+       Now you'll set the navigation to use a context that we'll use to take the user to another
+       screen.
+         1. On BrowseScreen screen, select Layout under gallery properties, and select Title,
+          subtitle and body
+         2. Select first record of BrowseGallery gallery. And then, under OnSelect, enter the
+          following:
+            Power Fx
+            Navigate(DetailScreen1, Fade, {accountVal:ThisItem})
+          The Navigate() function creates a context variable called accountVal. This variable
+          is populated whenever you select a record from the gallery. Upon selecting record,
+          you'll be taken to the DetailScreen with the selected value (in this example,
+          account) in accountVal.
+       3. From the Tree view on the left-side of the screen, expand DetailScreen1, and select
+        DetailForm1.
+       4. From the properties pane on the right-side of the screen, select Edit fields, and
+        add Account, Primary Contact, and Email fields.
+       5. Select DetailForm, and set Item to accountVal.
+               6. Save with the name "Account deep linking".
+            Get the App ID
+            App ID is a unique GUID representing a given app, and generated when you save the
+            app to cloud.
+            To get the App ID, open a new tab and go to Power Apps    > Apps > Select your app >
+            Details. More information: Get an App ID
+            Enable deep link to a screen
+       The goal of this example is to take users to the DetailsScreen1 when the app is launched
+       with the accountId query parameter as part of the app URL. For this purpose, we'll use
+       function Param() that retrieves the query string parameter supplied while launching the
+       app.
+         1. Select App from the Tree view on the left-side of the screen.
+             Tip
+            If you've closed Power Apps Studio, reopen the saved "Account deep linking"
+            app by editing the app.
+         2. Select OnStart property from the list of properties.
+         3. To store the App ID value, update the OnStart property formula as below.
+            Power Fx
+            Set(AppID, "GUID");
+            If(Not(IsBlank(Param("accountId"))),Set(accountId,Param("accountId")));
+          In this formula, function Set() sets the App ID to the GUID of the app. And function
+          Param() stores the value in the accountId variable, when not blank.
+            ７ Note
+            Ensure you replace "GUID" in the above formula to your App ID as
+            appropriate.
+         4. Select StartScreen property for the app, and add the following:
+            Power Fx
+            If(Not(IsBlank(Param("accountId"))),DetailScreen1,BrowseScreen1)
+          This function checks if the Param is blank, then stay on the BrowseScreen1. Else, go
+          to DetailScreen1.
+         5. Select DetailScreen1 from the Tree view.
+         6. Select OnVisible property, and enter the following:
+            Power Fx
+            If(Not(IsBlank(accountId)), UpdateContext({accountVal:LookUp(Accounts, 
+            Account = GUID(accountId))}))
+          This function uses accountId stored from the previous step to set accountVal
+          variable.
+       Create the deep link URL
+       Your app is now configured to receive accountId as the parameter that contains the
+       GUID for an account from the Accounts table. And when this parameter is provided with
+       the request to the app, the app will directly open the details screen (DetailScreen1) with
+       the given accountId.
+       To invoke app with the parameter value, we have to use the following syntax:
+       https://apps.powerapps.com/play/{App ID}?{Query}
+       In the above syntax, we have to add the App ID and the query that contains accountId
+       variable with its value.
+       For example, when the following URL was entered in a browser for the sample tenant,
+       the app Account deep linking opened directly with the supplied accountId parameter
+       value (in this example, "A. Datum Corporation (Sample)"):
+       https://apps.powerapps.com/play/061b64cd-e5a0-4a7a-a77f-b6f8586dd6c7?
+       accountId=01e5bf81-7d44-ec11-8c60-002248094566
+       Send deep link in email
+       We can also supply a variable accountVal to point to the account's ID instead of using
+       absolute link explained above while invoking the URL for the given account from inside
+       the app.
+       For this purpose, we'll create a button and add the ability to invoke an email from within
+       the app with the deep link to the selected account's details screen from the Account
+       deep linking app.
+         1. Select Data from the left-side of the screen.
+         2. Select Add data > search for and select Office 365 Outlook > select Connect.
+            ７ Note
+            This action adds the Microsoft 365 Outlook connection so that we can use the
+            next steps to invoke composing an email to share the account information.
+         3. Select DetailScreen1 from the Tree view.
+         4. Insert a button at bottom-right of the screen, and rename it to Share Account.
+         5. On the button's OnSelect property, enter the following:
+            Power Fx
+            Office365Outlook.SendEmailV2("Recipient", "Subject", "Here's the deep 
+            link to the selected account - https://apps.powerapps.com/play/{App 
+            ID}?accountId=" & accountVal.Account)
+          This formula uses the Microsoft 365 connector for Outlook to send an email using
+          the SendEmailV2 operation.
+            ７ Note
+            Replace Recipient, Subject, and AppID in the above formula with the email
+            address of the recipient, subject for the email, and the ID of the app.
+         6. Save and publish the app.
+       Test the app
+      Run the app, and go to the details screen for any account. And then, select the button
+      Share account. The OnSelect button formula triggers an email to the recipient with the
+      subject and body configured earlier. Here's a sample email sent by the configured app:
+      Open the email, and copy the deep link that points to the selected account, and you'll
+      be taken directly to the account details screen in the Account deep linking app, instead
+      of the default browse screen.
+      See also
+         Create a canvas app from a template
+         Add and configure controls in canvas apps
+         Get started with formulas in canvas apps
+      Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+             Work with the PDF function
+             (experimental)
+             Article • 04/11/2023
+             The PDF function in Power Apps generates a PDF document from the contents of a
+             screen or certain types of controls. You can pass the generated file to an action
+             connector—for example, to send it in an email using the Office 365 Outlook connector
+             —or to a Power Automate flow as part of an automation scenario.
+               ） Important
+                    This is an experimental feature. Experimental features aren't meant for
+                    production use and may have restricted functionality. These features are
+                    available before an official release so that customers can get early access and
+                    provide feedback. Understand experimental, preview, and retired features in
+                    canvas apps.
+                    You must turn on the PDF function in Settings > Upcoming features >
+                    Experimental. As an experimental feature, it's disabled by default.
+                    Send your feedback in the Power Apps experimental features community
+                    forum .
+             Turn on the PDF function
+             Since the PDF function is an experimental feature, it's turned off by default. To use it in
+             your apps, you need to turn it on manually.
+                1. Sign in to Power Apps   and create a canvas app or open an existing app.
+                2. In Power Apps Studio, on the command bar, select Settings.
+                3. Select Upcoming features.
+                4. On the Experimental tab, turn on PDF function.
+             Use the PDF function to generate a PDF file
+             In the following example, we use the PDF function in the OnSelect property of a button
+             to generate a PDF file. You can also use the PDF function in OnVisible, OnHidden, or any
+       other behavior property.
+        1. Select an existing button or add a new button to your canvas app.
+        2. In the button's OnSelect property, add the PDF function and enter the target of
+          the function as a parameter. Enter the formula: PDF(SubmitInspectionScreen);
+          In this example, we're targeting the screen SubmitInspectionScreen to generate a
+          PDF file from the contents of our sample app's Inspection screen. Replace it with
+          the name of a screen in your app.
+        3. Select Save and publish.
+       Play the app and select the button you added. The PDF file is generated and stored in
+       memory for future use. The following section suggests a few ways to work with the PDF
+       file in your app.
+       The PDF function can only target the screen that's currently visible. You can pass the
+       entire screen, as in our example, or enter more parameters to specify a container or
+       gallery to limit the content to pass.
+       Work with the generated PDF file
+       You can use the generated PDF file in many ways. Here are a few, using the example in
+       the previous section.
+       View the file with the PDF viewer control
+        1. In your canvas app, select the button that you created in the previous example or
+          add a new button.
+        2. In the button's OnSelect property, enter the following formula, replacing
+          SubmitInspectionScreen with the name of a screen in your app: Set(myPDF,
+          PDF(SubmitInspectionScreen));
+        3. Select Insert > PDF viewer (experimental).
+        4. From the properties list, select the Document property and then enter myPDF in
+          the formula bar.
+        5. Select Save and publish.
+       Play the app and select the button you added. The PDF file is generated, stored in the
+       variable myPDF, and visible in the PDF viewer control.
+       The PDF viewer control appears as a black shape inside the generated PDF file. To
+       exclude the control from the generated file, place the content you want to turn into a
+        PDF file inside a container or gallery and target that instead of the screen; for
+        example,PDF(Container1) or PDF(Gallery1).
+        Use an action connector
+        In this example, we generate a PDF file that we send as an email attachment using the
+        Office 365 Outlook connector.
+          1. In your canvas app, select the button that you created in the previous example or
+            add a new button.
+          2. In the button's OnSelect property, enter the following formula:
+             Office365Outlook.SendEmailV2(  
+                "sample@email.com",  
+                 "New Safety Inspection"  
+                 "A new safety inspection has been submitted for your review. Please 
+             see attached.",  
+                 {  
+                     Attachments: Table(  
+                          {  
+                              Name: "submittedInspection.pdf",  
+                              ContentBytes: PDF(SubmitInspectionScreen)  
+                          }  
+                      )  
+                 }  
+              );  
+          3. Select Save and publish.
+      Play the app and select the button you added. The PDF file is generated, and an email is
+      sent to the specified email address with the generated PDF file attached.
+      Use in a Power Automate flow
+      In this example, we generate a PDF file and pass it to a Power Automate flow that stores
+      the file in a document library using the SharePoint connector. This example replaces the
+      default PowerApps trigger in Power Automate with the PowerApps (V2) trigger.
+      Create a flow to use in your app
+       1. In your canvas app, select the button that you created in the previous example or
+        add a new button.
+       2. In the app authoring menu, select Power Automate > Create new flow.
+       3. Select Create from blank.
+       4. To delete the default PowerApps trigger, select the trigger menu (…), and then
+        select Delete.
+       5. Search for and select PowerApps (V2).
+       6. Select the PowerApps V2 trigger to expand the node, and then select Add an
+        input.
+       7. Select File as the type of user input.
+       8. Select Add an input again, and then select Text as the type of user input.
+       9. Rename the input File Name and change the description to Please enter the name
+        of the file.
+      Add the SharePoint connector to the flow
+       1. Select New step to add an action. Search for SharePoint and select Create file.
+       2. In Site Address, select a SharePoint site that you have permission to add files to.
+       3. In Folder Path, select a document library that you have permission to add files to.
+       4. Select the File Name input. In the Dynamic content tab, select a file name under
+        PowerApps (V2).
+       5. Select the File Content input, and then select File Content in the list.
+       6. Select Save, and then select the x in the upper-right corner to close the Power
+        Automate window.
+       7. The Power Automate pane refreshes, and the new PowerApps (V2) flow, Create file,
+        appears in the list.
+      Add the flow to a button in your app
+       1. Select the button in your app canvas. In the button's OnSelect property, enter the
+        following formula, replacing the flow name and generated PDF file name with your
+        own:
+              'PowerAppV2->Createfile'.Run(  
+                 "NewInspectionReport.pdf",  
+                  {          
+                     file: {  
+                          name: "NewInspectionReport.pdf",  
+                          contentBytes: PDF(InspectionDetails)  
+                      }                
+                  }  
+              );   
+          2. Select Save and publish.
+        Play the app and select the button you added. The Power Automate flow runs and adds
+        the generated PDF file into the document library.
+        See also
+        PDF function in Power Apps (experimental)
+         Overview of wrap
+         06/16/2025
+         The wrap feature in Power Apps lets you package your canvas app as a custom-branded
+         Android or iOS app for native distribution to mobile users. Distribute these wrapped native
+         mobile apps to users through the Google Play Store  , Apple Business Manager   , or
+         Microsoft Intune.
+         Key capabilities
+         With wrap, you can:
+              Package one or more Power Apps canvas apps in the same native mobile app package.
+              Customize your mobile app startup experience to match your organization's branding.
+              Specify the app icon, splash screen image, welcome screen image, and color palette.
+              Update wrapped mobile apps by publishing changes to the included canvas app through
+              the Power Apps     maker portal.
+              Distribute apps using MDM.
+           ７ Note
+           All published changes to the included canvas app(s) are downloaded automatically by
+           existing, released versions of your wrapped mobile apps.
+         Benefits of wrap
+         Wrap brings native mobile application development platform (MADP) capabilities to Power
+         Apps:
+                                                                                     ﾉ Expand table
+          Benefit                                      Description
+          No-code mobile app development               Create mobile apps with no previous experience
+          Managed mobile app builds                    We generate the app for you
+          Seamless end-to-end branding                 Use your own logo and color palette
+          Multiple canvas apps support                 Bundle multiple apps in a single mobile app
+          Enterprise governance with Microsoft Intune  Protect your data with app management
+         Software and device requirements
+         Platforms supported
+              iOS: Version 14.0 or later.
+              Android: Version 8.0 (API level 26) or later.
+         Device requirements
+              iOS: iPhone 6S or later, iPad 5th generation or later.
+              Android: Any device that runs Android 8.0 or later.
+         Developer requirements
+              Microsoft Power Apps account with appropriate licenses.
+              Access to Microsoft Entra ID (formerly Azure AD) for app registration.
+              Azure subscription (for Azure Key Vault and Blob Storage).
+              For manual code signing:
+                 iOS: macOS device with Xcode installed.
+                 Android: Windows PC with Android Studio installed.
+         Wrap process overview
+         The wrap feature packages your canvas app in a native mobile app shell and produces a
+         mobile package. You can digitally sign and distribute this mobile package as your custom-
+         branded Android and iOS app through native distribution channels, like Google Play Store
+         and Apple Business Manager    .
+     Step-by-step process
+       1. Select your primary canvas app and start the wrap wizard. A primary canvas app provides
+        the initial experience users see when launching your mobile app. Your canvas apps must
+        be part of a solution. More information: Add canvas app to solution.
+       2. Optionally, add secondary canvas apps to your mobile app in the wrap wizard. More
+        information: Wrapping multiple canvas apps together.
+       3. Select the target platforms (iOS and Android) for your mobile app. Optionally, select
+        automatically code sign your mobile app package.
+       4. Register your app. Use an existing app registration or create a new one in the wrap
+        wizard.
+       5. Customize app branding with icons, images, and a color palette to personalize your
+        mobile app.
+       6. Add the Azure blob storage account name and container name. Use an existing Azure
+        blob storage or create a new one.
+       7. Start the build process in the Wrap up step to generate your custom branded mobile
+        app.
+       8. Download your mobile app from the App blob storage location.
+       9. If you don't select automatically code sign in the wrap wizard, code sign the mobile app
+        package manually. More about signing your mobile app package manually: Signing your
+        mobile app package manually.
+      10. Test the app package.
+      11. Distribute the app package to mobile users.
+     Wrap multiple canvas apps together
+     You can wrap more than one canvas app into a single mobile app package. The mobile app
+     package needs a home app, called the primary app. This app becomes the entry point for all
+     other canvas apps included in the mobile app package, which are called secondary apps.
+     Secondary apps are optional. When you wrap only one canvas app, that app is considered the
+     primary app, and the mobile app package has no secondary apps.
+     As shown in the illustration below, a primary app can have links to multiple secondary apps.
+     You can manage navigation between primary and secondary apps using the Launch() function.
+     Brand your mobile app
+     Wrap supports customization of the mobile app bootstrap experience to match your
+     organization's branding requirements. You can specify:
+       App icon
+       Splash screen image
+       Welcome (sign in) screen image
+       Color palette for native experiences
+     Branding customization options are available when building your wrap project. More
+     information: Configure branding
+     Wrap terminology
+     Wrap involves multiple components across Power Apps and third-party platforms such as iOS
+     and Android. Understanding these components is important when working with the wrap
+     functionality.
+     App platform(s)
+         Target platforms for your app during the build process. You can create builds for:
+               iOS — creates IPA package
+               Android — creates APK package
+               Google Play Store — creates AAB package for distribution
+         Bundle ID
+         The bundle ID is a unique identifier for your app that follows a reverse domain name pattern. It
+         must contain one period (.) and no spaces. Example: com.contoso.myapp.
+         This bundle ID is used when creating the Azure key vault for wrap after iOS or Android
+         certificates are created and uploaded. If you've already created the Azure key vault, verify the
+         bundle ID in the Tags section of the Azure portal   . Use this same bundle ID in Step 2: Target
+         platform.
+         Code signing
+         Code signing completes a mobile app before distribution to end users. A code-signed app
+         assures users it comes from a known source and the app code hasn't changed since it was last
+         signed by the trusted source.
+         Primary app
+         A primary app is the entry point or home app for the mobile app experience when wrapping
+         multiple canvas apps together. If only one canvas app is wrapped, it's considered the primary
+         app.
+         Secondary app
+         Secondary apps are optional canvas apps that you wrap in the same build for mobile app
+         distribution along with the primary app.
+         Redirect URI
+         A redirect URI (reply URL) is the location where the authorization server sends the user after
+         successful app authorization and access token grant. The authorization server sends the code
+         or token to the redirect URI, so registering the correct location during app registration is
+         important. More information: Redirect URI
+     Common issues and limitations
+     Known limitations
+        The wrap feature only supports canvas apps (not model-driven apps)
+        All canvas apps in a wrap project must be from the same environment
+        Users must have a Power Apps license to use wrapped apps
+     Common issues
+        Bundle ID conflicts: Ensure your bundle ID is unique across your organization
+        Image format issues: All images must be in PNG format
+        Signing certificate problems: Verify certificate validity and expiration dates
+        Azure Key Vault access: Make sure proper permissions are configured
+     For troubleshooting details, see Troubleshoot issues with the wrap feature in Power Apps.
+     Next steps
+     System requirements and prerequisites for Wrap
+     See also
+        Use the wrap wizard to build your mobile app
+        Manual code sign on iOS
+        Manual code sign on Android
+        Code sign for Google Play Store
+        Create your Azure Key Vault for automated code signing
+        Frequently Asked Questions
+        Troubleshoot issues with the wrap feature in Power Apps
+        Benefits and limitations of Wrap
+         System requirements and prerequisites for
+         Wrap
+         07/09/2025
+         Before you use Wrap to create native mobile apps from your Power Apps canvas apps, check
+         that your system meets these requirements.
+         Software and device requirements
+              You need a Mac device for manual code signing with iOS.
+              You need a Windows PC for manual code signing with Android.
+              To run the wrapped mobile app:
+                 Android device with version 10 or higher
+                 iOS device with version 14 or higher
+           ７ Note
+           You need an Apple Developer Program       account to develop apps for iOS.
+         Permissions and access requirements
+            1. You need access to:
+                   One or more canvas apps to build the wrap project.
+                   Azure blob storage, including the account name and container name. More
+                   information: Create an Azure storage account.
+                   The Azure portal    to create app registration and register your app, which should be
+                   in the same environment as your Power Apps.
+            2. An Azure admin must grant you access to use the specific wrap app. More information:
+              API permissions.
+            3. Your apps must be part of a managed or unmanaged solution. If not, add them to an
+              existing or new solution. More information: Create a canvas app from within a solution.
+            4. You need an Azure key vault to perform the automatic sign-in process through Wrap
+              wizard. More information: Create a key vault using the Azure portal.
+            5. Check the policies enabled for your application. More information: Conditional Access
+              policy templates
+       6. If multifactor authentication (MFA) is enabled, make sure MFA is enabled for the accounts
+        you'll use to sign in, or disable the conditional access policies.
+     Sign-in options in Wrap
+        Manual code sign-in for Android and iOS: This option is best for most scenarios. For
+        Android, generate keys and generate a signature hash before you start. You need the
+        signature hash to set up the Redirect URI. More information: manual code sign-in for
+        Android.
+        Automatic sign-in using Wrap wizard: This option requires an Azure key vault. More
+        information: creating a key vault using the Azure portal.
+     Add canvas app to a solution
+     Wrap requires your apps to be part of a solution. If your canvas apps aren't already in a
+     solution, add them to an existing or new solution.
+       1. In the left navigation pane, select Solutions. If the item isn’t in the side panel pane, select
+        …More and then select the item you want.
+       2. Select a solution, and then select Edit.
+     Select + Add existing from the top menu, and then select App > Canvas app from the
+     dropdown.
+     Select the Outside Dataverse tab, select your app from the list, and then select Add to add the
+     app to the solution.
+     More information: Add an app to a solution
+     Next steps
+     Use the wrap wizard to build your mobile app
+     See also
+        Troubleshoot issues with the wrap feature in Power Apps
+        Manual code sign on iOS
+        Manual code sign on Android
+        Code sign for Google Play Store
+        Create your Azure Key Vault for automated code signing
+        Frequently Asked Questions
+        Wrap wizard: Step-by-step guide to building
+        your native mobile app
+        Use this guide to convert one or more canvas apps into a single custom-branded app package
+        that you can deploy on Google Play and the iOS App Store.
+        The wrap feature in Power Apps enables you to create native mobile versions of your canvas apps
+        as custom-branded Android and iOS mobile apps (IPA, APK, AAB packages). You can distribute
+        these wrapped native mobile apps to end users through Google Play     , Apple Business
+        Manager , or other native distribution methods.
+        When you update and republish your app, the wrapped app is automatically updated for users.
+        Steps to create a custom-branded native app using the
+        wrap wizard
+        Follow these steps to configure, build, sign, and distribute a custom-branded native mobile app
+        package (APK, AAB, or IPA) from your canvas apps using the wrap wizard in Power Apps.
+        1. Sign in and start a wrap project
+           1. Sign in to Power Apps maker portal  .
+           2. Select Wrap from the left navigation pane. If the item isn’t in the side panel pane, select …
+             More and then select the item you want.
+           3. Select the app you want to wrap, then select Wrap on the command bar.
+        2. Select apps
+           1. On the Select the app(s) to wrap screen, select your primary and secondary app.
+                   Primary app: The main app end users see when the mobile app launches.
+                   Secondary app(s): Optional other apps bundled in the same mobile app package.
+                ７ Note
+                     You can use the same primary app in multiple wrap projects.
+                      If the primary app name appears incorrect, proceed to the next step and return to
+                      refresh the name.
+           2. Select Next.
+        3. Choose target platform
+           1. On the Choose mobile platform to target screen, enter a Bundle ID.
+                ７ Note
+                The Bundle ID is a unique identifier for your app. It must contain one period (.) and no
+                spaces. Use this same bundle ID when creating the Azure key vault after generating
+                and uploading your iOS or Android certificates. If you have already created the Azure
+                Key Vault, verify the bundle ID in the Tags section of the Azure portal   .
+           2. Under Target platform(s), select all the mobile platforms that your end users use on their
+              mobile devices.
+           3. You need to have Azure key vault, to upload your build to Azure blob storage. If you haven't
+              already created, create one. Create an Azure key vault right within the Wrap wizard, or
+              follow the instructions manually.
+           4. Turn on the Autosigning toggle to automate the signing process.
+                ７ Note
+                Manual signing options:
+                      Code sign for iOS
+                      Code sign for Android
+                      Code sign for Google Play Store      You must manually sign AAB files regardless
+                      of the signing option selected in the wizard.
+           5. Set up autosigning through the wizard.
+              a. In the target platform step, toggle on Autosigning. The service checks if key vault and
+                 certificate are already attached.
+         ７ Note
+         Azure Key Vault is used to securely store and manage application secrets and
+         certificates, with centralized access and full audit logging.
+      b. If you don't have key vault and certificate or want to change them, select Configure.
+         ７ Note
+         Only Azure admins can create a key vault from the wrap wizard. Other users need to
+         follow the manual key vault creation process.
+                                             
+       c. On the side panel, select the subscription and resource group, and choose the key vault.
+        To create a new key vault, select Create a new keyvault. After you select the key vault,
+        select Next.
+                                             
+      d. The service checks if the appropriate service principal, reader role, access policies, and
+        environment variables are set up for the key vault. If errors appear, fix them. After all
+        checks pass, select Next.
+      e. On the next screen, enter the name of the certificate in the key vault.
+       f. If no certificate exists or you want to change the certificate, see Generate key and
+        signature hash to create a new certificate. Then select Create a certificate on this screen.
+        This action takes you to the Azure portal key vault location. Upload the generated
+        certificate into the configured key vault.
+         ７ Note
+         Users are responsible for creating the certificate.
+                                                                                                  
+              g. Select Finish.
+              h. On the main screen, the Azure Key Vault and certificate appear as confirmed.
+              i. On the main screen, select Next.
+           6. Set up autosigning from within Azure portal.
+              a. Refer to instructions in create an Azure key vault to create an Azure key vault. Once the
+                vault is created, you need to add the required tags, secrets, and certificates. Add the
+                environment variable if not created already.
+              b. To create the environment variable, go to Power Apps   > Solutions > Default solution.
+                Then select New > More > Environment variable, add the display name as
+                "PA_Wrap_KV_ResourceID".
+          
+                The name of the new environment variable must have the prefix "new." If it doesn't, see
+        Set Environment Variable Prefix for detailed steps.
+                                             
+       c. To add vault information to your environment variables, access the Azure portal as an
+        admin. Navigate to All Resources > Your Key Vault > Properties, and then copy the
+        Resource ID.
+                                             
+      d. To add the input to the environment variable, go to Power Apps > ApplicationName >
+        All > Environment variable. Click the three dots, select Edit, add the copied value to
+        Default value, and save.
+      e. To check whether the table value has been updated, go to Power Apps > Tables >
+        Environment variable definition > new_PA_Wrap_KV_ResourceID . The value in Default
+        value must be same as that of the resourceID for which you want to add the vault.
+         ７ Note
+         Guidelines for adding the input behind the environment variables for Key vault
+         information:
+           Environment variables must not be empty or can contain multiple entries.
+           Ensure that the resourceID added is correct (verify spelling).
+           Ensure that the resourceID added has non-empty tags and includes all the tags
+           expected with the bundle ID used in the wrap wizard.
+       f. Follow the steps in Steps for automated code signing to create the tags, secrets, and
+        certificates required during the automatic signing process.
+     4. Manage output
+     Configure where your app binaries (APK and IPA files) will be stored. Choose one of the following
+     options based on your storage and access requirements.
+                                                                  
+     Dataverse (Recommended)
+     Dataverse storage is the simpler option and is recommended for testing and evaluation of
+     deployments.
+     When you select Dataverse, build binaries are automatically stored in the
+      msdyn_PowerAppsWrapBuild table in your current environment. Builds count against your Dataverse
+     storage capacity.
+     Azure Blob Storage
+     Azure Blob Storage requires setup.
+     Prerequisites
+    Before you configure Azure Blob Storage, make sure you have:
+      An Azure Blob Storage account and container. If you don't have them, learn how to create a
+      storage account.
+      An Azure Key Vault that contains the access credentials for your storage account. If you
+      don't have one, learn how to create a key vault.
+      Sufficient permissions to read secrets from the key vault.
+    Configure Azure Blob Storage
+    To configure Azure blob storage follow these steps:
+     1. On the Manage output page, select Configure.
+                                             
+     2. In the Configure keyvault side panel, select the key vault that stores your Azure blob
+      storage credentials, and then select Next.
+     3. Enter the following details:
+         Storage account name: The name of your Azure Blob Storage account.
+         Container name: The container where build artifacts will be uploaded.
+     4. Select Save.
+     After you save, the configuration is applied to subsequent builds. To verify, run a build and
+     confirm that the APK or IPA file appears in your specified container.
+     5. Register your app
+     On the Register your app screen, register your application in Azure to establish trust with the
+     Microsoft identity platform.
+         If you have already registered an app:
+           Find your registration in the owned registration field.
+         If you do not see your registered app:
+           1. Select New app registration to create a new registration.
+           2. Provide:
+              Application name: The customer-facing name of your app
+              Android signature hash (if targeting Android): A 28-character alphanumeric string
+                                                                  
+           3. Save your changes.
+     Configure admin allowed third-party apps as an azure tenant admin
+     The registered app must be configured as a third-party app. To configure the app, the Azure
+     tenant admin follows these steps.
+       For Windows
+         1. Open Windows PowerShell as administrator.
+         2. Run these commands:
+         PowerShell
+         Install-Module -Name Microsoft.PowerApps.Administration.PowerShell -
+         AllowClobber -Force
+         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+         Import-Module -Name Microsoft.PowerApps.Administration.PowerShell
+         Add-AdminAllowedThirdPartyApps
+         Get-AdminAllowedThirdPartyApps
+       3. Provide the App ID when prompted.
+    After completing these steps, the registration screen will look like this:
+                                                   
+    Grant API permissions as an Azure tenant admin
+    The app requires the following API permissions to function correctly.
+    Required API permissions
+                                                                                               ﾉ Expand table
+          API Type            Specific API                Reason
+          Microsoft APIs      Dynamics CRM                The application needs user_impersonation to call
+                                                          Dataverse for the user.
+          APIs my             Azure API Connections       The application needs Runtime.All to call any connector
+          organization uses                               from Power Platform.
+          APIs my             PowerApps Service           The application needs the User permission to contact
+          organization uses                               Power Apps backend services from Power Platform.
+          APIs my             Power BI                    The application needs Power BI permissions to access or
+          organization uses                               embed Power BI content.
+          APIs my             Microsoft Mobile            The application needs this permission because Power
+          organization uses   Application Management      Apps uses Intune SDK internally.
+         Configure permissions from within Wrap wizard
+         The wrap wizard checks and flags permissions that aren't available with the app. As an Azure
+         admin, select one click access in the wrap wizard to grant the pending permissions. Alternatively,
+         you can configure permissions through the Powershell commands below.
+                                                                                                           
+         Configure permissions through Powershell commands:
+        Make sure DeviceManagementManagedApplication is set to Yes when you grant admin consent
+        for your app.
+                                                                                               
+        Run these PowerShell commands as an Azure admin if you don't see permissions under APIs my
+        organization uses:
+           1. Ensure the module Microsoft Graph   is available or install it:
+               PowerShell
+               Install-Module -Name Microsoft.Graph
+           2. Grant Azure API Connections permission for the static AppId fe053c5f-3692-4f14-aef2-
+             ee34fc081cae:
+               PowerShell
+               Connect-MgGraph -TenantId <your tenant ID>
+               New-MgServicePrincipal -AppId fe053c5f-3692-4f14-aef2-ee34fc081cae -DisplayName 
+               "Azure API Connections"
+           3. Grant PowerApps Service permission for the static AppId 475226c6-020e-4fb2-8a90-
+             7a972cbfc1d4:
+               PowerShell
+               Connect-MgGraph -TenantId <your tenant ID>
+               New-MgServicePrincipal -AppId 475226c6-020e-4fb2-8a90-7a972cbfc1d4 -DisplayName 
+        "PowerApps Service"
+      ７ Note
+      If only the Application name field is visible, continue to the next steps and select Android as
+      a target platform to display the signature hash field.
+    Configure API permissions manually (optional)
+    If you get errors, manually configure API permissions. For more information, see Add and
+    configure.
+    Add Redirect URIs as an app admin
+      1. In the Azure Portal, go to your app registration > Authentication.
+      2. Select Add a platform and choose iOS or Android.
+      3. For iOS, enter the Bundle ID. For Android, enter both the Bundle ID and Signature hash
+       key.
+                                                   
+        6. Configure branding
+            1. On the Configure Branding step, set the following options for your app:
+           ７ Note
+           All images must be in .png format. Default images will be used if no custom images are
+           selected.
+                                                                                             ﾉ Expand table
+          Setting                    Description                              Requirements
+          App icons                  Icons for your app                       iOS: 1024x1024 px or larger
+                                                                              Android: 432x432 px or larger
+          Splash screen image        Image shown while the app loads          .png format
+          Welcome screen image       Image shown on the sign-in screen        .png format
+          Background fill color      Color for welcome screen background      Hexadecimal color code
+          Button fill color          Color for buttons                        Hexadecimal color code
+          Status bar text theme      Color for the status bar text            Light or Dark
+            2. Select Next.
+        7. Wrap up and build
+            1. On the Wrap up screen, review your app details and select Build.
+            2. After a successful build, your app package will be available in the Azure blob storage you
+              specified.
+        View your build
+        You can view your build in several ways:
+              After building, select View Builds
+              Go to Wrap projects in the side pane, hover over the required project, and select it
+              Select the View builds option in the top header
+                                                          
+      ７ Note
+      To manually code sign an iOS app, unzip the IPA file using a Mac device.
+     Test and distribute your app
+     Test your app and distribute it as needed. If you encounter issues, see the troubleshooting page.
+     Set environment variable prefix
+     The name of the new environment variable must have the prefix "new." If it doesn't, follow these
+     steps:
+       1. Go to Solutions > New solution.
+       2. Select a Publisher or create one.
+       3. Select the edit icon next to the Publisher to view or change the prefix.
+       4. If the prefix isn't "new," change it to "new."
+       5. Save your changes.
+     Register your app on Azure portal manually (optional)
+     You can create your app registration automatically in the wizard or manually in Azure. More
+     information: Quickstart: Register an application with the Microsoft identity platform.
+      ７ Note
+      Both single tenant and multitenant customers can use wrap to create native mobile apps
+      based on their Power Apps canvas apps.
+     When registering, select an account type containing Any Microsoft Entra directory -
+     Multitenant:
+        Accounts in any organizational directory (Any Microsoft Entra directory - Multitenant)
+        Accounts in any organizational directory (Any Microsoft Entra directory - Multitenant) and
+        personal Microsoft accounts such as Skype or Xbox
+      ） Important
+         Wrap only supports Multitenant account types currently. The single tenant account
+         type is not yet supported. More information: Account types in Microsoft identity
+         platform.
+         You must create a separate Redirect URI for each platform (iOS, Android).
+     Sign your mobile app package manually (optional)
+     You can sign your app automatically in Step 2 or manually after building. Code signing is
+     different for Android and iOS.
+     Advantages of automatic signing for iOS and Android (APK):
+        You don't need to repeat the signing process during rewrapping.
+        You don't have to wait for app developers to finish the process.
+        You don't need to set up Android Studio or remember passwords.
+        You don't need a Mac device for iOS signing.
+                                                     ﾉ Expand table
+      Platform           Signing Method
+      iOS                Manual code sign for iOS
+      Android            Manual code sign for Android
+      Google Play Store  Code signing for Google Play Store
+     See also
+        Troubleshoot issues with the wrap feature in Power Apps
+        Wrap overview
+        Manual code sign for iOS
+        Manual code sign for Android
+        Create your Azure Key Vault for automated code signing
+        Frequently asked questions for wrap
+      Last updated on 06/12/2026
+          Manual code sign for iOS
+          06/16/2025
+          This article explains how to code sign for iOS. You need to sign your app for iOS if you selected
+          iOS as one of the platforms while creating and building your wrap project.
+            ） Important
+            Using Xcode to digitally sign your wrapped mobile apps for iOS is not supported. Follow
+            the instructions below to sign your wrapped mobile app packages for iOS correctly.
+          Before you begin
+          Prerequisites
+          Before you start, make sure you have:
+               App ID
+               Device UDIDs (only for testing and development purposes)
+               A macOS device to code sign for iOS
+          Set up your Mac
+             1. Install Xcode. More information: Xcode
+             2. Install PowerShell for macOS. More information: Installing PowerShell on macOS
+             3. Enroll in the Apple Developer Program
+             4. For organization distribution, sign up for the Apple Enterprise Developer Program
+          Create App ID
+             1. Sign in to your developer account at https://developer.apple.com        and select the
+               Account tab.
+             2. Go to Certificates, IDs & Profiles > Identifiers   .
+             3. Select + to create a new identifier.
+       4. Select App IDs, then select Continue.
+       5. Select the type as App, then select Continue.
+       6. Register an App ID:
+            Description - Name of your app.
+            Bundle ID - Select Explicit Bundle ID.
+            Enter the bundle ID that you used while creating the wrap project. More
+            information: Bundle ID
+            Enable these capabilities:
+             Associated Domains
+             iCloud
+             NFC Tag Reading
+             Push Notifications
+            Select Continue.
+       7. Review and register the App ID.
+      Create distribution certificate
+          Create Certificate Signing Request (CSR)
+             1. On your Mac, go to the Applications folder > Utilities > open Keychain Access.
+             2. Select Keychain Access > Certificate Assistant > Request a Certificate from a Certificate
+               Authority.
+             3. Fill out the Certificate Information:
+                     In the User Email Address field, enter your Apple ID email address.
+                     In the Common Name field, enter your name.
+                     In the Request group, select Saved to disk.
+                     Save the file to your Mac.
+                     Select Continue.
+          Upload and install certificate
+             1. Sign in to your developer account at https://developer.apple.com        by selecting the
+               Account tab.
+             2. Go to Certificates, IDs & Profiles > Certificates  .
+             3. Select + to create a new certificate.
+             4. Select App Store and Ad Hoc > Continue.

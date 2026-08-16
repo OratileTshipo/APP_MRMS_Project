@@ -1,0 +1,2484 @@
+     Undo and redo
+        Undo – undo the last action.
+        Redo – repeat the last action.
+     Cut, copy, and paste
+        Cut – Cut the selection, and store it in the clipboard.
+        Copy – Copy the selection, and store it in the clipboard.
+        Paste - Paste the last cut, or copied selection from the clipboard.
+     Add data
+        Create a new table by selecting Create new table.
+        Select any other existing tables from the current environment.
+        Search and select a connector, such as SharePoint or SQL Server.
+       New screen
+       Add screens based on the available layouts.
+       Layouts
+       Select a new screen to add to the app based on the layout of the screen.
+       Select a screen type based on the available scenarios, such as Blank, Scrollable, List, Success,
+       Tutorial, Email, People, Meeting, or Calendar.
+       App checker
+       Runs the App checker    with available rules and shows the results.
+    Settings
+    Configure the app's general settings.
+    General
+    Shows app name, and allows changing the app icon. To update the icon, select a new icon or
+    background color. To add or update description, enter text in the text box. You can also upload a
+    custom icon for the app using the Browse option.
+     Display
+     Shows the screen size and orientation. To change, select the radio buttons for Orientation and
+     Size.
+     Advanced settings allow you to further customize the app screen configuration.
+        Scale to it: Scales the app to fit available space.
+        Lock aspect ratio: Locks the height and width ratio.
+        Lock orientation: Maintains app orientation when device rotates.
+     To change the setting, toggle the switch.
+     More information: Change screen size and orientation
+     Upcoming features
+     Allows you to configure advanced settings for the app that include features under preview,
+     experimental or retired features.
+     More information: Understand experimental, preview, and deprecated features in Power Apps
+     Support
+     Shows current Power Apps Studio session details, version, and other information useful when
+     working with Microsoft support.
+     Power Automate
+     Create a new flow with Power Automate, or select any available flow.
+     More information: Create flows using the Power Apps app in Teams
+     Collections
+     A collection is a group of items that are similar, such as products in a product list. This section
+     lists the collections used by the current app. More information: Collections in canvas apps used
+     by the app.
+     Variables
+     You can save data such as the result values from a data set into temporary storage by using
+     variables. This section lists variables used by the current app. More information: Variables in
+     canvas apps used by the app.
+     3 – App actions
+     Use the options in the upper-right corner of Power Apps Studio to work with app-specific actions.
+     App name editor
+     Select the name of the app to edit it.
+     Save
+     Save allows you to perform the following actions:
+        Save - Saves recent and unsaved changes you made to the app in Power Apps Studio. Each
+        time you save changes, a new version is created.
+        Save as - Duplicate the app by saving the app with a different name.
+        Save and publish - Allows you to both save the app, and publish it at the same time.
+     Preview
+     This will show a preview version of the app in Microsoft Teams that you can interact with.
+     Publish to Teams
+     Publishes the app’s current version to a channel within Microsoft Teams. For more information
+     about publishing an app, go to Publish an app.
+     4 – Properties list
+     Shows the list of available properties for the selected object on the canvas. The properties list
+     changes based on your selection. For a complete list of all properties, go to All properties.
+     5 – Formula bar
+     Use the formula bar to add, edit, or remove functions relevant to the selected object and the
+     property selected from the properties list. For example, select the screen to update the
+     background by using the RGBA function.
+     The formula bar is IntelliSense-enabled, and provides tips as you enter text to help you with the
+     function syntax. If a formula returns an error, tips relevant to the syntax error and mitigation steps
+    are displayed. When you start entering text that matches one or more functions, the formula bar
+    shows inline function help and highlights help text relevant to the cursor position.
+    Similarly, you'll find help when working with complex functions, nested functions, or when
+    correcting a formula syntax.
+    For a quick and easy function reference, you can also select the formula drop-down menu.
+    Select an event type from the drop-down menu at the top of the dialog box, such as Action
+    instead of Text.
+    Select an action that you want to add a function for.
+    The available functions for the selected event type are dynamically updated depending on the
+    object you select. For example, if you selected a button on the canvas, the available Action
+    functions also include the function ClearCollect().
+    You can read the description of the selected Action function. Double-clicking a function name
+    adds it into the formula bar.
+    For a complete list of all canvas app functions, go to Formula reference.
+    6 – Power Apps app
+    The Power Apps app in Teams is described in detail in Overview of the Power Apps app.
+    7 – App authoring menu
+     Switch between various authoring options while working with the app.
+       Tip
+      You can also select the expand button to expand the list to include names instead of just
+      icons.
+        Tree view - Shows a tree view of all screens and controls in the current app.
+        Insert - Allows you to add different controls to the screen.
+        Data - Add or remove data such as tables that the app connects to.
+        Media - Insert or remove media from the app.
+     8 – App authoring options
+     The options for working with canvas apps change depending on the selection on the left pane.
+     Tree view
+     Select the tree view to show the screens available in the app,
+      Tip
+     Select App in the tree view to work with app-specific controls or to change app behavior,
+     such as adding a formula on OnStart event of the app.
+    Switch to the Components tab to work with component library features. You can add new
+    components or reuse those that were already published from published component libraries.
+    More information: Component library
+    Insert
+    Insert shows all the popular objects or controls that you can add on the selected screen in your
+    canvas app. You can also expand other choices or use the components option to insert controls
+    from a component library.
+        To insert controls on the canvas, you can drag the control to the canvas, select the control, or
+        select (...) and then select Add to canvas.
+           Tip
+          Dataverse for Teams provides new components built on the Fluent UI framework  . More
+          information: Fluent UI controls.
+        Popular controls
+                                                                                    ﾉ
+                                                                                       Expand table
+           Name                Description
+           Label               A box that shows data such as text, numbers, dates, or currency.
+           Edit form           Display, edit, or create a record in a data source.
+           Text                A box that shows text.
+           Text box            A box in which the user can enter text, numbers, and other data.
+           Vertical gallery    A control that contains other controls and shows a set of data.
+           Add icon            Graphics for which you can configure appearance and behavior properties.
+           Rectangle           A rectangular shape to configure the canvas appearance.
+           Date Picker         A control that the user can select to specify a date.
+           Button              A control that the user can select to interact with the app.
+         For more information about the controls that you can insert, and their properties and definitions,
+         go to Controls and properties in Power Apps.
+         Classic controls
+         Dataverse for Teams uses Fluent UI controls by default. If necessary, you can enable classic
+         controls by using the experimental feature setting. To do this, go to Settings > Upcoming
+         features > Experimental > toggle Classic controls to On.
+         After you enable classic controls, you'll be able to see and add them from the Classic category.
+         For example, you may need to enable classic controls when using dependent drop-down lists
+         when using Dataverse for Teams.
+         Data
+    Add, refresh, or remove data sources from your canvas app. You can add one or more
+    connections by using data sources.
+    In addition to data stored within tables, there are many connectors available to interact with data
+    in popular SaaS, services, and systems.
+    Select Create new table to create a new table in the Dataverse for Teams environment.
+    To choose other connectors such as SharePoint, OneDrive, or SQL Server, you can enter text in
+    the data source search box or select from the list of connectors.
+    More information: List of all Power Apps connectors
+    Visual editor
+    When you select Create new table and enter a name for the new table, you open visual editor
+    where you can design the table, add columns of different data types, enter data in rows, and save
+    the changes.
+    To get started with visual editor, select Create a table and enter the table name. You can also
+    expand the Advanced settings to update the table's plural name. For example, a table name can
+    be Shape, and the plural table name can be Shapes.
+    Watch this video that shows you how to quickly create table and columns.
+    https://learn-video.azurefd.net/vod/player?id=40f4f29f-77df-420a-a182-
+    cb71b39f4613&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Funderstand-
+         power-apps-studio
+           ７ Note
+           You can use visual editor in Power Apps Studio to quickly create a table while authoring an
+           app. However, you can also use the Build tab to edit or delete the tables you create by using
+           Power Apps Studio. Go to Create tables in Microsoft Teams for more information about
+           creating tables by using the Build tab.
+         Understand visual editor
+         Visual editor allows you to work with table rows, columns, and data.
+         Table name
+         Select Edit      to edit the name of the table.
+         Add row
+    Select Add row to add a new row to the table.
+    Add columns
+    Select Add columns to add new columns of the available column types supported by visual
+    editor.
+    Supported column types
+    Visual editor supports specific data types as columns. The following options are available when
+    creating a new column using visual editor inside Power Apps Studio:
+      Text
+      Email
+      URL
+      Phone
+      Auto number
+      Number
+      Date (Only dates without the user locale (time zone) settings are supported.)
+      Decimal
+      Lookup
+      Choice
+      Yes/No
+     ） Important
+     To add columns of types that aren't supported by visual editor, such as file or image, create
+     a table by using the solution explorer instead.
+    Advanced options
+    The advanced options for columns change depending on the type of column. For example, a Text
+    column type has an advanced option for Max length. By contrast, an Auto number column type
+    has options such as the type of autonumbering, prefixes, and maximum number of digits. More
+    information: Types of fields
+    Show/hide columns
+    Use the Show/hide columns option to show or hide available columns, including columns
+    automatically created as part of the table metadata.
+    For example, you can add an Owner column created by default to the existing table.
+    Refresh
+    Refreshes the current table with data.
+    Save
+    To save changes to a table, select Save. When you change a table and try to close it without
+    saving changes, you're prompted to discard changes.
+    To ensure that changes to the table are saved, you can select the next row inside the table, or
+    select any other cell after editing a cell to trigger the auto save functionality.
+    After you close a saved table, you'll see the table added to the list of available data sources in
+    Data on the left pane.
+    Visual editor view
+    Select from the options of Compact, Default, or Comfortable layouts to switch the view with
+    columns and rows spacing to change visual editor layout.
+    Row count
+    Shows the row counts in the table.
+    Column options
+    Select the drop-down menu next to the column heading to view column-related options.
+                                                                                                 ﾉ Expand table
+          Option         Description
+          Edit column    Edit the column name or advanced options. After it's created, you can't change the name of
+                         the column.
+          Hide           Hide or unhide the column.
+          Insert         Insert a new column at the selected column location.
+          column
+          A to Z         Sort records in ascending order.
+          Z to A         Sort records in descending order.
+          Filter by      Filter column data based on the filter criteria you define.
+          Move left      Move the column to the left from the current position.
+          Move right     Move the column to the right from the current position.
+          Pin left       Pin the column to the left side of the table.
+          Pin right      Pin the column to the right side of the table.
+     Option Description
+     Delete Delete the column.
+     column
+    Edit existing table
+    After you add rows and columns, and add data, you can close the table and use it as the data
+    source in your app. To edit content in the table, you can use the app controls or go back to visual
+    editor.
+    To edit the table, select the table data source, and then select Edit data to open the table in visual
+    editor.
+    After you close visual editor, the data source is automatically refreshed to reflect the updated
+    data in Power Apps Studio. You can also select Refresh to manually refresh Power Apps Studio to
+    reflect the data in the controls you added on the canvas.
+    Media
+    Select Media to add images, video, or audio files to your app. Adding media directly to your app
+    uploads the files to the app and uses the app storage. Each file uploaded to the app as media
+    must be 64 MB or smaller, and the size of all media files uploaded to an app can't exceed 200
+    MB.
+    If you want to reference more media, consider using audio and video controls with URLs, using
+    media from Azure Media Services. More information: Using multimedia files in Power Apps
+     9 – Canvas/screen
+     The canvas shows the currently selected screen from the left pane.
+     10 – Properties pane
+     The properties pane shows properties and options available for the currently selected object on
+     the canvas. The Properties tab shows generic options such as the name, color, size, or position.
+     The Advanced tab shows more options for advanced customization. The advanced properties
+     might sometimes be locked for editing, such as when working with data cards. You can select
+     Unlock to change properties in such situations.
+     11 – Screen selector
+     Use the screen selector to switch between screens when your canvas app has multiple screens.
+     You can also select a screen from the left pane by selecting the tree view. If the current selection
+     is inside a container, or inside an individual cell in a gallery, the selector shows the breadcrumbs
+     for the parent elements at each level.
+     12 – Change canvas screen size
+     You can zoom in or zoom out while authoring the canvas app. Select Ctrl+0 Fit to window to fit
+     the screen size based on the current authoring window size. The zoom percentage or screen size
+     you use while authoring a canvas app has no impact on the aspect ratio configured for the app
+     when you preview your app or play a published app.
+     See also
+     Use the Fluent UI controls
+     Overview of the Power Apps app
+     Manage your apps in Teams
+     Create tables in Microsoft Teams
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/20/2026
+        Use Fluent UI controls
+        Creating apps that look great in Microsoft Teams will be easier with our new components. Built
+        on the Fluent UI framework  , the new components will look great with Teams styles and will
+        automatically adjust to the Teams default theme. The new controls are Button, Check box, Combo
+        box, Date picker, Label, Radio group, Rating, Slider, Text box, and Toggle.
+        Let's take a look at each Fluent UI control and its most useful properties. For a complete list of
+        controls and properties in Power Apps, go to Controls and properties in Power Apps.
+        Button
+        A control that the user can select to interact with the app.
+        Description
+        Configure the OnSelect property of a Button control to run one or more formulas when the user
+        selects the control.
+        Key properties
+        ButtonType – The style of button to show, Standard, or Primary. Default value: Standard.
+        OnSelect – How the app responds when the user selects a control.
+        Text – Text that appears on a control or that the user enters into a control.
+    Check box
+    A control that the user can select or clear to set its value to true or false.
+    Description
+    The user can specify a Boolean value by using this familiar control, which has been widely used in
+    the user interface.
+    Key properties
+    Box side – The side of the control on which the check box is displayed.
+    Label – Text that appears on a control.
+    Checked – Whether the control is checked or not.
+    Combo box
+    A control that allows users to make selections from provided choices. Supports search and
+    multiple selections.
+    Description
+    A Combo box control allows a user to search for items to select.
+    Single-select or multiple-select mode is configured via the SelectMultiple property.
+    Key properties
+     Items – The source of data from which selections can be made.
+     DefaultSelectedItems – The items that are initially selected before the user interacts with the
+     control.
+     SelectMultiple – Whether the user can select a single item or multiple items.
+     IsSearchable – Whether the user can search for items before selecting.
+     Limitations
+      1. The list of Options doesn't support Data Paging. It's limited to show the first 500 records.
+      2. Filtering the list of Options by typing in the Text Box area of the Control works inside the
+        browser, not on the Server. This, coupled with the previous limitation, means that Filtering
+        will not match any Option(s) beyond the first 500 entries, even when the Text matches.
+     Date picker
+     A control that the user can select to specify a date.
+     Description
+     If you add a Date picker control instead of a text input control, you help ensure that the user
+     specifies a date in the correct format.
+     Key properties
+     Value – The date currently selected in a date control. This date is represented in local time.
+     Label
+     A box that shows data such as text, numbers, dates, or currency.
+     Description
+     A label shows data that you specify as a literal string of text or as a formula that evaluates to a
+     string of text. Labels often appear outside of any other control (such as a banner that identifies a
+     screen), as a label that identifies another control (such as a rating or audio control), or in a gallery
+     to show a specific type of information about an item.
+     Key properties
+     Color – The color of text in a control.
+     Font – The name of the family of fonts in which text appears.
+     Text – The text that appears on a control.
+     Radio group
+     An input control that shows multiple options, only one of which users can select at a time.
+     Description
+     A Radio group control, a standard HTML input control, is best used with only a few, mutually
+     exclusive options.
+     Key properties
+     Items – The source of data that appears in a control such as a gallery, a list, or a chart.
+     Selected – The data record that represents the selected item.
+     Rating
+     A control with which users can indicate a value from 0 through a maximum number that you
+     specify.
+     Description
+     In this control, the user can indicate, for example, how much they liked something by selecting a
+     certain number of stars.
+     Key properties
+     Value – The initial value of a control before it's changed by the user.
+     Max – The maximum value to which the user can set a slider or a rating.
+     Slider
+     A control with which the user can specify a value by dragging a handle.
+     Description
+     The user can indicate a value, between a minimum and a maximum value that you specify, by
+     dragging the handle of a slider left to right or up and down, depending on the direction that you
+     choose.
+     Key properties
+     Max – The maximum value to which the user can set a slider or a rating.
+     Min – The minimum value to which the user can set a slider.
+     Value – The value of an input control.
+     Layout – Whether a control is displayed horizontally or vertically.
+     Show value – Whether a control should display the value.
+     Text box
+     A box in which the user can enter text, numbers, and other data.
+     Description
+     The user can specify data by typing into a Text box control. Depending on how you configure the
+     app, that data might be added to a data source, used to calculate a temporary value, or
+     incorporated in some other way.
+     Key properties
+     Font – The name of the family of fonts in which text appears.
+     Text – Text that appears on a control or that the user enters into a control.
+     Toggle
+     A control that the user can turn on or off by moving its handle.
+     Description
+     A Toggle control is designed for the modern user interface, but behaves the same way as a check
+     box.
+     Key properties
+     Checked – Whether the control is checked or not.
+     OffText – The text of the off state.
+     OnText – The text of the on state.
+     Difference between Fluent UI and classic controls
+     Properties of controls have been simplified for the ease of use. The following table lists
+     differences between Fluent UI controls and classic control property names.
+                                                         ﾉ Expand table
+      Control type              Classic               Fluent UI
+      Button                      Fill                 ColorFill
+                               Background           ColorBackground
+                                TabIndex             AcceptsFocus
+      Check box                 Default                Checked
+                                TabIndex             AcceptsFocus
+      Combo box             InputTextPlaceholder        Text
+                                TabIndex             AcceptsFocus
+      Date picker              SelectedDate             Value
+                                TabIndex             AcceptsFocus
+      Label                      Size                  FontSize
+      Radio group               TabIndex             AcceptsFocus
+      Control type               Classic               Fluent UI
+      Rating                     Default                Value
+                                TabIndex              AcceptsFocus
+      Slider                     Default                Value
+                                TabIndex              AcceptsFocus
+      Text box                   Color                 ColorText
+                                 Default                Value
+                                  Fill               ColorBackground
+                                SpellCheck           EnableSpellCheck
+                                TabIndex              AcceptsFocus
+      Toggle                      Size                 FontSize
+                                 Default               Checked
+                                TabIndex              AcceptsFocus
+     Upgrade to modern controls
+     The Fluent UI (v8) controls in your canvas app in Microsoft Teams are deprecated. Modern
+     controls replace them. Upgrade your apps to modern controls to keep getting the latest design,
+     performance, and accessibility improvements. For more information, see Upgrade Fluent UI
+     controls to modern controls.
+     See also
+     Create additional apps
+     Understand Power Apps Studio
+     Upgrade Fluent UI controls to modern controls
+      Last updated on 07/21/2026
+       Create additional apps from Microsoft
+       Teams
+       Article • 12/16/2022
+       Using the Power Apps app to create the first app in a team creates an environment.
+       After an environment is available, you can create additional apps in the team by using
+       several methods. Let's take a look at them.
+       Create an app from the Power Apps home
+       Select Create an app from the Power Apps app to get started with creating an app.
+       When the team that you select already has an environment available, you're not
+       prompted to install an environment. Instead, you can select Create to create the app.
+             Create an app from the environment home
+             To create an app for the environment, you can also select the environment on the left
+             pane, and then select New.
+             You can also select Create at the bottom of the environment list.
+             Create an app while inside a team
+             To create an app while you're inside a team, go to the team and select the channel.
+             Select Add a tab    .
+       In the dialog box, select Power Apps, and then select Create an app in Power Apps.
+       Create an app from the solution explorer
+       You can also select New > Canvas app, and then select an app layout to create an app.
+       A canvas app is an app that you can create from scratch or using any available template
+              through Power Apps Studio. More information: Canvas apps terminology reference and
+              definitions
+                 Tip
+                Creating a canvas app using different methods doesn't affect which app features
+                are available. If you want to change the app orientation and size after you selected
+                a layout, go to Change screen size and orientation of a canvas app.
+              See also
+                    Microsoft Teams integration object
+                    Use the Fluent UI controls
+                    Create apps from lists in Teams
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Create an app from a list in Microsoft
+             Teams
+             Article • 12/16/2022
+             You can create an app from within a list in a Microsoft Teams channel      .
+                 Tip
+                To learn more about the Lists app in Teams, go to Overview of the Lists app in
+                Microsoft Teams.
+                1. Create a list in a Teams channel   .
+                2. From the list, select Integrate > Power Apps > Create an app.
+                3. If you have never used Power Apps in Teams before, you'll be prompted to add the
+                   Power Apps app to Teams. Select Add to install the Power Apps app in Teams.
+                   More information: Install the Power Apps personal app in Microsoft Teams
+                4. In the modal that appears, enter a name for your app and then select Save.
+        The app will be created using the data from your list.
+       5. (Optional) Customize your app by adding and configuring controls.
+       6. (Optional) Select Publish to Teams to publish your app to a channel of any team
+        that you have access to, including the team where your Microsoft list is located.
+         ７ Note
+         Apps created in Teams are only accessible within Teams. You may view your
+         apps created in Teams by selecting Integrate > Power Apps > See all apps
+         from the command bar of a list in Teams or by going directly to the Build tab
+         in Power Apps in Teams. In the Build tab, a link is available to navigate to the
+         rest of your apps in Power Apps web.
+      See also
+        Create your first app in Microsoft Teams
+        Create additional apps from Microsoft Teams
+    Overview of Microsoft Dataverse for Teams
+    Microsoft Dataverse for Teams delivers a built-in, low-code data platform for Microsoft Teams. It
+    provides relational data storage, rich data types, enterprise-grade governance, and one-click
+    solution deployment. Dataverse for Teams enables everyone to easily build and deploy apps.
+    Some of the benefits of Dataverse for Teams include:
+      Support to build low-code and no-code apps, flows, and chatbots for and within Teams.
+      Core data capabilities from the same platform behind Microsoft Power Platform and
+      Dynamics 365.
+      Storage, rich data types with enterprise capabilities, and one-click solution deployment.
+      A new visual editor that makes it even easier to define and populate table data.
+      Enterprise security that's easy to use and aligned with the approach used in Teams.
+      Inclusion in most existing Teams licenses.
+      Storage of 2 GB per team, and support for up to 1 million rows.
+      Support for 5 teams plus 1 additional team for every 20 licensed users.
+        The capability to be upgraded to Dataverse.
+     For the latest licensing, capacity, and request-limit guidance, see Dataverse for Teams FAQs and
+     About the Dataverse for Teams environment.
+     Tables in Dataverse for Teams
+     Dataverse for Teams tables provide the ability to create, populate, and query data within
+     Dataverse for Teams. Tables represent different types of entities important to an organization,
+     such as a table to store products or another to store orders.
+     Each of these tables includes columns that contain data about the subject of the table. For
+     example, a table named Product might have columns that contain a product name, product
+     identifier, manufacturer identifier, and price. Each of these columns can contain different types of
+     data. For example, the type of data for a product name is text, identifiers could be numbers, and
+     so on.
+     A solution often has multiple tables that are used together in an application. For example, an
+     Order table might reference multiple other tables, such as Customer, Product, and Country. These
+     tables are "related" to one another, and tables provide the way to create those relationships.
+     You can create and populate these tables with a new visual editor that makes it even easier to
+     work with these tables.
+      ７ Note
+      All the capabilities found in tables are powered by Dataverse for Teams. Although this will
+      satisfy many situations, in some situations an organization might want to have additional
+      capacity, capabilities, or control over their solution. In these scenarios, Dataverse for Teams
+      environments can be upgraded to Microsoft Dataverse. The upgrade process has several
+      considerations discussed in Upgrade process in the Microsoft Power Platform admin guide.
+     Security in Dataverse for Teams
+     These tables and the applications that use them are secured with enterprise-grade security that's
+     easy to understand and use for low-code and no-code developers. Security in Dataverse for
+     Teams aligns to how security is handled in Teams, with a focus on Owners, Members, and Guests.
+     Administer Dataverse for Teams environment
+     You can administer and manage Dataverse for Teams environment using the Power Platform
+     admin center. More information: About the Dataverse for Teams environment in the Power
+     Platform admin guide.
+     See also
+     How are Dataverse for Teams and Dataverse different?
+     Create tables
+     Work with table relationships
+     Dataverse for Teams FAQs
+     Overview of creating apps in Teams
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/22/2026
+          How are Dataverse for Teams and
+          Dataverse different?
+          Article • 05/28/2025
+          Applications within a team in Microsoft Teams have access to a Dataverse for Teams
+          environment. Dataverse for Teams is a common platform that allows all these interfaces to have
+          a unified understanding of how the data is modeled and consumed. Dataverse for Teams
+          delivers a targeted set of the features commonly needed for creating apps, flows, and more
+          within Teams. If your organization requires more capabilities, such as more granular control for
+          security and governance, or capacity beyond the approximately 1 million rows a Dataverse for
+          Teams environment can contain, Dataverse for Teams can be upgraded to Dataverse.
+          Table features
+          Following are the differences between a Dataverse for Teams and Dataverse table features.
+                                                                                                    ﾉ Expand table
+            Feature                                                               Dataverse for Teams      Dataverse
+            Basic data types                                                      Yes                      Yes
+            Advanced data types  (customer, multiple transaction currencies)      No                       Yes
+            Relational storage                                                    Yes                      Yes
+            Non-relational storage (logs)                                         No                       Yes
+            Managed data lake                                                     No                       Yes
+            File and image support                                                Yes                      Yes
+            Find, filter, sort                                                    Yes                      Yes
+            Advanced and Dataverse search                                         No                       Yes
+            Mobile offline                                                        No                       Yes
+          Most of the standard tables that are provided with a Power Platform environment won't be
+          present as part of Dataverse for Teams.
+          Business intelligence, professional developer, and
+          maker features
+           This table describes the differences between Dataverse for Teams and Dataverse business
+           intelligence and professional developer features.
+                                                                                                       ﾉ Expand table
+            Area                     Feature                                          Dataverse for           Dataverse
+                                                                                      Teams
+            Business intelligence    Data visualization                               Yes                     Yes
+                                     Paginated reports (SQL Server Reporting          No                      Yes
+                                     Services)
+            Professional             API access                                       No                      Yes
+            developer
+                                     Plug-ins                                         No                      Yes
+                                     Power Apps component framework                   No                      Yes
+            Maker                    Create canvas apps                               Yes                     Yes
+                                     Create model-driven apps                         No                      Yes
+           Environments
+           In Dataverse for Teams and Dataverse, data is stored within an environment. Dataverse for
+           Teams creates a single environment for each team in Teams where you create data, apps,
+           chatbots, and workflows. Environments support backups, point-in-time restore, and disaster
+           recovery. With Dataverse for Teams, capacity is measured with relational, image, and file data.
+           The 2-GB capacity provided to a team can typically store up to 1 million rows of data.
+           To make management easier, the lifecycle of the Dataverse for Teams environment is
+           connected to that of the associated team. For example, when a team is deleted, the associated
+           environment is also deleted.
+           Whereas Dataverse for Teams focuses on one environment per team for up to 10,000 teams,
+           Dataverse supports unlimited environments in addition to capabilities that are relevant for
+           multiple environments, such as copy and reset.
+                                                                                                       ﾉ
+                                                                                                           Expand table
+            Environment lifecycle                        Dataverse for Teams                        Dataverse
+            Environments                                 1 per Team                                 Unlimited
+            Environment lifecycle                       Dataverse for Teams                       Dataverse
+            Maximum size                                1 million rows or 2 GB                    Unlimited
+            Upgrade to Dataverse                        Yes                                       N/A
+          Security
+          Because collaboration in Teams happens with people inside and outside your organization, the
+          security model needed to support this is easy to use. In Dataverse for Teams, access is
+          preconfigured with a security role based on membership type such as owners, members, or
+          guests.
+          Because Dataverse isn't specific to the Teams environment, it delivers more options for admin
+          and user roles. It also includes many other security capabilities such as customer-managed
+          keys, field-level security, hierarchical security, sharing, and support for legacy authentication.
+             ７ Note
+             Because Dataverse for Teams environments are specific to a team, they only contain one
+             business unit.
+                                                                                                    ﾉ
+                                                                                                        Expand table
+            Security feature          Dataverse for Teams       Dataverse
+            Admin roles               System Administrator      System Administrator and System Customizer and
+                                      and System Customizer     other service admin roles. More information: Use
+                                                                service admin roles to manage your tenant
+            User roles                Team owners,              Several standard security roles and custom roles can
+                                      members, and guests       also be created. More information: Security roles and
+                                                                privileges
+            Activity logging          No                        Yes
+            Auditing                  No                        Yes
+            Business units            One                       Unlimited
+            Customer-managed          No                        Yes
+            environment
+            encryption key
+            Field-level security      No                        Yes
+           Security feature         Dataverse for Teams      Dataverse
+           Hierarchical security    No                       Yes
+           Record sharing           No                       Yes
+           Create Owner Teams**     Yes                      Yes
+           Create Microsoft Entra   No                       Yes
+           group Teams
+           Record sharing to        No                       Yes
+           Group Teams
+           Assign Teams Roles to    Yes                      Yes
+                        1
+           Owner Teams
+           Change record            Yes                      Yes
+           ownership**
+          1
+            Can be done via a custom app in Power Apps
+          Integration
+          Integration with Dataverse for Teams is delivered primarily through connectors. Support for
+          both standard connectors and the ability to use the Dataverse connector to connect to a
+          Dataverse for Teams for a Teams environment is included. Users with Premium licenses have
+          access to the full set of over 350 standard and premium connectors available. This allows you
+          to bring data into or retrieve data from tables in Dataverse for Teams, execute workflows when
+          data in those tables change, and also use data from tables in workflow logic.
+          Dataverse can also use connectors. Additionally, Dataverse includes other built-in integration
+          capabilities that can export data to a data lake or publish events to an event hub, service bus,
+          or by using webhooks. Dataverse also supports the TDS protocol, which provides integration
+          with SQL Server.
+          Dataverse can also be used with server-side sync to synchronize with Exchange or POP3, and
+          with Data Export Service, which synchronizes data to Azure SQL Database.
+                                                                                               ﾉ Expand table
+           Integration feature                                Dataverse for Teams               Dataverse
+           Power Automate                                     Yes                               Yes
+           Azure Synapse Link for Dataverse                   No                                Yes
+           Integration feature                            Dataverse for Teams            Dataverse
+           Data Export Service                            No                             Yes
+           Events to Azure Event Hubs                     No                             Yes
+           Events to Azure Service Bus                    No                             Yes
+           Webhooks                                       No                             Yes
+           Server-side sync                               No                             Yes
+           SQL Server Management Studio                   No                             Yes
+         See also
+         Create a table
+              Comparing Microsoft Lists, Dataverse
+              for Teams, and Dataverse
+              Article • 10/26/2022
+              Whether you’re using Power Apps to build a small app for your team or a mission critical
+              app for your business, there are many great options for data.
+              This article focuses on three of the most popular data technologies used in Microsoft
+              Power Platform: Microsoft Lists, Microsoft Dataverse for Teams, and Microsoft Dataverse.
+              With the answers to the questions below, you can quickly understand and apply the key
+              considerations that will help you pick the correct one for your application.
+              The questions are broken out into four categories:
+                                                                                              ﾉ Expand table
+               Category              Questions
+               Data                  What types of data (and how much of it) will your application require?
+                                     How do you want to search the data?
+               Application           How will the app be made available? For example, will it be a Teams app,
+                                     custom code, or something else?
+                                     Will guests be accessing your application?
+                                     Who will build the app; low-code or pro developers?
+                                     What special capabilities does your application need?
+               Integration           What do you want to integrate the system with? For example, databases,
+                                     services, and so on?
+               Admin and             What are your organizations requirements related to security and
+               governance            compliance?
+                                     Are there special requirements for backing up and restoring the data?
+              Key considerations and differences between
+              Lists, Dataverse for Teams, and Dataverse
+              Using the answers to the questions above, use the table below to help identify the right
+              technology for your application.
+                                                                                              ﾉ
+                                                                                                  Expand table
+                 Considerations      Lists                    Dataverse for Teams          Dataverse
+                 Types of data       Lists, File, Image       Relational, File, or Image   Relational, File, Image, Lake,
+                                                                                           Log, Dataverse Search
+                                                                                           Virtual tables
+                 Number of data      15                       23 (Currency is basic        24 (Currency is advanced
+                 types                                        version)                     version)
+                 Common Data         N/A                      User table only              Full support
+                 Model
+                 Capacity            Up to 30M rows           Up to 1M rows                No specified limit on rows.
+                                     (considerations for
+                                     lists > 100k)            Small number of files or     No specified limit of files or
+                                                              images                       images.
+                                                              For limits on API            For limits on API requests
+                                                              requests per day, go to      per day, with option of
+                                                              the entitlements             capacity add-ons, go to this
+                                                              available for Microsoft      article: Request limits based
+                                                              365 apps with Power          on user licenses
+                                                              Platform access in the
+                                                              article: Request limits
+                                                              based on user licenses
+                 Data movement       Create from/Export       Dataflows In                 Dataflows In/Out
+                                     to Excel                                              Server-side sync
+                                                                                           Synapse Integration (Bring
+                                                                                           Your Own Data Lake, Data
+                                                                                           Factory)
+                 Security            Owners, Members,         Owner, Member, Guest         Robust options to satisfy
+                                     Visitors, Designers,     roles                        complex enterprise scenario
+                                     Approvers roles                                       requirements, such as roles,
+                                     Customizable             Share app with Azure AD      business units, auditing,
+                                     permissions              group                        CMK, hierarchical/field-
+                                                                                           Level security, and so on
+                                                  1
+                 Clients             Lists, Teams ,           Teams                        Teams, Power Apps, Power
+                                     custom code                                           Pages, Dynamics 365,
+                                                                                           custom code
+                 Guest               Can't create or          Can't make, install, or      Must be in Azure AD using
+                 limitations         delete a list            edit apps                    Azure B2B
+                 Pro developer       REST API                 N/A                          REST API
+                 capability          Graph API                                             Software Development Kit
+                                                                                           (SDK)
+                                                                                           Plug-in Support
+                                                                                           Integration (Event Hub,
+              Considerations   Lists               Dataverse for Teams      Dataverse
+                                                                            Service Bus, Webhook,
+                                                                            Export to Lake) SQL Server
+                                                                            Management Studio
+                                                                            Integration
+              Package and      Package and deploy  Single unmanaged         Unlimited
+              deploy           Lists               solution per
+                                                   environment
+              Additional       Calculations and    N/A                      Business workflows
+              capabilities     rollups                                      Business rules
+                                                                            Calculations and rollups
+                                                                            Mobile offline
+             1
+              You can't create or pin lists on Power Apps mobile.
+             See also
+             Dataverse and Dataverse for Teams licensing
+             How are Dataverse for Teams and Dataverse different?
+             What is Dataverse?
+     Create tables in Microsoft Teams
+     In Teams, data is defined by tables. To create a table, you must be a member of a team.
+      ７ Note
+      The Teams experience changes frequently. If the current Teams UI or screenshots in this
+      article don't match what you see, use the option names and overall flow as your guide.
+     If you need to work with existing data after the table is created, see Edit table data in Excel and
+     publish it back to Dataverse for Teams and Dataverse for Teams FAQs.
+     Types of tables
+     Whereas Dataverse has two types of tables (a standard table with ownership defined and an
+     activity table), you can only create standard tables in Dataverse for Teams.
+     You define the type of table by selecting More settings when you create a table.
+     There are four different types of table ownership. When you create a table, the only options are
+     user, team owned, or organization-owned, but you should be aware that other tables have
+     different ownership types. More information: Types of tables in Dataverse
+     Create a table
+     Watch this video for a quick overview about how to create a table in Dataverse for Teams:
+     https://learn-video.azurefd.net/vod/player?id=a7b07bc4-1e08-4ed9-8675-
+     b700a8e1a6a3&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fcreate-table
+       1. Sign in to Teams, and then select the link for Power Apps.
+     2. Select the Build tab, and then select See all.
+     3. Select New on the command bar, and then select Table.
+     4. In the New table pane, enter the following information. Required columns are designated
+      with an asterisk (*) next to the column label.
+         Display name: The name of the table to be displayed. For example, Product.
+         Plural display name: The name used to reflect multiples of what the table contains. For
+         example, Products.
+         Name: A unique internal name for the table. Unlike the display name, after it's saved
+         this value can't be changed.
+          ７ Note
+          Each Dataverse for Teams environment is assigned a prefix when it's created, such
+          as cr628. The name for every table and column you create will be prefixed with
+          this value. This value can't be changed.
+         Display name (Primary name column): Every table contains a primary name column,
+         which is used by lookup fields when establishing relationships with other tables.
+         Typically the primary name column stores the name or primary description of the data
+         stored in the entity.
+         Name (Primary name column): This column is pre-populated based on the primary
+         name column name you enter. It includes the prefix. You cannot change this after the
+         table is saved.
+         More settings: This area provides additional settings that are available. More
+         information: Create a custom table.
+       5. Select Done.
+     See also
+     Edit or delete a table Overview of Microsoft Dataverse for Teams Dataverse for Teams FAQs
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/22/2026
+       Edit or delete a table
+       Article • 02/15/2022
+       With Dataverse for Teams, you can perform the following types of operations on a table:
+          Create table columns.
+          Delete a table.
+          Create, edit, and delete table relationships. More information: Work with table
+          relationships
+       Edit table properties
+       In Microsoft Teams, you can edit four table properties:
+          Display name: The name you want to display for the table.
+          Plural display name: The plural of the table name, when needed for display.
+          Description: A brief description of the purpose of the table.
+          Quick create settings: This enables quick creation of records for client apps that
+          support this feature.
+         ７ Note
+            You can also edit a table using the visual editor. More information: Create
+            your first table
+            Each Dataverse for Teams environment is assigned a prefix when it's created,
+            such as cr1a3. The name for every table and column you create will be
+            prefixed with this value. This value can't be changed.
+         1. On the left pane, select Tables.
+         2. Select the table you want and then select Settings on the command bar to display
+          the Edit table dialog box.
+          For more information about these settings, see Create a table.
+         3. Make the changes you want, and then select Done.
+       Edit table columns
+       You can edit table columns using the visual editor.
+         1. On the left pane, select Tables.
+         2. Select the table you want, select Edit data on the command bar to display the
+          visual editor.
+              More information: Create your first table
+              Delete a table
+              Anyone who's a member of the team can delete tables that aren't part of a managed
+              solution.
+              In the Tables list, select … next to the table you want to delete, and then select Delete
+              table. Alternatively, while viewing a table, select Delete table on the command bar.
+              See also
+              Work with table relationships
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Work with table relationships
+       Article • 02/15/2022
+       Table relationships define the ways that table records can be associated with records
+       from other tables or the same table. There are three types of table relationships.
+       Dataverse for Teams allows for the creation of the same relationship types as Dataverse
+       does:
+          One-to-many relationships. In this type of relationship, each row in table A can
+          match more than one row in table B, but each row in table B can match only one
+          row in table A. For example, a class of students have a single classroom.
+          Many-to-one relationships. In this type of relationship, each row in table B can
+          match more than one row in table A, but each row in table A can match only one
+          row in table B. For example, one single teacher teaches many classes.
+          Many-to-many relationships. In this type of relationship, each row in table A can
+          match more than one row in table B, and vice versa. For example, students attend
+          many classes, and each class can have multiple students.
+       More information: Entity relationships
+       Create a table relationship
+       To add a lookup relation to a table, create a relation on the Relationships tab and
+       specify the table with which you want to create a relationship.
+         1. In the Power Apps section of Microsoft Teams, select the table to create a
+          relationship. This can be done by opening the table and selecting the
+          Relationships tab.
+        Or, on the left pane, expand Tables, expand the table you want, and then select
+        Relationships.  
+       2. When the relationships page is open, select Add relationship, and then select the
+        type of relationship you want to create (for example, Many-to-one).
+      More information: Create a relationship between entities
+       ７ Note
+       When defining columns of type lookup within a table, a many-to-one relationship
+       is created automatically.
+       Edit a table relationship
+       Editing relationships in Dataverse for Teams works the same as Dataverse except that
+       you can't manage collaboration functions, such as allowing feedback or enabling
+       SharePoint document management. More information: Relationship actions
+       Delete a table relationship
+       While viewing table relationships, select the table relationship you want to delete, and
+       then do one of the following:
+           Select Delete relationship on the command bar.
+           Select … next to the relationship, and then select Delete relationship.
+       See also
+       Work with table columns
+       Work with table columns
+       Article • 02/15/2022
+       With the exception of the Customer column, all column types in Dataverse are available
+       in Dataverse for Teams as columns. This article covers the content you'll need for
+       working with table columns in Dataverse for Teams.
+       Watch this video for a quick overview about column data types in Dataverse for Teams:
+       https://learn-video.azurefd.net/vod/player?id=416d5037-a701-436d-bd77-
+       e7fcb5329ead&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Ftable-columns
+       Notice that the currency feature will always use the default currency for the
+       country/region that was selected during Dataverse for Teams environment creation. This
+       can't be changed, and additional transaction currencies or exchange rates can't be
+       added. However, you can upgrade from Dataverse for Teams to Dataverse for full
+       currency functionality.
+       For more information about the columns available, see these Dataverse articles:
+         Columns overview
+         Create and edit global option sets overview
+         Autonumber columns
+         Set managed properties for columns
+         Behavior and format of the Date and Time column
+       Create a column
+       Watch this video to learn how to create columns in Dataverse for Teams:
+       https://learn-video.azurefd.net/vod/player?id=9a5cecc2-2fce-4ad5-adc9-
+       0d68afb3426c&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Ftable-columns
+        1. On the Build tab, select See all, and then expand Tables.
+        2. Select the table you want to add a column to, and then select Add column on the
+         command bar.
+              The rest of the process to add and manage columns is the same as in Dataverse, which
+              is documented in these articles:
+                    Create and edit columns for Dataverse using Power Apps portal
+                    Manage custom columns in an entity
+              Choice columns
+              In Dataverse for Teams, choices can only be created as a column within a table. Creating
+              choices is otherwise the same as creating an option set in Dataverse. More information:
+              Create an Option set
+              Calculated and rollup columns
+              Calculated columns and rollup columns are not currently supported in Dataverse for
+              Teams.
+              See also
+              Create a table
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+       Provide product feedback
+       Work with formula table columns
+       (preview)
+       Article • 01/01/2023
+       [This topic is pre-release documentation and is subject to change.] More information:
+       Power Apps preview program
+       Formula columns are a data type in Microsoft Dataverse for Teams that are built on
+       Power Fx. You can add a formula column to a table in real time. The Dataverse table
+       stores the logic and gives you the values during fetch operations. Formula columns use
+       the Power Fx syntax that's similar to Office Excel. As you enter the formula, Intellisense
+       helps you with recommendations for formula, syntax, and errors.
+        ７ Note
+        Formula columns can be added as a calculated field. Currently, formula columns
+        can't be used in roll-up fields or with plugins.
+       Add a formula column
+        1. On the Build tab, select See all, and then expand Tables.
+        2. From the list of tables in Power Apps app for Teams, select the table you want.
+        3. Select Add column or select Edit data > Add column. When you select Edit data,
+         you can also select + on the column where you want to add the formula column.
+        4. In the Add new column pane:
+            Enter a Name for the column, such as Total price.
+            Select Formula as the Type.
+            Enter the formula in the Expression box. In this example, the Price column
+            (Decimal data type) is multiplied by the Number of units column (Number
+            data type). Select Create.
+       When you create a record, the formula column executes the formula and displays the
+       data for the record. If the formula column value for a record doesn't update, select
+       Refresh on the command bar to execute the formula.
+       Notice that the column type is determined by the formula. You can change the formula
+       after you’ve created it if it doesn’t change the column type. For example, the formula
+       price * discount creates a column type of number, whereas the formula First & “ “ & Last
+       creates a column type of string. You can change a price * discount formula to price *
+       (discount +10%) because that doesn’t change the column type. However, once saved,
+       you can’t change the price * discount formula to Text(price * discount) because that
+       would require changing the column type to string.
+       Data types
+       The following data types can be displayed in a formula column:
+          Text
+          Decimal Number
+          Yes/No (boolean)
+          Date
+        ７ Note
+        The Currency data type is not currently supported.
+       Function types
+       The following function types are supported with the formulas used in a formula column:
+          Decimal
+          String
+          Boolean
+          Option Set
+          DateTime (TZI)
+          DateTime (User local) (limited to comparisons with other user local values and the
+          DateAdd function)
+          DateTime (Date only) (limited to comparisons with other date-only values, and the
+          DateAdd function)
+          Currency
+          Whole Number, promoted to Decimal
+       Operators
+       These operators are supported with the formulas used in a formula column:
+       +, -, *, /, %, ^, in, exactin, &
+       More information: Operators in Power Apps
+       Available functions
+       The following scalar functions are available with formula columns.
+       Abs
+       And
+      Average
+      Blank
+      Char
+      Concatenate
+      DateAdd
+      DateDiff
+      Day
+      EndsWith
+      Exp
+      Hour
+      If
+      IfError
+      Int
+      IsBlank
+      IsError
+      ISOWeekNum
+      IsUTCToday
+      Left
+      Len
+      Ln
+      Lower
+      Max
+      Mid
+      Min
+      Minute
+      Mod
+      Month
+      Not
+      Or
+      Power
+      Replace
+      Right
+      Round
+      RoundDown
+      RoundUp
+      Second
+      Sqrt
+      StartsWith
+      Substitute
+      Sum
+      Switch
+      Text *
+      Trim
+      Trunc
+      TrimEnds
+              Upper
+              UTCNow
+              UTCToday
+              Value *
+              Weekday
+              WeekNum
+              Year
+              * The Text and Value functions only work with whole numbers, where no decimal
+              separator is involved. Since the decimal separator varies across locales, and the formula
+              columns are evaluated without locale knowledge, there's no way to properly interpret or
+              generate the decimal separator.
+              See also
+              Work with table columns
+              Formula reference for Power Apps
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+            Edit table data in Excel and publish it
+            back to Dataverse for Teams
+            Article • 02/15/2022
+            By opening Dataverse for Teams table data in Microsoft Excel, you can quickly and easily
+            view and edit the data by using the Microsoft Power Apps Office Add-in.
+            To install the Power Apps Excel Add-in, see Microsoft PowerApps Office Add-in   . For
+            more information about how to add or remove an Office Excel Add-in, see Add or
+            remove add-ins in Excel   .
+            Open table data in Excel
+                1. Sign in to Teams, and then in the left pane, select the Power Apps.
+                2. Select the Build tab, and then select See all.
+                3. In the left navigation pane, select Tables, next to the table you want, select …, and
+                  then select Edit data in Excel.
+        4. Open the Excel worksheet that is downloaded to your browser's default download
+          folder named similar to crdcb_table-name (1591125669213).xlsx.
+        5. In Excel, select Enable editing to enable the Power Apps Excel Add-in to run. The
+          Excel Add-in runs in a pane on the right side of the Excel window.
+        ） Important
+           If the pane displays an error message, see Office Store Add-in download
+           disabling.
+           If this is the first time that you've run the Power Apps Excel Add-in, you must
+           Trust this Add-in to allow the Excel Add-in to run.
+           The maximum table size when editing in Excel is one million cells. If there are
+           too many rows or columns, not all data will be read or published.
+       Next steps
+          View and refresh data in Excel
+          Edit data in Excel
+          Configure the add-in to adjust tables and columns
+          Troubleshooting
+       Move customizations between
+       environments
+       Article • 06/17/2022
+       Microsoft Dataverse for Teams provides a simplified way to transport customizations
+       between Dataverse for Teams environments. Additionally, customizations can also be
+       moved between Dataverse and Dataverse for Teams environments.
+       Export customizations from Dataverse for
+       Teams
+       Take the following steps to export your customizations from Dataverse for Teams. Notice
+       that the solution packages you export from Dataverse for Teams are unmanaged.
+        1. From the Power Apps personal app in Teams, select the Build tab of the team
+          where you want to export your customizations. More information: Install the Power
+          Apps personal app in Microsoft Teams
+        2. Select See all, and select the items you want to export.
+        3. On the command bar, select Export.
+        4. You can now review your selected items. By default, all dependencies of the items
+          you selected are added too.
+            We recommend that you keep the option Export all dependencies under
+            Advanced settings selected. By including all dependencies, you're optimizing
+            your success when importing your customizations into another environment.
+            If you prefer to manually select the dependencies of your items, you can
+            change the value to Export selected dependencies under Advanced settings.
+            Importing customizations that don't include all dependencies will fail if those
+            dependencies aren't already in the destination environment.
+         5. Select Export as zip. The selected items are exported as a compressed solution file
+          (.zip). The solution file is automatically offered for download when the export
+          completes.
+             Files you download from Microsoft Teams will show up in your device's
+             downloads folder. In Microsoft Teams desktop, you can navigate to the
+             Downloads section by select Files on the left side of the Teams client.
+       Import customizations into Dataverse for
+       Teams
+       Take the following steps to import your customizations into Dataverse for Teams:
+         1. From the Power Apps personal app in Teams, select the Build tab of the team
+          where you want to import your customizations. More information: Install the Power
+          Apps personal app in Microsoft Teams
+         2. Select See all, and then on the command bar, select Import.
+         3. On the Import a solution page, select Browse.
+       4. Locate the compressed (.zip) file that contains the solution you want to import,
+        select Open, and then select Next.
+       5. Review the items that you want to import.
+           If you're importing an unmanaged solution, you can select the item that you
+           want to import into your team. We recommend that you keep the default
+           selection and import all of the items. This helps ensure that all items and their
+           dependencies are imported. Import will fail when you exclude an item that
+           isn't already in the team and another item in the import is dependent on it.
+           If you're importing a managed solution, all the items will be imported.
+       6. Depending on the components in the solution, you might be prompted for
+        additional information when you select Next.
+           If your solution contains connection references, you’ll be prompted to select
+           the connections you want. If a connection doesn't already exist, create a new
+           one.
+           If your solution contains environment variables, you'll be prompted to enter
+           values. You won't see this page if values are already present in your solution
+           or the target environment.
+       7. Select Import.
+      Your solution imports in the background and might take a while. A notification appears
+      on the Build tab as the solution is imported.
+       After the import completes, a success or failure notification is displayed.
+       The location of your solution components is different depending on whether you
+       imported a managed or unmanaged solution:
+          With a managed solution, all your customizations appear on the Build tab under
+          Installed apps using the name of the solution.
+          With an unmanaged solution, all your customizations appear on the Build tab
+          under Built by this team.
+       Move customizations from Microsoft Dataverse
+       to Dataverse for Teams
+       Create a solution in a Power Platform environment
+       The first step to move your customizations from Microsoft Dataverse to Dataverse for
+       Teams is to create a solution in Dataverse. Include only components that are fully
+       supported for Dataverse for Teams. Solutions that include components that aren't
+       supported by Dataverse for Teams won’t import.
+       The following custom components can be imported into Dataverse for Teams:
+          Canvas apps
+          Tables
+          Flows
+          Bots
+          Connection references
+          Environment variables
+        ７ Note
+        Only include items that you or your team have created. Solutions that contain any
+        of the standard Dataverse or Dynamics 365 tables, such as account or contact,
+        won’t import.
+       For information about the differences between Dataverse for Teams and Dataverse, go
+       to How are Dataverse for Teams and Dataverse different?
+       For information about how to create a solution with Dataverse, go to Create a solution.
+       Export the solution from Dataverse
+       Typically, you want to export your solution from Dataverse as managed. However, if your
+       goal is to transport your customizations to Dataverse for Teams and continue your
+       development from there, export your solution as an unmanaged solution. More
+       information: Export solutions
+       You can now import your solution into Dataverse for Teams. More information: import
+       customizations into Dataverse for teams.
+       Troubleshooting import failures
+       If the import isn’t successful, you’ll see a notification on the solutions page that displays
+       error or warning messages that were captured. Select Download Log File to capture
+       details about what caused the import to fail. The most common cause for an import to
+       fail is that the solution didn't contain some required components.
+       When you download the log file, you'll find an XML file in your browser's default
+       download folder that you can open using an XML reader, such as Microsoft Excel, to
+       view the contents.
+       Known issues
+       When you're working with a new Dataverse for Teams environment, the Import
+       command is missing because the See all link located on the Build tab isn't displayed for
+       that environment.
+       To work around this issue, create and save an app in the environment. When an item
+       exists in the environment, the See all link is available and you'll be able to browse to the
+       Build tab.
+       See also
+              Export solutions
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       View Dataverse for Teams table data in
+       Power BI Desktop
+       Article • 02/28/2023
+       You can use Power BI Desktop to view data from tables in Dataverse for Teams. This
+       enables you to create sophisticated reports to analyze data from your Dataverse for
+       Teams tables. This is possible using a new connector that can use direct query mode for
+       real-time data while enforcing the Dataverse for Teams security model when accessing
+       data. Additionally, the connector automatically maps relationships.
+       Prerequisites
+       You must have the appropriate Power BI license to build and share Power BI reports.
+       Step 1: Get the environment URL
+       Follow the steps to get the URL of your Dataverse for Teams environment, which is
+       required to connect from the Power BI Desktop.
+         1. Start Teams, and sign in.
+         2. In the left pane, select Power Apps, and then select the Build tab.
+         3. Select the team in the left pane that contains the data you want to view in Power
+          BI.
+         4. Select the About tab, and then select Session Details to display the session details
+          information. 
+          Copy the Instance url value to notepad. This is the environment URL of your
+                  Dataverse for Team environment. For example:
+                  https://orga0e34f66.crm.dynamics.com/
+            Step 2: View the table data in Power BI
+               1. Open Power BI Desktop, and sign in. Don’t have Power BI Desktop? Get it now   .
+               2. Select Get data.
+               3. On the Get Data page, select Power Platform > Dataverse. Select Connect.
+               4. Read the preview disclaimer and select Continue.
+               5. On the next page, specify the environment URL that you copied earlier. Make sure
+                  you remove https:// and the trailing / from the URL. So, in this case you will add
+                  orga0e34f66.crm.dynamics.com. 
+                  Select the data connectivity mode and select OK.
+       6. On the next page, select Sign in. You'll be prompted to specify your credentials to
+        sign in to your Dataverse for Teams environment. Specify your credentials and
+        submit.
+       7. On successful sign in, the Connect button becomes available. Select Connect.
+        The environment appears in the Power BI Desktop Navigator window. Expand it to
+        view the tables available to analyze. Select a table to view its data.
+      For more information about working with Power BI Desktop, see Get started with Power
+      BI Desktop.
+      See also
+      View Dataverse table data in Power BI Desktop (preview)  
+      Dataverse for Teams FAQs
+       Dataverse for Teams environment
+       language
+       Article • 02/15/2022
+       A Dataverse for Teams environment is automatically created when a Teams user either
+       creates an app in a team using the Power Apps app for the first time or installs an app
+       (created using Power Apps app) in a team for the first time from the Teams app catalog.
+       During the environment creation, the environment’s language is set to the tenant
+       default language.
+       The language settings for the environment define the language, sorting, and search
+       formats of the tables in the environment. The default language set during the automatic
+       creation of the environment can't be changed thereafter.
+       When a user accesses the Power Apps app within a team in Microsoft Teams, the user’s
+       language setting is compared against the default language of the Dataverse for Teams
+       environment for the team. Depending on the match of the languages, the following
+       happens:
+         If the user's language setting matches the default language of the environment,
+         the default language is used to display existing information and for creating new
+         tables and columns.
+         If the user's language setting is different from the default language of the
+         environment and the environment:
+           Doesn't have the required language pack installed, the new language pack
+           matching the user's language setting will automatically be installed in the
+           environment. It might take up to 15 minutes for the language pack installation
+           to complete. This is a one-time installation, and will only occur the first time a
+           new language is used.
+           Already has the required language pack installed, the environment will use the
+           user’s language.
+         Also, this does not change the default language of the environment, but provides a
+         localized user experience for the user when viewing the existing information in the
+         team, and allows all new tables and columns created by the user to have localized
+         labels that match their language.
+        ） Important
+                    Any existing tables or columns at the time of the language change will not be
+                    translated to another language. They will continue to use the existing names.
+                    In some cases, a language supported by Teams might not be available in
+                    Dataverse for Teams and other Power Platform features. When this happens,
+                    the nearest fallback language is used for the interface. More information:
+                    Supported languages and fallbacks later in this topic.
+            Example
+            User A’s language is English (United States) in Teams and they create an app in a team
+            called Team 1.
+            User B’s language is set to French in Teams and they access the Power Apps app in Team
+            1.
+                  If the Dataverse for Teams environment doesn't have the French language pack
+                  installed, it will be automatically installed in the environment for Team 1. The user
+                  interface for User B immediately changes to French while the language pack is
+                  installed. After the language pack is installed, any new tables and columns will be
+                  created in the French language.
+                  If the Dataverse for Teams environment for Team 1 already has the French
+                  language pack installed, no additional installation is required.
+            If the User B changes their language in Teams again and accesses the Power Apps app in
+            the team next time, the new language pack will be installed if the language isn't already
+            installed in Dataverse for Teams environment.
+            Supported languages and fallbacks
+            The languages supported across Teams, Dataverse for Teams, and other Power Platform
+            features vary slightly. When a language is not supported by Dataverse for Teams and
+            other Power Platform features, these will use an identified fallback language. Here is a
+            list of the languages supported across Teams, Dataverse for Teams, and other Power
+            Platform features and their fallback languages.
+            The fallback languages are denoted in italics.
+              Teams         Dataverse     Power Apps    Power          Power Virtual Power BI
+                            for Teams     Studio        Automate       Agents
+              Arabic        Arabic        English US    English US     English US    Arabic
+              Teams         Dataverse     Power Apps    Power          Power Virtual Power BI
+                            for Teams     Studio        Automate       Agents
+              Brazilian     Brazilian     Brazilian     Brazilian      Brazilian     Brazilian
+              Portuguese    Portuguese    Portuguese    Portuguese     Portuguese    Portuguese
+              Bulgarian     Bulgarian     Bulgarian     Bulgarian      English US    Bulgarian
+              Catalan       Catalan       Catalan       Catalan        Spanish       Catalan
+              Croatian      Croatian      Croatian      Croatian       English US    Croatian
+              Czech         Czech         Czech         Czech          English US    Czech
+              Danish        Danish        Danish        Danish         Danish        Danish
+              Dutch         Dutch         Dutch         Dutch          Dutch         Dutch
+              English       English US    English US    English US     English US    English US
+              (Canada)
+              English UK    English US    English US    English US     English US    English US
+              English US    English US    English US    English US     English US    English US
+              Estonian      Estonian      Estonian      Estonian       English US    Estonian
+              Flipino       English US    English US    English US     English US    English UK
+              Finnish       Finnish       Finnish       Finnish        Swedish       Finnish
+              French        French        French        French         French        French
+              French        French        French        French         French        French
+              (Canada)
+              German        German        German        German         German        German
+              Standard      Standard      Standard      Standard       Standard      Standard
+              Greek         Greek         Greek         Greek          English US    Greek
+              Hebrew        Hebrew        English US    English US     English US    Hebrew
+              Hindi         Hindi         Hindi         Hindi          Hindi         Hindi
+              Hungarian     Hungarian     Hungarian     Hungarian      English US    Hungarian
+              Icelandic     English US    English US    English US     English US    English UK
+              Indonesian    Indonesian    Indonesian    Indonesian     English US    Indonesian
+              Italian       Italian       Italian       Italian        Italian       Italian
+              Teams         Dataverse     Power Apps    Power          Power Virtual Power BI
+                            for Teams     Studio        Automate       Agents
+              Japanese      Japanese      Japanese      Japanese       Japanese      Japanese
+              Korean        Korean        Korean        Korean         Korean        Korean
+              Latvian       Latvian       Latvian       Latvian        English US    Latvian
+              Lithuanian    Lithuanian    Lithuanian    Lithuanian     English US    Lithuanian
+              Norwegian -   Norwegian -   Norwegian -   Norwegian -    Norwegian -   Norwegian -
+              NB            NB            NB            NB             NB            NB
+              Norwegian -   Norwegian -   Norwegian -   Norwegian -    Norwegian -   Norwegian -
+              NN            NB            NB            NB             NB            NB
+              Polish        Polish        Polish        Polish         Polish        Polish
+              Portuguese    Portuguese    Portuguese    Portuguese     Brazilian     Portuguese
+              (Portugal)    (Portugal)    (Portugal)    (Portugal)     Portuguese    (Portugal)
+              Romanian      Romanian      Romanian      Romanian       English US    Romanian
+              Russian       Russian       Russian       Russian        Russian       Russian
+              (cyrillic)    (cyrillic)    (cyrillic)    (cyrillic)     (cyrillic)    (cyrillic)
+              Serbian       Serbian       Serbian       Serbian        English US    Serbian
+              (Latin)       (Latin)       (Latin)       (Latin)                      (Latin)
+              Simplified    Simplified    Simplified    Simplified     Simplified    Simplified
+              Chinese       Chinese       Chinese       Chinese        Chinese       Chinese
+              Slovak        Slovak        Slovak        Slovak         English US    Slovak
+              Slovenian     Slovenian     Slovenian     Slovenian      English US    Slovenian
+              Spanish       Spanish       Spanish       Spanish        Spanish       Spanish
+              Spanish       Spanish       Spanish       Spanish        Spanish       Spanish
+              (Mexico)
+              Swedish       Swedish       Swedish       Swedish        Swedish       Swedish
+              Thai          Thai          Thai          Thai           English US    Thai
+              Traditional   Traditional   Traditional   Traditional    Traditional   Traditional
+              Chinese       Chinese       Chinese       Chinese        Chinese       Chinese
+              Turkish       Turkish       Turkish       Turkish        Turkish       Turkish
+              Ukrainian     Ukrainian     Ukrainian     Ukrainian      English US    Ukrainian
+              Teams         Dataverse     Power Apps    Power          Power Virtual Power BI
+                            for Teams     Studio        Automate       Agents
+              Vietnamese    Vietnamese    Vietnamese    English US     English US    Vietnamese
+              Welsh         English US    English US    English US     English US    English UK
+            See also
+            What is Dataverse for Teams?  
+            Create tables 
+            About the Dataverse for Teams environment
+        FAQs for Dataverse for Teams
+        Article • 12/16/2022
+        Here is a list of frequently asked (FAQs) for Dataverse for Teams; also see Dataverse for
+        Teams licensing FAQs in the Power Platform admin guide.
+        What does Dataverse for Teams enable and how does this
+        impact Microsoft Power Platform and Teams users?
+        Power Apps developers and Power Virtual Agents chatbot creators will now be able to
+        make and manage their apps and bots directly in Teams with embedded Power Apps
+        and Power Virtual Agents apps. This enables a streamlined end-to-end user experience
+        and allows makers to deploy to Teams with one click through the Teams app store.
+        These new features are powered by Power Platform enhancement in Teams that provide
+        enterprise datastores with rich data types to Microsoft 365 users and is now included in
+        Microsoft 365 and Office 365 licenses.
+        Also, apps built with Power Apps and used in Teams will be responsive to the form factor
+        that they're loaded on, meaning a creator can build an app once for users to view full
+        screen on both mobile devices and desktops.
+        What value does Dataverse for Teams offer for
+        professional developers?
+        Dataverse includes a robust set of capabilities for professional developers, including API
+        access, the ability to create plug-ins, and so on.
+        Dataverse for Teams is initially focused on the low-code and no-code developer and
+        does not provide access to these capabilities at launch. However, Dataverse for Teams
+        capability along with premium functionality through Power apps provides professional
+        developers the ability to create robust solutions with far less code, including extending
+        the out-of-the-box capabilities of Power Automate with their own custom logic in Azure
+        functions, connect their own web services, etc.
+        When should customers use Lists versus Dataverse for
+        Teams?
+        Lists is great for quickly tracking data in Teams. All your lists are instantly usable inside
+        of Teams. Additionally, you can build canvas apps and flows on top of your Lists just like
+       you can today in SharePoint.
+       Dataverse for Teams is great for building Microsoft Power Platform solutions in Teams.
+       With support for files, images, and multiple related tables, Dataverse for Teams can meet
+       your needs today and be promoted to the full Dataverse if you need additional capacity
+       or capabilities in the future.
+       How does security and governance differ between
+       Dataverse and Microsoft Dataverse for Teams?
+       Dataverse for Teams is enterprise grade and designed to work within Teams. Focused on
+       Teams, it aligns with the core roles identified in the environment: Owners, Members, and
+       Guests.
+       For Dataverse for Teams, access to the environment is restricted just to the Teams
+       owners, members, and guests. Granting access to the environment is managed by Teams
+       Owner by adding or removing the Teams members. Key benefits include -
+          Supports Teams Azure AD security group with runtime (JIT) user access and
+          privilege checks.
+          Auto assignment of System Administrator security role to Teams Owners.
+          Ability to assign different security roles to Teams Owners and Members.
+          No security settings management for Business Unit and Teams is required.
+       Dataverse is designed to be used in any application (not just Teams) and includes
+       additional security features such as auditing, sharing, field level and hierarchical security.
+       How do users import data into tables in Dataverse for
+       Teams?
+       Makers have the opportunity to bring in data through both the apps they develop as
+       well as via connectors in Power Apps and Power Automate.
+       Which tables are available to developers in Dataverse for
+       Teams?
+       Dataverse for Teams makes it easy for users to create custom tables for all of their
+       scenarios.
+       It also includes a User table that represents the Common Data Model's User entity. Data
+       stored in the User table corresponds to a user in Azure Active Directory (Azure AD).
+       Does Dataverse for Teams include support for Common
+       Data Model?
+       The User table is included in Dataverse for Teams. A broader set of Common Data
+       Model entity support is available out-of-the-box in Dataverse.
+       Can I use tables from other environments?
+       Applications can include data from environments that the maker has access to within
+       the current tenant.
+       Where can I use the new visual editor?
+       In addition to the table designer experience previously found in Dataverse, Dataverse for
+       Teams includes a new, easy-to-use editable grid that helps user be even more
+       productive. You can also use tables from other environments subject to the normal
+       permission model. The new visual editor is currently available only in Dataverse for
+       Teams.
+       See also
+       Dataverse for Teams overview
+       How are Dataverse for Teams and Dataverse different?
+       Create tables
+       Work with table relationships
+       Microsoft Teams integration object
+       Article • 12/16/2022
+       You can use the Teams integration object to easily find and access the Teams integration
+       features and use the improved usability of expressions while integrating your canvas
+       app with Teams. The availability of a Teams integration object can be validated by
+       checking the presence of Teams control from the tree view.
+       There are two features available with the integration of Power Apps with Teams. You can
+       get a Teams theme inside a canvas app, and you can filter data depending on the team
+       or channel context.
+         ７ Note
+         To further integrate with Teams, you can use the Microsoft Teams connector with
+         actions such as post a message, create a Teams meeting, list channels, and more.
+       Get the Teams theme
+       Teams uses three themes: Default, Dark, and High contrast. When using the expressions
+       to retrieve theme names, you can use the names as Default, Dark, and Contrast in the
+       Power Apps formula bar.
+       To retrieve a theme name, use the following formula.
+         Power Fx
+         Switch(
+             Teams.Theme.Name,
+            TeamsTheme.Default,
+            Color.DimGrey,
+            TeamsTheme.Dark,
+            Color.White,
+            TeamsTheme.Contrast,
+            Color.Black
+            )
+       In the above formula, the expression Teams.Theme.Name is used to evaluate theme
+       names of Default, Dark, or Contrast and the color of the selected canvas app object is
+       changed depending on the color entered in the formula.
+       The Switch() function evaluates a formula and determines whether the result matches
+       any value in a sequence that you specify.
+       This function results in changing the background of canvas app, depending on the
+       change in the theme selection in Teams.
+       For example, use this formula in the Fill property of a control (such as, a rectangle) to
+       change the fill color based on the selected Teams theme.
+                                                 ﾉ
+                                                   Expand table
+        Teams theme     App background
+        Default (App background
+        color: DimGrey)
+        Dark (App background color:
+        White)
+        High contrast (App
+        background color: Black)
+       Get the Teams channel name to filter app data
+       You can get the Teams channel name in canvas app functions, such as function Filter().
+       To get a Teams channel name, use the following syntax:
+         Power Apps
+         Teams.ThisChannel.DisplayName
+       For example, you can add a label and set the Text property to display the name of the
+       Teams channel.
+       For example, connecting to a list hosted on a SharePoint site, you can list the items in a
+       default gallery.
+      The list shows all items and a column representing the Teams channel name.
+      Considering the Teams channel name as General, you can use the following formula to
+      filter the gallery content depending on the name of the channel.
+      Filter('Colors', Channel = Teams.ThisChannel.DisplayName)
+      For more information about the Teams client SDK, go to Context interface. For more
+      information about using context from Teams, go to Use context from teams.
+      See also
+      Manage your apps
+      Understand Power Apps Studio
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       How to build apps for Microsoft Teams
+       Article • 02/04/2023
+       The sample app templates for Microsoft Teams are designed, and built with the
+       following goals:
+         Provide fully functional apps for Teams that have relevance across multiple
+         industries.
+         Provide examples of deeper integration of line-of-business data from Power Apps
+         into collaborative elements of Teams to drive better more productive workloads.
+         Provide examples of using good UX design with Teams and Power Apps.
+         Provide extensible apps which users can modify and extend to suit their business
+         requirements.
+       In this article, we'll review the process that we used to build these apps, and the steps
+       that you can follow when building your own Power Apps.
+         Tip
+        This article highlights some of the approaches taken when designing the Teams
+        template apps. For additional resources on bet practices for building Power Apps,
+        please refer to Power Apps guidance documentation section of the Power Apps
+        docs.
+       Watch this video to learn how the Power Apps templates for Microsoft Teams were
+       made:
+       https://learn-video.azurefd.net/vod/player?id=a16dd643-8d23-4c54-a619-
+       a4fe0d38c07d&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fhow-
+       templates-built
+       Define
+       Before designing and building, you need to have an idea—can be an idea for a solution
+       to a business problem, an idea for modernizing a legacy or manual process, or an idea
+       for an app that will make the life of your users easier.
+       Look to see if there are any existing solutions for the problem. Talk to the stakeholders,
+       customers, or potential users of the app and get their input. Capture their requirements
+       or user stories and prioritize based on what is the highest priority need or opportunity.
+      Identify “personas” or roles of users who will use your application. At this point, you
+      want to focus on defining the user’s key problems—what are their unmet needs? How
+      important is it for them to solve this problem?
+      Many teams tend to dive into solutioning before they've fully understood the user’s
+      problem. One way to avoid this trap is to use the “Jobs to be done” framework. This
+      framework helps us identify and understand the needs and goals of the users that are
+      the original drivers of their actions or decisions. This artifact documents each of the
+      persona’s core objective and jobs they want to accomplish in their language.
+      The above example shows personas and jobs to be done for Inspection sample app
+      template for store walk scenario.
+      Design
+      Once you've identified and validated your idea, personas, and their jobs to be done,
+      now is time to design your app. It can be tempting to jump into development at this
+      point, but a bit more design planning will serve you well.
+      Having a plan will ensure a consistent user experience while enabling you to make the
+      best design decisions for the app.
+      Design user experience
+      Make your design plan by creating user flow and wireframes (blueprints) for each job
+      statement. This process helps to ensure the process your solution takes are logical,
+      efficient, and tackles the core of the problem at hand.
+      Playing with the flow can help you better understand the various pros and cons of
+      different processes. This understanding allows you to select the flow and screen that will
+      enable users to achieve their end goal smoothly. There are many tools available to help
+      you achieve the design outcome. For example, Microsoft applications such as
+      PowerPoint, Visio, or 3rd-party applications such as Figma, Adobe XD, Sketch, or even
+      simple pen and paper.
+      This is also a good check point to get the feedback from end users. Share these high-
+      level flows with your app users and get their feedback on the end to end experience.
+      The iteration at this stage is lower risk as you can quickly make changes and compare
+      options.
+      Once the base layout is in, now you can have some fun. Do you want a clean and crisp
+      app? Or something more playful. Think about the state of mind of the user and what
+      would work best for them. Wireframing the app screens also helps you to plan out what
+      data connectors will be needed, and giving you an artifact you can review with the
+      stakeholders to get feedback before building the app to verify that the proposed design
+      addresses the requirements.
+      Once you have identified the requirements and personas and prioritized the backlog,
+      identify the set of features that will be needed to satisfy the “must have” items in the
+      backlog. This is called the Minimum Viable Product (MVP).
+      Design data model
+      Along with the user experience, designing the data model of the app is also important.
+      While Power Apps can connect to data from anywhere, you want to think through the
+      data that is needed in the app and how it will be used. In Visio, or some other data
+      diagraming tool, plan out the tables, fields, and relationships that will be needed to
+      support your desired app functionality. Here's an example of the data model for
+      Milestones app tables, and their relationships.
+      Think through how users will need to interact with the data as you plan what field data
+      types to use. For example, drop-downs for Status, Priority, and Category are updatable
+      in Milestones—that's why we created a table for these options and used a lookup to link
+      them to the work item. For other infrequently changing list options that aren't editable
+            by users in the app, we used choice data type fields. Make sure your data design fits the
+            purpose and usage patterns of your app and users.
+            Develop
+            Now that you've got an idea and a design, start building the app in Power Apps. If
+            you're building an app using Power Apps in Teams, we recommend creating a private
+            team and limiting the members of the team to only those involved in the app
+            development process.
+            Be sure to periodically review progress with stakeholders to get feedback. Once they see
+            the app coming together, it will build excitement for the finished product, and they'll
+            also provide feedback that you can use to iterate and improve the app experience.
+            Validate
+            Once the app functionality is complete, thoroughly test the app:
+                 Test as each Persona
+                 Test in Teams Desktop
+                 Test in Teams Mobile
+                 Test as user who isn't a member of the team if your app will be shared for broad
+                 distribution (sharing with colleagues outside of the team).
+                 Verify App Checker to determine if there are any issues or accessibility problems
+                 with your app and address them.
+                 Run the app through the Power Apps Code Review Tool  . This tool has been
+                 purpose built to highlight specific areas of potential improvement in the app
+                 across a range of areas such as performance, maintainability, and security.
+            Deploy
+            Your app is now complete and fully tested. Now it's time to onboard users. With Teams,
+            you've several options that you can use to give users access to your app:
+                 Add members to the team in which you developed the app.
+                 Create a solution and move the app and underlying tables to a different Team
+                 environment.
+        Share the app for broad distribution.
+      To share an app for broad distribution, follow these steps:
+       1. In Teams, open the Power Apps app.
+       2. Under Recent apps select See more.
+       3. Select the team where your app is installed.
+       4. Select Share with colleagues.
+       5. In the Enter or select a security group field, enter a security group or team with
+        which you want to share access to your app.
+       6. Toggle Colleague can use to on for the app that you wish to share.
+                 7. Select Save.
+                ７ Note
+                You'll need to set table permissions for the Microsoft Dataverse tables included in
+                your app before users will be able to use it. For more information on table
+                permissions, see Set permission and share apps with colleagues.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Add notifications to make your apps
+       collaborative
+       Article • 01/20/2023
+       Apps in Microsoft Teams are designed to enable collaboration between people in your
+       organization. When you have an app that has a hand-off of information, such as group
+       A doing something that group B then needs to process, if everything happens in the
+       app, users may miss important updates, and processes might stall.
+       Using notifications for critical events in your apps in Teams enhances collaboration by
+       proactively letting users know that something needs their attention or needs to be
+       done.
+       Teams and Power Platform give you many options in the ways that you can notify
+       people.
+          Email notifications
+          SMS/text notifications
+          Teams messages
+          Adaptive cards
+          Channel posts
+       Watch this video to learn how to add notifications to make your apps collaborative:
+       https://learn-video.azurefd.net/vod/player?id=c17e7bd1-aa38-434e-8120-
+       e26b90cb3618&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fadd-app-
+       notifications
+       Choose the right notification type
+       How should you decide what type of notification to use? Many people default to email
+       notifications, but many people also complain that they receive too many emails. Email is
+       an acceptable type of notification, but it should be used sparingly. Especially for urgent
+       notifications, as frequent emails are only seen after a period of time.
+       Here are some questions to ask when defining the appropriate type of notification:
+         1. Is the notification urgent?
+          If you're creating an app to track safety issues, and there's an urgent issue that
+          requires immediate attention, a notification like SMS text, push notification, or high
+          priority Teams message should be used so the notification is immediately noticed.
+        But don’t over-use these types of notifications for non-urgent notifications, or you
+        risk irritating your users.
+       2. Is the notification informational or actionable? If you're creating a notification,
+        what do you want to have the notification recipient do with the notification?
+        Informational notifications are to notify users, but they're for information purposes
+        only. For example, in the Employee Ideas sample app template for Teams, when a
+        new idea is created, a message is posted in a Teams channel notifying people that
+        a new idea has been created.
+        Actionable notification enable one or more follow-up activities by the recipient. In
+        the extending Employee Ideas article, we show how to change the notification to
+        an adaptive card so users can open the submitted idea and vote for it.
+        If the notification requires that the user be able to do something with the
+        notification, such as open a record or respond, an actionable notification should be
+        used—such as an interactive card, or add a hyperlink to deep link to the app.
+        Also, Teams makes other types of notifications more actionable by enabling
+        conversations around the notification—when you post a message to a Teams
+        channel, users can respond to it in the channel, facilitating the ability for multiple
+        people to discuss the notification.
+       3. Is the notification personal, or to a group?
+        Is there a specific person that should be notified? Or, is there a group of people
+        that needs to know about the notification? For personal notifications, consider
+        sending a message, email, or text message so that other users aren't overloaded
+        with non-applicable notifications. If the message should be seen by multiple
+        people in a group, a post In a Teams channel is a better choice, as the users in the
+        group can all see the message and collaborate on it.
+       4. What is the frequency of notification?
+        In the Inspection sample app template for Teams, by default, a message is posted
+        to a Teams channel when an inspection is completed. However, if you've a high
+        frequency of inspections, many messages will be posted to the channel. And when
+        many notifications are posted to a channel, individual notifications can get lost.
+        Think of your phone notification center—when you've a few apps giving you
+        notifications, they're helpful, but if you've many apps posting updates, notifications
+        become noise. In this case, you'd want to reevaluate your notifications, and either
+        change the notification to only notify on urgent inspections, or issues.
+        5. What is the impact on the users?
+         Your colleagues are probably busy, and each interruption can add stress to their
+         lives—especially in high quantities. Notifications are good if they make important
+         information more available. But they can also have negative impact if too frequent
+         or unnecessary. Also, arbitrary notifications can diminish a user's sense of control—
+         if many messages start arriving that a user has no control over. And it can be a
+         frustrating experience. Consider giving users an option in the app to control their
+         notifications—this can be a settings toggle to opt in to notifications, or a
+         preference to select what type of notification to receive. See extending bulletins for
+         an example.
+       Notifications: Power Apps or Power Automate
+       When creating a notification, you have two options:
+         Have your app create the notification directly.
+         Or, trigger a Power Apps flow to post the notification.
+       The decision as to which approach you should use depends on what type of notification
+       you're using, and how the notification should be triggered. Some notification types—
+       such as adaptive cards, require Power Automate. Others, like sending emails, text
+       messages, or Teams channel messages can be sent from a Power Automate formula, or a
+       Power Automate flow. While there isn’t a “right or wrong” answer to this question, here
+       are some rules to consider:
+         Notifications sent directly from an app without flow will be in the context of the
+         user making the change in the app. That means that the user will need access to
+         the service sending the message, and some types of messages like emails may
+         come from their personal account. If you want to send messages from a service
+         account or general notification mailbox, a Power Automate flow can be owned by
+         a different user account, and send a message when triggered by a data condition
+         (like a record being created).
+         If a flow sends a notification, and is triggered directly by the app, the flow needs to
+         be shared or assigned with the user triggering the flow. If a flow sends a
+         notification, and is triggered by a data condition (like a record creation or update),
+         the flow doesn't need to be shared or owned by the triggering user.
+         By using Power Automate to send notifications, you can update your notifications
+         without having to republish your app. If your notification details frequently change,
+         or users other than the maker of the app need to modify them, having the
+          notification sent by Power Automate can segment your workloads and enable
+          other users to work on the notifications while you work on the app.
+          Power Apps sending notifications directly use formulas to define the notification
+          logic, Power Automate flow uses a more graphical interface to set the properties of
+          a notification. For example, from a Power Apps app, you can use the following
+          formula to send email with the Outlook connector:
+         Power Fx
+         Microsoft365Outlook.SendEmail("mailbox@contoso.com", Summary, Description)
+       In Power Automate instead, the send an email action is presented in a graphical manner,
+       allowing users to populate the fields in a manner similar to how they send an email in
+       Outlook.
+              Sending an email from Power Apps directly is faster for experienced makers, but the
+              more details are required—such as attachment files and formatted text. For the less
+              experienced makers, sending the email with Power Automate flow might be easier.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+       Integrate with Microsoft Planner
+       Article • 01/20/2023
+       In this article, we'll learn how to integrate Power Apps with Planner to create and assign
+       tasks to users within the organization.
+       Power Apps in Microsoft Teams enables collaboration between people and groups.
+       Employees already use Teams to work, communicate, and collaborate. Apps in Teams
+       have deep integration with other Teams capabilities. For example, in Teams, you can
+       assign tasks to team members using Planner in your Teams channel. Apps that require
+       follow-up by others in your team, such as to address issues reported in the Issue
+       Reporting app, can leverage Planner in the Teams channel and create Tasks where users
+       already manage their tasks.
+       Watch this video to learn how to integrate Power Apps with Planner:
+       https://learn-video.azurefd.net/vod/player?id=37312c36-393d-44fd-ba8a-
+       9b3dbdf8d60e&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       planner
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions. We'll also need the ability to
+       connect to Planner.
+       Login into Teams
+       Login into Teams using either the Desktop app or the web app.
+       Create a new Team
+       In this section, we'll create a new Teams team and then create an app within that team.
+       Skip this section if you already have a team that you want to use instead.
+         1. To create a new team, select the Teams tab > select Join or create a team > select
+          Create Team > select From Scratch > select Public, and give the team a name such
+          as "Planner Integration". And then, select Create.
+         2. Select and add any members in your organization that you'd like to add to the
+          team for testing purposes, and select Add.
+         3. Select Close.
+           The new team gets created and is listed under the Teams tab.
+       Create a new app
+       We'll create an app with five fields capturing details that will be used to create a Task in
+       Planner.
+         1. Open Teams.
+         2. Select Power Apps from the left-pane.
+         3. Select + New app under Recent apps.
+         4. Select the team created earlier, and select Create to open Power Apps Studio.
+         5. Enter a name for the app, such as "Integrate with Planner", and select Save.
+           The app shows a default gallery
+         6. Select the database option from the left-pane to connect to the Planner.
+         7. Select + Add data, and then select Connectors.
+         8. Enter "Planner" in the search box to look for the Planner connector.
+         9. Select Planner.
+         10. If prompted, sign in.
+           Planner gets added as a data connection to the app
+         11. Select to open the Tree view.
+         12. Select + New screen > Blank layout.
+         13. Add the following controls.
+           a. Title (text input)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Title
+             Type              Text box
+             Property          Value
+             X                 Screen2.Width/2
+             Y                 135
+             Width             320
+             Height            35
+           b. From Date (date picker)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              FromDate
+             Type              Date picker
+             X                 Screen2.Width/2
+             Y                 235
+             Width             320
+             Height            35
+           c. Due Date (date picker)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              DueDate
+             Type              Date picker
+             X                 Screen2.Width/2
+             Y                 335
+             Width             320
+             Height            35
+           d. Assigned To (combo box)
+                                                 ﾉ Expand table
+                      Property                      Value
+                      Name                          AssignedTo
+                      Type                          Combo box
+                      X                             Screen2.Width/2
+                      Y                             435
+                      Width                         320
+                      Height                        35
+                  e. Planner ID (combo box)
+                                                                                  ﾉ
+                                                                                      Expand table
+                      Property       Value
+                      Name           PlannerID
+                      Type           Combo box
+                      Items          Planner.ListGroupPlans(Param("groupID")).value
+                      X              Screen2.Width/2
+                      Y              535
+                      Width          320
+                      Height         35
+              14. Add the following labels.
+                  a. Title
+                                                                                  ﾉ
+                                                                                      Expand table
+                      Property                             Value
+                      Name                                 Label_Title
+                      X                                    365
+                      Y                                    135
+                      Width                                320
+             Property              Value
+             Height                35
+           b. From Date
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Label_FromDate
+             X                 365
+             Y                 235
+             Width             320
+             Height            35
+           c. Due Date
+                                                 ﾉ
+                                                   Expand table
+             Property           Value
+             Name               Label_DueDate
+             X                  365
+             Y                  335
+             Width              320
+             Height             35
+           d. Assigned To
+                                                 ﾉ Expand table
+             Property         Value
+             Name             Label_AssignedTo
+             X                365
+             Y                435
+             Width            320
+             Property         Value
+             Height           35
+           e. Planner ID
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Label_PlannerID
+             X                 365
+             Y                 535
+             Width             320
+             Height            35
+         15. Add a button to the bottom of the screen with the following properties.
+                                                 ﾉ
+                                                   Expand table
+           Property          Value
+           Name              Button_CreateTask
+           X                 526
+           Y                 635
+           Width             320
+           Height            35
+         16. Copy the following formula in the OnSelect property of Button_CreateTask.
+            Power Fx
+            Planner.CreateTaskV3(
+                Param("groupId"),
+                PlannerID.Selected.id,
+                Title.Value,
+                {
+                    startDateTime: FromDate.Value,
+                    dueDateTime: DueDate.Value,
+                    assignments: AssignedTo.Selected.'User Name'
+               }
+           )
+           ７ Note
+           Upon selecting the Create Task button, it'll use the parameters provided in the
+           formula to figure out the team for which the task is being created, the planner
+           within the team the task is to be created, the Title from the text box captured
+           on the screen, and the From and Due dates captured on the screen.
+        17. Move Screen2 up above Screen1. If you want, you can also delete Screen1 instead.
+       Save and publish the app
+         1. Select Save on the top-right side of the screen to save the app.
+         2. Select Publish.
+         3. Select Next.
+         4. Under Add to Channel, make sure the channel under which the app should be
+          shown is listed and shows as at least "1 active tab(s)" and not "0 active tab(s)".
+         5. Select Save and Close.
+       Test the app
+         1. Open the team under which the app is created.
+         2. Select + Add a tab.
+       3. Search for tasks by Planner to add a planner tab to the team.
+       4. Enter tab name under Create a new plan, for example "Tasks Integration". And
+        then, select Save.
+        The tab gets added to the Team
+       5. Run the app in preview mode or from within the team.
+       6. Populate the columns with appropriate values.
+       7. Select Create Task.
+                 8. Go to the Planner tab for which the task is being created—in our example, "Tasks
+                    Integration Planner".
+                    A new task with the details should be added to the list.
+              See Planner integration in action
+              To see an example of Planner integration, check out the Issue Reporting sample app
+              template for Teams. Issue Reporting makes it easy for users to report issues. These
+              issues are created in Planner and assigned for follow-up.
+              This integration can be easily extended to add logic to automatically assign the Planner
+              Tasks or provide notifications for issue tasks.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Integrate with Azure Active Directory
+       Article • 01/20/2023
+       In this article, we'll learn about how to integrate apps created using Power Apps in
+       Microsoft Teams with Azure Active Directory (AD).
+       Integration with Azure AD enables many deep capabilities within your organization
+       hierarchy, the people in your organizations, and groups. For example, you can get
+       information about a person, their job title, department, or photo. You can also get
+       information about the user's organization hierarchy, such as their manager.
+       This integration can also be used to grant access to app functionality based on their role
+       or group membership, and therefore, be used to control security to sensitive data or
+       functionality.
+       In this article, we'll create a Power Apps app with a button with administrative access on
+       it. The visibility of the button will depend on whether the user is a member of the admin
+       group or not.
+       Watch this video to learn how to integrate Power Apps app with Azure Active Directory:
+       https://learn-video.azurefd.net/vod/player?id=9fabda9a-e9b5-43af-addd-
+       a27d3f381f18&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       azure-ad
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions. We'll also need access to Azure
+       AD to create the admin group and assign members to it.
+       Sign in to Teams
+       Login into Teams using either the Desktop app or the web app.
+       Create a new Team
+       In this section, we'll create a new team, and then create an app within that team. Skip
+       this section if you already have a team that you want to use instead of creating a new
+       one.
+                 1. To create a new team, select the Teams tab, and then select Join or create a team
+                   on the left bottom of the screen.
+                 2. Select Create Team > From Scratch > Public, give the team a name such as "Azure
+                   AD Integration", and select Create.
+                 3. (Optional) If you have any members in your organization that you'd like to add to
+                   the team for testing purposes, select them, and add them in the popup for adding
+                   members.
+                 4. Select Close.
+             The new team gets created, and is listed under the Teams tab.
+             Create a new Azure AD Group
+                 1. Sign in to Azure portal   with the same account that you logged into Teams with
+                   earlier.
+                 2. On the top search bar, search for and select Groups.
+                 3. Select + New Group.
+                 4. Set up the group with the following values:
+                                                                                         ﾉ Expand table
+                    Option                            Value
+                    Group type                        Microsoft 365
+                    Group name                        Admin Access
+                    Group email address               Automatically updated
+                    Group description                 Group for users with Admin access
+                 5. Select Create.
+                 6. Copy the group's object ID from the group overview screen for use later.
+             Create a new app
+             We'll create an app with a button that will only show up if the user is a member of the
+             team we created above.
+       1. Open the Teams app.
+       2. Select Power Apps.
+       3. Select + New app under Recent apps.
+       4. Select the team created earlier, and then select Create.
+       5. The app gets created, and the Power Apps Studio opens to allow editing the app.
+       6. Enter a name for the app, such as "Integrate with Azure AD", and then select Save.
+       7. Select Data > Add data.
+       8. In the connectors list, search for Azure AD, and select it to add that as a
+        connection.
+       9. Select Connect.
+       10. Sign in, and select Accept to connect.
+       11. In the Tree view, select + New screen to add a new screen to the app.
+       12. Select + (Insert) icon on the left-pane.
+       13. Select Button.
+       14. Set the "Text" property of the button to “Admin access”.
+       15. Select + (Insert) again, and then select label control to add.
+       16. Update the label text to "Admin level: ".
+               17. Select the app from the tree view, and open the OnStart property from the top-left
+                   of the screen.
+               18. Enter the following formula for the app OnStart:
+                      Power Fx
+                      If(
+                          !IsEmpty(
+                              AzureAD.CheckMemberGroups(
+                                  User().Email,
+                                  ["Enter your Azure group ID here"]
+                              ).Value
+                          ),
+                          Set(varAdmin,true),
+                          Set(varAdmin,false)
+                      )
+                      ７ Note
+                      Update the formula with the group ID (GUID) for the group you copied
+                      earlier.
+               19. Select ... (ellipsis) next to the app, and then select Run OnStart.
+               20. Select ... (ellipsis) next to Settings on the top ribbon, and select to view variables.
+                   varAdmin is set to False.
+               21. Select Screen 2 from the Tree view, and update the Text formula for the label to
+                   "Admin Level: " & varAdmin. The label will currently show as "Admin level: false"
+                   on the screen.
+                   We'll now control the visibility of the Admin Access button so that it only shows up
+                   when the user is an admin (for example, belongs to the Admin access group in
+                   Azure AD)
+               22. Select the button, and set the Visible property to "varAdmin".
+                   The button doesn't show up anymore since we don't have admin access.
+             Testing the integration
+                 1. Sign in to Azure portal  .
+                 2. Select the group created earlier.
+         3. Select Members under Manage from the left-pane.
+         4. Select + Add members to add members to the group/
+         5. Select users from the list of users under Add members to add to the group.
+         6. Select Select. Selected users get added to the group.
+         7. Go back to Teams.
+         8. Select Tree view.
+         9. Select the app > Run OnStart.
+       The admin access button is now visible on Screen 2, and the label shows admin level as
+       true since we're now members of the Admin access group.
+       See Azure AD integration in action
+       You can see an example of Azure AD integration in the Profile+ sample app template for
+       Teams.
+          Office 365 Users connector is used to retrieve the user profile, including name,
+          photo, manager, and other details.
+          Office 365 Groups connector is used to retrieve the people who report to a
+          selected user.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Integrate with calls and meetings
+       Article • 01/20/2023
+       Apps in Microsoft Teams drive collaboration by enabling users to do work where they
+       communicate and collaborate. Many apps require a “back and forth” communication or
+       passing items between people. For example, in the Inspection sample app template for
+       Teams, managers create inspection forms, users complete the inspection, and reviewers
+       review the inspections.
+       Power Apps in Teams can leverage deep integration with other Teams capabilities to
+       make apps collaborative. In this article, we'll learn how we can integrate Power Apps
+       with Teams to make calls or schedule meetings with other users within the organization.
+       Watch this video to learn how to integrate Power Apps with calls and meetings:
+       https://learn-video.azurefd.net/vod/player?id=022e5ad1-7a6d-49bb-99de-
+       93dd4041bebd&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       calls-and-meetings
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using either the Desktop app or the web app
+       Create a new team
+       In this section, we'll create a new Teams team, and then create an app within that team.
+       Skip this section if you already have a team that you want to use.
+         1. To create a new team, select the Teams tab > select Join or create a team on the
+          bottom-left side of the screen > select Create Team > select From Scratch > select
+          Public, and give the team a name such as "Calls and Meetings Integration". And
+          then, select Create.
+         2. If you have any members in your organization you'd like to add to the team for
+          testing purposes, add them in the pop-up, and then select Add.
+         3. Select Close.
+       The new team gets created and is listed under the Teams tab
+       Create a new app
+       Well create an app with a gallery of users and buttons on each of the display forms to
+       either call, chat or schedule a meeting with a user from the list.
+         1. Open Teams app.
+         2. Select Power Apps from the left-pane.
+         3. Select + New app under Recent apps.
+         4. Select the team created earlier, and select Create to open the app in Power Apps
+          Studio.
+         5. Enter a name for the app, such as "Integrate with calls and meetings".
+         6. Select Save.
+          The app shows a default gallery
+         7. Select the gallery, and search for users in the Add a data source search box.
+         8. Select Users from the list of data sources.
+          The list of users shows in the gallery on the left-side of the screen. The right-side
+          of the screen shows details of the selected user record.
+         9. Select the app from the left-pane, and update the OnStart property of the app
+          with the following formula:
+            Power Fx
+            Set(gblIsHostClientWeb,Param("hostClientType")="web")
+            ７ Note
+            This formula checks if the user is accessing Teams from a web browser,
+            desktop, or a mobile app.
+        10. Select Screen1 from the Tree view.
+           11. Select + (Insert) > Button to add a button.
+           12. Move the button to the details pane on the right-side of the screen.
+           13. Set the following properties of the button.
+                                                                ﾉ Expand table
+               Property                            Value
+               Text                                "Call"
+               Width                               150
+               Height                              45
+               X                                   500
+               Y                                   300
+              Copy the following formula in the OnSelect property of the button:
+                Power Fx
+                If(
+                    gblIsHostClientWeb,
+                    Launch(
+                        "https://teams.microsoft.com/l/call/0/0?
+                users="&BrowseGallery1.Selected.'Primary Email',
+                        {},
+                        LaunchTarget.New
+                    ),
+                    Launch(
+                        "msteams://teams.microsoft.com/l/call/0/0?
+                users="&BrowseGallery1.Selected.'Primary Email',
+                        {},
+                        LaunchTarget.New
+                    )
+                )
+                ７ Note
+                    If the user is accessing Teams using a web browser, this will launch the
+                    call window in the browser itself because of https:// protocol identifier.
+                    If the user is accessing Teams using the Teams desktop or mobile app,
+                    then it launches the call window in the Teams app itself because of
+                    msteams:// instead.
+               The format to launch a call through a deep-link is:
+               https://teams.microsoft.com/l/call/0/0?users=\<user1\>,\<user2].
+               More information: Generate a deep link to a call
+         14. Add another button with the following properties:
+                                                 ﾉ Expand table
+           Property        Value
+           Text            "Schedule a Meeting"
+           Width           150
+           Height          45
+           X               Button1.X + 200
+           Y               Button1.Y
+         15. Copy the following formula in the OnSelect property of the new button:
+            Power Fx
+            If(
+                gblIsHostClientWeb,
+                Launch(
+                    "https://teams.microsoft.com/l/meeting/new?
+            subject=New%20Meeting&attendees="&BrowseGallery1.Selected.'Primary 
+            Email',
+                    {},
+                    LaunchTarget.New
+                ),
+                Launch(
+                    "msteams://teams.microsoft.com/l/meeting/new?
+            subject=New%20Meeting&attendees="&BrowseGallery1.Selected.'Primary 
+            Email',
+                    {},
+                    LaunchTarget.New
+                )
+            )
+         16. Add a third button with the following properties
+                                                 ﾉ
+                                                   Expand table
+           Property          Value
+           Text              "Chat"
+           Width             150
+           Height            45
+           X                 Button2.X + 200
+           Y                 Button1.Y
+        17. Copy the following formula in the OnSelect property of the new button:
+            Power Fx
+            If(
+                gblIsHostClientWeb,
+                Launch(
+                    "https://teams.microsoft.com/l/chat/0/0?
+            users="&BrowseGallery1.Selected.'Primary 
+            Email'&"&topicName=&message=Hi!",
+                    {},
+                    LaunchTarget.New
+                ),
+                Launch(
+                    "msteams://teams.microsoft.com/l/chat/0/0?
+            users="&BrowseGallery1.Selected.'Primary 
+            Email'&"&topicName=&message=Hi!",
+                    {},
+                    LaunchTarget.New
+                )
+            )
+          The screen should appear as shown below
+       Save and publish the app
+         1. Select Save on the top-right side of the screen to save the app.
+         2. Select Publish to publish the app.
+         3. Select Next in the pop-up.
+         4. Under Add to Channel, make sure the channel under which the app should be
+          shown is listed and shows as "1 active tab(s)" and not "0 active tab(s)".
+         5. Select Save and Close.
+       Test the app
+         1. Run the app in the preview mode.
+         2. Select a user from the list on the left.
+         3. If you don't have a user showing up in the list, share the app with another
+          colleague/user. Once that user logs in into the app, they'll show up in this list of
+          users.
+         4. Select the user from the list.
+         5. Test the options.
+       The call button launches a new call. The meeting button creates a meeting invitation
+       with the selected person
+       See chat, call, and meeting integration in action
+       For an example of chat, call, and meeting integration in action, check out the Profile +
+       sample app for template Teams.
+       When opened from within a Team, the app displays the other members of the team. You
+       can select the Select people to connect with and select one or more people, then start
+       a call or chat with the selected people, or schedule a meeting.
+       Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       Enable consistent experience across
+       sessions using LoadData and SaveData
+       functions
+       Article • 01/20/2023
+       Microsoft Dataverse for Microsoft Teams delivers a built-in, low-code data platform for
+       Teams. It provides relational data storage, rich data types, enterprise-grade governance,
+       and one-click solution deployment. Dataverse for Teams enables everyone to easily
+       build and deploy apps.
+       While there are numerous advantages of using Power Apps in Teams, one of the biggest
+       design considerations is the ability to keep consistent experience across sessions.
+       While using an app, if we switch a tab in Teams to look at Wiki or Planner, or even chat
+       with someone, the session data of the app is lost and we'd have to start the session
+       from scratch. For example, if we're in the middle of an inspection using the Inspections
+       app and we switch tabs even for a moment, all the data that was captured on the
+       inspection would be lost and we'll have to recapture all that information.
+       In this article, we'll learn how to use the LoadData() and SaveData() functions to store
+       the session data within the app to avoid any loss of work because of switching tabs in
+       Teams.
+       Watch this video to learn how to enable consistent experience across sessions:
+       https://learn-video.azurefd.net/vod/player?id=e669c7fe-3f11-43ad-8233-
+       0dbbb374bec5&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fconsistent-
+       experience-across-sessions
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that is
+       available as part of select Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using Teams Desktop.
+       Create a new Team
+       To create a new team:
+        1. Select the Teams tab.
+        2. Select Join or create a team on the bottom-left of the screen.
+        3. Select Create a team from scratch.
+        4. Select Public and give the team a name. In this example, we'd use "MSFT Partners".
+        5. Select Create.
+       The new team gets created and is listed under the Teams tab.
+       Create a Power Apps app in Teams
+       To create a Power Apps app in teams, we need to open Power Apps Studio in Teams as
+       shown below.
+       1. Select Power Apps from the list of apps and pin it to the left-pane, and then select
+        it.
+       2. Select Start now to create the first app.
+       3. Select the team for which this app is to be created—a Power Apps environment is
+        created for that team (there's one Power Apps environment per team).
+       4. While the environment is being created, close the dialog box that says Getting
+        things ready.
+       5. Select the Build tab on top, and in a few seconds the created app should appear in
+        the list.
+       6. Open the app, and notice it gets created in the tablet layout/form factor by
+        default.
+       7. Enter a name for the app Persistent session example app, and select Save.
+        The app gets created with a gallery.
+       8. Select Create new table to create a new table.
+       9. Enter Accounts, and select Create.
+       10. Add two columns—Phone with data type of Phone, and City with data type of Text.
+       11. Add sample data to the three columns.
+       12. Repeat to add at least five records.
+       13. Select Close.
+          The accounts table gets added as a data table
+        14. Select Tree View > Select BrowseGallery1 > Select Accounts as the data source.
+       Publish the app in Teams
+        1. Select Publish to Teams.
+        2. Select Next.
+       3. Select + to add the app to the "General" channel.
+         4. Go to the Persistent Session Example team, and notice the Persistent session
+          example app shows up on the top as a tab.
+       Testing the issue
+         1. Open the Persistent session example app from the Persistent Session Example
+          team.
+         2. Select New Record to create a new account in the app.
+         3. Enter the name and phone number
+         4. Before you enter City and save the record, switch to a different tab (like Files or
+          Wiki on top or a different team), and then come back to the app.
+         5. Notice that the data entered in the two columns is no longer available on the
+          screen and is lost
+       Solution: Use SaveData() and LoadData()
+       functions
+       To resolve the above issue, we'll use the LoadData() and SaveData() functions. We'll
+       create a collection for the data entered on a form as and when data is entered, and keep
+       saving the data in the collection until the record has been committed or saved. This way,
+       if the record hasn't been saved and we must tab out of the screen for some reason, the
+       collection would have the saved data that would get loaded once we're back in the app.
+       We'll also clear the collection once the record has been saved so that the collection is
+       ready to capture new data when the next new record is being created.
+         1. Start with making sure that the changes we're applying are applicable only in the
+          case of a new record. So, we're updating the variable newMode that will be used
+          as a condition on the edit form to figure out what data needs to be displayed.
+          Select New record and add the following formula on the OnSelect property of the
+          button:
+            Power Fx
+            NewForm(EditForm1);
+            UpdateContext({newMode: true})
+         2. Next, we'll add the data from the individual input controls to a collection, and then
+          we'll save the data to a local file from that collection. Select the text input box—in
+          our example it's the "DataCardValue1" of the "Name_DataCard1" on "EditForm1"
+          for the Name field—enter the following formula in the OnChange property of the
+          input field:
+            Power Fx
+            Collect(
+                colAccount,    
+                { Column:"Name",Value:Self.Value}
+            );
+            SaveData(colAccount,"colAccount").
+          With this change, we're adding the data to a local cache so that if the user leaves
+          the app, their data won't be lost.
+          Similarly, enter the following code in the OnChange property for Phone
+          (DataCardValue2):
+            Power Fx
+            Collect(colAccount, {Column:"Phone",Value:Self.Value});
+            SaveData(colAccount,"colAccount");
+          And enter the following code in OnChange property for City (DataCardValue3):
+            Power Fx
+            Collect(colAccount {Column:"City", Value:Self.Value});
+            SaveData(colAccount, "colAccount");
+         3. Now we'll update the App OnStart so that if there's any data saved in the
+          collection, that would get loaded on the start of the app.
+          Go to the App > OnStart property, and add the following formula:
+            Power Fx
+            LoadData(colAccount,"colAccount", true)
+         4. Next, we need to update the Default property of the data fields so that when the
+          page loads once we come back to the app, if data exists in the collection, it should
+          show the data from the collection by default.
+          Select the field DataCard and update the Default property of the data card to the
+          following formula for the listed fields.
+          For Name field, enter Name_DataCard1:
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column = "Name")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "Name")
+                ).Value,
+                If(newMode, Blank(), ThisItem.Name)
+            )
+          Similarly, enter the following formula in the Default property formula for Phone
+          (Phone_DataCard1):
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column ="Phone")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "Phone")
+                ).Value,
+                If(newMode, Blank(), ThisItem.Phone)
+            )
+          And use the following formula for City (City_DataCard1):
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column = "City")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "City")
+                ).Value,
+                If(newMode,Blank(), ThisItem.City)
+            )
+         5. Now, we need to clear the collection in two scenarios:
+           a. When the user submits the form, and the changes get saved.
+          b. When the user selects the cancel button to cancel the changes.
+          Use the following formula in the OnSelect property of the Submit button.
+            Power Fx
+            SubmitForm(EditForm1);
+            UpdateContext({editMode: false, newMode: false});
+            Clear(colAccount);
+            SaveData(colAccount, "colAccount");
+          Select the Cancel button, and enter the following formula:
+            Power Fx
+            ResetForm(EditForm1);
+            UpdateContext({editMode: false, newMode: false});
+            Clear(colAccount);
+            SaveData(colAccount, "colAccount");
+         6. Publish the apps after making all the above changes by selecting Publish to Teams.
+       Test the app again
+         1. Go to the team and run the app.
+         2. Select + New record, and add the name and phone details for the new record.
+         3. Select another tab to move out of the app.
+         4. Come back to the app—it shows details of the first account.
+        5. Now, when we select + New again, we'll see the Name and Phone details
+          populated in those text input fields already. And we can resume adding the
+          account we were adding before we had to tab out of the app.
+       How we use SaveData and LoadData in the
+       Inspection app
+       In the Inspection sample app template, we use load data and save data on the
+       inspection form—if a user is in the middle of an inspection, and they switch away from
+       the apps in Teams (like to send someone a message), we don’t want them to lose their
+       place in the inspection. When they return to the app tab in Teams, the app gives them
+       the option to resume the in-progress inspection.
+       Considerations
+       In Dataverse for Teams, there are some limits to the SaveData() and LoadData()
+       capabilities.
+          1-MB limit on Teams Desktop.
+          Doesn't work in a browser.
+          Apps in mobile are limited by the amount of local storage available to the app.
+       Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       Have a conversation about your business data
+       in a Teams app
+       Article • 01/20/2023
+       Apps in Microsoft Teams drive collaboration by enabling users to do work where they communicate and
+       collaborate. One way to make your apps collaborative is by adding the ability to have a conversation about
+       your app or the data in your app. Teams is your go-to place to have such conversations.
+       For example, in the Profile+ sample app template for Teams, when you select one or more profile cards in the
+       app, you can start a chat with the selected people directly in Teams.
+       You might also want to use this capability for your apps. For example, if you're building a sales opportunity
+       tracker for the sales manager to review upcoming deals, you might want to add a button for the user to chat
+       with the sales person about the opportunity.
+       This way, Power Apps in Teams can use deep integration with other Teams capabilities to make apps
+       collaborative. In this article, we'll learn how we can integrate Power Apps with Teams to facilitate conversations.
+       Watch this video to learn how to configure having conversations about business data in Teams app:
+       https://learn-video.azurefd.net/vod/player?id=aeacd56d-232b-4187-83f0-
+       e15dc4103f43&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fbusiness-data
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be available as part of select
+       Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using either the Desktop app or the web app
+       Create a new Team
+       In this section, we'll create a new Teams team and then create an app within that team. Skip this section if you
+       already have a team you want to use instead.
+         1. To create a new team, select the Teams tab, and then select Join or create a team on the left bottom of
+          the screen.
+         2. Select Create Team > From Scratch > Public, give the team a name such as "Calls and Meetings
+          Integration", and select Create.
+         3. (Optional) If you have any members in your organization that you'd like to add to the team for testing
+          purposes, select them, and add them in the popup for adding members.
+         4. Select Close.
+       The new team gets created, and is listed under the Teams tab.

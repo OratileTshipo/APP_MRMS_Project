@@ -1,0 +1,2253 @@
+       select the Related tab then select a related table like contacts.
+       Quick actions. Quick actions are associated with the main grid location. To add or edit
+       commands for both quick actions and main grid locations, select the desired table from
+       within the modern app designer, then edit the command bar and choose the main grid
+       location. The first five commands, determined by order, are also shown as quick actions
+       when playing the app.
+                                            
+         ７ Note
+         Less frequently customized command bar locations aren't supported in command
+         designer. See the Global command bar and other ribbons sections for more information
+         on customizing commands for these locations.
+       Types of commands
+           Command. Standard button. Performs an action when selected. Can also be nested in
+           groups within dropdowns and split buttons. These were called flyouts in classic
+           commanding.
+           Dropdown. Creates a menu where you can organize commands within a group.
+           Group. Add titles to groups of commands nested within dropdowns and split buttons.
+           Split button. Similar to a dropdown, but has a primary command. When the split button
+           is selected, the action from the primary command is executed. If the expand chevron is
+           selected, the primary command won't be executed. Instead a list expands to show
+           additional groups, flyouts, and commands.
+                                                                           
+       Key differences between classic and modern
+       commands
+       Classic commands (formerly known as the ribbon) weren't customizable using low code. With
+       code, command customizations were difficult, tedious, and error prone. In order to scale
+       commanding to low code as well as use custom pages to converge canvas and model-driven
+       apps, it was vital to reinvent and rebuild the command infrastructure.
+       Modern commanding offers many new capabilities and is much simpler to use.
+                                                                  ﾉ Expand table
+            Capability                Classic                                    Modern
+            Supported in model-       Yes                                        Yes, Additionally supports Power Fx
+            driven app runtime                                                   runtime.
+            Customized using          Hand editing XML within solution files     Command designer as well as
+                                      or using non-Microsoft tools. Requires     Dataverse API support.
+                                      time-consuming solution export and
+                                      import operations.
+            Supports Power Fx.        No                                         Yes. For actions and visibility.
+            Time required to          Slow, error prone.                         Fast
+            customize
+            Reliability and           Easy to make mistakes. Bad                 Inline error handling prevents
+            performance               customization and lack of scoping often    mistakes. Power Fx optimized for
+                                      impact app performance.                    better runtime performance.
+            Sharing                   Standard Dataverse role-based security.    Non-Power Fx commands use
+                                                                                 standard Dataverse role based
+                                                                                 security. Power Fx commands
+                                                                                 currently require the command
+                                                                                 component library to be shared in
+                                                                                 addition to having an appropriate
+                                                                                 security role.
+            Solution and              Inconsistent and problematic solution      Standard solution layering centrally
+            application lifecycle     layering, no presence in solution          managed for multiple solution object
+            management (ALM)          interface. Many standard solution          types within Dataverse. Present in
+            behaviors                 behaviors not supported such as            solution interface. All standard
+                                      patches, segmentation, solution            solution behaviors supported.
+                                      upgrade, managed properties, and
+                                      many more.
+            Localization              Nonstandard                                Standardized using export and
+                                                                                 import translations for the entire
+                                                                                 solution.
+            Data model                Complex. Optimized for classic ribbons     Simple, optimized for today’s model-
+                                      and contain many properties that are       driven app command bars.
+                                      no longer needed.
+            Use JavaScript            Yes                                        Yes. Now simpler. The same
+                                                                                 JavaScript can be used for classic and
+                                                                                 modern commands.
+            Customize out of the      Yes                                        Commands become editable in
+            box commands                                                         command designer once migrated to
+                                                                                 the modern framework.
+             Capability                 Classic                                       Modern
+             App specific               No                                            Yes. Using modern command
+             commands                                                                 designer ensures commands are only
+                                                                                      visible within the selected app.
+             Table specific             Yes                                           Yes. Requires modifying the
+             commands that display                                                    appaction definition within the
+             in all apps containing                                                   solution file.
+             the table
+             Global commands that       Yes                                           Yes. Requires modifying the
+             display for all tables                                                   appaction definition within the
+             and apps for the                                                         solution file.
+             specified command
+             bar location
+             Create split buttons,      Yes                                           Yes
+             flyouts, and groups
+             Dynamically populate       Yes                                           No. Create commands declaratively.
+             a flyout with code
+             Customize global           Yes                                           No
+             application header
+             commands
+             Customize commands         Yes                                           No.
+             for other, uncommon,
+             or obsolete command
+             bar locations
+             Run a modern flow or       Using JavaScript                              Using JavaScript. Also supported
+             workflow                                                                 using a custom page.
+           Classic versus modern visibility rule comparison
+           Classic visibility rules often had a specific rule for each scenario. With Power Fx, a declarative
+           function replaces many classic rules. And it’s much simpler to use.
+           Classic visibility rules are also supported within modern commands. However, support for
+           classic rules was needed for reliably migrating classic commands to modern commanding and
+           classic rules customization within command designer isn't supported. We recommend you use
+           Power Fx going forward.
+                                                                                                          ﾉ
+                                                                                                               Expand table
+            Use case             Classic Rule          Classic options             Power Fx visible property
+            Show or hide based   CustomRule            Use JavaScript              !IsBlank(Self.Selected.Item.Email)
+            on data values
+            Show or hide based   EntityPrivilegeRule   Multiple                    DataSourceInfo()
+            on table permission
+            Show or hide based   RecordPrivilegeRule   Multiple                    RecordInfo()
+            on record
+            permission
+            Reference the        EntityRule            PrimaryEntity.              Self.Selected
+            control context for                        SelectedEntity
+            primary and related
+            tables
+            Reference the        EntityRule            Form. HomePageGrid.         Self.Selected
+            control context                            SubGridStandard.
+                                                       SubGridAssociated
+            Table metadata       EntityPropertyRule                                DataSourceInfo()
+            properties
+            Show or hide based   FormStateRule         Create. Existing.           Self.Selected.State =
+            on form state. For                         ReadOnly. Disabled.         FormMode.New
+            example, show for                          BulkEdit
+            the create form
+            Show when > 1        SelectionCountRule                                CountRows(Self.Selected.Items)
+            records are                                                            > 1
+            selected in a grid
+            Show or hide for a   CustomRule            PrimaryEntityTypeCode       IsType(), AsType
+            related table in a
+            polymorphic
+            lookup. For
+            example, check
+            whether the lookup
+            is a user or a team
+            Reference            CustomRule            OrgName. OrgLcid.           Not currently available
+            environment                                UserLcid
+            properties (Org)
+          Frequently asked questions
+                Why do I see more commands in the designer than I see in my app?
+           There are several reasons. Sometimes there's visibility logic that hides the command
+           when running the app. Other times these commands are dynamically injected via
+           custom JavaScript during runtime and aren't configurable.
+          Why do I see duplicate commands in the designer?
+           This was a common pattern used with classic commands. Both commands wouldn't
+           show up in runtime as they were controlled by visibility rules. The command designer
+           shows all commands, regardless of their visibility rules.
+      See also
+      Customize the command bar using command designer
+      Manage commands in solutions
+      Modern commanding known limitations
+       Last updated on 03/31/2026
+            Edit system table messages (preview)
+            Article • 03/13/2023
+            [This topic is pre-release documentation and is subject to change.]
+            The default display name of some system tables, such as account and contact tables, is
+            used in user interface text and error messages in Microsoft Dataverse. If you change the
+            display name for a system table, you should also update any messages that use the
+            default display name. For example, if you change the display name from Account to
+            Company, you could still see an error message using the old name.
+               ） Important
+               This is a preview feature. More information: Model-driven apps and app
+               management
+            Add a message to a system table
+               1. Sign into Power Apps    (make.powerapps.com).
+               2. Go to Solutions, open the solution that has the table you want, and then open the
+                  table. If the item isn’t in the left navigation pane, select …More and then select the
+                  item you want.
+               3. In the Customizations area, select Messages.
+               4. Select the message you want, and then select Add.
+              Edit a system table message
+                  1. Open the table that has the message you want to edit, and then in the
+                     Customizations area select Messages.
+                  2. Select the message, and then select Edit on the command bar. Enter the changes
+                     you want: 
+                      Field                   Description
+                      Default display text    Shows the original text, which isn't editable.
+                      Custom display text     Edit this text to change the message that is displayed.
+                      Comment                 Optional. Include a comment about what you changed and why.
+                  3. Select Done.
+              Programmatically update table display strings
+              For developers looking for a way to work with these in code, the display strings are
+              stored in the DisplayString table.
+              The DisplayString table doesn’t contain the default display strings. The two attributes
+              for this table that contain text are CustomDisplayString and PublishedDisplayString. By
+              default, these attribute values are null unless the display string has been customized and
+              published. The PublishedDisplayString value is read-only and reflects the currently
+              published CustomDisplayString.
+              Edit using the classic experience
+              For information about how to edit system table messages using the classic experience,
+              see Edit system entity messages and display names.
+       See also
+       Edit a table 
+       Translate localizable text for model-driven apps
+            View and edit tables representing
+            solution objects
+            Article • 08/08/2023
+            Some standard tables in Dataverse represent the structure and instances of solution
+            objects. If you aren't familiar with solutions, go to Solutions overview.
+            For example, the Custom API table has columns that represent the properties of an API,
+            such as Name and Binding Type, with each row of data in the table representing a
+            particular API instance. For more information about Custom API table, go to Custom API
+            table columns
+            When viewing these tables in Power Apps (make.powerapps.com  ), you'll see a
+            warning stating that the data in the table is read only. This ensures the instances of
+            these objects aren't changed.
+            To update data in such tables, you must navigate to the respective objects in the
+            solution. In our example of custom API, you can open a solution that contains the
+            custom API object or add the custom API object to a new solution and then customize
+            the data as required.
+      See also
+      Create a table
+      Edit a table
+      Create a solution
+      Create and use custom APIs
+         Define alternate keys using Power Apps
+         Article • 05/15/2025
+         Power Apps provides an easy way to view and create table alternate keys with Microsoft
+         Dataverse. Alternate keys provide an efficient and accurate way of integrating data with
+         external systems. It’s essential in cases when an external system doesn’t store the globally
+         unique identifier (GUID) IDs that uniquely identify rows in Microsoft Dataverse. For more
+         information about alternate keys, see Define alternate keys to reference rows.
+           ） Important
+           If the data within a column that is used in an alternate key contains one of the following
+           characters /, #,<,>,*,%,&,:,\\,?,+ then GET or PATCH actions won't work. If you only
+           need uniqueness, then this approach works, but if you need to use these keys as part of
+           data integration then it's best to create the key on columns that won't have data with
+           those characters.
+         View alternate keys
+            1. In Power Apps  , go to Solutions and open the solution you want. If the item isn’t in the
+              side panel pane, select …More and then select the item you want.
+            2. Select Tables on the left Objects pane, and then open the table that you want to view.
+            3. In the Schema area, select Keys to view a list of any alternate keys that might be defined.
+         Create an alternate key
+            1. While viewing alternate keys, select New key.
+            2. In the Key properties pane, enter the following information:
+               a. Set a Display name and choose the columns to use to create the alternate key.
+              b. The Name column is populated based on the display name. You can change it if you
+                 want.
+               c. Select the columns that you want. For example, to identify an account row with an
+                 alternate key, you can use the Account Number column in combination with some
+                 other column, such as the SIC Code, which have values that shouldn't change.
+       3. Select Save to create the alternate key.
+       ７ Note
+       The alternate key isn't immediately available for use. A system job is initiated when you
+       save the table to create database indexes to support the alternate key.
+     Delete an alternate key
+     While viewing alternate keys, select the key you want to delete and select Remove > Remove
+     from this solution or to delete the key from the Power Platform environment Delete from this
+     environment on the command bar.
+     Related articles
+     Developer Documentation: Work with alternate keys
+            Define alternate keys using solution
+            explorer
+            Article • 05/30/2023
+            Solution explorer provides one way to view and create alternate keys for Microsoft
+            Dataverse.
+            The Power Apps portal   enables configuring the most common options, but certain
+            options can only be set using solution explorer.  
+            More information:
+                 Define alternate keys to reference rows 
+                 Define alternate keys using Power Apps portal
+              ） Important
+              If the data within a column that is used in an alternate key will contain one of the
+              following characters /,<,>,*,%,&,:,\\,?,+ then GET or PATCH actions will not
+              work. If you only need uniqueness then this approach will work, but if you need to
+              use these keys as part of data integration then it is best to create the key on
+              columns that won't have data with those characters.
+            Open solution explorer
+            Part of the name of any alternate key you create is the customization prefix. This is set
+            based on the solution publisher for the solution you're working in. If you care about the
+            customization prefix, make sure that you are working in an unmanaged solution where
+            the customization prefix is the one you want for this table. More information: Change
+            the solution publisher prefix
+            Open an unmanaged solution
+               1. From Power Apps   select Solutions from the left navigation pane, and then on
+                 the toolbar, select Switch to classic. If the item isn’t in the left navigation pane,
+                 select …More and then select the item you want.
+               2. In the All Solutions list open the unmanaged solution you want.
+       View alternate keys
+         1. With solution explorer open, under Components expand Entities and select the
+          table where you want to view alternate keys.
+         2. Expand the table and select Keys.
+       Create an alternate key
+         1. While viewing alternate keys, select New.
+         2. On the form, enter the Display Name. The Name column will be auto-populated
+          based on the Display Name.
+         3. From the Available Attributes list, select each attribute and then Add > to move
+          the attribute into the Selected Attributes list. 
+                4. Select OK to close the form.
+             (Optional) View the system job tracking creation of
+             indexes
+                1. While viewing alternate keys after you have created a new alternate key you will
+                   see a row for the key you created.
+                2. In the System Job column you will find a link to the system job that monitors the
+                   creation of the indexes to support the alternate key.
+                   This system job will have a name that follows this pattern: Create index for {0}
+                   for table {1} where 0 is the Display Name of the alternate key and 1 is the
+                   name of the table.
+                   The link to the system job will not be displayed after the system job completes
+                   successfully. More information: Monitor system jobs
+             Delete an alternate key
+             While viewing alternate keys, select    .
+             See also
+      Define alternate keys to reference rows 
+      Define alternate keys using Power Apps portal 
+      Developer Documentation: Work with alternate keys
+              Update forms and views using table
+              designer
+              Article • 08/25/2023
+              Create columns directly in the table hub or table designer, which will then be added to
+              your forms and views. In this walkthrough, you'll learn how to simply add the columns
+              you created to forms and views of this table without manually doing so in the form or
+              view designer.
+              Using table hub and table designer
+                  1. Sign in to Power Apps      .
+                  2. In the left navigation pane, select Tables, and then select the table that you want to
+                    update from the table list. In the table hub and table designer, there's an Update
+                    forms and views option that allows you to directly add columns to selected forms
+                    and views in this table.
+                  3. Select Update forms and views to configure what columns should be added to
+                    certain forms and views:
+                      Property     Description                       Available option      Default option
+                      Add these    Selected columns in this          Only columns          Both new columns
+                      columns      dropdown list will be added to    currently shown in    that are recently
+                                   the selected forms and views.     the table preview.    created and existing
+                                                                                           columns that are
+                       Property      Description                          Available option       Default option
+                                                                                                 recently added to the
+                                                                                                 table.
+                       To these      Columns selected in Add these        All main, quick        All Main forms from
+                       forms         columns will be added to             create, and quick      this table.
+                                     selected forms. If a certain         view forms from
+                                     column has already been added        this table.
+                                     to this form before, it won’t be
+                                     added again as a duplicate.
+                       And to        Columns selected in Add these        All public,            All public, advanced
+                       these         columns will be added to             advanced find,         find, associated, and
+                       views         selected views. If a certain         associated, quick      quick find views from
+                                     column has already been added        find, and lookup       this table.
+                                     to this view before, it won’t be     views from this
+                                     added again as a duplicate.          table.
+                   4. Once you’re done with the configuration, select Update. The columns you selected
+                      are added to the forms and views you selected.
+               Using inline table designer in modern app
+               designer
+               You might be working on a table in the modern app designer as you’re building an app.
+               In this case, you can also update your forms and views directly using the inline table
+               designer in the modern app designer:
+                   1. Sign in to Power Apps        .
+                   2. On the left navigation pane, select Apps, select the app you want, and then select
+                      Edit.
+                   3. In the left navigation pane within the modern app designer, select Data, then … >
+                      Edit table to edit your table using the inline table designer.
+                   4. The Update forms and views option is displayed in the inline table designer:
+          Follow the same steps in 3 and 4 as in the table hub and table designer to update
+          your forms and views. You can also add the columns you want to your table. When
+          you’re finished with the update, select Update and close at the bottom right of the
+          inline table designer. The columns are added to the forms and views preselected
+          for you, and the inline table designer is closed.
+       See also
+       Create a custom table
+            Open table data in Excel
+            Article • 03/13/2023
+            By opening table data in Microsoft Excel, you can quickly and easily view and edit data
+            by using the Microsoft Power Apps Excel Add-in.
+            To install the Power Apps Excel add-in, see Microsoft PowerApps Office Add-in   . For
+            more information about how to add or remove an Office Excel Add-in, see Add or
+            remove add-ins in Excel   .
+            Open table data in Excel
+                1. Sign in to Power Apps  .
+                2. In the left navigation pane, select Tables. If the item isn’t in the left navigation
+                  pane, select …More and then select the item you want.
+                3. Select the ellipsis (...) to the right of the table that you're interested in, and then
+                  select Edit data in Excel.
+                4. Open the Excel worksheet that is downloaded to your browser's default download
+                  folder named similar to table-name (1591125669213).xlsx. This workbook has
+                  binding information for the table, a pointer to your environment, and a pointer to
+                  the Power Apps Excel add-in.
+                5. In Excel, select Enable editing to enable the Power Apps Excel Add-in to run. The
+                  Excel add-in runs in a pane on the right side of the Excel window.
+                    ） Important
+                    If the pane displays an error message, see Office Store Add-in download
+                    disabling.
+               6. If this is the first time that you've run the Power Apps Excel add-in, select Trust this
+                 Add-in to allow the Excel add-in to run.
+               7. If you're prompted to sign in, select Sign in, and then sign in by using the same
+                 credentials that you used on Power Apps   . The Excel add-in will use a previous
+                 sign-in context and automatically sign you in if it can. Therefore, verify the user
+                 name in the upper right of the Excel add-in.
+            The Excel add-in automatically reads the data for the table that you selected. Note that
+            there will be no data in the workbook until the Excel add-in reads it in.
+            View and refresh data in Excel
+            After the Excel add-in reads table data into the workbook, you can update the data at
+            any time by selecting Refresh in the Excel add-in.
+            Edit data in Excel
+            You can change table data as you require and then publish it back by selecting Publish
+            in the Excel Add-in.
+            To edit a row, select a cell in the worksheet, and then change the cell value.
+            To add a new row, follow one of these steps:
+                 Select anywhere in the worksheet, and then select New in the Excel add-in.
+                 Select in the last row of the worksheet, and then press the Tab key until the cursor
+                 moves out of the last column of that row, and a new row is created.
+                 Select in the row immediately below the worksheet and start to enter data in a cell.
+                 When you move the focus out of that cell, the worksheet expands to include the
+                 new row.
+            To delete a row, follow one of these steps:
+                 Right-click the row number next to the worksheet row to delete, and then select
+                 Delete.
+                 Right-click in the worksheet row to delete, and then select Delete > Table Rows.
+       Configure the add-in to adjust tables and
+       columns
+       You can use the data source designer in the Excel add-on to adjust the columns and
+       tables that are automatically added to the worksheet.
+         1. Enable the data source designer of the Excel add-in by selecting the Options
+          button (the gear symbol).
+         2. Expand the Data Connector section, and then select the Enable design check box,
+          and then select OK.
+       3. Select Design in the Excel add-in. All the data sources are listed.
+       4. Next to the data source, select the Edit button (the pencil symbol).
+       5. Adjust the list in the Selected columns column as you require:
+           To add a column from the Available columns column to the Selected
+           columns column, select the column, and then select Add. Alternatively,
+           double-click the column.
+           To remove a column from the Selected columns column, select the column,
+           and then select Remove. Alternatively, double-click the column.
+                        To change the order of columns, select the column in the Selected columns
+                        column, and then select Up or Down.
+                6. Apply your changes to the data source by selecting Update, and then select Done
+                  to exit the designer. If you added a column (column), select Refresh to pull in an
+                  updated set of data.
+               ７ Note
+                     Make sure to always include the ID and required columns in your workbook,
+                     as you may receive errors when publishing.
+                     When adding look up columns, make sure to add both the ID and the Display
+                     columns.
+             Troubleshooting
+                  Not all tables support editing and creation of new rows, these tables will open in
+                  Excel and allow you to view data but publishing will be disabled.
+                  Look up columns must be edited using the add-in to ensure the correct row is
+                  referenced, updating these columns via copy and past or typing directly into the
+                  column is not supported.
+                  Image and file columns are not supported. You won’t be able to see any data when
+                  you open an Excel worksheet that includes those data types.
+                  The maximum table size when editing in Excel is one million cells. If there are too
+                  many rows or columns, not all data will be read or published.
+                  Rows are processed sequentially. If there is an error in saving a row, changes to
+                  subsequent rows will be aborted. Changes to preceding rows are kept.
+                  Centralized deployment is not supported. This add-in requires access to the Office
+                  store.
+                  Manually configuring the add-in might cause unexpected behavior. For best
+                  results, download the Excel file with Power Apps instead of starting from a blank
+                  Excel workbook.
+             If you encounter an issue that isn't described here, contact us via the support pages  .
+             Office Store add-in download disabling
+             If Office Store add-in downloading has been disabled for your organization, you might
+             receive the following error message when you open the Excel worksheet after selecting
+             the Edit data in Excel command.
+       Office 365 has been configured to prevent individual acquisition and execution of Office
+       Store Add-ins.
+       This setting prevents the Power Apps Excel Add-in from downloading. When this occurs,
+       table row data will not be displayed in Excel.
+       For more information about enabling Office Store Add-in downloading, contact your
+       Office app administrator.
+       For more information about preventing Office Store Add-in downloading from the
+       Office Store, see Prevent add-in downloads by turning off the Office Store across all
+       clients.
+       Other ways to export and view table row data
+       For more information about ways to export and view table row data, see these articles.
+          Export data to CSV
+          Export your data to Excel Online
+          Export table data to Azure Data Lake Storage Gen2
+          Self-service data prep with dataflows
+       See also
+          Manage columns in a table
+          Define relationships between tables
+          Generate an app by using Microsoft Dataverse
+          Create an app from scratch using Dataverse
+          Define alternate keys to reference rows
+          08/11/2025
+          Alternate keys provide an efficient and accurate way of integrating data with external systems.
+          It's essential in cases when an external system doesn't store the Globally Unique Identifier
+          (GUID) IDs that uniquely identify rows in Microsoft Dataverse.
+          A data integration system uses alternate keys to uniquely identify rows using one or more table
+          column values that represent a unique combination. Each alternate key has a unique name.
+          For example, to identify an account row with an alternate key, you can use the account number
+          or the account number column in combination with some other columns, which have values
+          that shouldn't change.
+            ７ Note
+            While you can define alternate keys with Power Apps, they can only be used
+            programmatically in code. To learn more about using alternate keys programmatically, see:
+                  Developer Documentation: Use an alternate key to reference a record
+                  Developer Documentation: Retrieve record using an alternate key
+          Some of the benefits of the alternate keys feature include:
+               Faster lookup of the rows.
+               More robust bulk data operations.
+               Simplified programming with data imported from external systems without row IDs.
+          Creating an alternate key
+          There are two designers you can use to create alternate keys:
+                                                                                             ﾉ
+                                                                                                 Expand table
+           Designer               Description
+           Power Apps portal      Provides an easy streamlined experience, but some options aren't available.
+                                  More information: Define alternate keys using Power Apps portal
+           Solution explorer      Not as easy, but provides for more flexibility for less common requirements.
+                                  More information: Define alternate keys using solution explorer
+           ７ Note
+           You can also create an alternate key in your environment using the following:
+                Import a solution that contains the definition of the alternate key.
+                A developer can also write code to create them. More information: Developer
+                Documentation: Work with alternate keys
+         Information in this article helps you choose which designer you can use.
+         You should use the Power Apps portal   to create alternate keys unless you need to address
+         any of the following requirements:
+              Create an alternate key within a solution other than the Common Data Service Default
+              Solution.
+              You want to easily track the system job created that tracks the progress of creating the
+              supporting indexes.
+         Limits in creating alternate keys
+         There are constraints on alternate key creation.
+         Fields that can be used for alternate keys
+         Only these kinds of columns can be used to create alternate keys:
+              Decimal
+              Whole Number (Integer)
+              Single line of Text (String)
+              Date and Time
+              Lookup
+              Choice
+           ７ Note
+                Columns that have the Enable column security property enabled can't be used as an
+                alternate key. More information: Field security tables
+          When NULL values are used in alternate key columns, uniqueness will not be
+          enforced. To avoid duplicate records, don't use null values in the columns defined in
+          the unique constraint of the alternate key.
+      Number of keys
+      You can define up to 10 different keys for a table.
+      Valid key size
+      When a key is created, the system validates that the key can be supported by the platform,
+      including that the total key size doesn't violate SQL-based index constraints like 900 bytes per
+      key and 16 columns per key. If the key size doesn't meet the constraints, an error message is
+      displayed.
+      Unicode characters in key value
+      If the data within a column that is used in an alternate key contains one of the following
+      characters <,>,*,%,&,:,/,\\,# then update or upsert (PATCH) actions won't work.
+      If you only need uniqueness, then this approach works, but if you need to use these keys as
+      part of data integration then it's best to create the key on columns that doesn't have data with
+      these characters.
+      Track the status of the creation of the alternate key
+      When an alternate key is created, it initiates a system job to create indexes on the database
+      tables to enforce unique constraints on the columns used by the alternate key. The alternate
+      key won't be in effect until these indexes are created. Creating these indexes might take some
+      time depending on the amount of data in the system.
+      The status of the system job determines the state of the alternate key. The alternate key can
+      have the following states:
+         Pending
+         In Progress
+         Active
+         Failed
+      When the system job is completed, the alternate key status is Active and it's available for use.
+    If the system job fails, locate the system job to view any errors. The system job will have a
+    name that follows this pattern: Create index for {0} for table {1} where 0 is the Display
+    Name of the alternate key and 1 is the name of the table.
+     ７ Note
+     If you want to monitor the status of the system job you should use solution explorer to
+     create the index. It will include a link to the system job so you can monitor it. More
+     information: (Optional) View the system job tracking creation of indexes
+    See also
+    Define alternate keys using Power Apps portal
+    Define alternate keys using solution explorer
+    Developer Documentation: Work with alternate keys
+    Developer Documentation: Use an alternate key to reference a record
+    Developer Documentation: Retrieve record using an alternate key
+            Define status reason transitions for the
+            Case or custom tables
+            Article • 06/21/2022
+            You can specify status reason transitions for the Incident (Case) table or a custom table.
+              ７ Note
+              Although the Incident (Case) table isn't included in a default Microsoft Power Apps
+              environment, it is used by Dynamics 365 for Customer Service    and defined
+              within the Common Data Model
+            Status reason transitions are an optional additional level of filtering to define what the
+            status reason value can be changed to for each status reason. Defining a limited list of
+            valid options can make it easier for people to choose the correct next status reason for a
+            row when you have a large number of combinations for valid status reason values.
+            What is the connection between Status and
+            Status Reason columns?
+            Tables that can have different status values have two columns that capture this data:
+             Display  Description
+             Name
+             Status   Represents the state of the row. Typically Active or Inactive. You cannot add new status
+                      options.
+             Status   Represents a reason that is linked to a specific status. Each status must have at least
+             Reason   one possible status reason. You can add additional status reason options.
+            The metadata for the column defines what status values are valid for a given state. For
+            example, for the Incident (Case) table, the default status and status reason options are:
+             Status                    Status Reason
+             Active                       In Progress
+                                          On Hold
+                                          Waiting for Details
+                                          Researching
+        Status         Status Reason
+        Resolved         Problem Solved
+                         Information Provided
+        Canceled         Canceled
+                         Merged
+       Edit status reason transitions
+       You can modify the status reason column options for the Case table and custom tables
+       to define which other status reason options people can choose. The only restriction is
+       that each status reason option for an active status must allow at least one path to an
+       inactive status. Otherwise you could create a condition where it would not be possible
+       to resolve or cancel the case.
+         ７ Note
+         Editing the status reason transitions requires using solution explorer. See Create
+         and edit columns for Dataverse using Power Apps solution explorer for
+         information about how to edit columns.
+       When you edit a status reason column the Edit Status Reason Transitions button is in
+       the menu.
+       When you click this button the Status Reason Transitions dialog provides the option to
+       choose Enable Status Reason Transitions. When this option is selected you must define
+       which other status reason values are allowed for each status reason. To remove the
+       filtering applied, remove the Enable Status Reason Transitions selection. The transitions
+       you have defined will be kept but not applied.
+       The screenshot below provides an example that meets the following requirements:
+          A case can be merged at any time. You will not be able to merge cases if a status
+          reason transition does not allow for it.
+          An active case can be canceled at any time.
+          A resolved or canceled case cannot be reactivated.
+        All cases must pass through the following stages: In Progress > On Hold >
+        Waiting for Details > Researching before they can be resolved. With this
+        configuration, a case could not be set to an earlier status.
+         ７ Note
+         This is not a good example for real work, but it demonstrates how stages of
+         status can be enforced through status reason transitions.
+      See Also
+      Create and edit columns for Dataverse using Power Apps solution explorer 
+      Table metadata > Table states 
+      Define custom state model transitions
+            Delete a table
+            Article • 02/24/2023
+            You can delete custom tables, but you can't delete standard tables. Notice that you can't
+            delete a custom table while it has one or more dependent components. More
+            information: Delete a table that has dependencies
+               ２ Warning
+               When you delete a table, you delete both the table definition and all data that the
+               table contains. Tables and the data within them can't be recovered if deleted.
+            Delete a custom table
+               1. Sign into Power Apps   , and then select Solutions in the left navigation pane. If
+                  the item isn’t in the left navigation pane, select …More and then select the item
+                  you want.
+               2. Open the solution that contains the custom table you want to delete, and then
+                  select it.
+               3. On the command bar select Remove, and then select from the following choices:
+                       Remove from this solution. Removes the table from the solution. You can still
+                       access the table from the Default Solution.
+                       Delete from this environment. Deletes the table and associated data.
+               4. In the dialog box that appears, select Delete to delete the table. If you receive a
+                  message that the component cannot be deleted because it is referenced by other
+                  components, see the next section in this article.
+       Delete a table that has dependencies
+       You can’t delete a table while it has a dependency on another component, such as a
+       business process flow or a model-driven app.
+       There are two ways that you can remove a dependency:
+          Reconfigure the component to remove the dependency.
+          Delete the component.
+       Remove a dependency
+       To find the dependencies for a component, see View dependencies for a component.
+       Next, remove the component. For example, if you have a business process flow that
+       references a table you want to delete, edit the business process flow to remove that
+       table. Once the business process flow no longer references that table, the table will no
+       longer appear in the show dependencies list and can be deleted. More information:
+       Delete a custom table
+        ） Important
+        Removing the dependency, can cause the component to no longer work. For
+        example, removing a table from a model-driven app may cause the model-driven
+        app to no longer work.
+       For more information, see these articles:
+          Edit or remove artifacts
+          Edit a business process flow
+          Delete relationships
+     Display custom icons alongside values in
+     list views
+     Power Apps environment administrators and customizers can add graphics to a view and
+     establish the logic used to select a graphic based on the column value using JavaScript. The
+     capability lets you customize list views that display icons alongside text or numerical values.
+      ） Important
+      There's a better way to add visualizations for a column in grids and views. More information:
+      Custom column visualizations for grids
+     This example displays custom icons in a view for the opportunity table, which is available with
+     certain apps, such as Dynamics 365 Sales. You can display custom icons in views with other
+     standard tables, such as the account or contact table, as well as custom tables.
+                                                       
+     Custom icons in list views can display in model-driven apps, mobile app, and App for Outlook.
+      ７ Note
+         Custom icons aren't available when the app is in mobile offline mode.
+         This customization currently can only be completed by using the classic solution
+         explorer.
+     Add custom graphics and JavaScript as web resources
+      1. Create the new graphic files needed for your customization. We recommend an icon size of
+        16x16 pixels (larger images will be scaled down).
+     2. Write one or more JavaScript functions that establish which icons to show for which values
+      (you typically need one function for each column you want to customize). Each function
+      must accept a row data object and a language (LCID) code as input and return an array
+      containing an image name and tooltip text. For an example function, see Sample JavaScript
+      function, later in this article.
+     3. Sign into your environment and open solution explorer.
+     4. The solution tab opens. Go to Components > Web Resources.
+     5. Now, upload your custom graphics, one at a time, as web resources. Select New on the
+      toolbar to create a new web resource. A pop-up window opens to help you create the
+      resource. Follow these steps:
+      a. Give the new resource a meaningful Name. This is the name that you use to refer to each
+        graphic from your JavaScript code.
+      b. Set the Type to the graphic format you've used to save your graphic file (PNG, JPEG, or
+        GIF).
+       c. Select Choose File to open a file browser window. Use it to find and select your graphic
+        file.
+      d. Add a Display Name and/or Description if you wish.
+      e. Select Save and then close the Web Resource window.
+     6. Repeat the previous step for each graphic file that you have.
+     7. Now, add your JavaScript as the final web resource. Select New on the toolbar to create a
+      new web resource. Another pop-up window opens to help you create the resource. Do the
+      following:
+      a. Give the new resource a meaningful Name.
+      b. Set the Type to Script (JScript).
+       c. Select Text Editor (next to the Type setting) to open a text-editor window. Paste your
+        JavaScript code here and select OK to save it.
+      d. Add a Display Name and/or Description if you wish.
+      e. Select Save and then close the Web Resource window.
+     8. With the solution tab still open, expand the Components > Tables tree and locate the table
+      that you want to customize.
+     9. Expand your table and select its Views icon.
+     10. You now see a list of views for your selected table. Select a view from the list. Then open the
+      More Actions drop-down list in the toolbar and select Edit.
+     11. A pop-up window opens with controls for editing your selected view. It shows each column
+      that is part of the view. Select the target column and then select the Change Properties in
+      the Common Tasks box. The Change Column Properties dialog opens; make the following
+      settings here:
+         Web Resource: Specify the name of the web resource that you created to hold your
+         JavaScript functions (select Browse to choose from a list).
+         Function Name: Type the name of the function that you wrote to modify the selected
+         column and view.
+     12. Select OK to close the Change Column Properties dialog.
+     13. Select Save and Close to save your view.
+     14. Repeat these steps for each table, view, and column as needed.
+     15. When you're ready, select Publish All Customizations to publish your changes. Then, close
+      the Default Solution window.
+    Sample JavaScript function
+    The JavaScript function for displaying custom icons and tooltips expects the following two
+    arguments: the entire row object specified in layoutxml and the calling user’s Locale ID (LCID).
+    The LCID parameter enables you to specify tooltip text in multiple languages. For more
+    information about the languages supported by the environment, see Enable languages and
+    Install or upgrade language packs. For a list of locale ID (LCID) values that you can use in your
+    code, see Locale IDs assigned by Microsoft.
+    Assuming you're adding custom icons for an option-set type of attribute, which has a limited set
+    of predefined options, make sure you use the integer value of the options instead of label to
+    avoid localization issues.
+     ７ Note
+      If it's necessary to retrieve data to determine the icon, Unified Interface supports returning a
+      JavaScript Promise object, which resolves to a boolean (similar to ribbon rules). Don't use a
+      synchronous XMLHttpRequest (XHR) in your custom function.
+    The sample code displays icons and tooltips based on one of three values (1: Hot, 2: Warm, 3:
+    Cold) in the opportunityratingcode (Rating) attribute. The sample code also shows how to
+    display localized tooltip text. For this sample to work, you must create three image web resources
+    with 16x16 images with the following names: new_Hot, new_Warm, and new_Cold.
+      ） Important
+      This sample requires the opportunity table, which is available with Dynamics 365 Sales app.
+     JavaScript
+     function displayIconTooltip(rowData, userLCID) {      
+         var str = JSON.parse(rowData);  
+         var coldata = str.opportunityratingcode_Value;  
+         var imgName = "";  
+         var tooltip = "";  
+         switch (parseInt(coldata,10)) { 
+             case 1:  
+                 imgName = "new_Hot";  
+                 switch (userLCID) {  
+                     case 1036:  
+                         tooltip = "French: Opportunity is Hot";  
+                         break;  
+                     default:  
+                         tooltip = "Opportunity is Hot";  
+                         break;  
+                 }  
+                 break;  
+             case 2:  
+                 imgName = "new_Warm";  
+                 switch (userLCID) {  
+                     case 1036:  
+                         tooltip = "French: Opportunity is Warm";  
+                         break;  
+                     default:  
+                         tooltip = "Opportunity is Warm";  
+                         break;  
+                 }  
+                 break;  
+             case 3:  
+                 imgName = "new_Cold";  
+                 switch (userLCID) {  
+                     case 1036:  
+                         tooltip = "French: Opportunity is Cold";  
+                          break;  
+                      default:  
+                          tooltip = "Opportunity is Cold";  
+                          break;  
+                  }  
+                  break;  
+              default:  
+                  imgName = "";  
+                  tooltip = "";  
+                  break;  
+          }  
+          var resultarray = [imgName, tooltip];  
+          return resultarray;  
+      }  
+     Custom icon view display behavior
+     Primary columns
+     In the grid list view, custom icons applied to the table primary column replace the default
+     system-generated icon.
+     Other columns
+     In the grid list view, custom icons applied to a column that isn't the table primary column display
+     as a secondary icon in addition to the default system-generated icon.
+    Card forms
+    Custom icons replace the default system-generated icon when the view is configured to use a
+    card form.
+    See also
+     Understand model-driven app views
+      Last updated on 07/23/2026
+            Edit system table messages (preview)
+            Article • 03/13/2023
+            [This topic is pre-release documentation and is subject to change.]
+            The default display name of some system tables, such as account and contact tables, is
+            used in user interface text and error messages in Microsoft Dataverse. If you change the
+            display name for a system table, you should also update any messages that use the
+            default display name. For example, if you change the display name from Account to
+            Company, you could still see an error message using the old name.
+               ） Important
+               This is a preview feature. More information: Model-driven apps and app
+               management
+            Add a message to a system table
+               1. Sign into Power Apps    (make.powerapps.com).
+               2. Go to Solutions, open the solution that has the table you want, and then open the
+                  table. If the item isn’t in the left navigation pane, select …More and then select the
+                  item you want.
+               3. In the Customizations area, select Messages.
+               4. Select the message you want, and then select Add.
+              Edit a system table message
+                  1. Open the table that has the message you want to edit, and then in the
+                     Customizations area select Messages.
+                  2. Select the message, and then select Edit on the command bar. Enter the changes
+                     you want: 
+                      Field                   Description
+                      Default display text    Shows the original text, which isn't editable.
+                      Custom display text     Edit this text to change the message that is displayed.
+                      Comment                 Optional. Include a comment about what you changed and why.
+                  3. Select Done.
+              Programmatically update table display strings
+              For developers looking for a way to work with these in code, the display strings are
+              stored in the DisplayString table.
+              The DisplayString table doesn’t contain the default display strings. The two attributes
+              for this table that contain text are CustomDisplayString and PublishedDisplayString. By
+              default, these attribute values are null unless the display string has been customized and
+              published. The PublishedDisplayString value is read-only and reflects the currently
+              published CustomDisplayString.
+              Edit using the classic experience
+              For information about how to edit system table messages using the classic experience,
+              see Edit system entity messages and display names.
+       See also
+       Edit a table 
+       Translate localizable text for model-driven apps
+            Configure a table for feedback/ratings
+            Article • 06/22/2022
+            Let customers or employees submit feedback for any table record, or rate table records
+            within a defined rating range by enabling tables for feedback. Use this capability for the
+            following scenarios:
+                  For customers to capture data via a portal or survey.
+                  To collect data about service or product satisfaction from table records.
+                  For employees to provide comments on collaborative efforts or as a way to
+                  improve on products and services.
+            For example, imagine you have an app that is used to maintain recipes and you want to
+            get feedback from your users about their experience using the recipes in the app.
+                                                                                             
+            Configure feedback for a table
+            First, you must enable the Allow feedback property in the table definition.
+               1. Sign into Power Apps   .
+               2. Open the table you want or create a new one. More information: Edit a table
+               3. On the right table properties pane, select Allow feedback.
+                    ７ Note
+                    Once you enable the Allow feedback property for a table, you can’t disable it.
+       4. Select Done, and then select Save Table.
+      Add a subgrid for feedback on the table form
+      By default, users must go to the list of associated records of the record you want to add
+      feedback to. To make it easier for users to add feedback, you should add a feedback
+      subgrid to the form of the table you are enabling feedback for, such as in the recipe
+      example depicted earlier in this article.
+       1. In the form designer, select the area of the form where you want the feedback
+        subgrid, and then select Subgrid on the left Components pane.
+       2. Select the following subgrid properties, and then select Done:
+           Show related records
+           Table Feedback (Regarding)
+           Default view. Active Feedback.
+       3. Save and Publish the form.
+      About the feedback table form
+      The feedback subgrid displays commands for creating new or adding existing feedback.
+      When a user selects Create Feedback from the subgrid, the records to create feedback
+      use the feedback standard table.
+      The feedback table form has the following columns:
+        General
+          Title: User provided title for the record feedback.
+          Regarding: System provided table record that the feedback is associated with.
+          Source: The feedback source to display where the feedback was submitted. If
+          the feedback was created from within a model-driven app, the default value is
+          set to Internal while Portal is the other option. This can be changed by the user.
+          Created By: System provided value that's the user who created or last modified
+          the feedback record.
+          Comments
+           Minimum Rating: The user can define a range for ratings by specifying a
+           minimum and maximum (numerical) value for ratings. For example, a minimum
+           rating of 1.
+           Maximum Rating: The user can define a range for ratings by specifying a
+           minimum and maximum (numerical) value for ratings. For example, a scale of
+           maximum rating of 5.
+           Normalized Rating. System generated numeric value that's automatically
+           calculated to show the specified user rating scaled to a value between 0 and 1
+           based on the minimum and maximum rating values.
+           The normalized rating helps to normalize or even out the specified rating value
+           for different rating ranges (minimum and maximum rating values). The
+           normalized rating is calculated as follows: (Rating - Minimum Rating) /
+           (Maximum Rating - Minimum Rating). Also, rating for a record is calculated as
+           an average of all the normalized ratings for the record.
+           Rating: User provided rating for the feedback that must be between the
+           minimum and maximum range. For example, a rating of 4 on a scale of 1-5.
+           Comments: User provided comments for the record feedback.
+       Add a rollup column for the feedback
+       Optionally, you can create a rollup column that's based on the feedback or ratings for
+       the table, and then add it to the form of the table you're enabling for feedback.
+       For example, you can provide a running total of all feedback records created for a given
+       record.
+        1. Open the table that contains the form with the feedback grid and select Columns.
+        2. Select Add column, and then select the following properties:
+            Display name: Total feedback
+            Data type: Whole Number
+            Calculated or Rollup: Select Add > Rollup. Select Save when prompted.
+        3. Select Done. Select the Total feedback column, and then in the right column
+          properties pane select Open rollup.
+        4. The rollup editor opens in a new browser window. Configure the following rollup
+          conditions, and then select Save and Close:
+           Source entity:
+            Source. Recipe (or the table that has the feedback subgrid)
+            Use Hierarchy: No
+           Related entity:
+            Feedback (Regarding)
+            Filters: If Status equals Open
+           Aggregation:
+            Count of Feedback
+       5. Add the column to the form that has the feedback subrid, save and publish it.
+      The form in an app now displays a running total of all feedback records submitted for
+      the record.
+      More information: Define rollup columns that aggregate values
+      See also
+      Star rating control
+            Preview feature: Azure Cosmos DB for
+            NoSQL Data Provider requirements
+            Article • 06/14/2023
+            This topic describes the requirements for the Azure Cosmos DB for NoSQL data provider
+            as well as how to configure and recommended best practices when you use the Azure
+            Cosmos DB for NoSQL data provider with virtual tables.
+              ） Important
+                   Preview features aren’t meant for production use and may have restricted
+                   functionality. These features are available before an official release so that
+                   customers can get early access and provide feedback.
+                   We expect changes to this feature, so you shouldn’t use it in production. Use
+                   it only in test and development environments.
+                   Microsoft doesn't provide support for this preview feature. Microsoft
+                   Dynamics 365 Technical Support won’t be able to help you with issues or
+                   questions. Preview features aren't meant for production use and are subject to
+                   a separate supplemental terms of use  .
+            What is Azure Cosmos DB?
+            Azure Cosmos DB is Microsoft's globally distributed multi-model database service for
+            mission-critical applications. It provides rich and familiar SQL query capabilities with
+            consistent low latencies over schema-less JSON data. More information: Introduction to
+            Azure Cosmos DB: Azure Cosmos DB for NoSQL
+            Requirements
+                 Azure subscription that includes Azure Cosmos DB.
+                 An Azure Cosmos DB for NoSQL collection.
+                 The Azure Cosmos DB database type should be SQL.
+            Data type mapping
+            Suppose you have an Azure Cosmos DB document in a collection named Orders that has
+            the following JSON structure.
+            This table indicates the data type mappings for the Azure Cosmos DB for NoSQL
+            document in the Orders collection with Microsoft Dataverse.
+             Azure Cosmos DB for NoSQL Data                Dataverse
+             id                                            Primary Key
+             name                                          Single Line of Text
+             quantity                                      Whole Number
+             orderid                                       Single line of text
+             ordertype                                     Choice
+             amount                                        Decimal Number or Currency
+             delivered                                     Yes/No
+             datetimeoffset                                Date and Time
+              ７ Note
+                   Attributes with an underscore (_) prefix are generated by the Azure Cosmos
+                   DB for NoSQL.
+                   Attributes that are configured as optional in the Azure Cosmos DB for NoSQL
+                   document and are mapped in Dataverse as Business Required will cause a
+                   runtime error.
+                   id attribute values must be guids.
+            Supported SQL query filtering
+            SQL query filtering supports the following operators.
+                 Comparison operators:<,>,<=, >=,!=
+                 Logical operators: and, or
+                 Set operators: in, not in
+                 String operators: like, contains, begins with, ends with
+              ７ Note
+              Usage of the like operator is translated to the equivalent contains/begins
+              with/ends with operators. The Azure Cosmos DB for NoSQL does not support
+              pattern arguments as described in the topic Like (Transact-SQL). The Azure Cosmos
+              DB for NoSQL Data Provider can translate the single special case Like('[aA]%') to
+              BeginsWith('a') OR BeginsWith('A'). Notice that string comparison in the Azure
+              Cosmos DB for NoSQL is case sensitive.
+            Add a data source using the Azure Cosmos DB
+            for NoSQL Data Provider
+               1. Go to AppSource  , select GET IT NOW, and follow the instructions to add the
+                 application to your environment using v9x or later.
+               2. After the solution is installed, sign in to the environment and go to Settings >
+                 Administration > Virtual Entity Data Sources.
+               3. On the Actions toolbar select NEW, and in the Select Data Provider dialog box
+                 select Azure Cosmos DB for SQL API Data Provider, and then select OK. 
+                 4. Enter the following information, and then select SAVE & CLOSE.
+                     Column           Description
+                     Name             Type a name that describes the data source.
+                     Collection       The name of the Azure Cosmos DB database containing the collection you
+                     Name             want to surface in a virtual table.
+                     Authorization    The primary or secondary key for the Azure Cosmos DB account. You can
+                     Key              find the key from the Azure admin portal under the Keys setting under
+                                      your Azure Cosmos DB account.
+                     Uri              The URI of the resource group where the Azure Cosmos DB collection is
+                                      located. The URI is formed similar to
+                                      https://contoso/documents.azure.com:443. You can find the URI from the
+                                      Azure admin portal under the Keys setting for the Azure Cosmos DB
+                                      account.
+                     Timeout in       Enter the number of seconds to wait for a response from the Azure
+                     seconds          Cosmos DB service before a data request time-out. For example, enter 30
+                                      to wait a maximum of thirty seconds before a time-out occurs. The default
+                                      timeout is 120 seconds.
+       Best practices and limitations
+          Notice the following when you use Azure Cosmos DB as a Data Source:
+            Each Azure Cosmos DB Data Source can only be associated with a single virtual
+            table.
+            You can connect multiple Data Sources to the same Collection in the Azure
+            Cosmos DB instance.
+          You can’t segment the data in a collection by table.
+          Azure Cosmos DB databases do not require a schema, however the data within the
+          Azure Cosmos DB must be structured using a predictable schema.
+          Although the Azure Cosmos DB for NoSQL Data Provider implements query
+          translation of projection, filtering, and sorting operators, it does not support join
+          operations.
+          You can only filter by a single column with Azure Cosmos DB for NoSQL.
+       See also
+       Create and edit virtual tables that contain data from an external data source
+             Virtual table walkthrough using the
+             OData v4 Data Provider
+             Article • 02/22/2023
+             Imagine that you want to access, create, update, and delete some personal information
+             about a contact from an external data source within your model-driven app. In this
+             simple walkthrough, you will model a virtual table named Person with columns mapped
+             to the external schema to these operations at runtime from an OData web service.
+             Data source details
+             Because the data source used for this walkthrough has an OData v4 web service, we can
+             use the OData v4 Data Provider included with your environment.
+             Web service url: https://contosowebservice.azurewebsites.net/odata/
+               ） Important
+                    The web service url used for this walkthrough isn't a functioning web service.
+                    You can't use the OData v4 Data Provider to connect to another environment.
+             For this walkthrough, a single virtual table that contains the following columns is
+             needed.
+              External column   External data type  Virtual table   Purpose
+              name                                  data type
+              Id                Edm.Guid            Primary key     Primary key for the table
+              FirstName         Edm.String          Single line of  First name of the person
+                                                    text
+              LastName          Edm.String          Single line of  Last name of the person
+                                                    text
+              Age               Edm.Int32           Whole number    Age of the person
+              LastModifiedOn    Edm.DateTimeOffset  Data and time   Last modified data and time of the
+                                                                    person record
+             The OData metadata of the external data source person table:
+              Create the data source
+              Create the data source for the OData v4 data provider that uses the OASIS Open Data
+              Protocol (OData) sample web service.
+                 1. Go to Settings > Administration > Virtual Entity Data Sources.
+                 2. Select NEW, select OData v4 Data Provider, and then select OK.
+                 3. Enter or select the following information.
+                     Field                     Value
+                     Name                      Person Sample OData Data Source
+                     URL                       https://contosowebservice.azurewebsites.net/odata
+                     Timeout                   30
+                     Return Inline Count       Client-side Paging
+                     Return Inline Count       True
+              Leave the other columns as-is, and select SAVE & CLOSE.
+                 Tip
+                When using your own web service, verify that the URL is valid by pasting it in to
+                your web browser. If you want to understand the columns and data types
+                respective to the table you are interested in, you can append /$metadata to the end
+                of your URL to see the definition of tables in you web service.
+              Open solution explorer
+           Part of the name of any custom table you create is the customization prefix. This is set
+           based on the solution publisher for the solution you’re working in. Make sure that you
+           are working in an unmanaged solution where the customization prefix is the one you
+           want for this table. More information: Change the solution publisher prefix
+           Open an unmanaged solution
+              1. From Power Apps   select Solutions from the left navigation pane, and then on
+                the toolbar, select Switch to classic. If the item isn’t in the left navigation pane,
+                select …More and then select the item you want.
+              2. In the All Solutions list open the unmanaged solution you want.
+           Create the virtual table
+              1. In the left navigation pane of solution explorer, select Entities, and then select New
+                from the main pane.
+              2. On the Entity: New form, select the Virtual table option, and then enter the
+                following information:
+                  Field                              Value
+                  Data Source                        Person Sample OData Data Source
+                  Display Name                       Person
+                  Plural Name                        Persons
+                  Name                               new_person
+                  External Name                      People
+                  External Collection Name           People
+                  Notes (includes attachments)       selected
+                  Activities                         selected
+                   ７ Note
+                   The OData resource path semantics uses EntitySet to identify the resource.
+                   In the sample OData web service, the EntitySet is defined as People. This
+                   value is used as the External Name for the virtual table Person.
+         3. Next to Areas that display this entity, select Sales, and then select Save (but don’t
+          close the table form). 
+       Create the columns for the virtual table
+       On the left navigation pane of the Entity: Person page, select Fields. As part of this
+       walkthrough, you will edit two existing columns and add three more columns that are
+       available in the external data source.
+        ） Important
+        External names are case sensitive. Refer to your web service metadata to make sure
+        you use the correct name. A Nullable value of false indicates that the attribute is
+        required. Notice that primary key columns are always system required.
+         1. Open the new_personid column, and change the following property with the value
+          indicated here:
+          External Name: Id
+       2. Select Save and Close.
+       3. Open the new_name column, and change the following properties to have the
+        values indicated here:
+           Display Name: Last Name
+           External Name: LastName
+       4. Select Save and Close.
+       5. Select New, and on the Field: New for Person page enter the following
+        information:
+          Field                Value
+          Field                Value
+          Display Name         First Name
+          Name                 new_firstname
+          External Name        FirstName
+          Field Requirement    Business Required
+          Data Type            Single Line of Text
+        6. Select Save and Close.
+        7. Select New, and on the Field: New for Person page enter the following
+         information:
+          Field                Value
+          Display Name         Age
+          Name                 new_age
+          External Name        Age
+          Field Requirement    Business Required
+          Data Type            Whole Number
+        8. Select Save and Close.
+        9. Select New, and on the Field: New of Person page enter the following information:
+          Field               Value
+          Display Name        Last Modified On
+          Name                new_lastmodifiedon
+          External Name       LastModifiedOn
+          Field Requirement   Business Required
+          Data Type           Date and Time
+       Add the columns to the main form
+         1. On the Person table window, select Forms.
+         2. Open the main form, drag and drop the First Name, Age, and Last Modified On
+          columns from the right pane onto the form in the General section.
+         3. On the Person table window, select Save and Close.
+       Configure the default view
+         1. On the left pane of the solution explorer, under the Person entity, select Views.
+         2. Open the All People view.
+         3. In the Common Tasks pane, select Add Columns. 
+         4. Select the First Name, Age, and Last Modified On columns, and then select OK.
+         5. On the View: All People window, arrange the column order by selecting the move
+          left and move right arrows, and then select Save and Close.
+         6. On the Solution Explorer window, select Publish All Customizations.
+         7. After all customizations are published, close the Solution Explorer window.
+       Use the virtual table in a model-driven app
+       Create a model-driven app and add the Person table to the site map. Then, select the
+       Person main form and the Person Advance Find view. Publish the app. More
+       information: Build your first model-driven app from scratch
+       Then, app users can perform read, create, update, and delete operations using the
+       virtual table just like any other table in Microsoft Dataverse.
+       Create, view, and delete records using the virtual table
+         1. Run the model-driven app. Select New, complete the required columns, and then
+          save the record.
+         2. Select New again to create another record and save it.
+         3. You should now have two records similar to the following in the All Persons view.
+         4. To delete a record, select a person record and then select Delete. Confirm to delete
+          the record on the confirmation page.
+       See also
+       OData v4 Data Provider configuration, requirements, and best practices 
+       Create and edit virtual tables that contain data from an external data source
+            Create and edit tables using solution
+            explorer
+            Article • 02/15/2022
+            You can easily create a table using Power Apps (make.powerapps.com   for most
+            common situations, but not all capabilities are implemented there. When you need to
+            meet the requirements described in Create and edit tables in Microsoft Dataverse, you
+            can achieve them by creating or editing tables using the Solution Explorer.
+            Open solution explorer
+            The customization prefix is part of the name of any table you create. This is set based on
+            the solution publisher for the solution you’re working in. If you care about the
+            customization prefix, make sure that you are working in an unmanaged solution where
+            the customization prefix is the one you want for this table. More information: Change
+            the solution publisher prefix
+            Open an unmanaged solution
+               1. From Power Apps    select Solutions from the left navigation pane, and then on
+                 the toolbar, select Switch to classic. If the item isn’t in the left navigation pane,
+                 select …More and then select the item you want.
+               2. In the All Solutions list open the unmanaged solution you want.
+            View tables
+            In the solution explorer Components node, select the Entities node.
+       Create a table
+       While viewing tables, select New to open the form to create tables.
+       The form has two tabs. The General tab is for entity options. The Primary Field tab is for
+       options about the special single line of text column that each table has that defines the
+             text shown when there is a link to open the table in a lookup column.
+             For information about each section see the following:
+                   Configure the primary column
+                   Configure required columns
+                ７ Note
+                You can also make the table a custom activity. This choice changes some of the
+                default option values. More information: Create a custom activity table
+             After you have set the required options for the table, click     to create the custom table.
+             Configure the primary column
+             In the Primary Field tab you can usually accept the default values for the primary
+             column, but you have the following options:
+               Field         Description
+               Display       Enter the localizable label that will be displayed for this column in forms and lists.
+               Name          The default value is Name.
+               Name          Set the name used in the system for this column. The default value is
+                             <customization prefix>_name
+               Maximum       Enter the maximum length for the column values. The default is 100.
+               Length
+                ７ Note
+                These options do not apply if the table is an activity table. More information:
+                Create a custom activity table
+             Configure required columns
+             In the General tab, some of the options are required before you can save the table.
+               Field       Description
+               Display     This is the singular name for the table that will be shown in the app. 
+               Name        This can be changed later.
+                Field         Description
+                Plural        This is the plural name for the table that will be shown in the app. 
+                Name          This can be changed later.
+                Name          This column is pre-populated based on the display name you enter. It includes the
+                              solution publisher customization prefix.
+                Ownership     You can choose either user or team-owned or organization owned. More
+                              information: Table ownership
+               Edit a table
+               While viewing tables, select the table you want to edit, or continue editing a new table
+               you have just saved.
+                  ７ Note
+                  Standard tables or custom tables that are part of a managed solution may have
+                  limitations on changes you can apply. If the option is not available or is disabled,
+                  you are not allowed to make the change.
+               Set once options
+               The following options can be set once and cannot be changed after you set them. Take
+               care to only set these options when you need them.
+                Option          Description
+                Activities      Associate activities to records for this table.
+                Business        Create business process flows for this table. More information: Create a business
+                process         process flow to standardize processes
+                flows
+                Connections     Use the connections feature to show how records for this table have connections
+                                to records of other tables that also have connections enabled.
+                Feedback        Let customers write feedback for any table record, or rate table records within a
+                                defined rating range. More information: Enable a table for feedback/ratings
+                Notes           Append notes to records for this table. Notes include the ability to add
+                                attachments.
+             Option       Description
+             Queues       Use the table with queues. Queues improve routing and sharing of work by
+                          making records for this table available in a central place that everyone can access.
+             Sending      Send emails using an email address stored in one of the fields for this table. If a
+             email        Single Line of Text field with format set to email doesn’t already exist for this
+                          table, a new one will be created when you enable sending email.
+            Options that you can change
+            The following properties can be changed at any time.
+             Option       Description
+             Access       Create team templates for this table.
+             Teams
+             Allow quick  After you have created and published a Quick Create Form for this table, people
+             create       will have the option to create a new record using the Create button in the
+                          navigation pane. More information: Create and design forms 
+                          When this is enabled for a custom activity table, the custom activity will be visible
+                          in the group of activity entities when people use the Create button in the
+                          navigation pane. However, because activities don’t support quick create forms,
+                          the main form will be used when the custom table icon is clicked.
+             Areas that   In the web application choose one of the available sitemap areas to display this
+             display this table. This does not apply to model-driven apps.
+             entity
+             Auditing     When auditing is enabled for your organization, this allows for changes to table
+                          records to be captured over time. When you enable auditing for an table,
+                          auditing is also enabled on all its fields. You can select or clear fields that you
+                          want to enable auditing on.
+             Change       Enables data synchronization in a performant way by detecting what data has
+             Tracking     changed since the data was initially extracted or last synchronized.
+             Color        Set a color to be used for the table in model-driven apps.
+             Description  Provide a meaningful description of the purpose of the table.
+             Document     After other tasks have been performed to enable document management for
+             management   your organization, enabling this feature allows for this table to participate in
+                          integration with SharePoint.
+             Duplicate    If duplicate detection is enabled for your organization, enabling this allows you to
+             Detection    create duplicate detection rules for this table.
+               Option          Description
+               Enable for      Make this table available to the Dynamics 365 for phones and tablets apps. You
+               mobile          also have the option to make this table Read-only in mobile. 
+                               If the forms for an table require an extension not supported in Dynamics 365 for
+                               phones and tablets apps use this setting to ensure that mobile app users can’t
+                               edit the data for these entities.
+               Enable for      Make this table available to the Dynamics 365 for phones app.
+               phone
+               express
+               Mail merge      People can use this table with mail merge.
+               Offline         Whether data in this table will be available while the Dynamics 365 for Outlook
+               capability for  application is not connected to the network.
+               Dynamics
+               365 for
+               Outlook
+               Primary         System entities that support images will already have an Image field. You can
+               Image           choose whether to display data in this field as the image for the record by setting
+                               this field to [None] or Default Image. 
+                               For custom entities you must first create an image field. Each table can have only
+                               one image field. After you create one, you can change this setting to set the
+                               primary image. More information: Image columns
+               Reading         Whether the table will be visible in the reading pane for the Dynamics 365 for
+               pane in         Outlook app.
+               Dynamics
+               365 for
+               Outlook
+               Use custom      When enabled, set a Help URL to control what page users will see when they click
+               Help            the help button in the application. Use this to provide guidance specific to your
+                               company processes for the table.
+              You can also make the following changes:
+                    Create and edit columns for Dataverse
+                    Create and edit relationships between tables
+                    Create and design forms
+                    Create a business process flow to standardize processes
+              Delete a table
+             As someone with the system administrator security role, you can delete custom tables
+             that aren’t part of a managed solution.
+                ） Important
+                     When you delete a custom table, the database tables that store data for that
+                     table are deleted and all data they contain is lost. Any associated rows that
+                     have a parental relationship to the custom table are also deleted. For more
+                     information about parental relationships, see Create and edit relationships
+                     between tables.
+                     The only way to recover data from a table that was deleted is to restore the
+                     database from a point before the table was deleted. More information:
+                     Backup and restore environments
+             While viewing tables, select the     command on the toolbar.
+             While viewing a table use the delete command on the menu bar.
+                ２ Warning
+       Deleting a table that contains data will remove all the data. This data can only be
+       retrieved by backup of the database.
+       ７ Note
+       If there are any table dependencies you will get a Cannot Delete Component error
+       with a Details link you can use to discover information about why the table cannot
+       be deleted. In most cases, this will be because of a dependency that has to be
+       removed.
+       There may be more than one dependency blocking the deletion of a table. This
+       error message may only show the first one. For an alternate way to discover
+       dependencies, see Identify table dependencies
+      Identify table dependencies
+      You can identify dependencies that will prevent a table from being deleted before you
+      try to delete it.
+       1. In the solution explorer with the table selected, click Show Dependencies in the
+        command bar.
+         2. In the dialog window that opens, scroll the list to the right to view the Dependency
+          Type column.
+       Published dependencies will block deleting a table. Internal dependencies should be
+       resolved by the system.
+         3. Remove these published dependencies and you should be able to delete the table.
+        ７ Note
+        A very common dependency is that another table form has a lookup column for the
+        table you are deleting. Removing the lookup column from the form will resolve the
+        dependency.
+       Create custom activity table
+       To create the table as an activity table, use the same steps described in this topic except
+       select Define as an activity table.
+       An activity table is a special kind of table that tracks actions for which an entry can be
+       made on a calendar. More information: Activity tables.
+       When you set this option some table properties are not compatible. An activity table has
+       to conform to standard behaviors that all activity tables use.
+       The primary column Name and Display Name will be set to Subject and you cannot
+       change this.
+       The following options are set by default and cannot be changed:
+           Feedback
+           Notes (includes attachments)
+           Connections
+           Queues
+           Offline capability for Dynamics 365 for Outlook
+       The following options cannot be set:
+           Areas that display this table
+           Activities
+           Sending email
+           Mail Merge
+           Single row auditing
+           Multiple row auditing
+       Create a virtual table
+       Some options are only used when creating a virtual table.
+        Option         Description
+        Virtual Entity Whether the table is a virtual table.
+        Data Source    The data source for the table.
+      More information: Create and edit virtual tables that contain data from an external data
+      source
+      See also
+      Create and edit tables in Dataverse 
+      Tutorial: Create a custom table that has components in Power Apps 
+      Create a solution
+     Microsoft Dataverse table relationships
+     Table relationships in Microsoft Dataverse define the ways that table rows can be associated
+     with rows from other tables or the same table. There are two types of table relationships:
+        One-to-many relationships
+        Many-to-many relationships
+     One-to-many relationships
+     In a one-to-many table relationship, many referencing (related) table rows can be associated
+     with a single referenced (primary) table row. The referenced table row is sometimes referred to
+     as the ”parent” and rows of the referencing table are referred to as ”children.” A many-to-one
+     relationship is just the child perspective of a one-to-many relationship.
+     For example, in a school scenario multiple courses might be delivered in a single classroom, so
+     the class table would have a one-to-many relationship with the course table.
+     Many-to-many relationships
+     In a many-to-many table relationship, many table rows can be associated with many other
+     table rows. Rows related using a many-to-many relationship can be considered peers and the
+     relationship is reciprocal.
+     For example, in the same school scenario mentioned earlier, a single student can enroll in
+     multiple courses, and each course can have multiple students. This type of relationship allows
+     for more complex data associations and is managed using Power Apps in Dataverse.
+     How relationships work in Dataverse
+     Table relationships define how table rows can be related to each other in Dataverse. At the
+     simplest level, adding a lookup column to a table creates a new 1:N (one-to-many) relationship
+     between the two tables and lets you put that lookup column on a form. With the lookup
+     column, users can associate multiple child rows of that table to a single parent table row.
+     Beyond simply defining how rows can be related to other rows, 1:N table relationships also
+     provide data to address the following questions:
+        When I delete a row, should any rows related to that row also be deleted?
+        When I assign a row, do I also need to assign all rows related to that row to the new
+        owner?
+               How can I streamline the data entry process when I create a new related row in the
+               context of an existing row?
+               How should people viewing a row be able to view the associated rows?
+          Tables can also participate in a N:N (many-to-many) relationship where any number of rows for
+          two tables can be associated with each other.
+          Decide whether to use table relationships or
+          connections
+          Table relationships are metadata that make changes in Dataverse. These relationships allow for
+          queries to retrieve related data efficiently. Use table relationships to define formal relationships
+          that define the table or that most rows can use. For example, an opportunity without a
+          potential customer wouldn't be useful. The opportunity table in Dynamics 365 for Sales also
+          has a N:N relationship with the competitor table, also available with Dynamics 365 for Sales.
+          This allows for multiple competitors to be added to the opportunity. You might want to capture
+          this data and create a report that shows the competitors.
+          There are other less formal kinds of relationships between rows that are called connections. For
+          example, it might be useful to know if two contacts are married, or perhaps they're friends
+          outside of work, or perhaps a contact used to work for another account. Most businesses won't
+          generate reports using this kind of information or require that it's entered, so it's probably not
+          worthwhile to create table relationships. More information: Configure connection roles
+          Types of table relationships
+          When you view relationships in Power Apps, you might think that there are three types of table
+          relationships. Actually there are only two, as shown in the following table.
+                                                                                           ﾉ Expand table
+           Relationship      Description
+           Type
+           1:N (One-to-      A table relationship where one table row for the Primary table can be associated to
+           Many)             many other Related table rows because of a lookup column on the related table.
+                             When viewing a primary table row, you can see a list of the related table rows that are
+                             associated with it.
+                             In the Power Apps portal, Current table represents the primary table.
+           Relationship      Description
+           Type
+           N:N (Many-to-     A table relationship that depends on a special Relationship table, sometimes called an
+           Many)             Intersect table, so that many rows of one table can be related to many rows of
+                             another table.
+                             When viewing rows of either table in a N:N relationship, you can see a list of any rows
+                             of the other table that are related to it.
+          The N:1 (many-to-one) relationship type exists in the user interface because the designer
+          shows you a view grouped by tables. 1:N relationships actually exist between tables and refer to
+          each table as either a Primary/Current table or Related table. The related table, sometimes
+          called the child table, has a lookup column that allows storing a reference to a row from the
+          primary table, sometimes called the parent table. A N:1 relationship is just a 1:N relationship
+          viewed from the related table.
+          Table relationship behavior
+          Behaviors for related tables are important because they help ensure data integrity and can
+          automate business processes for you.
+          Preserve data integrity
+          Some tables exist to support other tables. They don't make sense on their own. They'll typically
+          have a required lookup column to link to the primary table they support. What should happen
+          when a primary row is deleted?
+          You can use the relationship behavior to define what happens to related rows according to the
+          rules for your business. More information: Add advanced relationship behavior
+          Automate business processes
+          Let's say that you have a new salesperson and you want to assign them a number of existing
+          accounts currently assigned to another salesperson. Each account row might have a number of
+          task activities associated with it. You can easily locate the active accounts you want to reassign
+          and assign them to the new salesperson. But what should happen for any of the task activities
+          that are associated with the accounts? Do you want to open each task and decide whether they
+          should also be assigned to the new salesperson? Probably not. Instead, you can let the
+          relationship apply some standard rules for you automatically. These rules only apply to task
+          rows associated to the accounts you're reassigning. Your options are:
+               Reassign all active tasks.
+               Reassign all tasks.
+               Reassign none of the tasks.
+               Reassign all tasks currently assigned to the former owner of the accounts.
+          The relationship can control how actions performed on a row for the primary table row cascade
+          down to any related table rows.
+          Behaviors
+          There are several kinds of behaviors that can be applied when certain actions occur.
+                                                                                            ﾉ Expand table
+           Behavior             Description
+           Cascade Active       Perform the action on all active related table rows.
+           Cascade All          Perform the action on all related table rows.
+           Cascade None         Do nothing.
+           Remove Link          Remove the lookup value for all related rows.
+           Restrict             Prevent the primary table row from being deleted when related table rows exist.
+           Cascade User         Perform the action on all related table rows owned by the same user as the primary
+           Owned                table row.
+          Actions
+          These are the actions that can trigger certain behaviors:
+                                                                                            ﾉ Expand table
+           Column       Description                                                         Options
+           Assign       What should happen when the primary table row is assigned to        Cascade All
+                        someone else?                                                       Cascade Active
+                                                                                            Cascade User-
+                                                                                            owned
+                                                                                            Cascade None
+           Reparent     What should happen when the lookup value of a related table in a    Cascade All
+                        parental relationship is changed?                                   Cascade Active
+                        More information: Parental table relationships                      Cascade User-
+           Column       Description                                                             Options
+                                                                                                owned
+                                                                                                Cascade None
+           Share        What should happen when the primary table row is shared?                Cascade All
+                                                                                                Cascade Active
+                                                                                                Cascade User-
+                                                                                                owned
+                                                                                                Cascade None
+           Delete       What should happen when the primary table row is deleted?               Cascade All
+                                                                                                Remove Link
+                                                                                                Restrict
+           Unshare      What should happen when a primary table row is unshared?                Cascade All
+                                                                                                Cascade Active
+                                                                                                Cascade User-
+                                                                                                owned
+                                                                                                Cascade None
+           Merge        What should happen when a primary table row is merged?                  Cascade All
+                                                                                                Cascade None
+           Rollup       What is the desired behavior of the rollup view associated with this    Cascade All
+           View         relationship?                                                           Cascade Active
+                                                                                                Cascade User-
+                                                                                                owned
+                                                                                                Cascade None
+             ７ Note
+             Assign, Delete, Merge, and Reparent actions don't execute in the following situations:
+                  If the original parent row and requested action contain the same values. Example:
+                  Attempting to trigger an Assign and choosing a contact that is already the owner of
+                  the row.
+                  Attempting to perform an action on a parent row that is already running a cascading
+                  action.
+             When executing an assign, any workflows or business rules that are currently active on the
+             rows are automatically deactivated when the reassignment occurs. The new owner of the
+             row must reactivate the workflow or business rule if they want to continue using it.
+          Parental table relationships
+      Each pair of tables that are eligible to have a 1:N relationship can have multiple 1:N
+      relationships between them. Yet usually only one of those relationships can be considered a
+      parental table relationship.
+      A parental table relationship is any 1:N table relationship where one of the cascading options
+      in the Parental column of the following table is true.
+                                                   ﾉ Expand table
+      Action       Parental                Not Parental
+      Assign       Cascade All             Cascade None
+                   Cascade User-owned
+                   Cascade Active
+      Delete       Cascade All             RemoveLink
+                                           Restrict
+      Reparent     Cascade All             Cascade None
+                   Cascade User-owned
+                   Cascade Active
+      Share        Cascade All             Cascade None
+                   Cascade User-owned
+                   Cascade Active
+      Unshare      Cascade All             Cascade None
+                   Cascade User-owned
+                   Cascade Active
+      For example, if you create a new custom table and add a 1:N table relationship with the
+      account table where your custom table is the related table, you can configure the actions for
+      that table relationship to use the options in the Parental column. If you later add another 1:N
+      table relationship with your custom table as the referencing table you can only configure the
+      actions to use the options in the Not Parental column.
+      Usually this means that for each table pair there's only one parental relationship. There are
+      some cases where the lookup on the related table might allow for a relationship to more than
+      one type of table.
+      For example, if a table has a customer lookup that can refer to either a contact or account
+      table. There are two separate parental 1:N table relationships.
+      Any activity table has a similar set of parental table relationships for tables that can be
+      associated using the regarding lookup column.
+    Limitations on behaviors you can set
+    Because of parental relationships there are some limitations, you should keep in mind when
+    you define table relationships.
+       A custom table can't be the primary table in a relationship with a related system table
+       that cascades. This means you can't have a relationship with any action set to Cascade All,
+       Cascade Active, or Cascade User-Owned between a primary custom table and a related
+       system table.
+       No new relationship can have any action set to Cascade All, Cascade Active, or Cascade
+       User-Owned if the related table in that relationship already exists as a related table in
+       another relationship that has any action set to Cascade All, Cascade Active, or Cascade
+       User-Owned. This prevents relationships that create a multi-parent relationship.
+    Inherited access rights cleanup
+    Using Reparent and Share cascading behaviors are helpful when you want to provide access to
+    rows across related tables. But there can be a change in process or design that requires a
+    change of the cascading behavior settings.
+    When a table relationship uses Reparent or Share, and the cascading behavior is changed to
+    Cascade None, the table relationship prevents any new permission changes from cascading to
+    the related child tables. In addition, inherited permissions that were granted while the
+    cascading behavior was active must be revoked.
+    Inherited access rights cleanup is a system job that cleans up the legacy inherited access rights
+    that remain after the cascading behavior is changed to Cascade None. This cleanup doesn't
+    affect any user that was directly granted access to a table, but does remove access from
+    anyone who received access through inheritance only.
+    This is how inherited access rights cleanup works:
+      1. Identifies and collects all the tables that were in a cascading relationship with the updated
+       parent.
+      2. Identifies and collects the users that were granted access to the related tables through
+       inherited access.
+      3. Checks for users who were given direct access to a related table and removes them from
+       the collection.
+      4. Removes inherited access for the collected users on the collected tables.
+    After the cleanup runs, users who were able to access related tables only because of the
+    cascading feature can no longer access the rows, ensuring greater security. There are cases
+    where the cleanup might not be successful. Learn more about how to clean up inherited access
+      See also
+      Monitor system jobs
+      Create and edit 1:N (one-to-many) or N:1 (many-to-one) relationships
+      Create Many-to-many (N:N) table relationships
+       Last updated on 01/09/2026
+     Create one-to-many or many-to-one table
+     relationships in Microsoft Dataverse
+     overview
+     08/11/2025
+     In Microsoft Dataverse a one-to-many (1:N) or many-to-one (N:1) relationship defines how two
+     tables are related to each other.
+     Before you create a custom table relationship, evaluate whether using an existing table
+     relationship would meet your requirements. More information: Create new metadata or use
+     existing metadata?
+     Watch this video for a quick overview about how to create a table, a table relationship, and
+     columns:
+     https://learn-video.azurefd.net/vod/player?id=19b21a48-4a49-4163-8506-
+     7fb79f3290ef&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fdata-
+     platform%2Fcreate-edit-1n-relationships
+     You create and edit table relationships, including one-to-many and many-to-one relationships,
+     in Power Apps.
+     You can also create new table relationship in your environment using any of the following
+     experiences:
+        In model-driven apps, select New Column from the form editor and create a Lookup
+        column. More information: Add, configure, move, or delete columns on a form
+        Create a new Lookup column for the related table.More information: Create and edit
+        columns
+        Import a solution that contains the definition of the table relationship. More information:
+        Import, update, and export solutions
+        Use Power Query to create new tables and fill them with data. More information: Add
+        data to a table in Dataverse by using Power Query.
+        A developer can use Metadata services to write a program to create and update table
+        relationships. More information: Table relationship definitions
+     Information in this article helps you choose which designer you can use.
+     Create a one-to-many or many-to-one relationship
+     Create and edit one-to-many or many-to-one table relationships in Power Apps
+         Community tools
+         table Relation Diagram Creator   is a tool that XrmToolbox community developed for
+         Dataverse. Please see the Developer tools and resources topic for more community developed
+         tools.
+           ７ Note
+           The community tools are not a product of Microsoft and does not extend support to the
+           community tools. If you have questions pertaining to the tool, please contact the
+           publisher. More Information: XrmToolBox   .
+         See also
+         Create and edit relationships between tables
+         Create and edit 1:N (one-to-many) or N:1 (many-to-one) table relationships using solution
+         explorer
+         Developer documentation: Table relationship definitions
+         Developer documentation: Table relationship eligibility
+     Create many-to-many table relationships
+     overview
+     08/11/2025
+     One-to-many (1:N) table relationships establish a hierarchy between rows. With many-to-many
+     (N:N) relationships, there's no explicit hierarchy. There are no lookup columns or behaviors to
+     configure. Rows created using many-to-many relationships can be considered peers and the
+     relationship is reciprocal.
+     One example of a many-to-many relationship is defined between two standard tables included
+     with the Dynamics 365 for Sales app. The opportunity table has an N:N relationship with the
+     competitor table. This relationship allows for multiple competitors to be added to the
+     opportunity and multiple opportunities associated with the same competitor.
+     With many-to-many relationships, a relationship (or intersect) table stores the data that
+     associates the tables. This table has a one-to-many table relationship with both of the related
+     tables and only stores the necessary values to define the relationship. You can't add custom
+     columns to a relationship table and it's never visible in the user interface.
+     Creating a many-to-many relationship requires choosing the two tables that you want to
+     participate in the relationship. For model-driven apps you can decide how you want the
+     respective lists to be available within the navigation for each table. These are the same options
+     used for the primary table in 1:N table relationships.
+     Not all tables can be used with many-to-many relationships. If the table isn't available to be
+     chosen in the designer, you can't create a new many-to-many relationship with this table. More
+     information: Developer documentation: table relationship eligibility
+      ７ Note
+      You can also create new many-to-many (N:N) table relationship in your environment using
+      the following:
+         Import a solution that contains the definition of the relationship. More information:
+         Import, update, and export solutions
+         A developer can use Metadata services to write a program to create and update
+         table relationships. More information: Developer documentation: Table relationship
+         definitions
+     Next steps
+     Create many-to-many table relationships
+        Create a relationship between tables
+        Data in one table often relates to data in another table. For example, you might have a Teachers
+        table and a Class table, and the Class table might have a lookup relation to the Teachers table to
+        show which teacher instructs the class. You can use a lookup column to show data from the
+        Teachers table. This is commonly referred to as a lookup column.
+        Define a relationship
+        You can create several types of relationships from one table to another (or between a table and
+        itself). Each table can have a relationship with more than one table, and each table can have more
+        than one relationship to another table. Some common relationship types are:
+             Many-to-one - In this type of relationship, each row in table A can match more than one
+             row in table B, but each row in table B can match only one row in table A. For example, a
+             class has a single classroom. This is the most common type of relationship and is shown in
+             the column list as a Lookup column
+             One-to-many - In this type of relationship, each row in table B can match more than one
+             row in table A, but each row in table A can match only one row in table B. For example, a
+             single teacher, teaches many classes.
+             Many-to-many - In this type of relationship, each row in table A can match more than one
+             row in table B, and vice versa. For example, students attend many classes, and each class
+             can have multiple students.
+        Additionally, you can set advanced cascading behaviors on many-to-one and one-to-many
+        relationships whenever an action is taken on the parent table.
+        Add a lookup column (Many-to-one relationship)
+        To add a lookup relation to a table, create a relation under the Relationships area and specify the
+        table with which you want to create a relationship.
+           1. In Power Apps  , on the left navigation pane select Tables. If the item isn’t in the side panel
+             pane, select …More and then select the item you want.
+           2. Select an existing table, or Create a new table, and then select Relationships.
+           3. Select New relationship, and then select a relationship type, such as Many-to-one.
+     4. On the right pane, select a Related table for the Current table, and then select Done.
+     5. Select Done.
+        Add a one-to-many relationship
+        To add a one-to-many relationship, create a relation under the Relationships area and specify the
+        table with which you want to create a relationship.
+           1. In Power Apps  , select Tables in the left navigation pane. If the item isn’t in the side panel
+             pane, select …More and then select the item you want.
+           2. Select an existing table, or Create a new table, and then select Relationships.
+           3. Select the down arrow to the right of Add relationship, and then select One-to-many.
+           4. Select a table. Notice the Look up columns will be shown on the Current table, they'll
+             default with the tables name (in this example Teacher) but you can change them if needed.
+             Select Done to add the relationship to your table.
+               ７ Note
+       In the case of a One-to-many relationships, the Look up column will be created on the
+       related table, not the table you currently have selected. If you need the lookup on the
+       current table, create a Many-to-one relationship.
+     5. Select Done.
+     Add a many-to-many relationship
+     To add a many-to-many relationship, create a relation under the Relationships area and specify
+     the table with which you want to create a relationship.
+      1. On powerapps.com , select Tables in the left navigation pane. If the item isn’t in the side
+        panel pane, select …More and then select the item you want.
+      2. Select an existing table, or Create a new table
+      3. Select the Relationships area.
+      4. Select Add relationship and then select Many-to-many. This opens a panel for you to
+        choose the table you want to create a relationship to. Select the table from the Related
+        table drop-down.
+      5. After selecting a table, the names for the relationship and relationship table appear. They
+        default to the names of the tables combined, but you can change them if needed.
+      6. Select Done to add the relationship to your table, and then select Save table.
+     Add advanced relationship behavior
+     While building a one-to-many or a many-to-one relationship, you can also set advanced
+     behaviors.
+    These options are also referred to as cascading behaviors because they cascade down the
+    hierarchy of related tables. For example, it might be desirable to delete the related tests and
+    homework of a student if a student is removed from the system. This type of behavior is called a
+    parental relationship.
+    On the other hand, you might decide that you don't want actions to cascade down the hierarchy.
+    For example, in the teacher to class relationship you could decide that the child table (class)
+    shouldn't* be deleted when a parent (teacher) is deleted. This is called a referential relationship.
+    As you model your business data by creating custom tables or when using existing Common
+    Data Model tables, consider the behavior you require and the implications for the entire
+    hierarchy of related tables and choose between one of the following standard behaviors:
+      Referential, Remove Link: In a referential relationship between two tables, you can navigate
+      to any related rows, but actions taken on one table don't affect the other. For example, if
+      you have a one-to-many relationship between teachers and classes, deleting a teacher has
+      no impact on the related class.
+      Referential, Restrict Delete: In a referential, restrict delete relationship between two tables,
+      you can navigate to any related rows. Actions taken on the parent row don't affect the child
+      row, but the parent row can't be deleted while the child row exists. This behavior is useful if
+      you don't want child rows to become orphaned. This restriction forces the user to delete all
+      of the children before deleting the parent.
+        Parental: In a parental relationship between two tables, any action taken on a record of the
+        parent table is also taken on any child table records that are related to the parent table
+        record. For example, the owner of the parent record has inherited access to the child table
+        records and when the parent record is deleted, all of the child records will also be deleted.
+        Custom: In a custom relationship between two tables, you select the behavior associated
+        with each of a set of possible actions.
+     For more information on defaults and custom behaviors: Configure table relationship behavior.
+     Use a lookup column in an app
+     If you create an app automatically from a table that contains a lookup column, it appears as a
+     Drop down control that contains data from the Primary name column of the table.
+     Add 1:N and N:N relationships for canvas apps
+     Use the Relate function to link two rows through a one-to-many or many-to-many relationship in
+     Microsoft Dataverse. More information: Relate and Unrelate functions in Power Apps
+     Next steps
+        Generate an app by using a Dataverse database
+        Create an app from scratch using a Dataverse database
+      Last updated on 04/22/2026
+             Create and edit one-to-many or many-
+             to-one table relationships using Power
+             Apps
+             Article • 09/19/2024
+             In Microsoft Dataverse a one-to-many (1:N) or many-to-one (N:1) relationship defines
+             how two tables are related to each other.
+             Power Apps provides an easy way to create and edit one-to-many (1:N) or many-to-one
+             (N:1) relationships for Microsoft Dataverse. For more information about these kinds of
+             relationships, go to Create one-to-many or many-to-one table relationships overview.
+             View table relationships
+                1. Sign in to Power Apps  , and open the environment you want.
+                2. Select Solutions on the left navigation pane, and then open the solution you want.
+                3. Select Tables and open the table that has the relationships you want to view. If the
+                  item isn’t in the side panel pane, select …More and then select the item you want.
+                4. Select the Relationships area to view all relationships configured for the table.
+                                                                                               
+             Create a relationship
+             While viewing table relationships, on the command bar, select New relationship, and
+             then select either Many-to-one or One-to-many.
+               ７ Note
+           For information about Many-to-many relationships see Create N:N (many-to-
+           many) relationships
+          Depending on your choice the following is displayed:
+                                                                ﾉ Expand table
+           Type            Panel
+           Many-to-one
+           One-to-many
+          Choose the Related table for the relationship you want to create between the two
+          tables.
+           ７ Note
+           With either choice, a lookup column is created on the Current table. For more
+           information about look columns, go to Use the lookup column on a row.
+          Once you select the related table, you can edit the details of the relationship. In this
+          example, multiple contact table rows can be associated with a single account.
+            You can edit the default values provided before you save. Select General to view the
+            Relationship name and Lookup column description values.
+                                                                               ﾉ Expand table
+             Field              Description
+             Lookup column      The localizable text for the lookup column that will be created on the
+             display name       related table.
+                                This can be edited later.
+             Lookup column      The name for the Lookup column that will be created on the related table.
+             name
+             Lookup column      Optional. Column value doesn’t have to be selected to save the record.
+             requirement        Business Recommended. Should be selected indicator but column value
+                                doesn’t have to be selected to save the record.
+                                Business Required. Column value must be specified in order to save the
+                                record.
+             Searchable         Clear if you want to hide the relationship from Advanced Find in model-
+                                driven apps.
+             Relationship name  The name for the relationship that will be created.
+             Lookup column      The description for the lookup column. In model-driven apps this appears
+             description        as a tooltip when people hover their mouse over the column.
+                                This can be edited later.
+       You can continue editing the table. Select Save table to create the relationship you have
+       configured.
+       Advanced options
+       For both the Current table display settings and the Related table display settings, you
+       can edit the display option columns, which control how the related tables are displayed
+       for model-driven apps. More information: Advanced options
+       Relationship behavior
+       Relationship behavior determines how records are handled as the action cascades down
+       the hierarchy of related tables. For example, it might be desirable to delete the related
+       tests and homework of a student if a student is removed from the system. This type of
+       behavior is called a parental relationship. For more information about how to configure
+       relationship behavior, go to Add advanced relationship behavior.
+       Edit relationships
+       While viewing table relationships, open the relationship you want to edit to display the
+       properties pane.
+       The only columns you can edit are Lookup column display name and Lookup column
+       description. These can also be edited in the properties of the lookup column in the
+       related table. More information: Edit a column
+         ７ Note
+         Each relationship can be found within the primary table or the related table as a
+         Many-to-one or One-to-many relationship. Although it can be edited in either
+         place, it is the same relationship.
+         The publisher of a managed solution can prevent some customizations of
+         relationships that are part of their solution.
+       Delete relationships
+       Deleting a one-to-many relationship deletes the lookup column on the related table.
+                ７ Note
+                You can't delete a relationship that has dependencies. For example, if you have
+                added the lookup column to a form for the related table, you must remove the
+                column from the form before you delete the relationship.
+              While viewing table relationships, select the relationship you want to remove or delete,
+              choose from the following relationship types:
+                    Custom relationships in a single solution. On the command bar, select Remove >
+                    Delete from this environment.
+                    Custom relationships in multiple solutions, system, or standard table relationships.
+                    On the command bar, select Remove > Remove from this solution.
+              See also
+              Create and edit relationships between tables
+              Create and edit 1:N (one-to-many) or N:1 (many-to-one) relationships
+              Create and edit 1:N (one-to-many) or N:1 (many-to-one) table relationships using
+              solution explorer
+              Edit a column
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+           Create many-to-many table
+           relationships using Power Apps
+           Article • 09/17/2024
+           Power Apps  provides an easy way to create and edit many-to-many relationships for
+           Microsoft Dataverse tables. A many-to-many relationship defines the type of connection
+           between two tables where multiple records in one table can be associated with multiple
+           records in another table. For example, in a school scenario, a single student can enroll in
+           multiple courses, and each course can have multiple students. This type of relationship
+           allows for more complex data associations and is managed using Power Apps in
+           Dataverse. For more information about many-to-many table relationships, go to Create
+           many-to-many table relationships overview.
+           View many-to-many table relationships
+              1. From Power Apps  , select Solutions on the left navigation pane, and open the
+                solution you want.
+              2. Open the table that has the relationships you want to view.
+              3. Select the Relationships area to view all relationships configured for the table.
+                                                                                      
+           Many-to-many relationships have a Relationship type of Many-to-many.
+              ７ Note
+              The table you view might have no Many-to-many relationships.
+       Create relationships
+       While viewing table relationships, on the command bar, select New relationship, and
+       then select Many-to-many.
+       The Many-to-many relationship editor is displayed.
+       In the Related (Many) dropdown list, choose the table you want to relate to the current
+       table. In this example, a many-to-many relationship with the student and course tables
+       is created.
+       The values for these columns are generated for you based on the tables chosen.
+          Clear Searchable, if you want to hide the relationship from Advanced Find in model-
+          driven apps.
+          If you want to edit the display settings for the relationship, expand Advanced options
+          and make the changes you want. More information: Advanced options
+           ７ Note
+           If you create more than one Many-to-many relationship with the same two tables,
+           you must edit the generated Relationship Name and Relationship table name
+           columns so that they are unique.
+          Select Done to close the Many-to-many panel. The relationship is created when you
+          save changes to the table.
+          Advanced options
+          For both the Current table display settings and the Related table display settings, you
+          can edit the display option columns, which control how the related tables are displayed
+          for model-driven apps.
+                                                                ﾉ
+                                                                  Expand table
+           Field   Description
+           Display How the related table list should be displayed. More information: Display Options
+           option
+           Custom  Specify the localizable text to be used instead of the plural name when you select
+           label   Use Custom label as the Display option .
+           Display Select one of the available groupings to display this list. The available options are:
+           area    Details (for the Common group), Marketing, Sales, and Service.
+           Display Controls where the navigation item will be included within the selected display area.
+           order   The range of allowed numbers begins with 10,000. Navigation pane items with a
+                   lower value appear above other relationships with a higher value.
+          Display Options
+          These are the available display options:
+                                                                ﾉ Expand table
+             Option       Description
+             Do not       Do not display the related tables for this relationship.
+             Display
+             Use custom   When this option is chosen the Custom label column is enabled so that you can
+             label        specify the localizable text to be used instead of the plural name.
+             Use plural   Use the plural display name defined for the related table.
+             name
+            Create a many-to-many relationship with the
+            same table (self-referential relationship)
+            There might be times when you need to create a many-to-many relationship that
+            references the same table. For example, account records might have multiple parent
+            account records. However, if the self-referential relationship doesn’t have custom labels
+            configured, distinguishing the two related record types that appear in the app isn't
+            apparent to users. This is because the related records appear twice in the app by using
+            the same table name.
+            To create a self-referential relationship, use custom labels.
+               1. Open or create a solution and then create a new custom table. In this example, the
+                 table is named Custom table.
+               2. Open the custom table, select the New > Relationship > New relationship >
+                 Many-to-many relationship.
+               3. Under Related (Many) select the same table, in the example Custom table, that's
+                 also the Current (Many) table.
+               4. Expand Advanced options and complete the relationship definition as follows. Add
+                 custom labels to both the current and the related table’s relationship:
+                 Current table display settings section
+                      Display option: Use custom label
+                      Custom label: Primary Custom Table Relationship
+                 Related table display settings section
+                      Display option: Use custom label
+           Custom label: Secondary Custom Table Relationship
+       5. Select Done to save the relationship, and then publish the customization.
+      Because the related record types use the custom labels defined for the self-referential
+      relationship instead of the table name, users running the app can distinguish between
+      the two related record types that exist.
+              Delete relationships
+              Deleting a many-to-many relationship deletes the relationship table created. All data
+              connecting tables using the relationship are lost.
+              While viewing table relationships, select the relationship you want to delete, and then
+              on the command bar select Remove > Delete from this environment.
+              See also
+              Create N:N (many-to-many) table relationships overview
+              ） Note: The author created this article with assistance from AI. Learn more
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+              Set managed properties for
+              relationships
+              Article • 09/19/2024
+              Managed properties apply when you include a column with a managed solution and
+              import it into another organization. These settings allow a solution maker to have some
+              control over the level of customization that they want to allow people who install their
+              managed solution to have when they customize a table relationship.
+              Set managed properties for a relationship
+                 1. Sign in to Power Apps     ,and select the environment you want.
+                 2. Select Solutions, open the solution you want, and then open the table that has the
+                    relationship where you want to view the managed properties.
+                 3. Select the relationship, and then select Advanced > Managed properties on the
+                    command bar.
+              With relationships, the only managed property is Allow customizations. This single
+              setting controls all changes that can be made to the table relationship.
+              See also
+              Create and edit relationships between tables
+              Solutions in Power Apps overview
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Configure connection roles
+             Article • 03/13/2023
+             With Microsoft Dataverse, you can define connections between table rows without
+             creating a table relationship. In model-driven apps people can establish a named link
+             between rows to establish less a formal relationship, which doesn't justify creating an
+             actual table relationship. Some examples include friend, sibling, spouse, attendee, and
+             stakeholder. Some connections can also be reciprocal, such as child and parent, husband
+             and wife, or doctor and patient.
+             When people set a connection between two rows, they can also add a description and
+             additional information such as start and end dates for the relationship. More
+             information: Add a connection role to link rows to each other
+             Anyone with write access to the Connection Role table can establish which connections
+             are available for people to use.
+               ） Important
+               For a table to be available as a row type for a new or existing connection role, the
+               Can have connections property must be enabled for the table.
+             Enable connection roles for a table
+                1. Sign in to Power Apps  .
+                2. Open the table you want or create a new one. More information: Edit a table
+                3. Select Properties, and then in the right properties pane, select Can have
+                  connections.
+                                                                                               
+                4. Select Save.
+             View connection roles
+             There are a number of standard connection roles already configured in Dataverse.
+                1. Sign in to Power Apps  , and then on the left pane, select Solutions. If the item
+                  isn’t in the left navigation pane, select …More and then select the item you want.
+                2. Open the unmanaged solution you want.
+                3. On the command bar, select Add existing > Connection Role. The list of available
+                  connection roles are displayed.
+                4. Select Cancel to close the Add existing connection Roles pane without adding a
+                  connection role to the solution.
+               ７ Note
+                    If you want to distribute connection roles with a solution, make sure they are
+                    included in the solution you want to distribute. More information: Add
+                    connection roles to a solution
+             Add connection roles to a solution
+       Because connection roles are solution aware, which means that they can be included in a
+       solution, you can also add connection roles to a solution you distribute.
+       Generally we don't recommended you edit components in the internal Default Solution.
+       Within the solution you've created to work in, you can use the Add Existing command in
+       the Solutions area to bring any of the active connection roles into your solution.
+       Once you add the connection role to your solution, you can edit it wherever it's visible.
+        ７ Note
+        The connection role status is not included with the connection role when it is
+        exported from a solution. Therefore, when the solution is imported into a target
+        environment, the status will be set to active by default.
+       Create a connection role
+        ） Important
+        If you intend to distribute a solution that includes new connection roles or changes
+        to the existing connection roles you must add them to the solution you will
+        distribute. Editing or adding new connection roles in the Default Solution will not
+        include them in a solution you can distribute. More information Add connection
+        roles to a solution
+                1. Sign in to Power Apps   and then on the left pane select Solutions. If the item isn’t
+                  in the left navigation pane, select …More and then select the item you want.
+                2. Open the unmanaged solution your want, and then on the command bar select
+                  New > Other > Connection role.
+                3. Complete the three steps on the form to Describe the connection role.
+             Describe the connection role
+             Set the following columns:
+              Column             Description
+              Name               (Required) The text describing the connection.
+              Connection Role    A group describing the category of the connection. More information:
+              Category           Connection Role Category values
+              Description        Provide a definition for the role.
+             Connection Role Category values
+             The default Connection Role Category values are:
+                  Business
+                  Family
+                  Social
+                  Sales
+                  Other
+                  Stakeholder
+        Sales Team
+        Service
+      You can add new categories or modify existing ones by editing the Category global
+      choice. More information: Create and edit global choices for Dataverse (picklists)
+      Select row types
+      Select which row types should be available to connect.
+       ７ Note
+       Although All is selected by default, make sure you consider which types are
+       appropriate for the connection role you are adding.
+      Matching connection roles
+      In this optional step, you can define any roles that be applied in a reciprocal manner. It
+      isn't required, but connections are more meaningful if these are defined.
+      For example, people can set that Glen is a Friend to Mary, but does this mean that Mary
+      is a Friend to Glen? We hope so. But if Glen is the Father of Mary it doesn't mean that
+      Mary is the Father of Glen. Establishing correct reciprocity requires this extra step.
+      When people set a connection role that doesn't have a matching connection role, the
+      role will only be displayed when viewing the connection from the row that the
+      connection was applied to. When viewed from the connected row, the role will be empty
+      unless a matching role is set.
+      For role definitions like Friend, Spouse, Colleague, or Sibling, it's best to assign the
+      matching role to itself. If a single matching connection role is configured, the single
+      matching connection role will be applied in both directions.
+       ） Important
+       You will need to save a new connection role without this matching connection role
+       before you can set the matching connection role to itself.
+      You'll find that some connection roles are already configured with matching connection
+      roles. Former Employee is matched with Former Employer and vice versa. This kind of
+      one-to-one matching connection role is most common.
+      You can configure multiple matching connection roles to describe complex
+      relationships. If you create a connection role such as Father, you could configure two
+      more roles such as Daughter,* and Son and apply both of them as matching connection
+      roles to Father. In turn, both the Daughter and Son connection roles should be matched
+      to Father. Of course, then you should set up an equivalent role for Mother that is
+      similarly matched with Daughter and Son.
+        Tip
+       Before you create a complex set of connection roles, consider if a more simple set
+       of roles will be enough. For example, rather than creating a complex set of
+       connection roles like Father, Mother, Son, and Daughter - consider if simply using
+       Parent and Child will work for you.
+      If more than one matching connection role is configured, those connection roles
+      represent the only valid reciprocal roles. The first one will be applied automatically as
+      the default value. If the default value isn't correct, people need to manually edit the
+      connection and choose between valid options defined in the configuration.
+      See also
+      Create connections to define and view relationships between rows (classic) 
+      Create and edit global choices for Dataverse (picklists) 
+      Create and edit relationships between tables
+           Create many-to-many table
+           relationships using Power Apps
+           Article • 09/17/2024
+           Power Apps  provides an easy way to create and edit many-to-many relationships for
+           Microsoft Dataverse tables. A many-to-many relationship defines the type of connection
+           between two tables where multiple records in one table can be associated with multiple
+           records in another table. For example, in a school scenario, a single student can enroll in
+           multiple courses, and each course can have multiple students. This type of relationship
+           allows for more complex data associations and is managed using Power Apps in
+           Dataverse. For more information about many-to-many table relationships, go to Create
+           many-to-many table relationships overview.
+           View many-to-many table relationships
+              1. From Power Apps  , select Solutions on the left navigation pane, and open the
+                solution you want.
+              2. Open the table that has the relationships you want to view.
+              3. Select the Relationships area to view all relationships configured for the table.
+                                                                                      
+           Many-to-many relationships have a Relationship type of Many-to-many.
+              ７ Note
+              The table you view might have no Many-to-many relationships.
+       Create relationships
+       While viewing table relationships, on the command bar, select New relationship, and
+       then select Many-to-many.
+       The Many-to-many relationship editor is displayed.
+       In the Related (Many) dropdown list, choose the table you want to relate to the current
+       table. In this example, a many-to-many relationship with the student and course tables
+       is created.
+       The values for these columns are generated for you based on the tables chosen.
+          Clear Searchable, if you want to hide the relationship from Advanced Find in model-
+          driven apps.
+          If you want to edit the display settings for the relationship, expand Advanced options
+          and make the changes you want. More information: Advanced options
+           ７ Note
+           If you create more than one Many-to-many relationship with the same two tables,
+           you must edit the generated Relationship Name and Relationship table name
+           columns so that they are unique.
+          Select Done to close the Many-to-many panel. The relationship is created when you
+          save changes to the table.
+          Advanced options
+          For both the Current table display settings and the Related table display settings, you
+          can edit the display option columns, which control how the related tables are displayed
+          for model-driven apps.
+                                                                ﾉ
+                                                                  Expand table
+           Field   Description
+           Display How the related table list should be displayed. More information: Display Options
+           option
+           Custom  Specify the localizable text to be used instead of the plural name when you select
+           label   Use Custom label as the Display option .
+           Display Select one of the available groupings to display this list. The available options are:
+           area    Details (for the Common group), Marketing, Sales, and Service.
+           Display Controls where the navigation item will be included within the selected display area.
+           order   The range of allowed numbers begins with 10,000. Navigation pane items with a
+                   lower value appear above other relationships with a higher value.
+          Display Options
+          These are the available display options:
+                                                                ﾉ Expand table
+             Option       Description
+             Do not       Do not display the related tables for this relationship.
+             Display
+             Use custom   When this option is chosen the Custom label column is enabled so that you can
+             label        specify the localizable text to be used instead of the plural name.
+             Use plural   Use the plural display name defined for the related table.
+             name
+            Create a many-to-many relationship with the
+            same table (self-referential relationship)
+            There might be times when you need to create a many-to-many relationship that
+            references the same table. For example, account records might have multiple parent
+            account records. However, if the self-referential relationship doesn’t have custom labels
+            configured, distinguishing the two related record types that appear in the app isn't
+            apparent to users. This is because the related records appear twice in the app by using
+            the same table name.
+            To create a self-referential relationship, use custom labels.
+               1. Open or create a solution and then create a new custom table. In this example, the
+                 table is named Custom table.
+               2. Open the custom table, select the New > Relationship > New relationship >
+                 Many-to-many relationship.
+               3. Under Related (Many) select the same table, in the example Custom table, that's
+                 also the Current (Many) table.
+               4. Expand Advanced options and complete the relationship definition as follows. Add
+                 custom labels to both the current and the related table’s relationship:
+                 Current table display settings section
+                      Display option: Use custom label
+                      Custom label: Primary Custom Table Relationship
+                 Related table display settings section
+                      Display option: Use custom label

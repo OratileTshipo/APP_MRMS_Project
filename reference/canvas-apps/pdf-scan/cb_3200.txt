@@ -1,0 +1,1934 @@
+      Numbers, dates, and times are written in different formats in different parts of the world.
+      The meaning of commas, decimals, and the order of month, date, and year vary from
+      location to location.
+      The Text function formats numbers and dates using the language setting of the user.
+      Text requires a format string to know how you want to format the number or date. This
+      format string can take one of two forms:
+        A global aware enumeration. For example, Text( Now(),
+        DateTimeFormat.LongDate ). This formula will format the current date in a
+        language appropriate format. This method is the preferred way to specify the
+        format string.
+        A custom format string. For example, Text( Now(), "[$-en-US]dddd, mmmm dd,
+        yyyy" ) displays the same text as the enumeration when used in the language "en-
+        US". The advantage of the custom format string is that you can specify exactly
+        what you want.
+      The "[$-en-US]" on the front of the custom format string tells Text in which language to
+      interpret the custom format string. This string is inserted for you and defaults to your
+      authoring language. Normally you won't need to change this string. It's useful when
+      authors from different languages are editing the same app.
+      The third argument to Text specifies which language to use for the result of the
+      function. The default is the language setting of the current user.
+      For more information, see the documentation for the Text function.
+      Reading numbers, dates, and times
+      There are four functions for reading numbers, dates, and times provided by the user:
+        Value: Converts a number in a text string to a number value.
+        DateValue: Converts a date value in a text string to a date/time value. Anytime
+        specified in the text string is ignored.
+        TimeValue: Converts a time value in a text string to a date/time value. Any date
+        specified in the text string is ignored.
+        DateTimeValue: Converts a date and time value in a text string to a date/time
+        value.
+      If you have used Excel, all of these functions are combined in the single Value function.
+      They're broken out here since Power Apps has separate types for date/time values and
+      numbers.
+              All of these functions have the same arguments:
+                    String, required: A string from the user. For example, a string types into a Text
+                    input control and read from the control with the Text property.
+                    Language, optional: The language in which to interpret the String. By default, the
+                    language setting of the user.
+              For example:
+                    Value( "12,345.678", "en-US" ) or Value( "12,345.678" ) when located where "en-
+                    US" is the user's language returns the number 12345.678, ready for calculations.
+                    DateValue( "1/2/01", "es-ES" ) or DateValue( "1/2/01" ) when located where "es-
+                    ES" is the user's language returns the date/time value February 1, 2001 at
+                    midnight.
+                    TimeValue( "11:43:02", "fr-FR" ) or TimeValue( "11:43:02" ) when located where "fr-
+                    FR" is the user's language returns the date/time value January 1, 1970 at 11:43:02.
+                    DateTimeValue( "11:43:02 1/2/01", "de-DE" ) or DateTimeValue( "11:43:02 1/2/01" )
+                    when located where "de-DE" is the user's language returns the date/time value
+                    February 1, 2001 at 11:43:02.
+              For more information, see the documentation for the Value and DateValue, TimeValue,
+              and DateTimeValue functions and working with dates and times.
+              Calendar and Clock information
+              The Calendar and Clock functions provide calendar and clock information for the user's
+              current language.
+              Among other things, use these functions to provide a Dropdown control with a list of
+              choices.
+              For more information, see the documentation for the Calendar and Clock functions.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Build a multi-language app
+             Article • 03/03/2023
+             In this article, you'll learn how to create a multi-language app with localized experience.
+             With this method, you can use canvas app components and make translations available
+             in an app using a uniform formula syntax.
+               ） Important
+               The method described in this article use components for canvas apps which is in
+               public preview. For more information, see Create a component for canvas apps
+             Create a translation component
+             When working with a multi-language app, the first step is to create a reusable
+             component for translation. In this component, you'll store a table that acts as the
+             dictionary of all translations you'll need. An output property will be used to provide
+             output strings from this dictionary table based on the language of the user running the
+             app that uses this component.
+                1. Sign in to Power Apps  .
+                2. On the left pane, select Apps.
+                3. Under Apps, select Component libraries (preview).
+                4. Select + New component library (preview).
+               5. Enter a name, such as "Translation components", and select Create to open the
+                 component in Power Apps Studio.
+               6. Rename "Component1" by selecting ... on the left pane, and then select Rename as
+                 "Translation component".
+               7. From the property pane on the right-side of the screen, select + New custom
+                 property.
+               8. Set the following property values:
+                                                                               ﾉ Expand table
+                  Property name       Value
+                  Display name        Language
+                  Name                Language
+                  Description         The language that you want to translate the text to.
+                  Property type       Input
+                  Data type           Text
+               9. Select Raise OnReset when value changes checkbox.
+           10. Select Create.
+                ７ Note
+                This input property will receive the current locale ID (LCID) of the logged-in
+                user.
+           11. From the property pane on the right-side of the screen, select + New custom
+              property.
+           12. Set the following property values:
+                                                                ﾉ Expand table
+               Property name                 Value
+               Display name                  Labels
+          Property name       Value
+          Name                Labels
+          Description         Translated labels.
+          Property type       Output
+          Data type           Record
+        13. Select Create.
+           ７ Note
+           This output property exposes the translated labels based on the input locale
+           ID.
+        14. On the upper-left side of the screen, select the property list drop-down and
+          choose OnReset property for the component.
+        15. Copy and paste the following formula in the formula bar for the OnReset property.
+            Power Fx
+            Set(
+             varTranslations,
+             Table(
+                     {
+                         Language: "en-us",
+                         Labels: {
+                             Title: "UI Tips for building canvas apps",
+                             JobTitle: "Power Platform Specialist"
+                         }
+                     },
+                     {
+                         Language: "pt-br",
+                         Labels: {
+                             Title: "Dicas de UI para construir canvas apps",
+                             JobTitle: "Especialista de Power Platform"
+                         }
+                     }
+                 )
+                )
+          The formula uses Set() function to create a table with the labels in different
+          languages as a dictionary. To customize this table as the dictionary for your
+          translations, change the control names such as Title, JobTitle, Platform, Close, Open,
+          Cancel, and so on. You can add, or remove translations for control names
+          depending on your business requirement.
+          The table should also have an entry for each language that your app supports.
+          Each entry will have a Labels property that will contain the translated content of all
+          possible buttons, inputs, and labels in your app.
+        16. On the upper-left side of the screen, select the property list drop-down and
+          choose Labels property for the component.
+        17. Copy and paste the following formula in the formula bar for the Labels property.
+            Power Fx
+               LookUp(
+                varTranslations,
+                Language = Lower(
+                    Coalesce(
+                        Self.Language,
+                        Language()
+                    )
+                )).Labels
+          The formula finds the right translation entry based on the input Language using
+          the Lookup() function. In case where the language isn't set, the formula uses the
+          current user's language as the filter through Coalesce function.
+        18. Select File -> Save to save the component library.
+        19. Select Publish to publish the component library.
+             Tip
+            To learn more about creating, saving, and publishing component library, go to
+            Create an example component library
+       Your translation component library is created, saved, and published for use.
+       Use the translation component in your app
+       Previously, you created the translation component library for reuse. In this section, you'll
+       create an app that uses the translation component library and demonstrate the
+       language translation based on the selected language.
+        1. Start by creating a blank canvas app with Phone layout.
+        2. On the left-side of the screen, select + (Insert).
+        3. On the bottom-left side of the screen, select Get more components.
+        4. Select Translation component.
+           ７ Note
+           The name might be different if you saved the component library created
+           earlier with a different name.
+        5. Select Import.
+        6. On the left-side of the screen, select + (Insert).
+        7. Under Library components, select Translation component to add the component
+          to this app.
+        8. On the left-side of the screen, select the tree view.
+        9. Select the translation component.
+        10. On the upper-left side of the screen, select the property list drop-down and
+          choose Visible property for the component.
+        11. Set the value of the Visible property to false to make the component invisible on
+          the app.
+        12. Under Input in the list of controls, select Toggle.
+        13. On the upper-left side of the screen, select the property list drop-down and
+          choose OnChange property for the component.
+        14. Update the formula for the OnCheck property of the toggle control to the
+          following.
+            Power Fx
+                Set(varLanguage,"pt-br")
+          In this formula, the toggle sets a variable called varLanguage with the value of "pt-
+          br" using the function Set(), for Portuguese (BR) language code.
+        15. Update the formula for the OnUncheck property of the toggle control to the
+          following.
+            Power Fx
+                Set(varLanguage,"en-us")
+          In this formula, the toggle sets a variable called varLanguage with the value of "en-
+          us" using the function Set(), for English (US) language code.
+        16. On the left-side of the screen, select the translation component.
+        17. On the upper-left side of the screen, select the property list drop-down and
+          choose Language property for the component.
+        18. Set the formula value for Language property to varLanguage. The variable
+          varLanguage is determined by the toggle configured earlier. When the toggle is
+          checked, the language is set to "pt-br". When unchecked, the language is set to
+          "en-us".
+        19. On the left-side of the screen, select + (Insert).
+        20. Select Text label.
+        21. Update the label control name to Title from the right-side of the screen using the
+          property pane.
+              22. Select Text label again to add one more label.
+              23. Update the label control name to JobTitle.
+              24. Set the Title, and JobTitle labels below the toggle control so that both labels are
+                 visible.
+              25. Set the Text property for Title, and JobTitle labels from the upper-left side of the
+                 screen to the following.
+                                                                                ﾉ
+                                                                                   Expand table
+                  Label          Formula
+                  Title          'Translation component_1'.Labels.Title
+                  JobTitle       'Translation component_1'.Labels.JobTitle
+                   ７ Note
+                   Replace 'Translation component_1' in this formula to the name of the
+                   component in your app, if different.
+                 Similarly, you can use different labels, and properties, as defined in the component
+                 that you created earlier to pass more property values. For example, in addition to
+                 Title, and JobTitle, you can create more properties such as Description, or
+                 Instructions in the component library with the translated text. And then, use such
+                 properties on the respective labels, as 'Translation component_1'.Labels.Description,
+                 or 'Translation component_1'.Labels.Instructions.
+              26. Select File -> Save, update the name for your app, and then select Save to save
+                 your app. More information: Save and publish an app
+            Test your app with language translation
+            Now your app is using the translation component. Go to Power Apps   and select the
+            app to run.
+            When the toggle is selected, the language is changed to Portuguese (BR) for the labels.
+            When unchecked, the language is set back to English (US).
+              With this approach, you can now create your own component having the translations
+              dictionary that fits your business requirement. And then, create more canvas apps that
+              use the component that gives the business users the ability to use different languages.
+              See also
+              Add and configure controls
+              Understand variables
+              Formula reference
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Create accessible canvas apps
+       Article • 12/16/2022
+       An accessible canvas app will allow users with vision, hearing, and other impairments to
+       successfully use the app. In addition to being a requirement for many governments and
+       organizations, following the below guidelines increases usability for all users, regardless
+       of their abilities.
+       Use the Accessibility Checker to help review potential accessibility issues in your app.
+       Layout and color
+       Common sense and uncomplicated design helps apps be more accessible to all users.
+       When doing heavy customization of apps take note of the below suggestions. Power
+       Apps themes are designed to meet accessibility standards.
+          Ensure all elements are clearly visible and text is of sufficient size. All content must
+          be easily read and understood by the naked eye.
+          Ensure input elements are labeled on the screen. AccessibleLabel property defines
+          what the screen reader will announce.
+          If customizing colors, ensure the contrast ratio of text to background is 4.5:1 or
+          greater. Software tools that assist this process are readily available.
+          Ensure layout follows a logical flow when read from top to bottom, left to right.
+          Create a responsive app so that low-vision users can zoom in and use it without
+          scrolling back and forth.
+       Keyboard
+       When testing your app's accessibility, ensure the app can be used by keyboard only,
+       with or without a screen reader.
+       The Tab key should navigate to interactive elements in a logical order. You can create
+       this with a logical app structure and by setting each control's TabIndex property
+       accordingly.
+          Label, Image, Icon, Shape controls: Set TabIndex to 0 if they are meant to be
+          interactive. Otherwise, set TabIndex to -1.
+          Do not set TabIndex greater than zero.
+          Ensure that the Simplified tab index app setting is enabled.
+       Screen readers
+       The following screen readers have been verified to work with Power Apps:
+          JAWS: Microsoft Edge
+          Narrator: Microsoft Edge
+          NVDA: Google Chrome, Firefox
+          TalkBack: Google Chrome, Power Apps mobile
+          VoiceOver: Power Apps mobile, Safari (macOS, iOS, iPadOS)
+       To ensure a satisfying experience with the screen reader it is recommended to:
+          Ensure all input controls have the AccessibleLabel property set.
+          For images, set AccessibleLabel to an appropriate description.
+           If a picture is not used as a button or a link (i.e. icon is there just for the
+           decoration) and should not be read by the screen reader, make sure the
+           AccessibleLabel is empty or not set.
+           If a picture or an icon is used as a button, then set TabIndex to 0 and
+           AccessibleLabel to the link description.
+       Control type and structure
+       Using the right controls and grouping them will help screen reader users understand the
+       structure of the app.
+          Include at least one heading on each screen of the app. You can create headings
+          by setting the Role property of a Label.
+          Use a Button instead of a Label for interactive text.
+          Group related content in Containers.
+          Be aware of unsupported design patterns.
+       Multimedia
+       Ensure all videos are captioned and a transcript of all audio recordings is available to the
+       user. Video control supports closed captions in WebVTT format via the
+       ClosedCaptionsUrl property.
+       With the screen reader enabled, Timer does not announce button text, but how much
+       time has passed. Announcements can't be turned off, even if timer is hidden with low
+       opacity.
+       Working with signatures
+       If you have a signature field that uses the PenInput control, you need to enable an
+       alternative method of signature input. The recommended way is to show a TextInput
+       control where a user can type their name. Ensure the signing instructions are placed in
+       the AccessibleLabel property and the control is placed close to the Pen input - to the
+       right or immediately below.
+       Next steps
+       Accessible app structure
+       See also
+          Accessible colors in Power Apps
+          Show or hide content from assistive technologies for canvas apps
+          Announce dynamic changes with live regions for canvas apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+             Organize controls in accessible canvas
+             apps
+             Article • 07/13/2024
+             Controls in an app should be organized to help screen reader users navigate
+             sequentially. A logical order also reduces confusion for keyboard users and helps them
+             be more productive.
+             Meaningful screen name
+             When a screen is loaded, screen readers will say its name. Pick a meaningful name to
+             orientate users.
+             You can change the screen name in the controls tree or properties panel in Power Apps
+             Studio. Select the screen, and then select     to rename the screen.
+             The first element on a screen is its name. It's visually hidden and accessible only to
+             screen reader users.
+             When a new screen loads, Power Apps focuses the screen name. If you use SetFocus
+             immediately when the screen loads, the screen name won't be read. Consider creating a
+             visible title and making it a live region to announce the change in context.
+             Logical control order
+             Screen reader users can navigate content sequentially. The order is determined by the
+             position of controls, starting from top to bottom, then left to right. The size of the
+             control doesn't matter, only its X and Y properties matter.
+             In this example, A appears first in the sequence since it's closest to the top. B and C have
+             the same vertical position, but since B is closer to the left, and hence, it appears before
+       C. D appears last since it's furthest from the top.
+        ７ Note
+           In Preview mode when editing an app, the control order is not updated for
+           performance reasons. The order will be correct when the app is published and
+           run.
+           Control order is not the same as that shown in the tree view of controls in
+           Power Apps Studio. The tree view sorts controls according to when they were
+           added to the app. It does not affect the order of controls when the app is run.
+           When a control's X or Y value is set to an expression, the control order is not
+           updated when the result of the expression changes. The order is computed
+           and fixed when the app is saved, using the initial state of the app to evaluate
+           expressions.
+            If you're changing its position because other controls are being hidden or
+            shown, you can use auto-layout containers to manage X and Y for you.
+            You can also position all controls in a logical way regardless of expression
+            values. For example, if control A should always be below control B and B
+            may be hidden sometimes, set A's Y to be If(B.Visible, B.Y + B.Height,
+            B.Y + 1). The addition of 1 ensures that A is always below B, even if B is
+            hidden.
+      Grouped controls
+      The default order is suitable for isolated content but not for grouped content. Consider
+      two tiles side by side, drawn with Rectangle controls. Each tile has a heading. Below the
+      heading are two buttons stacked vertically: A and B for the first tile and C and D for the
+      other.
+      The default order goes from top to bottom, then left to right. Hence, the order of
+      controls is:
+       1. Left Rectangle
+       2. Right Rectangle
+       3. Left heading
+       4. Right heading
+       5. A
+       6. C
+       7. B
+       8. D
+      This structure doesn't convey that A and B are together, and similarly, C and D are
+      together.
+      Use Containers to group related content. All controls in a Container will appear
+      together in sequence. Within a container, controls are ordered with the same rule: top to
+      bottom, then left to right.
+      Replacing the Rectangles of the previous example with Containers, the control order is
+      now logical for screen reader users:
+       1. Left Container
+       2. Left heading
+       3. A
+       4. B
+       5. Right Container
+       6. Right heading
+       7. C
+       8. D
+      All controls in a Form Card and Gallery are automatically grouped, so you don't have to
+      use a Container. However, if there are subgroups, you should still use Containers for
+      them.
+      In this example, a Gallery row has a thumbnail and two pieces of text on the left. On the
+      right are two buttons. Visually and logically, the two sets of controls should be grouped.
+      This ensures that screen reader users will encounter the left group first before the right.
+       Logical keyboard navigation order
+       Keyboard navigation is an important aspect of any app. For many, the keyboard is more
+       efficient than using touch or a mouse. The navigation order should:
+          Follow the visual flow of controls.
+          Follow either an intuitive across and then down "Z" order or a down and then
+          across "reverse-N" order.
+          Only have a tab stop at controls that are interactive.
+       AcceptsFocus specifies whether controls can be reached by keyboard. For classic
+       controls, the equivalent property is TabIndex.
+       Navigation order follows control order: from left-to-right, then top-to-bottom, in a "Z"
+       pattern. You can customize it the same way as with control order. For example, controls
+       in Containers, Form Cards and Galleries are automatically grouped. The Tab key will
+       navigate through all elements inside the container before proceeding to the next
+       control outside of the container.
+       If the navigation order is unexpected, you should first check if the app structure is
+       logical.
+        ７ Note
+        When controls are dynamically moved on the screen, for example, by having its X
+        or Y value change according to a Power Fx expression, the navigation order will not
+        be updated.
+       Workaround for custom tab sequence
+       For rare scenarios where the keyboard navigation order should be different from visual
+       order, you can position container controls carefully to have the same effect.
+       In the example below, button A is above button B. The natural tab navigation order is A,
+       then B.
+      To reverse the tab navigation order, put B in a Container control. Set the Y value of the
+      Container to be above A. The app structure now has the Container (and B) before A.
+      Hence, the tab navigation order is B, then A.
+      With this technique, screen reader users will also encounter B before A when navigating
+      without the Tab key.
+      Custom tab indexes (retired feature)
+      Custom tab indexes are those that are greater than zero. They are no longer supported.
+      All TabIndex values greater than zero will be treated as zero.
+      Custom tab indexes are almost always a sign of bad design. There are better alternatives
+      like creating an appropriate app structure or using SetFocus to change focus.
+      Some problems with custom tab indexes:
+      Accessibility
+      It's a serious accessibility issue to have custom tab indexes. Screen reader users navigate
+      an app using its logical structure. Custom tab indexes ignore that structure. Since screen
+      reader users can also navigate using Tab key, they'll be confused when they get a
+      different order from other methods of navigation.
+       Usability
+       Users can be confused when some items appear to be skipped. They can be disoriented
+       when focus moves in an unpredictable order. This is even more problematic for users
+       with cognitive disabilities.
+       Maintenance
+       App makers have to manually update the TabIndex of multiple controls whenever a new
+       one is inserted. It's easy to miss an update or get the order wrong.
+       Performance
+       To support custom tab indexes, the Power Apps system has to examine all controls on
+       the page and compute the appropriate order. This computation is an intensive process.
+       Container controls like Gallery have complicated rules on how TabIndex works for child
+       controls. The system maps the app maker's desired TabIndex to a different value to
+       obey these rules. This is why even if TabIndex is set to zero for all controls, the actual
+       HTML tabindex will be some positive number.
+       Integration with other components
+       Custom tab indexes only work with built-in controls. Controls that aren't integrated into
+       Power Apps' tab index system will have an unexpected navigation order. This can be a
+       problem for code components. Developers of these components have to keep track of
+       interactive elements and set tab index on them. They might use third-party libraries,
+       which may not even provide a way to customize tab indexes. On the other hand, when
+       all tab indexes are either 0 or -1, there's no need to involve Power Apps' tab index
+       system. Any third-party component embedded in the app will automatically get the
+       correct tab sequence.
+       In the other direction, when canvas apps are embedded in another web page, custom
+       tab indexes don't work. For example, in custom pages. Power Apps can't control the
+       elements outside the canvas app, so the overall tab navigation order will be illogical.
+       Next steps
+       Accessible colors in Power Apps
+       See also
+                    Create accessible apps
+                    Show or hide content from assistive technologies for canvas apps
+                    Announce dynamic changes with live regions for canvas apps
+                    Use the Accessibility checker
+                    Accessibility limitations in canvas apps
+                    Accessibility properties
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+          Improved canvas keyboard navigation in
+          canvas apps (experimental)
+          Article • 11/13/2024
+          [This article is pre-release documentation and is subject to change.]
+           ） Important
+                This is an experimental feature, and will be deprecated soon. Instead of using
+                this experimental feature, consider structuring an app appropriately to
+                achieve the desired tab navigation order.
+                Experimental features aren’t meant for production use and may have
+                restricted functionality. These features are available before an official release
+                so that customers can get early access and provide feedback.
+          When you're nesting controls such as containers and component instances, the user
+          input value for TabIndex isn't respected sometimes. Improved canvas keyboard
+          navigation experimental setting improves the navigation experience in this situation
+          when Tab key is pressed on the keyboard helping focus on the desired container or
+          control precisely and predictably.
+          This feature also adds support for handling accessibility for keyboard tabs inline with
+          rest of the controls in canvas apps. And addresses manual TabIndex assignments for all
+          controls.
+           ７ Note
+           This feature is added as "Experimental" to maintain backward compatibility and
+           maintain existing app functionality.
+          When this feature is turned on, it also enables the following boolean properties for all
+          child controls for the selected container or component instance in canvas apps:
+                                                                ﾉ
+                                                                  Expand table
+                Property         Description
+                Name
+                Prioritize       Determines the order of navigation (Z-order) for child controls on canvas when
+                child controls   pressing tab key on the keyboard.
+                                       On (Default): Pressing the tab key on the keyboard will first progress
+                                       through all child controls before moving the focus outside of the selected
+                                       container or component instance. This option is recommended for similarly
+                                       nested HTML elements.
+                                       Off: Pressing the tab key on the keyboard will progress through all controls
+                                       only based on Z-order, ignoring parent-child relationship between controls
+                                       or containers for keyboard navigation.
+                                 Note: This property isn't applicable to responsive or autolayout containers.
+                Enable child     Determines the value of TabIndex for child controls on canvas when pressing tab
+                control focus    key on the keyboard.
+                                       On (Default): Pressing the tab key behaves as per TabIndex values defined
+                                       on each control.
+                                       Off: Pressing the tab key doesn't move focus to any child control within the
+                                       selected container or component instance. Sets the TabIndex value to -1 for
+                                       all child controls.
+              Configure improved canvas keyboard
+              navigation in your app
+              If not already enabled, follow these steps to enable this feature in your app, and set the
+              properties mentioned earlier.
+                  1. Sign in to Power Apps       .
+                  2. Select Apps from the left-pane.
+                  3. Select your app, and then select Edit.
+                  4. In Power Apps Studio, select Settings > Upcoming features > Experimental.
+                  5. Select Improved canvas keyboard navigation to turn on the feature.
+       6. Close settings.
+      Now that you've enabled the experimental feature, you'll see two new properties for
+      controls and containers—Prioritize child controls, and Enable child control focus.
+      Change the property values as appropriate.
+      Examples
+      Now that you understand the new feature with improved canvas keyboard navigation,
+      let's take a look at a few examples to understand the behavior when the tab key is
+      pressed.
+      Default improved canvas keyboard navigation behavior
+      The following example shows multiple Text input controls, and several nesting scenarios.
+      The number displayed in the input represents the value of the TabIndex property. There
+      are two nested containers, and component controls overlaid on top of each other.
+      The default order is determined by the relative position of the controls. When focus
+      enters a container or a component, tabs first traverse the children of the container
+      before moving on to the next available control.
+      When Prioritize child controls is set to Off
+      In the following example, each container and component control has the Prioritize child
+      controls property set to "Off". All inputs are therefore considered to be on the same
+      level of nesting, so the order is determined purely by their X/Y position relative to the
+      screen.
+      Advanced configuration with mixed settings
+      In the following example, the orange outlined containers have Prioritize child controls
+      property set to "Off". All others controls have this property set to "On". Also, a custom
+      TabIndex property has been set for some inputs, indicated by the number shown in each
+      input.
+      Tab order first proceeds through the containers and controls with TabIndex value of
+      greater than 0, and then proceeds through all others with value of 0. This behavior was
+      also the in the earlier implementation.
+              See also
+                    Create accessible apps
+                    Accessible app structure
+                    Accessible colors in Power Apps
+                    Use the Accessibility checker
+                    Accessibility limitations in canvas apps
+                    Accessibility properties
+                    Improved canvas keyboard navigation in canvas apps (video)
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+        Accessible colors for canvas apps
+        Article • 12/16/2022
+        Colors used in a canvas app should be accessible to color-blind and low-vision users. All
+        Power Apps themes are accessible by default. When modifying colors used in an app,
+        follow these guidelines to ensure that they remain accessible. There are several tools
+        available online which can help you identify color contrast issues.
+        Minimum contrast for text
+           Text and its background must have a contrast ratio of at least 4.5:1
+           Large text must have a contrast ratio of at least 3:1
+           Disabled text has no contrast requirements
+        In practical terms, all interactive controls must have adequate color contrast between:
+           Color and Fill
+           PressedColor and PressedFill
+           HoverColor and HoverFill
+        Minimum contrast for non-text
+           Non-text components, such as icons and borders, must have a contrast ratio of at
+           least 3:1 with the colors outside of them.
+           Disabled and decorative components have no contrast requirements.
+        User interface components
+        All interactive controls must have adequate color contrast between:
+           FocusedBorderColor and color outside the control
+        Additional color contrast checks apply for controls where the entire area is interactive or
+        informative. For example, a Button or an Icon used as a button. This ensures that the
+        boundaries of the control are clear and users know where they can click or tap.
+        If there is a border for such controls, there should be adequate color contrast between:
+           BorderColor and color outside the control
+           PressedBorderColor and color outside the control
+           HoverBorderColor and color outside the control
+       If there is no border, there should be adequate color contrast between:
+          Fill and color outside the control
+          PressedFill and color outside the control
+          HoverFill and color outside the control
+       Graphical objects
+       If an image conveys important information, consider checking it for contrast issues. This
+       applies to controls where an image can be shown: Audio, Image, Microphone, and
+       Video.
+       For video content, consider checking it for contrast issues. Alternatively or additionally,
+       provide closed captions that describe the video.
+       Provide other visual cues
+       Ensure that the app does not convey information with just color. For example, users with
+       red-green color blindness will not be able to distinguish a red error message from a
+       green success message.
+       Additional cues like an Icon or text styles like Italic and Underline can help convey
+       meaning.
+       Next steps
+       Show or hide content from assistive technologies for canvas apps
+       See also
+          Create accessible apps
+          Accessible app structure
+          Announce dynamic changes with live regions for canvas apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+       Show or hide content from assistive
+       technologies for canvas apps
+       Article • 12/16/2022
+       In most cases, all users should be able to access all content, but you might occasionally
+       want to show content only to sighted users or only to screen-reader users. For example,
+       you might want only screen-reader users to access descriptions of chart trends that are
+       obvious to sighted users. You might also want to hide an icon from screen-reader users
+       if an adjacent label describes it. Another description on the icon would be unnecessarily
+       verbose.
+       Hide content from all users
+          Set Visible to false.
+       Hide content from sighted users and show it to
+       screen-reader users
+       Use one or more techniques listed below:
+          Set Size to 0.
+          Set Width and Height to 1.
+          Set X, Y, or both properties such that the control is outside the screen.
+          Set Color and related properties to transparent.
+          Position a rectangle Shape above the content, and set Fill to the same color as the
+          background color of the screen.
+        ７ Note
+        Users can still use a keyboard to access an interactive control, such as a Button,
+        even if you hide it by using one of the techniques in the previous list. Set TabIndex
+        to -1 if you want to prevent users from accessing the control by pressing the Tab
+        key.
+       Hide content from screen-reader users and
+       show it to sighted users
+          For Image, Icon, and Shape controls, set AccessibleLabel to the empty string "".
+       Next steps
+       Announce dynamic changes with live regions for canvas apps
+       See also
+          Create accessible apps
+          Accessible app structure
+          Accessible colors in Power Apps
+          Use the Accessibility checker
+          Accessibility limitations in canvas apps
+          Accessibility properties
+             Announce dynamic changes with live
+             regions for canvas apps
+             Article • 12/16/2022
+             Dynamic changes pose challenges to the visually-impaired. Users who access an app
+             through a screen reader are focused on one part of the app. If a change happens
+             elsewhere, those users won't be aware of it.
+             You can solve this problem by adding live regions, which screen readers track. If content
+             changes in a live region, a screen reader will announce that change.
+             The underlying mechanism for live regions are aria-live regions  , so the same
+             guidelines apply.
+             Example uses of live regions
+             You can use live regions to notify users when events such as these occur:
+                  A validation error occurs in a form.
+                  An action triggered by a button is successful. For example, a user might select a
+                  button to add an item to a collection, and a live region could show the message
+                  "Item added".
+                  The user selected a different tab.
+                  A background timer refreshes a news feed.
+             Create and configure a live region
+             You can configure only a Label control as a live region. Its Live property determines
+             what type of live region it is.
+                  Off: Not a live region. Screen readers don't announce changes.
+                  Polite: Screen readers announce changes after finishing speaking. Use this value
+                  for non-critical notifications that don't require immediate attention.
+                  Assertive: Screen readers interrupt themselves to announce changes immediately.
+                  Use this for critical notifications that require immediate attention.
+             If the text content of a live region changes, screen readers will announce the entire text
+             content, not just the changed portion. If the value of the Text property is set to the
+             empty string "", the screen reader doesn't announce anything.
+       To repeat a message, clear text contents by setting the value of the Text property to the
+       empty string "" and then set the value to the message again.
+       Best practices
+          Always set Visible to true. Some screen readers don't detect live regions that
+          disappear and reappear.
+          Avoid changing the value of Live. Some screen readers don't detect when a non-
+          live region becomes live and vice-versa.
+          Position the live region in a logical position in the app, even if it isn't visible. Ensure
+          that its contents are sensible in context with the elements before and after it. Users
+          can access a live region anytime through regular navigation with a screen reader,
+          not just when changes happen.
+       Next steps
+       Use the Accessibility checker
+       See also
+          Create accessible apps
+          Accessible app structure
+          Accessible colors in Power Apps
+          Show or hide content from assistive technologies for canvas apps
+          Accessibility limitations in canvas apps
+          Accessibility properties
+        Review a canvas app for accessibility in
+        Power Apps
+        Article • 12/16/2022
+        Users who have vision, hearing, or other impairments can use your canvas app more
+        easily and successfully if you consider accessibility as you design how the app looks and
+        behaves. If you're not sure how to make your app more accessible, you can run the
+        Accessibility checker in Power Apps Studio. This tool not only finds potential accessibility
+        issues but also explains why each might be a potential problem for users who have a
+        specific disability and offers suggestions on how to resolve each issue. The Accessibility
+        checker detects screen-reader and keyboard issues for you, and you can find
+        information about how to fix color-contrast issues by using accessible colors.
+        The Accessibility checker helps you identify settings that you might want to change, but
+        you should always consider the suggestions in the context of what your app needs to
+        do. Many suggestions may be worthwhile, but you can ignore any that might do more
+        harm than good.
+        Find accessibility issues
+         1. In the upper-right corner of Power Apps Studio, select the icon for the App
+           checker.
+         2. In the menu that appears, select Accessibility.
+           A list of issues appears, sorted first by severity and then by screen.
+       3. Select the arrow next to an item to show details about it.
+         4. Select the back arrow to return to the list of items.
+         5. If you decide to address an issue, select it to open the affected property.
+         6. After you change one or more properties, select Re-check to update the list of
+          issues.
+          Resolved items disappear from the list, and new items may appear.
+       Severity of issues
+       The Accessibility checker classifies each issue as an error, a warning, or a tip based the
+       issue's severity.
+                       Errors identify issues that make the app difficult or impossible to use and
+                       understand for users who have a disability.
+                       Warnings identify issues that make the app difficult to use or understand for most
+                       but not all users who have a disability.
+                       Tips help you improve the experience of users who have a disability.
+                Types of issues
+                  Issue         Severity     Issue Description            How to fix                     Why fix
+                  Title
+                  Missing       Error        When the accessible-         Edit the accessible-label      If the accessible-
+                  accessible                 label property of an         property to describe the       label property
+                  label                      interactive control          item.                          contains no text,
+                                             contains no text. An                                        people who can’t
+                                             interactive control can                                     see the screen
+                                             be inherently                                               won't understand
+                                             interactive, as a button                                    what’s in images
+                                             is, or it has interactive                                   and controls.
+                                             properties. For
+                                             example, you might
+                                             have set the OnSelect
+                                             property of an image
+                                             or set its TabIndex
+                                             property to 0 or
+                                             higher.
+                  Focus         Error        When the                     Change the                     If the focus isn't
+                  isn't                      FocusBorderThickness         FocusedBorderThickness         visible, people who
+                  showing                    of a control is set to 0.    property to a value that's     don't use a mouse
+                                             It is good practice to       higher than 0.                 can't see it when
+                                             ensure a proper color-                                      they interact with
+                                             contrast ratio between                                      the app.
+                                             the focus border and
+                                             the control itself so it's
+                                             clearly visible.
+                  Missing       Warning      When the                     Set the                        Without captions,
+                  captions                   ClosedCaptionsURL            ClosedCaptionsURL              people who have
+                                             property of an Audio         property to the URL for        disabilities might
+                                             or Video control is          captions.                      not get any
+                                             empty.                                                      information from a
+                                                                                                         video or audio
+                                                                                                         segment.
+               Issue       Severity   Issue Description       How to fix                Why fix
+               Title
+               Missing     Warning    When any of several     Select the warning, and   By changing this
+               helpful                settings (such as       then set the property to  property setting,
+               control                showing labels and      true.                     you give the user
+               settings               markers for charts and                            better information
+                                      showing default                                   about how the
+                                      controls for Audio,                               controls in your app
+                                      Video, and Pen input                              function.
+                                      controls) are turned
+                                      off.
+               HTML        Warning    When a control other    Use a method other than   Your app won't
+               won't be               than an HTML text       HTML, or remove the       work correctly or be
+               accessible             control contains        HTML from this element.   accessible if you
+                                      HTML. In that case,                               add interactive
+                                      Power Apps doesn't                                HTML elements.
+                                      support accessibility of
+                                      custom HTML
+                                      elements.
+               Turn off    Warning    When an Audio or        Set the control's         Video and audio
+               autostart              Video control's         Autostart property to     files that play
+                                      Autostart property is   false.                    automatically can
+                                      set to true.                                      distract users. Let
+                                                                                        them choose
+                                                                                        whether to play a
+                                                                                        clip.
+               Revise      Tip        When a screen has a     Give the screen a name    People who are
+               screen                 default name, which     that describes what's on  blind, have low
+               name                   will be read out by     the screen or what it's   vision, or a reading
+                                      screen readers when     used for.                 disability rely on
+                                      users navigate the                                screen names to
+                                      app.                                              navigate using the
+                                                                                        screen reader.
+               Add State   Tip        When a control that     Set the ShowValue         Users won't get
+               indication             has a state, such as a  property of the control   confirmation of
+               text                   toggle, but the value   to true to show its       their actions if the
+                                      labels are turned off.  current state.            state of the control
+                                                                                        doesn't appear.
+                Issue        Severity    Issue Description         How to fix                  Why fix
+                Title
+                Check the    Tip         When the TabIndex         Set all                     The navigation
+                order of                 property is greater       TabIndex properties to 0    order should mirror
+                the                      than 0. App creators      or -1 whenever possible.    the order in which
+                screen                   can set custom tab        Instead of using            controls appear on
+                items                    orders by setting         TabIndex, use the           the screen, which is
+                                         the TabIndex property     Enhanced group control      the default. If
+                                         to a value greater than   to change the navigation    manual adjustments
+                                         0 but it is highly        order from the default. If  are made, it is
+                                         discouraged as it is      values of TabIndex          difficult to maintain
+                                         hard to get right,        greater than 0 must be      the correct order
+                                         maintain, and can         used, make sure that        especially in the
+                                         break screen readers.     your screen elements        presence of the
+                                                                   match the order in which    browser's address
+                                                                   you'd want to tab           bar and other
+                                                                   through them.               controls outside of
+                                                                                               the app. This can
+                                                                                               make a screen
+                                                                                               reader very difficult
+                                                                                               to use. When read
+                                                                                               by the screen
+                                                                                               reader, the controls
+                                                                                               should be
+                                                                                               presented in the
+                                                                                               same order in which
+                                                                                               they are seen on
+                                                                                               the screen, instead
+                                                                                               of an order that's
+                                                                                               less intuitive. 
+                Add          Tip         When an app contains      Add a Text input control    Some users can't
+                another                  a Pen control. This tip   in addition to the Pen      use a pen and
+                input                    reminds you to            control for an accessible   require another way
+                method                   include a separate        experience.                 to provide
+                                         method of input.                                      information (for
+                                                                                               example, by typing
+                                                                                               a signature).
+               Next steps
+               Accessibility limitations in canvas apps
+               See also
+                     Create accessible apps
+        Accessible app structure
+        Accessible colors in Power Apps
+        Show or hide content from assistive technologies for canvas apps
+        Announce dynamic changes with live regions for canvas apps
+        Accessibility properties
+       Accessibility limitations in canvas apps
+       Article • 03/05/2024
+       You can design and build accessible canvas apps with built-in controls. Sometimes, the
+       combination of app design, use of various controls, and the configured control
+       properties may result in an app to have an inaccessible user interface.
+       In this article, you'll learn about these accessibility limitations in canvas apps, and how
+       can you improve the app interface to make it more accessible.
+       Dialogs and overlays
+       Dialogs and user interfaces that appear on top of other content are not supported.
+       These overlays require focus management, hiding background content from screen
+       readers, and appropriate control roles.
+       Consider the following:
+          Use separate screens for each “dialog”.
+          Use the Notify function.
+          Create a code component that implements an accessible dialog.
+       Tabbed interfaces
+       A tabbed interface is made up of a list of tabs and a panel that shows content
+       associated with the selected tab.
+       The only built-in control that supports tabbed interfaces is the Tab list. Avoid using
+       Galleries to create tabs. The list of tabs should be navigable with arrow keys.
+       Appropriate control roles and states are required.
+       Consider the following:
+          Use the built-in Tab list.
+          Create a code component that implements an accessible tabbed interface.
+       Custom tables
+       The only built-in control that supports two-dimensional data is the Data Table. Avoid
+       using Galleries to present data in rows and columns. Rows and columns have to be
+       annotated so that screen reader users can understand their structure and navigate cells.
+       Consider the following:
+          Use the built-in Data Table.
+          Present data in one direction only with a Gallery.
+          Create a code component that implements an accessible table.
+       Custom combo boxes
+       It is possible to emulate a combo box by combining a Text Input and a Gallery.
+       However, combo boxes assembled from built-in controls are not accessible. Combo
+       boxes must handle arrow keys and set appropriate roles and states on its components.
+       Consider the following:
+          Use the built-in Combo box or Drop down.
+          Create a code component that implements an accessible combo box.
+       Scrollable content
+       Keyboard users can't scroll Forms, Scrollable screens, and Containers if there are no
+       interactive controls inside them.
+       For Galleries with no interactive content, you can set TabIndex on the Gallery itself so
+       that keyboard users can focus on it and use arrow keys to scroll it.
+       For Labels, setting TabIndex will make them focusable for keyboard scrolling. However,
+       it will also turn them into buttons. Don't making labels scrollable if they're not meant to
+       be buttons. Ensure the Label is large enough to fit text. The AutoHeight property can be
+       used to automatically adjust the control's size when it is inside a Form, Scrollable
+       screen, or Gallery.
+       Expandable sections
+       Expandable sections, also known as disclosures, contain content that is hidden until the
+       user presses a button. There is no built-in support for these elements but there is a
+       workaround.
+       Mention the expanded state in the AccessibleLabel of the button. For example, “Show
+       more details. Collapsed.”.
+       Update the AccessibleLabel when the expanded state changes. Position the expanded
+       content immediately after the button so that screen reader users can logically navigate
+            to it. Push other content down when the section expands.
+            Landmarks
+            You can create headings with Label controls. Navigation, banner, and other landmarks
+            are not supported. Power Apps automatically sets the main landmark to the app screen.
+            For other landmarks, use a heading as a workaround.
+            Custom roles and states
+            There is no built-in support for custom roles and states. Hence, it's not recommended to
+            create composite check boxes, sliders, and toggles from built-in controls.
+            Consider the following:
+                 Mention the control's role and state in its AccessibleLabel. For example, if an Icon
+                 is used as a check box, its label could be “Enable notifications. Check box.
+                 Checked.”.
+                 Create a code component that sets WAI-ARIA roles   and states  as appropriate.
+            Custom keyboard handling
+            It is not possible to react to specific key presses. For example, you can't have custom
+            behavior for arrow keys or the Escape key. Hence, it is not possible to compose list-like
+            controls like radio buttons from built-in controls. Nor can you create overlays that can
+            be dismissed with the Escape key.
+            Enter or Space key handling is supported with OnSelect. However, this property is also
+            triggered by other input methods like mouse clicks. There is no way to distinguish the
+            source of the event.
+            Focus management
+            SetFocus function can be used to change focus but it only works in limited scenarios.
+            It is not possible to detect when controls receive or lose focus.
+            Hide content from screen reader users only
+             There is no aria-hidden   equivalent to show content to sighted users but hide it for
+             screen reader users. Only a few scenarios are supported.
+             Next steps
+             Accessibility properties
+             See also
+                  Create accessible apps
+                  Accessible app structure
+                  Accessible colors in Power Apps
+                  Show or hide content from assistive technologies for canvas apps
+                  Announce dynamic changes with live regions for canvas apps
+                  Use the Accessibility checker
+            Send notification from an app
+            Article • 11/11/2023
+            You can send a push notification from one app to another or to the same app. In canvas
+            apps, you can send notifications by using the Power Apps Notification connector.
+            In this article, the sample app used for notifications is built from the default Case
+            Management app template.
+              ７ Note
+              Before you begin, create push notifications for the Power Apps mobile app. More
+              information: Create push notifications for the Power Apps mobile app.
+               1. In Power Apps  , go to the app to which you want to send push notifications.
+               2. Copy the app ID. More information: Get an app ID
+               3. In the left pane, select Data - Connections.
+               4. Edit the app. More information: Edit an app
+               5. Select View - Data sources.
+               6. Select Add data source.
+               7. Select New Connection.
+               8. Select Power Apps Notification.
+               9. Paste the app ID copied from the previous step.
+       10. Select Connect.
+       11. Add the push notification connection to the trigger app using the similar steps.
+        In our example, we use the same app as the trigger app. The user who reassigns
+        the case also triggers a push notification to the new case owner.
+       12. From the push notification connection, call the SendPushNotification method.
+         In our example, we trigger this notification by using the OnSuccess property in a
+         form.
+       Syntax
+                                                                                                    ﾉ Expand table
+                Name                      Description
+                SendPushNotification      Sends a push notification to the app that's specified in the connection
+                                          settings for the notification.
+               Parameters
+                                                                                                    ﾉ
+                                                                                                        Expand table
+                Name         Type               Description
+                recipients   String array,      A list of:
+                             required                 Email addresses for users or security groups
+                                                      Object IDs for users or security groups in Microsoft Entra ID
+                message      String, required   The message body of the push notification.
+                openApp      Boolean,           Whether to open the app when the user taps the push notification.
+                             optional
+                params       Parameters,        Key-value parameters to pass with the notification. These can be
+                             optional           further processed in the app to open a specific page and load a
+                                                specific state.
+               Sample formulas
+               Send a basic notification.
+                  Power Apps
+                  PowerAppsNotification.SendPushNotification(
+                       {
+                            recipients: ["f60ccf6f-7579-4f92-967c-2920473c966b", "72f988bf-86f1-
+                  41af-91ab-2d7cd011db47"],
+                            message: "A new case was assigned to you."
+                       }
+                  )
+               Send a notification that opens an app and passes along specific parameters.
+                  Power Apps
+                  PowerAppsNotification.SendPushNotification(
+                       {
+                recipients: ["email1@contoso.com", "email2@contoso.com"],
+                message: "message in the notification toast",
+                params: Table({key:"notificationKey", value:"The value for 
+          notificationKey"}),
+                openApp: true
+             }
+          )
+        See also
+            Create push notifications for the Power Apps mobile app
+            Power Apps Notification reference
+         Disconnect Git version control to edit
+         canvas apps
+         Article • 05/14/2025
+         Git version control for editing apps has been removed and is no longer supported.
+         If your app currently uses this feature, follow these steps to disconnect it:
+            1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+               Settings.
+            2. Select Git version control and then select Disconnect.
+         If you are using PASopa, download your app from your Git provider and pack the .zip file to an
+         .msapp file   . Once your .msapp file is uploaded to Power Apps, follow the steps above to
+         disconnect.
+            ７ Note
+            Git version control is replaced with the source control integration feature. More
+            information: Source code integration
+         Understand new, preview, experimental,
+         and retired features in canvas apps
+         Article • 04/29/2025
+         With every release, we make changes and add features to make Power Apps the best tool to fit
+         your needs. We move the product forward.
+         At the same time, keeping your apps running smoothly is our top priority. Despite our best
+         efforts, any change or improvement might unintentionally introduce a side effect, and your app
+         might not work exactly the way it did before.
+         To ensure enhancements don't adversely affect current apps, we take features through a
+         progression of stages. These stages give you a chance to try out the feature and provide us
+         with feedback, and for us to gradually roll out the feature while watching for any problems.
+         This article describes this process and how you can control your exposure to features that are
+         under development.
+         At each stage, the number of people who use the feature increases, helping us to validate that
+         the feature is what you need and that we're not introducing an unintended side effect.
+         Your feedback is critical throughout this process. Post your feedback in the Power Apps
+         Community Forum .
+         Feature roll out stages
+         In short, the stages are:
+              New: These features are new and generally available (GA), fully supported, and
+              documented. Generally these features are on by default for new apps, but might take
+              time to deploy everywhere. Enable for existing apps on your own schedule.
+              Preview: These features are almost done and will be New soon. But at this stage there still
+              might be some changes made. This stage is the last opportunity for feedback. These
+              features are generally turned off by default and are documented. These features aren't
+              GA, shouldn't be used in production, and are covered by the Preview terms of service   .
+              Experimental: An early stage "Preview," these features truly are experiments and might
+              never reach GA. We're assessing the value proposition and design of the feature, and the
+              feature might radically change or be removed completely at any time. These features are
+              off by default and aren't generally documented. These features aren't GA, shouldn't be
+              used in production, and are covered by the Preview terms of service   .
+              Retired: These features are GA features but are on their way to being removed from the
+              product. They're still fully supported and document, but we either have a new, better way
+               to do the same thing or usage is low. Disable for existing apps on your own schedule.
+               Generally, these features are off by default.
+         How long does a feature remain in each stage? It varies from feature to feature. We look at
+         many factors, including the number of apps that use the feature, the number of issues
+         reported, and how urgently the feature is needed. Features can remain in a stage for weeks to
+         many months. We might also skip some stages if we don't believe it would be helpful.
+         New
+         Enable New features for all your new apps, and enable for existing apps when you're ready.
+         New features are recently added to the product. They're generally available and fully
+         supported. You can use New features with confidence.
+         In general, New features are enabled by default when you create a new app. When a New
+         feature is first introduced, it might not be enabled in all regions initially, allowing us time to
+         deploy and gather information on usage and any problems. If you run into a problem with a
+         feature, the switch can be used as a workaround to disable it until we can correct the problem.
+         Eventually, New features are no longer "new". If there's no breaking change, the switch is
+         removed and the feature is enabled for all apps. If there's a breaking change, the old behavior
+         is available in the app settings under Retired as a disable switch.
+         New features are fully documented in the Power Apps documentation.
+         Preview
+         Enable Preview features if you want to test upcoming functionalities before the feature is
+         enabled for everyone.
+         Preview features are well on their way to being a valued part of the product. But, they aren't
+         generally available yet and aren't fully supported, instead offered under the preview terms of
+         service   . Preview features shouldn't be used in production.
+         In general, Preview features aren't enabled by default when creating a new app. You should
+         only enable a Preview feature for testing purposes and to provide feedback before the feature
+         becomes generally available. This stage is the last stop for feedback before the feature is
+         finalized.
+         Generally, Preview features graduate to New.
+         Preview features are documented in the Power Apps documentation. Use the Power Apps
+         Experimental Features forum    or Power Apps blog   for more information. Use the
+         "Experimental" forum as many Preview features start out as Experimental features and there
+         may already be information or comments there that can be helpful to you.
+         Provide feedback on Preview features in the Power Apps Experimental Features forum  .
+         Again, "Experimental" also covers Preview features in the forum.
+         Experimental
+         Enable Experimental features if you're an early adopter, see something useful to you, and
+         would like to help test the feature.
+         Experimental features are in an early-stage preview that is true to the name "experiment". This
+         feature might significantly change or be removed at any time. These features are far from
+         being generally available, aren't fully supported, and are offered under the preview terms of
+         service  . Experimental features shouldn't be used in production.
+         Experimental features are never enabled by default when creating a new app. You should only
+         enable an Experimental feature for testing purposes and to provide feedback. If you don't
+         know what the feature is referring to or its possible impact, you likely shouldn't turn it on.
+         Eventually Experimental features either graduate to Preview or are removed from the product.
+         Experimental features typically aren't documented. The short description in the App settings
+         pane might be the only information about them. Use the Power Apps Experimental Features
+         forum  or Power Apps blog  for more information.
+         Provide feedback on Experimental features in the Power Apps Experimental Features forum   .
+         Retired
+         Enable Retired features only if you need an old behavior. When appropriate, disable these
+         features in your existing apps.
+         Retired features, while fully supported and widely available, might be phased out in favor of
+         newer, improved methods or due to low usage. Maintaining every feature alongside ongoing
+         product updates incurs overhead.
+         When a feature moves from New to Retired, the meaning of its switch is often inverted. For
+         example, where "Delayed load" was on by default as a New feature, the Retired version
+         becomes "Disable delayed load" and is off by default.
+     Retired features are generally not enabled when creating a new app. They're provided for
+     existing apps that still depend on the old behavior.
+     Retired features will eventually be removed from the product after enough time has passed
+     and usage is low. Removals are well communicated ahead of time for breaking changes.
+     Retired features are fully documented in the Important changes (deprecations) coming in
+     Power Platform.
+     Defaults
+     In general, when creating a new app:
+        New switches are On. These features are generally available and fully supported. There
+        might be a small delay for the switch to be turned on by default as we continue rolling
+        out.
+        Preview switches are Off, but can be enabled for testing and feedback. Enable the
+        features that are interesting to you before they're enabled for all apps, for testing and
+        feedback. Preview features aren't ready for production.
+        Experimental switches are Off. These features are for early adopters and should only be
+        used with caution; they can be changed or removed at any time. Experimental features
+        aren't ready for production.
+        Retired switches are Off. These features are generally available and fully supported, but
+        will eventually be removed from the product. Avoid using these features.
+     As existing apps go through their lifecycle, you might want to take advantage of new features
+     or to remove dependencies on retired features by adjusting these switches in your app.
+     Turning New switches On and Retired switches Off brings existing apps into alignment with
+     new apps and the future of the product.
+     Controlling which features are enabled
+     Experimental and preview features are listed in the app's Settings > Updates. From within the
+     app, select Settings, and then select Updates. Select New, Preview, Experimental, or Retired
+     features using the available tabs.
+     Each feature has a toggle switch. Off generally means that the feature is disabled, except in the
+     Retired section where the title of the feature indicates if the switch disables the feature.
+     In some cases, you might need to close and reopen the app after you change a setting. The
+     feature description should indicate when you must perform this step.
+     At the top of the Settings panel, General settings provide control over fully shipped, generally
+     available features that don't belong in any of these feature categories and are a stable part of
+     the product. We limit the number of these settings as much as possible to keep things simple
+     and to reduce the size of our testing matrix.
+     These settings are specific to each app, so changing a toggle switch affects only the app that's
+     currently open. If you create an app, these switches revert to their default settings for that app.
+     Preview and Experimental features without a
+     switch
+     Sometimes a tag is added in the product to indicate that a particular feature is Preview or
+     Experimental without having a switch in Updates. For example, a control in an Insert menu
+         might have the name Grid (Preview) or the entry point for the Monitor was once Monitor
+         (Preview). In these cases, the feature can't be used without first seeing this tag.
+         Like the Preview and Experimental feature categories previously described, these features
+         shouldn't be used in production and are offered under the preview terms of service   .
+            Preview an app
+            Article • 05/19/2023
+            When you create an app, it's helpful to preview your app and see how it will look for
+            your users. Use the preview app feature to see how your app appears on various devices
+            and in different sizes. Previewing an app is especially beneficial when you're building a
+            responsive app.
+            To preview an app, open the app for editing in Power Apps Studio   , in the actions
+            menu, select     Preview the app.
+            Use the preview options to see how your app looks on different devices using the device
+            picker.
+            Legend:
+               1. Tablet Devices: Allows you to select from common tablet devices from several
+                  manufacturers, along with the ability to select a custom size based on your needs.
+                  This option shows a device frame and device safe zone, which is shown as the
+                  black area either on the top and bottom or sides depending on the orientation of
+                  the device. It also shows a black area with the home bar at the bottom.
+               2. Mobile devices: Lets you select from common phones from different
+                  manufacturers, along with the ability to select a custom size based on your needs.
+                  This option shows a device frame and device safe zone, which is shown as the
+          black area either on the top and bottom or sides depending on the orientation of
+          the device. It also shows a black area with the home bar at the bottom.
+         3. Web view: See how your app looks like on a web browser. You can select a window
+          size to fill the browser window, or you can select canvas size to see how the app
+          looks while authoring without leaving the preview.
+         4. Orientation Switcher: Switch between vertical and horizontal orientation. The
+          Orientation Switcher option is disabled if the Lock Orientation setting turned on.
+       If you're developing a responsive app, the content within the app adjusts to fit the
+       screen size of the device being used.
+       Watch this video to learn how the device picker helps you confirm that your app is
+       adjusting correctly.
+       https://learn-video.azurefd.net/vod/player?id=6fb4ee34-2393-4bf2-b3b9-
+       749b8a7cd257&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+       apps%2Fpreview-app
+       Display settings
+       The way your app behaves with each preview option is determined by app type and
+       your display settings.
+          If an app is created using the phone layout, you can still preview it on the web and
+          tablet devices using the device picker. However, if an app isn't created using a
+          responsive layout, it then appears in a phone shape on the web and selected tablet
+          device. You get a message explaining why the preview is narrow. If you’d like an
+          app to be responsive to phone, tablet, and web sizes then we recommend
+          selecting the tablet option when you create an app. You can use responsive auto
+          layout containers to determine the flow of the content for different screen sizes
+          including phones. More information: Building responsive canvas apps
+          Under Display settings:
+            Scale To Fit: When set to On your entire app is scaled to fit the available space.
+            If a smaller space is available to the app, you may notice empty space on the
+            sides to accommodate the scaling. When a user plays the app, they will also see
+            the empty space.
+            Lock Orientation: When set to On, the Switch Orientation button in the device
+            picker is disabled.
+       Known Issues
+                    If Scale To Fit setting is on and Lock Aspect Ratio is off, your preview won't be
+                    accurate. This configuration isn't recommended. More information: Change screen
+                    size and orientation of canvas apps
+                    If Scale to Fit is off and you resize your browser window while in preview mode,
+                    the preview won't be accurate. To address the issue, close and reopen the preview
+                    once your browser window is in the desired size.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+        Save and publish canvas apps
+        Saving and publishing an app are two different actions:
+             Save stores your latest changes so you and other app editors can keep working on them.
+             Saving doesn't change what end users see.
+             Publish makes your saved changes available to everyone the app is shared with.
+        Use this article to save your work, turn AutoSave on or off, publish updates, and manage app
+        versions. To share an app with users, see Share a canvas app.
+        Save your app
+        Open your app for editing in Power Apps  , and then save your work in one of these ways:
+             Select Save    on the command bar to save any unsaved changes. Each save creates a new
+             entry in the app's version history.
+             Select the dropdown arrow next to Save and choose one of the following options:
+                                                                                    ﾉ
+                                                                                        Expand table
+              Option                What it does
+              Save with version     Saves the app and lets you add notes that describe what changed in this
+              notes                 version.
+              Save as               Creates a copy of the app with a different name.
+              Download a copy       Downloads a local .msapp file of the app for backup or offline editing.
+        Turn AutoSave on or off
+        By default, Power Apps saves your work automatically every two minutes. AutoSave helps prevent
+        lost changes if your browser or device closes unexpectedly.
+        To change the setting:
+           1. On the command bar, select Settings, and then go to the General tab.
+           2. In the Auto save section, set the Auto save toggle to On or Off.
+       Tip
+      Even with AutoSave on, select Save before you close the browser tab to make sure your
+      most recent changes are captured.
+     Publish your app
+     Publishing your app pushes your latest saved changes to the users you've shared the app with.
+      1. On the command bar, select Publish. If you have unsaved changes, you're prompted to save
+        first. After you save, select Publish again.
+      2. (Optional) Enter a description of what's new in this version.
+      3. Select Publish this version.
+     Users see the new version the next time they open or refresh the app.
+      ７ Note
+         When you publish a canvas app, the app runs on the latest version of Power Apps and
+         picks up the newest features and performance improvements. If you haven't published
+               in several months, you usually see an immediate performance benefit when you
+               republish.
+               To make app startup faster, Power Apps caches some details (such as environment and
+               connection information) in the user's browser. Cached data stays until the browser
+               clears it. For steps, see Clear your browser cache.
+        Create an app description with Copilot (preview)
+        If your app is in a managed environment, you can use AI to help create a description for your
+        app.
+        In the Publishing dialog box, select Create descriptions using AI when you save and publish your
+        app.
+        You can also generate an app description by going to Settings > General. Under Description,
+        select Create descriptions using AI.
+        Admins can disable this feature for managed environments in Power Platform admin. For more
+        information, see Managed Environments panel.
+          ７ Note
+          If you don't add a description before publishing the app, Copilot generates one after the
+          app is published. Makers can edit this description if Copilot doesn't generate it correctly.
+          ） Important
+               To use this capability, your app must be in a managed environment.
+               Preview features aren't meant for production use and can have restricted functionality.
+               These features are available before an official release so customers get early access and
+               provide feedback.
+               For more information, go to our preview terms   .
+               This capability is powered by Azure OpenAI Service.
+               This capability isn't available in all regions yet and can be subject to usage limits or
+               capacity throttling.
+               To learn about capabilities and limitations of AI-powered and Copilot features in Power
+               Apps, see Responsible AI FAQs for Power Apps.
+        Identify and manage app versions
+        Each time you save the app, Power Apps adds a new entry to the version history. The version
+        marked Live is the one your shared users currently run. Other versions are saved drafts that you
+        can review or restore.
+        To view all versions of an app:
+          1. Go to Power Apps   , and in the left pane, select Apps.
+          2. Select the More commands icon     next to the app name.
+          3. Select Details > Details.
+          4. Go to the Versions tab.
+                                                                                             
+        From this tab you can:
+             See which version is Live.
+             Select an earlier version and publish it to roll back. For details, see Restore a canvas app to a
+             previous version.
+        To publish the most recent saved version, open the app in the studio and select the publish icon
+           .
+          ７ Note
+               Newly published changes can take a few seconds to appear when users launch the app.
+               Publishing time depends on app complexity and can take a few minutes for large apps.
+               If users already have the app open when you publish, they need to reload the app to
+               see the new version.
+            App preload is on by default to reduce wait time. You can turn it off if needed. For
+            more information, see Create performant apps.
+      In-app notifications for new versions
+      When you publish an update, users who currently have the app open see two notifications:
+         1. A new version of this app is coming. We'll let you know when it's available. — appears
+          while the new version is being prepared.
+         2. You're using an old version of this app. Refresh to use the latest version. — appears when
+          the new version is ready. Users select Refresh to load it.
+      Where these notifications appear
+                                                                    ﾉ Expand table
+       Scenario                                       Notification available?
+       Canvas app on web                              Yes
+       Canvas app embedded in an iframe               Yes
+       Customized SharePoint forms                    No
+       Canvas app embedded in Microsoft Teams         No
+       Canvas app embedded in Power BI                No
+       Power Apps web part                            No
+      Related information
+          Run an app in a browser or on a mobile device.
+          Rename a canvas app.
+          Restore a canvas app to an earlier version.
+          Share a canvas app with other users.
+       Last updated on 05/27/2026
+         Share a canvas app with your organization
+         10/10/2025
+         When you create a canvas app, you can define which users in your organization can use the
+         app, modify it, and even re-share it. You can specify individual users by name or designate a
+         security group in Microsoft Entra ID.
+         Prerequisites
+         Before you share an app, you must save it (not locally) and then publish it.
+              Give your app a meaningful name and a clear description, so that people know what your
+              app does and they can easily find it in a list. Select Settings > specify a name, and then
+              enter a description.
+              Whenever you make changes, you must save and publish the app again if you want
+              others to see those changes.
+            ） Important
+            For a shared app to function as you expect, you must also manage permissions for the
+            data source or sources on which the app is based, such as Microsoft Dataverse or Excel.
+            You might also need to share other resources on which the app depends, such as flows,
+            gateways, or connections.
+         Share an app from Power Apps
+            1. Sign in to Power Apps   .
+            2. On the left navigation pane, select Apps.
+            3. Select the app that you want to share.
+            4. On the command bar, select Share. Or select the Commands menu next to your app
+              name and then select Share.
+            5. In the Share dialog box, type the names or alias of the user or security groups in
+              Microsoft Entra ID.
+            6. Select the down arrow to choose permissions for the app. Options include:
+                    User: Can use the app only.
+         Co-Owner: Can use, edit, and share the app but not delete or change owners.
+         If your app connects to a Dataverse table, the permissions dropdown will display a
+         More security roles option. Select the appropriate security roles, and those roles will
+         be automatically assigned to users when you share the app.
+         If your admin enabled app level security roles in Power Platform Admin, makers with
+         the System Administrator security role can give collaborators app-level privileges
+         when sharing. Makers assign privileges from the security role picker, with App
+         reader, App user, App maker, or App admin as the security role options. To edit
+         assigned security roles, unshare and reshare the app to assign the appropriate
+         security role under Manage Access.
+          App reader: This role gives read privilege for both user or team owned tables and
+          org owned tables.
+          App user: This role gives full access to only their own records in user or team
+          owned tables, and read privilege to org owned tables.
+          App maker: This role gives create and read privilege for all records in user or
+          team owned tables, but only write, delete, assign, share, append, and append to
+          privileges for their own records in user or team owned tables. Additionally, it
+          gives read privilege to org owned tables.
+          App admin: This role gives full access to all records in user or team owned tables
+          and org owned tables.
+      7. Optional steps:
+         Select the overflow menu (...) at the top-right corner and then select Upload app
+         image to include an image of the app in the email.
+         Select Manage access to displays app access details, including current users and co-
+         owners. You can also edit user access and assign security roles here. The Additional
+         data access tab shows app connections to data sources like Dataverse tables or
+         Excel files on OneDrive for Business. To manage security roles for data sources other
+         than Dataverse, such as Excel files on OneDrive, ensure you share these data sources
+         with the app users.
+            8. Add an optional message and then select Share.
+            ７ Note
+                 To learn about sharing apps outside of your organization, see Share a canvas app
+                 with guest users.
+                 To learn about sharing limits applicable to canvas apps in managed environments,
+                 see Sharing limits.
+         Classic app sharing experience
+         You can still use the classic app sharing experience by selecting the classic sharing option.
+            1. Sign in to Power Apps   .
+            2. On the left navigation pane, select Apps.
+            3. Select the app that you want to share.
+            4. On the command bar, select Share. Or select the Commands menu next to your app
+              name and then select Share
+            5. Select the overflow menu (...) at the top-right corner and then select Use classic sharing.
+      6. Specify the name or alias the users or security groups in Microsoft Entra ID with whom
+       you want to share the app.
+       You can share an app with a list of aliases, friendly names, or a combination of those (for
+       example, Meghan Holmes <meghan.holmes@contoso.com>) if the items are separated
+       by semicolons.
+       If several people have the same name but different aliases, the first person found is added
+       to the list. A tooltip appears if a name or alias already has permission or can't be resolved.
+        ７ Note
+        You can't share an app with a distribution group in your organization or with a group
+        outside your organization.
+        ） Important
+        To avoid degraded experiences, use a security group when sharing the app with over
+        100 users.
+      7. If your app contains premium components, such as a map or address input, users must
+       have a Power Apps license to use the app. To request licenses for the users of your app,
+       select Request licenses, which submits the request to your admin.
+        ７ Note
+        You can't request licenses for security groups or distribution lists. For more
+        information about requesting licenses, see Request Power Apps licenses for your
+        app users.
+      8. If you want to allow users to edit and share the app, select the Co-owner check box.
+       In the sharing interface, you can't grant Co-owner permission to a security group if you
+       created the app from within a solution. However, its possible to grant co-owner
+       permission to a security group for apps in a solution by using the Set-
+       PowerAppRoleAssignment cmdlet.
+      9. If your app connects to data for which users need access permissions, specify security
+       roles as appropriate.
+       For example, your app might connect to a table in a Dataverse database. When you share
+       such an app, the sharing panel prompts you to manage security for that table.
+             For more information about managing security for a table, go to Manage table
+             permissions.
+             If your app uses connections to other data sources—such as an Excel file hosted on
+             OneDrive for Business—ensure that you share these data sources with the users you
+             shared the app with.
+             For more information about sharing canvas app resources and connections, go to Share
+             canvas app resources.
+          10. If you want to help people find your app, select the Send an email invitation to new
+             users check box.
+          11. At the bottom of the share panel, select Share.
+             Users can now run the app by using Power Apps Mobile on a mobile device or from
+             AppSource on Microsoft 365    in a browser. Co-owners can edit and share the app in
+             Power Apps .
+             If you sent an email invitation, users can also run the app by selecting the link in the
+             invitation email:
+                  If a user selects the Open the app link on a mobile device, the app opens in Power
+                  Apps Mobile.
+                  If a user selects the Open the app link on a desktop computer, the app opens in a
+                  browser.
+                  If a user selects the Microsoft Teams link, the app opens in Microsoft Teams.
+             If you selected Co-owner while sharing, the recipients will see a link for Power Apps
+             Studio that will open the app for editing using Power Apps Studio.
+     To change permissions for a user or a security group
+        To allow co-owners to run the app but no longer edit or share it, clear the Co-owner
+        check box.
+        To stop sharing the app with that user or group, select the Remove (x) icon.
+     Share apps using Teams
+     You can share a link to your app in a Teams chat. The user that you share the app with needs to
+     be on the same tenant and have access to the app that you're sharing.
+      ７ Note
+         To add canvas apps to Teams using the web player:
+          Your organization must have Allow interaction with custom apps turned on.
+          More information: Manage custom app policies and settings in Microsoft Teams
+          Your organization must allow Shared Power Apps. More information: Manage
+          Microsoft Power Platform apps in the Microsoft Teams admin center
+         If you're the sender or receiver and get a This app cannot be found error when you
+         select Add app to Teams, this means you don't have access to the app. To get
+         access, contact your admin.
+         If you're the sender and you don't have the Power Apps personal app installed in
+         Teams, then a preview card will appear with a Show Preview button. To unfurl the full
+         adaptive card, select Show Preview.
+     To share the app, copy the app link from your web browser and paste it into the Teams chat.
+     Before you send the link, you'll see a preview of your message.
+     Legend:
+       1. Link to app: Select the web link to open the app.
+       2. Collapse preview: Select to close the preview. When you collapse the preview then the
+        user that you send the link to will only get a web link to open the app. They won't see the
+        buttons to add the App to Teams or Launch app in web.
+       3. Name of app: Shows the name of the app.
+       4. Add app to Teams: Select to add the app to Teams.
+       5. Launch app in Web: Open the app directly in your browser.
+     Request licenses for your users
+     When sharing an app that requires a license for use, you can request Power Apps licenses for
+     your users. For more information, see Request Power Apps licenses for your app users.
+     Security group considerations
+        All existing members of the security group inherit the app permissions. New users joining
+        the security group will inherit the security group permissions on the app. Users leaving
+        the group will no longer have access through that group, but those users can continue to
+        have access either by having permissions assigned to them directly or through
+        membership in another security group.
+        Every member of a security group has the same permissions for an app as the overall
+        group does. However, you can specify greater permissions for one or more members of
+        that group to allow them greater access. For example, you can give Security Group A
+        permission to run an app. And then, you can also give User B, who belongs to that group,
+        Co-owner permission. Every member of the security group can run the app, but only User
+        B can edit it. If you give Security Group A Co-owner permission and User B permission to
+        run the app, that user can still edit the app.
+        Users must explicitly be a member of the security group. If a user is an owner of the
+        group, they must also assign themselves as a member of the group to inherit app
+        permissions.
+     Share an app with Microsoft 365 groups
+     You can share an app with Microsoft 365 groups. However, the group must have security
+     enabled. Enabling security ensures that the Microsoft 365 group can receive security tokens for
+     authentication to access apps or resources.
+     Using Microsoft Graph:
+       1. Install the Microsoft Graph module.
+          PowerShell
+          Install-Module Microsoft.Graph -Scope CurrentUser
+       2. Connect to Microsoft Graph. For information about the administrator roles required to
+        manage groups, see Microsoft Entra roles for managing groups.
+          PowerShell
+          Connect-MgGraph -Scopes "Group.ReadWrite.All"
+       3. Set the Object ID of Microsoft 365 group.
+          PowerShell
+          $ObjectID = "<ObjectID>"
+       4. Enable security.
+          PowerShell
+          Update-MgGroup -GroupId $ObjectID -BodyParameter @{ SecurityEnabled = $true }
+       5. Verify the update.
+          PowerShell
+          Get-MgGroup -GroupId $ObjectID | Select-Object DisplayName, SecurityEnabled
+       ７ Note
+       You must be the owner of the Microsoft 365 group to enable security. Setting the
+       SecurityEnabled property to True doesn't affect how Power Apps and Microsoft 365
+       features work. This command is required because the SecurityEnabled property is set to
+       False by default when Microsoft 365 groups are created outside of Microsoft Entra ID.
+     After a few minutes, you can discover this group in the Power Apps sharing panel and share
+     apps with this group.
+     Manage table permissions for Dataverse
+     If you create an app based on Dataverse, you must also ensure that the users you share the
+     app with have the appropriate permissions for the table or tables used by the app. Particularly,
+     those users must belong to a security role that can do tasks such as creating, reading, writing,
+     and deleting relevant records. In many cases, you'll want to create one or more custom security
+     roles with the exact permissions that users need to run the app. You can then assign the role to
+     each user as appropriate.
+      ７ Note
+         You can assign security roles to individual users and security groups in Microsoft
+         Entra ID, but not to Microsoft 365 groups.
+         If a user isn't in the Dataverse root business unit, you can share the app without
+         providing a security role, and then set the security role directly.
+         After a security role is assigned to a user or group, you can't unassigned it when you
+         share an app. However, you can still unassign security roles through the admin
+         portal.
+     Prerequisite
+     To assign a role, you must have System Administrator permissions for a Dataverse database.
+     To assign a security group in Microsoft Entra to a role
+       1. In the sharing panel under Data permissions, select Assign a security role.
+       2. Select the Dataverse roles that you want to apply to the selected Microsoft Entra users or
+        groups.
+      ７ Note
+      When you share an app that's based on an older version of Dataverse, you must share the
+      runtime permission to the service separately. If you don’t have permission to do this, see
+      your environment administrator.
+     Next steps
+     Share a canvas app with guest users
+     See also
+     Edit an app
+     Restore an app to a previous version
+     Export and import an app
+     Delete an app
+     Share a canvas app with guest users
+     06/27/2025
+     Canvas apps can be shared with guest users of a Microsoft Entra tenant. You can invite external
+     business partners, contractors, and third parties to run your company's canvas apps.
+     Watch this video to learn how to share an app with guests:
+     https://learn-video.azurefd.net/vod/player?id=84cd1908-2ca9-415b-a819-
+     3ffb61e55eca&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fcanvas-
+     apps%2Fshare-app-guests
+     Prerequisites
+        In Microsoft Entra ID, enable B2B external collaboration for the tenant. More information:
+        Configure external collaboration settings for B2B in Microsoft Entra External ID
+          ７ Note
+          B2B external collaboration is enabled by default. However, you need to verify that
+          the settings weren't changed by a tenant admin. For more information about
+          Microsoft Entra B2B, see Overview: B2B collaboration with external guests for your
+          workforce.
+        Access to an account that can add guest users to a Microsoft Entra tenant. Admins and
+        users with the Guest Inviter role can add guests to a tenant.
+        To access an app that connects to Dataverse, the guest user must have a license with
+        Power Apps use rights that matches the capability of the app. The exception to this
+        prerequisite is when an app is hosted in a Microsoft Dataverse for Teams environment.
+       ７ Note
+       Ensure that you perform these steps on the resource tenant, and not on the home tenant.
+          A resource tenant is where the app is expected to exist, and where the user is
+          expected to create the app using Power Apps as a guest.
+          A home tenant is where the user's account resides and authenticates against.
+     Steps to grant guest access
+       1. In Microsoft Entra ID, select New guest user. More information: Quickstart: Add a guest
+        user and send an invitation
+       2. If the guest user doesn't already have a license in their home tenant, assign a license to
+        the guest user.
+           To assign guest users from admin.microsoft.com, go to Add users and assign
+           licenses at the same time.
+           To assign guest users from portal.azure.com, go to Assign or remove licenses.
+         ） Important
+         You might need to disable the Microsoft 365 admin center preview to assign a
+         license to a guest.
+       3. [Share an app from Power Apps](Share an app from Power Apps)
+     Considerations and limitations for guest access
+        Users accessing web experiences in different Microsoft Entra tenants must access Power
+        Apps in a standalone browser session (different browser or InPrivate browser session).
+        The standalone browser session insures that Power Apps picks up the correct Azure B2B
+        user identity for the app being accessed.
+        Power Apps guest access uses Azure B2B.
+        Power Apps Mobile doesn't support authentication using Microsoft Entra direct
+        federation. More information: Sign in using Power Apps Mobile
+        Power Apps per app plans are scoped to apps in a specific environment, so they can't be
+        recognized across tenants.
+        Power Apps included with Office and Power Apps per user plans have the following
+        characteristics:
+          In the Azure public cloud, they're recognized across tenants in guest scenarios because
+          they aren't bound to a specific environment.
+          In Azure national or sovereign clouds, they're recognized across tenants in guest
+          scenarios. For more information, see National clouds, Azure geographies
+          Licenses aren't recognized across tenants in difference Azure clouds.
+          Not all connectors create connections in the resource tenant by default.
+          A user that signs in to an app using Azure B2B, doesn't see their identity information in
+          My account.
+      Frequently asked questions
+      What's the difference between canvas app guest access and
+      Power Pages?
+      With canvas apps, you can build an app tailored to digitizing business processes, without
+      writing code in a traditional programming language such as C#. Guest access for canvas apps
+      enables teams of individuals made up of different organizations participating in a common
+      business process to access the same app resources that might be integrated with a wide variety
+      of Microsoft and partner sources. More information: Overview of canvas-app connectors for
+      Power Apps
+      Power Pages provide you with the ability to build low-code, responsive websites that allow
+      external users to interact with the data stored in Dataverse. With Power Pages, organizations
+          can create websites and share them with users external to their organization either
+          anonymously or through the sign-in provider of their choice, such as LinkedIn, Microsoft, or
+          other commercial sign-in provider.
+          The following table outlines a few core capability differences between Power Pages and canvas
+          apps.
+                                                                                               ﾉ Expand table
+           Guest        Interface         Authentication                Accessible data sources
+           access in
+           Power        Browser-only      Allows anonymous and          Dataverse
+           Pages        experience        authenticated access
+           Canvas       Browser and       Requires authentication via   Any of approximately 150 out-of-the-box
+           apps         mobile apps       Microsoft Entra ID            connectors and any custom connector
+          Can guests access customized forms in SharePoint?
+          See What license must be assigned to my guest so they can run an app shared with them?
+          Why is a guest who accesses a customized form in SharePoint
+          prompted for a trial?
+          If the custom form uses a premium connector, a guest must have a Power Apps license to
+          access the custom form. If the custom form only uses standard connectors, your tenant must
+          allow Microsoft Power Platform internal consent plans to be assigned to users. For more details
+          about Power Platform internal consent plans, read block trial license commands.
+          Can guests access apps embedded in SharePoint?
+          Yes. However, access to canvas standalone apps requires a user license with Power Apps user
+          rights that matches the capability of the app, including embedded apps. When embedding a
+          canvas app in SharePoint with the Power Apps embed control, enter the app ID in the App web
+          link or ID box.
+         When embedding a canvas app in SharePoint via the iFrame HTML tag, reference the app by
+         using the full web URL. To find the URL, sign in to Power Apps   , select an app, and then select
+         the Details tab. The URL is displayed under Web link.
+         How is it that guests can open the app shared with them, but
+         no data connections are created?
+         As is the case with nonguests, the underlying data sources accessed by the app must also be
+         made accessible to the guest.
+         What license must be assigned to my guest so they can run an
+         app shared with them?
+         The following table explains whether the guests can run (use) customized Microsoft Lists or
+         SharePoint library forms, canvas apps, and model-driven apps using the referenced license.
+                                                                                                 ﾉ Expand table
+            Plan           Customized             Customized          Canvas app         Canvas app       Model-
+                           Microsoft Lists or     Microsoft Lists     (using             (using           driven
+                           SharePoint library     or SharePoint       nonpremium         premium          app
+                           form (using            library (using      connectors)        connectors)
+                           nonpremium             premium
+                           connectors)            connectors)
+            No license     ✓                      ✗                   ✗                  ✗                ✗
+            SharePoint     ✓                      ✗                   ✗                  ✗                ✗
+            user (without
+            Power Apps
+            license)
+            Power Apps     ✓                      ✗                   ✓                  ✗                ✗
+            included with
+            Office
+            Power Apps     ✓                      ✓                   ✓                  ✓                ✓
+            per app plan
+            Power Apps     ✓                      ✓                   ✓                  ✓                ✓
+            per user plan
+          For more information about pricing and the capabilities of various plans, go to Microsoft Power
+          Apps and Power Automate Licensing Guide            .
+          In Power Apps Mobile, how does a guest see apps for their
+          home tenant?
+          When users access a canvas app through a mobile device and the app is published in a non-
+          home Microsoft Entra tenant, they can switch to a different directory.
+          In Power Apps Mobile, how does a guest see apps in the
+          guest tenant?
+          The guest user opens the email they received when an app in the guest tenant is shared and
+          selects Open the app. This view applies to both Microsoft Entra and Microsoft account users.
+          You can also create a deep link. For more information, see Use deep links with Power Apps
+          mobile.
+    Must a guest accept the Microsoft Entra guest invitation
+    before an app can be shared with them?
+    No. If a guest opens an app shared with them before they accept a guest invitation, the guest
+    is prompted to accept the invitation as part of the sign-in experience while opening the app.
+    In which Microsoft Entra tenant are connections created for a
+    guest user?
+    Connections for an app are always made in the context of the Microsoft Entra tenant the app is
+    associated with. For example, if an app is created in the Contoso tenant, the connections made
+    for Contoso internal and guest users are made in the context of the Contoso tenant.
+    Can guests use Microsoft Graph with Power Apps?
+    By default, Azure B2B users have limited permission to access information from Microsoft
+    Graph. A user’s permission in Microsoft Graph determines what's returned when using
+    connectors such as Microsoft Security Graph, Office 365 Users, Office 365 Groups, and custom
+    connectors using Microsoft Graph APIs. For more information about Microsoft Graph
+    permissions, see Default user permissions and Working with users in Microsoft Graph.
+    Which Intune policies apply to guests who are using my apps?
+    Intune only applies the policies of a user's home tenant. For instance, if Lesa@Contoso.com
+    shares an app with Wanda@Fabrikam.com, Intune continues to apply Fabrikam.com policies on
+    Wanda's device, regardless of the apps Wanda runs.
+    Can I disable cross tenant license recognition?
+    No. Authorization capabilities can and should be used to control which users access a resource.
+    For instance, Dataverse environments can be bound to a security group that excludes Azure
+    B2B guest users.
+    Why can an Azure B2B user without a license access a model
+    driven app?
+    The detection of a previously licensed user no longer having a license isn't immediate. If you
+    expect a user to lose access to an app using Dataverse, then their authorization to the app or
+          data should be updated. For example, the app should be unshared with the user or Dataverse
+          security roles should be removed from the user.
+          Which connectors create connections in the resource tenant
+          by default?
+          Users relying on Azure B2B to access an app only has implications on connectors that use
+          Microsoft Entra ID for authentication. Some Microsoft Entra ID based connectors default to
+          creating a connection in the resource tenant, while others default to creating a connection in
+          the home tenant. Connectors that don't use any type of Microsoft Entra ID authentication work
+          the same for guests and members in a tenant. The following table enumerates all connectors
+          that do use Microsoft Entra ID authentication and default creates connections in the resource
+          tenant. For more information on each connector as there might be restriction, see List of all
+          Power Apps connectors
+                                                                                                ﾉ
+                                                                                                    Expand table
+           Connector                            Creates connection in resource tenant by default
+           Microsoft Entra                      Yes
+           Azure Automation                     Yes
+           Azure Container Instance             Yes
+           Azure Data Factory                   Yes
+           Azure Data Lake                      Yes
+           Azure IoT Central                    Yes
+           Azure Kusto                          Yes
+           Azure Log Analytics                  Yes
+           Azure Resource Manager               Yes
+           Microsoft Dataverse                  Yes*
+           Dynamics 365 AI for Sales            Yes
+           Microsoft Teams                      Yes
+           Office 365 Groups                    Yes
+           Office 365 Users                     Yes
+           Outlook Tasks                        Yes
+       Connector             Creates connection in resource tenant by default
+       Power BI              Yes
+       SharePoint            Yes
+      * When using the Microsoft Dataverse as the data source, ensure that the guest user is licensed
+      from the same tenant where you have Dataverse data located.
+      See also
+      Edit an app
+      Restore an app to a previous version
+      Export and import an app
+      Delete an app
+       Share Excel data used by your app
+       Article • 12/16/2022
+       You can share Excel data with your app users in a cloud account, such as OneDrive.
+       For example, you might create an app that shows the names and phone numbers of the
+       technical-support group at your company. The information is stored in an Excel
+       spreadsheet, which you put in a folder in Dropbox. You then share the folder with your
+       app users so that they can see the names and phone numbers.
+       You must share the data so that users can run and even modify your app. Users who
+       aren't given the sharing permissions won't see the data in the Excel file.
+       This topic shows you how to share data in an Excel spreadsheet using Dropbox,
+       OneDrive, and Google Drive. To create an app that displays data from an Excel file, see
+       Create an app from a set of data.
+       Share data in Dropbox
+        1. Sign in to Dropbox using the same account that you used to create a connection
+         from Power Apps to Dropbox.
+        2. Select the folder that contains the Excel file, and then select Share:
+        3. In the dialog box, enter the email addresses with which your app users sign in to
+         Dropbox.
+        4. If your app users will add, modify, or delete data in your app, select Can edit.
+         Otherwise, select Can view.
+        5. Select Share.
+            For more information, see Sharing folders on Dropbox  .
+            Share data in OneDrive
+               1. Sign in to OneDrive using the same account that you used when you created a
+                 connection from Power Apps to OneDrive.
+               2. Select the folder that contains the file, and then select Share:
+                    ７ Note
+                    In OneDrive for Business, share the file itself, not the folder that contains the
+                    file.
+               3. In the dialog box, select Email.
+               4. Specify the email addresses with which your app users sign in to OneDrive, and
+                 then select Share.
+             For more information, see Share OneDrive files and folders  .
+             Share data in Google Drive
+                1. Sign in to Google Drive using the same account with which you created a
+                  connection from Power Apps to Google Drive.
+                2. Right-click the folder that stores your Excel file, and then select Share.
+                3. In the dialog box, enter the email addresses with which your app users sign in to
+                  Google Drive:
+                4. If your app users will add, modify, or delete data in your app, then select Can edit
+                  in the list of permissions. Otherwise, select Can view.
+                5. Select Done.
+             For more information, see Share Google Drive files and folders  .
+             Known limitations
+             For information about how to share Excel data within your organization, review these
+             limitations.
+     Share resources used by canvas apps
+     07/08/2025
+     Before you share a canvas app, consider the types of resources on which it relies, such as one
+     or more of the following:
+        Tables in Microsoft Dataverse.
+        For information about giving users access to this data, see Manage table permissions.
+        A connection to a data source.
+        An on-premises data gateway.
+        A custom connector.
+        An Excel workbook or other service.
+        A flow.
+     Some of these resources are shared automatically when you share the app. Other resources
+     require you or the people with whom you share the app to take extra steps so that the app
+     works as you expect.
+     You can also share your connections, custom connectors and on-premises data gateway with
+     your entire organization.
+     Connections
+     Some connections (such as SQL Server with SQL or Windows authentication) are implicitly
+     shared with the app when you share the app with other users. Other connections require users
+     to create their own connections and explictly grant security privileges (such as security roles for
+     the Dataverse, OneDrive for Business, SQL Server with Microsoft Entra authentication).
+     You can determine whether a connection is automatically shared as part of the app when you
+     share the app with other users; allowing you to update sharing permissions. To do this, go to
+     make.powerapps.com and select Data -> Connections from left navigation. Then select the
+     required connection. If the Share button appears on top navigation or if the Share option
+     displays when you select More Commands (...), the selected connection can be shared with
+     other users.
+    Implicit sharing
+    When you share an app that uses a connection that can be shared, the app connection is
+    implicitly shared along with the app. For example, following message appears when you go to
+    make.powerapps.com, select Apps, choose an app that uses such connection, select More
+    Commands (...) and then select Share:
+    If you select Confirm and share the chosen app with other users, the app connection is
+    implicitly shared with those users along with the app.
+      ７ Note
+      To ensure the app works properly, the user who is sharing the app needs to have sharing
+      permission for all connections used by the app. Without these permissions, the user won't
+      be able to access or use the connections correctly. This applies to all app-sharing
+      activities, including app sharing, app publishing, and solution import.
+     On-premises data gateways
+     If you create and share an app that includes data from an on-premises source, the on-premises
+     data gateway itself and certain types of connections to that gateway will be shared
+     automatically. For any connection that isn’t shared automatically, you can share it manually (as
+     the previous section shows) or let the app prompt users to create their own connections. To
+     show the connection or connections with which a gateway has been configured:
+      1. Open powerapps.com , click or tap Manage in the left navigation bar, and then click or
+       tap Gateways.
+      2. Click or tap a gateway, and then click or tap the Connections tab.
+      ７ Note
+      If you share one or more connections manually, you might need to reshare them under
+      these circumstances:
+       You add an on-premises data gateway to an app that you’ve already shared.
+       You change the set of people or groups with whom you’ve shared an app that has an on-
+       premises data gateway.
+     Custom connectors
+     When you share an app that uses a custom connector, it is automatically shared, but users
+     must create their own connections to it.
+     On powerapps.com , you can view or update permissions for a custom connector. In the left
+     navigation bar, click or tap Manage, click or tap Connections, and then click or tap New
+     connection (in the upper-right corner). Click or tap Custom, and then click or tap a custom
+     connector to display details about it.
+     Excel workbooks
+     If a shared app uses data to which not all users have access (such as an Excel workbook in a
+     cloud-storage account), share the data.
+     Flows
+     If you share an app that includes a flow, users who run the app will be prompted to confirm or
+     update any connections on which the flow relies. In addition, only the person who created the
+     flow can customize its parameters. For example, you can create a flow that sends mail to an
+     address that you specify, but other users can’t change that address.
+         Tutorial: Embed a Power Apps visual in a
+         Power BI report
+         APPLIES TO:       Power BI Desktop       Power BI service
+         In this tutorial, you use the Power Apps visual to create a new app that is embedded in a
+         sample Power BI report. This app interacts with other visuals in that report.
+         If you don't have a Power Apps subscription, create a free account    before you begin.
+         In this tutorial, you learn how to:
+          ＂Add a Power Apps visual to a Power BI report
+          ＂Work in Power Apps to create a new app that uses data from the Power BI report
+          ＂View and interact with the Power Apps visual in the report
+         Prerequisites
+               Google Chrome  or Microsoft Edge  browser
+               A Power BI subscription, with the Opportunity Analysis Sample installed
+               An understanding of how to create apps in Power Apps and how to edit Power BI reports
+         Create a new app
+         When you add the Power Apps visual to your report, it launches Power Apps Studio with a live
+         data connection between Power Apps and Power BI.
+            1. Open the Opportunity Analysis sample report and select the Upcoming Opportunities
+               page.
+            2. Open the report in Editing mode by selecting Edit from the Options bar.
+            3. Move and resize some of the report tiles to make space for the new visual.
+      4. From the Visualizations pane, select the Power Apps icon, then resize the visual to fit the
+       space you made.
+      5. In the Fields pane, select Opportunity > Name, Product > Product Code, and SalesStage
+       > Sales Stage.
+      6. On the Power Apps visual, select the Power Apps environment where you want to create
+       the app, then select Create new.
+       In Power Apps Studio, you see that a basic app is created, with a gallery that shows one of
+       the fields you selected in Power BI.
+      7. In the left pane, select Screen1, then set the screen's Fill property to "LightBlue" (so it
+       shows up better in the report).
+       8. Select Gallery1 and make some room for a label control by changing Properties > Size >
+        Height to 964.
+         ７ Note
+         If you can't edit the Height field, try adjusting the size of the visual on the canvas
+         first. Select the visual and drag one of the handles. Now edit the Height field.
+       9. Expand the left navigation menu, choose + Insert, and select Classic > Text label from the
+        list of controls.
+      10. Drag the label to the bottom of your visual. Set the Text property to "Opportunity Count:
+        " & CountRows(Gallery1.AllItems). The visual on the canvas now shows a total of 487
+        opportunities in the dataset.

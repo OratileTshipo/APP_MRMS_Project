@@ -1,0 +1,52 @@
+{
+  "Resources": [
+    {
+      "Name": "SampleImage",
+      "Schema": "i",
+      "IsSampleData": true,
+      "IsWritable": false,
+      "Type": "ResourceInfo",
+      "FileName": "/ctrllib/image/images/SampleImage.svg",
+      "Path": "/ctrllib/image/images/SampleImage.svg",
+      "Content": "Image",
+      "ResourceKind": "Uri",
+      "RootPath": "ms-appx:///ctrllib/image/images/SampleImage.svg"
+    },
+    {
+      "Name": "dpwr logo",
+      "Schema": "i",
+      "IsSampleData": false,
+      "IsWritable": false,
+      "Type": "ResourceInfo",
+      "FileName": "2ba06760-45ef-4c88-8806-6ef787925855.png",
+      "Path": "Assets\\Images\\2ba06760-45ef-4c88-8806-6ef787925855.png",
+      "Content": "Image",
+      "ResourceKind": "LocalFile",
+      "RootPath": "https://dsprdil110neu.blob.core.windows.net/5b4396b2-a68b-477c-96b3-b33733cd5954-1/resource/MmJhMDY3NjAtNDVlZi00Yzg4LTg4MDYtNmVmNzg3OTI1ODU1.png?skoid=58690ece-ec83-4ce2-9ce8-883d4d6a54ee&sktid=975f013f-7f24-47e8-a7d3-abc4752bf346&skt=2026-08-16T08%3A12%3A48Z&ske=2026-08-17T08%3A27%3A48Z&sks=b&skv=2023-01-03&sv=2023-01-03&spr=https&se=2026-08-17T08%3A27%3A48Z&sr=b&sp=r&sig=DSktH25IYJHm8e8DIMs8bh7WKkvgIjc3ViwyT4tb0bA%3D"
+    },
+    {
+      "Name": "Gemini_Generated_Image_wri2oowri2oowri2",
+      "Schema": "i",
+      "IsSampleData": false,
+      "IsWritable": false,
+      "Type": "ResourceInfo",
+      "FileName": "1763f8dc-865b-44d8-bda1-876b102f70fc.png",
+      "Path": "Assets\\Images\\1763f8dc-865b-44d8-bda1-876b102f70fc.png",
+      "Content": "Image",
+      "ResourceKind": "LocalFile",
+      "RootPath": "https://dsprdil110neu.blob.core.windows.net/5b4396b2-a68b-477c-96b3-b33733cd5954-1/resource/MTc2M2Y4ZGMtODY1Yi00NGQ4LWJkYTEtODc2YjEwMmY3MGZj.png?skoid=58690ece-ec83-4ce2-9ce8-883d4d6a54ee&sktid=975f013f-7f24-47e8-a7d3-abc4752bf346&skt=2026-08-16T08%3A12%3A48Z&ske=2026-08-17T08%3A27%3A48Z&sks=b&skv=2023-01-03&sv=2023-01-03&spr=https&se=2026-08-17T08%3A27%3A48Z&sr=b&sp=r&sig=ZlGH6NumsoksdskAk2G4KE4S8BA0gGLvo%2BMtHsQ99Ws%3D"
+    },
+    {
+      "Name": "dpwr logo1",
+      "Schema": "i",
+      "IsSampleData": false,
+      "IsWritable": false,
+      "Type": "ResourceInfo",
+      "FileName": "628abf90-3a19-4abc-a8d0-9dc74d308f90.png",
+      "Path": "Assets\\Images\\628abf90-3a19-4abc-a8d0-9dc74d308f90.png",
+      "Content": "Image",
+      "ResourceKind": "LocalFile",
+      "RootPath": "https://dsprdil110neu.blob.core.windows.net/5b4396b2-a68b-477c-96b3-b33733cd5954-1/resource/NjI4YWJmOTAtM2ExOS00YWJjLWE4ZDAtOWRjNzRkMzA4Zjkw.png?skoid=58690ece-ec83-4ce2-9ce8-883d4d6a54ee&sktid=975f013f-7f24-47e8-a7d3-abc4752bf346&skt=2026-08-16T08%3A12%3A48Z&ske=2026-08-17T08%3A27%3A48Z&sks=b&skv=2023-01-03&sv=2023-01-03&spr=https&se=2026-08-17T08%3A27%3A48Z&sr=b&sp=r&sig=k1ct8E%2BeB3Khnqk5NgYoVkP0Y0BF0y1PF2VJvCpoX1k%3D"
+    }
+  ]
+}

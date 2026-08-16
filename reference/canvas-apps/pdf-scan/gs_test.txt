@@ -1,0 +1,778 @@
+        1. In Tree view, hover over a screen that you want to move up or down to reveal the
+          overflow menu (ellipses).
+        2. Select the ellipsis, then choose Move up or Move down. If you don't see a Move
+          down option, your screen is at the lowest point in the list already.
+        ７ Note
+        When the app is opened, the screen at the top of the list of controls usually
+        appears first. However, you can specify a different screen by setting the OnStart
+        property to a formula that includes the Navigate function.
+       Move and resize a control
+       To move a control, select it, hover over its center so that the four-headed arrow appears,
+       and then drag the control to a different location.
+       To resize a control, select it, hover over any handle in the selection box so that the two-
+       headed arrow appears, and then drag the handle.
+        ７ Note
+        As this topic describes later, you can also move and resize a control by modifying
+        any combination of its X, Y, Height, and Width properties in the formula bar.
+       Configure a control in the Properties pane
+       By using the Properties pane, specific to the control you select, you can specify a wide
+       variety of options.
+       For example, if you select a button control, you can replace the value of the text
+       displayed through the control's Properties pane.
+        ７ Note
+        You can alternatively change display text by modifying its Text property in the
+        formula bar.
+       Configure a control in the formula bar
+      You can configure a control by selecting a property in the property list and then
+      specifying a value in the formula bar. Autocomplete can be helpful in the formula bar to
+      see values you can use for a control.
+      Change the font color of a control
+      For example, if you want to change the font color for your control's text. You see many
+      color options.
+      Change the position on the canvas of a control
+      You can set the X and Y coordinates for the position of the control using the formula
+      bar. Setting coordinates in the formula bar gives you greater precision of control
+      placement.
+      For example, if you select X or Y in the properties list and specify a number in the
+      formula bar, you see the control move to that coordinate. In this case, the button moves
+      to position 100 on the X axis, assuming the far left side of the canvas is the zero point.
+      Change the control's size
+      You can resize a control by selecting Height or Width in the properties list and then
+      specifying a different number in the formula bar.
+      Change the control's display text
+      You can change a control's display text by selecting Text in the properties list and then
+      specifying any combination of a literal string, an expression, or a formula in the formula
+      bar.
+      Literal string
+      A literal string is surrounded by quotation marks and appears exactly as you type it.
+      "Hello, world" is a literal string.
+       ７ Note
+       When you add text that is longer than the width of your control, the control doesn't
+       change its width to accomodate the text. You must manually change the control's
+       size to fit the text.
+      Expression
+      An expression is often based on a property of another control. Screen2.Height is an
+      expression that shows the height of Screen2 where the display text is shown for a
+      button control.
+      Using an expression, for example, you can set a background image or icon as the fill for
+      your button.
+      Formula
+      A formula includes one or more functions. The Now function returns the current date
+      and time in your local time zone, and the Text function formats values such as dates,
+      times, and currency.
+      For example, you can display the date and time in a Label:
+                                                                                                        
+              Formulas are usually much more complex than this example so that they can update
+              data, sort it, filter it, and perform other operations. For more information, see the
+              formula reference.
+              Related information
+                    Find step-by-step procedures for configuring common controls such as screens,
+                    lists, galleries, forms, and charts.
+                    Find reference information about each type of control in the control reference.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+    Add and navigate screens in canvas apps
+    Create modern, responsive apps by adding prebuilt screens for common app scenarios. The
+    screens feature responsive containers and modern controls that adapt to different screen sizes.
+    You can also add custom screens with different layouts and controls.
+    The following new prebuilt screens are available:
+       Approval request
+       Welcome screen
+       Header and gallery
+       Header and form
+       Header and table
+   Add a new screen
+            1. Sign in to Power Apps   .
+            2. Create a canvas app or open one for editing.
+            3. On the command bar, select New screen, and then select a screen layout.
+            4. Preview the app to determine how it looks on different devices. For more information, see
+              Preview an app.
+             Tip
+            To make the app adapt to the size of the device display it's running on, turn off the Scale
+            to fit option.
+         Welcome screen
+         The Welcome screen works well as the first screen of an app. You can customize each tile with
+         an image, a title, and a description. Add or remove tiles in the main container to change the
+         number of tiles. Use the tiles to guide users to other parts of the app.
+         The Welcome screen template includes the following controls:
+              Screen container
+                 Header container
+                    Header
+                 Main container
+                    Container
+                       Image container
+                          Image
+                       Title container
+                          Feature item button
+                          Description text
+                                            
+    Add and customize the Welcome screen
+      1. Select New screen > Welcome screen.
+      2. To change the image of a tile, select it and then select Edit.
+      3. Select the Feature Item button control and add your own text in the Properties pane.
+      4. Select the Short description or engaging message text and add your own.
+      5. Add and remove tiles if needed.
+         To add tiles in the tree view, copy and paste a Container item.
+         To remove a tile in the tree view, right-click a Container, and then select Delete.
+     Header and gallery screen
+     Use the Header and gallery screen to show a range of product or service information, like a
+     product catalog. When you connect a gallery control to a data source, a catalog is
+     automatically created with little customization required.
+     The gallery control in the Header and gallery screen is a classic control. When the modern
+     gallery control is released, the Header and gallery screen uses it. For more information, see
+     Overview of modern controls and themes in canvas apps.
+     The Header and gallery screen has the following template for controls:
+        Screen container
+         Header container
+           Header
+         Main container
+           Gallery
+            Gallery container
+              Image container
+               Image
+              Title container
+               Title text
+               Description text
+              Button container
+               Button
+                                                    
+     Add and customize the header and gallery screen
+       1. Select New Screen > Header and gallery.
+       2. In the tree view, select Gallery and connect it to a data source such as Dataverse.
+       3. Select specific controls inside the gallery, such as the image, title text, and text
+        description. In the control's properties, use the ThisItem syntax to set the desired image,
+        title text, and description.
+        For example, to add the Account name to the title text control, find it by typing ThisItem
+        in the formula bar to see a list of available items to add from your data set.
+                                              
+     Approval request screen
+     The Approval request screen has a header, a form with a submit button, and a gallery with
+     predefined stages. The Approval request screen is useful for scenarios where actions are
+     triggered by form submissions, such as submitting an approval request or displaying a
+     workflow process for a business.
+       Tip
+      When you add an approval request screen, connect it to a data source. The data source
+      determines the field names in the request form.
+     The Approval request screen has the following template for controls:
+        Screen container
+        Header container
+         Header
+        Main container
+         Form container
+           Form title text
+           Approval form
+           Submit button
+         Sidebar container
+           Reviewers text
+           Reviewers gallery
+                                            
+    Add and customize the Approval request screen
+      1. Select New Screen > Approval request.
+      2. In the tree view on ApprovalForm, connect to a data source such as Dataverse.
+      3. Choose a data source.
+      4. To view the details of the approval stages, select ReviewersGallery under the
+       SidebarContainer node in the tree view. Then, in the properties pane, select the
+       Advanced tab and go to Items.
+       The approval stages have the following details:
+         Name: Name of the stage or approver
+         Title: Subtitle of the stage or approver
+         Status: Stage status
+          Current: Whether this stage is the current stage of the approval request
+     To notify the approver, add a Power Automate approval workflow in the button. For more
+     information, see Create and test an approval workflow with Power Automate.
+     Header and form
+     The Header and form screen has a header, a form, and two buttons to submit the form or
+     cancel form submission. This screen is great for using a full-screen form.
+     The Header and form screen has the following template for controls:
+       Screen container
+         Header container
+          Header
+         Main container
+          Form container
+           Form
+          Button container
+           Cancel button
+           Submit button
+                                                  
+     Add and customize the Header and form screen
+      1. Select New Screen > Header and form.
+      2. In the tree view, you see Form selected and a prompt appears for you to connect the
+        form to a data source.
+      3. Choose a data source.
+      4. Optionally, to ensure the best screen responsiveness, select each data card on the form
+        and set its Width Fit property to On in the Display tab of the Properties pane.
+     Header and table
+     The Header and table screen has two controls: a header control and a table control. This
+     template is great for showing a detailed data table on a screen.
+     The Header and table screen has the following controls:
+        Header container
+         Header
+        Main container
+         Table
+     Add and customize the Header and table screen
+      1. Select New Screen > Header and table.
+      2. In the tree view, select Table and connect it to a data source.
+     Table and form
+     The Table and form screen contains two main controls: the modern table control and the
+     modern form control. This template has built-in Power Fx formulas to make data connection
+     and customization easy. This template is ideal for selecting and editing a record by using a
+     form.
+     The Table and form screen contains the following controls:
+        Screen container
+         Header container
+          Header control
+         Body container
+          Text input (Search)
+          Table control
+          Form control
+          Button
+            New
+            Edit
+            Delete
+            Submit
+            Cancel
+                                                  
+     Add and customize Table and form screen
+     In Power Apps Studio:
+      1. Select New Screen > Table and form.
+      2. Select Data in the inline action bar.
+      3. Select the data source you want.
+       When you connect, the table and form controls both connect to the data source.
+    You can select a record in the table control, and the form shows the details of the selected
+    record.
+    All buttons in this template have prebuilt Power Fx, so you don't need to customize them.
+    When you connect the screen to the selected data source, the screen becomes fully functional.
+                                            
+     Reorder screens
+     When your app has more than one screen, you can change their order in the tree view.
+     Select the overflow menu of a screen that you want to reorder, and then select Move up or
+     Move down.
+     Use the StartScreen property to set the screen that displays first.
+     Add navigation
+     When your app has more than one screen, add navigation so your users can move between
+     them.
+       1. Select the screen. Select Insert. In the search box, type Next arrow and then select it.
+       2. Move the arrow to where you want it to appear on the screen.
+       3. Select the arrow. Set the OnSelect property to the Navigate function. For example, use
+        Navigate(Target, Fade).
+        Replace Target with the name of the screen where you want to navigate.
+                                                   
+        In this example, when a user selects the arrow, the target screen fades in.
+       4. On the Target screen, add a Back arrow icon the same way. Set its OnSelect property, for
+        example, Navigate(Target, ScreenTransition.Fade).
+        Replace Target with the name of the screen where you want to return.
+      Related information
+      Screen-control reference
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 01/14/2026
+        Add Microsoft 365 Copilot for app users in
+        canvas apps (preview)
+        [This article is prerelease documentation and is subject to change.]
+        Microsoft 365 Copilot makes it easier for users to work with canvas apps by offering AI-powered
+        insights through natural language conversations. By using this feature, users can quickly find
+        information, navigate apps more easily, and get help to boost their productivity. App makers can
+        enable Microsoft 365 Copilot to give users access to conversational AI that understands app data
+        and provides helpful, contextual answers. Users can ask questions about their Microsoft
+        Dataverse table or SharePoint list data in plain language and receive immediate, relevant
+        responses.
+        This article shows you how to enable and configure Microsoft 365 Copilot for your canvas apps,
+        both at the environment level and for individual apps.
+        When enabled, users can open Microsoft 365 Copilot in their canvas app by selecting Copilot on
+        the upper-right corner. For more information, see Use Microsoft 365 Copilot in canvas apps.
+           ） Important
+                This feature is in preview.
+                Preview features aren't meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  . They're
+                available before an official release so that customers can get early access and provide
+                feedback.
+                This feature is in the process of rolling out and might not be available in your region
+                yet.
+        Prerequisites
+        To use Microsoft 365 Copilot in canvas apps, make sure the following prerequisites are met:
+             You must enable the feature using https://make.preview.powerapps.com/      .
+             Your tenant must be set to allow Dataverse data available in Microsoft 365 Copilot. For
+             more information, see Enable Microsoft 365 admin center Copilot Dataverse settings.
+             Dataverse Search must be set to Default or On for the environment. For more information,
+             see Understand what this means for generative AI experiences.
+             To use the Microsoft 365 Copilot feature in your app, users must have a Microsoft 365
+             Copilot license.
+          ７ Note
+                Microsoft 365 Copilot for canvas apps with Dataverse relies on Dataverse Search
+                indexes. Enabling this feature might increase your environment’s Dataverse capacity
+                consumption. For more information, see What actions can makers or admins take to
+                manage Dataverse Search efficiently.
+                Sufficient Dataverse database capacity must be available to support indexing, semantic
+                search, and Copilot operations. For more information, see Capacity page details.
+        Enable Microsoft 365 Copilot for your environment
+        To manage Microsoft 365 Copilot for canvas apps, start by learning how to manage Microsoft
+        365 Copilot.
+        Power Platform administrators can set up and configure the Microsoft 365 Copilot feature for
+        users in their environment.
+           1. Sign in to the Power Platform admin center  .
+           2. In the navigation pane, go to Copilot > Settings. Under Power Apps, expand Chat Agent
+             and choose M365 Copilot.
+           3. Select an environment group or an environment name, and then select Edit Setting.
+           4. Select On and then select Save to enable Microsoft 365 Copilot for your canvas apps in the
+             selected environment group or environment.
+        Enable Microsoft 365 Copilot in a canvas app
+        Makers can enable or disable Microsoft 365 Copilot for a specific canvas app.
+           1. Sign in to Power Apps   .
+           2. Open a canvas app for editing.
+           3. Select Settings in the command bar.
+           4. On the left, select General.
+           5. To enable Microsoft 365 Copilot, set M365 Copilot in canvas apps (Preview) to On. To
+             disable it, set the option to Off.
+           6. Select Save and then publish the app for the changes to take effect.
+        Microsoft 365 Copilot vs. Copilot chat
+        Microsoft 365 Copilot is replacing Copilot chat in canvas apps.
+        Known limitations
+             Agents you author can't yet use in‑app user context to optimize their responses.
+        M365 Copilot in canvas apps supports apps that use either SharePoint or Dataverse as a
+        data source but not both within the same app.
+        During the initial preview phase, for SharePoint, only applications containing a single
+        SharePoint list will return answers to questions.
+        If your canvas app connects to a SharePoint list through an environment variable, Microsoft
+        365 Copilot won't reference data from that SharePoint list.
+        Microsoft 365 Copilot for canvas apps allows users to view data by using read-only
+        operations. This capability means that users can only view data that matches their queries
+        and can't make any changes. To make changes, customization with an agent is required.
+        Microsoft 365 Copilot for canvas apps isn't available in the Power Apps mobile app.
+     Related information
+        Use Microsoft 365 Copilot in canvas apps (preview)
+        Customize Microsoft 365 Copilot with an agent in canvas apps (preview)
+        Add Microsoft 365 Copilot to model-driven apps
+        Use Microsoft 365 Copilot in model-driven apps
+        Customize Microsoft 365 Copilot in model-driven apps
+      Last updated on 06/16/2026
+         Customize Microsoft 365 Copilot with an
+         agent (preview)
+         Microsoft 365 Copilot in Power Apps lets users interact with custom agents that extend what
+         Copilot can do. By customizing an agent, you can create tailored experiences that fit your
+         organization's business processes and data. For more information, see Use agents in Microsoft
+         365 Copilot.
+         This article describes the types of agents you can build for Microsoft 365 Copilot in Power Apps
+         and helps you choose the right approach for your scenario.
+         Choose an agent type
+         The following table compares the agent types you can build.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Agent type       Description                                         Common use cases
+           Declarative      Built with low-code tools and templates for quick   Automate routine tasks, answer FAQs,
+           agent            setup of common scenarios in Microsoft 365          and provide guided workflows.
+                            Copilot.
+           Custom           Built with custom logic and integrations for        Complex business processes, custom
+           engine agent     advanced capabilities tailored to your business.    data integrations, and specialized
+                                                                                automation.
+           Copilot Studio   Built and managed in Microsoft Copilot Studio,      Interactive chatbots, team
+           agent            with integration to Teams and Microsoft 365 for     collaboration, and personalized
+                            conversational experiences.                         support within Microsoft 365 apps.
+         To find the best option for your organization, use these resources:
+               Get an overview and guidance on how to choose what type of agent to build in Microsoft
+               365 Copilot agents overview.
+               Build a declarative agent for Microsoft 365 Copilot or a custom engine agent for Microsoft
+               365.
+               Use Microsoft Copilot Studio to connect and set up an agent for Teams and Microsoft 365
+               so it's available in Microsoft 365 Copilot.
+        Review the guidance on how to choose between Microsoft 365 Copilot and Copilot Studio
+        to build your agent.
+     Related information
+        Add Microsoft 365 Copilot for app users in canvas apps (preview)
+        Use Microsoft 365 Copilot in canvas apps (preview)
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 06/16/2026
+         Add a Copilot control to a canvas app
+         (preview)
+              Summarize this article for me
+         ﾃ
+         [This article is prerelease documentation and is subject to change.]
+         The Copilot control is an AI assistant that you can add to your canvas apps. By using Copilot,
+         app users can get insights about the data in your app through natural language conversations
+         with an AI-powered copilot. Makers can add the control to any canvas app and choose which
+         data provide answers.
+            ） Important
+            Starting February 2, 2026, you can't add the Copilot control to new canvas apps. Existing
+            apps with this control will remain functional for a limited time but will eventually no longer
+            be supported. Microsoft 365 Copilot Chat in canvas apps      is the new the recommended
+            solution for natural language interactions in canvas apps. To ensure a smooth transition
+            and prevent any disruption, we recommend that you migrate to Microsoft 365 Copilot
+            chat as soon as it becomes available in your environment.
+            ７ Note
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 This feature is powered by Azure OpenAI Service.
+         Prerequisites
+         Ensure you meet the prerequisites and region availability in Copilot in Power Apps overview
+         (preview).
+         Copilot doesn't work in environments that use a customer-managed key or Customer Lockbox.
+         Set up Copilot for your environment
+         To let app users use the Copilot chat experience in a canvas app, a Power Platform admin
+         needs to enable Allow users to analyze data using an AI-powered chat experience in canvas
+         and model-driven apps in the Power Platform admin center     . Learn more in Manage feature
+         settings.
+         Set up Copilot for your canvas app
+         To add a Copilot control to your canvas app, turn on Copilot component and Edit in Copilot
+         Studio in the app settings in Power Apps  .
+         Copilot component: Turns on the Copilot feature in your canvas app so you can add the
+         Copilot control and connect it to a copilot.
+         Edit in Copilot Studio: Lets you customize the copilot using Copilot Studio. If you turn off this
+         option, only the default copilot is available.
+            1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+              Settings > Updates.
+            2. On the Preview tab, turn on the Copilot component and Edit in Copilot Studio settings.
+     Add the Copilot control to your canvas app
+     With your canvas app open for editing, and all settings configured:
+       1. In the app authoring menu, select Insert, and then select Copilot (preview).
+       2. When prompted to add a data source to Copilot, select a Dataverse table as the data
+        source.
+      ７ Note
+      The Copilot control only supports Dataverse tables for the data source.
+     Customize the copilot by using Copilot Studio
+     Copilot Studio is an app that you use to create and edit copilots for your apps. Define your
+     copilot's articles, actions, and other features. For example, make your copilot respond to
+     specific questions about your app's data or perform actions like opening a screen or sending
+     an email.
+     Customize your newly connected copilot in Power Apps through the properties menu.
+       1. Select the Copilot control on your canvas. Select Edit next to the Customize copilot field
+        in Properties.
+       2. If you don't have a copilot, select Create new copilot in the Customize Copilot pane. The
+        Copilot control in Power Apps Studio doesn't support enabling an existing Copilot from
+        Copilot Studio.
+                                                                                                 
+              Copilot Studio    opens in a new tab. Any changes you make in Copilot Studio appear in
+              your connected copilot in your canvas app.
+         Learn more in Quickstart: Create and deploy a copilot.
+         Collect feedback from app users
+         Makers and app users provide feedback on copilot responses by selecting the Like (thumbs up)
+         or Dislike (thumbs down) button for each response. Enter detailed feedback in the text box,
+         and then select Submit.
+         Feedback goes to Microsoft to help improve the Copilot control.
+         Disallow feedback from app users
+         If you don't want your app users to provide feedback to Microsoft, turn off the feedback
+         option.
+            1. Sign in to Power Apps  , and select Tables from the left navigation pane.
+       2. Select the Organization table from the list.
+       3. In the Organization columns and data section, select the column headers list. The Show
+         existing column popup appears.
+       4. Search for Allow users to provide feedback for App Copilot, and make sure the check
+         box is unchecked.
+       5. Select Save.
+                                                           
+      Related information
+         Build apps through conversation (preview)
+         Use your prompt in Power Automate
+         Add Copilot for app users in model-driven apps
+         Power Apps Copilot control (video)
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 02/24/2026
+         Add a custom Copilot to a canvas app
+         (preview)
+              Summarize this article for me
+         ﾃ
+         [This article is prerelease documentation and is subject to change.]
+         You can integrate a custom Copilot created in Microsoft Copilot Studio and enable it for your
+         canvas app. This lets users interact with Copilot to ask questions about the data in your app.
+         With just a few simple steps, you can embed a custom Copilot across all your canvas app
+         screens without changing the app's design.
+            ） Important
+            Starting February 2, 2026, adding a custom Copilot to new canvas apps will be
+            discontinued. Existing apps using this feature will remain functional for a limited time but
+            will eventually no longer be supported. Microsoft 365 Copilot Chat in canvas apps     is
+            the new the recommended solution for natural language interactions in canvas apps. To
+            ensure a smooth transition and prevent any disruption, we recommend that you migrate
+            to Microsoft 365 Copilot chat as soon as it becomes available in your environment.
+            ７ Note
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 App Copilot for canvas apps is currently rolling out and might not yet be available in
+                 your region. App Copilot may be available on Power Apps mobile for mobile devices
+                 before it becomes available on the web browser during rollout.
+         Availability
+               This capability might not be available in your region yet. Learn more in Explore Copilot
+               features by geography and languages     .
+               During the rollout, this capability might be accessible on the Power Apps mobile app
+               before it becomes available on web browsers.
+        To use copilots in Power Apps, you must enable data movement across regions for
+        generative AI features. This is crucial if your organization and environment are located in
+        different regions. For more information, see Enable copilots and generative AI features.
+     Prerequisites
+     Before using this feature, make sure the following prerequisites are met:
+        Create a custom Copilot in Copilot Studio and publish it in the same environment as your
+        canvas app.
+        Configure the custom Copilot with user authentication in Microsoft Entra ID.
+        Give makers and users access to the Copilot within the environment.
+     Connect Copilot to your app
+     Open your canvas app for editing in Power Apps Studio:
+       1. In the command bar, go to Settings > Updates > Preview tab, and set the toggle for App
+        Copilot to On.
+        You see a Copilot tab appear in Settings.
+       2. Select the Copilot tab. In the drop-down list under Connect a copilot, select a custom
+        copilot published and shared in the same environment as your canvas app.
+                                                       
+        3. Once you select a Copilot, close the settings dialog box and publish the app. Once the
+         app is published, users are able to use Copilot within it.
+      Copilot isn't visible when previewing an app in Power Apps Studio. To see Copilot in action,
+      save and publish your app, and then open it using the Power Apps mobile app or a web
+      browser.
+        Tip
+       Removing the custom Copilot from the app will disable its functionality.
+      Use Copilot in your app
+         Open your canvas app in a web browser. On the command bar, select Copilot.
+                                                
+         In the Power Apps mobile app on iOS or Android devices, select the floating button to
+         access Copilot. You can reposition the button or dismiss it. To use Copilot again after
+         dismissing it, close and reopen the app.
+      Difference between this feature and the Copilot
+      control
+      This feature lets you add a custom Copilot created in Microsoft Copilot Studio to a canvas app.
+      It doesn't require any changes to the app's layout. It's available both on the web and natively
+      on mobile devices, and it can connect to existing custom Copilots created in Copilot Studio.
+      When you add a Copilot control to a canvas app, makers need to update the app's layout to
+      accommodate the control, which is only available on the web. This control supports asking
+      questions about your data or connecting to a new custom copilot from Copilot Studio.
+      See Also
+      FAQ for Copilot
+       Last updated on 02/24/2026
+       Create and edit tables using the table
+       designer
+       Article • 10/29/2024
+       Create and edit Dataverse tables in canvas apps using the table designer inside Power
+       Apps Studio. You can also work with the data that's in the table without leaving the app
+       that you're working on.
+       Create a table
+         1. Create a new or open an existing app in Power Apps Studio.
+         2. In the app authoring menu, select Data.
+         3. On the Data pane, select Add Data > Create new table.
+           ７ Note
+           If the Create new table button is disabled then review Required permissions
+           and limitations.
+                                           
+       4. You see Choose an option to create tables. For example, you can choose to Start
+        from blank or Start with Copilot to create a new table.
+       5. A new table is created for you in the canvas. Enter a name for the table directly
+        where you see the table name.
+        You can also expand the Properties pane found in the table's overflow menu (the
+        ellipses) to edit the table properties, such as the plural name for the table. For
+        example, a table name can be Ticket, and the plural table name can be Tickets.
+                                           
+        Can you also add columns or sample data to the table.
+         6. When you're done editing, select Save and exit.
+       Edit an existing table
+       Once a Dataverse table is created, you can start editing the table. You can also add
+       existing Dataverse tables to your app and edit those tables using the table designer.
+         1. From the app authoring menu, select Data.
+         2. On the Data pane, select Add data.
+         3. In the Select a data source dialog box, from the list of Dataverse tables, select a
+          table to add to your app.
+         4. On the newly added table select, More actions > Edit data.
+       5. The selected table is ready for editing in the table designer.
+         ７ Note
+         Some system tables might not be available for editing, or some editing
+         actions may be disabled.
+      Edit the table properties
+      After selecting Edit data, you see the Edit table designer.
+       1. Select Edit table properties.
+             You can edit the following table properties.
+                                                                                    ﾉ Expand table
+              Property          Description
+              Display name      The singular name for the table shown in the app. The display name can be
+                                changed later.
+              Plural display    The plural name for the table shown in the app. The plural display name can
+              name              be changed later.
+              Description       Provide a meaningful description of the purpose of the table.
+             Select Enable Attachments to append notes and files to records for this table.
+             Select the Primary column tab if you want to change its Display Name or Description.
+             The primary column is used by lookup fields when establishing relationships with other
+             tables.
+             Advanced options
+             Select Advanced options to see the optional properties you can set. Otherwise some are
+             already set for you.
+                                                                                              ﾉ Expand table
+               Property               Description
+               Schema name            By default, the schema name is automatically created for you based on the
+                                      display name, but you can change it. The schema name can't contain
+                                      spaces and includes the customization prefix for the Dataverse solution
+                                      publisher. You can't change the schema name after the table is saved.
+               Logical name           A unique identifier for the entity. This name can't be changed once the
+                                      entity is created.
+               Type                   Select the type of table. Use standard for most tables. Activity tables are
+                                      special tables that can only be owned by a user or team, but can't be
+                                      owned by an organization. Virtual tables require the table be populated
+                                      with data from an external source.
+               Record ownership       Switch the table type to Activity table, so you can create tables that can
+                                      manage tasks. The type of Ownership defines who can perform operations
+                                      on a record.
+               Color                  You can select your table color using words or hex codes.
+               Primary row image      You can choose whether to display an image for the table. This image is
+                                      displayed in Power Apps in some design areas. Notice that the image
+                                      doesn't appear in apps using the table. To display images in apps, use the
+                                      image column. Learn more in Image columns.
+               Apply duplicate        If duplicate detection is enabled for your organization, enabling allows you
+               detection rules        to create duplicate detection rules for this table.
+               Track changes          Enables data synchronization in a performant way by detecting what data
+                                      changed since the data was initially extracted or last synchronized.
+               Provide custom         When selected, set a Help URL to control what page users see when they
+               help                   select the help button in the application. Use help to provide guidance
+                                      specific to your company processes for the table.
+               Audit changes to its   When auditing is enabled for your organization, table records can change
+               data                   to be captured over time. When you enable auditing for a table, auditing is
+                                      also enabled on all its fields. You can select or clear fields that you want to
+                                      enable auditing on.
+               Leverage quick         After you create and publish a Quick Create Form for this table, people can
+               create form if         create a new record using the Create button in the navigation pane. Learn
+               available              more in Create and design model-driven app forms.
+                                      If enabled for a custom activity table, the custom activity is visible in the
+                                      group of activity entities when people use the Create button in the
+                                      navigation pane. However, because activities don't support quick create
+                                      forms, the main form is used when the custom table icon is selected.
+               Property              Description
+               Enable long term      Table can be included in the configuration of data retention, which moves
+               retention             certain records to long term storage.
+               Creating a new        Associate activities to records for this table.
+               activity
+               Doing a mail merge    App users can use this table with mail merge.
+               Setting up            After other tasks are performed to enable document management for your
+               SharePoint            organization, enabling this feature allows for this table to participate in
+               document              integration with SharePoint.
+               management
+               Can have              Use the connections feature to show how records for this table have
+               connections           connections to records of other tables that also have connections enabled.
+               Can have a contact    Send emails using an email address stored in one of the fields for this
+               email                 table. If a Single Line of Text column with format set to email doesn't
+                                     already exist for this table, a new one is created when you enable sending
+                                     email.
+               Have an access        Create team templates for this table.
+               team
+               Can be linked to      Let app users write feedback for any table record, or rate table records
+               feedback              within a defined rating range. Learn more in Configure a table for
+                                     feedback/ratings.
+               Appear in search      Enable so that table records can be included in search results when using
+               results               an app.
+               Can be taken          Makes data in this table available while the Power Apps application isn't
+               offline               connected to a network.
+               Can be added to a     Use the table with queues. Queues improve routing and sharing of work by
+               queue                 making records for this table available in a central place that everyone can
+                                     access.
+             Add and edit columns
+             You can create and edit columns in the table editor.
+             Learn more in How to create and edit columns.
+             Editing other table properties
+       For more advanced table editing scenarios, using the table hub is required. Some
+       examples of these kinds of edits are table relationships, keys, and deleting the table.
+       Learn more in Create and edit tables using Power Apps.
+       Add and edit data
+       The table designer for canvas apps allows you to add new rows to a Dataverse table or
+       edit rows inside Power Apps Studio using the table designer. You can start typing
+       directly into the grid or select, New row.
+       Learn more in Create your first table.
+       Remove a table
+       To remove a table from your app, select More options to the right of the table name
+       then select, Remove.
+        ７ Note
+        When you remove a table, the table is removed and not deleted.
+       Required permissions and limitations
+          To create a table in Dataverse, the environment must have a Dataverse database
+          provisioned. You must have system customizer or system administrator
+                    permissions for the environment where you'd like to build a table. If these
+                    conditions aren't met, the Create New Table button is disabled.
+                    You can only create and edit tables in the current Dataverse environment. If you
+                    changed your Dataverse environment using the environment picker, then the
+                    Create new table and Edit table options is disabled.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+          Show a list of items in canvas apps
+          05/31/2025
+          Show a list of items from any data source by adding a Gallery control to your canvas app. This
+          topic uses Excel as the data source. Filter the list by configuring the Gallery control to show
+          only those items that match the filter criterion in a Text input control.
+          Prerequisites
+               Learn how to add and configure a control in Power Apps.
+               Set up the sample data:
+                  1. Download this Excel file   , which contains sample data for this tutorial.
+                  2. Upload the Excel file to a cloud-storage account, such as OneDrive for Business.
+               Open a blank app:
+                  1. Create a blank canvas app.
+                  2. Add a connection to the FlooringEstimates table in the Excel file.
+          Add a gallery to a blank screen
+             1. On the Insert tab, select Gallery, and then select Vertical.
+             2. On the Properties tab of the right-hand pane, open the Items list, and then select
+               Flooring Estimates.
+       3. (optional) In the Layout list, select a different option.
+     Add a gallery in a screen
+       1. On the Home tab, select New screen > List screen.
+        A screen that contains a Gallery control and other controls, such as a search bar, appears.
+       2. Set the gallery's Items property to FlooringEstimates.
+        The Gallery control shows the sample data.
+     Add a control to the Gallery control
+     Before you do any other customization, ensure that the layout for your Gallery control most
+     closely matches what you want. From there, you can further modify the Gallery template, which
+     determines how all data in the Gallery control appears.
+       1. Select the template by clicking or tapping near the bottom of the Gallery control and
+        then selecting the pencil icon in its upper-left corner.
+       2. With the template still selected, add a Label control, and then move and resize it so that it
+        doesn't overlap with other controls in the template.
+      3. Select the gallery, and then select Edit next to Fields on the Properties tab of the right-
+       hand pane.
+      4. Select the label that you added earlier in this procedure, and then open the highlighted
+       list in the Data pane.
+       5. In that list, click or tap Price.
+         The Gallery control shows the new values.
+      Filter and sort a gallery
+      The Items property of a Gallery control determines which items it shows. In this procedure, you
+      configure that property so that it also determines which records appear based on filter criteria
+      and in what order.
+       1. Set the Items property of the Gallery control to this formula:
+          Power Fx
+           Sort(
+               Filter(
+              FlooringEstimates,
+              IsBlank(TextSearchBox1.Text) or TextSearchBox1.Text in Text(Name)
+               ),
+               Name,
+               If(
+                   SortDescending1,
+                   SortOrder.Descending,
+                   SortOrder.Ascending
+               )
+           )
+        For more information about the functions in this formula, see the formula reference.
+       2. Double-click the search box, and then type part or all of a product name in it.
+        Only those items that meet the filter criterion appear.
+       3. While pressing the Alt key, select the sort icon one or more times to switch the sort order.
+        The records toggle between ascending and descending alphabetical order based on the
+        product name.
+     Highlight the selected item
+     Set the Gallery control's TemplateFill property to a formula that's similar to this example, but
+     you can specify different colors if you want:
+     If(ThisItem.IsSelected, LightCyan, White)
+     Change the default selection
+     Set the Gallery control's Default property to the record that you want to select by default. For
+     example, you can specify the fifth item in the FlooringEstimates data source:
+     Index(FlooringEstimates, 5)
+     In this example, you specify the first item in the Hardwood category of the FlooringEstimates
+     data source:
+     LookUp(FlooringEstimates, Category = "Hardwood")
+     Next steps
+    Learn how to work with forms and formulas.
+     Show items of different heights in a canvas
+     app gallery
+     If different items in your data set contain different amounts of data in the same field, you can
+     display items that contain more data without adding extra empty space after items with less data.
+     Add and configure a Flexible height gallery control so that you can:
+        Configure Label controls to expand or shrink based on their contents.
+        Position each control so that it automatically appears just below the control above it.
+     In this article, you show data about flooring products in a Flexible height gallery control. The
+     image of each product appears 5 pixels below the overview text, whether that overview is two
+     lines or five.
+      ７ Note
+      If you've never added controls to a gallery, complete the steps in Show a list of items in a
+      gallery before you proceed.
+     Add data to a blank app

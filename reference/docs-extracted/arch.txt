@@ -1,0 +1,1404 @@
+
+APP MONTHLY REPORTING
+MANAGEMENT SYSTEM
+Enterprise Solution Architecture &amp; Implementation Documentation
+Power Apps Canvas • SharePoint Online • Power Automate • Microsoft Forms • Power BI • Microsoft 365
+
+Document Control
+ | | 
+Solution Name
+ | APP Monthly Reporting Management System (APP-MRMS)
+ | 
+Document Type
+ | BRD / FDS / TDS – Combined Architecture Pack
+ | 
+Version
+ | 1.0 – Draft for Stakeholder Review
+ | 
+Status
+ | Draft
+ | 
+Prepared For
+ | Annual Performance Plan (APP) Implementation Reporting Programme
+ | 
+Prepared By
+ | Senior Enterprise Solution Architect / Power Platform Lead
+ | 
+Date
+ | 26 June 2026
+ | 
+Classification
+ | Internal – Departmental Use
+ | 
+
+Table of Contents
+TOC \h \o "1-3"Table of Contents PAGEREF _Toc236383059 \h 1
+0. Executive Summary &amp; Review of Existing Project Material PAGEREF _Toc236383060 \h 1
+1. Business Requirements Document (BRD) PAGEREF _Toc236383061 \h 1
+1.1 Background PAGEREF _Toc236383062 \h 1
+1.2 Business Objectives PAGEREF _Toc236383063 \h 1
+1.3 Scope PAGEREF _Toc236383064 \h 1
+In Scope PAGEREF _Toc236383065 \h 1
+Out of Scope (Phase 1) PAGEREF _Toc236383066 \h 1
+1.4 Stakeholders &amp; Roles PAGEREF _Toc236383067 \h 1
+1.5 Business Requirements PAGEREF _Toc236383068 \h 1
+1.6 Assumptions &amp; Constraints PAGEREF _Toc236383069 \h 1
+1.7 Success Criteria / KPIs PAGEREF _Toc236383070 \h 1
+1.8 Risks PAGEREF _Toc236383071 \h 1
+2. Functional Design Specification (FDS) PAGEREF _Toc236383072 \h 1
+2.1 User Roles &amp; Responsibilities PAGEREF _Toc236383073 \h 1
+2.2 Functional Requirements PAGEREF _Toc236383074 \h 1
+2.2.1 User &amp; Security Management (FR-1xx) PAGEREF _Toc236383075 \h 1
+2.2.2 Programme Management (FR-2xx) PAGEREF _Toc236383076 \h 1
+2.2.3 Project Management (FR-3xx) PAGEREF _Toc236383077 \h 1
+2.2.4 Activity Management (FR-4xx) PAGEREF _Toc236383078 \h 1
+2.2.5 Monthly Reporting, Drafts &amp; Submission (FR-5xx) PAGEREF _Toc236383079 \h 1
+2.2.6 Approval Workflow &amp; Rejection (FR-6xx) PAGEREF _Toc236383080 \h 1
+2.2.7 Attachments &amp; Comments (FR-7xx) PAGEREF _Toc236383081 \h 1
+2.2.8 KPI Tracking &amp; Progress Indicators (FR-8xx) PAGEREF _Toc236383082 \h 1
+2.2.9 Dashboards, Search &amp; Filtering (FR-9xx) PAGEREF _Toc236383083 \h 1
+2.2.10 Notifications (FR-10xx) PAGEREF _Toc236383084 \h 1
+2.2.11 Audit Trail &amp; Approval History (FR-11xx) PAGEREF _Toc236383085 \h 1
+2.2.12 Security (FR-12xx) PAGEREF _Toc236383086 \h 1
+2.3 Core Process Flow PAGEREF _Toc236383087 \h 1
+2.4 Non-Functional Requirements PAGEREF _Toc236383088 \h 1
+3. Technical Design Specification (TDS) PAGEREF _Toc236383089 \h 1
+3.1 Solution Architecture PAGEREF _Toc236383090 \h 1
+3.2 Technology Stack PAGEREF _Toc236383091 \h 1
+3.3 Integration Points PAGEREF _Toc236383092 \h 1
+3.4 Naming Conventions PAGEREF _Toc236383093 \h 1
+3.5 Environment Strategy PAGEREF _Toc236383094 \h 1
+4. SharePoint Data Model PAGEREF _Toc236383095 \h 1
+4.1 List: Programmes PAGEREF _Toc236383096 \h 1
+4.2 List: Projects (Key Deliverables) PAGEREF _Toc236383097 \h 1
+4.3 List: Activities PAGEREF _Toc236383098 \h 1
+4.4 List: MonthlyReports PAGEREF _Toc236383099 \h 1
+4.5 List: ReportComments PAGEREF _Toc236383100 \h 1
+4.6 Document Library: EvidenceLibrary PAGEREF _Toc236383101 \h 1
+4.7 List: AuditLog (append-only) PAGEREF _Toc236383102 \h 1
+4.8 List: Notifications PAGEREF _Toc236383103 \h 1
+4.9 List: KPIDefinitions PAGEREF _Toc236383104 \h 1
+4.10 List: Users PAGEREF _Toc236383105 \h 1
+4.11 Reference / Choice Data PAGEREF _Toc236383106 \h 1
+5. Lookup Relationships PAGEREF _Toc236383107 \h 1
+5.1 Relationship Table PAGEREF _Toc236383108 \h 1
+5.2 Cascading Selection in Power Apps PAGEREF _Toc236383109 \h 1
+6. Power Apps Screens PAGEREF _Toc236383110 \h 1
+7. Container Hierarchy PAGEREF _Toc236383111 \h 1
+7.1 General Pattern PAGEREF _Toc236383112 \h 1
+8. Responsive Formulas PAGEREF _Toc236383113 \h 1
+9. Power Fx Formulas PAGEREF _Toc236383114 \h 1
+9.1 App.OnStart – Role Resolution &amp; Reference Caching PAGEREF _Toc236383115 \h 1
+9.2 My Activities – Scoped Gallery PAGEREF _Toc236383116 \h 1
+9.3 Save Draft / Submit PAGEREF _Toc236383117 \h 1
+9.4 Approve / Reject PAGEREF _Toc236383118 \h 1
+9.5 KPI Progress Indicator PAGEREF _Toc236383119 \h 1
+9.6 Global Search PAGEREF _Toc236383120 \h 1
+9.7 Notification Badge PAGEREF _Toc236383121 \h 1
+10. Power Automate Flows PAGEREF _Toc236383122 \h 1
+10.1 Error-Resilient Flow Pattern (applies to all flows above) PAGEREF _Toc236383123 \h 1
+11. Security Architecture PAGEREF _Toc236383124 \h 1
+11.1 Identity &amp; Group Model PAGEREF _Toc236383125 \h 1
+11.2 SharePoint Permission Mapping PAGEREF _Toc236383126 \h 1
+11.3 Power Apps Role-Based UI PAGEREF _Toc236383127 \h 1
+11.4 Data Loss Prevention &amp; Conditional Access PAGEREF _Toc236383128 \h 1
+12. Error Handling PAGEREF _Toc236383129 \h 1
+12.1 Power Apps PAGEREF _Toc236383130 \h 1
+12.2 Power Automate PAGEREF _Toc236383131 \h 1
+12.3 Data Validation PAGEREF _Toc236383132 \h 1
+13. Performance Optimization PAGEREF _Toc236383133 \h 1
+13.1 Delegation PAGEREF _Toc236383134 \h 1
+13.2 Indexing PAGEREF _Toc236383135 \h 1
+13.3 Caching &amp; Collection Strategy PAGEREF _Toc236383136 \h 1
+13.4 List &amp; UI Scaling PAGEREF _Toc236383137 \h 1
+13.5 Power BI PAGEREF _Toc236383138 \h 1
+14. Deployment Strategy PAGEREF _Toc236383139 \h 1
+14.1 Application Lifecycle Management (ALM) PAGEREF _Toc236383140 \h 1
+14.2 Release Pipeline PAGEREF _Toc236383141 \h 1
+14.3 Rollback PAGEREF _Toc236383142 \h 1
+14.4 Rollout Approach PAGEREF _Toc236383143 \h 1
+15. Governance Recommendations PAGEREF _Toc236383144 \h 1
+15.1 Centre of Excellence (CoE) PAGEREF _Toc236383145 \h 1
+15.2 Data Governance PAGEREF _Toc236383146 \h 1
+15.3 Licensing &amp; Access Governance PAGEREF _Toc236383147 \h 1
+15.4 Naming, Documentation &amp; Change Control PAGEREF _Toc236383148 \h 1
+15.5 Roadmap Beyond Phase 1 PAGEREF _Toc236383149 \h 1
+15.6 Support Model PAGEREF _Toc236383150 \h 1
+
+0. Executive Summary &amp; Review of Existing Project Material
+This pack was developed after reviewing the three documents already in the project workspace: the live APP Implementation Plan 2026/27 workbook (17 directorate sheets – Communications, Legal Services, ICT, Strategic Planning M&amp;E, HRM, HRD, Finance, SCM, CFO, Risk &amp; Internal Control, Special Programmes, Security Services, and Programmes 2A, 2B, 3 and 4), the draft Technical Design Specification, and the draft APP Reporting System FDS.
+Three findings from that review shaped this design:
+The real-world data is naturally hierarchical and repeats a fixed pattern across every sheet: Directorate/Programme → Priority/Challenge &amp; Key Deliverable → Activities → a recurring April-to-March pair of “Activities / Progress” columns. This maps directly onto a Programme → Project → Activity → Monthly Report data model, which is the model used throughout this document.
+The existing draft TDS/FDS used a 3-tier role model (User, Manager, M&amp;E) and a single-level approval. The brief for this engagement specifies four roles — Administrator, Programme Manager, Supervisor, Contributor — with explicit KPI tracking, progress indicators, threaded comments, full audit trail and approval history. This pack supersedes the earlier draft and extends it accordingly, while keeping the same SharePoint-first, low-code delivery philosophy.
+The earlier TDS already flagged that SharePoint list attachments are a weak substitute for a proper evidence repository. This pack carries that recommendation forward as a firm design decision (Section 4 and Section 15) and adds Microsoft Forms as a lightweight, low-bandwidth field-capture channel — important given several Activities in the workbook are executed at district and sub-district level with variable connectivity (e.g. Ganyesa, Sannieshof, Atamelang, Morokweng).
+The remainder of this document is organised as fifteen numbered deliverables, in the order : BRD, FDS, TDS, SharePoint data model, lookup relationships, Power Apps screens, container hierarchy, responsive formulas, Power Fx formulas, Power Automate flows, security architecture, error handling, performance optimisation, deployment strategy and governance.
+
+1. Business Requirements Document (BRD)
+1.1 Background
+APP (Annual Performance Plan) implementation is currently tracked in a single, very wide Excel workbook with one sheet per directorate/programme. Each row carries a Priority/Challenge, a Key Deliverable, an Annual Target, a Budget reference, and 24 paired “Activities / Progress” columns running April through March. Progress narratives are typed directly into cells by directors and submitted by email or shared drive for consolidation by Strategic Planning, Monitoring &amp; Evaluation (SP M&amp;E) ahead of DMC, EMC and Lekgotla reporting cycles.
+This approach is functionally adequate but operationally fragile: there is no single source of truth, no enforced workflow, no version history, no automatic reminders, and no audit trail — all of which become material weaknesses during AGSA audit engagements where evidence of timely review, approval and corrective action is itself an audit point (the workbook contains multiple AGSA-related corrective action items).
+1.2 Business Objectives
+Replace the spreadsheet-based process with a governed, role-based digital workflow.
+Establish one authoritative record per Programme → Project → Activity → Monthly Report, replacing manual consolidation.
+Enforce a draft → submit → review → approve/reject cycle with full audit trail and approval history.
+Provide real-time dashboards (KPI attainment, progress against Annual Target, overdue items) for DMC/EMC and Lekgotla preparation.
+Reduce administrative effort spent consolidating progress narratives manually each month.
+Capture evidence (POEs) against each monthly report in a governed, versioned evidence repository.
+Enable low-connectivity field/district reporting via Microsoft Forms as an alternate capture channel.
+1.3 Scope
+In Scope
+Programme, Project and Activity master data administration.
+Monthly progress capture, drafting, submission and multi-stage approval.
+KPI/target definition and automatic progress-indicator calculation.
+Attachments/evidence, threaded comments, notifications, audit trail and approval history.
+Role-based Power Apps Canvas application for all four user roles.
+Power BI dashboards for executive/oversight reporting.
+Microsoft Forms-based lightweight capture for low-connectivity contributors.
+Out of Scope (Phase 1)
+Integration with financial systems (BAS, Reapatala) – budget fields remain free text/reference in Phase 1, recommended as a Phase 2 integration.
+HR/Persal integration for organisational hierarchy – Phase 1 uses Entra ID groups and a Users list maintained by Administrators.
+Public-facing access – the system is for internal departmental users only.
+1.4 Stakeholders &amp; Roles
+Role
+ | Description
+ | Primary Business Need
+ | 
+Administrator
+ | Power Platform/IT or SP M&amp;E super-user
+ | Configure Programmes, Projects, Activities, KPIs, users and financial years; full visibility
+ | 
+Programme Manager
+ | Chief Director / Director accountable for a Programme
+ | Oversight of all Projects under their Programme; escalation approval; KPI dashboards
+ | 
+Supervisor
+ | Director/Deputy Director line-managing Contributors
+ | Review, approve, reject and comment on monthly submissions from their team
+ | 
+Contributor
+ | Officials responsible for executing an Activity
+ | Capture monthly progress, save drafts, submit for review, view feedback
+ | 
+DMC / EMC / Lekgotla (consumers)
+ | Executive oversight bodies
+ | Read-only consolidated Power BI dashboards, no system login required
+ | 
+1.5 Business Requirements
+ID
+ | Requirement
+ | Priority
+ | 
+BR-01
+ | The system shall allow Administrators to maintain Programmes, Projects and Activities without developer intervention.
+ | Must
+ | 
+BR-02
+ | The system shall allow Contributors to capture, save as draft, and submit monthly progress against an assigned Activity.
+ | Must
+ | 
+BR-03
+ | The system shall route submitted reports to the relevant Supervisor for approval or rejection with mandatory comments on rejection.
+ | Must
+ | 
+BR-04
+ | The system shall allow Programme Managers to escalate-approve, override, and monitor all Projects within their Programme.
+ | Must
+ | 
+BR-05
+ | The system shall track KPI/Annual Target attainment and display a visual progress indicator per Project and Programme.
+ | Must
+ | 
+BR-06
+ | The system shall retain a complete, immutable audit trail of every create/update/status transition.
+ | Must
+ | 
+BR-07
+ | The system shall send automated reminders ahead of the monthly due date and escalate overdue items.
+ | Must
+ | 
+BR-08
+ | The system shall support file attachments (POEs) and threaded comments against each monthly report.
+ | Must
+ | 
+BR-09
+ | The system shall provide role-appropriate dashboards (Power BI) for monitoring and executive reporting.
+ | Must
+ | 
+BR-10
+ | The system shall support search and multi-criteria filtering (Programme, Project, status, financial year, quarter, month).
+ | Should
+ | 
+BR-11
+ | The system shall offer a Microsoft Forms-based lightweight capture path for low-connectivity users.
+ | Should
+ | 
+BR-12
+ | The system shall be usable on tablet and mobile devices in the field.
+ | Should
+ | 
+BR-13
+ | The system shall enforce role-based security so users only see/edit data relevant to their role and assignment.
+ | Must
+ | 
+1.6 Assumptions &amp; Constraints
+The Department holds Microsoft 365 (SharePoint Online, Power Apps/Power Automate per-user or per-app, Power BI Pro) licensing, or will procure it.
+Entra ID (Azure AD) is the system of record for user accounts; departmental security groups exist or will be created per role/Programme.
+SharePoint Online list view threshold (5,000 items per non-indexed view) and the practical comfort ceiling for canvas-app-bound lists (broadly tens of thousands of rows with indexing/delegation) are accepted constraints for Phase 1; Dataverse migration is the recommended Phase 2 path if volumes or row-level security needs grow (see Section 15).
+District/sub-district connectivity is inconsistent; the design must tolerate intermittent connectivity (Forms + offline-tolerant patterns).
+Financial year runs April – March, consistent with the existing workbook.
+1.7 Success Criteria / KPIs
+Metric
+ | Target
+ | 
+On-time monthly submission rate
+ | ≥ 90% submitted by the 5th working day of the following month
+ | 
+First-time approval rate
+ | ≥ 75% of submissions approved without rejection
+ | 
+Consolidation effort for SP M&amp;E
+ | Reduced from multi-day manual collation to same-day dashboard read
+ | 
+Audit trail completeness
+ | 100% of status transitions logged with actor, timestamp and reason
+ | 
+User adoption
+ | 100% of assigned Contributors actively using the app within one reporting cycle of go-live
+ | 
+1.8 Risks
+Risk
+ | Impact
+ | Mitigation
+ | 
+Low digital literacy / connectivity at district level
+ | Late or incomplete submissions
+ | Microsoft Forms low-bandwidth path; offline-tolerant Power Apps caching; training &amp; change champions per district
+ | 
+SharePoint list scaling limits as history accumulates
+ | Performance degradation, delegation warnings
+ | Indexed columns, list archiving by financial year, phased Dataverse migration roadmap
+ | 
+Role/Programme assignment data quality
+ | Wrong approver routing
+ | Administrator-owned Users/Assignment list with validation; quarterly access review
+ | 
+Resistance to change from spreadsheet-based culture
+ | Low adoption, shadow spreadsheets persist
+ | Executive sponsorship, phased pilot with one Programme, embedded training, parallel run for one cycle
+ | 
+
+2. Functional Design Specification (FDS)
+2.1 User Roles &amp; Responsibilities
+Role
+ | Key Responsibilities
+ | 
+Administrator
+ | Create/maintain Programmes, Projects, Activities, KPI definitions, financial years and choice lists; manage Users and role/Programme assignment; view all data; access full audit trail; configure notification schedules.
+ | 
+Programme Manager
+ | View and oversee all Projects/Activities within assigned Programme(s); escalation-level approve/reject; monitor KPI and progress dashboards across the Programme; receive escalations from overdue/disputed items.
+ | 
+Supervisor
+ | Review monthly reports submitted by assigned Contributors; Approve, Reject (with mandatory comment) or Return for Correction; add comments/evidence requests; view team-level progress and KPI status.
+ | 
+Contributor
+ | View own assigned Activities; capture monthly progress narrative and percentage complete; attach evidence; save as draft or submit; view own report history, status and Supervisor feedback; respond to rejected items.
+ | 
+2.2 Functional Requirements
+2.2.1 User &amp; Security Management (FR-1xx)
+FR-101 Administrators can create, edit, deactivate Users and assign Role and Programme/Project scope.
+FR-102 The system shall map Entra ID security groups to in-app roles at sign-in.
+FR-103 The system shall prevent a user from acting outside their assigned role or assigned Programme/Project scope.
+2.2.2 Programme Management (FR-2xx)
+FR-201 Administrators can create/edit/archive Programmes (e.g. Programme 1–4, or Chief Directorate groupings).
+FR-202 Each Programme has an accountable Programme Manager (Person field) and an Active flag.
+FR-203 Programme Managers can view, but not delete, all Projects under their Programme.
+2.2.3 Project Management (FR-3xx)
+FR-301 Administrators (and Programme Managers, for their own Programme) can create/edit Projects, equivalent to a Key Deliverable / Priority-Challenge record, with Annual Target, Reference, Budget, Start/Completion Date and Status.
+FR-302 Each Project belongs to exactly one Programme (lookup) and may contain many Activities.
+FR-303 Projects carry one or more KPI/Target definitions used for progress-indicator calculation.
+2.2.4 Activity Management (FR-4xx)
+FR-401 Administrators/Supervisors can create/edit Activities within a Project, set Frequency (Monthly/Quarterly/Annual), assign an Owner (Contributor) and define the reporting calendar (Start/End Date, due-day-of-month).
+FR-402 Activities can be deactivated without deleting historical reports.
+2.2.5 Monthly Reporting, Drafts &amp; Submission (FR-5xx)
+FR-501 Contributors see a personal ‘My Activities’ list filtered to items due in the current/selected reporting period.
+FR-502 Contributors can capture Planned Activity, Progress Narrative and Percentage Complete, and save as Draft repeatedly without triggering workflow.
+FR-503 Submitting a report locks the Contributor-editable fields and sets Status = Submitted, recording SubmittedBy and SubmissionDate.
+FR-504 The system shall maintain one MonthlyReport record per Activity per ReportingMonth per FinancialYear, with a Version number incremented on every resubmission.
+2.2.6 Approval Workflow &amp; Rejection (FR-6xx)
+FR-601 Submitted reports appear in the assigned Supervisor’s Approval Queue.
+FR-602 Supervisors can Approve, Reject (mandatory comment) or Return for Correction (mandatory comment).
+FR-603 Rejected/Returned reports revert to the Contributor as an editable draft, retaining the prior narrative and the Supervisor's comment for context.
+FR-604 Approved reports are visible read-only to the Contributor, Supervisor and the Project’s Programme Manager.
+FR-605 Programme Managers can perform an escalation-level review/override on any report within their Programme, recorded distinctly from Supervisor approval.
+2.2.7 Attachments &amp; Comments (FR-7xx)
+FR-701 Users can attach one or more evidence files to a monthly report, stored in a governed Evidence Library (not raw list attachments).
+FR-702 Any role with visibility of a report can add a threaded comment; comments are timestamped and attributed.
+FR-703 Comment authors and the report owner are notified of new comments.
+2.2.8 KPI Tracking &amp; Progress Indicators (FR-8xx)
+FR-801 Each Project displays a calculated progress indicator (RAG status + percentage) derived from its Activities’ latest approved Percentage Complete weighted against the Annual Target.
+FR-802 Programme-level KPI roll-ups aggregate all Projects within a Programme.
+FR-803 RAG thresholds (Red/Amber/Green) are configurable by Administrators per KPI definition.
+2.2.9 Dashboards, Search &amp; Filtering (FR-9xx)
+FR-901 The in-app Home Dashboard shows role-appropriate cards (counts) and charts (monthly trend, Programme performance, overdue items).
+FR-902 A Power BI dashboard provides executive-level, cross-Programme reporting, refreshed on a schedule.
+FR-903 Users can search by free text (Activity/Project title, keyword in narrative) and filter by Financial Year, Quarter, Month, Programme, Project, Status and Owner.
+2.2.10 Notifications (FR-10xx)
+FR-1001 The system sends a reminder ahead of the monthly due date to each Contributor with an outstanding Activity.
+FR-1002 The system notifies the Supervisor on submission, the Contributor on approval/rejection, and the Programme Manager on escalation.
+FR-1003 The system escalates overdue (unsubmitted) reports automatically after a configurable grace period, first to the Supervisor, then to the Programme Manager.
+2.2.11 Audit Trail &amp; Approval History (FR-11xx)
+FR-1101 Every create, edit and status transition is written to an append-only Audit Log capturing actor, timestamp, entity, field-level change (where applicable) and reason/comment.
+FR-1102 Each MonthlyReport exposes a chronological Approval History (submit → review → decision → resubmit) independent of the generic audit log, for quick on-screen review.
+2.2.12 Security (FR-12xx)
+FR-1201 Access to screens, records and actions is governed by role and Programme/Project assignment, enforced in both the application layer and the data layer.
+2.3 Core Process Flow
+Monthly Reporting Lifecycle:
+Contributor opens an assigned Activity for the current reporting period and captures progress; saves as Draft (repeatable, no workflow triggered).
+Contributor submits; Status → Submitted; Supervisor notified; Audit Log entry written.
+Supervisor reviews. If Approved → Status → Approved; Contributor notified; Project/Programme KPI roll-up recalculated.
+If Rejected/Returned → Status → Rejected with mandatory comment; Contributor notified; record becomes editable again; Version increments on resubmission; loop to step 1.
+Programme Manager may, at any time, open an escalation review on a report within their Programme (e.g. disputed rejection, audit follow-up), recorded as a distinct Approval History entry.
+On the due date + grace period, any Activity without a Submitted/Approved report for the period triggers the Overdue Escalation flow.
+2.4 Non-Functional Requirements
+Category
+ | Requirement
+ | 
+Performance
+ | Core screens (Home, My Activities, Report Submission) render in under 3 seconds on a standard departmental laptop and under 5 seconds on 4G mobile.
+ | 
+Availability
+ | Aligned to Microsoft 365 service SLA (target 99.9%); no additional on-prem dependency.
+ | 
+Usability
+ | Single consistent navigation pattern; role-aware landing screen; mobile/tablet-responsive layout.
+ | 
+Accessibility
+ | Sufficient colour contrast for RAG indicators (icon + text, not colour-only), keyboard-navigable forms, descriptive alt text on icons.
+ | 
+Data retention
+ | Monthly reports and audit trail retained for a minimum of 5 years in line with public-sector records retention requirements.
+ | 
+Auditability
+ | Every status change is traceable to a user, timestamp and reason.
+ | 
+Mobile compatibility
+ | Fully usable on tablet/phone for field-based Contributors, including Forms-based capture.
+ | 
+
+3. Technical Design Specification (TDS)
+3.1 Solution Architecture
+ Microsoft Entra ID (Users, Security Groups: Admin / ProgMgr / Supervisor / Contributor)
+ |
+ v
+ +-------------------------------------------------------------+
+ | PRESENTATION LAYER |
+ | Power Apps Canvas App (primary) Microsoft Forms (field) |
+ | Power BI App / embedded dashboards (oversight, read-only) |
+ +-------------------------------------------------------------+
+ | | ^
+ v v |
+ +-------------------------------------------------------------+
+ | PROCESS / AUTOMATION LAYER |
+ | Power Automate: notifications, escalation, approval |
+ | routing, audit logging, consolidation, Forms intake |
+ +-------------------------------------------------------------+
+ | ^
+ v |
+ +-------------------------------------------------------------+
+ | DATA LAYER |
+ | SharePoint Online: Programmes / Projects / Activities / |
+ | MonthlyReports / Comments / AuditLog / Notifications / |
+ | KPIDefinitions / Users + Evidence Document Library |
+ +-------------------------------------------------------------+
+Figure 1 – Layered architecture: Entra ID (identity) → Presentation → Process/Automation → Data.
+3.2 Technology Stack
+Layer
+ | Technology
+ | Purpose
+ | 
+Identity
+ | Microsoft Entra ID
+ | Authentication, security groups for role/Programme scoping
+ | 
+Presentation – primary
+ | Power Apps Canvas App
+ | Full-feature application for Administrators, Programme Managers, Supervisors, Contributors
+ | 
+Presentation – field capture
+ | Microsoft Forms
+ | Lightweight, low-bandwidth monthly progress capture for district-based Contributors
+ | 
+Presentation – oversight
+ | Power BI
+ | Executive dashboards (DMC/EMC/Lekgotla), embedded in Power Apps and shared via Power BI Service
+ | 
+Process automation
+ | Power Automate (Cloud Flows)
+ | Notifications, escalation, approval routing, audit logging, consolidation, Forms-to-SharePoint intake
+ | 
+Data store
+ | SharePoint Online (Lists + Document Library)
+ | System of record for master data, transactional reports, comments, audit log and evidence
+ | 
+Collaboration/Notifications
+ | Outlook/Teams connectors (via Power Automate)
+ | Email and Teams adaptive-card notifications
+ | 
+3.3 Integration Points
+Microsoft Forms → Power Automate → SharePoint: a Forms response creates/updates a MonthlyReports item in Draft or Submitted state, including any uploaded photo evidence routed to the Evidence Library.
+Power Apps → SharePoint: direct CRUD via the native SharePoint connector for all transactional screens.
+Power Apps → Power Automate: UI actions (Submit, Approve, Reject) call flows directly via the Power Automate connector for actions that must guarantee server-side notification/audit logging even if the user closes the app.
+Power BI → SharePoint: scheduled dataset refresh against the SharePoint lists (or an Excel/CDS export) for the oversight dashboards; embedded into Power Apps via the Power BI tile control.
+SharePoint → Power Automate → Outlook/Teams: list-triggered flows for reminders, escalations and approval notifications.
+3.4 Naming Conventions
+Artifact
+ | Convention
+ | Example
+ | 
+SharePoint Lists
+ | PascalCase, singular-plural as natural English
+ | MonthlyReports, KPIDefinitions
+ | 
+Site Columns
+ | PascalCase, no spaces
+ | ReportingMonth, PercentageComplete
+ | 
+Power Apps screens
+ | scr_[Name]
+ | scr_ReportSubmission
+ | 
+Power Apps containers
+ | con_[Purpose]
+ | con_HeaderBar, con_ActivityList
+ | 
+Power Apps variables
+ | var/col/loc prefix by scope
+ | varUserRole, colMyActivities, locStatusColor
+ | 
+Power Automate flows
+ | [Trigger] - [Action] (APP-MRMS)
+ | Report Submitted - Notify Supervisor (APP-MRMS)
+ | 
+Power BI dataset/report
+ | APP-MRMS - [Purpose]
+ | APP-MRMS - Executive Dashboard
+ | 
+3.5 Environment Strategy
+Environment
+ | Purpose
+ | SharePoint
+ | Power Platform
+ | 
+Development
+ | Build and unit test new features
+ | Dev site collection
+ | Dev environment, unmanaged solution
+ | 
+Test / UAT
+ | Integration testing and user acceptance
+ | Test site collection (sample data)
+ | Test environment, managed solution import
+ | 
+Production
+ | Live departmental use
+ | Production site collection
+ | Production environment, managed solution, restricted maker access
+ | 
+
+4. SharePoint Data Model
+The model generalises the existing workbook structure (Directorate → Priority/Challenge &amp; Key Deliverable → Activities → monthly Activity/Progress pairs) into four core transactional lists plus supporting reference, security, audit and evidence lists/libraries.
+4.1 List: Programmes
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Programme name, e.g. ‘Programme 2: Immovable Asset Management’
+ | 
+ProgrammeCode
+ | Single line text
+ | Indexed, used for lookups/filters
+ | 
+ProgrammeManager
+ | Person
+ | Single value; drives escalation routing
+ | 
+Description
+ | Multiple lines of text
+ | | 
+Active
+ | Yes/No
+ | Default Yes
+ | 
+4.2 List: Projects (Key Deliverables)
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Project / Key Deliverable reference number
+ | 
+PriorityChallenge
+ | Multiple lines of text
+ | | 
+KeyDeliverable
+ | Multiple lines of text
+ | | 
+AnnualTarget
+ | Multiple lines of text
+ | Free text target, e.g. ‘50 vacant positions filled’
+ | 
+Reference
+ | Single line text
+ | e.g. Lekgotla 2025/26, MEC Budget Speech 2025/26
+ | 
+Budget
+ | Currency
+ | Rand value; free-text variants migrated/normalised on import
+ | 
+Programme
+ | Lookup (Programmes)
+ | Indexed – required for delegation at scale
+ | 
+Responsibility
+ | Person
+ | Accountable Director/Deputy Director
+ | 
+StartDate / CompletionDate
+ | Date and Time
+ | | 
+FinancialYear
+ | Choice
+ | e.g. 2026/27
+ | 
+Status
+ | Choice
+ | Active / Closed / Cancelled
+ | 
+4.3 List: Activities
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Activity ID / short name
+ | 
+Project
+ | Lookup (Projects)
+ | Indexed
+ | 
+ActivityDescription
+ | Multiple lines of text
+ | | 
+Frequency
+ | Choice
+ | Monthly / Quarterly / Annual
+ | 
+Owner
+ | Person
+ | Contributor accountable for capture
+ | 
+Supervisor
+ | Person
+ | Approver – denormalised from Owner’s assignment for fast lookup
+ | 
+StartDate / EndDate
+ | Date and Time
+ | | 
+DueDayOfMonth
+ | Number
+ | Used by reminder/escalation flows
+ | 
+Active
+ | Yes/No
+ | | 
+4.4 List: MonthlyReports
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Report Number (auto-generated)
+ | 
+Activity
+ | Lookup (Activities)
+ | Indexed
+ | 
+ReportingMonth
+ | Choice
+ | April … March
+ | 
+Quarter
+ | Choice
+ | Q1–Q4
+ | 
+FinancialYear
+ | Choice
+ | e.g. 2026/27
+ | 
+PlannedActivity
+ | Multiple lines of text
+ | | 
+ProgressNarrative
+ | Multiple lines of text
+ | Rich text enabled for evidence links
+ | 
+PercentageComplete
+ | Number
+ | 0–100, used for KPI roll-up
+ | 
+Status
+ | Choice
+ | Draft / Submitted / Approved / Rejected / Escalated
+ | 
+Version
+ | Number
+ | Incremented on each resubmission
+ | 
+SubmittedBy / SubmissionDate
+ | Person / Date and Time
+ | | 
+ReviewedBy / ReviewDate
+ | Person / Date and Time
+ | | 
+RejectionReason
+ | Multiple lines of text
+ | Mandatory when Status = Rejected
+ | 
+IsOverdue
+ | Yes/No (calculated via flow)
+ | Set by the Overdue Escalation flow
+ | 
+4.5 List: ReportComments
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Auto ID
+ | 
+MonthlyReport
+ | Lookup (MonthlyReports)
+ | Indexed
+ | 
+CommentText
+ | Multiple lines of text
+ | | 
+Author
+ | Person
+ | | 
+CommentDate
+ | Date and Time
+ | | 
+4.6 Document Library: EvidenceLibrary
+Replaces simple list attachments with a governed document library, as recommended in the prior TDS draft.
+Column
+ | Type
+ | Notes
+ | 
+Name
+ | Managed metadata / file
+ | Native library column
+ | 
+MonthlyReport
+ | Lookup (MonthlyReports)
+ | Indexed – links evidence to its report
+ | 
+EvidenceType
+ | Choice
+ | POE / Photo / Signed Document / Report / Other
+ | 
+UploadedBy
+ | Person
+ | | 
+UploadDate
+ | Date and Time
+ | | 
+Versioning
+ | Library setting
+ | Major versioning enabled, minimum 5 versions retained
+ | 
+4.7 List: AuditLog (append-only)
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Auto ID
+ | 
+EntityType
+ | Choice
+ | Programme / Project / Activity / MonthlyReport / Comment / User
+ | 
+EntityId
+ | Single line text
+ | ID of the affected item
+ | 
+Action
+ | Choice
+ | Create / Update / StatusChange / Delete
+ | 
+FieldChanged
+ | Single line text
+ | Optional, for field-level changes
+ | 
+OldValue / NewValue
+ | Multiple lines of text
+ | | 
+ActionBy
+ | Person
+ | | 
+ActionDate
+ | Date and Time
+ | Indexed
+ | 
+Reason
+ | Multiple lines of text
+ | Populated for rejections/escalations
+ | 
+Item-level permissions on AuditLog are restricted to Read for all roles and Full Control for the underlying service account/flow identity; no role can edit or delete entries from the application layer (see Section 11).
+4.8 List: Notifications
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Notification subject
+ | 
+RecipientUser
+ | Person
+ | | 
+RelatedEntity
+ | Single line text
+ | e.g. MonthlyReports:1234
+ | 
+Message
+ | Multiple lines of text
+ | | 
+IsRead
+ | Yes/No
+ | Default No
+ | 
+CreatedDate
+ | Date and Time
+ | | 
+4.9 List: KPIDefinitions
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | KPI name
+ | 
+Project
+ | Lookup (Projects)
+ | | 
+TargetValue
+ | Number
+ | | 
+Unit
+ | Choice
+ | % / Count / Currency
+ | 
+RedThreshold / AmberThreshold / GreenThreshold
+ | Number
+ | Configurable RAG breakpoints
+ | 
+4.10 List: Users
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Person
+ | Linked Entra ID account
+ | 
+Role
+ | Choice
+ | Administrator / ProgrammeManager / Supervisor / Contributor
+ | 
+Programme
+ | Lookup (Programmes)
+ | Scope for Programme Manager / Supervisor
+ | 
+Active
+ | Yes/No
+ | | 
+4.11 Reference / Choice Data
+FinancialYear, Quarter, ReportingMonth, Status and EvidenceType are implemented as SharePoint Choice columns (not separate lookup lists) to keep the model lightweight and avoid extra round trips; Administrators maintain the choice values centrally via the Activity Administration screen, which writes to a small ReferenceData list consumed by Power Apps dropdowns at App.OnStart.
+
+5. Lookup Relationships
+Programmes (1) -----------------&gt; (∞) Projects
+Projects (1) -----------------&gt; (∞) Activities
+Activities (1) -----------------&gt; (∞) MonthlyReports
+MonthlyReports (1) -------------&gt; (∞) ReportComments
+MonthlyReports (1) -------------&gt; (∞) EvidenceLibrary items
+Projects (1) -----------------&gt; (∞) KPIDefinitions
+Users (Programme lookup) -------&gt; (1) Programmes [scopes a Supervisor/Programme Manager]
+AuditLog / Notifications --------&gt; reference EntityId (loosely coupled, no enforced SharePoint relationship)
+Figure 2 – Cardinality across the four-tier hierarchy plus supporting entities.
+5.1 Relationship Table
+Parent
+ | Child
+ | Cardinality
+ | Enforcement
+ | 
+Programmes
+ | Projects
+ | 1 : N
+ | SharePoint Lookup column on Projects.Programme
+ | 
+Projects
+ | Activities
+ | 1 : N
+ | SharePoint Lookup column on Activities.Project
+ | 
+Activities
+ | MonthlyReports
+ | 1 : N
+ | SharePoint Lookup column on MonthlyReports.Activity
+ | 
+MonthlyReports
+ | ReportComments
+ | 1 : N
+ | SharePoint Lookup column on ReportComments.MonthlyReport
+ | 
+MonthlyReports
+ | EvidenceLibrary
+ | 1 : N
+ | Lookup column on the document library
+ | 
+Projects
+ | KPIDefinitions
+ | 1 : N
+ | SharePoint Lookup column on KPIDefinitions.Project
+ | 
+Programmes
+ | Users
+ | 1 : N
+ | SharePoint Lookup column on Users.Programme (scoping, not ownership)
+ | 
+5.2 Cascading Selection in Power Apps
+SharePoint Lookup columns do not natively cascade. Dependent dropdowns (Programme → Project → Activity) are implemented in Power Apps using chained Filter() calls against locally cached collections, refreshed at App.OnStart and on pull-to-refresh:
+// Project dropdown, filtered by the selected Programme
+Items: Filter(colProjects, Programme.Id = ddProgramme.Selected.Id)
+ 
+// Activity dropdown, filtered by the selected Project
+Items: Filter(colActivities, Project.Id = ddProject.Selected.Id, Active = true)
+Lookup columns are configured as single-value (not multi-value) throughout, since SharePoint multi-value lookups are non-delegable and degrade gallery performance at scale; Person fields follow the same single-value rule except where a field is explicitly designed for multiple reviewers (none in this model).
+
+6. Power Apps Screens
+#
+ | Screen
+ | Audience
+ | Purpose / Key Controls
+ | 
+1
+ | scr_Splash
+ | All
+ | Loading, role detection, theme load
+ | 
+2
+ | scr_Home
+ | All (role-aware)
+ | Cards: My Activities, Pending Approvals, Overdue, Approved this month; charts: monthly trend, Programme performance
+ | 
+3
+ | scr_MyActivities
+ | Contributor
+ | Gallery of assigned Activities for the selected period; Year/Quarter/Month filters; status badges
+ | 
+4
+ | scr_ReportSubmission
+ | Contributor
+ | Form: Planned Activity, Progress Narrative, % Complete, attachment uploader; Save Draft / Submit buttons; embedded comment panel
+ | 
+5
+ | scr_MyReports
+ | Contributor
+ | History of own submissions with status and Supervisor feedback
+ | 
+6
+ | scr_ApprovalQueue
+ | Supervisor
+ | Gallery of Submitted reports awaiting decision; Approve / Reject / Return buttons; comment box
+ | 
+7
+ | scr_ReportDetail
+ | Supervisor / Programme Manager / Contributor
+ | Read-only detail view: full report, evidence, comment thread, Approval History timeline
+ | 
+8
+ | scr_ProgrammeOversight
+ | Programme Manager
+ | Dashboard scoped to the manager’s Programme(s): KPI roll-up, Project list with progress indicators, escalation queue
+ | 
+9
+ | scr_ProgrammeAdmin
+ | Administrator
+ | Create/edit Programmes
+ | 
+10
+ | scr_ProjectAdmin
+ | Administrator, Programme Manager
+ | Create/edit Projects and KPI definitions
+ | 
+11
+ | scr_ActivityAdmin
+ | Administrator, Supervisor
+ | Create/edit Activities, assign Owners/Supervisors
+ | 
+12
+ | scr_UserAdmin
+ | Administrator
+ | Manage Users, Role and Programme scope
+ | 
+13
+ | scr_AuditTrail
+ | Administrator, Programme Manager
+ | Searchable, filterable Audit Log viewer
+ | 
+14
+ | scr_Notifications
+ | All
+ | Notification centre (unread/read), deep links to source record
+ | 
+15
+ | scr_Search
+ | All
+ | Global free-text search with Year/Quarter/Month/Programme/Project/Status filters
+ | 
+16
+ | scr_Reports Dashboard
+ | All (scoped)
+ | Embedded Power BI tile: monthly/quarterly/annual summaries, performance trends
+ | 
+
+7. Container Hierarchy
+All screens follow the same outer-shell pattern for consistent responsiveness, illustrated below for scr_ReportSubmission and then generalised.
+scr_ReportSubmission (Screen)
+└─ con_ScreenRoot (Container, Fill parent, vertical)
+ ├─ con_Header (Container, fixed height 70px, horizontal)
+ │ ├─ icoBack
+ │ ├─ lblScreenTitle
+ │ └─ icoNotificationsBell
+ ├─ con_Body (Container, Fill remaining height, horizontal, wraps to vertical on mobile)
+ │ ├─ con_FormPanel (Container, 65% width / 100% on mobile, vertical, scrollable)
+ │ │ ├─ con_FieldGroup_Planned
+ │ │ ├─ con_FieldGroup_Progress
+ │ │ ├─ con_FieldGroup_PercentComplete (slider + numeric label)
+ │ │ └─ con_AttachmentUploader
+ │ └─ con_SidePanel (Container, 35% width / hidden behind a toggle on mobile, vertical)
+ │ ├─ con_ApprovalHistoryTimeline
+ │ └─ con_CommentThread
+ └─ con_Footer (Container, fixed height 60px, horizontal, right-aligned)
+ ├─ btnSaveDraft
+ └─ btnSubmit
+Figure 3 – Container tree for the Report Submission screen.
+7.1 General Pattern
+Every screen root container uses Fill horizontal/vertical alignment so the canvas resizes to any device.
+con_Header and con_Footer are fixed-height horizontal containers; all remaining space goes to con_Body.
+con_Body uses a horizontal layout on tablet/desktop and switches to vertical (stacked) on phone breakpoints (Section 8).
+List/gallery screens (My Activities, Approval Queue, Audit Trail) follow the same shell with con_FilterBar inserted between Header and Body.
+
+8. Responsive Formulas
+App-level formulas establish a single source of truth for breakpoint, used by every container's Width/Layout/Visible properties.
+// App.Formulas (calculated, always current, no OnStart assignment needed)
+varIsMobile = App.Width &lt; 640;
+varIsTablet = App.Width &gt;= 640 And App.Width &lt; 1100;
+varIsDesktop = App.Width &gt;= 1100;
+varContentPadding = If(varIsMobile, 12, 24);
+// con_Body.Layout
+If(varIsMobile, Layout.Vertical, Layout.Horizontal)
+ 
+// con_FormPanel.Width
+If(varIsMobile, Parent.Width, Parent.Width * 0.65)
+ 
+// con_SidePanel.Width
+If(varIsMobile, Parent.Width, Parent.Width * 0.35)
+ 
+// con_SidePanel.Visible (collapsed behind a toggle on mobile to avoid excessive vertical scroll)
+If(varIsMobile, togSidePanel.Value, true)
+ 
+// Font scaling example (form labels)
+lblFieldLabel.Size = If(varIsMobile, 14, 16)
+Galleries use a TemplateSize that switches between a compact mobile card and a wider desktop row, and WrapCount on icon-grid screens (e.g. Home cards) switches between 1 (mobile), 2 (tablet) and 4 (desktop).
+
+9. Power Fx Formulas
+9.1 App.OnStart – Role Resolution &amp; Reference Caching
+ClearCollect(colCurrentUser,
+ LookUp(Users, Title.Email = User().Email)
+);
+Set(varUserRole, colCurrentUser.Role);
+Set(varUserProgrammeId, colCurrentUser.Programme.Id);
+ 
+ClearCollect(colProgrammes, Programmes);
+ClearCollect(colProjects, Projects);
+ClearCollect(colActivities, Activities);
+ClearCollect(colKPIDefinitions, KPIDefinitions);
+9.2 My Activities – Scoped Gallery
+// galMyActivities.Items
+Filter(
+ colActivities,
+ Owner.Email = User().Email,
+ Active = true,
+ ReportingMonth = ddMonthFilter.Selected.Value
+)
+9.3 Save Draft / Submit
+// btnSaveDraft.OnSelect
+IfError(
+ Patch(MonthlyReports,
+ Coalesce(varCurrentReport, Defaults(MonthlyReports)),
+ {
+ Activity: galMyActivities.Selected,
+ PlannedActivity: txtPlanned.Text,
+ ProgressNarrative: txtProgress.Text,
+ PercentageComplete: sldComplete.Value,
+ ReportingMonth: ddMonthFilter.Selected,
+ FinancialYear: ddFYFilter.Selected,
+ Status: { Value: "Draft" }
+ }
+ ),
+ Notify("Could not save draft: " &amp; FirstError.Message, NotificationType.Error)
+);
+ 
+// btnSubmit.OnSelect
+If(
+ IsBlank(txtProgress.Text) Or IsBlank(sldComplete.Value),
+ Notify("Progress narrative and percentage complete are required.", NotificationType.Warning),
+ IfError(
+ Patch(MonthlyReports, varCurrentReport,
+ {
+ Status: { Value: "Submitted" },
+ SubmittedBy: User().FullName,
+ SubmissionDate: Now(),
+ Version: varCurrentReport.Version + 1
+ }
+ );
+ 'APP-MRMS Notify Supervisor'.Run(varCurrentReport.ID);
+ Navigate(scr_MyReports, ScreenTransition.Fade),
+ Notify("Submission failed: " &amp; FirstError.Message, NotificationType.Error)
+ )
+)
+9.4 Approve / Reject
+// btnApprove.OnSelect
+Patch(MonthlyReports, galApprovalQueue.Selected,
+ { Status: { Value: "Approved" }, ReviewedBy: User().FullName, ReviewDate: Now() }
+);
+'APP-MRMS Notify Contributor Decision'.Run(galApprovalQueue.Selected.ID, "Approved", "");
+ 
+// btnReject.OnSelect (txtRejectReason is required – button Disabled when blank)
+Patch(MonthlyReports, galApprovalQueue.Selected,
+ {
+ Status: { Value: "Rejected" },
+ ReviewedBy: User().FullName,
+ ReviewDate: Now(),
+ RejectionReason: txtRejectReason.Text
+ }
+);
+'APP-MRMS Notify Contributor Decision'.Run(galApprovalQueue.Selected.ID, "Rejected", txtRejectReason.Text);
+9.5 KPI Progress Indicator
+// lblProjectProgress.Text – weighted average of latest Approved report per Activity under the Project
+With(
+ { latestApproved:
+ AddColumns(
+ GroupBy(
+ Filter(MonthlyReports, Activity.Project.Id = varSelectedProject.Id, Status.Value = "Approved"),
+ "Activity", "Grp"
+ ),
+ "LatestPct", First(SortByColumns(Grp, "SubmissionDate", SortOrder.Descending)).PercentageComplete
+ )
+ },
+ Round(Average(latestApproved, LatestPct), 0) &amp; "%"
+)
+// RAG colour, driven by KPIDefinitions thresholds
+Switch(
+ true,
+ varProjectPct &gt;= varKPI.GreenThreshold, ColorValue("#1E8A44"),
+ varProjectPct &gt;= varKPI.AmberThreshold, ColorValue("#E6A100"),
+ ColorValue("#C0392B")
+)
+9.6 Global Search
+// galSearchResults.Items – delegable Search() combined with dropdown filters
+Filter(
+ Search(MonthlyReports, txtSearchBox.Text, "PlannedActivity", "ProgressNarrative"),
+ (IsBlank(ddProgrammeFilter.Selected) Or Activity.Project.Programme.Id = ddProgrammeFilter.Selected.Id),
+ (IsBlank(ddStatusFilter.Selected) Or Status.Value = ddStatusFilter.Selected.Value),
+ FinancialYear.Value = ddFYFilter.Selected.Value
+)
+9.7 Notification Badge
+// icoNotificationsBell badge count
+CountRows(Filter(Notifications, RecipientUser.Email = User().Email, IsRead = false))
+
+10. Power Automate Flows
+Flow
+ | Trigger
+ | Key Actions
+ | 
+User Provisioning
+ | Item created in Users list
+ | Add user to corresponding Entra ID security group; send welcome email with app link
+ | 
+Monthly Reminder
+ | Scheduled – 5 days before month-end
+ | For each active Activity without a Submitted/Approved report for the period, email/Teams-notify the Owner
+ | 
+Submission Notification
+ | Item modified in MonthlyReports, Status = Submitted
+ | Create Notifications item and email the Supervisor; write AuditLog entry (Action = StatusChange)
+ | 
+Approval Workflow
+ | Item modified, Status = Approved
+ | Recalculate KPI roll-up; notify Contributor; write AuditLog entry; refresh Power BI dataset (optional)
+ | 
+Rejection Workflow
+ | Item modified, Status = Rejected
+ | Notify Contributor with RejectionReason; write AuditLog entry; reset record to editable state
+ | 
+Overdue Escalation
+ | Scheduled – daily
+ | Identify Activities past due-day with no Submitted/Approved report; set IsOverdue; notify Supervisor (day 1–3), then Programme Manager (day 4+)
+ | 
+Audit Log Writer
+ | Item created or modified – Programmes / Projects / Activities / MonthlyReports / Comments
+ | Compute changed fields, write a structured entry to AuditLog with ActionBy and timestamp
+ | 
+Comment Notification
+ | Item created in ReportComments
+ | Notify the report owner and any other prior commenters (deduplicated)
+ | 
+Quarterly Consolidation
+ | Scheduled – quarterly
+ | Aggregate Approved reports per Quarter into a summary used by Power BI; email summary to Programme Managers
+ | 
+Annual Consolidation
+ | Scheduled – annually (end of FY)
+ | Compile annual roll-up per Programme/Project against Annual Target; archive prior-year MonthlyReports to a year-stamped archive list
+ | 
+Forms Intake (Field Capture)
+ | Microsoft Forms response submitted
+ | Map response to MonthlyReports (Status = Draft or Submitted per a form toggle); move any uploaded photo to EvidenceLibrary; link to Activity by a pre-filled Activity ID
+ | 
+Power BI Dataset Refresh
+ | Scheduled / called from Quarterly Consolidation
+ | Trigger a Power BI dataset refresh once consolidation completes, so dashboards reflect the latest approved data
+ | 
+10.1 Error-Resilient Flow Pattern (applies to all flows above)
+Trigger
+ -&gt; Scope: "Try"
+ - main actions (Patch/Create/Send notification)
+ -&gt; Scope: "Catch" [Configure run after: Try has failed, has timed out]
+ - Compose error details (status code, message)
+ - Send email to Power Platform Administrator distribution list
+ - Create AuditLog entry: Action = "FlowError"
+ -&gt; Scope: "Finally" [Configure run after: Try succeeded OR Catch has run]
+ - Terminate (Succeeded / Failed, based on which scope ran)
+
+11. Security Architecture
+11.1 Identity &amp; Group Model
+Entra ID Security Group
+ | Maps to App Role
+ | Scope
+ | 
+SG-APPMRMS-Administrators
+ | Administrator
+ | Global
+ | 
+SG-APPMRMS-ProgrammeManagers-[Programme]
+ | Programme Manager
+ | One Programme
+ | 
+SG-APPMRMS-Supervisors-[Programme]
+ | Supervisor
+ | Directorate/Project level within a Programme
+ | 
+SG-APPMRMS-Contributors-[Programme]
+ | Contributor
+ | Own assigned Activities only
+ | 
+11.2 SharePoint Permission Mapping
+List/Library
+ | Administrator
+ | Programme Manager
+ | Supervisor
+ | Contributor
+ | 
+Programmes
+ | Full Control
+ | Read (own)
+ | Read (own)
+ | No access
+ | 
+Projects
+ | Full Control
+ | Edit (own Programme)
+ | Read (own Programme)
+ | Read (own assigned)
+ | 
+Activities
+ | Full Control
+ | Read (own Programme)
+ | Edit (own team)
+ | Read (own assigned)
+ | 
+MonthlyReports
+ | Full Control
+ | Edit – escalation only (own Programme)
+ | Edit – review actions (own team)
+ | Contribute – own items only
+ | 
+EvidenceLibrary
+ | Full Control
+ | Read (own Programme)
+ | Contribute (own team)
+ | Contribute (own items)
+ | 
+AuditLog
+ | Read
+ | Read (own Programme)
+ | No access
+ | No access
+ | 
+Users
+ | Full Control
+ | Read
+ | No access
+ | No access
+ | 
+SharePoint Online does not natively support row-level security at the column-value level. Contributor-scoped “own items only” access is implemented through a combination of: (a) item-level permission inheritance break performed automatically by the Audit Log Writer/creation flow, granting Edit only to the creator and their assigned Supervisor; and (b) application-layer filtering (Power Fx Filter() by Owner.Email) so the experience matches the enforced permission. This is acceptable for the data sensitivity involved but is explicitly the boundary case called out in Section 15 – a future move to Dataverse would replace this with native Security Roles and Row-Level Security and is the recommended target state if the user base or sensitivity grows.
+11.3 Power Apps Role-Based UI
+// Example: Admin-only navigation tile visibility
+icoAdminConsole.Visible = (varUserRole = "Administrator")
+ 
+// Example: Approval Queue screen OnVisible guard
+If(
+ Not(varUserRole in ["Supervisor","ProgrammeManager","Administrator"]),
+ Navigate(scr_Home, ScreenTransition.None);
+ Notify("You do not have access to this screen.", NotificationType.Warning)
+)
+11.4 Data Loss Prevention &amp; Conditional Access
+A DLP policy classifies SharePoint, Power Automate, Outlook, Teams and Approvals as Business connectors; non-Microsoft/unapproved connectors are blocked for the APP-MRMS environment.
+Conditional Access requires MFA for all users accessing the Power Apps player and SharePoint site, and restricts access from unmanaged/non-compliant devices for Administrator accounts.
+Sensitivity labelling (e.g. ‘Internal’) is applied at the site collection level; export of audit data is restricted to Administrators.
+
+12. Error Handling
+12.1 Power Apps
+All Patch/Collect/Remove calls are wrapped in IfError(), surfacing FirstError.Message via Notify(NotificationType.Error) rather than failing silently.
+A lightweight client-side ErrorLog collection captures the error, screen and control context, and is flushed to a small SharePoint ErrorLog list on a timer/OnHidden, giving Administrators visibility into recurring UI errors without needing user-reported tickets.
+Form-level validation (required fields, percentage range 0–100, date logic) runs before Submit is enabled, using a single varFormIsValid boolean checked by the Submit button's DisplayMode.
+Set(varFormIsValid,
+ Not(IsBlank(txtProgress.Text)) And
+ sldComplete.Value &gt;= 0 And sldComplete.Value &lt;= 100
+);
+btnSubmit.DisplayMode = If(varFormIsValid, DisplayMode.Edit, DisplayMode.Disabled);
+12.2 Power Automate
+Every flow follows the Try/Catch/Finally scope pattern shown in Section 10.1, using ‘Configure run after’ so failures are caught rather than aborting silently.
+Retry policies are set on all SharePoint/Outlook actions (default 4 retries, exponential interval) to absorb transient throttling (HTTP 429) without manual intervention.
+A dedicated Power Platform Administrator distribution list receives a structured error email (flow name, run ID, error message, affected item) on any Catch branch execution, and a corresponding AuditLog ‘FlowError’ entry is written for traceability.
+Long-running scheduled flows (Overdue Escalation, Annual Consolidation) include a Timeout setting on the main Scope to prevent runaway executions against a growing dataset.
+12.3 Data Validation
+Rule
+ | Layer Enforced
+ | 
+PercentageComplete between 0 and 100
+ | Power Apps slider bounds + Power Automate Catch check
+ | 
+RejectionReason mandatory when Status = Rejected
+ | Power Apps button DisplayMode + SharePoint column validation formula
+ | 
+MonthlyReport uniqueness per Activity/Month/FinancialYear
+ | Power Automate lookup-before-create + a compound ‘key’ calculated column for fast duplicate detection
+ | 
+Attachments restricted to approved file types/size
+ | Power Apps Attachments control configuration + flow-level file-type check before move to EvidenceLibrary
+ | 
+
+13. Performance Optimization
+13.1 Delegation
+All gallery/search queries use delegable functions – Filter, Search, SortByColumn, LookUp on indexed columns – against the SharePoint connector's supported delegation set.
+Non-delegable operations (e.g. multi-condition aggregation across lookups, as in the KPI roll-up in Section 9.5) are deliberately scoped to a single Project at a time so the underlying Filter() stays within the non-delegated row limit, rather than ever running across the full MonthlyReports list.
+CountRows()/Sum() used for dashboard cards operate against pre-filtered, period-scoped collections (e.g. the current month) rather than the entire history.
+13.2 Indexing
+The following columns are explicitly indexed to keep filtered views and Power Fx delegation under the SharePoint 5,000-item list view threshold as data accumulates over multiple financial years:
+MonthlyReports: Activity, Status, FinancialYear, ReportingMonth
+Activities: Project, Owner
+Projects: Programme
+AuditLog: ActionDate, EntityType
+13.3 Caching &amp; Collection Strategy
+Slow-changing reference data (Programmes, Projects, Activities, KPIDefinitions) is loaded once into collections at App.OnStart and refreshed on a manual pull-to-refresh, avoiding repeated round trips on every screen visit.
+Concurrent() is used at OnStart to load independent collections in parallel rather than sequentially.
+Galleries are scoped to the current reporting period by default, with an explicit ‘Load more / change period’ filter rather than loading full history.
+13.4 List &amp; UI Scaling
+Each transactional list carries an indexed default view filtered to the current/recent financial year to avoid the 5,000-item list view threshold being hit on the default view.
+Older financial years are moved to year-stamped archive lists by the Annual Consolidation flow (Section 10), keeping the live MonthlyReports list lean for day-to-day delegation performance.
+Galleries implement simple page-based loading (Set(varPage, varPage+1) with First()/Skip() over a locally sorted collection) rather than rendering unbounded result sets.
+Attachment/evidence images are compressed client-side (Camera/Attachments control quality setting) before upload to reduce both upload time on low-bandwidth district connections and Evidence Library storage growth.
+13.5 Power BI
+The Power BI dataset uses Import mode with a scheduled refresh (e.g. every 4 hours) rather than DirectQuery against SharePoint, which is not well suited to high user concurrency.
+Aggregation tables (pre-summarised by Programme/Project/Month) are built in Power Query to keep visual-level queries fast regardless of underlying row growth.
+
+14. Deployment Strategy
+14.1 Application Lifecycle Management (ALM)
+All components (Canvas App, flows, environment variables, connection references) are packaged as a single Power Platform Solution, developed as Unmanaged in the Development environment.
+Power Platform CLI (pac cli) and Power Platform Pipelines (or an Azure DevOps/GitHub Actions pipeline) export the solution, convert it to source-controlled, unpacked components, and build a Managed Solution for downstream environments.
+SharePoint site URL and key list GUIDs are abstracted as Environment Variables / Connection References inside the solution so the same managed solution can be imported into Test and Production without manual rewiring.
+14.2 Release Pipeline
+Build &amp; unit test in Development (unmanaged).
+Export solution → source control (Git) → build pipeline produces a versioned Managed Solution.
+Import Managed Solution into Test/UAT; run a structured UAT script per role (Administrator, Programme Manager, Supervisor, Contributor); load representative sample data (a subset of the existing APP Implementation Plan workbook).
+Obtain formal UAT sign-off from SP M&amp;E and at least one Programme Manager per Programme.
+Import Managed Solution into Production during an agreed change window; run a smoke test script.
+One-time historical data migration: a Power Automate/Power Query import maps the existing workbook's Directorate sheets and monthly Activity/Progress columns into Programmes, Projects, Activities and historical MonthlyReports (Status = Approved, ReviewDate backdated for audit continuity).
+Hypercare period (first full reporting month) with daily monitoring of flow run history and user-reported issues before handover to standard support.
+14.3 Rollback
+The previous Managed Solution version is retained and can be re-imported (the Power Platform preserves solution history); SharePoint list schema changes are additive-only during the pilot cycle to avoid destructive rollback scenarios.
+14.4 Rollout Approach
+A phased rollout is recommended: pilot with a single Programme (suggested: Programme 4 – Community-Based Programme, given its already well-structured monthly KPI narrative in the existing workbook) for one full reporting cycle, then onboard the remaining Programmes and Directorate sheets in two further tranches.
+
+15. Governance Recommendations
+15.1 Centre of Excellence (CoE)
+Adopt the Microsoft Power Platform CoE Starter Kit to maintain an inventory of apps/flows, monitor DLP compliance, and flag orphaned or unmanaged solutions across the tenant.
+Establish a small Power Platform governance group (Administrator + IT representative + one Programme Manager) to review schema changes and new feature requests on a quarterly cadence.
+15.2 Data Governance
+Move from list-attachment-based evidence to the governed EvidenceLibrary document library (Section 4.6) – this is a firm recommendation carried forward from the existing draft TDS, not optional, given audit-evidence requirements.
+Apply SharePoint retention labels/policies to MonthlyReports, AuditLog and EvidenceLibrary aligned to public-sector records retention rules (minimum 5 years).
+Enable recycle-bin and versioning on all lists/libraries; consider a third-party backup solution (e.g. AvePoint, Veeam) for point-in-time recovery beyond the native 93-day SharePoint recycle bin.
+15.3 Licensing &amp; Access Governance
+Use Per-App plans for Contributors (high volume, single-app usage) and Per-User plans for Administrators/Programme Managers/Supervisors who may need broader Power Platform access.
+Quarterly access review: Administrators reconcile the Users list and Entra ID group membership against current organograms, removing access for staff who have exited (the workbook itself shows meaningful staff turnover – retirements, resignations – that must be reflected promptly in system access).
+15.4 Naming, Documentation &amp; Change Control
+Enforce the naming conventions in Section 3.4 across all environments via the CoE Starter Kit's naming policy checks.
+Maintain this document pack (BRD/FDS/TDS) as the single source of truth, version-controlled alongside the exported solution in Git; any schema or workflow change ships with a corresponding documentation update.
+Require change-board sign-off for any change to the approval workflow, security model, or KPI calculation logic, given their audit relevance.
+15.5 Roadmap Beyond Phase 1
+Dataverse migration: once data volumes, concurrent users or row-level security needs exceed comfortable SharePoint-list scale, migrate the data layer to Dataverse for native Security Roles, Business Units and Row-Level Security, while keeping the same Power Apps/Power Automate/Power BI front end.
+Financial system integration (BAS/Reapatala) to replace free-text Budget fields with live expenditure data, closing the loop between APP commitments and actual spend referenced throughout the existing workbook.
+Power BI paginated reports for formal, print-ready DMC/EMC/Lekgotla packs generated directly from the same governed dataset.
+15.6 Support Model
+Tier
+ | Owner
+ | Responsibility
+ | 
+L1
+ | Departmental IT Helpdesk
+ | Password resets, access requests, basic how-to guidance
+ | 
+L2
+ | Power Platform Administrator (in-house)
+ | Configuration changes, flow monitoring, user/role administration, minor enhancements
+ | 
+L3
+ | Solution Architect / Implementation Partner
+ | Architecture changes, Dataverse migration, major feature development, security reviews
+ | 
+
+End of document.

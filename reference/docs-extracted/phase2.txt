@@ -1,0 +1,331 @@
+
+APP-MRMS
+Phase 1 — SharePoint Provisioning
+Execution Guide &amp; Verification Checklist
+
+Field
+ | Detail
+ | 
+Document
+ | Phase 1 Execution Guide
+ | 
+Version
+ | 1.0
+ | 
+Audience
+ | SharePoint / M365 Administrator running the provisioning script
+ | 
+Time Required
+ | ~30 minutes (script runs in ~5 min; allow 25 min for setup &amp; verification)
+ | 
+Date
+ | 2026-07-03
+ | 
+
+1. What Phase 1 Delivers
+The PnP PowerShell script (APPMRMS_Phase1_Provision.ps1) provisions the complete SharePoint data layer for the APP Monthly Reporting Management System. It creates 10 lists and 1 document library, with all columns, lookup relationships, indexes, versioning settings and default views, directly on your existing SharePoint site.
+Nothing is installed on your local machine other than a PowerShell module. The script is safe to re-run — every step checks whether a list or column already exists before trying to create it.
+
+What gets created
+ | Count
+ | Purpose
+ | 
+SharePoint Lists
+ | 10
+ | Programmes, Projects, Activities, MonthlyReports, ReportComments, KPIDefinitions, APP_Users, Notifications, AuditLog, Directorates
+ | 
+Document Library
+ | 1
+ | EvidenceLibrary — governs evidence file uploads (POEs, photos, signed docs)
+ | 
+Columns (fields)
+ | ~90
+ | All typed, named and indexed per the Architecture Pack Section 4
+ | 
+Lookup relationships
+ | 7
+ | Projects.Directorate -&gt; Directorates; Activities.Project -&gt; Projects; MonthlyReports.Activity -&gt; Activities; APP_Users.Directorate -&gt; Directorates; Comments, KPIs, Evidence
+ | 
+Seeded reference data
+ | 8 rows
+ | Financial Year and Quarter lookup values for Power Apps dropdowns
+ | 
+
+After Phase 1 is complete you will move to:
+Phase 2 — Power Apps Canvas App (all 16 screens)
+Phase 3 — Power Automate flows (12 flows: reminders, approvals, audit logging, escalations)
+Phase 4 — Power BI dashboards (executive reporting layer)
+
+2. Prerequisites
+2.1 What you need before running the script
+Requirement
+ | Details
+ | Where to confirm
+ | 
+M365 SharePoint Online licence
+ | Any M365 plan that includes SharePoint Online (E1/E3/E5, Business Basic/Standard/Premium)
+ | Microsoft 365 admin centre → Licences
+ | 
+Site Collection Administrator rights
+ | Your account must be a Site Collection Admin on the target SharePoint site
+ | SharePoint Admin Centre → Active Sites → your site → Permissions
+ | 
+PowerShell 7.x (recommended) or 5.1
+ | PowerShell 7 is cross-platform and preferred
+ | Run: $PSVersionTable.PSVersion in a terminal
+ | 
+PnP.PowerShell module
+ | The modern PnP module (not the legacy SharePointPnPPowerShellOnline)
+ | Run: Get-Module PnP.PowerShell -ListAvailable
+ | 
+Internet access from your machine
+ | The script connects to SharePoint Online via HTTPS
+ | Standard corporate network or VPN
+ | 
+MFA-capable browser session
+ | Connect-PnPOnline -Interactive opens a browser for login
+ | Your M365 account must be able to complete MFA
+ | 
+
+2.2 Install PnP.PowerShell (if not already installed)
+Open PowerShell as your normal user account (not Run as Administrator) and run:
+# Install the module for the current user (no admin rights needed)
+Install-Module PnP.PowerShell -Scope CurrentUser -Force
+
+# Verify installation
+Get-Module PnP.PowerShell -ListAvailable | Select Name, Version
+ | 
+Expected output: a row showing PnP.PowerShell with version 2.x or later.
+
+IMPORTANT — if you see a red error about 'execution policy', run this first:
+ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+If prompted to confirm, type Y and press Enter.
+ | 
+
+3. Copy the Script to Your Machine
+Copy the file APPMRMS_Phase1_Provision.ps1 (delivered alongside this guide) to a folder on your machine, for example:
+C:\APPMRMS\Phase1\APPMRMS_Phase1_Provision.ps1
+ | 
+Right-click the file and choose Properties. If you see 'This file came from another computer…', click Unblock, then OK. (This avoids a security prompt when running.)
+Note your SharePoint site URL. It will look like:
+https://YOURORG.sharepoint.com/sites/APP-MRMS
+ | 
+If you are using an existing site that is not called 'APP-MRMS', that is fine — use whatever URL you have.
+
+4. Run the Script
+4.1 Open PowerShell
+Open PowerShell 7 (pwsh) or Windows PowerShell 5.1. Do NOT run as Administrator — you need to connect as your own user account.
+4.2 Navigate to the script folder
+cd C:\APPMRMS\Phase1
+ | 
+4.3 Run the provisioning script
+Replace the URL below with your actual SharePoint site URL:
+.\APPMRMS_Phase1_Provision.ps1 `
+ -SiteUrl 'https://YOURORG.sharepoint.com/sites/APP-MRMS'
+ | 
+Press Enter. A browser window will open asking you to sign in to Microsoft 365 — complete your login and MFA, then return to the PowerShell window.
+
+4.4 Watch the output
+The script prints colour-coded output:
+Colour
+ | Meaning
+ | 
+Cyan
+ | A major section (e.g. '3.1 — Programmes') is starting
+ | 
+Green
+ | An item was successfully created
+ | 
+Yellow
+ | An item was skipped (it already existed — safe to ignore)
+ | 
+Red
+ | An error occurred — note the message; check Section 7 of this guide
+ | 
+White
+ | Informational log entry
+ | 
+
+A full timestamped log file is saved automatically in the same folder as the script, named:
+APPMRMS_Provision_YYYYMMDD_HHMMSS.log
+ | 
+Keep this file — it is your audit record of the provisioning run.
+
+4.5 Expected run time
+Approximately 3–6 minutes for a fresh site with no existing lists. The script creates ~90 columns across 11 lists and must round-trip to SharePoint for each one.
+
+5. Verification Checklist
+After the script completes, open your SharePoint site in a browser and tick off each item below. Everything should be visible under Site Contents.
+
+5.1 Lists present in Site Contents
+☐ Programmes
+☐ Projects
+☐ Activities
+☐ MonthlyReports
+☐ ReportComments
+☐ KPIDefinitions
+☐ APP_Users
+☐ Notifications
+☐ AuditLog
+☐ Directorates
+☐ EvidenceLibrary
+
+5.2 Sample column spot-checks
+For each list below, open it in SharePoint, go to Settings → List columns, and confirm these columns exist:
+List
+ | Columns to spot-check
+ | 
+Programmes
+ | ProgrammeCode, ProgrammeManager, Active
+ | 
+Directorates
+ | DirectorateID (Title), DirectorateName, Programme, Director, DeputyDirector, Deligate, Active
+ | 
+Projects
+ | ProjectID (Title), ProjectCode, KeyDeliverable, FinancialYear, Status, Directorate (Lookup)
+ | 
+Activities
+ | ActivityCode, Frequency, ActivityOwner, Supervisor, DueDate, Status
+ | 
+MonthlyReports
+ | Activity (Lookup), ReportingMonth, Status, PercentageComplete, IsOverdue, isFlagged
+ | 
+EvidenceLibrary
+ | EvidenceType, EvidenceReport (Lookup), EvidenceUploadedBy
+ | 
+AuditLog
+ | EntityType, EntityId, AuditAction, ActionBy, ActionDate
+ | 
+
+5.3 Lookup relationships
+Open the Projects list. In List Settings → Columns, click 'Directorate'. Confirm the Lookup list shows 'Directorates'. Repeat for Activities → Project (lookup to Projects), and MonthlyReports → Activity (lookup to Activities). Note: Programme is a plain text column on Projects/Directorates, not a Lookup.
+
+5.4 Choice data (FinancialYear / Quarter)
+FinancialYear and Quarter are Choice columns, not a separate lookup list. Per the CSV exports: MonthlyReports.FinancialYear = 2026/27, 2025/26, 2024/25, All; MonthlyReports.Quarter = Q1–Q4, All; Projects.FinancialYear = 2026/27 … 2022/23.
+
+5.5 Versioning on MonthlyReports
+Open MonthlyReports → List Settings → Versioning Settings. Confirm 'Create a version each time you edit an item' is ON and the limit is 20.
+
+5.6 AuditLog write-locked
+Open AuditLog → List Settings → Advanced Settings. Confirm 'Item-level Permissions' Create/Edit access is set to 'None'. (Users can read but cannot add or edit items through the browser.)
+
+6. Post-Script: Create Entra ID Security Groups
+The provisioning script creates the data layer. Before Power Apps is connected, your M365 / IT Administrator must create four Entra ID (Azure AD) Security Groups and add the right staff to each one. The Power Apps role-detection logic reads these groups at sign-in.
+
+Group Name
+ | Description
+ | Who to add
+ | 
+SG-APPMRMS-Administrators
+ | Full system access
+ | IT/Power Platform admin + SP M&amp;E lead
+ | 
+SG-APPMRMS-ProgrammeManagers
+ | Oversight of one Programme; escalation approval
+ | Chief Directors / Directors accountable per Programme
+ | 
+SG-APPMRMS-Supervisors
+ | Review and approve monthly submissions from their team
+ | Deputy Directors / line managers who review reports
+ | 
+SG-APPMRMS-Contributors
+ | Capture monthly progress for assigned Activities
+ | All officials who currently fill in the Excel workbook
+ | 
+
+To create a security group: go to portal.azure.com → Azure Active Directory → Groups → New Group → Security. Set 'Membership type' to Assigned. Add members now or later.
+
+TIP: Name the groups exactly as shown above.
+The Power Apps formulas in Phase 2 reference these exact group names
+for role resolution at App.OnStart.
+ | 
+
+Also add each group to your SharePoint site with the correct permission level:
+Entra Group
+ | SharePoint Permission Level
+ | 
+SG-APPMRMS-Administrators
+ | Full Control
+ | 
+SG-APPMRMS-ProgrammeManagers
+ | Contribute
+ | 
+SG-APPMRMS-Supervisors
+ | Contribute
+ | 
+SG-APPMRMS-Contributors
+ | Contribute
+ | 
+Go to Site Settings → Site Permissions → Grant Permissions to add each group.
+
+7. Troubleshooting
+Error / Symptom
+ | Likely Cause
+ | Fix
+ | 
+'Connect-PnPOnline is not recognized'
+ | PnP.PowerShell not installed
+ | Run: Install-Module PnP.PowerShell -Scope CurrentUser -Force
+ | 
+Browser opens but login fails / loops
+ | MFA or Conditional Access issue
+ | Try Connect-PnPOnline -Url $SiteUrl -UseWebLogin as an alternative parameter
+ | 
+'Access Denied' after login
+ | Your account is not a Site Collection Admin on the target site
+ | Ask your SharePoint Admin to add you as Site Collection Admin, then retry
+ | 
+'The field already exists' warning (yellow)
+ | Script has been run before — safe to ignore
+ | Re-run is idempotent; existing items are skipped
+ | 
+Lookup column creation fails with 'list not found'
+ | Target list wasn't created yet (Section 3 error)
+ | Check the log for the Section 3 error, fix the root cause, re-run the script
+ | 
+Script times out / hangs at a list
+ | Throttling from SharePoint Online
+ | Wait 2 minutes, then re-run — idempotency means it skips completed steps
+ | 
+'WriteSecurity' error on AuditLog
+ | PnP.PowerShell version limitation
+ | Update module: Update-Module PnP.PowerShell, then re-run
+ | 
+
+If you encounter an error not listed above, open the .log file generated in the script folder, find the [ERROR] lines, and share them with your implementation support contact.
+
+8. What's Next — Phase 2 Overview
+Once you have confirmed all Phase 1 checks above and created the Entra ID security groups, confirm back and Phase 2 will be generated for you. Phase 2 delivers the Power Apps Canvas App.
+
+Phase
+ | Deliverable
+ | Approx. effort to implement
+ | 
+1 (this doc)
+ | SharePoint lists, columns, lookups, EvidenceLibrary
+ | ~30 min
+ | 
+2
+ | Power Apps Canvas App — all 16 screens, Power Fx formulas, responsive layout, role-based navigation
+ | ~3–4 hours (import solution + connect data sources)
+ | 
+3
+ | Power Automate — 12 flows: reminders, submission routing, approvals, rejections, overdue escalation, audit logging, quarterly consolidation
+ | ~2–3 hours (import + configure connections)
+ | 
+4
+ | Power BI — Executive dashboard (Programme KPIs, monthly trend, RAG status), embedded in app
+ | ~1–2 hours (publish + configure gateway/refresh)
+ | 
+
+CONFIRM BACK WHEN READY FOR PHASE 2
+
+Provide your SharePoint site URL and confirm:
+ ✅ All 11 lists/library visible in Site Contents
+ ✅ Lookup columns working (Projects → Programmes, etc.)
+ ✅ Four Entra ID security groups created
+ ✅ Groups added to SharePoint site permissions
+ | 
+
+End of Phase 1 Execution Guide.

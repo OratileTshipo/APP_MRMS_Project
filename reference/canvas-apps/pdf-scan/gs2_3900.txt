@@ -1,0 +1,1962 @@
+            by users in the app, we used choice data type fields. Make sure your data design fits the
+            purpose and usage patterns of your app and users.
+            Develop
+            Now that you've got an idea and a design, start building the app in Power Apps. If
+            you're building an app using Power Apps in Teams, we recommend creating a private
+            team and limiting the members of the team to only those involved in the app
+            development process.
+            Be sure to periodically review progress with stakeholders to get feedback. Once they see
+            the app coming together, it will build excitement for the finished product, and they'll
+            also provide feedback that you can use to iterate and improve the app experience.
+            Validate
+            Once the app functionality is complete, thoroughly test the app:
+                 Test as each Persona
+                 Test in Teams Desktop
+                 Test in Teams Mobile
+                 Test as user who isn't a member of the team if your app will be shared for broad
+                 distribution (sharing with colleagues outside of the team).
+                 Verify App Checker to determine if there are any issues or accessibility problems
+                 with your app and address them.
+                 Run the app through the Power Apps Code Review Tool  . This tool has been
+                 purpose built to highlight specific areas of potential improvement in the app
+                 across a range of areas such as performance, maintainability, and security.
+            Deploy
+            Your app is now complete and fully tested. Now it's time to onboard users. With Teams,
+            you've several options that you can use to give users access to your app:
+                 Add members to the team in which you developed the app.
+                 Create a solution and move the app and underlying tables to a different Team
+                 environment.
+        Share the app for broad distribution.
+      To share an app for broad distribution, follow these steps:
+       1. In Teams, open the Power Apps app.
+       2. Under Recent apps select See more.
+       3. Select the team where your app is installed.
+       4. Select Share with colleagues.
+       5. In the Enter or select a security group field, enter a security group or team with
+        which you want to share access to your app.
+       6. Toggle Colleague can use to on for the app that you wish to share.
+                 7. Select Save.
+                ７ Note
+                You'll need to set table permissions for the Microsoft Dataverse tables included in
+                your app before users will be able to use it. For more information on table
+                permissions, see Set permission and share apps with colleagues.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Add notifications to make your apps
+       collaborative
+       Article • 01/20/2023
+       Apps in Microsoft Teams are designed to enable collaboration between people in your
+       organization. When you have an app that has a hand-off of information, such as group
+       A doing something that group B then needs to process, if everything happens in the
+       app, users may miss important updates, and processes might stall.
+       Using notifications for critical events in your apps in Teams enhances collaboration by
+       proactively letting users know that something needs their attention or needs to be
+       done.
+       Teams and Power Platform give you many options in the ways that you can notify
+       people.
+          Email notifications
+          SMS/text notifications
+          Teams messages
+          Adaptive cards
+          Channel posts
+       Watch this video to learn how to add notifications to make your apps collaborative:
+       https://learn-video.azurefd.net/vod/player?id=c17e7bd1-aa38-434e-8120-
+       e26b90cb3618&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fadd-app-
+       notifications
+       Choose the right notification type
+       How should you decide what type of notification to use? Many people default to email
+       notifications, but many people also complain that they receive too many emails. Email is
+       an acceptable type of notification, but it should be used sparingly. Especially for urgent
+       notifications, as frequent emails are only seen after a period of time.
+       Here are some questions to ask when defining the appropriate type of notification:
+         1. Is the notification urgent?
+          If you're creating an app to track safety issues, and there's an urgent issue that
+          requires immediate attention, a notification like SMS text, push notification, or high
+          priority Teams message should be used so the notification is immediately noticed.
+        But don’t over-use these types of notifications for non-urgent notifications, or you
+        risk irritating your users.
+       2. Is the notification informational or actionable? If you're creating a notification,
+        what do you want to have the notification recipient do with the notification?
+        Informational notifications are to notify users, but they're for information purposes
+        only. For example, in the Employee Ideas sample app template for Teams, when a
+        new idea is created, a message is posted in a Teams channel notifying people that
+        a new idea has been created.
+        Actionable notification enable one or more follow-up activities by the recipient. In
+        the extending Employee Ideas article, we show how to change the notification to
+        an adaptive card so users can open the submitted idea and vote for it.
+        If the notification requires that the user be able to do something with the
+        notification, such as open a record or respond, an actionable notification should be
+        used—such as an interactive card, or add a hyperlink to deep link to the app.
+        Also, Teams makes other types of notifications more actionable by enabling
+        conversations around the notification—when you post a message to a Teams
+        channel, users can respond to it in the channel, facilitating the ability for multiple
+        people to discuss the notification.
+       3. Is the notification personal, or to a group?
+        Is there a specific person that should be notified? Or, is there a group of people
+        that needs to know about the notification? For personal notifications, consider
+        sending a message, email, or text message so that other users aren't overloaded
+        with non-applicable notifications. If the message should be seen by multiple
+        people in a group, a post In a Teams channel is a better choice, as the users in the
+        group can all see the message and collaborate on it.
+       4. What is the frequency of notification?
+        In the Inspection sample app template for Teams, by default, a message is posted
+        to a Teams channel when an inspection is completed. However, if you've a high
+        frequency of inspections, many messages will be posted to the channel. And when
+        many notifications are posted to a channel, individual notifications can get lost.
+        Think of your phone notification center—when you've a few apps giving you
+        notifications, they're helpful, but if you've many apps posting updates, notifications
+        become noise. In this case, you'd want to reevaluate your notifications, and either
+        change the notification to only notify on urgent inspections, or issues.
+        5. What is the impact on the users?
+         Your colleagues are probably busy, and each interruption can add stress to their
+         lives—especially in high quantities. Notifications are good if they make important
+         information more available. But they can also have negative impact if too frequent
+         or unnecessary. Also, arbitrary notifications can diminish a user's sense of control—
+         if many messages start arriving that a user has no control over. And it can be a
+         frustrating experience. Consider giving users an option in the app to control their
+         notifications—this can be a settings toggle to opt in to notifications, or a
+         preference to select what type of notification to receive. See extending bulletins for
+         an example.
+       Notifications: Power Apps or Power Automate
+       When creating a notification, you have two options:
+         Have your app create the notification directly.
+         Or, trigger a Power Apps flow to post the notification.
+       The decision as to which approach you should use depends on what type of notification
+       you're using, and how the notification should be triggered. Some notification types—
+       such as adaptive cards, require Power Automate. Others, like sending emails, text
+       messages, or Teams channel messages can be sent from a Power Automate formula, or a
+       Power Automate flow. While there isn’t a “right or wrong” answer to this question, here
+       are some rules to consider:
+         Notifications sent directly from an app without flow will be in the context of the
+         user making the change in the app. That means that the user will need access to
+         the service sending the message, and some types of messages like emails may
+         come from their personal account. If you want to send messages from a service
+         account or general notification mailbox, a Power Automate flow can be owned by
+         a different user account, and send a message when triggered by a data condition
+         (like a record being created).
+         If a flow sends a notification, and is triggered directly by the app, the flow needs to
+         be shared or assigned with the user triggering the flow. If a flow sends a
+         notification, and is triggered by a data condition (like a record creation or update),
+         the flow doesn't need to be shared or owned by the triggering user.
+         By using Power Automate to send notifications, you can update your notifications
+         without having to republish your app. If your notification details frequently change,
+         or users other than the maker of the app need to modify them, having the
+          notification sent by Power Automate can segment your workloads and enable
+          other users to work on the notifications while you work on the app.
+          Power Apps sending notifications directly use formulas to define the notification
+          logic, Power Automate flow uses a more graphical interface to set the properties of
+          a notification. For example, from a Power Apps app, you can use the following
+          formula to send email with the Outlook connector:
+         Power Fx
+         Microsoft365Outlook.SendEmail("mailbox@contoso.com", Summary, Description)
+       In Power Automate instead, the send an email action is presented in a graphical manner,
+       allowing users to populate the fields in a manner similar to how they send an email in
+       Outlook.
+              Sending an email from Power Apps directly is faster for experienced makers, but the
+              more details are required—such as attachment files and formatted text. For the less
+              experienced makers, sending the email with Power Automate flow might be easier.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+       Integrate with Microsoft Planner
+       Article • 01/20/2023
+       In this article, we'll learn how to integrate Power Apps with Planner to create and assign
+       tasks to users within the organization.
+       Power Apps in Microsoft Teams enables collaboration between people and groups.
+       Employees already use Teams to work, communicate, and collaborate. Apps in Teams
+       have deep integration with other Teams capabilities. For example, in Teams, you can
+       assign tasks to team members using Planner in your Teams channel. Apps that require
+       follow-up by others in your team, such as to address issues reported in the Issue
+       Reporting app, can leverage Planner in the Teams channel and create Tasks where users
+       already manage their tasks.
+       Watch this video to learn how to integrate Power Apps with Planner:
+       https://learn-video.azurefd.net/vod/player?id=37312c36-393d-44fd-ba8a-
+       9b3dbdf8d60e&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       planner
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions. We'll also need the ability to
+       connect to Planner.
+       Login into Teams
+       Login into Teams using either the Desktop app or the web app.
+       Create a new Team
+       In this section, we'll create a new Teams team and then create an app within that team.
+       Skip this section if you already have a team that you want to use instead.
+         1. To create a new team, select the Teams tab > select Join or create a team > select
+          Create Team > select From Scratch > select Public, and give the team a name such
+          as "Planner Integration". And then, select Create.
+         2. Select and add any members in your organization that you'd like to add to the
+          team for testing purposes, and select Add.
+         3. Select Close.
+           The new team gets created and is listed under the Teams tab.
+       Create a new app
+       We'll create an app with five fields capturing details that will be used to create a Task in
+       Planner.
+         1. Open Teams.
+         2. Select Power Apps from the left-pane.
+         3. Select + New app under Recent apps.
+         4. Select the team created earlier, and select Create to open Power Apps Studio.
+         5. Enter a name for the app, such as "Integrate with Planner", and select Save.
+           The app shows a default gallery
+         6. Select the database option from the left-pane to connect to the Planner.
+         7. Select + Add data, and then select Connectors.
+         8. Enter "Planner" in the search box to look for the Planner connector.
+         9. Select Planner.
+         10. If prompted, sign in.
+           Planner gets added as a data connection to the app
+         11. Select to open the Tree view.
+         12. Select + New screen > Blank layout.
+         13. Add the following controls.
+           a. Title (text input)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Title
+             Type              Text box
+             Property          Value
+             X                 Screen2.Width/2
+             Y                 135
+             Width             320
+             Height            35
+           b. From Date (date picker)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              FromDate
+             Type              Date picker
+             X                 Screen2.Width/2
+             Y                 235
+             Width             320
+             Height            35
+           c. Due Date (date picker)
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              DueDate
+             Type              Date picker
+             X                 Screen2.Width/2
+             Y                 335
+             Width             320
+             Height            35
+           d. Assigned To (combo box)
+                                                 ﾉ Expand table
+                      Property                      Value
+                      Name                          AssignedTo
+                      Type                          Combo box
+                      X                             Screen2.Width/2
+                      Y                             435
+                      Width                         320
+                      Height                        35
+                  e. Planner ID (combo box)
+                                                                                  ﾉ
+                                                                                      Expand table
+                      Property       Value
+                      Name           PlannerID
+                      Type           Combo box
+                      Items          Planner.ListGroupPlans(Param("groupID")).value
+                      X              Screen2.Width/2
+                      Y              535
+                      Width          320
+                      Height         35
+              14. Add the following labels.
+                  a. Title
+                                                                                  ﾉ
+                                                                                      Expand table
+                      Property                             Value
+                      Name                                 Label_Title
+                      X                                    365
+                      Y                                    135
+                      Width                                320
+             Property              Value
+             Height                35
+           b. From Date
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Label_FromDate
+             X                 365
+             Y                 235
+             Width             320
+             Height            35
+           c. Due Date
+                                                 ﾉ
+                                                   Expand table
+             Property           Value
+             Name               Label_DueDate
+             X                  365
+             Y                  335
+             Width              320
+             Height             35
+           d. Assigned To
+                                                 ﾉ Expand table
+             Property         Value
+             Name             Label_AssignedTo
+             X                365
+             Y                435
+             Width            320
+             Property         Value
+             Height           35
+           e. Planner ID
+                                                 ﾉ
+                                                   Expand table
+             Property          Value
+             Name              Label_PlannerID
+             X                 365
+             Y                 535
+             Width             320
+             Height            35
+         15. Add a button to the bottom of the screen with the following properties.
+                                                 ﾉ
+                                                   Expand table
+           Property          Value
+           Name              Button_CreateTask
+           X                 526
+           Y                 635
+           Width             320
+           Height            35
+         16. Copy the following formula in the OnSelect property of Button_CreateTask.
+            Power Fx
+            Planner.CreateTaskV3(
+                Param("groupId"),
+                PlannerID.Selected.id,
+                Title.Value,
+                {
+                    startDateTime: FromDate.Value,
+                    dueDateTime: DueDate.Value,
+                    assignments: AssignedTo.Selected.'User Name'
+               }
+           )
+           ７ Note
+           Upon selecting the Create Task button, it'll use the parameters provided in the
+           formula to figure out the team for which the task is being created, the planner
+           within the team the task is to be created, the Title from the text box captured
+           on the screen, and the From and Due dates captured on the screen.
+        17. Move Screen2 up above Screen1. If you want, you can also delete Screen1 instead.
+       Save and publish the app
+         1. Select Save on the top-right side of the screen to save the app.
+         2. Select Publish.
+         3. Select Next.
+         4. Under Add to Channel, make sure the channel under which the app should be
+          shown is listed and shows as at least "1 active tab(s)" and not "0 active tab(s)".
+         5. Select Save and Close.
+       Test the app
+         1. Open the team under which the app is created.
+         2. Select + Add a tab.
+       3. Search for tasks by Planner to add a planner tab to the team.
+       4. Enter tab name under Create a new plan, for example "Tasks Integration". And
+        then, select Save.
+        The tab gets added to the Team
+       5. Run the app in preview mode or from within the team.
+       6. Populate the columns with appropriate values.
+       7. Select Create Task.
+                 8. Go to the Planner tab for which the task is being created—in our example, "Tasks
+                    Integration Planner".
+                    A new task with the details should be added to the list.
+              See Planner integration in action
+              To see an example of Planner integration, check out the Issue Reporting sample app
+              template for Teams. Issue Reporting makes it easy for users to report issues. These
+              issues are created in Planner and assigned for follow-up.
+              This integration can be easily extended to add logic to automatically assign the Planner
+              Tasks or provide notifications for issue tasks.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Integrate with Azure Active Directory
+       Article • 01/20/2023
+       In this article, we'll learn about how to integrate apps created using Power Apps in
+       Microsoft Teams with Azure Active Directory (AD).
+       Integration with Azure AD enables many deep capabilities within your organization
+       hierarchy, the people in your organizations, and groups. For example, you can get
+       information about a person, their job title, department, or photo. You can also get
+       information about the user's organization hierarchy, such as their manager.
+       This integration can also be used to grant access to app functionality based on their role
+       or group membership, and therefore, be used to control security to sensitive data or
+       functionality.
+       In this article, we'll create a Power Apps app with a button with administrative access on
+       it. The visibility of the button will depend on whether the user is a member of the admin
+       group or not.
+       Watch this video to learn how to integrate Power Apps app with Azure Active Directory:
+       https://learn-video.azurefd.net/vod/player?id=9fabda9a-e9b5-43af-addd-
+       a27d3f381f18&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       azure-ad
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions. We'll also need access to Azure
+       AD to create the admin group and assign members to it.
+       Sign in to Teams
+       Login into Teams using either the Desktop app or the web app.
+       Create a new Team
+       In this section, we'll create a new team, and then create an app within that team. Skip
+       this section if you already have a team that you want to use instead of creating a new
+       one.
+                 1. To create a new team, select the Teams tab, and then select Join or create a team
+                   on the left bottom of the screen.
+                 2. Select Create Team > From Scratch > Public, give the team a name such as "Azure
+                   AD Integration", and select Create.
+                 3. (Optional) If you have any members in your organization that you'd like to add to
+                   the team for testing purposes, select them, and add them in the popup for adding
+                   members.
+                 4. Select Close.
+             The new team gets created, and is listed under the Teams tab.
+             Create a new Azure AD Group
+                 1. Sign in to Azure portal   with the same account that you logged into Teams with
+                   earlier.
+                 2. On the top search bar, search for and select Groups.
+                 3. Select + New Group.
+                 4. Set up the group with the following values:
+                                                                                         ﾉ Expand table
+                    Option                            Value
+                    Group type                        Microsoft 365
+                    Group name                        Admin Access
+                    Group email address               Automatically updated
+                    Group description                 Group for users with Admin access
+                 5. Select Create.
+                 6. Copy the group's object ID from the group overview screen for use later.
+             Create a new app
+             We'll create an app with a button that will only show up if the user is a member of the
+             team we created above.
+       1. Open the Teams app.
+       2. Select Power Apps.
+       3. Select + New app under Recent apps.
+       4. Select the team created earlier, and then select Create.
+       5. The app gets created, and the Power Apps Studio opens to allow editing the app.
+       6. Enter a name for the app, such as "Integrate with Azure AD", and then select Save.
+       7. Select Data > Add data.
+       8. In the connectors list, search for Azure AD, and select it to add that as a
+        connection.
+       9. Select Connect.
+       10. Sign in, and select Accept to connect.
+       11. In the Tree view, select + New screen to add a new screen to the app.
+       12. Select + (Insert) icon on the left-pane.
+       13. Select Button.
+       14. Set the "Text" property of the button to “Admin access”.
+       15. Select + (Insert) again, and then select label control to add.
+       16. Update the label text to "Admin level: ".
+               17. Select the app from the tree view, and open the OnStart property from the top-left
+                   of the screen.
+               18. Enter the following formula for the app OnStart:
+                      Power Fx
+                      If(
+                          !IsEmpty(
+                              AzureAD.CheckMemberGroups(
+                                  User().Email,
+                                  ["Enter your Azure group ID here"]
+                              ).Value
+                          ),
+                          Set(varAdmin,true),
+                          Set(varAdmin,false)
+                      )
+                      ７ Note
+                      Update the formula with the group ID (GUID) for the group you copied
+                      earlier.
+               19. Select ... (ellipsis) next to the app, and then select Run OnStart.
+               20. Select ... (ellipsis) next to Settings on the top ribbon, and select to view variables.
+                   varAdmin is set to False.
+               21. Select Screen 2 from the Tree view, and update the Text formula for the label to
+                   "Admin Level: " & varAdmin. The label will currently show as "Admin level: false"
+                   on the screen.
+                   We'll now control the visibility of the Admin Access button so that it only shows up
+                   when the user is an admin (for example, belongs to the Admin access group in
+                   Azure AD)
+               22. Select the button, and set the Visible property to "varAdmin".
+                   The button doesn't show up anymore since we don't have admin access.
+             Testing the integration
+                 1. Sign in to Azure portal  .
+                 2. Select the group created earlier.
+         3. Select Members under Manage from the left-pane.
+         4. Select + Add members to add members to the group/
+         5. Select users from the list of users under Add members to add to the group.
+         6. Select Select. Selected users get added to the group.
+         7. Go back to Teams.
+         8. Select Tree view.
+         9. Select the app > Run OnStart.
+       The admin access button is now visible on Screen 2, and the label shows admin level as
+       true since we're now members of the Admin access group.
+       See Azure AD integration in action
+       You can see an example of Azure AD integration in the Profile+ sample app template for
+       Teams.
+          Office 365 Users connector is used to retrieve the user profile, including name,
+          photo, manager, and other details.
+          Office 365 Groups connector is used to retrieve the people who report to a
+          selected user.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Integrate with calls and meetings
+       Article • 01/20/2023
+       Apps in Microsoft Teams drive collaboration by enabling users to do work where they
+       communicate and collaborate. Many apps require a “back and forth” communication or
+       passing items between people. For example, in the Inspection sample app template for
+       Teams, managers create inspection forms, users complete the inspection, and reviewers
+       review the inspections.
+       Power Apps in Teams can leverage deep integration with other Teams capabilities to
+       make apps collaborative. In this article, we'll learn how we can integrate Power Apps
+       with Teams to make calls or schedule meetings with other users within the organization.
+       Watch this video to learn how to integrate Power Apps with calls and meetings:
+       https://learn-video.azurefd.net/vod/player?id=022e5ad1-7a6d-49bb-99de-
+       93dd4041bebd&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fintegrate-
+       calls-and-meetings
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be
+       available as part of select Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using either the Desktop app or the web app
+       Create a new team
+       In this section, we'll create a new Teams team, and then create an app within that team.
+       Skip this section if you already have a team that you want to use.
+         1. To create a new team, select the Teams tab > select Join or create a team on the
+          bottom-left side of the screen > select Create Team > select From Scratch > select
+          Public, and give the team a name such as "Calls and Meetings Integration". And
+          then, select Create.
+         2. If you have any members in your organization you'd like to add to the team for
+          testing purposes, add them in the pop-up, and then select Add.
+         3. Select Close.
+       The new team gets created and is listed under the Teams tab
+       Create a new app
+       Well create an app with a gallery of users and buttons on each of the display forms to
+       either call, chat or schedule a meeting with a user from the list.
+         1. Open Teams app.
+         2. Select Power Apps from the left-pane.
+         3. Select + New app under Recent apps.
+         4. Select the team created earlier, and select Create to open the app in Power Apps
+          Studio.
+         5. Enter a name for the app, such as "Integrate with calls and meetings".
+         6. Select Save.
+          The app shows a default gallery
+         7. Select the gallery, and search for users in the Add a data source search box.
+         8. Select Users from the list of data sources.
+          The list of users shows in the gallery on the left-side of the screen. The right-side
+          of the screen shows details of the selected user record.
+         9. Select the app from the left-pane, and update the OnStart property of the app
+          with the following formula:
+            Power Fx
+            Set(gblIsHostClientWeb,Param("hostClientType")="web")
+            ７ Note
+            This formula checks if the user is accessing Teams from a web browser,
+            desktop, or a mobile app.
+        10. Select Screen1 from the Tree view.
+           11. Select + (Insert) > Button to add a button.
+           12. Move the button to the details pane on the right-side of the screen.
+           13. Set the following properties of the button.
+                                                                ﾉ Expand table
+               Property                            Value
+               Text                                "Call"
+               Width                               150
+               Height                              45
+               X                                   500
+               Y                                   300
+              Copy the following formula in the OnSelect property of the button:
+                Power Fx
+                If(
+                    gblIsHostClientWeb,
+                    Launch(
+                        "https://teams.microsoft.com/l/call/0/0?
+                users="&BrowseGallery1.Selected.'Primary Email',
+                        {},
+                        LaunchTarget.New
+                    ),
+                    Launch(
+                        "msteams://teams.microsoft.com/l/call/0/0?
+                users="&BrowseGallery1.Selected.'Primary Email',
+                        {},
+                        LaunchTarget.New
+                    )
+                )
+                ７ Note
+                    If the user is accessing Teams using a web browser, this will launch the
+                    call window in the browser itself because of https:// protocol identifier.
+                    If the user is accessing Teams using the Teams desktop or mobile app,
+                    then it launches the call window in the Teams app itself because of
+                    msteams:// instead.
+               The format to launch a call through a deep-link is:
+               https://teams.microsoft.com/l/call/0/0?users=\<user1\>,\<user2].
+               More information: Generate a deep link to a call
+         14. Add another button with the following properties:
+                                                 ﾉ Expand table
+           Property        Value
+           Text            "Schedule a Meeting"
+           Width           150
+           Height          45
+           X               Button1.X + 200
+           Y               Button1.Y
+         15. Copy the following formula in the OnSelect property of the new button:
+            Power Fx
+            If(
+                gblIsHostClientWeb,
+                Launch(
+                    "https://teams.microsoft.com/l/meeting/new?
+            subject=New%20Meeting&attendees="&BrowseGallery1.Selected.'Primary 
+            Email',
+                    {},
+                    LaunchTarget.New
+                ),
+                Launch(
+                    "msteams://teams.microsoft.com/l/meeting/new?
+            subject=New%20Meeting&attendees="&BrowseGallery1.Selected.'Primary 
+            Email',
+                    {},
+                    LaunchTarget.New
+                )
+            )
+         16. Add a third button with the following properties
+                                                 ﾉ
+                                                   Expand table
+           Property          Value
+           Text              "Chat"
+           Width             150
+           Height            45
+           X                 Button2.X + 200
+           Y                 Button1.Y
+        17. Copy the following formula in the OnSelect property of the new button:
+            Power Fx
+            If(
+                gblIsHostClientWeb,
+                Launch(
+                    "https://teams.microsoft.com/l/chat/0/0?
+            users="&BrowseGallery1.Selected.'Primary 
+            Email'&"&topicName=&message=Hi!",
+                    {},
+                    LaunchTarget.New
+                ),
+                Launch(
+                    "msteams://teams.microsoft.com/l/chat/0/0?
+            users="&BrowseGallery1.Selected.'Primary 
+            Email'&"&topicName=&message=Hi!",
+                    {},
+                    LaunchTarget.New
+                )
+            )
+          The screen should appear as shown below
+       Save and publish the app
+         1. Select Save on the top-right side of the screen to save the app.
+         2. Select Publish to publish the app.
+         3. Select Next in the pop-up.
+         4. Under Add to Channel, make sure the channel under which the app should be
+          shown is listed and shows as "1 active tab(s)" and not "0 active tab(s)".
+         5. Select Save and Close.
+       Test the app
+         1. Run the app in the preview mode.
+         2. Select a user from the list on the left.
+         3. If you don't have a user showing up in the list, share the app with another
+          colleague/user. Once that user logs in into the app, they'll show up in this list of
+          users.
+         4. Select the user from the list.
+         5. Test the options.
+       The call button launches a new call. The meeting button creates a meeting invitation
+       with the selected person
+       See chat, call, and meeting integration in action
+       For an example of chat, call, and meeting integration in action, check out the Profile +
+       sample app for template Teams.
+       When opened from within a Team, the app displays the other members of the team. You
+       can select the Select people to connect with and select one or more people, then start
+       a call or chat with the selected people, or schedule a meeting.
+       Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       Enable consistent experience across
+       sessions using LoadData and SaveData
+       functions
+       Article • 01/20/2023
+       Microsoft Dataverse for Microsoft Teams delivers a built-in, low-code data platform for
+       Teams. It provides relational data storage, rich data types, enterprise-grade governance,
+       and one-click solution deployment. Dataverse for Teams enables everyone to easily
+       build and deploy apps.
+       While there are numerous advantages of using Power Apps in Teams, one of the biggest
+       design considerations is the ability to keep consistent experience across sessions.
+       While using an app, if we switch a tab in Teams to look at Wiki or Planner, or even chat
+       with someone, the session data of the app is lost and we'd have to start the session
+       from scratch. For example, if we're in the middle of an inspection using the Inspections
+       app and we switch tabs even for a moment, all the data that was captured on the
+       inspection would be lost and we'll have to recapture all that information.
+       In this article, we'll learn how to use the LoadData() and SaveData() functions to store
+       the session data within the app to avoid any loss of work because of switching tabs in
+       Teams.
+       Watch this video to learn how to enable consistent experience across sessions:
+       https://learn-video.azurefd.net/vod/player?id=e669c7fe-3f11-43ad-8233-
+       0dbbb374bec5&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fconsistent-
+       experience-across-sessions
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that is
+       available as part of select Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using Teams Desktop.
+       Create a new Team
+       To create a new team:
+        1. Select the Teams tab.
+        2. Select Join or create a team on the bottom-left of the screen.
+        3. Select Create a team from scratch.
+        4. Select Public and give the team a name. In this example, we'd use "MSFT Partners".
+        5. Select Create.
+       The new team gets created and is listed under the Teams tab.
+       Create a Power Apps app in Teams
+       To create a Power Apps app in teams, we need to open Power Apps Studio in Teams as
+       shown below.
+       1. Select Power Apps from the list of apps and pin it to the left-pane, and then select
+        it.
+       2. Select Start now to create the first app.
+       3. Select the team for which this app is to be created—a Power Apps environment is
+        created for that team (there's one Power Apps environment per team).
+       4. While the environment is being created, close the dialog box that says Getting
+        things ready.
+       5. Select the Build tab on top, and in a few seconds the created app should appear in
+        the list.
+       6. Open the app, and notice it gets created in the tablet layout/form factor by
+        default.
+       7. Enter a name for the app Persistent session example app, and select Save.
+        The app gets created with a gallery.
+       8. Select Create new table to create a new table.
+       9. Enter Accounts, and select Create.
+       10. Add two columns—Phone with data type of Phone, and City with data type of Text.
+       11. Add sample data to the three columns.
+       12. Repeat to add at least five records.
+       13. Select Close.
+          The accounts table gets added as a data table
+        14. Select Tree View > Select BrowseGallery1 > Select Accounts as the data source.
+       Publish the app in Teams
+        1. Select Publish to Teams.
+        2. Select Next.
+       3. Select + to add the app to the "General" channel.
+         4. Go to the Persistent Session Example team, and notice the Persistent session
+          example app shows up on the top as a tab.
+       Testing the issue
+         1. Open the Persistent session example app from the Persistent Session Example
+          team.
+         2. Select New Record to create a new account in the app.
+         3. Enter the name and phone number
+         4. Before you enter City and save the record, switch to a different tab (like Files or
+          Wiki on top or a different team), and then come back to the app.
+         5. Notice that the data entered in the two columns is no longer available on the
+          screen and is lost
+       Solution: Use SaveData() and LoadData()
+       functions
+       To resolve the above issue, we'll use the LoadData() and SaveData() functions. We'll
+       create a collection for the data entered on a form as and when data is entered, and keep
+       saving the data in the collection until the record has been committed or saved. This way,
+       if the record hasn't been saved and we must tab out of the screen for some reason, the
+       collection would have the saved data that would get loaded once we're back in the app.
+       We'll also clear the collection once the record has been saved so that the collection is
+       ready to capture new data when the next new record is being created.
+         1. Start with making sure that the changes we're applying are applicable only in the
+          case of a new record. So, we're updating the variable newMode that will be used
+          as a condition on the edit form to figure out what data needs to be displayed.
+          Select New record and add the following formula on the OnSelect property of the
+          button:
+            Power Fx
+            NewForm(EditForm1);
+            UpdateContext({newMode: true})
+         2. Next, we'll add the data from the individual input controls to a collection, and then
+          we'll save the data to a local file from that collection. Select the text input box—in
+          our example it's the "DataCardValue1" of the "Name_DataCard1" on "EditForm1"
+          for the Name field—enter the following formula in the OnChange property of the
+          input field:
+            Power Fx
+            Collect(
+                colAccount,    
+                { Column:"Name",Value:Self.Value}
+            );
+            SaveData(colAccount,"colAccount").
+          With this change, we're adding the data to a local cache so that if the user leaves
+          the app, their data won't be lost.
+          Similarly, enter the following code in the OnChange property for Phone
+          (DataCardValue2):
+            Power Fx
+            Collect(colAccount, {Column:"Phone",Value:Self.Value});
+            SaveData(colAccount,"colAccount");
+          And enter the following code in OnChange property for City (DataCardValue3):
+            Power Fx
+            Collect(colAccount {Column:"City", Value:Self.Value});
+            SaveData(colAccount, "colAccount");
+         3. Now we'll update the App OnStart so that if there's any data saved in the
+          collection, that would get loaded on the start of the app.
+          Go to the App > OnStart property, and add the following formula:
+            Power Fx
+            LoadData(colAccount,"colAccount", true)
+         4. Next, we need to update the Default property of the data fields so that when the
+          page loads once we come back to the app, if data exists in the collection, it should
+          show the data from the collection by default.
+          Select the field DataCard and update the Default property of the data card to the
+          following formula for the listed fields.
+          For Name field, enter Name_DataCard1:
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column = "Name")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "Name")
+                ).Value,
+                If(newMode, Blank(), ThisItem.Name)
+            )
+          Similarly, enter the following formula in the Default property formula for Phone
+          (Phone_DataCard1):
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column ="Phone")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "Phone")
+                ).Value,
+                If(newMode, Blank(), ThisItem.Phone)
+            )
+          And use the following formula for City (City_DataCard1):
+            Power Fx
+            If(
+                newMode && !IsBlank(
+                    Last(
+                        Filter(colAccount, Column = "City")
+                    ).Value
+                ),
+                Last(
+                    Filter(colAccount, Column = "City")
+                ).Value,
+                If(newMode,Blank(), ThisItem.City)
+            )
+         5. Now, we need to clear the collection in two scenarios:
+           a. When the user submits the form, and the changes get saved.
+          b. When the user selects the cancel button to cancel the changes.
+          Use the following formula in the OnSelect property of the Submit button.
+            Power Fx
+            SubmitForm(EditForm1);
+            UpdateContext({editMode: false, newMode: false});
+            Clear(colAccount);
+            SaveData(colAccount, "colAccount");
+          Select the Cancel button, and enter the following formula:
+            Power Fx
+            ResetForm(EditForm1);
+            UpdateContext({editMode: false, newMode: false});
+            Clear(colAccount);
+            SaveData(colAccount, "colAccount");
+         6. Publish the apps after making all the above changes by selecting Publish to Teams.
+       Test the app again
+         1. Go to the team and run the app.
+         2. Select + New record, and add the name and phone details for the new record.
+         3. Select another tab to move out of the app.
+         4. Come back to the app—it shows details of the first account.
+        5. Now, when we select + New again, we'll see the Name and Phone details
+          populated in those text input fields already. And we can resume adding the
+          account we were adding before we had to tab out of the app.
+       How we use SaveData and LoadData in the
+       Inspection app
+       In the Inspection sample app template, we use load data and save data on the
+       inspection form—if a user is in the middle of an inspection, and they switch away from
+       the apps in Teams (like to send someone a message), we don’t want them to lose their
+       place in the inspection. When they return to the app tab in Teams, the app gives them
+       the option to resume the in-progress inspection.
+       Considerations
+       In Dataverse for Teams, there are some limits to the SaveData() and LoadData()
+       capabilities.
+          1-MB limit on Teams Desktop.
+          Doesn't work in a browser.
+          Apps in mobile are limited by the amount of local storage available to the app.
+       Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       Have a conversation about your business data
+       in a Teams app
+       Article • 01/20/2023
+       Apps in Microsoft Teams drive collaboration by enabling users to do work where they communicate and
+       collaborate. One way to make your apps collaborative is by adding the ability to have a conversation about
+       your app or the data in your app. Teams is your go-to place to have such conversations.
+       For example, in the Profile+ sample app template for Teams, when you select one or more profile cards in the
+       app, you can start a chat with the selected people directly in Teams.
+       You might also want to use this capability for your apps. For example, if you're building a sales opportunity
+       tracker for the sales manager to review upcoming deals, you might want to add a button for the user to chat
+       with the sales person about the opportunity.
+       This way, Power Apps in Teams can use deep integration with other Teams capabilities to make apps
+       collaborative. In this article, we'll learn how we can integrate Power Apps with Teams to facilitate conversations.
+       Watch this video to learn how to configure having conversations about business data in Teams app:
+       https://learn-video.azurefd.net/vod/player?id=aeacd56d-232b-4187-83f0-
+       e15dc4103f43&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fbusiness-data
+       Prerequisites
+       To complete this lesson, we'd need the ability to create apps within Teams that will be available as part of select
+       Microsoft 365 subscriptions.
+       Log in into Teams
+       Log in into Teams using either the Desktop app or the web app
+       Create a new Team
+       In this section, we'll create a new Teams team and then create an app within that team. Skip this section if you
+       already have a team you want to use instead.
+         1. To create a new team, select the Teams tab, and then select Join or create a team on the left bottom of
+          the screen.
+         2. Select Create Team > From Scratch > Public, give the team a name such as "Calls and Meetings
+          Integration", and select Create.
+         3. (Optional) If you have any members in your organization that you'd like to add to the team for testing
+          purposes, select them, and add them in the popup for adding members.
+         4. Select Close.
+       The new team gets created, and is listed under the Teams tab.
+       Create a new app
+       We'll create an app where the user can start a conversation for a particular team and Channel by selecting a
+       button and typing in a message in a text box. The user can then select the Submit button to post the message
+       in the particular team and channel in Teams, then other user can join the conversation.
+        1. Open Teams.
+        2. Select Power Apps from the left-pane.
+        3. Select + New app under Recent apps.
+        4. Select the team created earlier, and then select Create.
+          The app gets created and Power Apps Studio opens to allow editing the app.
+        5. Enter a name for the app, such as "Conversation app", and select Save.
+          The app is created with a default gallery on Screen 1.
+       Add Teams as a connector
+       We need to add Teams as a connector to the app since we want to be able to access the teams and channels
+       from the logged in user’s account.
+        1. Select Data from the left-pane.
+        2. Select + Add data, and then select Connectors.
+        3. Scroll down and select See all connectors.
+        4. Search for and select Teams connector.
+       Add a new table to capture company record
+       We need to add a table to maintain a list of companies we'll use as the company record, and to start a
+       conversation about it.
+        1. Select Data from the left-pane.
+        2. Select + Add data and then create a new table with the name "Company", and plural name as
+          "Companies".
+        3. Add a few company names to the table, and then select Close.
+       Add a new screen to select the customer
+       Next, we'll add a screen to the app so that users can select the customer that they want to have the
+       conversation about.
+        1. In the tree view, select + New screen > select Scenarios tab > select List.
+          A new screen gets added with a gallery list.
+        2. Update the title of the gallery to "Companies List".
+        3. Select Companies as the data source for the gallery.
+           The list of companies that was added shows up in the gallery TemplateGalleryList1.
+          4. Delete Screen1 from the tree view, and rename the new screen to Screen1.
+        Add a new table to capture the conversation details
+        We need to add another table to capture the details such as the Teams conversation ID, team, and channel
+        related to a conversation started in the app.
+          1. Select Data > + Add data > Create new table.
+          2. Enter table name as Conversation and plural name as Conversations.
+          3. Change the default Name column name to ID.
+          4. Add the following columns to the conversation table:
+                                                               ﾉ Expand table
+            Column              Type
+            Team                Text
+            Team Channel        Text
+            Team Name           Text
+            Channel Name        Text
+            Company             Lookup, related table= Company
+          5. Save and close the table.
+        Add a new screen to start or join a conversation
+        Now, we'll add a new screen where the app user can start or join a conversation.
+          1. In the tree view, select + New screen > Blank layout.
+          2. Update the Fill property of the screen to something other than white color.
+           In our example, we've set the Fill property of the screen to RGBA(224, 224, 237, 1).
+          3. Select + (Insert) > Input > Button.
+          4. Update the following properties of the button.
+                                                               ﾉ
+                                                                 Expand table
+            Property   Value
+            Name       startaconversation_Button
+            Text       "Start a conversation"
+            Width      200
+            Height     32
+                    Property          Value
+                    Font size         12
+                    X                  Parent.Width/2 - startaconversation_Button.Width/2
+                    Y                 100
+                    OnSelect           Set(enterMessage,true)
+                5. Select + (Insert) > Input > Combo box.
+                6. Update the following properties of the Combo box.
+                                                                                                          ﾉ Expand table
+                    Property              Value
+                    Name                  team_Combobox
+                    Items                  MicrosoftTeams.GetAllTeams().value
+                    Width                 320
+                    Height                32
+                    X                      Parent.Width/2 - team_ComboBox.Width/2
+                    Y                     200
+                    Text                  "Team"
+                    Tooltip               "Team"
+                    Visible               enterMessage
+                7. Add another combo box and update the following properties.
+                                                                                                          ﾉ
+                                                                                                              Expand table
+                    Property  Value
+                    Name      channel_Combobox
+                    Items      If(!IsBlank(team_ComboBox.Selected.id),MicrosoftTeams.GetChannelsForGroup(team_ComboBox.Selected.id).value)
+                    Width     320
+                    Height    32
+                    X          Parent.Width/2 - channel_ComboBox.Width/2
+                    Y         200
+                    Text      "Channel"
+                    Tooltip   "Channel"
+                    Visible   enterMessage
+                8. Select + (Insert) > Input > Text box.
+             9. Update the following properties of the Textbox.
+                                                                                  ﾉ
+                                                                                     Expand table
+                Property           Value
+                Name               message_TextBox
+                Value              ""
+                Width              500
+                Height             180
+                X                  Parent.Width/2 - message_TextBox.Width/2
+                Y                  300
+                Placeholder        Type message here
+                Visible            enterMessage
+            10. Select + (Insert) > Input > Button.
+            11. Update the following properties of the button.
+                                                                                  ﾉ Expand table
+                Property         Value
+                Name             submit_Button
+                Value            "Submit"
+                Width            96
+                Height           32
+                Font size        12
+                X                Parent.Width/2 - submit_Button.Width/2
+                Y                500
+                Visible          enterMessage
+            12. Copy the following formula in the OnSelect event of the button.
+                Power Fx
+                Patch(Conversations,Defaults(Conversations),
+                {ID:MicrosoftTeams.PostMessageToChannelV3(team_ComboBox.Selected.id,channel_ComboBox.Selecte
+                d.id,{content:message_TextBox.Value,contentType: "text"},{subject:"New 
+                conversation"}).id,Team:team_ComboBox.Selected.id,'Team 
+                Channel':channel_ComboBox.Selected.id, 'Team 
+                Name':team_ComboBox.Selected.displayName,'Channel 
+                Name':channel_ComboBox.Selected.displayName, Company: TemplateGalleryList1.Selected}); 
+                Set(enterMessage,false); Reset(team_ComboBox);Reset(channel_ComboBox);Reset(message_TextBox)
+                ７ Note
+                    In the above formula, we're using the Patch function to create a row in the Conversations table
+                    to capture the conversation ID along with the team, team name, channel and channel came. At
+                    the same time, we're also posting a message in the appropriate team and channel using the
+                    PostMessageToChannelV3 function. We then set the enterMessage variable back to "false" to
+                    hide some of the fields and buttons whose visibility depends on this variable.
+                    The subject is hardcoded to “New conversation" to keep the app simple ,and not add another
+                    text box control to capture. But a text box can be added for subject to the screen and can be
+                    captured by the user. This formula will need to be adjusted accordingly to reference that
+                    control. The Reset function doesn't work for the Fluent UI Combobox control. This is needed to
+                    not have any team or channel selected once a message is posted.
+            13. Select + (Insert) > Input > Button.
+            14. Update the following properties of the button.
+                                                                                  ﾉ Expand table
+                Property         Value
+                Name             joinconversation_Button
+                Text             "Join conversation"
+                Width            200
+                Height           32
+                Font size        12
+                X                Parent.Width/2 - submit_Button.Width/2
+                Y                500
+                Visible          enterMessage
+            15. Copy the following formula in the OnSelect event of the button.
+                Power Fx
+                Launch(Concatenate("msteams://teams.microsoft.com/l/message/",Last(Sort(Conversations, 
+                'Created On', Ascending)).'Team Channel',"/",Gallery1.Selected.etag,"?
+                tenantId=",Param("tenandId"),"&groupId=",Last(Sort(Conversations, 'Created On', 
+                Ascending)).Team,"&parentMessageId=",LookUp(MicrosoftTeams.GetMessagesFromChannel(Last(Sort(
+                Conversations, 'Created On', Ascending)).Team,Last(Sort(Conversations, 'Created On', 
+                Ascending)).'Team Channel').value,id = Last(Sort(Conversations, 'Created On', 
+                Ascending)).Team).etag,"&teamName=",Last(Sort(Conversations, 'Created  On', 
+                Ascending)).'Team Name',"&channelName=",Last(Sort(Conversations, 'Created On', 
+                Ascending)).'Channel Name'),{},LaunchTarget.New)
+                ７ Note
+                    In the above formula, we're using the Launch function to launch Teams using the team and
+                    channel parameters of the last record that was created in the Conversations table. We're doing
+                    this so that when a user starts a conversation and submits a message to post to a channel, the
+                    user can then select the Join Conversation button to go to the Teams post directly.
+              We're using the last function here to keep it simple. If you anticipate using this app more
+              extensively and anticipate having multiple conversations, you could get creative by using a
+              gallery of conversations, and letting the user select which conversation they'd want to join.*
+       Update the gallery OnSelect Property
+       Next, we'll update the OnSelect property of the company gallery so that when a user selects a company from
+       the list, the app will go to the second screen.
+         1. Select Screen1 from the tree view to open the Companies gallery.
+         2. Set the OnSelect property of the gallery item to Navigate(Screen2).
+       Save and publish the app
+         1. Select Save on the top-right to save the app.
+         2. Select Publish on the top-right to publish the app.
+         3. Select Next.
+         4. Under Add to Channel, make sure the channel under which the app should be shown is listed and shows
+          as "1 active tab(s)" and not "0 active tab(s)".
+         5. Select Save and Close to complete the publishing of the app.
+       Testing the app
+       Run the app in preview mode or go to the team in which the app is created.
+         1. The Companies gallery should show up as the first screen.
+         2. Select one of the companies.
+         3. You should only see two buttons: Start a conversation and Join a conversation.
+         4. Select Start a conversation.
+         5. Additional fields should show up:
+            Team (dropdown with a list of teams)
+            Channel (dropdown list of channels within the selected team)
+            Message box (text box to type in the message to be sent to the team)
+            Submit button (to submit the message)
+         6. Select a team.
+         7. Select a channel within the team.
+         8. Enter message.
+         9. Select Submit. All the additional fields/controls get hidden.
+        10. Select Join conversation to be taken to the team and channel chat where the last message was sent.
+               Feedback
+               Was this page helpful?   Yes       No
+               Provide product feedback
+       Build an app to retrieve Power Platform
+       videos for readiness
+       Article • 02/04/2023
+       In this tutorial, you’ll build a solution that retrieves, lists, and displays content that can
+       be used for readiness.
+       Objective
+       The focus of this tutorial will be on finding, retrieving, browsing, and playing video
+       content available on YouTube or RSS Feeds with MP4 video files. It will continually
+       monitor these channels and feeds for new content, and send a message to a specified
+       Microsoft Team when new content is available.
+       The channels and feeds in the tutorial will focus on Power Platform content but can
+       easily be used for other topics.
+       In this tutorial, you’ll use:
+          Power Apps to build the application to specify the YouTube channels and RSS
+          feeds.
+          Power Automate to retrieve information about new and existing videos.
+          Microsoft Dataverse for Teams to create tables to store the feed and video
+          information.
+          Power Automate to send a message to Microsoft Teams when a new video is
+          delivered.
+            Prerequisites
+                 Identify an existing Microsoft Team or create a new Microsoft Team that you’ll
+                 build your app for.
+                 Identify an existing channel or create a new channel within Microsoft Teams to
+                 post the messages sent, to specify that a new video has been retrieved.
+            If you’re unfamiliar with how to create a Team or a channel in a Team, see Create a
+            channel in Teams  .
+            In this tutorial, we'll use a channel named "Readiness".
+            Step 1: Install and pin Power Apps in Teams
+            In this section, you’ll install the Power Apps app in Teams and pin it to the left rail so you
+            can easily access it. To learn how to do install and pin the Power Apps app, see Install
+            the Power Apps personal app in Microsoft Teams.
+            If you’ve already done installed and pinned the Power Apps app, you can skip to the
+            next step.
+            Step 2: Create the app and the tables
+            In this section, you’ll take the initial steps to create the application.
+               1. Select the Power Apps app.
+               2. Select the Build tab at the top of the screen.
+               3. Select Create shown in the lower left of the screen.
+                 This action will display the Create an app dialog box.
+               4. Select the name of the team from the drop-down list and select Create.
+         ７ Note
+         If this is the first time you’ve tried to create an app in this Microsoft Teams
+         team, it will take a moment to set up.
+       5. When prompted for the name of the app, enter Video Library and select Save.
+      Step 2.1: Create the table for the feeds
+      In this section, you'll create a table to store the names and details for the feeds that will
+      be used by the application.
+       1. Select Create new table on the left side of the screen.
+       2. When prompted for the name of the table, enter Feeds.
+       3. Select Create.
+      Step 2.1.1: Edit the Name column
+       1. In the visual editor, select the drop-down menu for the Name column and then
+        Edit column.
+       2. Change the name to Title.
+       3. Select Advanced options and then change the value for Max length to 255.
+       4. Select Save.
+      Step 2.1.2: Create the Description column
+       1. Select + to create a new column.
+       2. Specify the name as Description.
+       3. For Type, select Text from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+       5. Select Create.
+      Step 2.1.3: Create the Image Link column
+       1. Select + to create a new column.
+       2. Specify the name as Image Link.
+       3. For Type, select URL from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+       5. Select Create.
+      Step 2.1.4: Create the Image Title column
+       1. Select + to create a new column.
+       2. Specify the name as Image Title.
+       3. For Type, select Text from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+                 5. Select Create.
+             Step 2.1.5: Create the Last Retrieved column
+                 1. Select + to create a new column.
+                 2. Specify the name as Last Retrieved.
+                 3. For Type, select Text from the list.
+                 4. Select Create.
+             Step 2.1.6: Create the Link column
+                 1. Select + to create a new column.
+                 2. Specify the name as Link.
+                 3. For Type, select URL from the list.
+                 4. Select Advanced options and then change the value for Max length to 255.
+                 5. Select Create.
+             Step 2.1.7: Create the Published On column
+                 1. Select + to create a new column.
+                 2. Specify the name as Published On.
+                 3. For Type, select Text from the list.
+                 4. Select Create
+             Step 2.1.8: Add a row
+             In the visual editor, add a row for the Microsoft show "#LessCodeMorePower" that will
+             be used in testing.
+                                                                                          ﾉ
+                                                                                              Expand table
+               Title           #LessCodeMorePower (HD) - Channel 9
+               Description     The show all about Power Apps. Learn more here!
+              Title           #LessCodeMorePower (HD) - Channel 9
+              Image Link      https://sec.ch9.ms/content/feedimage.png
+              Image Title     #LessCodeMorePower (HD) - Channel 9
+              Link            https://s.ch9.ms/Shows/Less-Code-More-Power/feed/mp4high
+               ７ Note
+               Leave the Published On column empty.
+             The visual editor should resemble the image below.
+             Select Close to close the visual editor.
+             The screen created automatically in the app, named Screen1, should automatically bind
+             to the table, displaying the fields in the table and the record you added.
+             The screen should resemble the image below.
+             Step 2.2: Create the table for the feed items
+             In this section, you'll create a table to store the details for the videos stored in the Feed
+             Items for the YouTube channel or RSS feed.
+                1. Select Add data on the left side of the screen.
+                2. Select Create new table.
+       3. When prompted for the name of the table, enter Feed Items.
+      Step 2.2.1: Edit the Name column
+       1. In the visual editor, select the drop-down for the Name column, and then select
+        Edit column.
+       2. Change the name to Feed Item ID.
+       3. Select Advanced options and then change the value for Max length to 255.
+       4. Select Save.
+      Step 2.2.2: Create the Feed column
+       1. Select + to create a new column.
+       2. Specify the name as Feed.
+       3. For Type, select Lookup from the list.
+       4. For the table, select Feeds from the list
+       5. Select Create.
+      Step 2.2.3: Create the Title column
+       1. Select + to create a new column.
+       2. Specify the name as Title.
+       3. For Type, select Text from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+       5. Select Create.
+      Step 2.2.4: Create the Description column
+       1. Select + to create a new column.
+       2. Specify the name as Description.
+       3. For Type, select Text from the list.
+       4. Select Advanced options and then change the value for Max length to 2500.
+       5. Select Create.
+      Step 2.2.5: Create the Primary Feed Link column
+       1. Select + to create a new column.
+       2. Specify the name as Primary Feed Link.
+       3. For Type, select URL from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+       5. Select Create.
+      Step 2.2.6: Create the Video Link column
+       1. Select + to create a new column.
+       2. Specify the name as Video Link.
+       3. For Type, select URL from the list.
+       4. Select Advanced options and then change the value for Max length to 255.
+       5. Select Create.
+      Step 2.2.7: Create the Published On column
+       1. Select + to create a new column.
+         2. Specify the name as Published On
+         3. For Type, select Text from the list.
+         4. Select Create.
+       The visual editor should resemble the image below.
+       Select Close to close the visual editor.
+       Now that you’ve created the required tables, select Save on the upper-right corner to
+       save the app and close the Power Apps Studio.
+       Step 3: Create flows to get the video details for
+       configured feeds
+       In this section, you'll create flows in Power Automate to retrieve videos for each of the
+       configured feeds. This flow will monitor the RSS feeds for the addition of new videos,
+       retrieve details for the videos, and save those details in the database.
+       When you’ve completed this section, your flow should resemble the diagram below.
+       ７ Note
+       Power Automate has a trigger that allows you to detect when a new item is added
+       to a feed for an individual feed. When tracking multiple feeds, this would require
+       multiple feeds and would require the same number of flows to match the number
+       of feeds. The approach taken in this lab is more complex but with the benefit of
+       having a single flow that supports any number of configured feeds in a single flow.
+      Step 3.1: Create the flow
+       1. Select the Build tab.
+       2. From the list on the left, select the name of your team in which you created the
+        tables earlier.
+       3. Select See all under the Built by this Team tab.
+       4. Select New.
+       5. Select Flow > Scheduled.
+       6. In the Build a scheduled flow dialog,
+         a. Enter the name as "Retrieve Videos".
+        b. Select Day as the frequency.
+         c. Select Create.
+      Step 3.2: Add the initialize variable action
+       1. Select New step.
+       2. Enter Initialize variable in the search box.
+       3. Select the Initialize variable action.
+       4. Enter Link to Video in the Name field.
+       5. Select String in the drop-down for Type.
+         ７ Note
+         Don’t enter any value in the Value field.
+      Step 3.3: Add the List Records action
+       1. Select New Step.
+       2. Enter Microsoft Dataverse in the search box and select the action named List
+        records.
+       3. Select Feeds in the Entity name property.
+       4. Select ellipsis (…) in the header of the action and select Rename.
+       5. Rename the action to Get list of feeds to retrieve.
+      Step 3.4: Add the Current time action
+       1. Select New Step.
+       2. Enter Date Time in the search box and select the action named Current time.
+      Step 3.5: Add the Apply to each action
+       1. Select New Step.
+       2. Enter Apply to each in the search box, and then select the action named Apply to
+        each.
+       3. Select the text box under Select output from previous steps.
+       4. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select value.
+       5. Select ellipsis (…) in the header of the action and select Rename.
+       6. Rename the action to Loop through each of the feeds in the database.
+      Step 3.6: Add the List all RSS Feed Items action
+       1. Select Add an action.
+       2. Enter RSS in the search box and select the action called List all RSS feed items.
+       3. Select the box for the property The RSS feed URL.
+       4. In the Dynamic content, scroll down to the section Get list of feeds to retrieve,
+        and then select Link.
+       5. Select in the box for the property since and select Last Retrieved.
+      Step 3.7: Add the Apply to Each Action
+       1. Select Add an action.
+       2. Enter Apply to each in the search box and select the action named Apply to each.
+       3. Select the text box under Select output from previous steps.
+       4. In the Dynamic content list, scroll down to the section called List all RSS feed
+        items, and then select body.
+       5. Select ellipsis (…) in the header of the action, and then select Rename.
+       6. Rename the action to Loop through each of the items in the feed since last retrieved.
+      Step 3.8: Add the Apply to Each action
+       1. Select Add an action inside Loop through each of the items in the feed since last
+        retrieved.
+       2. Enter Apply to each in the search box and select the action named Apply to each.
+       3. Select the text box under Select output from previous steps.
+       4. In the Dynamic content list, scroll down to the section List all RSS feed items, and
+        then select Feed links.
+       5. Select ellipsis (…) in the head of the action, and then select Rename.
+       6. Rename the action to Evaluate links to determine if this is YouTube or a Vlog with a
+        video.
+      Step 3.9: Add the Condition action
+       1. Select Add an action.
+       2. Enter Condition in the search box, and then select the action named Condition.
+       3. Select the text box containing text Choose a value.
+       4. In the Dynamic content list that is displayed, scroll down to the section called
+        Evaluate links to determine if this is YouTube or a Vlog with a video, and then
+        select Current item.
+       5. Select the drop-down that shows is equal to, and then select contains.
+       6. Select the text box text Choose a value and enter the value .mp4.
+       7. Select ellipsis (…) in the header of the action, and then select Rename.
+       8. Rename the action to Check to see if there is a link with an MP4 file.
+       9. In the If yes path on the left, select Add an action.
+         a. Enter Set variable in the search box, and then select the action named Set
+          Variable.
+        b. Select Link to Video in the drop-down for the Name property.
+         c. Select the textbox for the Value property.
+        d. In the Dynamic content list, scroll down to the section called Evaluate links to
+          determine if this is YouTube or a Vlog with a video and select Current item.
+        e. Select ellipsis (…) in the header of the action, and then select Rename
+         f. Rename the action to Specify the Video Link is the link to an MP4 File.
+       10. In the If No path on the left, select Add an action.
+         a. Enter Set variable in the search box, and then select the action named Set
+          Variable.
+        b. Select Video Link in the drop-down for the Name property.
+         c. Select the textbox for the Value property.
+        d. In the Dynamic content list, scroll down to the section List all RSS feed items,
+          and then select Primary feed link.
+        e. Select ellipsis (…) in the header of the action, and then select Rename.
+         f. Rename the action to Specify the Video Link is the Primary feed link.
+      Select the header of the action to show the title of Evaluate links to determine if this is
+      YouTube or a Vlog with a video.
+      Step 3.10: Add the Create a New Record action
+       1. Inside Loop through each of the items in the feed since last retrieved action, select
+        Add an action.
+       2. Enter Microsoft Dataverse in the search box, and then select the action called
+        Create a new record.
+       3. Select Feed Items in the Entity name property.
+       4. In the Dynamic content list scroll down to the section List all RSS feed items, and
+        then select Feed ID.
+       5. Select the textbox next to Field Item ID.
+       6. Select Show advanced options link in the action to display all the fields in the
+        table.
+       7. Select the textbox next to Description.
+       8. In the Dynamic content list, scroll down to the section called List all RSS feed
+        items and select Feed summary.
+       9. Select the textbox next to Feed (Feeds).
+       10. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select OData Id.
+       11. Select the textbox next to Primary Feed Link.
+       12. In the Dynamic content list scroll down to the section List all RSS feed items, and
+        then select Primary feed link.
+       13. Select the textbox next to Published On.
+       14. In the Dynamic content list, scroll down to the section List all RSS feed items, and
+        then select Feed published on.
+       15. Select the textbox next to Title.
+       16. In the Dynamic content list, scroll down to the section List all RSS feed items, and
+        then select Feed title.
+       17. Select the textbox next to Video Link.
+       18. In the Dynamic content list, scroll down to the section Variables, and then select
+        Link to Video.
+    Step 3.11: Add the Set Variable action
+       1. Select Add action after Create new record.
+       2. Enter Teams in the search box, and then select the Post a message (V3) (preview)
+        action.
+       3. In the drop-down for the Team property, select the team to send the message.
+       4. In the drop-down for the Channel property, select the channel to send the
+        message.
+       5. Select Show advanced options link.
+       6. In the Message property, create a message with details about the item. An example
+        message is shown in the image below.
+      Select the header of the action to show the title of Loop through each of the items
+      since last retrieved.
+      Step 3.12: Add the Update Record action
+       1. Inside Loop through each of the feeds in the database action, select Add an action.
+       2. Enter Microsoft Dataverse in the search box, and then select the action Update a
+        record.
+       3. Select Feeds for the Entity Name.
+       4. Select textbox next to Item ID.
+       5. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Feeds.
+       6. Select textbox next to Title.
+       7. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Title.
+       8. Select Show advanced options link in the action to display all the fields in the
+        table.
+       9. Select textbox next to Description.
+       10. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Description.
+       11. Select textbox next to Image Link.
+       12. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Image Link.
+       13. Select textbox next to Image Title.
+       14. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Image Title.
+       15. Select textbox next to Last Retrieved.
+       16. In the Dynamic content list, scroll down to the section Current time and select
+        Current time.
+       17. Select textbox next to Link.
+       18. In the Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Link
+       19. Select textbox next to Published On.
+       20. In Dynamic content list, scroll down to the section Get list of feeds to retrieve,
+        and then select Published On.
+      Your complete flow should look like the following image:
+      Step 3.13: Save the Flow
+       1. From the upper-right side of the screen, select Save.
+       2. Select the back arrow in the upper left.
+       3. Select the flow Retrieve Videos.
+       4. Select Run in the command bar.
+       5. From the panel on the right side of the screen, select Run flow.
+       6. Select Done.
+       7. Select the refresh button in 28-day run history to show the details of the flow run.
+       If the flow doesn't show as succeeded, select Run and it will display the failed action
+       with any associated error message.
+       Step 4: Edit the app to add the video library
+       interface
+       In this section, you'll create a new screen in the app that enables you and other
+       members of the team to browse through videos, see the video details, and play them
+       directly within Teams.
+       To start editing the app:
+         1. Select Power Apps from the left rail in Teams.
+         2. Select the Build tab.
+         3. From the left pane, select the team environment where the app is created.
+         4. Under Built by this team*, select the Video Library app.
+       Now create a new screen and configure the screen controls using the following steps.
+       Step 4.1: Create new screen
+         1. Select Tree view.
+          2. Select New screen.
+          3. Select Blank layout.
+          4. Select + to begin adding controls to screen.
+        Step 4.2: Add the header
+          1. Enter Rectangle in the search box.
+          2. Drag the rectangle control onto the screen.
+          3. Set the following properties with these values:
+                                                        ﾉ
+                                                          Expand table
+             Property                       Value
+             X                              0
+             Y                              0
+             Width                          1365
+             Height                         60
+             Color                          Purple
+        Step 4.3: Add the header label
+          1. Enter Label in the search box.
+          2. Drag the label onto the screen.
+          3. Set the following properties with these values:
+                                                        ﾉ
+                                                          Expand table
+             Property                   Value
+             Text                       Video Library
+             Display Mode               View
+             Font size                  24
+             X                          576
+             Property                     Value
+             Y                            0
+             Width                        191
+             Height                       61
+             Color                        White
+         Step 4.4: Add a rectangle for the Video List Header
+           1. Enter Rectangle in the search box.
+           2. Drag the rectangle control onto the screen.
+           3. Set the following properties with these values:
+                                                         ﾉ
+                                                           Expand table
+             Property                        Value
+             X                               0
+             Y                               61
+             Width                           1365
+             Height                          58
+             Color                           Purple
+         Step 4.5: Add a label for the Video List Header
+           1. Enter Label in the search box.
+           2. Drag the label onto the screen.
+           3. Set the following properties with these values:
+                                                         ﾉ Expand table
+             Property          Value
+             Text              Select a video from the list below
+             Display Mode      View
+             Property          Value
+             Font size         14
+             X                 39
+             Y                 74
+             Width             320
+             Height            32
+             Color             White
+         Step 4.6: Add a Vertical Gallery
+           1. Enter Vertical Gallery in the search box.
+           2. Drag the label onto the screen.
+           3. Set the following properties with these values:
+                                                          ﾉ
+                                                            Expand table
+             Property            Value
+             Name                Video Library
+             Data Source         Feed Items
+             Layout              Image, title, and subtitle
+             X                   0
+             Y                   119
+             Width               450
+             Height              649
+         In the tree view on the left side of the screen, there are three controls underneath the
+         Video Gallery with names starting with Subtitle, Title, and Image.
+       Step 4.6.1: Set the Subtitle
+         1. Select the control that starts with Subtitle.
+         2. Select the Text property from the property list on top-left.
+         3. Update the property value to the following formula:
+            Power Fx
+            ThisItem.Feed.Description
+       Step 4.6.2: Set the Title
+         1. Select the control that starts with Title.
+         2. Select the Text property from the property list on top-left.
+         3. Update the property value to the following formula:
+            Power Fx
+            ThisItem.Feed.Title
+       Step 4.6.3: Set the Image
+         1. Select the control that starts with Image.
+         2. Select the Text property from the property list on top-left.
+         3. Update the property value to the following formula:
+            Power Fx
+              ThisItem.Feed.'Image Link'
+         Step 4.7: Add the background for the feed item
+           1. Enter Rectangle in the search box.
+           2. Drag the rectangle control onto the screen.
+           3. Set the following properties with these values:
+                                                         ﾉ
+                                                           Expand table
+             Property                        Value
+             X                               451
+             Y                               61
+             Width                           915
+             Height                          707
+             Color                           Purple
+         Step 4.8: Add the feed item title header label
+           1. Enter Label in the search box.
+           2. Drag the label onto the screen.
+           3. Set the following properties with these values:
+                                                         ﾉ Expand table
+             Property                         Value
+             Font size                        18
+             X                                466
+             Y                                51
+             Width                            883
+             Height                           78
+             Property                       Value
+             Color                          White
+          4. Select the Text property from the property list on top-left.
+          5. Set the Text property value to the following formula:
+             Power Fx
+             'Video Library'.Selected.Title
+        Step 4.9: Add a Video Control
+          1. Enter Video in the search box.
+          2. Drag the video control onto the screen.
+          3. Set the following properties with these values:
+                                                       ﾉ Expand table
+             Property                       Value
+             X                              450
+             Y                              129
+             Width                          916
+             Height                         523
+          4. Select the Media property from the property list on top-left.
+          5. Set the Media property value to the following formula:
+             Power Fx
+             'Video Library'.Selected.'Video Link'
+        Step 4.10: Add the feed description HTML Text control
+          1. Enter HTML text in the search box.
+          2. Drag the HTML text control onto the screen.
+          3. Set the following properties with these values:
+                                                        ﾉ
+                                                          Expand table
+             Property                        Value
+             Font size                       14
+             X                               458
+             Y                               651
+             Width                           908
+             Height                          82
+             Color                           White
+          4. Select the HtmlText property from the property list on top-left.
+          5. Set the HtmlText property value to the following formula:
+              Power Fx
+              'Video Library'.Selected.Description
+        Step 4.11: Add the Published On label
+          1. Enter Label in the search box.
+          2. Drag the Label onto the screen.
+          3. Set the following properties with these values:
+                                                        ﾉ Expand table
+             Property                        Value
+             Font size                       14
+             X                               1153
+             Y                               732
+             Width                           213
+             Height                          36
+            Property                       Value
+            Color                          White
+          4. Select the Text property from the property list on top-left.
+          5. Set the Text property value to the following formula:
+             Power Fx
+             Concatenate("Published On ",Text('Video Library'.Selected.'Published 
+             On'))
+        Step 4.12: Enable toggle between screens
+        Currently there are two separate screens, but no way to toggle between them. The
+        ability to toggle between the screens will be important to enable the addition of more
+        feeds.
+        Step 4.12.1: Add the gear icon
+          1. Select Screen2.
+          2. Select Add icon from the properties pane.
+          3. Select the Settings icon type.
+          4. Set the following properties with these values:
+                                                      ﾉ
+                                                        Expand table
+            Property                       Value
+            X                              1307
+            Y                              6
+            Width                          48
+            Height                         51
+            Color                          White
+          5. Select the OnSelect property from the property list on top-left.
+          6. Set the OnSelect property value to the following formula:
+                Power Fx
+                Navigate(Screen1)
+          Step 4.12.2: Configure the back button
+            1. Select Screen1.
+            2. Select Add icon from the properties pane.
+            3. Select the Back icon type.
+            4. Set the following properties with these values:
+                                                                ﾉ Expand table
+               Property                             Value
+               X                                    225
+               Y                                    12
+               Width                                32
+               Height                               32
+            5. Select the OnSelect property from the property list on top-left.
+            6. Set the OnSelect property value to the following formula:
+                Power Fx
+                Navigate(Screen2)
+          When you select the gear icon, the app will now show the form to edit the list of feeds.
+          Selecting the back button will return to the list of videos.
+          Step 5: Test the app
+          Before publishing the application to teams, it’s important to test core functionality.
+          Step 5.1: Test the Power Automate Flow
+            1. Run the Power Automate flow.
+         2. Confirm that new items have been added to the Feed Items table.
+         3. Confirm that the flow has posted new messages to the Channel you specified
+          when configuring the application.
+       Step 5.2: Test the app functionality
+         1. Open the app in Power Apps Studio.
+         2. From upper-right side of the screen, select Preview.
+         3. Select the list of feed items in the gallery on the left.
+         4. When you select an item, confirm that the Title, Description, Publish Date, and the
+          Video details are displayed.
+         5. Select the video and confirm the video plays.
+       Step 5.3: Test additions to the Feeds table
+         1. Add another feed to the Feeds table.
+         2. Rerun the Power Automate flow.
+         3. Repeat the above steps.
+       Step 6: Publish the app
+         1. Select the Publish to Teams icon in the upper right.
+         2. Select Next.
+         3. Select + next to the channel, such as Readiness to add the app to.
+                 4. Select Save and close.
+              See also
+              Use sample app templates in Microsoft Teams
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Manage your apps in Teams
+     To manage an app, select Apps from the solution explorer. Then select the app that you want to
+     manage, or select Commands (…) next to the app name, and then select commands from the
+     drop-down menu.
+      ７ Note
+      The Teams experience changes frequently. If the current Teams UI or screenshots in this
+      article don't match what you see, use the option names and overall flow as your guide.
+     Edit an app
+     Select Edit to edit the app in Power Apps Studio. More information: Edit a canvas app in Power
+     Apps and Understanding Power Apps Studio
+       Tip
+      Use this option if you want to rename an app, or change app icon and description. For
+      detailed steps, go to rename an app or change app icon and description.
+     Add to Teams
+     Allows you to download the app and then add it to Teams. For the current end-to-end
+     experience, see Embed a canvas app as personal app in Teams and Publish your app in Teams.
+     App details
+     The Details option shows the owner of the app, when the app was created and last modified, app
+     ID and license designation.
+         Restore an app
+         A canvas app can have multiple versions. You can restore an app to an available published
+         version.
+         To restore an app to a specific version:
+            1. Select Versions from the app details screen.
+            2. Select a version other than Live that you want to restore.
+            3. Select      .
+            4. Select Restore.
+                  ７ Note
+                  The restored app becomes the latest version of the app. However, the latest version is
+                  not yet live. You must publish the restored version to make the restored version
+                  available to all users.
+            5. Select       for the restored version.
+            6. Select Publish this version.
+            7. Review the app preview and select Publish this version to confirm.
+    The Versions tab now shows the restored version as Live:
+     More information: Restore an app
+     Delete an app
+     Select Delete to delete an app. When prompted, select Delete from cloud to delete the app.
+     For more information about deleting an app, go to Delete an app.
+     Rename an app
+     To rename an app:
+      1. Edit the app in Power Apps Studio.
+      2. Select the app name from the top-right.
+      3. Update the name.
+      4. Select Save.
+     More information: Edit app editor
+     Change app icon and description
+     To change the app icon and description:
+       1. Edit the app in Power Apps Studio.
+       2. Select Settings.
+       3. Update the icon and description.
+       4. Select Save.
+     More information: Change app settings
+     See also
+     Publish and share your apps Set permission and share apps with colleagues Embed a canvas app
+     as personal app in Teams
+     ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/22/2026
+    Set permission and share apps
+    with colleagues
+    After collaboration with your team to build an app, as an owner of the team, you can share the
+    app and its underlying data with other colleagues within your company that don't belong to your
+    development team.
+     ７ Note
+     The Teams experience changes frequently. If the current Teams UI or screenshots in this
+     article don't match what you see, use the option names and overall flow as your guide.
+    To share an app:
+     1. Assign the correct permissions for the tables in your app for the Colleagues with access
+      role.
+     2. Select a security group you would like to assign to the Colleagues with access role.
+     3. Choose which apps the Colleagues with access role should have access to.
+    Once you’re done sharing your apps, they’ll appear in the Built for your colleagues section within
+    the Teams app store. If you’re a Teams admin, you can also pin apps for users in the Teams app
+    bar for even easier discovery.
+      ７ Note
+         If your app doesn't appear in the Built by your colleagues section, your Teams app
+         might be caching information. If this happens, try signing out, and sign back in if you're
+         using the Teams desktop app. If you're using Teams web app, try refreshing your
+         browser.
+         You need to be an owner within the team to share apps and edit table permissions. If
+         you are not an owner, the Manage permission and Share with colleagues options
+         won't appear.
+     Assign table permissions
+     By default, the Colleagues with access role has no access to the data inside any of the custom
+     tables you built using Dataverse for Teams. If you would like users outside of your team to access
+     this data, you'll need to change the default access to one of these four permission sets:
+        Full access – Allows end users to see and edit all records in the table.
+        Collaborate – Allows end users to see all records, but they can only edit their own records.
+        Reference – Provides a read-only view of data for end users.
+        Private  – Allows end users to only view and edit their own data.
+    Use Full access or Collaborate when colleagues need to edit data, and use Reference when they
+    only need read-only access.
+     ７ Note
+     You can also use this experience to alter the default access rights for members and guests
+     within your team. By default, Team members are given Full access and guests are given
+     Private access to new custom tables.
+    To set the permissions of a table:
+     1. Select Build tab.
+     2. Select the team that contains the app and tables you want to share.
+     3. Select See all under the list of resources in the team.
+     4. Select Tables from the left pane.
+     5. Select the table you want to share.
+     6. Select the Manage permissions in the command bar.
+     7. Under the Colleagues with access role, and select the permission set that you want to grant
+      this role.
+           Tip
+          After you assign a security group to the Colleagues with access role, you'll see the
+          name of the security group reflected in the table permission panel.
+       8. Select Save.
+       9. Repeat the above steps for the remaining tables in your app.
+      ） Important
+      When using Share app with Colleagues in the Microsoft Teams app store and the security
+      group doesn't exist in the Dataverse organization, the Teams app will be created and
+      assigned the Basic User role.
+     Assign the colleagues with access role to a security
+     group and share the app
+     After you’ve completed setting the permissions to all your tables, you’re now ready to share the
+     app with an existing security group.
+     ７ Note
+       You can share an app to a single security group.
+       If you want to share the app to a Microsoft 365 group, it must be security enabled.
+       The security group's membership type must be Assigned. More information: Group
+       membership types in Microsoft Entra ID
+       Your Power Apps administrator may have applied the limit to the maximum size of the
+       security group. By default, this limit is 10,000 members. More information: List tenant
+       settings (preview) - powerPlatform.teamsIntegration.shareWithColleaguesUserLimit,
+       Set-TenantSettings
+    To share an app:
+     1. Select Build tab.
+     2. Select the team that contains the app you want to share.
+     3. In the top-right, select the Share with colleagues.
+     4. Search for, and select the security group you want to share the apps and tables with.
+     5. Set Colleague can use toggle to On for the apps and tables that you want to share with the
+      security group selected in the previous step.
+     6. Select Save.
+    The apps you selected will now appear in the Built for your colleagues section within the Teams
+    app store.
+      Optional: Pin the app to the app bar as a tenant administrator
+      If you're a tenant administrator, you can go one step forward and pin the apps for end users in
+      Teams. To pin apps in Teams, follow the steps to add an app to the app catalog, and then, edit or
+      create a new Teams app setup policy with your app.
+                                                           ﾉ Expand table
+      Teams desktop client                   Teams mobile client
+      See also
+      Publish your app in Teams Manage your apps in Teams Set table permissions in Dataverse for
+      Teams
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/22/2026
+       Publish your app in Teams
+       Article • 12/16/2022
+       In this article, learn about how you can publish and add apps to Microsoft Teams team.
+       Publish and add an app to Teams
+       Whenever you save changes to a canvas app, you automatically publish them only for
+       yourself and anyone else who has permissions to edit the app. When you finish making
+       changes, you must explicitly publish them to make them available to everyone the app
+       is shared with.
+       To publish an app, select the Publish to Teams button from the top-right side of Power
+       Apps Studio.
+       Select Next. Publishing an app creates a new version of the app and makes the
+       published version of the app available to everyone else the app is shared with.
+            A list of all channels is displayed. You can add the app to one or more channels as a tab
+            in the team.
+            Select Add a tab     , and then select Save + close.
+                Tip
+               If the app is already published to a Teams channel as a tab, you'll have the option
+               to Show tabs.  
+               To publish updated version of an app to an existing active tab, select Save + close
+               without adding a new tab.  
+               To add published version of an app to a new tab in a different channel, Select Add
+               a tab     for the channel you want, and then select Save + close.
+             More information: Publish an app
+             Move an app to another Teams channel in the
+             same team
+             Moving an app to another Teams channel in the same team requires publishing the app
+             to the new channel, and then, removing the app from the old channel.
+                  To publish an app to the new channel: Follow the steps to publish and add an app
+                  to Teams. But before you select Save + close, select Add a tab     for the new
+                  channel you want. And then, select Save + close to publish the app to the new
+                  channel.
+                  To remove the app from a channel: Follow the steps to remove an app.
+             See also
+             Set permission and share apps with colleagues
+             Manage your apps in Teams
+       Remove an app from your team
+       Article • 12/16/2022
+       Removing an app that was added as a tab from a Microsoft Teams channel makes it
+       inaccessible from the Teams tab for all members of the Teams channel.
+       To remove an app from your team:
+        1. Go to the team that you added the app to.
+        2. Select the drop-down for the tab.
+        3. Select Remove.
+        4. Confirm Remove.
+      The app is now removed from your Teams channel.
+      See also
+      Uninstall the Power Apps personal app
+              Uninstall the Power Apps personal app
+              Article • 03/03/2023
+              Uninstalling the Power Apps app removes the app as a personal app available to your
+              account. Uninstalling the Power Apps app doesn't uninstall or remove the apps created
+              by using Power Apps from the respective Microsoft Teams channels.
+              To uninstall the Power Apps personal app:
+                  1. Select       on the left pane in Teams.
+                  2. Find the Power Apps app by using search, if it's not visible in your most recent
+                    view.
+       3. Right-click to select Power Apps app, and then select Uninstall from the shortcut
+        menu.
+       4. In the window that appears, select Uninstall.
+      The Power Apps app is now uninstalled from Teams.
+      See also
+      Install the Power Apps personal app
+        Use sample app templates in Microsoft
+        Teams
+        Several sample app templates are available for use in Microsoft Teams that you can download
+        from here   . You can choose the sample app template that best fits your business requirement
+        and quickly install it to get started. Sample app templates created with Power Apps typically
+        consist of multiple components such as apps, flows, and tables.
+          ） Important
+          Sample app templates available for download      are provided as-is. For any issues, feedback,
+          support, or changes related to sample app templates, go to
+          https://github.com/microsoft/teams-powerapps-app-templates/issues           and submit an
+          issue or a pull request.
+        Available sample app templates
+        The following table lists sample app templates available for download  .
+        Boards
+        A simple way to connect and share with people in your organization with similar interests.
+        Bulletins
+        Manager and user apps for company communications.
+        Employee ideas
+    App for campaigns and ideas.
+    How to
+    Learn how to be a Power Apps maker.
+    Inspection
+    Manager and user apps for area inspections.
+    Issue reporting
+    Manager and user apps for issue reporting.
+    Milestones
+    App to keep track of projects, and initiatives.
+    Perspectives
+    A simple way to add topics and extend the topics with Q&A for discussions.
+    Profile+
+    Quickly find out about people in your organization.
+     Get connected
+     Connect with people in your organization with similar skills.
+     The following tutorial shows how to install the Employee ideas app. You can use similar steps to
+     install other sample app templates.
+     Install the sample app template
+     To learn about installing sample app templates, go to https://github.com/microsoft/teams-
+     powerapps-app-templates .
+      ７ Note
+         Installing sample app templates automatically enables the selected team's Microsoft
+         365 Group for security. More information: Enable security for the selected team's
+         Microsoft 365 Group
+         If you can't upload or install uploaded sample app templates, check your app
+         permission policies in Microsoft Teams.
+     Run the sample app template
+     To run the installed app, select the app's tab from the team channel. In this example, we'll use
+     Employee ideas.
+     Step 1 - Allow connections
+     Before you can use the app, it might ask your permission to use connections.
+      ７ Note
+      The list of connections you see below is an example. The number and types of connections
+      asking for your permissions may vary depending on the app you install.
+    Select Allow, so the app can use connections.
+    Step 2 - Select the channel
+    Select the channel (in this example, the channel is populated automatically), and then select Let's
+    go.

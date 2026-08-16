@@ -1,0 +1,2206 @@
+       Map input fields of a component
+       Article • 01/24/2023
+       A component can receive input values to emit or process data using custom input
+       properties. In this article, you'll learn about working with such components expecting
+       one or more input properties with a specific schema for the given table or record, and
+       how to map the component input fields to the columns of the data source.
+          Tip
+         To learn about what the custom input and output properties in components are,
+         see Custom properties in components.
+       Map columns
+       Use the RenameColumns() function to rename one or more columns of a table to match
+       the input property schema for input column selection.
+       For example, consider a component that expects a table input with the following format:
+                                                 ﾉ Expand table
+        Flavor           UnitPrice     QuantitySold
+        Strawberry       1.99          20
+        Chocolate        2.99          45
+       The input property expects table data type:
+       The schema of the input property looks like the following formula:
+         Power Fx
+         Table({Flavor: "Strawberry",UnitPrice: 1.99, QuantitySold:20})
+       The app consuming this component has the following IceCreams table that doesn’t
+       match with the component schema:
+                                                 ﾉ Expand table
+        FlavorName         Price     SaleNumber
+        Strawberry         1.99      20
+        Chocolate          2.99      45
+       To map the correct fields, use RenameColumn() function to rename expected columns.
+         Power Fx
+         RenameColumns(IceCreams,"cra56_flavorname","Flavor","cra56_price","UnitPrice
+         ","cra56_salenumber","QuantitySold")
+       The input fields that the component expects are now mapped with the matching
+       columns from the data source.
+       Map records
+       Use With() function to map a single record.
+       For example, continuing from the earlier example for mapping columns, the custom
+       input property of a component inside an app expects a record type with the following
+       schema:
+         Power Fx
+         {Flavor: "Strawberry",UnitPrice: 1.99, QuantitySold: 20}
+       Since the IceCreams data source expects column names as FlavorName, Price, and
+       SaleNumber, we'll need to change the mapping for the record once the component is
+       added to the app.
+       Use With() function to select the columns of the IceCreams table, and map them to the
+       input fields of the component:
+         Power Fx
+         With(Gallery3.Selected,
+         {Flavor:FlavorName,UnitPrice:Price,QuantitySold:SaleNumber})
+       The following animation shows the example of a component added to the app that
+       shows the selected record from the gallery (above the component):
+       Map tables
+       Use ForAll() function to map a table of records with the records expected by the
+       component added to the app.
+       For example, at the end of the map columns example, you can use the ForAll() function
+       to map the entire table with the specific columns to point to the fields from the
+       component for each row:
+         Power Fx
+         ForAll(IceCreams,
+         {Flavor:FlavorName,UnitPrice:Price,QuantitySold:SaleNumber})
+      Map using dropdown (deprecated)
+      You can use the Advanced tab for a component added to an app that expects input
+      property of table or record type, and select the field mappings using the dropdown
+      option. This mapping is assigned by default, and unless you manually select the
+      appropriate mapping fields, the mapping might not yield expected results.
+      For example, the following animation shows the formula being updated to rename
+      columns. The component on screen doesn't change the field mapping since the default
+      field selection using this dropdown needs to be updated manually.
+      This method of selecting the mapping using the dropdown has been deprecated.
+      Instead, use the column, record, or table mapping methods as described earlier in this
+      article.
+      You can still use the dropdown option to choose mapping for existing apps, though not
+      recommended. For new apps, this option will be unavailable by default. To turn this
+      deprecated capability on or off, go to Settings > Upcoming features > Retired, and
+      choose Allow automatic field assignment for component inputs.
+              When turning the setting on, ensure you save and reopen the app in Power Apps Studio.
+              Once reopened, update the input property formula to trigger formula validation so that
+              the dropdown options start to appear in the Advanced properties pane.
+              See also
+                    Behavior formulas for components
+                    Deprecated: Map component fields using dropdown option
+                    Canvas components
+                    Component library
+                    Component library application lifecycle management (ALM)
+                    Add multimedia to a component
+                    Behavior formulas for components
+                    Power Apps component framework
+                    Add canvas components to a custom page in a model-driven app
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Add multimedia to a component
+       Article • 01/24/2023
+       You can add multimedia files to the components inside a library. These components can
+       then be used by all apps in an environment and can be moved across environments
+       using standard component application lifecycle management (ALM) through solutions in
+       Microsoft Dataverse.
+       To add multimedia to a component, use the same steps that you'd follow when adding
+       multimedia files in a canvas app. More information: Using multimedia files in canvas
+       apps
+       After adding multimedia files to a component inside the component library, the files will
+       appear under the media pane as they do for canvas apps:
+       Media resources in a component library are defined at the library level, and not tied to
+       individual components. Importing any component from the component library will
+       import all media resources from the library to the app. However, you can remove the
+       unused media when app customization is complete. More information: Remove unused
+       media
+         Tip
+       Prefix the media resources in a component library with a unique namespace or
+       library name so that those names don't conflict with existing resources in an app
+       during import.
+      During the component import to your app, if the component library multimedia has a
+      resource with the same name as the multimedia that already exists inside your app, the
+      import process adds an underscore ("_") and a random number to enforce name
+      uniqueness.
+      Example
+      Consider that you created a component library with a slider image that uses an icon with
+      an input property for the component named "value" to set it's X property.
+      To reuse this multimedia component in your app, all you have to do is import the
+      component, and link the component's input property with the value you'll supply from
+      within the app.
+      Start with importing the component to your app:
+      After the import, you can insert a slider control, and set the imported component's value
+      to the slider's value:
+      When you play this app, the slider movement in the app would then move the imported
+      slider component:
+      See also
+        Canvas components
+        Component library
+        Component library application lifecycle management (ALM)
+        Behavior formulas for components
+        Power Apps component framework
+        Add canvas components to a custom page in a model-driven app
+       Behavior formulas for components
+       (experimental)
+       Article • 01/24/2023
+       [This article is pre-release documentation and is subject to change.]
+        ） Important
+        This is an experimental feature. For more information, see Experimental and
+        preview features.
+       Specify one or more behavior formulas that run when an event triggers a change in
+       component instances.
+       For example, set a component's OnReset property to one or more formulas that do
+       initialization and clear input. Reset values when the Reset function runs on the
+       component instances.
+        ７ Note
+        The feature to create custom behavioral properties is currently experimental.
+        However, you can use the default OnReset property that is available on all
+        components in your production environment.
+       OnReset
+       With a component master selected, select OnReset in the drop-down list of properties
+       (on the left side of the formula bar), and then enter one or more formulas.
+      To test OnReset, configure a control to reset the component. For example, set the
+      OnSelect property of a button to this formula: Reset(ComponentName).
+      Example - Reset timer
+      In this time picker component, two variables are used to display the time _selectedHour
+      and _selectedMinute. When the picker gets reset, these variables should be reset to a
+      default value, say 12: 12.  The OnReset property for the component has the following
+      formula: Set(_selectedHour,12); Set(_selectedMinute,12)
+      To trigger reset, go to a screen and insert an instance of the component. Add a button
+      and configure OnSelect of the button to call Reset(TimerComponent_instance) to
+      trigger OnReset.
+       Update OnReset using custom property
+       Besides resetting a component instance from outside of the component, there's another
+       method to trigger the OnReset from the inside. "Raise OnReset when value changes" is
+       an option when creating a custom input property. It allows the value changes of this
+       property to trigger OnReset of the component. This method is designed to set and reset
+       the default value easily.
+       Example
+       The example above shows reviewing order numbers and updating the numbers. The
+       numeric up and down component is used to increase or decrease number of orders.
+       When selecting the gallery on the left, the default number of the numeric up and down
+       component is reset to display the order number of the selected tool. Raise OnReset
+       when value changes made it possible to reset the default value when the input changes.
+       To do so, check Raise OnReset when value changes of the default input property.
+       OnReset of the component is set to Set(_numericValue,'Numeric up
+       down'.DefaultValue). _numericValue is the variable to store the value of the current
+       order value. Set the Default of the text input control to If(IsBlank(_numericValue),
+       'Numeric up down'.DefaultValue, _numericValue).
+       See also
+          Canvas components
+          Component library
+          Component library application lifecycle management (ALM)
+          Behavior formulas for components
+          Power Apps component framework
+          Add canvas components to a custom page in a model-driven app
+     Canvas component properties
+     06/07/2025
+     Canvas components let makers create different types of properties to pass values or logic
+     between the component and the app that hosts the component. Properties are essential for
+     building interactive, reusable components.
+     Prerequisites
+     This feature is on by default for new apps. For existing apps, you need to turn it on in your app
+     settings.
+       1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+        Settings > Updates.
+       2. On the New tab, find and turn on the Enhanced component properties setting.
+     Types of properties
+     There are four types of properties available to makers.
+       1. Data properties: Data properties pertain to data, like a color or text value. A Data property
+        can be set to be Input or Output, which indicates if the component provides data to the
+        app (Output) or the app provides data to the component (Input). Data properties are the
+        only properties that participate in app data flow.
+       2. Function properties: Function properties are related to logic, such as performing a
+        calculation based on specific parameters or altering text. A Function property can be set
+        to be Input or Output, which indicates if the component provides a function the app can
+        call (Output), or the app provides a function the component can call (Input). Function
+        properties do not participate in an app's data flow, and cannot use component or app
+        variables.
+       3. Action properties: Action properties are a type of property that deals with logic and
+        behaves like an Output Function. Thus, the component has the logic defined, and that
+        logic can use chained expressions and manipulate collections or variables ("behavior").
+        For example, a Clear() Action property could provide functionality the app can call to
+        clear out some values in the component, or a Save() Action property that updates a
+        datasource.
+       4. Event properties: Event properties are a category of property that involves logic and
+        functions as an Input Function. Thus, the app defines the logic, which the component can
+        call and that logic can use chained expressions and manipulate collections or variables
+         ("behavior"). Typically these properties' names reflect an event such as OnSelect or
+         OnChanged.
+      Data property
+      A data property's usage is easy to imagine. Standard controls in apps typically have several
+      data properties, to set default values, text color, size, etc. Let's look at a simple example where
+      you want to make properties of a control within the component available to the hosting app. In
+      this example, the component is named Component1. Put a slider control inside the component.
+      Add an Input property to specify the color from the consuming app, and an Output property
+      so the component can tell the app the current value of the slider. This example assumes the
+      component has a Slider control named Slider.
+        1. In the property pane of the component, select New custom property.
+        2. On the New custom property pane, enter display name Slider Color.
+        3. Select Property type of Data and select Property definition value Input.
+        4. Finally, from the Data type dropdown, select Color.
+        5. Click Create.
+      Next, select the Slider1 Slider control. Find its ValueFill property and in the formula bar, enter
+      Component1.SliderColor. Component1 is the name of the component, and SliderColor is the
+      name of the property you added.
+      Now the component has a SliderColor property that can be set in the consuming app to pass
+      a color into the component and set the slider's ValueFill property.
+      You might also want to provide the value of the slider to the consuming app. To do this, add an
+      Output property.
+        1. In the property pane of the component, select New custom property.
+        2. On the New custom property pane, enter display name Slider Value.
+        3. Select Property type of Data and select Property definition value Output.
+        4. Finally, from the Data type dropdown, select Number.
+        5. Click Create.
+      When a Data property is Output, the component provides the value to the consuming app. To
+      set the formula, set the new SliderValue property in the component to the Value property of
+      the slider.
+        1. In the property pane of the component, click on the Slider Value property.
+        2. In the formula bar, replace the default value of 100 with the following formula:
+         Slider1.Value.
+      Now the component's SliderValue property reflects the value of the slider inside the
+      component, which the consuming app can read.
+      Function property
+      A function property contains an expression that returns a value. Typically, the function takes
+      arguments that it uses to calculate the value to return.
+       ７ Note
+       Function properties currently cannot access variables or component values and properties,
+       and cannot trigger data flow. Any required values have to be passed in as arguments.
+      An Output function is a simple way to create a custom function for Power Apps. The
+      component defines an Output function with an expression that takes some arguments and
+      returns a value. This function can then be used in an app using the component's name (say
+      Component1) by calling Component1.MyFunction(arg1, arg2).
+      An Input function lets a consuming app provide logic to a component, similar to a function
+      pointer or callback function. For example, if the component works with people's names, it can
+      have an input function with arguments firstname and lastname and expects a string back. The
+      app can define the function expression to return $"{firstname} {lastname}" or $"{lastname},
+      {firstname}". The component calls the function the app maker provides and uses the returned
+      string.
+      Action property
+      Action properties are similar to function properties of type Output, but they allow side-effect
+      formulas and expression chaining. A component can have an action property named AddRecord
+      that lets the app add a record to a collection inside the component, or a Reset action that
+      clears variables or collections inside the component.
+      In the earlier slider example for the Data property, you can add an action property called
+      ResetValue to set the slider back to its default value. Use the formula Reset( Slider1 ) for
+      this. Now, instances of the component in the app can call Component1.ResetValue() to set the
+      slider back to the default value.
+      Event property
+     Many standard controls have common Event-type properties, which are input behavior
+     function properties. OnSelect on the button control is a common example. A component can
+     define event properties and call these events like a function. For example, a component with a
+     button control can have an event property named OnButtonClicked. In the button control's
+     OnSelect, the component can call its Component1.OnButtonClicked() property. A consuming
+     app can define its own logic for this property to act when the button inside the component is
+     pressed.
+     Default values for properties or arguments
+     Default values give an argument or property a value if none is set. This doesn't make sense for
+     some types of properties. In some cases, you can use default values to show the expected
+     schema for a record. By providing a default record, you set the record type as the expected
+     schema.
+     For example, an Action property named AddRecord takes a record to add to a local collection.
+     To show the schema of the expected record, add a default value for the AddRecord property's
+     argument.
+     Overview of creating performant apps
+     06/27/2025
+     Creating performant Power Apps ensures your apps run efficiently and providing a better user
+     experience. This article explains key patterns, anti-patterns to avoid, and design principles to
+     help you build high-performing Power Apps for your organization.
+        App patterns and Power Apps productivity gain: Power Apps makes it easier to build
+        enterprise-grade apps by using established app patterns. Patterns are groups of Power
+        Apps elements that work together, like data sources, collections, controls, Power
+        Automate, and pages. Power Apps includes key performant patterns by default, so low-
+        code developers quickly build functional enterprise apps. Deployment and administration
+        tasks are also straightforward. With Power Apps, your team is more productive because
+        many elements don't need your attention.
+        Power Apps steers towards performant patterns: Power Apps guides you toward well
+        known performant patterns by default. These patterns include streamlined data loading at
+        launch, automatic incremental paging, caching data for collections, and loading only
+        essential data for each page. These proven patterns work well for data-heavy enterprise
+        apps. Many successful Power Apps implementations use more than 100 tables and over
+        50 screens while keeping excellent performance.
+        Falling into anti-patterns: When you build an app on any development platform, you risk
+        making it perform poorly because of anti-patterns. These patterns can cause slow
+        loading, slow page transitions, and make it hard to update or get data. Common anti-
+        patterns include loading too much data, turning everything into collections, and
+        overloading OnStart. People often use these patterns to work around real or perceived
+        Power Apps limitations. Even with guidance, you might still use a bad pattern and end up
+        with a slow app.
+     Key performance design principles
+     When building your app, consider these key performance principles to ensure it runs efficiently.
+     These principles cover most aspects needed to enhance your app's speed. Some performance
+     suggestions might appear in multiple sections due to their interrelated nature.
+        Optimize page loads: Optimize your apps for app and page load speed. Minimize, delay,
+        or eliminate actions that prevent fast app or page load.
+        Small data payloads: Keep the amount of data that is bulk retrieved small.
+        Optimize query data patterns: Do data mashups on the server, not in your app.
+        Fast calculations: Work with Power Fx, not against it.
+         For a deeper understanding, also see Execution phases of a Power App article.
+         Additional performance guidance
+         Other performance considerations can affect your app. For more information, see these articles:
+              Other performance considerations: Discusses other factors that might affect performance.
+              Build large complex apps: Lists key factors to consider when building a large app.
+              Canvas app coding standards and guidelines  : Lists general coding and development
+              guidelines that help you build an app.
+          Use Monitor to get insights and
+          recommendations for your app
+               Summarize this article for me
+          ﾃ
+          Monitor in Power Apps offers insights and recommendations to enhance app performance. It
+          provides makers with detailed information on their app's performance and actionable steps to
+          improve their apps.
+          Prerequisites
+          To use this feature, your administrator must enable certain analytics and monitoring settings in
+          the Power Platform Admin Center. For more information, see Monitoring experiences for
+          makers. When you sign in to Power Apps and open Monitor, make sure you’ve selected the
+          correct environment and that you’re a member of that environment with an assigned role (for
+          example, Basic User). Otherwise, you won’t be able to access Monitor.
+          Open and pin Monitor
+             1. Sign in to Power Apps    .
+             2. On the left navigation, select Apps.
+             3. On the command bar, select Monitor.
+             4. On the left navigation pane, select the     pin button next to Monitor.
+          Use Monitor
+          The Monitor page displays metric cards at the top, highlighting the top three underperforming
+          apps for each metric. If all apps perform well on a specific metric, the card doesn't list any apps.
+          Use the tabs under the cards to switch between viewing your model-driven, canvas, and code
+          apps.
+                                                                                                    ﾉ Expand table
+            Metric         Definition                                       Available     Available       Available
+                                                                            for Canvas    for Model-      for Code
+                                                                            apps          driven apps     apps
+            App open       Indicates the percentage of app launch           Yes           Yes             Yes
+            success rate   attempts that successfully allowed end-users
+                           to access the app. This metric is calculated
+                           once every 24 hours.
+            App session    The number of distinct user sessions in an app   Yes           Yes             Yes
+            count          in one day. A session begins when a user
+                           opens the app and ends after a period of
+                           inactivity or when the app is closed.
+            Time to        Measures the time end-users wait to access       Yes           No              Yes
+            interactive    the first screen of an app. It doesn't include
+            (TTI)          the time users wait to see all data presented
+                           on the first screen, such as filling in rows of a
+                           gallery. This metric is calculated every 24
+                           hours and is measured using percentiles, with
+                           the 75th percentile being reported.
+            Time to full   Measures the time end-users wait to see all      Yes           No              No
+            load (TTFL)    data displayed on the first screen of an app. In
+                           the app launch lifecycle, this metric follows the
+                           Time to interactive phase. This metric is
+                           calculated every 24 hours and is measured
+                           using percentiles, with the 75th percentile
+                           being reported.
+            Data           A percentage that describes how often data       Yes           No              No
+            request        requests coming from an app are successful
+            success rate
+            Metric          Definition                                          Available      Available       Available
+                                                                                for Canvas     for Model-      for Code
+                                                                                apps           driven apps     apps
+            Data            The average time (in seconds) it takes for all      Yes            No              No
+            request         data requests made by the app to complete
+            latency         during a session.
+            Row             The time (in seconds) that end users spend on       No             Yes             No
+            summary         the expanded AI row summary of a main form.
+            dwell time
+           View metrics and recommendations for an app
+           When you select an app on the Monitor page, a side pane opens and displays more data for
+           each metric, including a data chart for the last 30 days.
+               1. On Monitor page, select an app.
+               2. To view recommendations for an app, select the app’s name to open the side panel. The
+                 chart shows a callout with a recommended action for improving the metric.
+              ） Important
+              Recommendations are only available in Managed Environments. Contact your admin to
+              enable Managed Environments for access to recommendations.
+            Last updated on 03/05/2026
+         Analyze system-generated logs using
+         Application Insights
+         Article • 04/09/2025
+         Connect your canvas apps to Application Insights, which is a feature of Azure Monitor.
+         Application Insights includes analytics tools that help diagnose issues and understand user
+         behavior in apps. Use the collected information to make better business decisions and improve
+         app quality.
+         Prerequisites
+              You need access to the Azure portal   .
+              You need permission to create Azure resources.
+           ７ Note
+           To view telemetry information, your tenant admin needs to enable Canvas app insights.
+           Sign in as an admin at the Power Platform admin center    . Select Settings > Tenant
+           settings > Canvas app insights. In the Canvas app insights pane, turn the toggle On and
+           save your changes. Learn more in Tenant settings.
+         Create an Application Insights resource
+         Send system-generated logs from an app by creating an Application Insights resource to store
+         events.
+         Learn how to create a workspace-based resource for Application Insights in the Azure portal.
+         Connect your app to Application Insights
+           ７ Note
+                 When you specify a connection string, remember that data can be sent across
+                 tenants. Trace events are sent to the App Insights resource that corresponds to the
+                 connection string you set for your app, even if the target App Insights instance is in a
+                 different tenant than the app.
+                 Be cautious when importing existing .msapp files because connection strings for App
+                 Insights might be present. Manually open the app after import to check that the
+                 correct App Insights connection string is used.
+            1. Sign in to Power Apps   .
+            2. Open an app to edit it.
+            3. Select the App object in the left navigation tree view, and paste the Connection string
+              from your Application Insights resource.
+            4. Save and Publish your app.
+            5. Play the published app and browse the different screens.
+         When you browse the app screens, events are automatically logged to Application Insights.
+         These include usage details like:
+              Where users access the app from
+              Which devices users use
+              The types of browsers users use
+            ） Important
+            Play the published app to send events to Application Insights. Events don't send to
+            Application Insights when you preview the app in Power Apps Studio.
+         View events in Application Insights
+             1. Sign in to the Azure portal   and open the Application Insights resource you created
+               previously.
+             2. In the left navigation pane, select Users under the Usage section.
+                  ７ Note
+                  The Users view shows app usage details, such as:
+                       Number of users who viewed the app
+                       Number of user sessions
+                       Number of events logged
+                       Users' operating systems and browser version details
+                       Users' region and location
+                  Learn more about users, sessions, and events analysis in Application Insights.
+             3. Select a user session to view specific details, such as session length and screens visited.
+             4. In the left navigation pane, select Events under the Usage section. You can view a
+               summary of all the screens viewed across all app sessions.
+       Tip
+      Explore more Application Insights features, such as:
+         Funnels
+         Cohorts
+         Impact analysis
+         Retention analysis
+         Usage flows
+     Create custom trace events
+     Write custom traces to Application Insights to analyze information specific to your app. The
+     Trace function allows you to collect:
+        Detailed usage information for controls on the screens
+        Which specific users are accessing your app
+        What errors occur
+     Tracing helps you diagnose issues by sending a trail of information as users browse your app
+     and take actions. Trace messages sent to Application Insights have one of three severities:
+        Information
+        Warning
+        Error
+         Send a trace message with the appropriate severity based on the situation. You can query the
+         data and take specific actions based on the severity.
+            ７ Note
+            If you are logging any personal data, be aware of your obligations with respect to various
+            privacy laws and regulations. Refer to the Microsoft Trust Center   and the Service Trust
+            Portal   for more information.
+         Create a component in your app to collect feedback on each screen and log events to
+         Application Insights.
+            1. Sign in to Power Apps   .
+            2. Select Apps in the left navigation pane. From the list of apps, select the Kudos app, and
+               then select Edit.
+                 ７ Note
+                 You can also create a new app or edit an existing app instead.
+            3. Select Components in the Tree view:
+      4. Select New component, then resize the width to 200 and the height to 75:
+      5. Select Insert from the menu and then select Icons to add Emoji - Frown and Emoji - Smile:
+      6. Select New custom property to create a custom property:
+      7. Enter the property Name and Display name (for example, FeedbackScreen).
+      8. Enter a property Description.
+      9. Select Property type as Input and Data type as Screen:
+        ７ Note
+        An input property lets you capture the screen name and its component to log this
+        information to Application Insights.
+     10. Select the component in the Tree view, select More actions (…), and select Rename to
+       give the component a meaningful name, such as FeedbackComponent.
+      11. Select the icons, select More actions (…), and then select Rename to rename the icons
+        with meaningful names, such as FrownIcon and SmileIcon.
+      12. Select FrownIcon, select the OnSelect property, and enter the following expression in the
+        formula bar:
+          Power Fx
+          Trace(
+             "App Feedback",
+             TraceSeverity.Information,
+                 {
+                   UserName: User().FullName,
+                   UserEmail: User().Email,
+                   Screen: FeedbackComponent.FeedbackScreen.Name,
+                   FeedbackValue: "-1"
+                 }
+               );
+          Notify("Thanks for your feedback!");
+          ７ Note
+          The formula sends UserName, UserEmail, Screen, and Feedback (with the value -1) to
+          Application Insights.
+      13. Select SmileIcon, select the OnSelect property, and then enter the following expression in
+        the formula bar:
+          Power Fx
+          Trace(
+             "App Feedback",
+             TraceSeverity.Information,
+                 {
+                   UserName: User().FullName,
+                   UserEmail: User().Email,
+                   Screen: FeedbackComponent.FeedbackScreen.Name,
+                   FeebackValue: "1"
+                 }
+               );
+          Notify("Thanks for your feedback!");
+      14. Add the component to one of the screens in your app:
+     15. Select Save and then select Publish to save and publish your app.
+     16. Play the published app and send smile or frown feedback from its screens.
+        ） Important
+        You must play the published app to send events to Application Insights. Events are
+        not sent to Application Insights when you preview the app in Power Apps Studio.
+          Analyze custom data in Application Insights
+          You can now begin to analyze the data you sent using the Trace function from your app in
+          Application Insights.
+             1. Sign in to the Azure portal   and open the application insights resource you created
+               earlier.
+             2. Select Logs under Monitoring in the left navigation pane.
+       3. Enter the following query and select Run to view the feedback from your app:
+          Kusto
+          traces
+          | where message == "App Feedback"
+          | order by timestamp
+       4. Select a row in the results and expand the customDimensions field.
+        The values for Screen, UserName, UserEmail, and FeedbackValue for the OnSelect event
+        of the smile or frown icon in your component are recorded. Values are also recorded for
+        each event sent to Application Insights, such as the appId, appName, and appSessionId.
+       5. Use the following example query to extend the properties of the JSON custom
+        dimensions and project the columns in the results view.
+          Kusto
+          traces
+              | extend customdims = parse_json(customDimensions)
+              | where message == "App Feedback"
+              | project timestamp
+                  , message
+                  , AppName = customdims.['ms-appName']
+                  , AppId = customdims.['ms-appId']
+                  , FeedbackFrom = customdims.UserEmail
+                  , Screen = customdims.Screen
+                  , FeedbackValue = customdims.FeedbackValue
+              | order by timestamp desc
+            Tip
+           Log queries are powerful. Use them to join multiple tables, aggregate large amounts
+           of data, and run complex operations. Learn more about log queries.
+      Analyze app lifecycle data in Application Insights
+      The session summary event is logged once per session and contains information on app open
+      success, app open optimal vs non-optimal sessions, and app open performance metrics.
+      Limits
+      These events are accurate for canvas apps running in a web browser. They aren't available for
+      apps running in Power Apps mobile, and their values might not always be available or accurate
+      for custom pages.
+      Here is an example query showing how to access the session summary event and all available
+      fields:
+        Kusto
+        customEvents 
+        | where name == "PowerAppsClient.PublishedApp.SessionLoadSummary" 
+        // 
+        | extend cd = parse_json(customDimensions) 
+        // 
+        | extend sessionSummary = parse_json(tostring(cd["ms-sessionSummary"])) 
+            | extend successfulAppLaunch = tobool(sessionSummary["successfulAppLaunch"]) 
+            | extend unsuccessfulReason = tostring(sessionSummary["unsuccessfulReason"]) 
+            | extend appLoadResult = tostring(sessionSummary["appLoadResult"]) 
+            | extend appLoadNonOptimalReason = 
+            tostring(sessionSummary["appLoadNonOptimalReason"]) 
+            // 
+            | extend timeToAppInteractive = todouble(sessionSummary["timeToAppInteractive"]) 
+            | extend timeToAppFullLoad = todouble(sessionSummary["timeToAppFullLoad"]) 
+            // 
+            | project 
+                timestamp, 
+                session_Id, 
+                successfulAppLaunch, 
+                unsuccessfulReason, 
+                appLoadResult, 
+                appLoadNonOptimalReason, 
+                timeToAppInteractive, 
+                timeToAppFullLoad 
+            | limit 5 
+         The following fields help measure app open success and latency of performance markers tied
+         to end-user experiences.
+                                                                                          ﾉ Expand table
+           Field                       Description
+           successfulAppLaunch         Boolean value indicating whether the session successfully launched the
+                                       app
+           unsuccessfulReason          If the session failed to launch the app, this indicates the reason / error. This
+                                       field will be an empty string if the session was successful.
+           appLoadResult               Indicates if the session was optimal or not. Possible values: optimal, other
+           appLoadNonOptimalReason     If the session was not optimal, this indicates the reason. Possible values:
+                                       interaction-required, throttled, screen-navigated-away, other
+           timeToAppInteractive        Duration in milliseconds for the app session to reach an interactive state. In
+                                       this state, users can start to interact with the first screen, but data may not
+                                       be fully loaded.
+           timeToAppFullLoad           Duration in milliseconds for the app session to reach a fully loaded state,
+                                       where all data requests for the first screen have finished loading.
+         Sample queries
+         App Open Success rates
+       This query will show the app open success rate by day. This can be used to evaluate spikes or
+       trends in issues that users may be experiencing
+         Kusto
+         customEvents 
+         | where name == "PowerAppsClient.PublishedApp.SessionLoadSummary" 
+         | extend cd = parse_json(customDimensions) 
+         | extend sessionSummary = parse_json(tostring(cd["ms-sessionSummary"])) 
+         | extend successfulAppLaunch = tobool(sessionSummary["successfulAppLaunch"]) 
+         | summarize 
+         sessions_total = dcount(session_Id), 
+         sessions_success = dcountif(session_Id, successfulAppLaunch == true) 
+         by bin(timestamp, 1d) 
+         | extend successRate =  
+         100.0 * (todouble(sessions_success) / todouble(sessions_total)) 
+         | project timestamp, successRate 
+         | render timechart
+       Count of Unsuccessful Sessions by Reason
+       This query will show counts of unsuccessful sessions by reason / error. This can be used to
+       debug app open failures or evaluate trends in issues that users may be experiencing.
+         Kusto
+         customEvents 
+         | where name == "PowerAppsClient.PublishedApp.SessionLoadSummary" 
+         | extend cd = parse_json(customDimensions) 
+         | extend sessionSummary = parse_json(tostring(cd["ms-sessionSummary"])) 
+         | extend successfulAppLaunch = tobool(sessionSummary["successfulAppLaunch"]) 
+         | extend unsuccessfulReason = tostring(sessionSummary["unsuccessfulReason"]) 
+         | where successfulAppLaunch == false 
+         | summarize 
+         count() 
+         by unsuccessfulReason, bin(timestamp, 1d) 
+         | render timechart
+       App Open Performance
+       This query will show app open performance metrics by day. This can be used to evaluate
+       performance trends over time or after making changes. We recommend:
+         1. Using the 75th percentile of the timeToAppInteractive and timeToAppFullLoad fields to
+           avoid noise caused by outliers.
+         2. Filtering to only optimal sessions to avoid noise in the data caused by expected cases like
+           sessions with user interaction, sessions where the app was loaded in a background tab,
+           etc.
+         Kusto
+         customEvents 
+         | where name == "PowerAppsClient.PublishedApp.SessionLoadSummary" 
+         | extend cd = parse_json(customDimensions) 
+         | extend sessionSummary = parse_json(tostring(cd["ms-sessionSummary"])) 
+         | extend appLoadResult = tostring(sessionSummary["appLoadResult"]) 
+         | extend timeToAppInteractive = todouble(sessionSummary["timeToAppInteractive"]) 
+         | extend timeToAppFullLoad = todouble(sessionSummary["timeToAppFullLoad"]) 
+         | where appLoadResult == "optimal" 
+         | summarize 
+         percentile(timeToAppInteractive, 75), 
+         percentile(timeToAppFullLoad, 75) 
+         by bin(timestamp, 1d) 
+         | render timechart
+       App Load State on HTTP Calls
+       There is a new request header x-ms-app-load-state that indicates if an HTTP call contributed to
+       app startup. Specifically, this can be used to determine which HTTP calls impacted the
+       timeToAppFullLoad above.
+       The header can be one of two values:
+                                                                ﾉ
+                                                                   Expand table
+        Value     Description
+        TTFL      indicates that the request contributed to timeToAppFullLoad
+        PostTTFL  indicates that the request did not contribute to timeToAppFullLoad
+       Here is an example query showing how to access the header value and projecting it in the
+       appLoadState column:
+         Kusto
+         dependencies 
+         | extend cd = parse_json(customDimensions) 
+         | extend requestHeaders = parse_json(tostring(cd["requestHeaders"])) 
+         | extend appLoadState = tostring(requestHeaders["x-ms-app-load-state"]) 
+         | project timestamp, session_Id, appLoadState, name, duration 
+         | limit 5
+     Count of HTTP calls contributing to Full Load
+     This query will show the average count of HTTP calls that are contributing to
+     timeToAppFullLoad by day. This can be used to evaluate the number of calls the app is making
+     at startup that may be contributing to poor performance.
+       Kusto
+       dependencies 
+       | extend cd = parse_json(customDimensions) 
+       | extend requestHeaders = parse_json(tostring(cd["requestHeaders"])) 
+       | extend appLoadState = tostring(requestHeaders["x-ms-app-load-state"]) 
+       | where appLoadState == "TTFL" 
+       | summarize httpCalls = count() by session_Id, bin(timestamp, 1d) 
+       | summarize avg(httpCalls) by timestamp 
+       | render timechart
+     Duration of HTTP calls contributing to Full Load
+     This query will show the total duration of HTTP calls that are contributing to
+     timeToAppFullLoad by day. This can be used to evaluate the overall impact of HTTP calls to app
+     startup performance.
+       Kusto
+       dependencies 
+       | extend cd = parse_json(customDimensions) 
+       | extend requestHeaders = parse_json(tostring(cd["requestHeaders"])) 
+       | extend appLoadState = tostring(requestHeaders["x-ms-app-load-state"]) 
+       | where appLoadState == "TTFL" 
+       | summarize httpCallDuration = sum(duration) by session_Id, bin(timestamp, 1d) 
+       | summarize percentile(httpCallDuration, 80) by timestamp 
+       | render timechart
+     Duration of HTTP calls contributing to Full Load by URL
+     Similar to above, this query will show the count and duration of HTTP calls contributing to
+     timeToAppFulLoad by URL. This can be used to identify specific slow HTTP calls that are
+     impacting app startup performance.
+       Kusto
+       dependencies 
+       | extend cd = parse_json(customDimensions) 
+       | extend requestHeaders = parse_json(tostring(cd["requestHeaders"])) 
+       | extend appLoadState = tostring(requestHeaders["x-ms-app-load-state"]) 
+        | where appLoadState == "TTFL" 
+        | summarize 
+        count(), percentile(duration, 80) by name
+      Monitor unhandled errors (experimental)
+      [This section contains pre-release documentation and is subject to change.]
+        ） Important
+           This is an experimental feature.
+           Experimental features aren’t meant for production use and may have restricted
+           functionality. These features are available before an official release so that customers
+           can get early access and provide feedback.
+      You can't always anticipate or plan for every error that might occur while your app runs.
+      Unhandled Power Fx formula errors are reported to users as banner messages. They can also
+      be reported to Application Insights to show their frequency and severity without relying on
+      your app's users to report issues. You can also set up real-time alerts when runtime errors
+      occur to take a more proactive approach.
+      Enable error passing to Application Insights
+      Enable the setting that lets Power Apps pass unhandled runtime errors to Azure Application
+      Insights.
+        ２ Warning
+        Enabling the Pass errors to Azure Application Insights setting might incur additional
+        costs for storing Application Insights logs.
+        1. Open the canvas app for editing.
+        2. Select Settings > Updates > Experimental, and turn on Pass errors to Azure Application
+          Insights.
+        3. Save and then publish your app.
+      Error events in Application Insights
+     Unhandled Power Fx errors that users encounter at app runtime are reported to the traces
+     table. Unhandled errors can be identified and distinguished from other error events by the
+     event message "Unhandled error." The "severityLevel" dimension of these events is 3
+     (TraceSeverity.Error).
+     Detailed error messages are provided in the "errors" dimension of the customDimension
+     property. In situations where multiple errors occurred during the same operation, the errors are
+     consolidated in the "errors" dimension of a single trace event. The error messages match those
+     reported in Monitor during a live debug session.
+     This example query identifies unhandled errors and expands all error messages in the trace
+     event:
+       Kusto
+       traces
+           | where message == "Unhandled error"
+           | extend customdims = parse_json(customDimensions)
+           | extend errors = parse_json(tostring(customdims.['errors']))
+           | mv-expand errors
+           | project timestamp
+               , itemId //unique identifier for the trace event
+               , AppName = customdims.['ms-appName']
+               , AppId = customdims.['ms-appId']
+               , errors = errors.['Message']
+           | order by timestamp desc
+     Correlation tracing (experimental)
+     [This section contains pre-release documentation and is subject to change.]
+       ） Important
+          This is an experimental feature.
+                  Experimental features aren’t meant for production use and may have restricted
+                  functionality. These features are available before an official release so that customers
+                  can get early access and provide feedback.
+          Connecting to external data and services is essential for most apps. Correlation tracing
+          generates and propagates context information to link system-generated logs across a canvas
+          app and its connections, subject to certain limitations. For example, your app might call a
+          custom connector that then calls an Azure Function or another REST API. Correlation tracing
+          allows you to correlate actions taken in the app with the underlying API calls across tiers. This is
+          useful for troubleshooting.
+          Canvas app correlation tracing implements context tracing and follows the W3C
+          specification  .
+          Enable correlation tracing
+            ２ Warning
+            Enabling this setting might incur additional costs related to storing Application Insights
+            logs.
+             1. To enable correlation tracing, open your cavas app for editing.
+             2. Select Settings > Udates > Experimental > and turn on Enable Azure Application
+               Insights correlation tracing.
+             3. Save and publish the app.
+          Limitations
+       Correlation tracing works only with custom connectors. Other connector types aren't
+       supported.
+       HTTP requests are captured in Application Insights only if the connected service is also
+       connected to Application Insights.
+    Using correlation tracing
+    When enabled, correlation tracing adds a new system-generated log event in the
+    dependencies table of the canvas app's Application Insights instance. This event is recorded at
+    the time a response from a network call is received. Dependency events capture details of the
+    network call, including the request and response headers, response status code, and duration
+    of the call.
+    If the connected service is also connected to Application Insights, an additional system-
+    generated log event capturing the request is generated in the requests table of the service's
+    Application Insights instance. Some Azure services, such as Azure Functions, can be connected
+    without any coding from the Azure portal. Both the canvas app or multiple apps and
+    connected services can be connected to the same Application Insights instance.
+     Join network calls for supported connectors with other system-generated logs on the
+     "operation_Id" dimension. The following query shows a network call alongside trace events
+     emitted during an app session.
+       Kusto
+       traces | union dependencies | union requests | union pageViews | union 
+       customEvents
+       | project timestamp
+           , itemType
+           , name
+           , operation_Name
+           , message
+           , severityLevel
+           , customDimensions
+           , operation_Id
+           , operation_ParentId
+       | where operation_Id == "0a7729e3e83c4e4d93cb4f51149f73b9" //placeholder 
+       operation_Id, replace
+       | order by timestamp asc
+          Export data to Power BI
+          You can export your Application Insights data and query results to Power BI for analysis and
+          data presentation.
+             1. Sign in to the Azure portal   and open the Application Insights resource you set up
+               earlier.
+             2. Select Logs under Monitoring in the left navigation pane.
+             3. In the log analytics query window, select the Export menu.
+             4. Select Export to Power BI (M query) to download a Power BI query file.
+             5. Open the downloaded file in a text editor, and copy the query to the clipboard.
+             6. Open Power BI.
+             7. Select Get Data in the Home ribbon, and then select Blank query.
+      8. In the query window, select Advanced Editor, paste the query into the window, select
+       Done, and then select Close & Apply.
+     Create charts and visualizations in Power BI to represent feedback from your app and make
+     data-driven decisions.
+     Default Trace event context and dimensions
+         Default dimensions are added to the customDimensions property on each Trace event. These
+         dimensions identify the application and application sessions where the events occur. If you log
+         additional custom data using the Trace function, it also appears in the custom dimensions.
+                                                                                      ﾉ Expand table
+          Dimension Name      Represents
+          ms-appId            The Application ID of the app that sent the event.
+          ms-appname          The Application name of the app that sent the event.
+          ms-appSessionId     The application session ID. This value might not be populated in some scenarios.
+                              When available, this value overrides the standard Application Insights sessionID
+                              dimension.
+          ms-tenantID         The unique identifier of the tenant where the application is published.
+          ms-environmentId    The name of the environment where the application is published.
+          userId              A unique identifier for the user associated with the session.
+          ms-duration         An imputed value measuring the time it takes for a user to navigate from one
+                              screen to another. This value overrides the standard Application Insights PageView
+                              duration dimension.
+          sessionId           A session ID that can be used to correlate all events associated with a single
+                              application session. This value is always present and is recommended for
+                              understanding unique session count. This value is taken from the player's session
+                              ID and is shown when viewing the session details while playing the app. Session ID
+                              might sometimes get a default, random, unique Application Insights-generated
+                              value. This default value isn't reliable and doesn't correlate with any app-specific
+                              parameters.
+          Duration            An imputed value measuring the time it takes for a user to navigate from one
+                              screen to another. This value matches the duration reported by the ms-duration
+                              dimension.
+          ms-isTest           Indicates whether the session is associated with the Test Studio test runner.
+          ms-                 The name of the page the user navigates from (available for page navigation
+          currentScreenName   events).
+          ms-                 The name of the page a user is navigating to (present for page navigation events).
+          targetScreenName
+         Unsupported scenarios
+         Application Insights doesn't support these scenarios.
+       Offline player events aren't recorded.
+       Events from mobile apps (iOS and Android) aren't recorded when the app is suspended.
+       Understand canvas app execution
+       phases, data call flow, and performance
+       monitoring
+       Article • 12/12/2023
+       When a user opens a canvas app, the app goes through several phases of execution
+       before showing any user interface. While the app loads, it connects to different data
+       sources—such as SharePoint, Microsoft Dataverse, SQL Server (on-premises), Azure SQL
+       Database (online), Excel, and Oracle.
+       In this article, you'll learn about these different phases of execution and how an app
+       connects to data sources and about tools you can use to monitor performance.
+       Execution phases in canvas apps
+       A canvas app goes through the following phases of execution before showing the
+       interface to a user:
+         1. Authenticate the user: Prompts the first-time user to sign in with credentials for
+          whatever connections the app needs. If that user opens the app again, that person
+          might be prompted again, depending on the organization's security policies.
+         2. Get metadata: Retrieves metadata, such as the version of the Power Apps platform
+          on which the app runs and the sources from which it must retrieve data.
+         3. Initialize the app: Performs any tasks specified in the OnStart property.
+         4. Render the screens: Renders the first screen with controls that the app populates
+          with data. If the user opens other screens, the app renders them by using the same
+          process.
+       Data call flow in canvas apps
+       Data calls from canvas apps send data to tabular data sources by using connectors over
+       the OData protocol.OData requests flow to back-end layers to reach out to the target
+       data source and retrieve data for the client, or commit data to the data source. Action
+       based connectors that enable APIs work in the same way.
+       Understanding how OData and API requests travel in canvas apps can help you to
+       optimize your canvas app performance and your back-end data sources.
+      In this section, you'll learn about how the data call flows in canvas apps with different
+      data source types.
+      Data call flow with online data sources
+      The following diagram shows how a typical data request in a canvas app (on the left
+      side) travels server-side layers, reaches out to the target data source (on the right side),
+      and then returns the data to the client.
+      Each layer in the preceding diagram can perform quickly or encounter some overhead
+      while processing the request. In many apps, two particular spots commonly present
+      noticeable overhead:
+        Back-end data source while processing the request.
+        Client while sending the request—or while manipulating the received data on the
+        heap memory and executing the associated JavaScript functions to process data to
+        show in screens.
+      Data call flow with on-premises data gateway
+      If a canvas app connects to an on-premises data source like SQL Server, you need to
+      have another layer called an on-premises data gateway. This gateway is mandatory for
+      accessing on-premises data sources. It takes charge of converting OData protocol
+      requests to SQL Data Manipulation Language (DML) statements.
+      The following diagram shows where and how the on-premises data gateway is put in
+      place to process data requests.
+      If the app uses a data source on-premises, the location and the specification of the data
+      gateway also affect the performance of data calls.
+      Data call flow with Microsoft Dataverse
+      When you use Microsoft Dataverse as the data source, data requests go to the
+      environment instance directly—without passing through Azure API Management.
+      Because of this, the performance of data calls is faster compared to the rest of the data
+      sources. The app is by default connected to Microsoft Dataverse when you create a new
+      canvas app.
+      With the understanding of this high-level concept of how data calls travel, you can get
+      into the details of reviewing the performance of your app. In summary, performance
+      overhead can happen at any of the layers—from client, API Management, connector,
+      on-premises data gateway, or back-end data sources.
+      Measuring performance
+      Power Apps Monitoring tool
+      While you can use the browser's developer tools to see performance, Power Apps
+      subsets the set of calls in the Monitoring tool to just those that are Power Apps.
+      The Power Apps monitoring tool can help you track what is actually sent to the data
+      source and timestamps for when requests are sent and responses come from the server.
+      You can learn more about the monitoring tool in this article: Debugging canvas apps
+      with Monitor .
+       Measuring memory pressure on the client
+       To see memory consumption graphically, you can use the developer tools for your
+       browser to profile memory. It helps you visualize heap size, documents, nodes, and
+       listeners. Profile the app's performance by using a browser, as described in Microsoft
+       Edge (Chromium) Developer Tools overview. Check the scenarios that exceed the
+       memory threshold of the JS heap. More information: Fix memory problems
+       Next steps
+       Small data payloads
+       See also
+       Troubleshooting issues for Power Apps
+        Small data payloads - limit the amount
+        of data you get
+        Article • 12/12/2023
+        One of the most important patterns for enterprise data apps is to limit the size of the
+        data you fetch into Power Apps. If the data payloads are small, nearly everything else
+        gets easier. The Gallery and Table controls do this for you automatically when you
+        connect directly to the data source in the Items property. For instance, when connected
+        directly to a remote data source, a Gallery control pages in data in small increments, for
+        example, 100 records. This default leverages the fact that an end user rarely really needs
+        more than a hundred records for a user task.
+        Use delegation
+        One key way to keep data payloads small is to rely on the data source to do work for
+        you before it gets to Power Apps. Delegation is when Power Fx can translate a Power Fx
+        expression into a query expression that a data source such as Dataverse, SQL Server,
+        SharePoint, and Excel can handle on its own. And, then Power Fx delegates that query,
+        or gives the responsibility of doing the query work, the data mashup, to the data source.
+        The data source produces the correct data and returns it to Power Apps.
+        When the data source is bound directly to a gallery or table, then the data is paged or
+        handed back the data to Power Apps in small performant increments of 100 records.
+        Different data sources have different capabilities. Dataverse, for example, has many
+        more capabilities to filter data on the server than Excel. A good example is CountRows
+        and CountIf. Dataverse supports CountRows in a limited way. Dataverse calculates the
+        size of the table periodically and keep that value around. When CountRows is called,
+        you're given that value. That way it doesn't have to perform a full table scan to get the
+        exact number for every CountRows call. But Dataverse also supports an exact count with
+        CountIf up to 50,000 rows. It supplies these two different capabilities as a way to help
+        preserve good performance of Dataverse server. In contrast, SharePoint doesn't support
+        this function. So, a Power Fx expression with CountRows or CountIf for SharePoint isn't
+        delegated. Instead, Power Apps downloads a limited number of rows, 500 – 2000. Power
+        Fx works on the 500/2000 records locally and returns a result. If your data is always less
+        than 500/2000 records this approach can work. But if it's greater than 500/2000 records
+        you might get incorrect results.
+        Avoid too many columns
+      By default, Power Apps computes the actual columns you need for a given query using a
+      feature call Explicit Column Selection. This feature is on by default for all new apps. To
+      turn on the explicit column selection feature on the canvas app, go to Settings >
+      Upcoming features > Preview> turn on Explicit column selection toggle.
+      Suggestions
+      To achieve the goal of a small data payload, consider the following questions and
+      suggestions:
+        1. Aim for the default query for a gallery or table to only return approximately 100 –
+         200 records. If you use a delegable query, this happens automatically. If you're
+         querying an API, or other source that doesn't support delegation, use parameters
+         to refine the results.
+            Consider using a data source based view that automatically filters the data.
+            Most enterprise-grade apps make heavy use of views on the data source.
+            Consider using default lookup or filter values to scope the data.
+            Consider requiring search arguments in the UI before you show data.
+            Consider these questions about your app:
+             What is necessary on a given screen by default?
+             What data does the end user really need to take a given business action?
+             Users generally don’t need thousands of records on an initial screen to
+             accomplish a task.
+        2. Start building your query for a gallery or table by using the delegation tables for
+         your data source. Only choose the functions supported for your query. If your
+         query isn't delegable, what can you do to make it delegable?
+       Optimized query data patterns
+       Article • 12/13/2023
+       The simplest and fastest data query pattern is:
+         1. A single table or view
+         2. Prefiltered on the server to what you need
+         3. Columns are indexed correctly for the expected queries
+       When you design your app, you need to think about how to query the data quickly. The
+       best way to query data is to use a single table or view that has all the information you
+       need, and filter it on the server before you display it in your app. You also need to make
+       sure that the columns you use to filter or sort the data are indexed properly. This makes
+       your app faster and smoother.
+       For example, suppose you have a gallery that shows a list of customers and their
+       salespersons. If you store the customer and salesperson information in separate tables,
+       you need to use lookups to get the salesperson name for each customer. This slows
+       down your app because it needs to run many queries to the other table. A better way is
+       to create a view that combines the customer and salesperson information in one table,
+       and use that view as the data source for your gallery. Then your app only needs to run
+       one query to get all the data it needs.
+       There's a trade-off between query speed and data normalization. Data normalization
+       means that you store the data only once, and avoid duplication. This helps to keep the
+       data consistent and accurate. However, sometimes you need to duplicate some data to
+       make the queries faster and easier. You need to balance these two goals in your app
+       design and table structure. Otherwise your app will be slow and laggy because it needs
+       to do numerous work to filter and join the data from different tables.
+       Use server-side views
+       Views are probably the most common tool to help balance these goals. They present a
+       single table structure for queries, prefilter data for what you need in the query, and
+       enable lookups and joins to other tables. Because the filters, lookups and joins for the
+       view are computed on the server, both the payload and client-side compute are
+       minimized.
+       Avoid too many lookups on a gallery
+       A gallery can display many records from a data source. But sometimes, you need to
+       show additional information from another data source that is related to the original one.
+       For example, you have a gallery that shows a list of customers, and you want to show
+       the name of the salesperson who is assigned to each customer. The salesperson’s name
+       is stored in a different data source than the customer’s information. To show the
+       salesperson’s name, you need to use a lookup function that finds the matching record in
+       the other data source. This expands the original table with the lookup values.
+       However, expanding the table can be very slow if you have many records and many
+       lookups. For each record in the gallery, the app needs to run a separate query to the
+       other data source and get the lookup value. This means that the app may need to run
+       many queries for each record, which can take a long time and affect the app
+       performance. This anti-pattern is sometimes known as “N squared, (n^2)" or an "N+1"
+       problem.
+       Use StartsWith or Filter
+       Power Fx provides several ways to search data. In general, use an expression that
+       leverages an index like StartsWith or Filter instead of one that reads the entire table like
+       In. The In operator is fine for in-memory collections or if the external data source table is
+       very small.
+       Consider duplicating data
+       Sometimes data is slow to access in a query because it is stored in a different location or
+       format. To make the query faster, you can copy the slow data and store it locally in a
+       table that is fast and easy to query. However, this means that the local data may not be
+       the most updated version of the original data. Then run another process to update the
+       local data periodically. This process can be a Power Automate flow, a plugin, a stored
+       procedure, or any other method that can move data from one place to another.
+       The frequency requirement of updating the local data depends on your business needs.
+       How fresh does the data need to be for your app? For example, suppose you work for
+       Contoso, a company that sells bicycles. The list of available bicycles is stored in a
+       Products database that you can access through an API in a custom connector. But say
+       the API call is slow, and so you decide to copy the product data and store it locally in a
+       table. Then you create a view that combines your table with other relevant data for your
+       app. You also create a Power Automate flow that runs every day and updates your table
+       with the latest product data from the API. Then your app can query the local data faster,
+       and the data is only one day old at most.
+      Duplicating data is a common type of technique in enterprise-grade applications to
+      ensure good performance. You can use Dataverse plugins, stored procedures, or data
+      movement to duplicate data into a single table that is optimized for querying. The key
+      question is: how up to date must this data be? If you can afford some delay, you can use
+      this technique to speed up your app.
+      Suggestions
+      To achieve this goal, consider the following questions and suggestions:
+        1. How important is it for a customer to see the data value in a gallery or data grid?
+         Would it be acceptable to first select a record and then show the data in a form?
+        2. Can a view do the prework necessary to see data in the right format?
+        3. Are you using an "IN" operator where a "StartsWith" will work?
+        4. How current does your data need to be? Is there a data duplication strategy you
+         can use to get your query to work over a single table by default?
+        Optimize app or page load for peak
+        performance
+        Article • 01/05/2024
+        One of the key factors that shape a user's perception of an app is how quickly it opens
+        and becomes functional. Therefore, prioritizing this goal is crucial in building a
+        performant app. To achieve optimal app performance, there's three main areas that
+        require attention:
+          1. Load data fast
+          2. Efficient calculations
+          3. Minimizing required resources
+        Each of these areas has several common anti-patterns.
+        Load data fast
+        Follow these guidelines to achieve fast data loading apps.
+        Avoid directly populating a collection with large amounts
+        of data
+        Sometimes authors use ClearCollect() to copy data from a server to a collection in their
+        app. This practice is a work-around for delegation limitations in the source or because
+        they plan to use collections in the app for other purposes. Using ClearCollect() can
+        potentially increase the speed of the app when the collection is later utilized. However,
+        it's important to exercise caution while implementing it. Using ClearCollect in this
+        manner can lead to slower app load times or when navigating between pages.
+        ClearCollect() must finish before you can see the data in a gallery or a table. This step
+        can take a long time if there's lots of data or if you use this approach for too many data
+        sources. Collections are best used for situations where the data is small and you need to
+        do many calculations on the collection. For example, a good use of collections is an
+        Online order basket. The customer may update and remove items several times before
+        choosing to commit the order. Additionally, you may augment the collection with more
+        data items like potential discounts, highlights, etc. Data that is 'read-only' should be
+        accessed natively - without bringing it into a collection.
+      Consider avoiding calling Power Automate to populate a
+      collection
+      This issue is a slight variation of the previous section. Sometimes authors also use Power
+      Automate to populate their collection in Power Apps. There's approximately a 0.6-
+      second performance cost to instantiate Power Automate. Power Automate must be
+      independently launched each time it's called. It must allocate memory, get situated with
+      the right components, and be ready to run. As with the above advice, one or two calls to
+      Power Automate might not be an issue depending on your app. But, almost universally,
+      the worst performing apps overuse this approach. The performance cost can add up
+      quickly and ruin the performance of your app.
+      Avoid using SaveData() and LoadData() as a full offline
+      scenario
+      Some authors use ClearCollect() and then SaveData() to store data for general purpose
+      offline use. You can use SaveData() to save the collection to your device, and LoadData()
+      to load it when you're offline. However, this approach isn't recommended for instances
+      where there's a large amount of data or if the data is complex. It makes your app slower
+      because it has to wait for ClearCollect() to finish before it can show the data. You should
+      only use SaveData() and LoadData() for small and simple data scenarios such as
+      preferences and short lists. A better way to work with large amounts of offline data is to
+      use the Power Apps offline feature that works with Dataverse. This feature can handle
+      larger and more complex data more efficiently.
+      Use Explicit column selection
+      Explicit column selection is on by default. However, some authors turn this feature off.
+      The issue is that with Explicit column selection (ECS) turned on, columns are sometimes
+      not retrieved from the data source if the data is first retrieved into a collection. As some
+      tables may have many columns, ECS automatically computes which columns are
+      necessary to retrieve based on their usage in controls (for example, galleries and forms.)
+      As some tables can many columns, reducing the size of the download can speed up
+      performance. Some tables can have a hundred columns or more. If your app only needs
+      to use 10 columns, and you bring down all the columns from a 100 column table, you
+      are bringing down ten times as much data as you actually need.
+      Most issues arise when bringing data into collections. If a column is explicitly referenced
+      in a control then ECS works well. And, ECS generally does work for collections. However,
+      the column lineage is occasionally lost when the data moves through collections and
+        variables. And, and so Power Apps may lose track of the column it should retrieve. To
+        resolve this issue, you can force Power Apps to "remember" the column by using the
+        ShowColumns function. For example:
+         Power Fx
+             ClearCollect(
+                 MyColTable, 
+                 ShowColumns(Filter(BankAccounts, AcountNo = 32),
+                 "Col1", 
+                 "Col2", 
+                 "Col3")
+             );
+        Where Col1, Col2, and Col3 are columns you expect to be retrieved from the data
+        source (for example, the Account data source).
+        Alternatively, you can add a hidden control to your form that references the column.
+        This forces Power Apps to "remember" the column.
+        Fast calculations
+        Fast (or efficient) calculations are a performance goal in its own right. For more
+        information, see Fast (efficient) calculations. However there are some common anti-
+        patterns that can affect app load as well and so we discuss them here. Below is a list of
+        optimizations you should consider that might affect app launch or page navigation.
+        Use App.Formulas
+        Historically many authors have put a large number of calculations in OnStart. When you
+        place an expression in OnStart, it forces Power Apps to run that expression precisely
+        when the app starts and before everything else. However, with the introduction of
+        App.Formulas you can let Power Apps decide when to run an expression. Power Apps
+        can run the formula 'Just-in-time' before it's needed. For more information, see App
+        formulas. Use App.Formulas to split up your formula into pieces that Power Apps can
+        arrange more efficiently for execution.
+        Use Concurrent
+        Use the Concurrent function to allow formulas to be executed at the same time. It's
+        common to use this function to populate collections as it allows for parallel execution.
+       While this can provide some modest speed ups, adding many data sources can cause
+       timing and throttling issues.
+       Use Enhanced performance for hidden controls
+       When enabled by default in all new apps created since December 2022, Power Apps
+       doesn't render any control that isn't initially visible.
+       Minimize required resources
+       Minimize the resources required to launch your app or screen. This effort includes
+       carefully scoping or partitioning the resources your app or screen needs. Below are
+       several approaches to help you.
+       Use a low dependency start screen and eliminate unused
+       screens.
+       Use a low-dependency first screen such as a welcome on your application. Create a
+       screen that doesn't load a gallery or table or reference data. This manages the user's
+       perception of speed and allow Power Fx to properly delay some calculations to later. If
+       you have any unused screens, remove them.
+       Keep cross screen dependencies between screens low
+       Cross page references force the load of additional pages via references, for example,
+       referencing controls on pages and putting into collections. Some references might be
+       unavoidable. Centralize common references to a single page if possible so that only
+       page is loaded.
+       Consider embedded media
+       Authors sometimes embed media in their apps to ensure fast loading. If you have
+       embedded media consider whether or not, you're using it. If not, delete it. If you have
+       embedded a .png file, consider substituting a .svg file which is smaller. Note that if you
+       use a .svg, the font for the .svg must be on the client machine. Consider the embedded
+       media resolution. Is it too high for the device it will used on?
+       Don't forget App.StartScreen
+              If you use App.StartScreen, ensure the first screen is a blank screen. Due to current
+              packaging of the app, the first logical screen is always bundled with the app init logic
+              and will get initialized, regardless of whether we ever navigate to it.
+              Consider splitting up the app
+              If your app is large, consider partitioning it into smaller apps. If the functionality is
+              separate enough in different parts of your app, this approach might work. In this
+              scenario, you create an actual separate app that you launch with parameters that
+              include context from the first or parent app.
+              Suggestions
+              To achieve the goal of a fast app and page start, consider the following questions and
+              suggestions:
+                 1. Are you loading lots of data in a first screen? Can you use a different first screen?
+                 2. Are you running many commands or Power Fx expressions at the beginning of the
+                    app load? Can you defer these commands and expressions to a later point in the
+                    application? Only get the data you actually need to start the app? 1 Can you
+                    convert expressions in App.OnStart to named formulas with App.Formulas? This
+                    allows Power Fx to decide when to actually execute the formula rather than forcing
+                    it to happen on load or navigate events.
+                 3. Can you use a separate Power Automate flow to create a temporary table in a local
+                    data store such as Dataverse that combines data from different sources? And then
+                    access that data in your Power App?
+                 4. For business process kick offs, can you use Server triggered actions rather than
+                    calling a Power Automate Flow?
+                 5. Can you create a view on the server that joins the data for you?
+                 6. If you want to use offline data in your app, can you use the Power Apps offline
+                    feature that works with Dataverse? If your data isn't in Dataverse, can you move it
+                    there?
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+         Fast calculations
+         Article • 12/13/2023
+         Power Fx expressions are powerful and do many background calculations for you
+         automatically. While Power Fx automates many things for you, it's possible to fine-tune
+         your calculations so there as fast as possible.
+         Data retrieval
+         Use Explicit column selection
+         The Explicit Column Selection (ECS) feature is enabled by default for all new apps. If it
+         isn't enabled for your app, you should enable it. ECS automatically reduces the number
+         of columns retrieved to only the ones that are used in the application. If ECS isn't
+         enabled, you might be retrieving more data than you need, which can affect
+         performance. Occasionally, when an app pulls data in through collections, the original
+         lineage or source of a column can be lost. We don't know if it’s being used and we drop
+         it using ECS. You can usually force ECS to work for a missing column by using the
+         PowerFx expression ShowColumns after a collection reference or by using it in a control.
+         Use images on galleries, tables, and forms carefully
+         Use Dataverse thumbnail versions of images for galleries and tables. Dataverse
+         thumbnails are small about 1 kilobyte and are stored inline as part of the record, and are
+         useful and fast for display on controls that show collections. All other image references
+         including all SharePoint images require a separate call and shouldn't be placed on a
+         gallery or table. Place images that require a separate call on detail forms. Consider never
+         showing a full image by default. Full detailed images can be useful and important to
+         users. However, you can make these images available to users through an explicit user
+         action, for example, a button or navigation to a separate page. SharePoint has a range
+         of intermediate sized images you can use for use on a form short of the full image.
+         Dataverse only has two sizes: Thumbnail and Full.
+         Calculations
+         Split up formulas with App.formula
+      The use of App.formulas and named formulas can help with the speed of app load and
+      page navigation because it allows Power Fx to decide when to evaluate a formula. That
+      means it doesn't have to necessarily evaluate it in OnStart. In addition, named formulas
+      can generally help speed as well. In particular if you have a long script, breaking it up
+      into named formulas allow for more efficient calculations as Power Fx can schedule the
+      work and it enables reuse. For more information, see App formulas.
+      Use Concurrent
+      Use the Concurrent function to allow formulas to be executed at the same time.
+      Carefully choose where concurrent is used. It can provide some modest speed ups but if
+      you're running items that depend on each other it can cause timing and throttling
+      issues.
+      Defer significant updates to a nonblocking UI step
+      Large updates to a data source may take a while to complete. But users expect the UI to
+      return control to them quickly. Tasks may be either sequential where the update must
+      finish before the user can take another actions or asynchronous (the update can finish
+      separate of user actions.)
+      An example of a time-consuming synchronous task is confirming a seat at a concert. For
+      most time-consuming synchronous tasks like this, it’s common to put up a progress bar.
+      This UI actually blocks the user but ensures that the task is complete before other UI
+      elements are updated. This approach may not work for your application. Businesses
+      normally handle longer sequential steps as an explicit business step. You're approved to
+      go the next step via a business process signal. An example is an approval. An approval
+      may come quickly or may be delayed. In the UI you can signal that the process is
+      complete several ways. You can enable a button, show a message, send e-mail, or
+      enable a part of the UI such as a menu item.
+      An example of an asynchronous task is the completion of an order. A customer updates
+      an order basket, works through their order and then places the order. But several
+      updates must happen before the customer is given a confirmed ship date. In this
+      example, the Ship Date isn't something you can easily provide right away. , you can
+      defer this part of the update to an e-mail that is sent to the customer later.
+      For synchronous tasks, you'll often use the code in Power Apps for UI blocking tasks. For
+      instance, the code waits until it gets a return value and then releases the progress bar. It
+      is best to minimize these types of situations. But for tasks that use an explicit business
+         step or asynchronous tasks it's common to use an external service to complete the task
+         such as a Dataverse action, stored procedure, or a Power Automate flow.
+         Place 'ForAll' appropriately
+         If you have an expression with ForAll and collect that looks like this:
+          Power Fx
+           ForAll(x, Collect(y, { … }))
+         Then, invert this to
+          Power Fx
+           Collect(y, ForAll(x, { … }))
+         In the first pattern, any dependent rule on collection y is notified of changes and
+         evaluated for each iteration of x. In the second pattern, these rules are only evaluated
+         once.
+         Consider avoiding references to Gallery.AllItems
+         When working with Power Apps, it’s best to avoid referencing Gallery.AllItems unless
+         you need out user values. This is because every time AllItems is read, a new output table
+         is generated. Instead, use Gallery.AllItemsCount if you just want to know how many
+         items are loaded.
+         Carefully use Gallery.TemplateSize
+         To ensure that flexible-height galleries are rendered correctly, it’s important to set a
+         reasonable default size. Initially, we try to render as many rows as possible based on this
+         value. If you set the default size to 0, we try to render everything, except for a few edge
+         cases. If you’re using a formula, make sure to set a minimum value for when the formula
+         might evaluate to 0. For example, you could use Max (20, varFoo + rectBar.Height). This
+         way, if varFoo and rectBar.Height aren’t yet available, we at least use a reasonable value
+         of 20.
+         Note DelayOutput especially for search
+              There's one second delay before the changes is detected, which allows you to complete
+              the typing instead of detecting the changes for every typing.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+         Other performance considerations
+         Article • 12/11/2024
+         In addition to the four key performance principles, there are several other possible
+         reasons for poor performance typically due to external factors.
+         Consider the differences in Client browsers,
+         devices, and locations
+         Canvas apps can be used on different devices, browsers, and locations with varying
+         network conditions. As the Power Apps client is executed, be sure to use modern,
+         updated, and supported browsers. The performance of an app might vary when loading
+         large sets of data on different platforms like iOS or Android. This variation happens
+         because of different network request limitations on each platform. For example, the
+         number of concurrent network requests allowed differs by platform. These differences
+         can have a major impact act on the data load time for large datasets.
+         Consider the differences in Geographic location
+         of the on-premises data gateway and
+         environment
+         Users can access canvas apps globally. However, we recommend that you locate the
+         data source near most of your users. For example, when your app accesses your on-
+         premises data gateway, it’s best to place the gateway near the users who is accessing
+         the app most frequently.
+         General Server-side issues
+         Poor performance might be caused by problems at the server source of the data. This
+         can happen for various reasons. You can use the monitoring tool to assess the specific
+         issue by measuring the data call timings.
+         Possible bottlenecks issues in the data source
+         There are many possible causes of bottlenecks in the data source. Usually, a few tables
+         in the data source are at the center of activity for many queries. Queries might be slow
+         if:
+           The data source is missing or has incorrect indexes.
+           The query is joining extra-ordinary large amounts of data on the server.
+           The query requires a table SCAN, for example, In operator instead of using an
+           index like StartsWith.
+           The back-end machine hosting the data source is low on resources.
+           The back-end SQL instance has blockings, deadlocks, or resource contention.
+           The on-premises data gateway is unhealthy.
+           The on-premises data gateway should be scaled out.
+        When these problems occur, tune the back-end data source to avoid slowing the app’s
+        performance.
+        Specific data sources
+        Azure SQL Database
+        It's important to select the right tier for your business requirements. For more
+        information, see Azure SQL Database documentation. A lower tier has some limitations
+        and constraints. From a performance perspective, CPU, I/O throughput, and latency are
+        important. Therefore, we recommend that you check the performance of the SQL
+        database periodically, and check whether resource usage exceeds the threshold. For
+        example, on-premises SQL Server normally sets the threshold of CPU usage to around
+        75 percent.
+        SharePoint
+        The SharePoint connector can be used to create apps that use data from SharePoint
+        Lists. Here are some common performance problems and resolutions for SharePoint:
+        Avoid too many dynamic lookup columns: SharePoint supports various data types,
+        including dynamic lookups such as Person, Group, and Calculated. If a list defines too
+        many dynamic columns, it takes more time to manipulate these dynamic columns within
+        SharePoint before returning data to the client running the canvas app. To avoid this,
+        don’t overuse the dynamic lookup columns in SharePoint. For example, use static
+        columns to keep email aliases or people’s names.
+        Carefully use the picture column and attachment: The size of an image and an
+        attached file can contribute to a slow response while retrieving to the client. Review your
+        list, and ensure that only necessary columns have been defined. The number of columns
+        in the list affects the performance of the data requests. This is because the matched
+        records, or the records up to the defined data row limits, are retrieved and transmitted
+      back to the client with all the columns defined in the list—even if the app doesn’t use all
+      of them.
+      Consider breaking up large lists: If you have a large list with hundreds of thousands of
+      records, consider partitioning the list or splitting it into several lists based on parameters
+      such as categories, or date and time. For instance, your data might be stored in different
+      lists on a yearly or monthly basis. In such a case, you can design the app to let a user
+      select a time window and retrieve the data within that range.
+      Dataverse
+      When you use Microsoft Dataverse as the data source, data requests go directly to the
+      environment instance without passing through Azure API Management. So, it tends to
+      be faster than other data sources. For more information, see Data call flow when
+      connecting to Microsoft Dataverse.
+      Check custom table configurations: If custom tables are used in Dataverse, additional
+      security configuration might be required for users to view the records with canvas apps.
+      For more information, see Security concepts in Dataverse, Configure user security to
+      resources in an environment, and Security roles and privileges.
+      Excel
+      The Excel connector allows a canvas app to connect to a table in an Excel file. However,
+      this connector has limitations compared to other data sources. For example, it restricts
+      the canvas app to loading data from the table only up to 2,000 records due to limited
+      delegable functions. To load more than 2,000 records, partition your data in different
+      data tables as other data sources.
+      Use the new Excel connector: Be sure to use the new Excel connector - Excel business
+      online. It allows for multi-user access and handles contention issues better.
+      Only use the columns you need from large data lists in Excel: An app can perform
+      slowly if the Excel file that has too many data tables or data tables that contain an
+      immense amount of data over several columns. To ensure that your app isn’t affected by
+      this problem, define only the columns you need on the data table in an Excel file.
+      Note the limitations of Excel as a database. Excel isn’t a relational database system :
+      Any changes from an app are managed by Excel in the same way as if a user were
+      changing data in an Excel file directly. If the app has a high number of reads, but fewer
+      update operations, it might perform well. However, if the app requires heavy
+      transactions, it can adversely affect the performance of the app. There’s no specific
+             threshold value for the number of transactions. It also depends on the data being
+             manipulated. Several other aspects also affect the app’s performance, such as network
+             overhead or the user’s device.
+             Consider the differences in geographic location: The geographic location of the data
+             and its distance from customer locations can be a performance issue. This issue can be
+             amplified if a mobile client has limited bandwidth.
+             Enable Preload app for enhanced performance
+             You can optionally preload your app to increase performance.
+                1. Sign in to Power Apps  .
+                2. On the left navigation pane, select Apps.
+                3. Select the app and then select Settings on the command bar.
+                4. In the App settings pance, set the Preload app for enhanced performance to Yes.
+                  The app will then pre-load.
+                5. For the changes to take effect for apps embedded in Teams, remove and add your
+                  app into Teams again.
+                    ７ Note
+                    This makes the compiled app assets accessible via unauthenticated endpoints
+                    to enable loading them before authentication. However, users can still only
+                    use your app to access data via connectors only after authentication and
+                    authorization completes. This behavior ensures that the data an app retrieves
+                    from data sources won’t be available to unauthorized users. Compiled app
+                    assets include a collection of JavaScript files containing text authored in app
+                    controls (such as PCF controls), media assets (such as images), the app name,
+                    and the environment URL the app resides in.
+                    In general, apps should retrieve media and information from data sources,
+                    through connections. If media and information must be added to the app,
+                    without coming from a connection, and it is considered sensitive you may
+                    want to disable this setting. Note, disabling this setting will result in users
+                    waiting a bit longer to access an app.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Build large and complex canvas apps
+       Article • 04/11/2023
+       Most of the articles in this section of the documentation cover the runtime performance
+       of apps as experienced by the people who use them. This article covers app
+       performance as experienced by the people who make them.
+       As apps become larger and more complex, Power Apps Studio needs to load and
+       manage larger numbers of controls, formulas, and data sources, all with
+       interdependencies that grow exponentially. Power Apps Studio can take longer to load,
+       and features such as IntelliSense and color coding can lag. Use the recommendations
+       that follow to better work with large and complex apps in Power Apps Studio. They can
+       also help to improve your apps' runtime performance.
+       The examples in this article use the Hospital Emergency Response sample solution.
+       Use App.Formulas instead of App.OnStart
+          Tip
+         You can use With function and canvas component custom output properties as an
+         alternative to named formulas.
+       The best way to reduce loading time for both Power Apps Studio and your app is to
+       replace variable and collection initialization in App.OnStart with named formulas in
+       App.Formulas.
+       Let's look at the following example, which uses App.OnStart.
+         Power Fx
+         // Get the color of text on a dark background.
+         Set(varColorOnDark,RGBA(0, 0, 0, 1));
+         // Get the color of the menu icons.
+         Set(varColorMenuIcon,"#0070a9");
+         // Get the styles for a form.
+         Set(varFormStyle,
+             {
+                 DataCard: { Height: 50 },
+                 Title: { Height: 50, Size: 21, Color: varColorOnDark },
+                 Control: { Height: 50, Size: 18 },
+                 Label: { Size: 18, Color: varColorOnDark }
+             }
+         );
+         ClearCollect(
+             FacilitiesList,
+             ForAll(
+                 Facilities,
+                 { Name: 'Facility Name', Id: Facility }
+             )
+         );
+         If(
+             Not IsBlank(Param("FacilityID")),
+             Set(ParamFacility,
+                 LookUp(
+                     FacilitiesList,
+                     Id = GUID(Param("FacilityID"))
+                 ).Name
+             );
+         );
+       Because they're a sequence of statements, your app must evaluate these Set and Collect
+       calls in order before it can display the first screen, which makes the app load more
+       slowly. And because the entire App.OnStart must be considered as a whole, order
+       preserved, and errors aggregated before returning the final result, the formula is
+       complex for Power Apps Studio to analyze.
+       There's a better way. Use App.Formulas instead and define these variables and
+       collections as named formulas, as in the following example.
+         Power Fx
+         // Get the color of text on a dark background.
+         varColorOnDark = RGBA(0, 0, 0, 1);
+         // Get the color of the menu icons.
+         varColorMenuIcon = "#0070a9";
+         // Get the styles for a form.
+         varFormStyle = 
+             {
+                 DataCard: { Height: 50 },
+                 Title: { Height: 50, Size: 21, Color: varColorOnDark },
+                 Control: { Height: 50, Size: 18 },
+                 Label: { Size: 18, Color: varColorOnDark }
+             };
+         FacilitiesList =
+             ForAll(
+                 Facilities,
+                 { Name: 'Facility Name', Id: Facility }
+             );
+        ParamFacility = 
+            If( Not IsBlank(Param("FacilityID")),
+                LookUp(
+                    FacilitiesList,
+                    Id = GUID(Param("FacilityID"))
+                ).Name,
+                Blank()
+            );
+       This change may seem small, but it can have a huge impact. Because each named
+       formula is independent of the others, Power Apps Studio can analyze them
+       independently, effectively splitting a large App.OnStart into smaller pieces. We've seen
+       Power Apps Studio load time drop by as much as 80% with this change alone.
+       Your app also loads faster because it doesn't have to evaluate these formulas until it
+       needs the result. The first screen of the app is displayed immediately.
+       Named formulas can't be used in all situations because you can't modify them or use
+       them with Set. Some situations require the use of a state variable that can be modified.
+       Set is perfect for these situations and you should continue to use it. But, more often
+       than not, you're using global variables in OnStart to set up static values that don't
+       change. In those cases, a named formula is the better choice.
+       Since named formulas are immutable, the prefix var (short for "variable") as a naming
+       convention is no longer appropriate. We didn't change the names in this example
+       because it would require changes to the rest of the app to match.
+       It's tempting to place a named formula in App.OnStart, but don't. They don't belong
+       there. As an On behavior property, App.OnStart evaluates each of its statements in
+       order, creating global variables, and talking to databases only once, when the app is
+       loaded. Named formulas are formulas that define how to calculate something whenever
+       needed and are always true. It's this formula nature that allows them to be independent
+       and allows the app to finish loading before they're evaluated.
+       Split up long formulas
+       App.OnStart is one of the worst offenders for long formulas and definitely where you
+       should start, but it isn't the only case.
+       Our studies have shown that nearly all apps with a long load time for Power Apps Studio
+       have at least one formula of more than 256,000 characters. Some apps with the longest
+       load times have formulas of more than 1 million characters. Formulas that long put a
+       significant strain on Power Apps Studio.
+        To make matters worse, copying and pasting a control with a long formula duplicates
+        the formula in the control's properties without it being realized. Power Apps is modeled
+        after Excel, where multiple copies of a formula are common. However, in Excel formulas
+        are limited to one expression and are capped at 8,000 characters. Power Apps formulas
+        can grow much longer with the introduction of imperative logic and the chaining
+        operator (; or ;;, depending on locale).
+        The general solution is to split long formulas into smaller parts and reuse the parts, as
+        we did in the previous section when we changed Set/Collect statements in App.OnStart
+        to named formulas in App.Formulas. In other programming languages, reusable parts
+        are often referred to as subroutines or user-defined functions. You can think of named
+        formulas as a simple form of user-defined function with no parameters or side-effects.
+        Use named formulas everywhere
+        In the earlier example, we used named formulas as a replacement for App.OnStart.
+        However, you can use them to replace a calculation anywhere in an app.
+        For example, one of the screens in the Hospital Emergency Response sample solution
+        includes this logic in Screen.OnVisible:
+         Power Fx
+         ClearCollect(
+             MySplashSelectionsCollection,
+             {
+                 MySystemCol: First(
+                     Filter(
+                         Regions,
+                         Region = MyParamRegion
+                     )
+                 ).System.'System Name',
+                 MyRegionCol: First(
+                     Filter(
+                         Regions,
+                         Region = MyParamRegion
+                     )
+                 ).'Region Name',
+                 MyFacilityCol: ParamFacility,
+                   MyFacilityColID:  LookUp(
+                     FacilitiesList,
+                     Id = GUID(Param("FacilityID"))
+                 ).Id
+             }
+         ); 
+        This formula can be split into a set of named formulas. It also makes the formula easier
+        to read.
+          Power Fx
+          MyRegion = LookUp(
+                              Regions,
+                              Region = MyParamRegion
+                     );
+          MyFacility = LookUp(
+                              FacilitiesList,
+                              Id = GUID(Param("FacilityID")
+                      );
+          MySplashSelectionsCollection = 
+              {
+                  MySystemCol: MyRegion.System.'System Name',
+                  MyRegionCol: MyRegion.'Region Name',
+                  MyFacilityCol: ParamFacility,
+                  MyFacilityColID:  MyFacility.Id
+              };
+        We extracted ParamFacility as a named formula earlier when we moved most of the Set
+        calls from App.OnStart to named formulas in App.Formulas.
+        Named formulas are evaluated only when their values are needed. If the original intent
+        of using Screen.OnVisible was to defer work until the screen is shown, then the work is
+        still deferred as global named formulas in App.Formulas.
+        Use the With function
+        You can also use the With function in a formula to split up logic. Create a record in the
+        first parameter with the values you want to use as fields, and then use those fields in the
+        second parameter to calculate the return value from With. For example, the previous
+        example can be written as just one named formula:
+          Power Fx
+          MySplashSelectionsCollection = 
+              With( { MyRegion: LookUp(
+                                      Regions,
+                                      Region = MyParamRegion
+                                ),
+                      MyFacility: LookUp(
+                                      FacilitiesList,
+                                      Id = GUID(Param("FacilityID")
+                                ) 
+                     },
+                     {
+                          MySystemCol: MyRegion.System.'System Name',
+                          MyRegionCol: MyRegion.'Region Name',
+                          MyFacilityCol: ParamFacility,
+                          MyFacilityColID:  MyFacility.Id
+                     }
+              )
+         One downside to using With this way is that MyFacility can't use MyRegion because
+         they're defined in the same With function, a problem that's not present with named
+         formulas. One solution is to nest With functions and use the As keyword to name the
+         record for each to give easy access to all the With variables.
+         Use canvas components
+         Canvas components are most often used to create a UI control that can be placed on
+         the canvas just like a control. You can also use them without placing them in the UI to
+         perform calculations with custom output properties as an alternative to named formulas.
+         Canvas components are easy to share across apps with component libraries and, unlike
+         named formulas, are fully supported. However, they're harder to configure and use than
+         named formulas.
+         To split logic:
+           1. In Power Apps Studio, switch to the Components tab in the Tree view.
+           2. Create a new component.
+           3. In the Properties pane, turn on Access app scope.
+           4. Add a custom property.
+           5. Set the Property type to Output and the Data type as appropriate.
+           6. Select Create.
+           7. In the property picker next to the formula bar at the top of the screen, select the
+            new property.
+           8. Write the formula for the logic to split and reuse.
+         To use the logic:
+           1. Switch to the Screens tab in the Tree view.
+           2. In the Insert pane, expand Custom and insert your component.
+           3. To calculate a value with the property, use ComponentName.PropertyName.
+         Use Select with a hidden control for imperative logic
+       Imperative logic is used to modify state with Set and Collect, notify the user with Notify,
+       navigate to another screen or app with Navigate and Launch, and write values to a
+       database with Patch, SubmitForm, or RemoveIf.
+       Named formulas and canvas component custom output properties don't support
+       imperative logic. A common way to split up imperative logic is to use the OnSelect
+       property of a hidden control.
+         1. Add a Button control to a screen.
+         2. Set the OnSelect property to the imperative logic you want to execute.
+         3. Set the Visible property to false, since there's no need for the user to see or
+          interact with it.
+         4. Call Select( Button ) when you want to execute the imperative logic.
+       For example, one of the screens in our sample has the following OnSelect property on a
+       Button control. (This simple example is for illustration purposes only. Normally, you
+       would only use this technique for longer formulas.)
+         Power Fx
+         btnAction_17.OnSelect = 
+             Trace("Feedback Screen: Submit Button",TraceSeverity.Information);
+             If(
+                 // Proceed if all forms are validated.
+                 And(
+                     FormFeedback.Valid
+                 ),
+             
+                 // Set the updates to static variables.
+                 Set(updatesFeedback,Patch(Defaults('App Feedbacks'), 
+         FormFeedback.Updates));
+                 // Submit the first form. Subsequent actions can be found in the 
+         OnSuccess.
+                 SubmitForm(FormFeedback);
+                 ,
+             
+                 Notify("Please complete all fields before proceeding",
+                        NotificationType.Warning,2000)
+             );
+       To split this logic into parts, we can put portions onto separate Button controls and
+       Select them from the original:
+         Power Fx
+         btnTrace.OnSelect = 
+             Trace("Feedback Screen: Submit Button",TraceSeverity.Information);
+         btnSubmit.OnSelect = 
+             If(
+                 // Proceed if all forms are validated.
+                 And(
+                     FormFeedback.Valid
+                 ),
+             
+                 // Set the updates to static variables.
+                 Set(updatesFeedback,Patch(Defaults('App Feedbacks'), 
+         FormFeedback.Updates));
+                 // Submit the first form. Subsequent actions can be found in 
+         OnSuccess.
+                 SubmitForm(FormFeedback);
+                 ,
+             
+                 Notify("Please complete all fields before proceeding",
+                        NotificationType.Warning,2000)
+             );
+         btnAction_17.OnSelect = 
+             Select( btnTrace );
+             Select( btnSubmit );
+        This technique only works on the same screen. Other techniques that are slightly more
+        complicated work across screens, like using the Toggle control, setting OnCheck to the
+        logic you want to run, and setting Default to a global variable and then toggling the
+        global variable with Set( global, true ); Set( global, false ) at the point you want
+        to run the logic.
+        In this example, some logic splitting had already been done. The comment mentions
+        that "Subsequent actions can be found in OnSuccess." This event runs imperative logic
+        after the record has been successfully submitted, a solution specific to the SubmitForm
+        function.
+        Partition the app
+        Some apps grow to thousands of controls and hundreds of data sources, which slows
+        Power Apps Studio. As with long formulas, large apps can be split into smaller sections
+        that work together to create one user experience.
+        Separate canvas apps
+        One approach is to implement sections in separate canvas apps and use the Launch
+        function to navigate between the separate apps and pass needed context.
+       This approach was used in the Hospital Emergency Response sample solution. Separate
+       apps manage each of the major areas of the overall app. The apps share a common
+       switchboard component through a component library that each app shows on its
+       startup screen:
+       When the user selects an area, the component uses metadata about the apps available
+       and which app is hosting the component. If the desired screen is in this app (that is,
+       ThisItem.Screen is not blank), then a Navigate call is made. But if the desired screen is
+       in a different app (that is, ThisItem.PowerAppID is not blank), then a Launch function is
+       used with the App ID of the target and the FacilityID context:
+         Power Fx
+         If(
+             IsBlank(ThisItem.Screen),
+             If(IsBlank(ThisItem.PowerAppID), 
+                 Launch(ThisItem.URL),           
+                 Launch("/providers/Microsoft.PowerApps/apps/" & ThisItem.PowerAppID, 
+                        "FacilityID", Home_Facility_DD.Selected.Id)
+             ),
+             Navigate(
+                 ThisItem.Screen,
+                 Fade
+                    )
+                );
+              State in the original app is lost when another app is launched. Be sure to save any state
+              before you call the Launch function. Write it to a database, call SaveData, or pass state
+              to the target app with parameters that are read with the Param function.
+              Model-driven app with custom pages
+              Sections can also be implemented as custom pages. Custom pages act as a mini canvas
+              app with a model-driven app container for navigation.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+       Build business logic
+       Article • 10/22/2024
+       Power Platform offers various capabilities for makers to build business logic for Power
+       Apps. In this article, you find an overview of the key methods and offer guidance to help
+       determine the most suitable approach building business logic for Power Apps.
+       Use Power Fx in your app
+       Power Fx is the low code functional programming language shared by Excel and Power
+       Platform. When used with Power Platform connectors, makers can access data and
+       create custom app logic. Power Fx supports the following characteristics:
+          Live – Canvas apps recalculate just as Excel spreadsheets do. As users interact with
+          the app, Power Fx is in the background making data requests and keeping the
+          state of the app up to date with Dataverse.
+          Delegation – Power Fx optimizes data handling by delegating operations to the
+          server whenever possible. Functions like Filter(), Lookup(), and Search() enable
+          server-side data filtering, ensuring that only the necessary data is retrieved to
+          support the app's functionality and user experience. In cases where delegation isn't
+          possible, functions run locally within the JavaScript environment of the browser.
+          Optimized for Dataverse – Dataverse serves as the primary data storage option for
+          Power Apps, offering direct, and low-latency access due to fewer intermediary
+          layers. Power Fx is also compatible with Dataverse's diverse relationship types,
+          including many-to-one and one-to-many associations.
+          Offline – The Power Apps mobile app enables offline use of Dataverse data,
+          allowing users to use the app in the field allowing a seamless connection. Any
+          changes made offline are synchronized when internet connection is available. The
+          app's predefined business logic remains operational, even without an internet
+          connection.
+       Use cloud flows in your app
+       Power Automate is a low code workflow service built on top of the Power Platform
+       connector ecosystem. Power Automate adds the following capabilities when building
+       Power Apps:
+         Asynchronous – A Power Automate cloud flow is inherently asynchronous. This
+         means that when a flow is initiated, it's using a queuing system to manage the
+         various subtasks. The asynchronous nature of Power Automate means makes it
+         well-suited for longer running complex sequences of logic.
+         Detailed logging – All flows create a record of what happened when they executed
+         in the form of Run History providing traceability and ensuring auditing record for
+         what happened and why.
+         Multi-connector – Although it's possible to create multi-connector Power Apps
+         logic, due to the live nature of Power Apps, as you increase the number of
+         connectors performance degrades. These complex multi-connector scenarios are a
+         great place to use Power Automate which can offload these cases from live
+         execution in the app.
+       Choose between Power Fx and cloud flows for
+       your app
+       We recommend using Power Fx for developing business logic in Power Apps. While it's a
+       powerful tool, there are scenarios where integrating other tools might be more
+       appropriate.
+       Low latency use cases
+       Power Fx excels in delivering low latency for Power Apps, making it the go to choice for
+       developing responsive business logic. However, the actual latency experienced can vary
+       based on the complexity of the operations and the volume of data being processed. It's
+       crucial to understand that while Power Fx can facilitate swift interactions, the design, and
+       objectives of your application play a pivotal role in its overall performance. For more
+       information, see performance and optimization articles earlier in this section.
+       When it comes to accessing data efficiently, the combination of Dataverse and Power Fx
+       offers the quickest solution.
+       For more information, see Data call flow with Microsoft Dataverse.
+       Complex sequences and use of multiple connectors
+       When dealing with complex sequences of action that span various connectors, Power
+       Automate serves as an effective asynchronous solution to delegate processing away
+              from Power Apps. This asynchronous capability lets Power Apps kick off a workflow and
+              proceed with other tasks without having to pause for a response.
+              Design app experience around inherent task
+              latency
+              When designing user experiences, it's essential to consider the latency that comes with
+              executing complex tasks.
+              There are two strategies:
+                 1. Pause the user experience until the task finishes, providing a visual indicator of
+                    progress.
+                 2. Offload the complex task to Power Automate, allowing the user experience to
+                    continue uninterrupted.
+              Related content
+              Overview of creating performant apps
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+         Power Apps coding guidelines
+         ﾃ Summarize this article for me
+         Creating a simple canvas app is straightforward, but as the application's complexity grows,
+         maintaining high code quality becomes essential. These guidelines describe standards for
+         naming objects, collections, and variables, and provide recommendations for developing
+         consistent, performant, and easily maintainable apps.
+         The guidelines offer essential guidance for developers who design, build, test, deploy, and
+         maintain Power Apps apps in various environments, including small businesses, corporations,
+         and government entities.
+            Tip
+           Use the Power CAT Toolkit   to perform code reviews. The toolkit incorporates many of
+           the coding guidelines from this documentation, ensuring that your solutions are efficient
+           and maintainable. The toolkit automatically flags any patterns that don't adhere to these
+           best practices, so you can address potential issues early in the development process. This
+           proactive approach enhances the quality of your code and helps streamline the review
+           process, making it easier to maintain high standards across your projects. Integrating the
+           Power CAT Toolkit into your development workflow ensures that your solutions are built
+           on a solid foundation and leads to more reliable and scalable solutions.
+         Next step
+          App design guidelines
+          Last updated on 02/28/2026
+        Power Apps and Microsoft
+        Teams integration
+        Microsoft Teams provides a collaboration surface where makers can build, share, and use Power
+        Apps experiences for teams, chats, and personal use.
+        Power Apps can be used in five scenarios with Teams.
+                                                                                          ﾉ
+                                                                                             Expand table
+         Scenario             Description
+         Embed a canvas app   Use the Power Apps tab for Teams to embed a canvas app as a tab app in Teams.
+         as a tab app         The canvas app integrates business data from a wide variety of Microsoft and third-
+                              party data sources, including Dataverse.
+         Embed a canvas app   Embed a canvas app as a first-class Teams personal app. The canvas app integrates
+         as a personal app    business data from a wide variety of Microsoft and third-party data sources,
+                              including Dataverse.
+         Embed a model-       Use the Power Apps tab for Teams to embed a model-driven app as a tab app in
+         driven app as a tab  Teams.
+         app
+         Embed a model-       Embed a model-driven app as a first-class Teams personal app.
+         driven app as a
+         personal app
+         Create apps in       Use the Power Apps app in Teams to create canvas apps within Teams backed by
+         Teams backed by      Dataverse for Teams, the built-in low-code data platform for Teams. Dataverse for
+         Microsoft Dataverse  Teams empowers users to build custom apps, bots, and workflows—by using Power
+         for Teams            Apps, Microsoft Copilot Studio, and Power Automate, respectively—without ever
+                              leaving the Teams interface.
+        Related articles
+        What is Dataverse for Teams?
+        Create your first app in Teams
+        Set permission and share apps with colleagues
+        Use flows in Microsoft Teams
+        Microsoft Copilot Studio in Teams
+        ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 05/22/2026
+             Embed a canvas app as tab app in
+             Teams
+             Article • 01/30/2024
+             You can customize the Teams experience by adding Power Apps canvas apps to your
+             channels in Teams using the Power Apps tab. In this topic, you learn how to add the
+             Product Showcase sample app template to a Teams channel, and then open the app
+             from that channel.
+             If you're not signed up for Power Apps, sign up for free   before you begin.
+             Prerequisites
+             To follow this procedure, you need an Office 365 subscription     and a channel in
+             Teams .
+             Sign in to Power Apps
+            Sign into Power Apps at https://make.powerapps.com  .
+            Add an app
+               1. In Microsoft Teams, select a team, and a channel under that team. In this example,
+                 it's the General channel under the Business Development team.
+               2. Choose + to add a tab.
+               3. In the Add a tab dialog box, choose Power Apps.
+               4. Choose Sample app templates > Product Showcase > Save.
+        The app is now available to use in the channel.
+       ７ Note
+       You must share your own apps before you add them to Teams (sample app
+       templates are shared by default).
+      Open an app
+        1. In Microsoft Teams, choose the team and the channel that contains the app.
+        2. Choose the Product Showcase tab.
+         The app opens in the channel.
+      Known issues
+      In the desktop app for Microsoft Teams:
+         Apps must load content such as images and .pdf files over a secure (https)
+         connection.
+         Not all sensors, such as Acceleration, Compass, and Location, are supported.
+         Only these audio formats are supported: AAC, H264, OGG Vorbis, and WAV.
+      In the mobile app for Microsoft Teams:
+         End users can't download attachments from canvas apps. As a workaround, use
+         Microsoft Teams desktop to access the canvas app and download the attachment.
+       Clean up resources
+       To remove the app from the channel, choose the Product Showcase tab > Remove.
+        Embed a canvas app as personal app
+        in Teams
+        You can share an app you've created by embedding it directly into Microsoft Teams. When
+        completed, users can select + to add your app to any of your team channels or conversations in
+        the team you are in. The app appears as a tile under Tabs for your team.
+          ７ Note
+          The Teams experience changes frequently. If the current Teams UI or screenshots in this
+          article don't match what you see, use the option names and overall flow as your guide.
+          ７ Note
+          Team custom app policies must be set to allow uploading custom apps. If you are unable to
+          embed your app in Teams, check with your administrator to see if they've setup custom app
+          settings.
+        Prerequisites
+             You need a valid Power Apps license.
+             To embed an app into Teams, you need an existing app created using Power Apps.
+        Add to Teams
+           1. Sign in to Power Apps   , and then select Apps.
+           2. Select More actions (...) for the app you want to share in Teams, and then select Add to
+             Teams.
+      Add to Teams panel opens on the right-side of the screen.
+     3. (Optional) If the app doesn't have any description, select Edit details to open the app in
+      Power Apps Studio to add.
+     4. (Optional) Select Advanced settings to add additional details such as Name, Website, Terms
+      of Use, Privacy Policy, MPN ID (Microsoft Partner Network ID).
+     5. Select Add to Teams and you'll be asked to open Teams.
+        Tip
+       If you want, you can also choose Download app to download the app, and then use
+       the steps described in Upload your app in Microsoft Teams article to upload the app
+       to Teams.
+     6. Select Open Microsoft Teams to open Teams app, or select Cancel followed by Use the web
+      app instead to open Teams web.
+            7. Select Add. You can also choose to add the app to a specific team using Add to team, or a
+              specific chat using Add to chat.
+              The app is now added to Teams.
+                  Tip
+                 You can also pin the app for easy access.
+         Add to Teams using the web player
+         You can also add canvas apps to Teams using the web player.
+            1. Go to Power Apps      > Apps > select the app to launch in a new browser tab.
+            2. Edit the app > select     or press F5 to play the app.
+            3. After the app is open using the web player, choose the Add to Teams button from the top-
+              right side of the screen.
+            4. When prompted, select Cancel.
+            5. Select Launch it now to open the Teams app. Alternatively, you can also choose Use the
+              web app instead to open the app in Teams web.
+           ７ Note
+                 To add canvas apps to Teams using the web player:
+           Your organization must have Allow interaction with custom apps turned on. More
+           information: Manage custom app policies and settings in Microsoft Teams
+           Your organization must allow Shared Power Apps. More information: Manage
+           Microsoft Power Platform apps in the Microsoft Teams admin center
+         You can only add apps to Teams that belong to the same tenant as your Teams
+         account. Otherwise, you'll see an error "App was not found in tenant".
+     Publish the app to the Teams catalog
+     If you're an admin, you can also publish the app to the Microsoft Teams catalog.
+     Use context from Teams
+     To build deeply integrated apps with Teams, you can use Team's context variables with the
+     Param() function. For example, use the following formula in screen's Fill property to change the
+     background of app based on user's theme within Teams:
+      Switch(
+              Param("theme"),
+              "dark",
+              RGBA(
+                  32,
+                  31,
+                  31,
+                  1
+              ),
+              "contrast",
+              RGBA(
+                  0,
+                  0,
+                  0,
+                  1
+              ),
+              RGBA(
+                  243,
+                  242,
+                  241,
+                  1
+              )
+          )
+     To test the app, publish it and then play it within Teams.
+      The following context variables from Teams are supported:
+          locale
+          channelId
+          channelType
+          chatId
+          groupId (not supported with private channels)
+          hostClientType
+          subEntityId
+          teamId
+          teamType
+          theme
+          userTeamRole
+        ７ Note
+        This feature was added in March, 2020. If you embedded your app within Teams before this,
+        you may need to re-add your app to Teams to use this functionality.
+      Improve the performance of your app
+      You can optionally preload your app within Teams to increase performance. For mor information:
+      Enable Preload app for enhanced performance.
+      See also
+      Welcome to Microsoft Teams Manage your apps in Teams Publish your app in Teams
+      ） Note: The author created this article with assistance from AI. Learn more
+       Last updated on 05/22/2026
+     Create apps in Microsoft Teams by using
+     Power Apps
+     09/03/2025
+     With the significant number of enterprise employees working remotely, and millions of them
+     meeting and collaborating through Microsoft Teams, there's significant interest in building low-
+     code and no-code applications that can make remote work easier and more productive.
+     Introducing Microsoft Dataverse for Teams (formerly called Project Oakdale), a built-in, low-
+     code data platform for Teams that empowers you to build custom apps and workflows in
+     Teams by using Power Apps and Power Automate. Dataverse for Teams, built on Microsoft
+     Dataverse (formerly called Common Data Service), provides relational data storage, rich data
+     types, enterprise-grade governance, and one-click solution deployment to the Teams app
+     store.
+     The new Power Apps app in Teams provides an integrated experience for app makers to create
+     and edit apps and workflows within Teams, and quickly publish and share them for anyone on
+     the team to use, without having to switch between multiple apps and services. With Power
+     Apps Studio embedded in the Power Apps app in Teams and the new built-in data platform
+     providing an easy-to-use, editable data table, you can quickly build apps based on custom
+     data tables that are Teams-specific and scenario-specific.
+     To help organizations realize value faster, you can use templates, which are purpose-built apps
+     for common application patterns that can be easily discovered and installed by members of the
+     team. Although these templates can work without modification, members of the team can
+     customize and extend them to meet the specific needs of their business.
+     Access and authorization align with the Microsoft Teams security model and include security
+     groups that enable access for owners, members, and guests of the team that your app is
+     associated with.
+     Licensing requirements
+     The ability to create apps within Microsoft Teams will be available as part of select Microsoft
+     365 subscriptions. For detailed information, see Licensing and restrictions in the Power
+     Platform admin guide.
+     Get started with creating apps in Teams
+     There are two ways to use the apps created by using Power Apps in Teams:
+        You can use the Power Apps app from the default Teams catalog as a personal app and
+        create apps to share with teams in Teams. More information: Install the Power Apps
+        personal app
+     When you create an app in Teams with the Power Apps app for the first time, or install an app
+     created with Power Apps from the app catalog for the first time, a new Dataverse for Teams
+     environment is created for the selected team. The Dataverse for Teams environment is used to
+     store, manage, and share team-specific data, apps, flows, and chatbots. Each team can have
+     one Dataverse for Teams environment, and all data, apps, and flows created with the Power
+     Apps app inside a team are available from that environment. More information: About the
+     Dataverse for Teams environment
+     When you create an app in Teams with the Power Apps app for the first time, or install an app
+     created with Power Apps from the app catalog for the first time, you get to choose which team
+     is responsible for customizing, maintaining, and sharing the app.
+     After selecting a team, we will create a new Dataverse for Teams environment if one doesn’t
+     already exist. This will provide the necessary workspace for your team to collaborate on all your
+     data, apps, flows, and bots. More information: About the Dataverse for Teams environment
+     Get started with creating flows and chatbots in
+     Teams
+     You can create:
+       Power Automate flows by using the new Power Apps app in Teams. More information:
+       Create flows using the Power Apps app in Teams
+       Chatbots by using the new Microsoft Copilot Studio app in Teams. More information:
+       Microsoft Copilot Studio in Teams
+    Next steps
+    Install the Power Apps personal app
+    Create your first app in Teams
+    Related articles
+    Administer Dataverse for Teams environment
+       Install the Power Apps personal app in
+       Microsoft Teams
+       Article • 03/03/2023
+       A personal app is a Teams application that has a personal scope. Power Apps is by
+       default available for you to select and add to a tab in the Teams channel of your choice.
+       More information: Personal apps
+        1. Open Microsoft Teams, and then select More added apps (...).
+        2. Search for Power Apps.
+        3. Select Add.
+            Power Apps is now added to Teams. You can access the app in Teams from the left pane.
+                Tip
+               As an alternative to using the flyout menu, you can select Apps from the lower-left
+               corner in Teams, and then search for Power Apps to install the app.
+            Pin Power Apps to Teams
+            To easily access Power Apps app, right click the Power Apps app from     , and then
+            select Pin.
+      This action adds Power Apps to the Teams left rail for quick access.
+      When you pin Power Apps app, the text of the app icon in the Teams rail changes from
+      italicized to normal to reflect the pinned app.
+      You can unpin Power Apps app anytime with a right click on the Power Apps app from
+      the left rail, and then by selecting Unpin.
+      Pop out app
+            If you're using Microsoft Teams desktop app   , you can use the Pop up out option to
+            open Power Apps in a separate window for ease of use.
+            This way, you can continue to use Microsoft Teams for day-to-day interactions and still
+            be able to interact with Power Apps separately.
+            Next steps
+            Create your first app in Teams 
+            Overview of the Power Apps app
+     Create your first app in Microsoft Teams
+     You can create, edit, and delete canvas apps in Teams. If you're creating an app by using Power
+     Apps in a Teams team for the first time, you also create a new Dataverse for Teams environment.
+     For more information, see About the Dataverse for Teams environment.
+     Prerequisites
+        A Microsoft Teams license (included with most Microsoft 365 plans).
+        Power Apps for Teams doesn't require a standalone Power Apps license. The capability is
+        included with your Teams license for apps that use Dataverse for Teams.
+        You must be a member of the team where you want to create the app.
+      ７ Note
+      The Teams user interface updates regularly. If the screenshots or steps in this article don't
+      exactly match what you see, look for similar options in the current interface. The core
+      workflow remains the same.
+     Creating an app in Microsoft Teams is a quick and easy three-step process.
+       1. Create your app
+       2. Create your first table
+       3. Customize and publish your app
+     Watch this video to learn how to create your first app.
+     https://learn-video.azurefd.net/vod/player?id=3e63d41c-d4eb-411e-b99a-
+     7cc87bb2992d&locale=en-us&embedUrl=%2Fpower-apps%2Fteams%2Fcreate-first-app
+     Ensure you refer to the latest steps when creating the table.
+     Now let's go through each step in detail.
+     Create your app
+     After installing the Power Apps app template:
+      1. Start Teams, and sign in.
+      2. In the left pane, select Power Apps, and then select Start now.
+                 Tip
+                If you don't see the Power Apps app in the left pane, select      (More added apps), and
+                then select Power Apps.
+     3. Select a team where you want to create the app. This is where the app lives. Team members
+      can't see the app until you publish the app. You can also share the app with colleagues
+      within your company that are not part of the team. For more information, see Set
+      permission and share apps with colleagues.
+      If this is the first app you're creating in the selected team, a new Dataverse for Teams
+      environment is created for the selected team. You see a message about this when you select
+      the team. For more information, see About the Dataverse for Teams environment.
+     4. Select Create. You see a confirmation about the Dataverse for Teams environment being
+      created, which might take some time. You're notified when the environment is available for
+      you to create your first app by using an email and a Teams notification.

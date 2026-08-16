@@ -1,0 +1,2502 @@
+         Power Fx    Supported in    Limitation or workaround
+         formula     plug-ins?
+         Defaults    No              Use Collect instead. For example, instead of Patch(account,
+                                     Defaults(account), {“Account Name”: “Example Account”}) use
+                                     Collect(account, {“Account Name”: “Example Account”}).
+        Power Fx formulas supported
+        For information about the formulas supported with low-code plug-ins, go to Formula reference-
+        Dataverse plug-ins.
+        Formulas not currently supported with low-code plug-ins
+        Clear
+        ClearCollect
+        Update
+        UpdateIf
+        SortByColumns
+        Concurrent
+        DropColumns
+        AddColumns
+        IsEmpty
+        SetFocus
+        IsType
+        JSON
+        Download
+        PlainText
+        RemoveIf
+    GroupBy
+    SetProperty
+    RenameColumns
+    Search
+    ShowColumns
+    UTCNow
+    UTCToday
+    Validate
+    Weekday
+    As
+    Calendar
+    Choices
+    Clock
+    Select
+    Notify
+    Errors
+    HashTags
+    ISOWeekNum
+    WeekNum
+    Refresh
+    SaveData, LoadData, and ClearData
+     Form-related formulas (EditForm, NewForm, SubmitForm, ResetForm, and ViewForm)
+     Device sensor formulas (Acceleration, App, Compass, Connection, and Location)
+     See also
+     Use Dataverse low-code plug-ins (preview)
+      Last updated on 05/27/2026
+     Create low-code plug-ins to use with a
+     copilot (preview)
+     06/23/2025
+     [This topic is pre-release documentation and is subject to change.]
+     Copilot actions are a way to extend the capabilities of your copilot bots. With Copilot
+     generative AI actions, you create custom actions that are triggered by your copilot bot. These
+     actions are used to perform a wide range of tasks, such as sending emails, creating records in
+     Microsoft Dataverse, or calling external APIs. In this article, you create a basic low-code plug-in
+     that adds two integers together and a more complex plug-in that can be used to send a
+     notification either of which can be used to create an action in Microsoft Copilot Studio.
+       ） Important
+          Instant low-code plug-ins are deprioritized and aren't being delivered as a feature.
+          Instant low-code plug-ins are replaced with functions. More information: Functions
+          in Microsoft Dataverse (preview)
+          This is a preview feature.
+          Preview features aren’t meant for production use and may have restricted
+          functionality. These features are available before an official release so that customers
+          can get early access and provide feedback.
+     Prerequisites to use the plug-in with Microsoft
+     Copilot
+     Before you begin, make sure you have the following prerequisites:
+        Access to a Dataverse environment that includes the Dataverse Accelerator App for
+        creating low-code plug-ins.
+        Access to Copilot Studio in the same environment as your Dataverse environment.
+     Basic low-code plugin example
+     In this example you create a low-code instant plug-in that adds two numbers and returns the
+     sum of those numbers. You then create a Copilot action that calls this low-code plug-in to
+      perform the addition. The copilot you create works for numbers and arbitrary text queries that
+      contain numbers and fractions spelled out.
+      To create your basic low-code instant plug-in, follow these steps:
+        1. Open the Dataverse Accelerator App in your Dataverse environment by going to Apps >
+          All > Dataverse Accelerator App and select Play.
+        2. From the Dataverse Accelerator App, select New plug-in and select Instant plug-in.
+        3. Enter a descriptive display name for your plug-in. For example Sum numbers, and then
+          select Create.
+        4. In the Parameters section:
+              Add the following input parameters:
+                Parameter Name: Number1, Type: Float
+                Parameter Name: Number2, Type: Float
+              Add the following output parameter:
+                Parameter Name: Result, Type: Float
+        5. In the Expression section, enter the following code:
+            {Result: Number1 + Number2}
+                                                                   
+        6. Select Save to save your plug-in.
+      Create a copilot to call your basic low-code plug-in
+    Go to Copilot Studio, and open the environment that has the plug-in.
+      1. Create a copilot. More information: Create and configure copilot plugins
+      2. Enable generative actions on the copilot. More information: Enable generative actions
+      3. Add a generative AI action. When you add the action, search for 'Perform an unbound
+       action in selected environment' and select the action. More information: Use Generative
+       Actions in Microsoft Copilot Studio
+      4. Configure the action with the following details:
+         Add a model description that lets the copilot know when to call this action. Use
+         plain English to describe the conditions under which this action should be called. For
+         example, you can enter "Adds numbers and return the sum of those numbers given
+         2 floating point values." More information: Authoring descriptions
+         Use these Inputs:
+          Change How will the copilot fill this input for the Organization parameter to Set
+          as a value.
+          Select your current environment (the environment in which you created your low-
+          code plug-in) as the value for the Organization parameter.
+          Change How will the copilot fill this input for the Action Name parameter to Set
+          as a value.
+          Select the low-code plug-in you created as the value for the Action Name
+          parameter. If you're unsure what the name of your plug-in is you can find it in the
+          Dataverse Accelerator App by selecting it from the list and selecting Copy code
+          snippet and then pasting the code into a text editor.
+         Additional Inputs:
+          Add and the following input parameters. Adding additional inputs doesn't
+          currently show details in Copilot Studio. You can verify that the inputs were
+          added correctly by selecting Open the code edit and reviewing the code, which
+          should show the additional inputs under the inputs section in the action YAML:
+            Parameter Name: Number1
+            Parameter Name: Number2
+      5. Save and publish the copilot.
+    Test your copilot action
+    Follow these steps in the Test copilot pane in Copilot Studio.
+      1. Select the sparkle icon at the top of the chat window to start tracing mode. This allows
+       you to confirm that your action is being called and verifies the inputs and outputs of your
+       action. More information: Testing you copilot using generative actions
+      2. Enter the text in the chat window Add 5.2 and 10.3 and select Send.
+     If everything is configured correctly, you see the expected result of 15.5 output in the chat
+     window and the trace pane shows the inputs and outputs of your action. The trace pane looks
+     similar to the following example. You can try some other prompts to test the action further and
+     change the language to see how the action responds. Some examples:
+        If I have 3 apples and my friend gives me 4 more, how many apples do I have in total?
+        If I have 1/2 pounds of cheese and I order another 1/4 pounds, how much cheese do I have
+        total?
+                                                   
+     Send notification low-code plugin example
+     In this example you create a low-code instant plug-in that wraps an existing API for use with a
+     copilot. The action sends a notification to the user specified in the copilot action when the user
+     creating the action tests it in Copilot Studio. The copilot determines the required parameters
+     from the plain language query from the user and sends a notification using a Dataverse low-
+     code plugin-in to a model-driven app in Power Apps.
+     To create your low-code instant plug-in, follow these steps:
+       1. Open the Dataverse Accelerator App in your Dataverse environment by going to Apps >
+        All > Dataverse Accelerator App and select play.
+       2. From the Dataverse Accelerator App, select New plug-in, and then select Instant plug-in.
+       3. Enter a descriptive display name for your plug-in. For example, Send in-app notification to
+        user and select Create.
+         4. In the Parameters section:
+              Add the following input parameters:
+                Parameter Name: UserName, Type: String
+                Parameter Name: Title, Type: String
+                Parameter Name: Body, Type: String
+                Parameter Name: Url, Type: String
+              Add the following output parameter:
+                Parameter Name: Result, Type: String
+         5. In the Expression section, enter the following code. Notice that we're wrapping the
+          existing XSendAppNotification API with the plugin to give the ability to find users by
+          name. This behavior helps when called from copilot, which can only provide information
+          the user knows about the person and not more esoteric IDs of records that the
+          underlying API is expecting:
+            PowerApps Formula
+            XSendAppNotification(Title,
+            First(Filter(Users, UserName in 'Full Name')), 
+            Body,
+            [XCreateUrlAction("Click Here", Url)]
+            );
+            {Result: "Success"}
+                                                                      
+         6. Select Save to save your plug-in.
+       Create a copilot to call your send notification low-code plug-
+       in
+    Go to Copilot Studio, and open the environment that has the plug-in.
+      1. Create a copilot. More information: Create and configure copilot plugins
+      2. Enable generative actions on the copilot. More information: Enable generative actions
+      3. Add a generative AI action. When you add the action, search for 'Perform an unbound
+       action in selected environment' and select the action. More information: Use Generative
+       Actions in Microsoft Copilot Studio
+      4. Configure the action with the following details:
+         Add a model description that lets the copilot know when to call this action. Use
+         plain English to describe the conditions under which this action should be called. For
+         example, you can enter "Calls a Dataverse API to send a notification to a user in
+         Dataverse to remind or alert them to something important with a title, body and
+         optionally a link for more details." More information: Authoring descriptions
+         Use these Inputs:
+          Change How will the copilot fill this input for the Organization parameter to Set
+          as a value.
+          Select your current environment from the dropdown list (the environment in
+          which you created your low-code plug-in) as the value for the Organization
+          parameter. You need to put your cursor in the textbox in order for the list of
+          available environments to show.
+          Change How will the copilot fill this input for the Action Name parameter to Set
+          as a value.
+          Select the low-code plug-in you created as the value for the Action Name
+          parameter. You need to put your cursor in the textbox in order for the list of
+          available APIs to show. The value to enter here is the schema name of the low-
+          code plugin, such as org_SendInAppNotificationToUser. If you're unsure what the
+          schema name of your plug-in is you can find it in the Dataverse Accelerator App
+          by selecting it from the list and selecting Copy code snippet and then pasting
+          the code into a text editor.
+         Additional Inputs:
+          Select Add and add following input parameters. Notice that adding additional
+          inputs doesn't currently show details in Copilot Studio. This is a known issue. You
+          can verify that the inputs were added correctly by selecting Open the code edit
+          and reviewing the code, which should show the additional inputs under the
+          inputs section in the action YAML:
+            Parameter Name: UserName
+            Parameter Name: Title
+            Parameter Name: Body
+            Parameter Name: Url
+      5. Save and publish the copilot.
+          Test your send notification copilot action
+          Follow these steps in the Test copilot pane in Copilot Studio.
+             1. Select the sparkle icon at the top of the chat window to start tracing mode. This allows
+               you to confirm that your action is being called and verifies the inputs and outputs of your
+               action. More information: Testing you copilot using generative actions
+             2. Enter the text in the chat window Send a notification to my user to check out this url
+               https://copilotstudio.microsoft.com   , and then select Send.
+          If everything is configured correctly, you see that a notification has been sent in the Test
+          copilot pane. The notification is sent as a model-driven in-app notification when the specified
+          user plays the app.
+                                                                                                       
+          You can try some other prompts to test the action further and you could change the plugin to
+          be smarter about how it searches for users given a name to see how the action responds. For
+          example, you could add a step to search for the user by email address if the name doesn't
+          return a result.
+          See also
+          Use low-code plug-ins in Dataverse
+       Microsoft Dataverse low-code plug-ins
+       tips and known issues (preview)
+       Article • 02/15/2025
+       [This topic is pre-release documentation and is subject to change.]
+       This article describes tips and known issues when working with low-code plug-ins in
+       Microsoft Dataverse.
+        ） Important
+           Instant low-code plug-ins are deprioritized and aren't being delivered as a
+           feature. Instant low-code plug-ins are replaced with functions. More
+           information: Functions in Microsoft Dataverse (preview)
+           This is a preview feature.
+           Preview features aren’t meant for production use and may have restricted
+           functionality. These features are available before an official release so that
+           customers can get early access and provide feedback.
+       Handle general runtime issues
+       If you face runtime plugin issues, re-edit the low-code plug-in. Then the intellisense
+       issues on your formula expression are displayed in the low-code plug-in editor. Follow
+       the guidelines to correct the issue that are also displayed, and then resave the plug-in.
+       Use caution when using post-operation
+       patching
+       Your low-code plug-in execution might encounter this error when using Patch in a post-
+       operation: Execution failed for PowerPlexPlugin: System.ServiceModel.FaultException
+       1[Microsoft.Xrm.Sdk.OrganizationServiceFault] This low-code plugin's execution was
+       cancelled because the plugin logic caused an infinite loop. Correct the plugin
+       logic and try again.
+       Using Patch in a post-operation scenario must be done with caution to avoid infinite
+       loops. A Patch operation initiates a new transaction. For example, if an update trigger
+       for MyTable invokes Patch(MyTable, ThisRecord, ...), this operation might result in a
+       recursive update cycle.
+       Here are a couple of examples of operations that can avoid this issue:
+          Patch(CurrentTable, SomeOtherRecord, ... ) // For example, updating a
+          manager's contact from a contact record.
+          Patch(OtherTable, SomeOtherRecord, ... ) // Operations on a completely
+          different table.
+       Handle the two-minute timeout
+       For operations that continue for two minutes or longer, you can receive this error:
+       Execution failed for PowerPlexPlugin:
+       System.ServiceModel.FaultException1[Microsoft.Xrm.Sdk.OrganizationServiceFault]:
+       Operation not allowed as plugin execution exceeded maximum allowed time (Fault
+       Detail is equal to Exception details: limit your callbacks .. Create, Update)
+       When working with Dataverse low-code plugins, it’s important to manage the two-
+       minute timeout effectively:
+          Limit your number of Patch and Collect operations inside your plug-ins,
+          especially if you have other plug-ins already registered against that table, which
+          can affect the performance of your plug-ins.
+          Monitor performance. Keep an eye on the performance of your plug-ins and
+          consider using tracing and logging capabilities within Dataverse to track execution
+          times and failures. By following these guidelines, you can ensure that your low-
+          code plug-ins run smoothly within the Dataverse environment without interruption
+          caused by the two-minute timeout. More information: Tracing and logging
+       Failed response received from APIM
+       If you receive this error message, which can be returned from API management (APIM),
+       just edit the plug-in, and then resave. Saving initializes the APIM authentication and
+       your plug-in begins executing successfully.
+       Execution failed for PowerPlexPlugin: Failed response received from APIM;
+       StatusCode: NotFound; ResponseContent: { "statusCode": 404, "message": "Resource
+       not found" } Method: POST; RequestUri: https://canada-001.azure-apim.net/invoke;
+       StatusCode: NotFound; ResponseContent: { "statusCode": 404, "message": "Resource
+              not found" }; HeadersString: Headers - 'Access-Control-Allow-Methods':
+              'System.String[]'; 'Access-Control-Allow-Origin': 'System.String[]'; 'Access-
+              Control-Max-Age': 'System.String[]'; 'Access-Control-Expose-Headers':
+              'System.String[]'; 'Date': 'System.String[]'; Access to APIM expires..edit and save
+              the plugin
+              See also
+              Use low-code plug-ins in Dataverse
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Use custom process actions
+       Article • 02/15/2022
+       Custom process actions, also known as Custom actions, or just actions open a range of
+       possibilities for composing business logic. With custom process actions, you can
+       perform operations, such as Create, Update, Delete, Assign, or Perform Action. Internally,
+       a custom process action creates a custom message. Developers refer to these actions as
+       messages. If the goal of a process is to create a row, then update it, and then assign it,
+       there are three separate steps. Each step is defined by the capabilities of the table—not
+       necessarily your business process.
+       Custom process actions let you define a single verb (or message) that matches an
+       operation you need to perform for your business. These new messages are driven by a
+       process or behavior rather than what can be done with a table. These messages can
+       correspond to verbs like Escalate, Convert, Schedule, Route, or Approve—whatever you
+       need. The addition of these verbs helps provide a richer vocabulary for you to fluently
+       define your business processes. You can apply this richer vocabulary from clients or
+       integrations rather than having to write the action within clients. This also makes it
+       easier because you can manage and log the success or failure of the entire action as a
+       single unit.
+       Configurable messages
+       Once an action is defined and activated, a developer can use that message like any of
+       the other messages provided by the platform. However, a significant difference is that
+       now someone who isn't a developer can apply changes to what should be done when
+       that message is used. You can configure the action to modify steps as your business
+       processes change. Any custom code that uses that message doesn't need to be changed
+       as long as the process arguments don't change.
+       Workflow processes and plug-ins continue to provide similar capabilities for defining
+       automation. Workflow processes still provide the capability for a nondeveloper to apply
+       changes. But the difference is in how the business processes are composed and how a
+       developer can write their code. A custom process action is a message that operates on
+       the same level as any of the messages provided by the platform. Developers can register
+       plug-ins for actions.
+        ７ Note
+        Custom API is a newer way to define custom messages with many advantages for
+        developers. If you do not intend to use the no-code capabilities that custom
+        process actions provide to configure business logic, custom API provides better
+        capabilities for developers to create their own messages. More information:
+           Compare Custom Process Action and custom API
+           Create and use custom APIs
+       Global messages
+       Unlike Microsoft Dataverse workflows or plug-ins, a custom process action doesn’t have
+       to be associated with a specific table. You can define global custom process actions that
+       can be called on their own.
+       Next steps
+       Create a custom process action
+       Create a custom process action
+       Article • 02/15/2022
+       Use custom process actions when you want to automate a series of commands in the
+       system. Custom process actions expand the vocabulary available for developers to
+       express business processes. An custom process action uses core verbs provided by the
+       system, such as Create, Update, Delete, and Assign, to create more expressive verbs like
+       Approve, Escalate, Route, or Schedule. If the definition of a business process changes,
+       someone who isn’t a developer can edit the custom process action so the code doesn’t
+       need to be changed.
+        ７ Note
+        If you intend to write a plug-in to implement your logic for a custom process action
+        instead of using the workflow designer, you should use custom API instead. More
+        information: Compare Custom Process Action and custom API
+       Create a custom process action
+        ） Important
+        If you’re creating an custom process action to include as part of a solution that will
+        be distributed, create it in the context of the solution. Go to Settings > Solutions
+        and locate the unmanaged solution that this action will be part of. Then, in the
+        menu bar, select New > Process. This ensures that the customization prefix
+        associated with the name of the action will be consistent with other components in
+        the solution. After you create the action, you can’t change the prefix.
+       Like workflow processes, custom process actions have the following properties in the
+       Create Process dialog box:
+          Process name
+          After you enter a name for the process, a unique name will be created for it by
+          removing any spaces or special characters from the process name.
+          Category
+          This property establishes that this is an action process. You can’t change this after
+          you save the process.
+          Table
+          With actions processes, you can select a table to provide context for the workflow
+          just like other types of processes, but you also have the option to choose None
+          (global). Use this if your action doesn’t require the context of a specific table. You
+          can’t change this after you save the process.
+          Type
+          Use this property to choose whether to build a new custom process action from
+          scratch or to start from an existing template.
+       Unlike workflow processes, you don’t need to set the following options:
+          Start When: Actions start when code calls the message generated for them.
+          Scope: Actions always run in the context of the calling user.
+          Run in the background: Actions are always real-time workflows.
+       Custom process actions also have something that workflow processes don’t—input and
+       output arguments.
+        ７ Note
+        You can enable a custom process action from a workflow without writing code.
+        More information: Invoke custom process actions from a workflow
+       Edit a custom process action
+       You must deactivate custom process actions before you can edit them.
+       You can edit an custom process action that was created as part of an unmanaged
+       solution or included in a solution installed in your organization. If the solution is a
+       managed solution, you might not be able to edit it. The solution publisher has the
+       option to edit the managed properties so that the action installed with a managed
+       solution can’t be edited.
+       When an action is saved, a unique name is generated based on the process name. This
+       unique name has the customization prefix added from the solution publisher. This is the
+       name of the message that a developer will use in their code.
+       When editing an action, you have the following options:
+        Process name
+        After the process is created and the unique name is generated from the process
+        name, you can edit the process name. You might want to apply a naming
+        convention to make it easier to locate specific processes.
+        Unique name
+        When an action is saved, a unique name is generated based on the process name.
+        This unique name has the customization prefix from the solution publisher added.
+        This is the name of the message that a developer will use in their code. Don’t
+        change this unique name if the process has been activated and code is in place
+        expecting to call the action using this name.
+         ） Important
+         After the action is activated and code is written to use a unique name, the
+         unique name must not be changed without also changing the code that
+         references it.
+        Enable rollback
+        Generally, processes that support transactions will “undo” (or roll back) the entire
+        operation if any part of them fails. There are some exceptions to this. Some actions
+        developers might do in code initiated by the custom process action might not
+        support transactions. For example, if the code perform actions in other systems
+        that are beyond the scope of the transaction. Those can’t be rolled back by the
+        action running in an app. Some messages in the platform don’t support
+        transactions. But everything you can do just with the user interface of the action
+        will support transactions. All the actions that are part of a real-time workflow are
+        considered in transaction, but with actions you have the option to opt out of this.
+        You should consult with the developer who will use this message to determine
+        whether it must be in transaction or not. Generally, an action should be in
+        transaction if the actions performed by the business process don’t make sense
+        unless all of them are completed successfully. The classic example is transferring
+        funds between two bank accounts. If you withdraw funds from one account you
+        must deposit them in the other. If either fails, both must fail.
+         ７ Note
+          You can’t enable rollback if a custom process action is invoked directly from
+          within a workflow. You can enable rollback if an action is triggered by a Power
+          Apps web services message.
+         Activate as
+         Like all processes, you can activate the process as a template and use it as an
+         advanced starting point for processes that follow a similar pattern.
+         Define process arguments
+         In this area, you’ll specify any data that the action expects to start and what data
+         will be passed out of the action. More information: Define process arguments
+         Add stages and steps
+         Like other processes, you specify what actions to perform and when to perform
+         them. More information: Add stages and steps
+       Define process arguments
+       When developers use messages, they might begin with some data that they can pass
+       into the message. For example, to create a new case row, there might be the case title
+       value that is passed in as the input argument.
+       When the message is finished, the developer might need to pass some data that was
+       changed or generated by the message to another operation in their code. This data is
+       the output argument.
+       Both input and output arguments must have a name, a type, and some information
+       about whether the argument is always required. You can also provide a description.
+       The name of the message and the information about all the process arguments
+       represent the signature for the message. After an custom process action is activated and
+       is being used in code, the signature must not change. If this signature changes, any
+       code that uses the message will fail. The only exception to this may be changing one of
+       the parameters so that it is not always required.
+       You can change the order of the arguments by sorting them or moving them up or
+       down because the arguments are identified by name, not by the order. Also, changing
+       the description won’t break code using the message.
+       Action process argument types
+               The following table describes the action process argument types.
+                                                                                                   ﾉ
+                                                                                                       Expand table
+                Type               Description
+                Boolean            A true or false value.
+                DateTime           A value that stores date and time information.
+                Decimal            A number value with decimal precision. Used when precision is extremely
+                                   important.
+                Table              A row for the specified table. When you select table, the drop-down list is
+                                   enabled and allows you to select the table type.
+                entityCollection   A collection of table rows.
+                entityReference    An object that contains the name, ID, and type of a table row that uniquely
+                                   identifies it. When you select entityReference, the drop-down list is enabled and
+                                   allows you to select the table type.
+                Float              A number value with decimal precision. Used when data comes from a
+                                   measurement that isn’t absolutely precise.
+                Integer            A whole number.
+                Money              A value that stores data about an amount of money.
+                Picklist           A value that represents an option for an OptionSet attribute.
+                String             A text value.
+                  ７ Note
+                  entityCollection argument values can’t be set in the user interface for conditions or
+                  actions. These are provided for use by developers in custom code. More
+                  information: Create your own messages
+               Add stages and steps
+               Custom process actions are a type of process very similar to real-time workflows. All the
+               steps that can be used in real-time workflows can be used in actions. For information
+               about the steps that can be used for both real-time workflows and actions, see
+               Workflow stages and steps.
+       In addition to the steps that can be used for real-time workflows, actions also have the
+       Assign Value step. In actions, these can be used only to set output arguments. You can
+       use the form assistant to set output arguments to specific values or, more likely, to
+       values from the row that the action is running against, rows related to that row with a
+       many-to-one relationship, rows created in an earlier step, or values that are part of the
+       process itself.
+       Managed properties
+       Custom process actions have two relevant managed properties
+       Is Customizable
+       The Is Customizable managed property controls whether on not someone who installs a
+       managed solution containing the custom process action can edit or delete it. If wish for
+       the custom process action to be edited or deleted when included in a managed
+       solution, you should set this property to true.
+       Is Custom Processing Step Allowed for Other Publishers
+       The Is Custom Processing Step Allowed for Other Publishers managed property
+       controls whether third party plug-in developers can register plug-in steps on the
+       message created by the custom process action. When this is true, plug-ins registered by
+       anyone on this message will run and can modify the behavior of the custom process
+       action. When false, only plug-ins steps registered within a solution from the same
+       solution publisher will run.
+       Next steps
+       Invoke custom process actions from a workflow
+       Configure custom process actions from
+       a workflow
+       Article • 02/15/2022
+       You can enable a custom process action from a real-time workflow without writing code.
+       More information: Invoke custom actions from a workflow
+       You also can create a custom process action so that a developer can use it in code, or
+       you might need to edit an action that was previously defined. Like real-time workflow
+       processes, consider the following:
+          What should the action do?
+          Under what conditions should the action be performed?
+       Unlike real-time workflow processes, you don’t need to set the following options:
+          Start When: Custom process actions start when code calls the message generated
+          for them.
+          Scope: Custom process actions always run in the context of the calling user.
+          Run in the background: Custom process actions are always real-time workflows.
+       Custom process actions also have something that real-time workflow processes don’t—
+       input and output arguments. More information: Define process arguments
+       Create a custom process action
+        ） Important
+        If you’re creating an action to include as part of a solution that will be distributed,
+        create it in the context of the solution. Go to Settings > Solutions and locate the
+        unmanaged solution that this action will be part of. Then, in the menu bar, select
+        New > Process. This ensures that the customization prefix associated with the
+        name of the action will be consistent with other components in the solution. After
+        you create the action, you can’t change the prefix.
+        ７ Note
+         If you intend to write a plug-in to implement your logic for a custom process action
+         instead of using the workflow designer, you should use custom API instead. More
+         information: Compare Custom Process Action and custom API
+       Like real-time workflow processes, actions have the following properties in the Create
+       Process dialog box:
+          Process name
+          After you enter a name for the process, a unique name will be created for it by
+          removing any spaces or special characters from the process name.
+          Category
+          This property establishes that this is an action process. You can’t change this after
+          you save the process.
+          Entity
+          With action processes, you can select a table to provide context for the real-time
+          workflow just like other types of processes, but you also have the option to choose
+          None (global). Use this if your action doesn’t require the context of a specific
+          table. You can’t change this after you save the process.
+          Type
+          Use this property to choose whether to build a new custom process action from
+          scratch or to start from an existing template.
+       Edit an action
+       You must deactivate processes before you can edit them.
+       You can edit a custom process action that was created as part of an unmanaged solution
+       or included in a solution installed in your organization. If the solution is a managed
+       solution, you might not be able to edit it. The solution publisher has the option to edit
+       the managed properties so that the action installed with a managed solution can’t be
+       edited.
+       When an action is saved, a unique name is generated based on the process name. This
+       unique name has the customization prefix added from the solution publisher. This is the
+       name of the message that a developer will use in their code.
+       When editing an action, you have the following options:
+        Process Name
+        After the process is created and the unique name is generated from the process
+        name, you can edit the process name. You might want to apply a naming
+        convention to make it easier to locate specific processes.
+        Unique Name
+        When a custom process action is saved, a unique name is generated based on the
+        process name. This unique name has the customization prefix from the solution
+        publisher added. This is the name of the message that a developer will use in their
+        code. Don’t change this unique name if the process has been activated and code is
+        in place expecting to call the action using this name.
+         ） Important
+         After the action is activated and code is written to use a unique name, the
+         unique name must not be changed without also changing the code that
+         references it.
+        Enable rollback
+        Generally, processes that support transactions will “undo” (or roll back) the entire
+        operation if any part of them fails. There are exceptions to this. Actions executed in
+        code by a developer initiated by the custom process action might not support
+        transactions. An example would be when the code perform actions in other
+        systems that are beyond the scope of the transaction. Those can’t be rolled back
+        by the action running in an app. Some messages in the platform don’t support
+        transactions. But everything you can do just with the user interface of the action
+        will support transactions. All the actions that are part of a real-time workflow are
+        considered in transaction, but with actions you have the option to opt out of this.
+        You should consult with the developer who will use this message to determine
+        whether it must be in transaction or not. Generally, an action should be in
+        transaction if the actions performed by the business process don’t make sense
+        unless all of them are completed successfully. The classic example is transferring
+        funds between two bank accounts. If you withdraw funds from one account you
+        must deposit them in the other. If either fails, both must fail.
+         ７ Note
+           You can’t enable rollback if a custom process action is invoked directly
+           from within a workflow. You can enable rollback if an custom process
+           action is triggered by a Power Apps web services message.
+           If the action defined does not change data, but only retrieves data, there
+           are certain situations where performance can be improved by disabling
+           Enable rollback.
+        Activate As
+        Like all processes, you can activate the process as a template and use it as an
+        advanced starting point for processes that follow a similar pattern.
+        Define Process Arguments
+        In this area, you’ll specify any data that the action expects to start and what data
+        will be passed out of the action. More information: Define process arguments
+        Add Stages, Conditions and Actions
+        Like other processes, you specify what actions to perform and when to perform
+        them. More information: Add stages, conditions and actions
+      Define process arguments
+      When a developer uses a message, they might begin with some data that they can pass
+      into the message. For example, to create a new case row, there might be the case title
+      value that is passed in as the input argument.
+      When the message is finished, the developer might need to pass some data that was
+      changed or generated by the message to another operation in their code. This data is
+      the output argument.
+      Both input and output arguments must have a name, a type, and some information
+      about whether the argument is always required. You can also provide a description.
+      The name of the message and the information about all the process arguments
+      represent the signature for the message. After an action is activated and is being used in
+      code, the signature must not change. If this signature changes, any code that uses the
+      message will fail. The only exception to this might be changing one of the parameters so
+      that it is not always required.
+      You can change the order of the arguments by sorting them or moving them up or
+      down because the arguments are identified by name, not by the order. Also, changing
+      the description won’t break code using the message.
+               Action process argument types
+               The following table describes the action process argument types.
+                                                                                                   ﾉ Expand table
+                Type               Description
+                Boolean            A true or false value.
+                DateTime           A value that stores date and time information.
+                Decimal            A number value with decimal precision. Used when precision is extremely
+                                   important.
+                Table              A row for the specified table. When you select Table, the drop-down list is
+                                   enabled, allowing you to select the table type.
+                entityCollection   A collection of table rows.
+                entityReference    An object that contains the name, ID, and type of a table row that uniquely
+                                   identifies it. When you select tableReference, the drop-down list is enabled and
+                                   allows you to select the table type.
+                Float              A number value with decimal precision. Used when data comes from a
+                                   measurement that isn’t absolutely precise.
+                Integer            A whole number.
+                Money              A value that stores data about an amount of money.
+                Picklist           A value that represents an option for an OptionSet attribute.
+                String             A text value.
+                  ７ Note
+                  entityCollection argument values can’t be set in the user interface for conditions or
+                  actions. These are provided for use by developers in custom code. More
+                  information: Create your own messages
+               Add stages and steps
+               Actions are a type of process very similar to real-time workflows. All the steps that can
+               be used in real-time workflows can be used in actions. For information about the steps
+               that can be used for both real-time workflows and actions, go to Workflow stages and
+               steps.
+       In addition to the steps that can be used for real-time workflows, actions also have the
+       Assign Value step. In actions, these can be used only to set output arguments. You can
+       use the form assistant to set output arguments to specific values or, more likely, to
+       values from the row that the action is running against, rows related to that row with a
+       many-to-one relationship, rows created in an earlier step, or values that are part of the
+       process itself.
+       Managed properties
+       Custom process actions have two relevant managed properties
+       Is Customizable
+       The Is Customizable managed property controls whether on not someone who installs a
+       managed solution containing the custom process action can edit or delete it. If wish for
+       the custom process action to be edited or deleted when included in a managed
+       solution, you should set this property to true.
+       Is Custom Processing Step Allowed for Other Publishers
+       The Is Custom Processing Step Allowed for Other Publishers managed property
+       controls whether third party plug-in developers can register plug-in steps on the
+       message created by the custom process action. When this is true, plug-ins registered by
+       anyone on this message will run and can modify the behavior of the custom process
+       action. When false, only plug-ins steps registered within a solution from the same
+       solution publisher will run.
+       Next steps
+       Use actions
+       Invoke custom actions from a workflow
+       Monitoring real-time workflows and actions
+       Invoke custom process actions from a
+       workflow
+       Article • 02/15/2022
+       Workflows have numerous capabilities supporting business scenarios. Calling basic data
+       operation actions for a row, such as create, update, and delete, from within a workflow
+       solves quite a few business scenarios. However, if you couple the capabilities of the
+       workflows with the power of the custom processs actions invoked directly from within a
+       workflow, you add a whole new range of business scenarios to your application without
+       needing to write code.
+       Let’s look at the scenario in which a custom process action is invoked from a workflow.
+       We’ll invoke a custom process action to request the manager’s approval when a
+       discount for a particular opportunity exceeds 20 percent.
+       Example: Create a custom process action using
+       the opportunity table
+         1. In solution explorer, select Processes.
+         2. On the Nav bar, choose New. Give the process a name and choose the Action
+          category.
+       To request an approval for the discount, we’re using a custom action called Approval
+       Process. We added an input parameter, SpecialNotes, and a Send email step to create a
+       new message and send a request for the manager’s approval, as shown here.
+      To configure the email message, choose Set Properties. When the form opens, use the
+      Form Assistant to add special notes and other information to the email, as highlighted
+      on the screenshot. To add the special notes, place the cursor where you want the notes
+      to appear in the message, and then, in the Form Assistant, under Look for, choose
+      Arguments in the first drop-down list and choose SpecialNotes in the second drop-
+      down list, and then choose OK.
+      Before you can invoke the custom process action from a workflow, you have to activate
+      it. After you have activated the action, you can view its properties by choosing View
+      properties.
+       Invoke a custom process action from a
+       workflow
+        1. In solution explorer, select Processes.
+        2. On the Nav bar, choose New. Give the process a name and choose the Workflow
+          category.
+       We created a workflow that invokes the Approval Process custom action whenever the
+       manager’s approval for a discount of more than 20 percent for an opportunity is
+       required.
+      You can set the custom process action’s input properties by choosing Set Properties.
+      We added a name of the account related to the opportunity in the special notes. In the
+      Form Assistant, under Look for, choose Account in the first drop-down list, choose
+      Account Name in the second drop-down list, and then choose OK. The Target property
+      is required and it is populated by the system. The {Opportunity(Opportunity)} in the
+      Target property is the same opportunity that the calling workflow is running on.
+      Alternatively, you can choose a specific opportunity for the target property by using
+      lookup.
+     Solutions in Power Apps overview
+     Solutions are used to transport apps and components from one environment to another or to
+     apply a set of customizations to existing apps. A solution can contain one or more apps as well
+     as other components such as site maps, tables, processes, web resources, choices, flows, and
+     more.
+     Solutions are the mechanism for implementing application lifecycle management (ALM) in
+     Power Apps and other Power Platform products, such as Power Automate.
+       ７ Note
+       To learn more about the solution concepts and how solutions are used for application
+       lifecycle management, go to Overview of ALM with Microsoft Power Platform in the
+       Power Platform ALM guide.
+     This section focuses on the manual tasks that app makers need to perform while working with
+     solutions in Power Apps.
+     Get started: solution concepts
+     Before you work with solutions, it's important that you get acquainted with the following
+     solution concepts:
+        Two types of solutions (managed and unmanaged)
+        Solution components
+        Lifecycle of a solution (create, update, upgrade, and patch a solution)
+        Solution publisher
+        Solution and solution component dependencies
+     To learn more, go to Solution concepts in the Power Platform ALM guide.
+     Default solutions
+     Power Apps provides you with the following default unmanaged solutions:
+        Common Data Service Default Solution. This solution is available for makers to use by
+        default for their customizations in an environment. The Common Data Service Default
+        Solution is useful when you want to evaluate or learn Power Apps. However, we
+        recommend that app makers work in their own unmanaged solutions.
+        Default Solution. This is a special solution that contains all components in the system.
+        The default solution is useful for discovering all the components and configurations in
+        your system.
+     However, we recommend that you create a solution to manage your customizations. More
+     information: Use a solution to customize in the Power Platform ALM guide.
+     Managed properties
+     You can control which of your managed solution components are customizable by using
+     managed properties. We recommend that you set managed properties so that your managed
+     components can’t be modified. This helps protect your solution from modifications that might
+     cause it to break after it's imported into another environment, such as test or production.
+     More information: Managed properties in the Power Platform
+     Work with solutions in Power Apps
+     Within Power Apps, you can view a list of solutions by selecting Solutions in the left navigation.
+     You can perform these solution tasks:
+        New solution: To locate and work with just the components you’ve customized, create a
+        solution and do all your customization there. Then, you can easily distribute your solution
+        to other environments. More information: Create a solution
+        Import solution: Import a solution into your environment. More information: Import
+        solutions
+        Open AppSource: Microsoft AppSource  is where you can go to get solutions tailored to
+        your industry that work with the products you already use.
+        Publish all customizations: Publish all active customizations in your environment.
+        Set preferred solution: Set your preferred solution where all solution components are
+        created in.
+        See history: View details about solution operations over time, such as import, export, and
+        uninstall. More information: View the history of a solution
+        Connect to Git: Source control integration allows development teams to sync solutions
+        and solution objects across one or more Dataverse environments using an Azure DevOps
+        Git repository. More information: Overview of Git integration in Power Platform
+        Switch to classic: Open the classic solution explorer.
+     When you select a solution, additional tasks become available on the command bar. These
+     tasks include:
+        Edit: Edit the solution properties, such as adding or removing solution components.
+       Delete. Delete the selected solution.
+       Create a plan. Use Plan designer to create a plan for your existing solution. Plan designer
+       generates a detailed document that describes your solution. The plan covers the business
+       problem, user requirements like user roles and stories, the data model, and technologies
+       like apps. This feature saves time when you're trying to understand a solution's content
+       and helps makers improve an existing solution. More information: Create a plan from a
+       solution
+       Export solution: Export the solution to a file that can be imported into another
+       environment. More information: Export solutions
+       Deploy. Use pipelines in Power Platform to deploy solutions to test and production
+       environments. More information: Overview of pipelines in Power Platform
+       Solution checker: Run or review results of solution checker for this solution.
+       Show dependencies: View the solution components that have a dependency on another
+       component. More information: View solution dependencies for solutions that would block
+       uninstall of this solution.
+       Set preferred solution. Use the selected solution as your preferred solution. The preferred
+       solution is where, if not already working in the context of a solution, all your solution
+       components are maintained. More information: Preferred solution
+       See history. View details about solution operations over time, such as import, export, and
+       uninstall. More information: View the history of a solution
+       Publish to Catalog: Publishes the solution to the catalog, making it available for other
+       makers in your organization to use. This is useful for sharing solutions that you want
+       others to be able to import and use in their environments. More information: Catalog in
+       Power Platform
+       Apply Upgrade: Appears when you select a solution. Apply a pending upgrade that has
+       been initiated for a managed solution.
+    From the Solutions area, open a solution to view all of its objects.
+      Browse through all the objects in a solution by scrolling through the items. If there are more
+      than 100 items in the list, you can select Load the next 100 items to see more.
+      Columns can be sorted and filtered by selecting the column header.
+      Column headers include:
+         Managed: The solution object is from a managed solution. You can inspect the object by
+         selecting the item and then select Advanced > See solution layers.
+         Customizable: The component is available to be customized.
+         Customized: This indicates that the object is an unmanaged object, or a managed object
+         with an unmanaged customization layer. You can use this column to quickly locate the
+         unmanaged changes you have for components in the solution.
+         Owner: If the solution object supports user and team ownership, the current owner is
+         displayed.
+         Status: If the solution object supports state management (on/off, enabled/disabled,
+         active/inactive), the status is displayed.
+        Tip
+       You can quickly locate all solution objects that are unmanaged or have unmanaged
+       customizations by selecting the default solution and filtering on the Customized column.
+      Search and filter in a solution
+      Search for a specific component by its name.
+    Or filter all items in the list by the component type.
+     Contextual commands
+     As you select each component, the actions available in the command bar changes depending
+     on the type of the component you have selected and if the solution is the default or a
+     managed one.
+     When you don't select any component, the command bar shows actions applied to the
+     solution itself.
+     With solutions that are unmanaged or the default one, you can use the New or Add Existing
+     command to create or add different types of components. More information: Add solution
+     components
+       ７ Note
+       You can't add components to a managed solution. When you try to, you’ll get the
+       following message:
+       "You cannot directly edit the components within a managed solution. You’ll need to
+       add it to another unmanaged solution that you’ve created to customize the component.
+       The component might not be customizable."
+     Additional privileges required
+     Some components might require certain Dataverse privileges for users to run the component
+     when the component is imported into the environment from a solution.
+      Flows
+      To use or run a flow from a canvas app that is included in a solution, you must have
+      permissions to that flow through someone sharing ownership or run permissions. When an app
+      in a solution is shared with a set of users, the flows must also be explicitly shared.
+      More information: Security roles and privileges
+      Use pipelines in Power Platform to deploy
+      solutions
+      Easily deploy solutions to test and production environments using pipelines in Power Platform.
+      Once pipelines are in place, makers can initiate in-product deployments with a few clicks.
+      Makers do so directly within their development environments. More information: Overview of
+      pipelines in Power Platform
+      Known limitations
+      The following limitations apply to the use of canvas apps, flows, and custom connectors in
+      solutions.
+         If you encounter a canvas app publishing error: the app has connections to flows that
+         are no longer in the environment, remove any deleted flows from the app. Then save
+         and publish the app.
+         Canvas apps shared with Everyone that go through environment backup and
+         environment restore operations aren't shared with Everyone in the restored environment.
+         Notice that the canvas app can be shared with a security group, and the app in the
+         restored environment is shared with that security group.
+      To learn more about customizing the individual components in a solution, go to the following
+      articles:
+         For table, table relationships, column and message customizations, go to Metadata.
+         For table forms, go to Forms.
+         For processes, go to Processes.
+         For business rules, go to Business Rules.
+      Troubleshooting solutions
+      For known issues and information about how to troubleshoot working with solutions, go to
+      Manage apps and solutions in the Power Apps Troubleshooting documentation.
+      Next step
+      Create a solution
+      Last updated on 01/09/2026
+       Solution view
+       Article • 11/06/2024
+       The modern solution view makes it easier for you to work with solution objects and
+       subcomponents in your solutions.
+       Open solution view
+       To open the solution view, sign in to Power Apps (make.powerapps.com) on the left
+       navigation pane, select Solutions, and then open the solution you want. If the item isn’t
+       in the side panel pane, select …More and then select the item you want.
+       The solution objects and available actions are displayed.
+        1. Panes - The left navigation pane consists of the following areas:
+            Overview. Provides details about the solution, such as display name, name,
+            created on date, version, managed or unmanaged, publisher, description, and
+            whether the solution is a patch. Also, solution health information and solution
+            actions available on the command bar such as export, clone, apply upgrade,
+            and translations.
+            Objects. Presents a tree view of all objects within the solution. Select an
+            object from the objects list (4) to view or edit it.
+            History. Presents the solution operations completed on the solution. An
+            operation can be a solution import, export, or uninstall. The solution history
+            displays information such as solution version, solution publisher, type of
+            operation, operation start and end time, and operation result status.
+            Pipelines. Deploy solutions using pipelines in Power Platform. More
+            information: Set up pipelines in Power Platform
+            Source control (not shown in image). Connect to Git to source your Power
+            Platform solution objects in an Azure DevOps Git repo. More information:
+            Overview of Dataverse Git integration
+        2. Tree view. From the Object pane, the tree view displays a list that you can browse
+         to find an object to open it or one of the object’s subcomponents. Search for
+         objects and subcomponents that are in the solution.
+        3. Command bar. Contextual command bar to perform actions on the solution,
+         objects, or subcomponents.
+        4. Objects. Displays information and solution components that can be viewed and/or
+         opened for editing of the selected object from the Objects pane. Add existing
+           objects and subcomponents or create new ones for unmanaged solutions. More
+           information: Objects list
+          5. Search. Use to filter the list of subcomponents for the object that's currently
+           selected. Filter on any subcomponent property. For example, filter on only Lookup
+           data types or whether a column is Required by entering those strings in the Search
+           box.
+                                                         
+        Objects list
+        The Objects list in solution view has the following columns:
+           Display name. The friendly name of the solution object.
+           Name. The unique or logical name of the solution object that includes the solution
+           publisher prefix.
+           Type. Solution object type, such as a table, web resource, model-driven app,
+           canvas app, and so on.
+           Managed. Indicates whether the solution object is managed or unmanaged.
+           Managed solutions aren't typically customizable.
+           Customized. Unmanaged solution components are customized while managed
+           solution objects typically shouldn't be. If a managed solution object is customized,
+           you can remove the customization. More information: View solution layers for a
+           component
+           Last modified. The date the solution object was last changed.
+        See also
+        View the history of a solution
+        View dependencies for a component
+        Create a solution
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+         Create a solution
+         To locate and work with just the components you customize, create a solution and do all your
+         customization there. Then, always remember to work in the context of the custom solution as
+         you add, edit, and create components. This makes it easy to export your solution so that it can
+         be backed up or imported to another environment.
+            ７ Note
+            Consider specifying a custom solution as you preferred solution. This way you can control
+            where your solution components are stored when you don't specifically create them in the
+            context of a custom solution. More information: Set the preferred solution.
+         To create a solution:
+            1. Sign in to Power Apps    and select Solutions from the left navigation. If the item isn’t in
+              the side panel pane, select …More and then select the item you want.
+            2. Select New solution and then complete the required columns for the solution.
+                                                                                       ﾉ
+                                                                                           Expand table
+                Field            Description
+                Display Name     The name shown in the list of solutions. You can change this later.
+                Name             The unique name of the solution. Must only contain letters, numbers, and
+                                 underscores. The name is generated from the allowed characters from the value
+                                 you enter in the Display Name column. You can edit this before you save the
+                                 solution, but after you save the solution, you can’t change it.
+                Publisher        You can select the default publisher or create a new publisher. We recommend
+                                 that you create a publisher for your organization to use consistently across your
+                                 environments where you'll use the solution. See Solution publisher later in this
+                                 article.
+                Version          Enter a number for the version of your solution. This is only important if you
+                                 export your solution. The version number is included in the file name when you
+                                 export the solution.
+                Set as your      Using a preferred solution is a way you can control where your solution
+                preferred        components are stored when you don't specifically create them in the context of
+                solution         a custom solution. When your preferred solution isn't set, by default, the
+                                 Common Data Services Default Solution is your preferred solution. If Common
+                                 Data Services Default Solution isn't available, the solution named Default
+                 Field            Description
+                                  Solution is used as your preferred solution. More information: Set the preferred
+                                  solution
+                 Configuration    Under More options you can, optionally select a web resource to use as a
+                 Page             configuration page. The configuration page is typically used by independent
+                                  software vendors (ISVs) who distribute solutions. When this is set, a new
+                                  Configuration node appears below the Information node to display this web
+                                  resource. Developers use the web resource, which is an HTML page, to include
+                                  instructions or controls to allow you to set configuration data or launch their
+                                  solution.
+                 Description      Under More options you can optionally add a description of the solution. This is
+                                  useful if you want to share the solution with others or if you want to remember
+                                  what the solution is for.
+             3. Select Save.
+          Add or remove solution objects
+          After you create your solution, it won’t contain any solution objects. You can create new objects
+          to add to the solution or add existing objects to your new solution.
+          Create objects in a solution
+          You can use the New command to create different types of objects. Selecting New and then
+          selecting the object you want takes you to a different create experience depending on the
+          object type that you choose. After you finish creating the object, it's added to the solution.
+          Add an existing object to a solution
+          With solutions that are unmanaged and not the system default solution, you can use the Add
+          existing command to bring in objects that aren’t already in the solution.
+            ７ Note
+            The list of existing objects are different depending on the version and solutions imported
+            in your environment.
+          Many of the customizations you want to do involve tables. Select Tables in the left pane to
+          filter and display a list of all the tables in the current solution. Once you drill into a table, you
+     can view the objects that are part of the table as shown with the account table in this
+     screenshot.
+     Remove objects from a solution
+     You can remove objects from an unmanaged solution. With the solution open, select the
+     object, and then select Remove from this solution on the command bar.
+     When the object is removed, it’s no longer part of the solution. However, the object still exists
+     in the environment and can be added to another solution. Once the object is removed from all
+     solutions in the environment, it can be deleted.
+      ） Important
+      Once the object is deleted it can't be recovered and all associated data, such as table
+      records when you delete a custom table are lost. If you want to keep the object, but not
+      have it in the solution, remove it from the solution without deleting it.
+     To delete an object, select it, and then select Delete from this environment.
+     Publish changes
+     When you make unmanaged changes in an environment, some objects, such as tables, forms,
+     model-driven apps, site maps, and views are saved in an unpublished state. The publish action
+     promotes these changes to an active state and makes them available to end users and for
+     solution export.
+         Publish your customizations
+            1. Select Solutions from the left navigation. If the item isn’t in the side panel pane, select …
+              More and then select the item you want.
+            2. Open the solution that you want to publish.
+            3. Select Publish all customizations on the command bar.
+           ） Important
+           Preparing customizations might take some time. If you see a message that the browser
+           page is unresponsive, wait for the page to become responsive, and don't close it.
+         Solution publisher
+         Every app you create or customization you make is part of a solution. Every solution has a
+         publisher. You specify the publisher when you create a solution.
+         The solution publisher indicates who developed the app. For this reason, you should create a
+         solution publisher that is meaningful. You can view the solution publisher for a solution by
+         selecting the solution, and then select ... > Settings on the command bar from the Solutions
+         area in Power Apps. For more information about the solution publisher, go to Solution
+         publisher in the Power Platform ALM guide.
+           ７ Note
+           The Common Data Services Default Solution is associated with the Microsoft Dataverse
+           Default Publisher. The default customization prefix is randomly assigned for this
+           publisher, for example it could be cr8a3. This means that the name of every new item of
+           metadata created for your organization in this solution has this prepended to the names
+           used to uniquely identify the items.
+         Create a solution publisher
+            1. In Power Apps  , select Solutions. If the item isn’t in the side panel pane, select …More
+              and then select the item you want.
+            2. On the command bar, select New solution, in the right pane select New publisher under
+              Publisher.
+            3. In the New Publisher form, enter the required and optional information:
+                   Display Name. Enter the display name for the publisher.
+                   Name. Enter the unique name for the publisher.
+                   Description. Optionally, you can add a description for the publisher.
+                   Prefix. Enter the publisher prefix you want.
+                   Choice value prefix. This column generates a number based on the publisher prefix.
+                   This number is used when you add options to choices and provides an indicator of
+                   which solution was used to add the option.
+            4. Select Save.
+           ７ Note
+           Don't use _upgrade as part of the solution name. _upgrade is an internal reserved word
+           for the solution upgrade process.
+         Change a solution publisher
+         You can change a solution publisher for an unmanaged solution by following these steps:
+            1. In Power Apps  , select Solutions, select the solution you want, and then select ... >
+              Settings on the command bar. If the item isn’t in the side panel pane, select …More and
+              then select the item you want.
+            2. In the Solution settings pane, select a different publisher from the Publisher drop down
+              list or select New publisher to create a new one. More information: Create a solution
+              publisher.
+            3. Select Update.
+         Use segmented tables in a solution
+         Use table segmentation so that you only include table objects that are updated when you
+         distribute solution updates. More information: Use segmented solutions in the Power Platform
+         ALM guide
+         To create a solution with proper table segmentation, start with creating an unmanaged solution
+         and add only the objects that you've updated.
+         For example, imagine that you've created a new custom table that doesn't exist in any other
+         environment named Custom table and also added a new column named Top Ten for the
+         account table. To create a solution with table segmentation, follow these steps.
+           1. Go to Power Apps    and then select Solutions. If the item isn’t in the side panel pane,
+              select …More and then select the item you want.
+           2. Select New solution and create a solution. Enter information in the required columns.
+              Select Create.
+           3. Open the solution you created. On the command bar, select Add existing, and then select
+              Table.
+           4. In the Add existing tables pane, select one or more tables you want to add to the
+              solution. For example, select Account and Custom table. Select Next.
+           5. In the Select tables pane, you can choose from the assets to include:
+                   Include all objects. This option includes all components and metadata associated
+                   with the table. It can include other tables or table components such as business
+                   process flows, reports, connections, and queues. For example, if the custom table
+                   has never been imported into the target environment, select this option. In this
+                   example, custom table has never been imported into the target environment, so
+                   select this option for Custom table.
+                   Include table metadata. This option includes only the metadata associated with the
+                   table. Metadata includes the table attributes, such as auditing, duplicate detection,
+                   or change tracking.
+                   Edit objects. This option lets you individually select each component that’s
+                   associated with the table, such as columns, relationships, business rules, views,
+                   forms, and charts. Notice that the account table is included in Dataverse and by
+                   design also exists in the target environment. Therefore, in our example only the Top
+                   Ten custom column is new to the account table so you select it after selecting Edit
+                   objects (in the next step).
+                   Clear all objects. If you selected objects using the Edit objects option, you can clear
+                   all the selected objects and start over.
+                                                                                            
+              More information: Why table segmentation in a solution is important
+           6. If you selected Edit objects, an object list pane opens. Here you can select the specific
+              objects you want to include in the solution. In our example you selected the Account
+              table earlier, so now you select the Top Ten column since that's the only new or edited
+       component for the table, and then select Add.
+                                            
+      7. Select Add to add the objects to the solution.
+    Why table segmentation in a solution is important
+    When you add an existing system table, such as account or contact, or a custom table to a
+    solution for a table that's already been imported into your downstream environments, the best
+    practice is to only add the table objects that were updated in your solution. With solution
+    segmentation, you export solution updates with selected table assets, such as table columns,
+    forms, and views, rather than entire tables with all the assets. This avoids unnecessary layers
+    that hinder other solutions from being effective and unnecessary dependencies on other
+    solutions. The system automatically selects Include all objects if the table is unmanaged, and
+    Include table metadata if there's an unmanaged layer on the table. The system also preselects
+    the table assets that are unmanaged or have unmanaged customizations automatically. You
+    can select the Edit objects link to review that selection before you select Add to complete the
+    process.
+     ） Important
+     Don't segment tables that don't exist in the target environment. Notice that if a table has
+     never been imported or doesn't already exist in the target environment you must select
+     Include all objects when you add the table to the solution, such as when adding a new
+     custom table that you recently created. Otherwise you receive a missing dependency error
+     message when you try to import the solution.
+    Create a solution with table segmentation using solution
+    explorer
+    The following illustrations provide an example of creating a segmented solution by choosing
+    table assets from the Account, Case, and Contact tables.
+     ７ Note
+     The case table is included with some Dynamics 365 applications, such as Dynamics 365
+     Customer Service.
+    Start by opening an unmanaged solution you created. Choose the table component.
+    Then, select the solution components.
+    Follow the wizard. In Step 1, starting in alphabetical order, select the assets for the first table,
+    the Account table, as shown here.
+    Open the Fields tab and select the Account Number column.
+    In Step 2, for the Case table, add all assets.
+     In Step 3, add the Anniversary column for the Contact table.
+     As a result, the segmented solution that’s created contains three tables, Account, Case, and
+     Contact. Each table contains only the assets that were chosen.
+     Delete a solution
+     Because there are two different types of solutions, managed and unmanaged, the behavior for
+     deleting each type of solution is different.
+     The solution you want to delete might have components that have dependencies on other
+     components. These dependencies must be removed before you can delete the component.
+     More information: View dependencies for a component in Power Apps
+         Delete a managed solution
+         Deleting a managed solution removes (uninstalls) all the components within the solution.
+         Additionally, all associated data are also deleted.
+            Ｕ Caution
+            Because all components within the solution and all associated data are deleted, use
+            caution when you delete a managed solution.
+         Delete an unmanaged solution
+         Deleting an unmanaged solution deletes the solution container but doesn't delete any of the
+         unmanaged components within. Any data associated also remains. Each unmanaged
+         component must be individually deleted to remove all components within the unmanaged
+         solution.
+         Delete a managed or unmanaged solution
+            Ｕ Caution
+            Before you delete a solution, make sure you understand the consequences. Once a
+            solution is deleted, it can't be restored. More information: Delete a managed solution and
+            Delete an unmanaged solution
+            1. Sign in to Power Apps   .
+            2. Select Solutions on the left navigation pane, and then select (don't open) the solution
+              you want to delete in the Solutions list.
+            3. Select Delete on the command bar.
+         Limitations
+              Solution size is limited to 95 MB.
+              Number of solutions is limited by Microsoft Dataverse capacity.
+              Number of objects in a solution is limited by Dataverse capacity.
+         Related articles
+              Use solutions
+         For developers: Create, export, or import an unmanaged solution
+         Power Platform ALM guide
+      Last updated on 01/09/2026
+            Export solutions
+            Article • 03/13/2023
+            You can manually export solutions using the steps in this article. We recommend that
+            you create an unmanaged solution to use for exporting your customizations, and then
+            export your customizations periodically so that you have a backup in case anything
+            happens. You can't export managed solutions or the Default Solution.
+               ７ Note
+               To implement healthy application lifecycle management (ALM) in your organization,
+               consider using a source control system to store and collaborate on your solutions,
+               and automate the solution export process. More information: ALM basics in the
+               Power Platform ALM guide.
+            Export from Power Apps
+               1. Sign into Power Apps    and select Solutions from the left navigation. If the item
+                  isn’t in the left navigation pane, select …More and then select the item you want.
+               2. In the list of solutions, select the unmanaged solution you want to export, and then
+                  select Export. Notice that you can't export managed solutions.
+               3. The Before you export right pane appears. Choose from the following options,
+                  and then select Next:
+                       Publish all changes. Notice that, when you export an unmanaged solution,
+                       only published components are exported. We recommend that you select
+                       Publish all changes to make sure all components are included in the
+                       exported solution.
+               4. The Export this solution right pane appears. Enter or select from the following
+                  options, and then select Export:
+                       Version number: Power Apps automatically increments your solution version
+                       while displaying the current version. You can accept the default version or
+                       enter your own.
+                       Export as: Select the package type, either Managed or Unmanaged. More
+                       information: Managed and unmanaged solutions
+                       Run solution checker on export. Run the solution checker against the
+                       solution to detect performance and stability issues.
+            The export can take several minutes to complete. Once finished, the export .zip file is
+            available in the download folder specified by your web browser.
+            Export using the classic experience
+               1. Sign into Power Apps    and select Solutions from the left navigation. If the item
+                  isn’t in the left navigation pane, select …More and then select the item you want.
+               2. Select Switch to classic.
+               3. In the list select the solution you want to export and then select Export.
+               4. In the Publish Customizations step you will be reminded that only published
+                 customizations are exported and you will have the option to Publish All
+                 Customizations before you select Next.
+               5. If your solution contains any missing required components you will see the
+                 Missing Required Components step. You can disregard this warning only if you
+                 intend to import this as an unmanaged solution back into the original
+                 environment. Otherwise, follow the instructions in the dialog to cancel the export
+                 and add the required components.
+               6. In the Export System Settings (Advanced) step you can choose certain system
+                 settings to include in your solution. If your solution depends on any of the groups
+                 of system settings, select them and select Next.
+                 See Settings options for solution export below for details about the settings that
+                 will be included with each option.
+               7. In the Package Type step, you must choose whether to export the solution as an
+                 Unmanaged or Managed solution.
+               8. The next step allows you to choose a target solution for a specific version. This
+                 option is typically used by ISVs who may want to export a solution that is
+                 compliant with a previous version. Unless you intend to import this solution into an
+                 environment that is not upgraded to the same version as the environment version
+                 you are using, accept the default.
+               9. Select Export to download the solution file.
+            The exact behavior for downloading files varies between web browsers.
+            Settings options for solution export
+            If you export the solution from Power Apps, please disregard this section. The following
+            table shows the options available when you export a solution from the classic
+            experience.
+             Group             Setting                                Description
+             Auto-numbering    Campaign Prefix                        Prefix used for campaign
+                                                                      numbering.
+             Case Prefix       Prefix to use for all cases throughout the
+                               app.
+                Group                 Setting                                         Description
+                Contract Prefix       Prefix to use for all contracts throughout
+                                      the app.
+                Invoice Prefix        Prefix to use for all invoice numbers
+                                      throughout the app.
+                Article Prefix        Prefix to use for all articles in the app.
+                Order Prefix          Prefix to use for all orders throughout the
+                                      app.
+                Unique String         Number of characters appended to invoice,
+                Length                quote, and order numbers.
+                Calendar              Calendar Type                                   Calendar type for the system.
+                                                                                      Set to Gregorian US by default
+                Date Format Code      Information about how the date is
+                                      displayed throughout Microsoft Dataverse
+                Date Separator        Character used to separate the month, the
+                                      day, and the year in dates throughout the
+                                      app.
+                Max Appointment       Maximum number of days an appointment
+                Duration              can last.
+                Show Week             Information that specifies whether to
+                Number                display the week number in calendar
+                                      displays throughout the app.
+                Time Format Code      Information that specifies how the time is
+                                      displayed throughout the app.
+                Week Start Day        Designated first day of the week
+                Code                  throughout the app.
+                Customization         Is Application Mode Enabled                     Indicates whether loading of
+                                                                                      the app in a browser window
+                                                                                      that does not have address,
+                                                                                      tool, and menu bars is
+                                                                                      enabled.
+                Email-tracking        Allow Unresolved Address Email Send             Indicates whether users are
+                                                                                      allowed to send email to
+                                                                                      unresolved parties (parties
+                                                                                      must still have an email
+                                                                                      address).
+                Group                 Setting                                        Description
+                Ignore Internal       Indicates whether incoming email sent by
+                Email                 app users or queues should be tracked.
+                Max Tracking          Maximum tracking number before
+                Number                recycling takes place.
+                Render Secure         Flag to render the body of email in the
+                Frame For Email       webform in an IFRAME with the
+                                      security='restricted' attribute set. This is
+                                      additional security but can cause a
+                                      credentials prompt.
+                Tracking Prefix       History list of tracking token prefixes.
+                Tracking Token        Base number used to provide separate
+                Base                  tracking token identifiers to users
+                                      belonging to different deployments.
+                Tracking Token        Number of digits used to represent a
+                Digits                tracking token identifier.
+                General               Block Attachments                              Prevent upload or download
+                                                                                     of certain attachment types
+                                                                                     that are considered
+                                                                                     dangerous.
+                Currency Format       Information about how currency symbols
+                Code                  are placed throughout the app.
+                Currency Symbol       Currency Symbol
+                Full Name Display     Order in which names are to be displayed
+                Order                 throughout the app.
+                Presence Enabled      Information on whether IM presence is
+                                      enabled.
+                Negative Format       Information that specifies how negative
+                                      numbers are displayed throughout the app.
+                Number Format         Specification of how numbers are displayed
+                                      throughout the app.
+                Pricing Decimal       Number of decimal places that can be used
+                Precision             for prices.
+                Share To Previous     Information that specifies whether to share
+                Owner On Assign       to previous owner on assign.
+               Group                Setting                                       Description
+               Marketing            Allow Automatic Response Creation             Indicates whether automatic
+                                                                                  response creation is allowed
+               Allow Automatic      Indicates whether automatic unsubscribe is
+               Unsubscribe          allowed.
+               Allow Automatic      Indicates whether automatic unsubscribe
+               Unsubscribe          acknowledgement email is allowed to send.
+               Acknowledgement
+               Allow Marketing      Indicates whether marketing emails
+               Email Execution      execution is allowed.
+               Outlook              Allow Address Book Synchronization            Indicates whether background
+               Synchronization                                                    address book synchronization
+                                                                                  in Microsoft Office Outlook is
+                                                                                  allowed.
+               Allow Offline        Indicates whether background offline
+               Scheduled            synchronization in Outlook is allowed.
+               Synchronization
+               Allow Scheduled      Indicates whether scheduled
+               Synchronization      synchronizations to Outlook are allowed.
+               Email Send Polling   Normal polling frequency used for sending
+               Frequency            email in Outlook.
+               Min Address          Normal polling frequency used for address
+               Synchronization      book synchronization in Outlook.
+               Frequency
+               Min Offline          Normal polling frequency used for
+               Synchronization      background offline synchronization in
+               Frequency            Outlook.
+               Min                  Minimum allowed time between scheduled
+               Synchronization      Outlook synchronizations.
+               Frequency
+               Auto-Tag Max         Maximum number of aggressive polling
+               Cycles               cycles executed for email auto-tagging
+                                    when a new email is received.
+               Auto-Tag Interval    Normal polling frequency used for email
+                                    auto-tagging in Outlook.
+               ISV Config           Service Calendar Appearance Configuration     You can define visual styles for
+                                                                                  service calendars.
+      More information: Service Calendar Appearance Configuration
+      See also
+      Import solutions  
+      Update solutions  
+      For developers: Create, export, or import an unmanaged solution
+    Import solutions
+    You can manually import solutions using the steps in this article. You must import only those
+    solutions that you've obtained from a trusted source.
+    Solutions are packages of customizations that can be exported from one environment and
+    imported into another. Solutions can be managed or unmanaged. Managed solutions are
+    intended for production use, while unmanaged solutions are typically used during development.
+     ７ Note
+       You need the create privilege to import a component. Although the System Customizer
+       security role has create privilege on most components that you commonly import, by
+       default it doesn't have create privilege on the Plug-In Assembly table. The System
+       Administrator security role has this privilege.
+       When you import a managed solution, all component changes are brought into the
+       environment in a published state. However, when you import an unmanaged solution,
+       the changes are imported in a draft state so you must publish them to make them
+       active.
+       To implement healthy application lifecycle management (ALM) in your organization,
+       consider using a source control system to store and collaborate on your solutions, and
+       automate the solution import process. More information: ALM basics in the Power
+       Platform ALM guide.
+       The maximum size of a solution file is 95 MB.
+    When you import an unmanaged solution:
+      You add all the components of that solution into your environment and can't delete the
+      components by deleting the solution. Deleting the unmanaged solution deletes only the
+      solution container.
+      If the solution contains customized components, the existing customizations to the
+      component are overwritten after the unmanaged solution import. You can't undo this
+      action.
+    To import a solution:
+           1. Sign into Power Apps   and select Solutions from the left navigation. If the item isn’t in the
+             side panel pane, select …More and then select the item you want.
+           2. On the command bar, select Import solution.
+           3. On the Import a solution page, select from where you want to import the solution:
+                  This device. Select Browse to locate the compressed (.zip or .cab) file located on your
+                  device that contains the solution you want to import.
+                  Pipeline. Select this option to import a solution from a pipeline. To use this option, you
+                  must have the solution set up in a pipeline. More information: Overview of pipelines in
+                  Power Platform.
+           4. Select Next.
+           5. Information about the solution is displayed. By default, in the Advanced settings section, if
+             plugin steps (also known as SDK message processing steps) and flows exist in the solution,
+             they'll be imported. Clear the Enable Plugin steps and flows included in the solution
+             option if you don't want the import to attempt to activate any plugin steps that are
+             imported in an inactive state. Flows will not be deactivated when the option is unchecked.
+           6. If your solution contains connection references, you're prompted to select the connections
+             you want. If a connection doesn't already exist, create a new one. Select Next.
+           7. If your solution contains environment variables, you're prompted to enter values. You won't
+             see this screen if values are already present in your solution or the target environment.
+           8. If missing dependencies are detected in the target environment, a list of the dependencies
+             is presented. In environments where the required package version is available for import in
+             the target environment, a link to resolve the dependency is presented. Selecting the link
+             takes you to the Power Platform admin center where you can install the application update.
+             After the application update is completed, you can start the solution import again.
+           9. Select Import.
+        Your solution imports in the background and might take a few moments.
+        If you import any changes that require publishing, you must publish customizations before
+        they're available.
+        If the import isn't successful, you see a notification on the solutions page showing any errors or
+        warnings that were captured. Select Download Log File to capture details about what caused the
+      import to fail. The most common cause for an import to fail is that the solution didn't contain
+      some required components.
+      When you download the log file, you find an XML file that you can open by using Office Excel to
+      view the contents.
+        ７ Note
+        You can view the details of all solution operations, including solution import, by using the
+        solution history feature. To view these operations, select See history on the solutions page.
+      Troubleshooting solution import
+      For known issues and information about how to troubleshoot working with solutions, go to
+      Manage apps and solutions in the Power Apps Troubleshooting documentation.
+      Importing apps that use an on-premises data
+      gateway ID
+      When you import a Power Apps app that uses an on-premises data gateway ID, note the
+      following requirements:
+          The connection to the gateway must be a shared connection.
+          The connections must be removed and then added back with the correct gateway ID after
+          solution import into the target environment.
+      See also
+          Update solutions
+          Export solutions
+          Publish changes
+          For developers: Create, export, or import an unmanaged solution
+          Import a solution (Power Automate)
+      ） Note: The author created this article with assistance from AI. Learn more
+       Last updated on 05/27/2026
+     Set the preferred solution
+     By default, unless you're already in the context of an unmanaged solution when you create an
+     object, all solution objects are stored in the solution named Common Data Services Default
+     Solution. For most situations, you don't want to create your solution objects in either of the two
+     Dataverse system solutions, which are the Common Data Services Default Solution and the Default
+     Solution. This article explains why using the system solutions is discouraged and provides step-
+     by-step instructions to set and manage your preferred solution.
+     Why not create your objects in the system solutions?
+     There are a few reasons you shouldn't create your solution objects in either the Common Data
+     Services Solution and the Default Solution:
+        There's no control over the separation of solution objects between makers. All objects can
+        be viewed from the Default Solution and the Common Data Services Solution is the default
+        solution so other makers can and likely are using it.
+        The Default Solution can't be exported for import to other environments.
+        You can't change the solution publisher for the Default Solution. Additionally, since the
+        solutions already exist, you can't change the solution publisher prefix for either system
+        solutions. More information: Solution publisher
+     Using preferred solutions is a way to determine which solutions contain each maker's edits that
+     occur in Power Apps. Setting the preferred solution enables makers to view and update which
+     solution they're using. After you set your preferred solution, you can create objects in the
+     solution you specify and those objects will automatically be in that solution so that you control
+     the objects within the solution. Then, you can export your preferred solution and import the
+     solution to other Microsoft Dataverse environments.
+      ７ Note
+      When your preferred solution isn't set, by default, the Common Data Services Default
+      Solution is your preferred solution. If Common Data Services Default Solution isn't
+      available, the solution named Default Solution is used as your preferred solution. You can
+      change this to your desired solution by following the steps in this article. For more
+          information about the Common Data Services Default Solution and Default Solution, go to
+          Default solutions.
+        Prerequisites
+        We recommend that admins enable the Cloud flows and Canvas apps environment setting in
+        Power Platform. Enabling this feature ensures cloud flows are also stored in Dataverse and that
+        they're added to the maker's preferred solution. More information: Create new canvas apps and
+        cloud flows in a Dataverse solution
+        Set your preferred solution
+           1. Sign into Power Apps  , and then select Solutions from the left navigation pane. If the item
+             isn’t in the side panel pane, select …More and then select the item you want.
+           2. Select the unmanaged solution that you want to make your preferred solution. Don't have
+             one? More information: Create a solution
+           3. Select Set preferred solution on the command bar.
+        Once your preferred solution is set, notice the preferred solution indicator, which can be viewed
+        from the Solutions area or when you hover over the Environment switcher.
+        Deleting a preferred solution
+        You can delete your preferred solution or a preferred solution that other makers have also set as
+        their preferred solution.
+        ２ Warning
+        When you delete a preferred solution, you receive a warning that includes the fallback
+        default solution and the number of other makers who are using the same solution. Delete an
+        active solution only when you're sure it won't impact your work or the work of other makers.
+      Limitations
+           You can't set or view the preferred solution in the classic solution explorer.
+           Components that are created in the classic solution explorer won't go into the preferred
+           solution.
+           Preferred solution currently doesn't work with Dataverse for Teams, cards, dataflows, AI
+           Builder, chatbots, connections, gateways, custom connectors, Power Automate flows
+           (limited), and canvas apps created from image or a Figma design.
+           When a component is already part of an existing unmanaged solution, it will still be added
+           to the preferred solution.
+      See also
+      Solutions overview
+      Set the preferred solution with Power Apps (video)
+       Last updated on 05/20/2026
+     View solution deployments on the
+     deployment page
+     Article • 05/14/2025
+     From the Solutions page, makers can navigate to Deployments to view all of their solution
+     deployments, across all solutions and pipelines, in one place. If their deployment began from
+     (or was deployed to) the current environment, they're able to view its status and other details.
+                                                     
+     Get started
+     When you first access the Deployment page, you notice the Get started section. This section
+     currently offers several links to relevant documents designed to help makers gain a better
+     understanding of solutions, pipelines, and the in-product Application Lifecycle Management
+     (ALM) process.
+     Failed deployments
+     On the left of the overview, makers can view failed deployments if any. When you select each
+     deployment, a panel appears, highlighting the necessary actions to either retry or revise the
+     solution, ensuring a successful deployment.
+     Active deployments
+     On the right of the overview, makers view their ongoing deployments. When makers select
+     these deployments, they can view the in-progress details of the deployment, such as waiting
+      for a predeployment approval. The active deployments page is useful for makers who work in
+      multiple solutions that are deploying simultaneously.
+      Deployment history
+      At the bottom of the overview, makers view their deployment history. This section provides a
+      comprehensive list of all deployments, including the deployment status, the solution, the
+      pipeline, and the environment. Makers can filter this list by solution, pipeline, and environment
+      to quickly find the deployment they're looking for. This run history view is unique. First it's
+      filtered to only show the current user's deployments specifically to and from this environment,
+      and second it's upleveled to show all the current user's deployments, not just involving one
+      solution or pipeline. Selecting a deployment in this grid shows a details panel, summarizing all
+      the deployment information and displaying the deployment notes as well.
+      Retry failed deployments
+      Deployments shown as Failed in the run history view can be deployed by selecting Retry in the
+      details panel if the operation was Deploy. A confirmation message appears when you confirm
+      the retry.
+      Take action with advisor-powered
+      recommendations
+      Actionable recommendations for improving ALM health within your environment is shown in
+      the Take action section at the bottom of the Deployment page. These recommendations help
+      ensure that makers are following the best practices to enable healthy ALM within the
+      organization.
+      Why can't I see solution deployments other than
+      those that I initiated?
+      In order to view others' solution deployments, you must have the Deployment Pipeline
+      Administrator security role or equivalent privileges to view other deployments.
+      Related articles
+      Use pipelines in Power Platform to deploy solutions
+      View solution deployments on the deployment page for admins
+       Use pipelines in Power Platform to
+       deploy solutions
+       Article • 02/23/2023
+       Easily deploy solutions to test and production environments using pipelines in Power
+       Platform. Once pipelines are in place, makers can initiate in-product deployments with a
+       few clicks. Makers do so directly within their development environments. More
+       information: Overview of pipelines in Power Platform
+       See also
+       Solutions overview
+        Upgrade or update a solution
+        There are times when you need to update an existing managed solution. To update the solution,
+        follow these steps:
+           1. Open the unmanaged solution in your development environment and create new or add
+             and remove the existing components that you want.
+           2. Increment the version number when you export the solution as a managed solution. More
+             information: Understanding version numbers for updates
+           3. Apply the upgrade or update in the target environment.
+        Apply the upgrade or update in the target environment
+        The procedure to import the updated solution is similar to installing a new managed solution,
+        except you'll get some different options. If you're updating a solution you got from someone
+        else, you should get guidance from the solution publisher about which options you should
+        choose.
+           1. Sign into Power Apps  , select the target environment you want, and then select Solutions
+             from the left navigation. If the item isn’t in the side panel pane, select …More and then
+             select the item you want.
+     2. On the command bar, select Import.
+     3. On the Select Solution Package page, select Browse to locate the compressed (.zip or .cab)
+      file that contains the solution you want to update.
+     4. Select Next.
+     5. This page displays a yellow bar indicating This solution package contains an update for a
+      solution that is already installed. To upgrade the solution, select Next. To view additional
+      options, expand Advanced settings, and then select from the following solution action
+      options:
+         Upgrade This is the default option and upgrades your solution to the latest version
+         and rolls up all previous patches in one step. Any components associated to the
+         previous solution version that aren't in the newer solution version will be deleted. This
+         option ensures that your resulting configuration state is consistent with the importing
+         solution including removal of components that are no longer part of the solution.
+         Stage for Upgrade This option upgrades your solution to the higher version, but
+         defers the deletion of the previous version and any related patches until you apply a
+         solution upgrade later. Select this option only if you want to have both the old and
+         new solutions installed in the system concurrently so that you can do some data
+         migration before you complete the solution upgrade. Applying the upgrade deletes
+         the old solution and any components that aren't included in the new solution.
+         Update This option replaces your solution with this version. Components that aren't in
+         the newer solution won't be deleted and remains in the system. Be aware that the
+         source and destination environment may differ if components were deleted in the
+         source environment. This option has the best performance by typically finishing in less
+         time than the upgrade methods.
+     6. Decide whether to enable the following option for post import actions:
+         Enable plug-in steps and flows included in the solution
+         Selecting this option enables plug-ins and Power Automate flows that are included in
+         the solution.
+     7. Select Import.
+      8. You might need to wait a few moments while the solution import completes. If it's
+       successful, you can view the results and select Close.
+     Managed customizations are always imported in a published state, so there's no need to publish
+     customizations after import in this scenario.
+     Completing Solution Upgrade If you chose to stage for upgrade, or if the system had an issue
+     completing an upgrade, you'll see that you have the original solution still installed in your system
+     as well as a new solution that has the same solution name as the base solution suffixed with
+     _Upgrade. To complete the upgrade, select the base solution in the solution list and select Apply
+     Solution Upgrade. This uninstalls all previous patches and the base solution then rename the
+     _Upgrade solution to be the same name as the previous base solution. Any components that
+     were in the original solution and patches that aren't present in the _Upgrade solution will be
+     deleted as part of this process.
+      ７ Note
+      Recent changes in the platform have optimized the single step upgrade process to no longer
+      use a temporary _Upgrade solution or use an uninstall operation on the original solution.
+     Understanding version numbers for updates
+     A solution's version has the following format: major.minor.build.revision. An update must have a
+     higher major, minor, build, or revision number than the parent solution. For example, for a base
+     solution version 3.1.5.7, a small update could be a version 3.1.5.8 or a slightly more significant
+     update could have version 3.1.7.0. A substantially more significant update could be version
+     3.2.0.0.
+     Removing a managed component from the
+     target environment
+     There might be occasions when you want to remove a managed component from an
+     environment. There are two different solution actions that you can perform that will remove a
+     managed component from an environment.
+       Upgrade the solution (recommended). In the development environment where the
+       managed solution originated, update the solution so that it no longer includes the
+       component. In other words, remove the component such as a column, chart, or form from
+           the solution and then export it as managed. Then, when you import the managed solution
+           into the target environment, choose the Solution action as Upgrade. This action removes
+           the component (if there aren't any other components that depend on it in the target
+           environment).
+           Delete the managed solution. This action removes all components in the solution. In the
+           environment where the managed solution was imported, delete the managed solution that
+           includes the managed component. You can do this from the Solutions area of Power Apps.
+            ２ Warning
+            Deleting a managed solution deletes all the components in the managed solution as
+            well as any related data. Always use caution before deleting a managed solution.
+      Overwrite customizations option
+      The option to overwrite customizations is available with the classic import experience, when using
+      the Microsoft Power Platform CLI pac solution import command, or by using the
+       OverwriteUnmanagedCustomizations option with the ImportSolution or ImportSolutionAsync
+      messages. More information: ImportSolutionRequest class, ImportSolution action, or
+      ImportSolutionAsync action.
+        ） Important
+        Selecting the Overwrite Customizations (not recommended) option overwrites or removes
+        any unmanaged customizations previously performed on components included in this
+        solution. This option doesn't affect components that support merge behavior (forms,
+        sitemap, ribbon, app modules). Components that have other managed solutions on top of
+        the existing solution you're replacing aren't affected by this option.
+      See also
+      Layering within a managed solution Add solution components
+      Create solution patches
+      For developers: Cloning, patching, and upgrading
+       Last updated on 05/27/2026
+     Solution layers
+     Managed and unmanaged solutions exist at different levels within a Microsoft Power Platform
+     environment. In Microsoft Dataverse, there are two distinct layer levels:
+        Unmanaged layer. All imported unmanaged solutions and unmanaged customizations
+        exist at this layer. The unmanaged layer is a single layer.
+        Managed layers. All imported managed solutions and the system solution exist at this
+        level. When multiple managed solutions are installed, the last one installed is above the
+        managed solution installed previously. This means that the second solution installed can
+        customize the one installed before it. When two managed solutions have conflicting
+        definitions, the runtime behavior is either “Last one wins” or a merge logic is
+        implemented. If you uninstall a managed solution, the managed solution below it takes
+        effect. If you uninstall all managed solutions, the default behavior defined within the
+        system solution is applied. At the base of the managed layers level is the system layer.
+        The system layer contains the tables and components that are required for the platform
+        to function.
+     Solution merge behavior
+     When you prepare your managed solution for distribution, remember that an environment
+     might have multiple solutions installed or that other solutions might be installed in the future.
+     Construct a solution that follows best practices so that your solution doesn't interfere with
+     other solutions.
+     The processes that Dataverse uses to merge customizations emphasize maintaining the
+     functionality of the solution. While every effort is made to preserve the presentation, some
+     incompatibilities between customizations might require that the computed resolution will
+     change some presentation details in favor of maintaining the customization functionality. More
+     information: Understand how managed solutions are merged
+     View the solution layers for a component
+     The see solution layers feature allows you to view all component changes that occur due to
+     solution changes over time. Within a solution layer, you can drill down to view specific changed
+     and unchanged property details for a component. You can access solution layers from the
+     Solutions area in Power Apps (make.powerapps.com).
+     The see solution layers feature:
+        Lets you see the order in which a solution changed a component.
+        Lets you view all properties of a component within a specific solution, including the
+        changes to the component.
+        Can be used to troubleshoot dependency or solution-layering issues by displaying
+        change details for a component that was introduced by a solution change.
+       1. Sign in to Power Apps, select Solutions, open the solution you want, select a component,
+        such as the Account table, and then on the command bar select Advanced > See
+        solution layers.
+       2. The solution layer page appears. It displays each layer for the component, such as the
+        Active Accounts view for the Account table used as an example here, with the most
+        recent layer at the top, which is typically indicated as the Active layer. The active layer
+        determines the runtime behavior of the component.
+       3. To view the details for a solution layer, select it. The Properties pane is displayed. The
+        Updated tab displays only those properties that were modified as part of the specific
+        solution layer. Select the All Properties tab to view all properties, including changed and
+        unchanged properties, for the solution layer.
+                                                     
+       4. If the component includes translations that have been imported, select the Localized
+        Labels tab to display information for components that have label columns in the solution
+                  layer. The base language and any imported translation text are displayed as indicated in
+                  the languageid column. Note that if no labels exist the tab isn't displayed.
+                  Select a label to see its full layering.
+           There are other tabs available for specific component solution layers.
+                                                                                                             ﾉ Expand table
+             Tab name                              Description                                       Possible value
+             RolePrivileges                        Displays the privileges for a security role.      Added, Updated,
+                                                                                                     Removed, Unchanged
+             AttributePicklistValues               When selected for a global choice ,               Added, Updated,
+             (optionset)                           displays the possible values for a choice .       Removed, Unchanged
+             AttributePicklistValues               When selected for a choice attribute,             Added, Updated,
+             (optionset attribute)                 displays the values for the attribute.            Removed, Unchanged
+           Remove an unmanaged layer
+           Unmanaged customizations reside at the top layer for a component and subsequently define
+           the runtime behavior of the component. In most situations you don't want unmanaged
+           customizations determining the behavior of your components in your test and production
+           environments.
+     ） Important
+        By design, your dev and maker environments where you're working with unmanaged
+        components typically have unmanaged layers.
+        If the unmanaged layer you want to remove is the only layer and as such the base
+        layer for the component, you can’t remove it with the remove active customizations
+        command. To remove the layer, you have to delete the unmanaged component.
+        More information: Remove objects from a solution.
+    To remove the unmanaged layer for a component, follow these steps:
+     ２ Warning
+     Removing active unmanaged customizations can't be reversed or undone. All data
+     associated with the unmanaged customization can be lost.
+      1. Open the solution you want, select ... next to a component, such as Account, and then
+       select See solution layers.
+      2. If an unmanaged layer exists, Unmanaged layer is displayed in the Solution column for
+       the layer.
+      3. Select the layer, and then on the command bar, select Remove active customizations.
+    See also
+    Translate localizable text for model-driven apps
+    Solutions overview
+      Last updated on 01/09/2026
+        View the history of a solution
+        View details about solution operations from the Solutions area of Power Apps. An operation can
+        be a solution import, export, or uninstall. The solution history displays information such as
+        solution version, solution publisher, type of operation, operation start and end time, and
+        operation status.
+          ７ Note
+          The system automatically deletes solution history records that are older than 180 days.
+        View solution history
+           1. Sign in to Power Apps   .
+           2. Select Solutions on the left navigation pane. If the item isn’t in the side panel pane, select …
+             More and then select the item you want.
+           3. select the solution you want, and then on the command bar select See history.
+             The history is displayed.
+        Select a solution operation to display the Information page. Each solution history row is read-
+        only and includes the following in the Details area:
+             Name. The solution unique name.
+             Start time. The time in which the operation started.
+             End time: The time in which the operation ended.
+             Version. The version of the solution.
+             Publisher. The name of the publisher that is associated with the operation.
+             Operation. The operation, such as import, export, or delete.
+      Suboperation: Denotes the type of operation, such as a new solution import or an update
+      to an existing solution.
+      Result. The result of the operation, such as Success or Failure.
+     ７ Note
+       Recent changes have optimized the single step upgrade process to no longer use a
+       temporary _Upgrade solution. As a result, you no longer experience an uninstall operation
+       for single stage upgrades in the solution history.
+      View solution operation error details
+      Below the Details area is the More details area that has additional information about the solution
+      and, when a solution operation has a failure, the information includes:
+         The Error code of the error returned from the operation.
+         The Exception message, which can help diagnose the underlying cause for the operation
+         failure. Some errors, including solution dependency errors, may also include links to solution
+         layers to make it easier for you to diagnose the issue.
+         The Activity Id can be useful in cases where you need to contact Microsoft Customer
+         Support.
+      See also
+      View solution layers
+      Solutions overview
+      Last updated on 05/20/2026
+        View dependencies for a component in
+        Power Apps
+        Article • 03/22/2024
+        Solution components in Microsoft Dataverse often depend on other solution
+        components. You can’t delete any solution component that has dependencies from
+        another solution component. For example, you can't delete a model-driven app site
+        map component without first deleting the model-driven app component, or removing
+        the dependency, because the site map depends on the model-driven app.
+        You can view the dependent components from the Solutions area of Power Apps.
+        Show dependencies
+        The show dependencies page for a component helps identify the dependencies so you
+        can take appropriate action.
+        This section describes the actions you can take while viewing the dependencies in the
+        Show dependencies menu under Advanced.
+        Dependencies page contents
+        The Dependencies page displays details about all the components that have a
+        dependency on the solution component. They're grouped by the solution's name.
+        The Dependencies page has tabs covering reports for Delete blocked by, Used by, and
+        Uses:
+           Delete blocked by: The report lists all the dependencies that block the delete of
+           the solution component. Unless these dependencies are removed or the
+           component is deleted, the solution component delete remains blocked.
+           Used by: The report lists all the dependencies of other components that are using
+           this solution component.
+           Uses: This report lists all the dependencies that the given solution component
+           uses.
+        Dependencies page actions
+        The Dependencies page has multiple actions you can take for each dependency. The
+        actions can be used to inspect, delete the component, or remove a dependency with the
+      listed dependencies.
+      To choose an action, select the vertical ellipsis next to any component and then select
+      one of the following actions:
+        Open: This action takes you to the particular component using the default solution.
+        The open action helps you navigate to the component where you can inspect or
+        edit it.
+        Delete: This action allows you to delete the component. Ensure to use this action
+        only if the component is no longer required and can be deleted. This action is
+        available only for unmanaged components.
+        Remove dependency: This action allows you to remove the dependency of the
+        component on the solution component. The system attempts to edit the
+        component to remove the dependency. In the event, when the system is
+        unsuccessful in removing the dependency you might have to do a manual edit.
+        This feature is currently available for the following components:
+          Entity's dependency on WebResource
+          SystemForm's dependency on Attribute and Role
+          AppModule's dependency on SavedQuery, SavedQueryVisualization, Entity, and
+          SystemForm
+        Open documentation: This action allows you to open documentation where you
+        can learn about the dependencies for that component type.
+      You can also select a grouped solution and perform delete solution action:
+      Delete Solution: If you need to delete (uninstall) a solution that has dependencies on
+      the solution component, use Delete. This action deletes the solution.
+      See also
+      For developers: Detect solution dependencies
+    Environment variables for Power Platform
+    overview
+    Environment variables enable the basic application lifecycle management (ALM) scenario of
+    moving an application between Power Platform environments. In this scenario, the application
+    stays exactly the same except for a few key external application references (such as tables,
+    connections, and keys) that are different between the source environment and the destination
+    environment. The application requires the structure of the tables or connections to be exactly
+    the same between the source and the destination environments, with some differences.
+    Environment variables allow you to specify which of these different external references should
+    be updated as the application is moved across environments.
+    Environment variables store the parameter keys and values, which then serve as input to
+    various other application objects. Separating the parameters from the consuming objects
+    allows you to change the values within the same environment or when you migrate solutions
+    to other environments. The alternative is leaving hard-coded parameter values within the
+    components that use them. This approach is often problematic; especially when the values
+    need to be changed during ALM operations. Because environment variables are solution
+    components, you can transport the references (keys) and change the values when solutions are
+    migrated to other environments.
+    Benefits of using environment variables:
+       Provide new parameter values while importing solutions to other environments.
+       Store configuration for the data sources used in canvas apps and flows. For example,
+       SharePoint Online site and list parameters can be stored as environment variables. This
+       approach allows you to connect to different sites and lists in different environments
+       without needing to modify the apps and flows.
+       Package and transport your customization and configuration together and manage them
+       in a single location.
+       Package and transport secrets, such as credentials used by different components,
+       separately from the components that use them.
+       One environment variable can be used across many different solution components -
+       whether they're the same type of component or different. For example, a canvas app and
+       a flow can use the same environment variable. When the value of the environment
+       variable needs to change, you only need to change one value.
+       Additionally, if you need to retire a data source in production environments, you can
+       update the environment variable values with information for the new data source. The
+       apps and flows don't require modification and start using the new data source.
+       Supported by SolutionPackager and DevOps tools enable continuous integration and
+       continuous delivery (CI/CD).
+       The environment variables can be unpacked and stored in source control. You might also
+       store different environment variables values files for the separate configuration needed in
+       different environments. Solution Packager can then accept the file corresponding to the
+       environment the solution is imported to.
+     How do environment variables work?
+     Environment variables can be created and modified within the modern solution interface. They
+     can also be automatically created when connecting to certain data sources in canvas apps or
+     with code. They can also be imported to an environment via solutions. Environment variables
+     can be used as inputs when authoring canvas apps, Power Automate flows, plug-ins, and
+     adding Power BI dashboards to model-driven apps. When you use environment variables, the
+     values are then derived from the environment variables, and can be changed when solutions
+     are imported to other environments.
+     Manually create an environment variable in a solution
+      1. Sign in to Power Apps (make.powerapps.com), and then on the left pane select Solutions.
+       If the item isn’t in the side panel pane, select …More and then select the item you want.
+      2. Open the solution you want or create a new one.
+      3. On the command bar, select New > More, and then select Environment variable.
+      4. On the right pane, complete the following columns, and then select Save:
+          Display name. Enter a name for the environment variable.
+          Name. The unique name is automatically generated from the Display name, but you
+          can change it.
+          Data Type. Select from Decimal number, Text, JSON, Two options, Data source, or
+          Secret.
+           ７ Note
+             If Data source is the selected type, you need to select the connector, a valid
+             connection for the selected connector, and the parameter type. The
+             connection isn't stored as part of the environment variable. The environment
+             variable stores information not in the connection that is necessary to
+             connect Power Apps to the right server and table. The connection is only
+             used for retrieving available parameter values such as the SharePoint sites
+             you have access to, or the lists associated with a site.
+           If Secret is the selected type, additional information to set up and configure
+           Azure Key Vault is needed to allow Power Platform to access the secret.
+         Current Value. Also known as the value. This property is optional and is a part of the
+         environment variable value table. A defined value is used even if a default value is
+         also present. Remove the value from your solution if you don't want to use it in the
+         next environment. The values are also separated into separate JSON files within the
+         exported solution.zip file and can be edited offline. More information: How do I
+         remove a value from an environment variable?
+         Default Value. This column is part of the environment variable definition table and
+         isn't required. The default value is used if there's no current value.
+         Separation of default value and current value allows you to service the definition
+         and the default value separately from the value. For example, an application
+         publisher might list their offer on AppSource with a default value. Then optionally,
+         the customer can provide a new value. When the application publisher publishes
+         updates to the application, the value set by the customer isn't overwritten.
+          ７ Note
+          A value can't exist without a definition. The interface only allows creation of one
+          value per definition.
+    Power Apps can automatically create environment variables
+    On the General tab of Power Apps settings:
+       Enable the Automatically create environment variables when adding data sources
+       option. Now, when you add a new data source to your app, it adds an environment
+       variable for you.
+    Different data sources
+    Different data sources enable different types of environment variables.
+    Microsoft Dataverse
+    Power Apps connects natively to Dataverse. You don't need an environment variable for tables
+    in your current environment. When you connect to Dataverse, your application automatically
+    looks for exactly the same table name in any environment you port it. As long as your table
+    name structure is the same in the target environment as it is in the original environment, it
+    works.
+    If you use an external table from a different environment (via Change Environment), then
+    Power Apps assumes you want to always refer to the exact same table. You need an
+    environment variable if you need that external table to be a different external table when you
+    move from dev to test or to prod. It's easiest to allow Power Apps to automatically create the
+    environment variable for you. (If you previously added the table to your app, then turn on the
+    settings switch, drop the external table, and then add it back.)
+    When you add the external table to your app, choose the Advanced tab to select the
+    environment variable.
+    SharePoint
+    SharePoint supports only Microsoft Entra connections. So, for SharePoint, in addition to a valid
+    connection, a separate environment variable is required for Site and List.
+    To successfully use environment variables with SharePoint lists:
+       The display name and the logical name for each corresponding column in the source and
+       target environments must match.
+       Environment variables for SharePoint must have matching metadata. SharePoint has
+       internal identifiers that might not match between target environments. For example, if
+       you create a list with the same name and columns in a target environment, the internal
+       names won't match. The metadata always matches if you duplicate a SharePoint site and
+       copy it to your target environment.
+    SQL Server
+    SQL Server supports many different types of authentication and connections. Use environment
+    variables for Microsoft Entra connections. A separate environment variable is required for the
+    server and the database. The application is bound to specific table names so they're assumed
+    to be the same between environments.
+    Don't use environment variables for shared connections such as basic SQL authentication with
+    SQL Server. Use connection references for information that is traditionally passed as part of the
+    connection string. Basic SQL auth parameters are all part of the connection string. For example,
+    the Server and Database name are provided when creating the connection and therefore are
+    always derived from the connection.
+     Data source environment variables are used for connectors with authentication like Microsoft
+     Entra. In these types of connections, Power Apps only has an identified user. Power Apps can't
+     derive what service or table you intend to work with from the connection.
+     Enter new values while importing solutions
+     The modern solution import interface includes the ability to enter values for environment
+     variables. This sets the value property on the environmentvariablevalue table.
+     Environment variable values are visible when importing solutions or when using Pipelines to
+     deploy. Environment variables without a default value or value prompt for a value, but those
+     otherwise are prefilled with a label beneath the text area denoting the value's source: solution
+     value, target environment value, or default value.
+      ７ Note
+         In some cases, for specific data source environment variable values, an Access
+         denied warning might appear if the importing maker doesn't have access to the
+         connection or source used for the environment variable. This is a nonblocking
+         warning, but something to take note of depending on how you plan to use the
+         environment variable in the target environment.
+         You can remove the value from your solution before exporting the solution. This
+         ensures the existing value remains in your development environment, but won't get
+         exported in the solution. This approach allows a new value to be provided while
+          importing the solution into other environments. More information: How do I remove
+          a value from an environment variable?
+     Notifications
+     A notification is displayed when the environment variables don't have any values. Set the
+     values so that components dependent on environment variables don't fail.
+     Security
+     The environmentvariabledefinition table is user or team owned. When you create an
+     application that uses environment variables, be sure to assign users the appropriate level of
+     privilege to this table. Permission to the environmentvariablevalue table is inherited from the
+     parent environmentvariabledefinition table and therefore doesn't require separate privileges.
+     Privileges for environmentvariabledefinition tables are included in Environment Maker and
+     Basic User security roles by default. More information: Security in Dataverse.
+     Naming
+     Ensure environment variable names are unique so they can be referenced accurately. Duplicate
+     environment variable display names make environment variables difficult to differentiate and
+     use. Ensure environment variable names are unique so they can be referenced accurately. The
+     names $authentication and $connection are specially reserved parameters for flows and
+     should be avoided. Flow save is blocked if environment variables with those names are used. If
+     an environment variable is used in a flow and the display name of the environment variable is
+     changed, then the designer shows both the old and new display name tokens to help with
+     identification. When updating the flow, we recommend you remove the environment variable
+     reference and add it again.
+     Current limitations
+        Validation of environment variable values happens within the user interfaces and within
+        the components that use them, but not within Dataverse. Therefore ensure proper values
+        are set if they're being modified through code.
+        Power Platform Build Tools tasks aren't yet available for managing data source
+        environment variables. However, this doesn't block their usage within Microsoft provided
+        tooling and within source control systems.
+        Interacting with environment variables via custom code requires an API call to fetch the
+        values; there isn't a cache exposed for non-Microsoft code to use.
+        Environment variables are limited to a maximum of 2,000 characters.
+     Frequently asked questions
+     Why can't I see the value for my environment variable?
+     If the environment variable is in a managed solution, you won't be able to see the value unless
+     you look inside of the Default solution. This behavior is by design, since the environment
+     variable value is an unmanaged customization.
+     How can I view where environment variables are being used?
+     Either through selecting Show dependencies in the solution interface, while authoring
+     components, or in source control and in the solution file by viewing the app or flow metadata.
+     Are data source environment variables the same as
+     connections?
+     No. Although they're related, a connection represents a credential or authentication required
+     to interact with the connector. Data source environment variables store parameters that are
+     required by one or more actions in the connector and these parameters often vary depending
+     on the action. For example, a SharePoint Online connection doesn't store any information
+     about sites, lists, or document libraries. Therefore calling the connector requires both a valid
+     connection and some more parameters.
+     Can my automated ALM pipeline use different values files for
+     different environments?
+     Yes. Solution packager accepts file name as input parameters so your pipeline can pack a
+     different values file into the solution depending on the environment type it’s executing against.
+     Should I include the value in my solution?
+     No. Environment variables are intended to be used by applications that need to have different
+     values in different environments where the solution is deployed. Environment variable
+     definitions should be included in your solution but the values should be provided for the target
+     environment during deployment. This behavior results in the environment variable definition
+      being a managed solution object in the target environment while the environment variable is
+      an unmanaged record.
+      Why can't I delete a value in my environment?
+      If the value was included in a managed solution, the only way to delete the value is to update
+      the solution in the source environment to exclude the value, then export a new version of the
+      solution. This new version then can be imported into the environment using an upgrade
+      operation (not an update), resulting in the value record being deleted.
+      What if someone inadvertently deletes a value?
+      If not already prevented by dependency system, runtime uses the last known value as a
+      fallback.
+      If a value is changed, when does the new value get used in
+      canvas apps and cloud flows?
+      It might take up to an hour to fully publish updated environment variables because the value is
+      pushed into the apps and flows asynchronously.
+      Are premium licenses required?
+      No. While ALM requires Dataverse (or Dynamics 365 apps), use of premium connectors isn't
+      required. The one caveat is if you're using the Dataverse connector to interact with
+      environment variables as you would with other data records like accounts or contacts.
+      Previously this was the only way to use environment variables in canvas apps and flows.
+      Is there a limit to the number of environment variables I can
+      have?
+      No. However, the max size of a solution is 95 MB. More information: Create a solution
+      Can environment variable display names and descriptions be
+      localized?
+      Yes.
+    Should I use environment variables instead of storing
+    configuration data in custom tables?
+    Yes if your configuration data isn't relational. Environment variables should be used for key:
+    value pairs and when the value likely needs to different in other environments. Other tools such
+    as the Configuration migration utility are better suited for migration of relational configuration
+    data stored within custom tables. Unlike other configuration data, environment variables are
+    migrated within solutions and therefore much simpler to manage and more performant to
+    import.
+    Why isn't my connection saved for data source environment
+    variables?
+    Connections are only used to generate the user interface. For example, to retrieve friendly
+    names for SharePoint lists associated with a site. When editing a data source environment
+    variable, be sure to select a connection with access to the data source. If you no longer have
+    access to the connection, you can manually enter a value. For example, enter the SharePoint
+    site URL or unique identifier (GUID) for a list.
+    When there are multiple connections available for a single (data source-type) environment
+    variable, there's a by-design implementation to select the first connection in the list of
+    connections. Because there's usually only one connection associated with an environment
+    variable, this isn't something that usually needs to be validated. Additionally, with recent
+    changes to environment variable value visibility, this is easier to validate upon import.
+    How do I remove a value from an environment variable?
+    You might want to remove the value of an environment variable from your solution before
+    exporting the solution. Then, the existing value remains in your development environment, but
+    isn't exported in the solution. This approach allows a new value to be provided while importing
+    the solution into another environment.
+    To remove the value, follow these steps:
+      1. In the solution where the environment variable is located select the environment variable
+       to display the properties.
+      2. Under Current Value, select ... > Remove from this solution.
+    Can I use environment variables in custom connectors?
+    Yes. Environment variable support in custom connectors
+    See also
+    Use data source environment variables in canvas apps
+    Use environment variables in Power Automate solution cloud flows
+    EnvironmentVariableDefinition table/entity reference
+    Web API samples
+    Use data source environment variables in Canvas apps
+      Use environment variables in Power Automate solution cloud flows
+      Use Azure Key Vault secrets
+      Environment variable support in custom connectors
+      Power Apps Blog: Environment variables available in preview!
+      Last updated on 01/09/2026
+     Use data source environment variables in
+     canvas apps
+     In this article, you learn about using data source environment variables in canvas apps. You can
+     either use pre-existing data source environment variables, or create data source environment
+     variables automatically when connecting to data.
+     Use pre-existing data source environment variables
+     Environment variables can be reused across other apps and even different types of resources like
+     cloud flows. You might wish to first create them within your solution and later use them while
+     authoring canvas apps and cloud flows.
+      1. Follow the steps to manually create an environment variable in a solution.
+      2. Edit or create a canvas app from your solution.
+      3. Add a new data source for SharePoint online.
+      4. Select the Advanced tab. You'll see a filtered list of environment variables that you have
+        access to and that match the parameter being set. For example, when you select the
+        SharePoint site, you'll see a list of all data source environment variables with Connector as
+        SharePoint and Parameter type as Site. The same is true when selecting SharePoint lists for
+        a given site.
+      5. Select the desired environment variable(s), and then select Connect.
+      ） Important
+         If an environment variable from a different solution is selected, a dependency will exist
+         on the solution containing the environment variable. Therefore, be sure to either:
+           Add the environment variable to your current solution prior to exporting.
+           Ensure the solution containing the environment variable is imported to the
+           destination environment before your current solution is imported.
+     Automatically create data source environment variables
+     when connecting to data
+      This option provides simplicity and ensures environment variables are always used for data
+      sources, such as SharePoint Online. However, some customers prefer to provide their own
+      schema names and therefore should create them from solutions.
+        ７ Note
+        Pre-existing canvas apps don't automatically use data source environment variables. Remove
+        the data source from the app and add them back using the above steps to upgrade these
+        apps to use environment variables.
+         1. Edit or create a canvas app from your solution.
+         2. Select Settings > General and enable the setting to Automatically create environment
+          variables when adding data sources.
+         3. Add a New data source for SharePoint online.
+         4. Select a SharePoint site, one or more lists, and then Connect.
+            ７ Note
+            To prevent creation of duplicate environment variables, you're prompted to use the
+            existing environment variable when duplicates are identified. You can clear the option
+            to use the existing environment variable if creation of a duplicate is desired.
+         5. Select Save.
+      See also
+      Create canvas app from scratch using Dataverse.
+      Use environment variables in Power Automate solution cloud flows
+      Environment variables overview
+       Last updated on 04/27/2026
+     Use environment variables in Power
+     Automate solution cloud flows
+     Environment variables can be used in solution cloud flows since they're available in the dynamic
+     content selector. All types of environment variables can be used in triggers and actions.
+     To use an environment variable in a solution cloud flow:
+       1. Edit or create a cloud flow in a solution.
+       2. In an action or a trigger, determine the parameter that you want to use for the environment
+        variable:
+        a. If the parameter takes a simple value, such as a string or number, enter the parameter.
+        b. If the parameter is a lookup, scroll to the bottom of the lookup, and then select Enter
+          custom value. Environment variables that you have access to are listed in the Dynamic
+          content selector with other dynamic content.
+       3. Select the desired environment variable.
+     Limitations
+        When environment variable values are changed directly within an environment instead of
+        through an ALM operation like solution import, flows will continue using the previous value
+         until the flow is either saved or turned off and turned on again.
+         When editing a cloud flow, the environment variables shown in the dynamic content
+         selector are unfiltered, but will be filtered by data type in the future.
+         When editing a cloud flow, if an environment variable is added in another browser tab, the
+         flow needs to be reopened in the flow designer to refresh the dynamic content selector.
+     See also
+     Use data source environment variables in canvas apps
+     Create a flow with Dataverse
+     Environment variables overview.
+      Last updated on 04/27/2026
+     Use environment variables for Azure Key
+     Vault secrets
+     Environment variables allow for referencing secrets stored in Azure Key Vault. These secrets are
+     then made available for use within Power Automate flows and custom connectors. Notice that
+     the secrets aren't available for use in other customizations or generally via the API.
+     The actual secrets are stored in Azure Key Vault and the environment variable references the
+     key vault secret location. Using Azure Key Vault secrets with environment variables require that
+     you configure Azure Key Vault so that Power Platform can read the specific secrets you want to
+     reference.
+     Environment variables referencing secrets aren't currently available from the dynamic content
+     selector for use in Power Automate flows.
+     Configure Azure Key Vault
+     To use Azure Key Vault secrets with Power Platform, the Azure subscription that has the vault
+     must have the PowerPlatform resource provider registered and the user who creates the
+     environment variable must have appropriate permissions to the Azure Key Vault resource.
+      ） Important
+         There are recent changes to the security role used to assert access permissions
+         within Azure Key Vault. Previous instructions included assigning the Key Vault Reader
+         role. If you have set up your key vault previously with the Key Vault Reader role,
+         make sure that you add the Key Vault Secrets User role to ensure that your users and
+         Microsoft Dataverse have sufficient permission to retrieve the secrets.
+         We recognize that our service is using the Azure role-based access control APIs to
+         assess security role assignment even if you still have your key vault configured to use
+         the vault access policy permission model. To simplify your configuration, we
+         recommended that you switch your vault permission model to Azure role-based
+         access control. You can do this on the Access configuration tab.
+       1. Register the Microsoft.PowerPlatform resource provider in your Azure subscription.
+        Follow these steps to verify and configure: Resource providers and resource types
+      2. Create an Azure Key Vault vault. Consider using a separate vault for every Power Platform
+       environment to minimize the threat in case of a breach. Consider configuring your key
+       vault to use Azure role-based access control for the Permission model. More
+       information: Best practices for using Azure Key Vault, Quickstart - Create an Azure Key
+       Vault with the Azure portal
+      3. Users who create or use environment variables of type secret must have permission to
+       retrieve the secret contents. To grant a new user the ability to use the secret, select the
+       Access control (IAM) area, select Add, and then select Add role assignment from the
+       dropdown. More information: Provide access to Key Vault keys, certificates, and secrets
+       with an Azure role-based access control
+      4. On the Add role assignment wizard, leave the default assignment type as Job function
+       roles and continue to the Role tab. Locate the Key Vault Secrets User role and select it.
+       Continue to the members tab and select the Select members link and locate the user in
+       the side panel. When you have the user selected and shown on the members section,
+       continue to the review and assign tab and complete the wizard.
+      5. Azure Key Vault must have the Key Vault Secrets User role granted to the Dataverse
+       service principal. If it doesn't exist for this vault, add a new access policy using the same
+       method you previously used for the end user permission, only using the Dataverse
+       application identity instead of the user. If you have multiple Dataverse service principals in
+       your tenant, then we recommend that you select them all and save the role assignment.
+       Once the role is assigned, review each Dataverse item listed in the role assignments list
+              and select the Dataverse name to view the details. If the Application ID isn't 00000007-
+              0000-0000-c000-000000000000**, then select the identity, and then select Remove to
+              remove it from the list.
+            6. If you have enabled Azure Key Vault Firewall, you have to allow Power Platform IP
+              addresses access to your key vault. Power Platform isn't included in the "Trusted Services
+              Only" option. Go to Power Platform URLs and IP address ranges for the current IP
+              addresses used in the service.
+            7. If you haven't done so already, add a secret to your new vault. More information: Azure
+              Quickstart - Set and retrieve a secret from Key Vault using Azure portal
+         Create a new environment variable for the Key
+         Vault secret
+         Once Azure Key Vault is configured and you have a secret registered in your vault, you can now
+         reference it within Power Apps using an environment variable.
+           ７ Note
+                User access validation for the secret is performed in the background. If the user
+                doesn’t have at least read permission, this validation error is displayed: "This variable
+                didn't save properly. User isn't authorized to read secrets from 'Azure Key Vault
+                path'."
+                Currently, Azure Key Vault is the only secret store that is supported with environment
+                variables.
+                The Azure Key Vault must be in the same tenant as your Power Platform subscription.
+            1. Sign on to Power Apps  , and in the Solutions area, open the unmanaged solution you're
+              using for development.
+            2. Select New > More > Environment variable.
+            3. Enter a Display name and optionally, a Description for the environment variable.
+            4. Select the Data Type as Secret and Secret Store as Azure Key Vault.
+            5. Choose from the following options:
+                   Select New Azure Key Vault value reference. After the information is added in the
+                   next step and saved, an environment variable value record is created.
+                    Expand Show default value, to display the fields to create a Default Azure Key Vault
+                    secret. After the information is added in the next step and saved, the default value
+                    demarcation is added to the environment variable definition record.
+            6. Enter the following information:
+                    Azure Subscription ID: The Azure subscription ID associated with the key vault.
+                    Resource Group Name: The Azure resource group where the key vault that contains
+                    the secret is located.
+                    Azure Key Vault Name: The name of the key vault that contains the secret.
+                    Secret Name: The name of the secret located in Azure Key Vault.
+                       Tip
+                      The subscription ID, resource group name, and key vault name can be found on
+                      the Azure portal Overview page of the key vault. The secret name can be found
+                      on the key vault page in the Azure portal by selecting Secrets under Settings.
+            7. Select Save.
+         Create a Power Automate flow to test the
+         environment variable secret
+         A simple scenario to demonstrate how to use a secret obtained from Azure Key Vault is to
+         create a Power Automate flow to use the secret to authenticate against a web service.
+           ７ Note
+           The URI for the web service in this example isn't a functioning web service.
+            1. Sign into Power Apps  , select Solutions, and then open the unmanaged solution you
+              want. If the item isn’t in the side panel pane, select …More and then select the item you
+              want.
+            2. Select New > Automation > Cloud flow > Instant.
+            3. Enter a name for the flow, select Manually trigger a flow, and then select Create.
+      4. Select New step, select the Microsoft Dataverse connector, and then on the Actions tab
+       select Perform an unbound action.
+      5. Select the action named RetrieveEnvironmentVariableSecretValue from the dropdown
+       list.
+      6. Provide the environment variable unique name (not the display name) added in the
+       previous section, for this example new_TestSecret is used.
+      7. Select ... > Rename to rename the action so that it can be more easily referenced in the
+       next action. In this screenshot, it's renamed to GetSecret.
+      8. Select ... > Settings to display the GetSecret action settings.
+      9. Enable the Secure Outputs option in the settings, and then select Done. This is to prevent
+       the output of the action getting exposed in the flow run history.
+      10. Select New step, search, and select the HTTP connector.
+      11. Select the Method as GET and enter the URI for the web service. In this example, the
+        fictitious web service httpbin.org is used.
+      12. Select Show advanced options, select the Authentication as Basic, and then enter the
+        Username.
+      13. Select the Password field, and then on the Dynamic content tab under the flow step
+        name above (GetSecret in this example) select
+        RetrieveEnvironmentVariableSecretValueResponse EnvironmentVariableSecretValue,
+        which is then added as an expression outputs('GetSecretTest')?
+        ['body/EnvironmentVariableSecretValue'] or body('GetSecretTest')
+        ['EnvironmentVariableSecretValue'].
+     14. Select ... > Settings to display the HTTP action settings.
+     15. Enable the Secure Inputs and Secure Outputs options in the settings, and then
+       select Done. Enabling these options prevents the input and outputs of the action getting
+       exposed in the flow run history.
+     16. Select Save to create the flow.
+     17. Manually run the flow to test it.
+       Using the run history of the flow, the outputs can be verified.
+     Use environment variable secrets in Microsoft
+     Copilot Studio
+     Environment variable secrets in Microsoft Copilot Studio work a bit differently. You need to run
+     through the steps in the sections in Configure Azure Key Vault and Create a new environment
+     variable for the Key Vault secret to use secrets with environment variables.
+     Give Copilot Studio access to Azure Key Vault
+     Follow these steps:
+       1. Go back to your Azure Key Vault.
+            2. Copilot Studio needs access to the key vault. To grant Copilot Studio the ability to use the
+               secret, select Access control (IAM) on the left navigation, select Add, and then select Add
+               role assignment.
+            3. Select the Key Vault Secrets User role, and then select Next.
+            4. Select Select Members, search for Microsoft Copilot Studio Service, select it, and then
+               choose Select.
+            5. Select Review + assign on the bottom of the screen. Review the information and select
+               Review + assign again if all is correct.
+         Add a tag to allow a copilot to access the secret in Azure Key
+         Vault
+         By completing the previous steps in this section, Copilot Studio now has access to the Azure
+         Key Vault, but you can't use it yet. To complete the task, follow these steps:
+            1. Go to Microsoft Copilot Studio    and open the agent you want to use for the
+               environment variable secret or create a new one.
+            2. Open an agent topic or create a new one.
+            3. Select the + icon to add a node, and then select Send a message.
+            4. Select the Insert variable {x} option in the Send a message node.
+            5. Select the Environment tab. Select the environment variable secret you created in the
+               Create a new environment variable for the Key Vault secret step.
+            6. Select Save to save your topic.
+      7. In the test pane, test your topic by using one of the start phrases of the topic where you
+       just added the Send a message node with the environment variable secret. You should
+       run into an error that looks like this:
+       This means you need to go back to Azure Key Vault and edit the secret. Leave Copilot
+       Studio open, because you come back here later.
+      8. Go to Azure Key Vault. In the left navigation, select Secrets under Objects. Select the
+       secret you want to make available in Copilot Studio by selecting the name.
+      9. Select the version of the secret.
+     10. Select 0 tags next to Tags. Add a Tag Name and a Tag Value. The error message in
+       Copilot Studio should give you the exact values of those two properties. Under Tag Name
+       you need to add AllowedBots and in Tag Value you need to add the value that was
+       displayed in the error message. This value is formatted as {envId}/{schemaName}. If there
+       are multiple copilots that need to be allowed, separate the values with a comma. When
+       done, select OK.
+     11. Select Apply to apply the tag to the secret.
+      12. Go back to Copilot Studio. Select Refresh in the Test your copilot pane.
+      13. In the test pane, test your topic again by using one of the start phrases of the topic.
+     The value of your secret should be shown in the test panel.
+     Add a tag to allow all copilots in an environment access to the
+     secret in Azure Key Vault
+     Alternatively, you can allow all copilots in an environment access to the secret in Azure Key
+     Vault. To complete the task, follow these steps:
+       1. Go to Azure Key Vault. In the left navigation, select Secrets under Objects. Select the
+        secret you want to make available in Copilot Studio by selecting the name.
+       2. Select the version of the secret.
+       3. Select 0 tags next to Tags. Add a Tag Name and a Tag Value. Under Tag Name add
+        AllowedEnvironments and in Tag Value add the environment ID of the environment you
+        want to allow. When done, select OK
+       4. Select Apply to apply the tag to the secret.
+     Limitation
+     Environment variables referencing Azure Key Vault secrets are currently limited for use with
+     Power Automate flows, Copilot Studio agents, and custom connectors.
+     Integrate Azure Key Vault private link with
+     environment variables
+     Using Azure Key Vault secrets with environment variables requires configuring Azure Key Vault
+     so that Power Platform can read the specific secrets you want to reference. This capability
+     enables support for environment variables with Azure Key Vault secrets connecting via a private
+     link, enhancing security and providing a more robust integration.
+       1. Set up Azure Virtual Network support for Power Platform to integrate environment
+        variables with Azure Key Vault secrets without exposing them to the public internet. For
+        detailed instructions, go to set up virtual network.
+       2. Ensure that the Azure subscription for Key Vault and Power Platform Virtual Network are
+        in the same tenant, as cross-tenant integration isn't supported.
+        3. Ensure that the user who creates the environment variables has appropriate permissions
+          to the Azure Key Vault resource. For more details, go to Configure the Azure key Vault
+        4. Create a key vault and establish a private link connection. The steps to create the key
+          vault should include the following actions:
+             Disable public access.
+             Create a private endpoint.
+             Select the virtual network and subnet where you want this private endpoint to be
+             created. Ensure to connect the Virtual Network (virtual network) delegated to Power
+             Platform.
+             Validate the private link connectivity.
+          For detailed steps, go to Set up Virtual Network support for Power Platform.
+        5. Create environment variables secrets by linking to the Azure Key Vault.
+      See also
+      Use data source environment variables in canvas apps
+      Use environment variables in Power Automate solution cloud flows
+      Environment variables overview.
+       Last updated on 01/09/2026
+       Environment variables frequently asked
+       questions
+       Article • 10/25/2024
+       In this article find the frequently asked question (FAQs) for environment variables.
+       Why can't I see the value for my environment
+       variable?
+       If the environment variable is in a managed solution, you won't be able to see the value
+       unless you look inside of the Default solution. This behavior is by design, since the
+       environment variable value is an unmanaged customization.
+       How can I view where environment variables
+       are being used?
+       Either through selecting Show dependencies in the solution interface, while authoring
+       components, or in source control and in the solution file by viewing the app or flow
+       metadata.
+       Are data source environment variables the
+       same as connections?
+       No. Although they're related. A connection represents a credential or authentication
+       required to interact with the connector. Data source environment variables store
+       parameters that are required by one or more actions in the connector and these
+       parameters often vary depending on the action. For example, a SharePoint Online
+       connection doesn't store any information about sites, lists, or document libraries.
+       Therefore calling the connector requires both a valid connection and some additional
+       parameters.
+       Can data source environment variables be used
+       with shared connections such as SQL Server
+       with SQL authentication?
+       Generally no. Shared connections with SQL Server store the parameters required to
+       connect to data within the connection. For example, the Server and Database name are
+       provided when creating the connection and therefore are always derived from the
+       connection.
+       Data source environment variables are used for connectors that rely on user based
+       authentication such as Microsoft Entra ID because the parameters can't be derived from
+       the connection. For these reasons authentication with SQL Server, which is a shared
+       connection, won't use data source environment variables.
+       Can my automated ALM pipeline use different
+       values files for different environments?
+       Yes. Solution packager accepts file name as input parameters so your pipeline can pack
+       a different values file into the solution depending on the environment type it’s executing
+       against.
+       What if someone inadvertently deletes a value?
+       If not already prevented by dependency system, runtime uses the last known value as a
+       fallback.
+       If a value is changed, when does the new value
+       get used in canvas apps and cloud flows?
+       It may take up to an hour to fully publish updated environment variables because the
+       value is pushed into the apps and flows asynchronously.
+       Are premium licenses required?
+       No. While ALM requires Dataverse (or Dynamics 365 for Customer Engagement), use of
+       premium connectors isn't required. The one caveat is if you're using the Dataverse
+       connector to interact with environment variables as you would with other data records
+       like accounts or contacts. Previously this was the only way to use environment variables
+       in canvas apps and flows.
+       Is there a limit to the number of environment
+       variables I can have?
+       No, there is no hard limit to the number of environment variables allowed in an
+       environment, but user experience will become difficult when there are too many
+       environment variables to select from.
+       Can environment variable display names and
+       descriptions be localized?
+       Yes.
+       Should I use environment variables instead of
+       storing configuration data in custom tables?
+       Yes if your configuration data isn't relational. Environment variables should be used for
+       key: value pairs and when the value likely needs to different in other environments.
+       Other tools such as the Configuration migration utility are better suited for migration of
+       relational configuration data stored within custom tables. Unlike other configuration
+       data, environment variables are migrated within solutions and therefore much simpler
+       to manage and more performant to import.
+       How do I remove a value from an environment
+       variable?
+       You might want to remove the value of an environment variable from your solution
+       before exporting the solution. Then, the existing value remains in your development
+       environment, but isn't exported in the solution. This approach allows a new value to be
+       provided while importing the solution into another environment.
+       To remove the value, follow these steps:
+         1. In the solution where the environment variable is located select the environment
+          variable to display the properties.
+         2. Under Current Value, select ... > Remove from this solution.

@@ -1,0 +1,2353 @@
+                                                                                                   
+            ） Important
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 This feature is available only in the English language and it replaces the earlier
+                 Microsoft Copilot Studio activity-based agent feed.
+                 For information about how AI is used with this feature, go to FAQ about Power Apps
+                 MCP server invoke_data_entry tool.
+         Autonomous agents can be added to model-driven apps to help users get work done faster.
+         Using the Power Apps MCP server, agents can post actionable tasks for user review, allowing
+         humans to validate results, step in when needed, and finish work the agent couldn’t complete
+         —without leaving their app.
+         Learn more about how to supervise agents
+            ７ Note
+            Access to the agent feed and supervision capabilities is limited by default to the System
+            Administrator and System Customizer roles. To allow additional users to view the agent
+             feed, grant organization‑level read/write permissions on the entities listed below. You can
+             create a new security role with these permissions and assign it to multiple users as
+             needed.
+                   Agent Hub Goal(agenthubgoal)
+                   Agent Hub Insight(agenthubinsight)
+                   Agent Hub Metric(agenthubmetric)
+                   Agent Task(agenttask)
+                   Copilot(bot)
+          Supervise an autonomous agent within the app
+          The enhanced agent feed is powered by the autonomous agents using the Power Apps MCP
+          server. Power Apps MCP sever tools enable these two core human‑agent collaboration
+          patterns:
+                Autonomous Microsoft Dataverse record creation and updates with human‑in‑the‑loop
+                review.
+                Agent requests for human assistance and logging tasks for human review.
+          In agent‑enabled apps, user focus shifts from doing the work to supervise and prioritize
+          agent‑driven work. Agents help with automation and organization of work, ensuring business
+          experts remain involved in decision‑making and critical actions. You can supervise elligible
+          autonomous agents with any model‑driven app. We recommend adding agents to apps that
+          contain functionality or data relevant to the agent’s intended purpose.
+          Terminology
+                                                                                                ﾉ
+                                                                                                    Expand table
+           Term                   Description
+           Agent                  The customer’s custom autonomous agent.
+           Task/Agent task        A single request for human assistance or human review within an agentic
+                                  workflow.
+           Agent feed             The system for surfacing agent tasks to the user.
+           Agent canvas           The UX surface where users provide the requested human input or observe task
+                                  details.
+          Term               Description
+          Power Apps MCP     The collection of tools available to agents for interacting with capabilities of the
+          server             business app platform.
+           ７ Note
+           To be eligible for addition to an app, an agent must be connected to Power Apps MCP
+           server or be in a published state. A maker can verify an agent's eligibility to be added to
+           an app via the right-hand properties pane where the requirements for an agent to be
+           added to an app are displayed and includes a Power Apps MCP Server status as
+           Connected. The Add to feed button is disabled for any agents that don't meet the
+      requirements to be eligible for addition.
+     Create an autonomous agent connected to Power
+     Apps MCP server
+     MCP is an open protocol that enables seamless integration between large language model
+     (LLM) applications and external data sources and tools. Your agent can use the Power Apps
+     MCP server to communicate with your apps in Power Apps, providing right human-in-the-loop
+     supervision or agentic workflows. To use the Power Apps MCP server, you need to enable and
+     configure the MCP server with an agent. More information: Work with Power Apps MCP server
+      1. Sign in to Power Apps, select Apps, and then select Edit for the app you want to modify.
+      2. In the app designer, go to the Agents tab on the left navigation pane.
+      3. Select Create agent.
+       Microsoft Copilot Studio opens in the new tab.
+      4. Enter the name and description and scroll to tools and select Add tool.
+      5. Search for Power Apps MCP Server and select it.
+      6. Select Add and configure to connect the agent to Power Apps MCP tools.
+      7. In the details section, change the Credentials to use field to Maker-provided credentials to
+       enable the MCP Server to initialize autonomously via a trigger. Go to Control maker-
+       provided credentials for authentication for more details if this option is disabled.
+      8. Notice the tools available to use with your agent. You can select to enable the tools you
+       want. For information about these tools go to Work with Power Apps MCP server.
+      9. Add a trigger for this autonoumous agent so that it is invoked when the trigger is fired. In
+       this example, the trigger When a row is added, modified, or deleted is selected for the
+       Dataverse Booking table.
+    The agent is ready to use the Power Apps MCP server tools. This image shows how the agent
+    can add a task for human review using natural language instructions. Internally, the task
+    invoked maps to the Power Apps MCP server log_for_review tool.
+    When a new booking record is created, it triggers the agent, which adds the review task in the
+    agent feed Completed tab. Note that all tasks created by the log_for_review tool are created
+    as "Completed" items intended for passive supervision of agent activity.
+     Current limitations
+        Only model-driven Power Apps support agent supervision. This feature isn't available for
+        canvas or vibe apps.
+        Power Apps MCP server is supported only via Microsoft Copilot Studio.
+     Add an autonomous agent to an app
+       1. Sign in to Power Apps, select Apps, and then select Edit for the app you want to modify.
+       2. In the app designer, go to the Agents tab.
+       3. Under the Agent feed dropdown, the In your environment dropdown appears that lists
+        all agents in your environment. Locate the agent you want to add.
+      4. Select ... (more options) next to the agent, and then select Add to feed.
+      5. Verify agent feed is added to your app with all added agents by saving, publishing, and
+       playing your app. Previewing agent feed in the app designer isn't currently supported.
+      6. To view or edit the agent in Copilot Studio, select Edit in Microsoft Copilot Studio.
+      ） Important
+      Use the Create agent button to open Copilot Studio for agent creation. Note that even if
+      the agent is created through a link inside the app designer, the maker must ensure it
+      meets all requirements to be added to the app.
+     Remove an autonomous agent from an app
+      1. In the app designer, go to the Agents tab.
+      2. In the Agent feed dropdown, select In your feed.
+       3. Locate the agent you want to remove, select ..., and then select Remove from feed.
+      ７ Note
+      Removing an agent from an app doesn't remove the agent from the environment.
+     Working with an app assistant agent
+     The app assistant agent makes a model-driven app more intelligent and relevant for your
+     organization by adding additional topics, knowledge sources, and more. The Copilot Chat,
+     Agent APIs, and agent response components access the topics within this agent. Learn more:
+     Add app assistant agent
+      ７ Note
+      The app assistant agent is a rename of interactive agent, which is the improved experience
+      for ... > Configure in Copilot Studio. The agents created with the previous experiences are
+      now shown as the App assistant agent.
+     Related information
+     Overview of App Designer
+     Add app assistant agent
+      Last updated on 04/06/2026
+         Work with Power Apps MCP server
+            ） Important
+            Starting May 1st, 2026, agent feed only supports agents that use the Power Apps MCP
+            Server to create tasks. Ensure your agents are properly onboarded to the Power Apps
+            MCP server by then to continue using the agent feed. If your agents don't use the Power
+            Apps MCP Server, the agent feed doesn't appear in you model-driven app. More
+            information: Onboard your agent feed to use the Power Apps MCP server
+         The model context protocol (MCP) is an open protocol that enables seamless integration
+         between large language model (LLM) applications and external data sources and tools. Your
+         agent can use the Power Apps MCP Server to communicate with your Power Apps, providing
+         right human-in-the-loop supervision or agentic workflows.
+            ） Important
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 This feature is available only in the English language and it replaces the earlier
+                 Microsoft Copilot Studio activity-based agent feed.
+                 For information about how AI is used with this feature, go to FAQ about Power Apps
+                 MCP Server invoke_data_entry tool.
+         The Power Apps MCP Server equips your agent with two types of capabilities:
+               Automate repetitive app tasks:
+               The Power Apps MCP Server enables agents to use advanced app tools developed in
+               Power Apps. For example, the data‑entry agent capabilities previously available as an
+               on‑demand AI feature are now accessible to any agent through Power Apps MCP server.
+               To use them, you create your agent, configure the MCP tool, and direct it to unstructured
+       content so it can generate Dataverse records with human review and approval through
+       the enhanced agent feed.
+       Supervise agent activity:
+       The Power Apps MCP Server also provides specialized tools to business users to supervise
+       any agent activity in the agent feed. Agents can now handoff control to humans for
+       review, assistance, and steering with the MCP tools. These tools provide makers with
+       much more control over the tasks they want to publish to the agent feed and when they
+       need agent-human handoff.
+                                            
+     ７ Note
+     Access to the agent feed and supervision capabilities is limited by default to the System
+     Administrator and System Customizer security roles. To allow additional users to view the
+     agent feed, grant organization‑level read/write permissions on the tables listed here. You
+     can create a new security role with these permissions and assign the role to multiple users
+     as needed.
+        Agent Hub Goal(agenthubgoal)
+        Agent Hub Insight(agenthubinsight)
+        Agent Hub Metric(agenthubmetric)
+        Agent Task(agenttask)
+         Copilot(bot)
+     The Power Apps MCP tools improve the more you use them. For example, when you make
+     corrections to suggestions in the agent canvas, the data entry tool improves based on your
+     corrections. To use the enhanced agent feed capabilities, enable and configure the Power Apps
+     MCP server from the Microsoft Copilot Studio agent. Once configured, you can invoke Power
+     Apps MCP server tools from agent instructions using natural language.
+     More information: Create an autonomous agent connected to Power Apps MCP server
+     Onboard your agent to use the Power Apps MCP
+     server
+     To configure an existing agent that was in the previous version of agent feed to use the Power
+     Apps MCP server, you must do the following:
+       1. Add the Power Apps MCP server to your agent. To do this, open the agent in Copilot
+        Studio and then select Add tool.
+                                                    
+      2. Search for Power Apps MCP Server.
+                                            
+      3. Select Add and configure.
+                                  
+      4. Update your agent instructions to use each of the tools in the Power Apps MCP Server at
+       the proper times in it's orchestration. There are examples of how to do this in the
+       remainder of this document.
+      5. Save and publish your agent.
+             ） Important
+             For autonomous agent scenarios where an agent runs via a trigger, the Power Apps MCP
+             server must be configured to run using "Maker-provided credentials" as seen in the details
+             section of the tool. Go to Control maker-provided credentials for authentication for
+             more details if this option is disabled.
+          List of tools
+          Once connected to the Power Apps MCP Server, the agent can choose from various tools in the
+          Power Platform environment. These tools can generate agent feed items that render different
+          user experiences, such as a side‑by‑side view for data entry agents or direct navigation to a
+          record for request_for_assistance scenarios.
+                                                                                                  ﾉ Expand table
+            Tool                Description
+            log_for_review      Log completed activity for passive human oversight.
+            request_assistance  Request assistance from a human user.
+            invoke_data_entry   Create one or more records in a data source like Microsoft Dataverse, using contents
+                                from plain text or an email.
+          log_for_review
+          Records completed agent work to the agent feed for review. The log_for_review tool is
+          intended for scenarios where an agent has sufficient information to act autonomously but the
+     user should still be made aware of what the agent has done. This tool can be thought of as a
+     way to passively oversee the high-confidence or low-risk actions performed by agents. It is
+     best suited for decisions that can be easily revised or rolled back if the agent happens to
+     perform the action incorrectly. Besides title, description, and steps you can also ask the tool to
+     add a link to either the relevant Dataverse record or to an app-external URL. If an agent action
+     touches multiple Dataverse records, you can instruct the agent which record it should navigate
+     to in connection with the created task. It could be the link to the record the agent created
+     using the Dataverse MCP server or a record link present in context like the record that
+     triggered the agent execution. These tasks are shown in the agent feed's Completed tab.
+     Sample instruction
+     When the customer makes a booking from the portal this agent must log the details for review.
+     The review item title should be based on the booking reference number and must use the
+     exact prefix “Review Web Booking: ”. In the review description, write a concise summary of the
+     booking that includes main fields like Booking Reference, Booking Date, Seat Number, and
+     Status, so a reviewer can quickly understand what was processed without opening the record.
+     Ensure the description reads as a short paragraph and accurately reflects the current values
+     from the booking record. Include your reasoning as steps. Also, include a link to the booking
+     record.
+     request_assistance
+     The intended purpose of the request_assistance tool is to enable agents to surface errors,
+     escalations, or exceptions to users, so they can take appropriate action. As a maker, you can
+     define the scenarios for when to have your agent use the request_assistance tool. It creates an
+     agent feed task that is populated in the Needs Attention section of the agent feed. This is an
+     asynchronous operation that calls the Microsoft Copilot Studio agent that waits until the
+     human completes the action. For details on completing the action feed activity, go to Supervise
+     agents in model-driven apps with agent feed (preview)
+     You can observe the In progress status for the agent run in the activity tab when viewing the
+     agent in Copilot Studio. Once the user completes the activity from agent feed, control comes
+     back to agent via callback and agent can complete the task.
+     Like with the log_for_review tool, you can control the task output for title, description, and
+     steps and can be specific when telling the agent which link to associate with a given task.
+     Sample instruction
+     When this agent is triggered by the creation of a new support case, it should request
+     assistance. In the request, set the title by prefixing the value of issue with “Assistance needed: ”.
+     In the task description include the issue type, issue description, date reported, and the resolved
+     value. Include your reasoning steps. Also include a link to the related Dataverse issue record.
+     Once the user completes the task, continue processing by setting the case status to Closed.
+     Design your user-in-the-loop
+            Before writing your agent's instructions, decide where human oversight belongs in your
+            workflow. Use the following questions to identify which moments should use
+            request_assistance, which should use log_for_review, and which the agent can handle
+            autonomously.
+                                                                                                               ﾉ Expand table
+             Question                       Guidance                                                Tool
+             Where are the stakes           High-stakes outcomes require oversight                  request_assistance
+             high?                          regardless of agent confidence. Give the agent
+                                            explicit instructions to pause.
+             When is user                   If you can state it as a rule, encode it directly in    request_assistance
+             intervention always            the agent's instructions.
+             needed?
+             Which inputs vary              Unstructured data, edge cases, and novel                request_assistance
+             unpredictably?                 situations can't always be anticipated. Instruct
+                                            the agent to surface these dynamically.
+             Does the agent need an         If the agent is blocked without human input, it         request_assistance if yes,
+             answer to keep going?          should wait for a response. If it can proceed and       log_for_review if no
+                                            a human audits later, it shouldn't.
+             Does a user own the            Compliance requirements, high-value                     log_for_review
+             outcome?                       approvals, or policy decisions may require a
+                                            human sign-off even when the agent is
+                                            confident.
+                Tip
+               A well-designed agent doesn't ask for help constantly. Instead, it asks at the right
+               moments. Use request_assistance sparingly for genuine decision points, and let
+               log_for_review handle the rest.
+            Example instructions by pattern
+            Explicit rule:
+              "For any claim with an estimated loss amount over $5,000, use request_assistance to route
+              the claim to the assigned adjuster before proceeding."
+            Dynamic judgment:
+      "If the cause of loss is ambiguous or claim documents conflict with each other, use
+      request_assistance to flag the claim for adjuster review."
+     Passive oversight:
+      "After completing the coverage determination, use log_for_review to record the outcome
+      and confirm the claim has been cleared to advance."
+     Example: Homeowner's insurance coverage
+     determination agent
+     The following example shows how these patterns apply to a complete, real-world workflow.
+     The agent triggers automatically when a new claim is submitted. It pulls the relevant policy,
+     endorsements, and supporting documents from Dataverse, then reasons over them to produce
+     a coverage determination, checking whether the policy was active, whether the claimed peril is
+     covered, and whether any document conflicts affect confidence in the outcome.
+     From there, the agent uses the Power Apps MCP server to surface results in the agent feed
+     based on what it found. If the claim is ambiguous, conflicted, or requires adjuster judgment,
+     the agent uses request_assistance to create a task for the assigned adjuster with the context
+     they need to act. If the claim is clear-cut, the agent uses log_for_review to record the outcome
+     passively and no action is required. When an adjuster completes a task, the agent resumes,
+     reads the decision, updates the claim record, and logs a completion notice back to the feed.
+     The result is a workflow where the agent handles the routine volume autonomously and pulls a
+     human in only at genuine decision points with enough context that the adjuster can act
+     immediately.
+     invoke_data_entry
+     The invoke_data_entry tool streamlines the creation of Dataverse records by extracting
+     structured information from unstructured inputs such as emails, messages, or documents.
+     When invoked from a Copilot Studio agent, it automatically analyzes incoming content, fills out
+     the appropriate form with the extracted data, and presents the proposed entry as a task in the
+     agent feed for user review and approval. It requires review of the proposed entry by a user
+      before creating the record. Records are never created automatically using the
+      invoke_data_entry tool. This enables fast, reliable data capture with minimal manual effort.
+      Sample instruction - shared email triggered agent
+      You are the travel idea generator agent. Your job is to process incoming emails and create
+      travel idea records in Dataverse.
+      When an email arrives:
+        1. Determine if it contains travel-related information (either in the email body or
+          attachments).
+        2. Use the invoke_data_entry tool to create a travel idea record with the extracted
+          information in the following columns:
+             cr3ea_title
+             cr3ea_description
+             cr3ea_triptype
+             cr3ea_customername
+             cr3ea_customeremail
+             cr3ea_customerphone
+             cr3ea_destinationcity
+             cr3ea_travelstart
+             cr3ea_travelend
+             cr3ea_numberoftravelers
+             cr3ea_budgetusd
+             cr3ea_specialrequests
+        3. If information is missing, still create the record with available data - leave unknown fields
+          empty.
+                                                              
+       ７ Note
+           When you write instructions for your agent, always reference Dataverse columns by
+           their logical names as shown in the sample instruction. Clear, direct instructions help
+           the agent reliably create records from the input. You can view a column’s logical
+           name by opening the table in make.powerapps.com, select Columns, and then open
+           the column to view the details.
+           invoke_data_entry tool supports .pdf, .xlsx, .docx, .jpeg, .jpg, .png, .gif and.bmp
+           formats.
+           invoke_data_entry tool can populate single line of text (None format), Whole
+           number and Decimal column types.
+           Ensure that the user has permission to create records for the target table.
+      How the invoke_data_entry tool works
+      When you configure a Copilot Studio agent to use the Power Apps MCP Server and enable the
+      invoke_data_entry tool, the agent follows this process:
+        1. An agent trigger is fired based on your configuration — such as an email arriving in a
+         monitored mailbox or new document uploaded to SharePoint.
+        2. The agent analyzes incoming content and your instructions to determine whether the
+         invoke_data_entry tool should be used.
+        3. If needed, the invoke_data_entry tool is invoked, passing the input content and the
+         target Dataverse table and table columns to predict.
+        4. The tool processes the input, extracts relevant information, and populates a Dataverse
+         form with suggested values for each mapped column.
+        5. A task appears in the agent feed. Selecting it opens the data‑entry review experience. The
+         left panel shows the original input, and the right panel displays the form populated with
+         suggested values.
+        6. The user can review the extracted values, make corrections if needed, and then save the
+         record to Dataverse.
+      Provide feedback
+      To provide feedback about the invoke_data_entry tool:
+        1. Open a invoke_data_entry task in the agent feed.
+        2. Select the feedback button in the task header.
+        3. Choose to give a compliment, report an issue, or make a suggestion.
+      Related articles
+      Add agents to your model-driven app (preview)
+      Supervise agents in model-driven apps with agent feed (preview)
+      Last updated on 04/07/2026
+     Add an app assistant agent to your model-
+     driven app (preview)
+     09/04/2025
+     [This topic is pre-release documentation and is subject to change.]
+     The app assistant agent makes a model-driven app more intelligent and relevant for your
+     organization by adding additional topics, knowledge sources, and more. The Copilot Chat,
+     Agent APIs, and agent response components access the topics within this agent.
+      ） Important
+                 This is a preview feature.
+                 Preview features aren’t meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+            ７ Note
+            The app assistant agent is a rename of interactive agent, which is the improved experience
+            for ... > Configure in Copilot Studio. The agents created with the previous experiences are
+            now shown as the App assistant agent.
+         Create an app assistant agent
+         When an app assistant agent is created, it's named as Copilot in Power Apps - <app name>.
+         The created agent is associated with the app when the app is saved and published.
+            1. In the app designer, select the Agents pane.
+            2. Expand Agent assistance.
+            3. On App assistant agent, select ... > Configure.
+               A new browser tab for Copilot Studio is opened with the new agent.
+                 ７ Note
+                 Pop-ups need to be enabled in your web browser to allow editing the created agent.
+            4. After configure completes, the right pane is expanded showing the status of Not
+               published and the agent name.
+      5. Switch to the Copilot Studio browser tab or select Edit in Copilot Studio to add topics,
+       knowledge, and so on, to the agent.
+      6. Save and publish the agent.
+      7. Switch to the app designer browser tab and select refresh in Agents pane header to show
+       agent published status.
+      8. In the app designer, save and publish the app.
+    Edit an app assistant agent
+    After the app assistant agent has been initially configured, it can be edited from either the
+    Agents pane or the App assistant agent property pane.
+    Agent pane:
+      1. In the app designer, select the Agents pane.
+      2. Expand Agent assistance.
+      3. On App assistant agent, select ... > Edit in Copilot Studio.
+    App assistant agent property pane:
+      1. In the app designer, select the Agents pane.
+      2. Expand Agent assistance and select App assistant agent.
+      3. In the property pane for App assistant agent, select Edit in Copilot Studio.
+     Limitations
+     The app assistant agent isn't able to be defined or referenced in app designer for these
+     Microsoft model-driven apps:
+        Connected Field Service
+        Customer Insights
+        Customer Service Hub
+        Customer Service workspace
+        Dynamics 365 App for Outlook
+        Field Service
+        Field Service Mobile
+        Inventory Visibility
+        Omnichannel engagement hub
+        Project Operations
+        Sales Hub
+        Sustainability
+      ７ Note
+      When a model-driven app includes both Lead and Opportunity tables, it implicitly uses the
+      Copilot in Dynamics 365 Sales agent. The app designer doesn't show the app assistant
+      agent, but the Copilot in Dynamics 365 Sales agent can be customized from Copilot
+      Studio.
+     Related information
+     Overview of App Designer
+     Add agents to your model-driven app
+     Customize Copilot Chat
+     Add Microsoft 365 Copilot for app users in
+     model-driven apps
+     Microsoft 365 Copilot makes it easier for users to work with model-driven apps by offering AI-
+     powered insights through natural language conversations. With this feature, users can quickly
+     find information, navigate apps more easily, and get help to boost their productivity. App makers
+     can enable Microsoft 365 Copilot to give users access to conversational AI that understands app
+     data and provides helpful, contextual answers. Users can ask questions about their Microsoft
+     Dataverse table data in plain language and receive immediate, relevant responses.
+     https://learn-video.azurefd.net/vod/player?id=843f065d-4ee4-4006-b09b-
+     e97da24b7393&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fmodel-driven-
+     apps%2Fadd-microsoft-365-copilot
+     This article shows you how to enable and configure Microsoft 365 Copilot for your model-driven
+     apps, both at the environment level and for individual apps.
+     When enabled, users can open Microsoft 365 Copilot in their model-driven app by selecting
+     Copilot > Chat on the upper-right corner. For more information, see Use Microsoft 365 Copilot in
+     model-driven apps.
+     Prerequisites
+     To use Microsoft 365 Copilot in canvas apps, make sure the following prerequisites are met:
+        Your tenant must be set to allow Dataverse data available in Microsoft 365 Copilot. For
+        more information, see Enable Microsoft 365 admin center Copilot Dataverse settings.
+        Dataverse Search must be set to Default or On for the environment. Fore more information,
+        see Understand what this means for generative AI experiences.
+             To use the Microsoft 365 Copilot feature in a Power Apps app, users must have both a
+             Power Apps premium license and a Microsoft 365 Copilot license.
+             To use the Microsoft 365 Copilot feature in a Dynamics 365 app, users must have a
+             Dynamics 365 Enterprise or Premium license. However, to get the full capabilities of Work
+             IQ, beyond Dataverse grounding, a Microsoft 365 Copilot license is required.
+          ７ Note
+                Microsoft 365 Copilot for model‑driven apps relies on Dataverse Search indexes.
+                Enabling this feature might increase your environment’s Dataverse capacity
+                consumption. For more information, see What actions can makers or admins take to
+                manage Dataverse Search efficiently.
+                Sufficient Dataverse database capacity must be available to support indexing, semantic
+                search, and Copilot operations. For more information, see Capacity page details.
+        Enable Microsoft 365 Copilot for your environment
+        To manage Microsoft 365 Copilot for model-driven apps, start by learning how to manage
+        Microsoft 365 Copilot.
+        Power Platform administrators can set up and configure the Microsoft 365 Copilot feature for
+        users in their environment.
+           1. Sign in to the Power Platform admin center  .
+           2. In the navigation pane, go to Copilot > Settings. Under Power Apps, expand Chat Agent
+             and choose M365 Copilot.
+           3. Select an environment group or an environment name, then select Edit Setting.
+           4. Select On and then select Save to enable Microsoft 365 Copilot for your canvas apps in the
+             selected environment group or environment.
+        Enable Microsoft 365 Copilot in a single model-
+        driven app
+        Makers can enable or disable Microsoft 365 Copilot for a specific model-driven app.
+           1. Sign in to Power Apps   .
+           2. Open a model-driven app for editing.
+           3. Select Settings in the command bar.
+           4. On the left, select Features.
+           5. To enable Microsoft 365 Copilot, set M365 Copilot in model-driven apps to On. To disable
+             it, set the option to Off.
+           6. Select Save and then publish the app for the changes to take effect.
+        Enable Microsoft 365 Copilot for all model-driven apps
+        in an environment
+        Makers can enable Microsoft 365 Copilot as the default for all model-driven apps in an
+        environment.
+           1. Sign in to Power Apps   , and then on the left pane, select Solutions.
+           2. Open the solution named Default Solution in the Solutions list.
+           3. On the left pane, select Objects
+           4. In the left Objects pane, expand Settings, and then select Setting environment values.
+           5. Select Enable M365 Copilot in model-driven apps
+           6. Under Setting environment values, select Add existing value, if a value doesn't already
+             exist, and then set the value to 2.
+                                                          
+       7. Select Save.
+       8. Select Publish for the change to take effect.
+     Microsoft 365 Copilot vs. Copilot chat
+     Microsoft 365 Copilot is gradually replacing Copilot chat in model-driven apps.
+     During the transition period, makers can enable either one or both chat experiences. When both
+     options are available, the Copilot dropdown menu shows the following options:
+        Chat button opens Microsoft 365 Copilot
+        App Skills button opens Copilot chat in model-driven apps.
+     Known limitations
+        Microsoft 365 Copilot for model-driven apps allows users to view data by using read-only
+        operations. This capability means that users can only view data that matches their queries
+        and can't make any changes. To make changes, customization with an agent is required.
+        Microsoft 365 Copilot for model-driven apps isn't available in the Power Apps mobile app.
+        As this feature is being gradually deployed, certain settings in the Power Platform Admin
+        Center might not be accessible yet, depending on the geographic location of your tenant.
+     Related information
+        Customize Microsoft 365 Copilot with an agent (preview)
+        Use Microsoft 365 Copilot in model-driven apps
+      Last updated on 06/03/2026
+         Customize Microsoft 365 Copilot with
+         an agent
+         Microsoft 365 Copilot in Power Apps lets users interact with custom agents that extend what
+         Copilot can do. By customizing an agent, you can create tailored experiences that fit your
+         organization's business processes and data. For more information, see Use agents in Microsoft
+         365 Copilot.
+         This article describes the types of agents you can build for Microsoft 365 Copilot in Power Apps
+         and helps you choose the right approach for your scenario.
+         Choose an agent type
+         The following table compares the agent types you can build.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+           Agent type       Description                                         Common use cases
+           Declarative      Built with low-code tools and templates for quick   Automate routine tasks, answer FAQs,
+           agent            setup of common scenarios in Microsoft 365          and provide guided workflows.
+                            Copilot.
+           Custom           Built with custom logic and integrations for        Complex business processes, custom
+           engine agent     advanced capabilities tailored to your business.    data integrations, and specialized
+                                                                                automation.
+           Copilot Studio   Built and managed in Microsoft Copilot Studio,      Interactive chatbots, team
+           agent            with integration to Teams and Microsoft 365 for     collaboration, and personalized
+                            conversational experiences.                         support within Microsoft 365 apps.
+         To find the best option for your organization, use these resources:
+               Get an overview and guidance on how to choose what type of agent to build in Microsoft
+               365 Copilot agents overview.
+               Build a declarative agent for Microsoft 365 Copilot or a custom engine agent for Microsoft
+               365.
+               Use Microsoft Copilot Studio to connect and set up an agent for Teams and Microsoft 365
+               so it's available in Microsoft 365 Copilot.
+        Review the guidance on how to choose between Microsoft 365 Copilot and Copilot Studio
+        to build your agent.
+     One way to create a declarative agent for a model-driven app is to turn on Microsoft 365 Copilot
+     directly in your app. For more information, see Enable your app for Microsoft 365 Copilot.
+     You can create your own app-specific agent mode in Power Apps by combining a default agent
+     with the Xrm.Copilot.* APIs. The default agent defines the tailored Microsoft 365 Copilot
+     experience that opens for users, and the APIs create the bidirectional connection between your
+     app and Microsoft 365 Copilot.
+     Set a default agent
+     If you build a custom agent as a companion to your model-driven app, you can set it as the
+     default agent so it loads automatically when the app and the Microsoft 365 Copilot side pane
+     open. This makes your agent the starting point for the experience and is the first part of building
+     your own agent mode.
+     When you set a default agent:
+        Your agent is selected without any action from the user.
+        Users go straight to the tailored experience you designed for the app.
+        App-specific workflows and guidance are ready as soon as Microsoft 365 Copilot opens.
+     A default agent is especially useful for scenario-focused agents that extend the core experience
+     of the app and act as the front door to the app-specific Microsoft 365 Copilot experience you
+     want users to have.
+                                                       
+     Xrm.Copilot APIs
+     The Xrm.Copilot.* client APIs let developers integrate Microsoft 365 Copilot directly into model-
+     driven app experiences. With these APIs, your app can interact directly with the Microsoft 365
+     Copilot side pane and respond to Microsoft 365 Copilot-driven actions, so you can create richer,
+     end-to-end agentic scenarios.
+     Used together with a default agent, these APIs complete the agent mode pattern: your agent is
+     the starting point, your app can send prompts and context into Microsoft 365 Copilot, and
+     Microsoft 365 Copilot can invoke actions back inside your app.
+     For the full API surface, see Xrm.Copilot (Client API reference) in model-driven apps.
+     These APIs let you:
+        Send prompts to Microsoft 365 Copilot. Use sendPromptToM365Copilot to start a Microsoft
+        365 Copilot interaction from your app.
+        Open and control the Microsoft 365 Copilot side pane. Use openM365CopilotPanel to make
+        sure the Microsoft 365 Copilot pane is visible when needed.
+        Pass app context to Microsoft 365 Copilot. Use updateContext (preview) to send extra
+        grounding signals from your app.
+        Work with agents. Use getCurrentAgent to check which agent is active.
+        Handle Microsoft 365 Copilot actions in your app. Use addActionHandler to register
+        custom handlers that process actions sent from Microsoft 365 Copilot responses.
+     Together, these APIs create a true bidirectional experience between the app UI and the agent, so
+     agents can drive UI updates, trigger workflows, or run custom business logic.
+     Handle Microsoft 365 Copilot actions with addActionHandler
+     Use the addActionHandler API when your app needs to handle structured actions that Microsoft
+     365 Copilot emits.
+     When you build the action payload:
+         Set type to PowerApps to target the Power Apps host.
+         Set action (for example, MyNamespace.MyMessage) to the actionId you register in
+         addActionHandler.
+         Use actionData for the payload that your code processes and passes to the Power Apps
+         host.
+     The following sections show two supported scenarios.
+     Adaptive Cards
+     Microsoft 365 Copilot responses can include Adaptive Cards with Action.Submit buttons that
+     send action messages to the Power Apps host.
+     Example:
+      JSON
+      {
+        "type": "AdaptiveCard",
+        "$schema": "https://adaptivecards.io/schemas/adaptive-card.json",
+        "version": "1.5",
+        "body": [
+          {
+            "type": "TextBlock",
+            "text": "Click Go and I will send data to the host to process.",
+            "wrap": true,
+            "id": "txtSendMessage"
+          },
+          {
+            "type": "ActionSet",
+            "actions": [
+              {
+                "type": "Action.Submit",
+                "title": "Go",
+                "id": "btnGo",
+                "data": {
+                  "type": "PowerApps",
+                  "action": "MyNamespace.MyMessage",
+                  "actionData": {
+                    "foo": "bar"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+     MCP apps
+     Microsoft 365 Copilot responses can include HTML that sends action messages to the Power
+     Apps host.
+     Example:
+      HTML
+      <Button
+        appearance="outline"
+        icon={<ArrowLeft24Regular />}
+        onClick={() => {
+          try {
+            const message = {
+              eventName: 'powerapps.copilot.chat.action',
+              action: 'MyNamespace.MyMessage',
+              actionData: {
+                foo: 'bar'
+              },
+            };
+            window.parent.parent.postMessage(message, '*');
+          } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error posting HOST_ACTION message to parent window:', error);
+          }
+        }}
+      >
+        Test
+      </Button>
+     Limitations
+        Agents you author can't yet use in-app user context to tailor their responses.
+        When setting a default agent, the starter prompts from the agent do not render.
+     Related information
+        Add Microsoft 365 Copilot for app users in model-driven apps
+        Use Microsoft 365 Copilot in model-driven apps
+        Add Microsoft 365 Copilot for app users in canvas apps (preview)
+        Use Microsoft 365 Copilot in canvas apps (preview)
+        Customize Microsoft 365 Copilot with an agent in canvas apps
+     ）Note: The author created this article with assistance from AI. Learn more
+      Last updated on 07/15/2026
+         Add Copilot for app users in model-driven
+         apps
+         Copilot chat for model-driven apps in Power Apps is a next-generation AI assistant that helps
+         app users get insights about the data in their apps through conversation in natural language.
+         Copilot chat helps app users boost their productivity through AI-powered insights and intuitive
+         app navigation.
+            ） Important
+            This feature is generally available in Dynamics 365 apps, but remains a preview feature in
+            Power Apps.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality These features are subject to supplemental terms of use  , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 You must allow data movement across regions for Generative AI features as a
+                 prerequisite for using Copilot in Power Apps. This step is especially important if your
+                 organization and your environment are in different regions. Learn more in Turn on
+                 copilots and generative AI features.
+                 This capability is powered by Azure OpenAI Service.
+                 This capability might be subject to usage limits or capacity throttling.
+            ７ Note
+            Copilot chat in Power Apps is a preview feature that will be deprecated for model-driven
+            apps in environments not enabled for Dynamics 365 apps, starting January 2026. We
+            recommend switching to Microsoft 365 Copilot chat. During the transition period, makers
+            can enable either one or both chat experiences. For more information, see Deprecation of
+            Copilot chat in model-driven apps
+         When enabled, Copilot chat can be accessed through the Copilot icon in the right navigation
+         bar in a model-driven app. The Copilot chat pane can be opened or minimized as desired.
+                                                                                                 
+         Copilot chat in model-driven apps can answer questions about the Microsoft Dataverse table
+         data in the environment. Copilot can also help you navigate the app. For example, when a user
+         enters take me to Online Cases or show me Cruise Support Tickets, Copilot automatically opens
+         the relevant app screens. Learn more in Use Copilot chat in model-driven apps.
+         Enable Copilot for model-driven apps in your
+         environment
+         Power Platform administrators enable the Copilot chat feature in model-driven apps for all the
+         users in their environments in the Power Platform admin center  .
+           ） Important
+                 Copilot chat for app users in model-driven apps isn't enabled by default.
+                 Administrators must manually enable this feature for their environments in the
+                 Power Platform admin center     .
+                 Questions and answers about enterprise data environments that have a customer-
+                 managed key or Customer Lockbox won't use your data stored in Dataverse. You
+                 might get answers from Copilot, but they won't be based on your Dataverse data.
+            1. Sign in to the Power Platform admin center at
+              https://admin.powerplatform.microsoft.com     .
+       2. In the navigation pane, go to Manage > Environments and select the environment where
+        you want to enable Copilot chat for app users in model-driven apps. On the command
+        bar, select Settings.
+       3. In Settings for the selected environment, select Product > Features.
+       4. In the Features section, set the value for Allow users to analyze data using an AI-
+        powered chat experience in canvas and model-driven apps to the setting that's
+        appropriate for your environment.
+           Default. Copilot chat is disabled for a Power Apps licensed environment and enabled
+           for a Dynamics 365 licensed environment.
+           On. Copilot chat is enabled for the environment regardless of the environment
+           licensing type.
+           Off. Copilot chat is disabled for the environment regardless of environment
+           licensing type.
+       5. Save your changes.
+     Disable Copilot chat for a model-driven app
+     Makers can disable Copilot chat for a specific model-driven app. In app designer, open the
+     model-driven app for Edit, and then select Settings on the command bar. Select Upcoming on
+     the Settings screen, set Copilot control to Default or Off, and then select Save.
+     Save and Publish the model-driven app for the changes to take effect.
+         Reset to environment value
+         Makers can set the Copilot control for the app to match the environment setting by selecting
+         Reset to environment value on the Upcoming tab of app settings.
+         Provide feedback in Copilot
+         To provide feedback to help us improve Copilot's responses, app users can select the "thumb
+         up" or "thumb down" icon after each Copilot response. Optionally, app users can provide
+         feedback in their own words about what they liked or what went wrong, or how they would like
+         Copilot to improve.
+         Disable feedback for app users
+            1. Sign in to Power Apps   .
+            2. Go to Tables, and then open the Organization table.
+            3. In the Organization columns and data section, select +nnn more to display the column
+              search box.
+            4. In the search box, search for the Allow users to provide feedback for App Copilot
+              column.
+               5. Set the column to No, and then Save the table.
+           Region availability and language supported
+           Copilot chat for model-driven apps in Power Apps is available in the regions and languages
+           listed here.
+                                                                                                            ﾉ
+                                                                                                                Expand table
+             Regions                                                  Language
+             Asia Pacific, Australia, Brazil, Canada, Europe,         Czech, Danish, German, Greek, Finnish, French,
+             France, Germany, India, Japan, Korea, Norway,            Italian, Japanese, Korean, Dutch, Norwegian
+             Qatar, Singapore, South Africa, Sweden,                  (Bokmål), Polish, Portuguese (Brazil), Russian,
+             Switzerland, United Arab Emirates, United                Swedish, Thai, Turkish, Chinese (Simplified), Spanish
+             Kingdom, United States                                   (Spain), Arabic, Hebrew 
+         Copilot takes into account the user's preferred UI language and localizes responses based on
+         that. Depending on the user's preferred UI language, environment base language, and
+         languages supported for a specific Copilot feature, the responses are localized accordingly.
+         This table summarizes the expected behavior in different scenarios.
+                                                                                        ﾉ
+                                                                                           Expand table
+           Base language of   Preferred UI         Expected behavior
+           the environment    language of the
+                              user
+           English            English              Output in English
+           English or non-    One of the           Output in the preferred UI language of the user.
+           English            supported non-
+                              English languages
+           English or non-    An unsupported       Output is unpredictable as the language is unsupported.
+           English            language             The responses are mixed with English and the user
+                                                   language. We recommend using one of the supported
+                                                   Copilot languages in such cases.
+         Known limitations
+            1. Copilot for app users allows users to retrieve information from Dataverse through read-
+               only operations. This means that users can only view data that matches their queries and
+               can't make any changes to the data.
+            2. Create, update, or other generic actions such as enable or disable Copilot and create a
+               memo aren't supported.
+            3. Summarization skill feature is available in Dynamics 365 Sales copilot and not in Copilot
+               for app user.
+            4. Copilot for app users isn't supported with the Power Apps mobile app.
+         Related information
+               Customize Copilot chat in model-driven apps
+               FAQ for Copilot chat in model-driven apps
+               Responsible AI FAQs for Power Apps
+               Add Copilot control to a canvas app (preview)
+               Enable copilots and generative AI features in Power Apps
+          Last updated on 01/09/2026
+         Customize Copilot chat using Copilot
+         Studio (preview)
+         [This article is prerelease documentation and is subject to change.]
+         Customize Copilot chat to make it even more intelligent and relevant for your organization by
+         adding additional articles, knowledge sources, and more.
+            ） Important
+            This feature is generally available in Dynamics 365 apps, but remains a preview feature in
+            Power Apps.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality These features are subject to supplemental terms of use  , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 You must allow data movement across regions for Generative AI features as a
+                 prerequisite for using Copilot in Power Apps. This step is especially important if your
+                 organization and your environment are in different regions. Learn more in Turn on
+                 copilots and generative AI features.
+                 This capability is powered by Azure OpenAI Service.
+                 This capability might be subject to usage limits or capacity throttling.
+            ７ Note
+            Copilot chat in Power Apps is a preview feature that will be deprecated for model-driven
+            apps in environments not enabled for Dynamics 365 apps, starting January 2026. We
+            recommend switching to Microsoft 365 Copilot chat. During the transition period, makers
+            can enable either one or both chat experiences. For more information, see Deprecation of
+            Copilot chat in model-driven apps
+         You customize Copilot chat using Microsoft Copilot Studio and expand the capabilities to go
+         beyond just handling Microsoft Dataverse tables questions and out-of-the-box skills. Before
+         customizing, make sure Copilot chat is enabled for your environment.
+         https://learn-video.azurefd.net/vod/player?id=d0439343-f464-4ec7-a92d-
+         b3c528430fb5&locale=en-us&embedUrl=%2Fpower-apps%2Fmaker%2Fmodel-driven-
+         apps%2Fcustomize-copilot-chat
+           ７ Note
+                Copilot Studio license and agent editing permissions are required to customize
+                Copilot chat.
+                This feature is only available in standalone model-driven apps, which don't include
+                both lead and opportunity tables. This feature isn't yet supported for Dynamics 365
+                apps.
+                This experience has changed to use interactive agent and is currently rolling out to
+                regions.
+            1. Go to https://make.preview.powerapps.com  .
+            2. Open your model-driven app in edit mode, and then on the left navigation bar select ... >
+              Configure in Copilot Studio. You're taken to Microsoft Copilot Studio where your app’s
+              agent is set up. Every standalone model-driven app Copilot has its own dedicated agent
+              available for customizations. Setting up the agent for the first time takes a few seconds.
+                                                                                             
+            3. Customize your agent by adding knowledge sources or topics. Customizing this agent
+              only impacts the Copilot chat of the specific app it's provisioned for.
+                                                                                             
+            4. Publish the agent after you make customizations to ensure changes are available to
+              users.
+      Power Apps creates a platform-owned agent named Copilot in Power Apps in each
+      environment. This agent is only editable by a Power Platform environment admin and isn’t
+      published to any channels by default. Although this agent can be viewed in Microsoft Copilot
+      Studio, this agent shouldn't be edited since it isn't used by model-driven apps.
+      Related information
+         Add Copilot chat to model-driven apps
+         FAQ for Copilot chat in model-driven apps
+         Responsible AI FAQs for Power Apps
+         Enable copilots and generative AI features in Power Apps
+      ） Note: The author created this article with assistance from AI. Learn more
+      Last updated on 01/09/2026
+             Add knowledge to Copilot chat in
+             model-driven apps (preview)
+             Article • 02/22/2025
+             [This topic is pre-release documentation and is subject to change.]
+             Extend your app’s Copilot chat intelligence by adding additional knowledge sources in
+             Copilot Studio.
+               ） Important
+                    This is a preview feature.
+                    Preview features aren't meant for production use and might have restricted
+                    functionality. These features are subject to supplemental terms of use   , and
+                    are available before an official release so that customers can get early access
+                    and provide feedback.
+             Add knowledge to Copilot chat
+             You can add additional knowledge sources in Copilot Studio. For example, you can add
+             a link to an external public-facing website like Power Apps documentation by adding
+             https://learn.microsoft.com/power-apps/ as knowledge to enable your Copilot chat to
+             respond to questions related to creating apps in Power Apps. Another example is to
+             upload your organization’s internal knowledge as a document to enable Copilot chat to
+             respond to relevant queries that aren't a part of the app data.
+                                           
+      More information: Add knowledge to an existing agent – Microsoft Copilot Studio.
+       ７ Note
+         Currently only Public website, File upload and SharePoint knowledge source
+         types are supported. Dataverse knowledge isn't part of this preview.
+         Copilot studio Generative AI orchestration isn't supported currently. You can
+         use classic orchestration topic whose trigger phrases match most closely with
+         the user's query for a given skill.
+      Once knowledge is enabled, app users can ask relevant questions to get responses
+      along with the knowledge references.
+                                           
+              Related articles
+                    Customize Copilot chat using Copilot Studio (preview)
+                    Add topics to Copilot chat in model-driven apps (preview)
+                    FAQ for Copilot chat in model-driven apps
+                    Responsible AI FAQs for Power Apps
+                    Enable copilots and generative AI features in Power Apps
+              ） Note: The author created this article with assistance from AI. Learn more
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+             Add topics to Copilot chat in model-
+             driven apps (preview)
+             Article • 02/22/2025
+             [This topic is pre-release documentation and is subject to change.]
+             Extend your app’s Copilot chat intelligence by adding topics in Copilot Studio.
+               ） Important
+                    This is a preview feature.
+                    Preview features aren't meant for production use and might have restricted
+                    functionality. These features are subject to supplemental terms of use   , and
+                    are available before an official release so that customers can get early access
+                    and provide feedback.
+             Add new topics to Copilot chat
+             In Copilot Studio, you can add topics to your app’s Copilot agent. These topics can be
+             customized to use various trigger types and can respond with simple messages,
+             adaptive cards, or generative answers. Additionally, topics can also initiate actions like
+             flows, connectors, and Dataverse plug-ins enabling seamless point in time integration
+             with external systems.
+                                                                                                
+             More information: Create and edit topics – Microsoft Copilot Studio.
+                ７ Note
+                Copilot Studio has inline capability to "Test your agent" and can be used to validate
+                topics as they're added. However, topics using out-of-the-box model-driven app
+                custom variables like Global.PA__Copilot_Model_PageContext.pageContext.id can
+                only be tested in the published Copilot.
+              Related articles
+                    Customize Copilot chat using Copilot Studio (preview)
+                    Add knowledge and topics to Copilot chat in model-driven apps (preview)
+                    FAQ for Copilot chat in model-driven apps
+                    Responsible AI FAQs for Power Apps
+                    Enable copilots and generative AI features in Power Apps
+              ） Note: The author created this article with assistance from AI. Learn more
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+             Send a message to Copilot chat
+             (preview)
+             Article • 03/17/2025
+             [This topic is pre-release documentation and is subject to change.]
+             Extend your app's Copilot chat engagement and affect by incorporating rich audio,
+             video, and simple cards as a chat response type. The Message node, within the flow of a
+             topic in Copilot Studio, can be used to send a message from the agent to the user in
+             your model-driven app. Messages can be simple text messages, but can also include
+             richer components, such as images, videos, quick replies, and cards.
+               ） Important
+                    This is a preview feature.
+                    Preview features aren't meant for production use and might have restricted
+                    functionality. These features are subject to supplemental terms of use   , and
+                    are available before an official release so that customers can get early access
+                    and provide feedback.
+                    Copilot Studio license and agent editing permissions are required to
+                    customize Copilot chat.
+             Add an image response to Copilot chat
+             When you add an image, Copilot can send a message as a response with the image
+             from the agent to the user. To add an image, the image must be hosted through a URL.
+                1. Add a Message node.
+                2. In the node's menu bar, select Add and choose Image.
+                3. Under Image properties, enter the Image URL for your image.
+         4. Optionally, enter a Title for the image.
+                                                   
+       Add a video response to Copilot chat
+       When you add a video, Copilot can send a message with the video as a response from
+       the agent to the user.
+         1. Add a Message node.
+         2. In the node's menu bar, select Add, and then select Video.
+         3. Under Media URL, enter the URL of your video. The URL can either be a direct link
+          to a publicly accessible MP4 file or a YouTube URL.
+         4. Optionally, enter a Title, Subtitle, Image URL (the URL of a publicly available image
+          file), or Text to be shown alongside the video on the card. You can also add one or
+          more buttons, which have the same properties as quick replies.
+                                                   
+       Add a basic card response to Copilot chat
+       A basic card is a general-purpose card used for adding text, images, and interactive
+       elements to an agent response message.
+         1. Add a Message node.
+         2. In the node's menu bar, select Add, and then select Basic card.
+         3. In the Basic Card properties pane, fill in the properties for the content of your
+          card. You can also add one or more buttons, which have the same effect as quick
+          replies.
+                                                      
+       For more information about sending messages with Copilot, go to send a message
+       Copilot Studio documentation
+       Related articles
+          Customize Copilot chat using Copilot Studio (preview)
+          Add topics to Copilot chat in model-driven apps (preview)
+          FAQ for Copilot chat in model-driven apps
+          Responsible AI FAQs for Power Apps
+          Enable copilots and generative AI features in Power Apps
+       ） Note: The author created this article with assistance from AI. Learn more
+       Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+         Prompt guide customizations (preview)
+         [This topic is pre-release documentation and is subject to change.]
+         A prompt library is a collection of prewritten, tested, and optimized prompts designed to help
+         shape the interactions and responses of the Copilot chat. They ensure that the Copilot chat
+         provides relevant, accurate, and contextually appropriate information based on the user’s
+         needs and preferences.
+                                                                                                   
+            ） Important
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+         The following steps detail how to add specific queries to the prompt guide. A Power Apps Help
+         section is appended to the existing out-of-the-box Copilot prompt guide. Alternatively, you
+         can copy the sample code into a new topic directly from the Prompt guide customizations
+         topic sample. All the prompts shown to the end user via the prompt guide are stored in the
+         Copilot Studio agent used for the app.
+       1. Open the agent backing the app in Copilot Studio and add a new blank topic.
+                                                    
+       2. Rename the topic to reflect the topic intent and change the topic trigger to Event
+        received.
+                                                    
+       3. Select Edit under Event received, and then set the event name as
+        Microsoft.PowerApps.Copilot.RequestSparks, which is the reserved name for prompt
+        guide.
+                                                    
+       4. Optionally, you can set the conditions to prompt entries in case they're specific to the
+        page context. For example, this prompt entry checks if the page context's table type
+        name matches the specified value. If the condition is true, the custom prompts are shown
+        to the user.
+        condition:Global.PA__Copilot_Model_PageContext.pageContext.entityTypeName = "Entity
+        name"
+       5. Under Priority, add an appropriate priority value so the trigger is fired after the higher
+        priority topics. Priority values can have 0 to 10K range with 0 being highest. Although
+        about 200 is recommended as it allows for more options to add higher priority topics
+        later, 10 is used in this example.
+       6. Select + under Event received, and then select Variable management > Parse value to
+        add a next step for variable management parse value.
+                             
+       7. Paste the following Power Fx formula into the Parse value box, and then select Insert.
+         PowerApps Formula
+         [{displayName:"Power Apps Help",displaySubtitle:"Power Apps 
+         Help",iconName:"List24Regular",sparks:[{displayName:"What is Copilot 
+         chat?",type:"MCSMessageSkill"},{displayName:"How can I use the record 
+         picker?",type:"PromptTextSkill"},{displayName:"What types of questions can I 
+         ask Copilot?",type:"PromptTextSkill"},{displayName:"How do I provide feedback 
+         on Copilot’s responses?",type:"PromptTextSkill"}]}]
+     For the sparks type you can either use MCSMessageSkill, which are directly sent to Copilot
+     Studio as user messages or PromptTextSkill when you want to populate the Chat Input box.
+     PromptTextSkill is useful when you want additional input from the user, such as specifying a
+     record or table name among other things. For example: How many **[table name]** are
+     active? What are the **[table name]** assigned to me?
+                                                    
+       1. Set the Data type as Table. The Edit schema link appears.
+       2. Select Edit schema and paste the following schema, and then select Confirm.
+         yml
+         kind: Table
+         properties:
+           displayName: String
+           displaySubtitle: String
+           iconName: String
+           sparks:
+             type:
+               kind: Table
+               properties:
+                 displayName: String
+                 eventName: String
+                 iconName: String
+                 payload: String
+                 type: String
+       3. Set Save as to save as a new custom variable and name it something meaningful such as
+        SparkGroupCustom.
+                                            
+      4. Select + under the Parse value step, and then select Variable management > Set a
+       variable value.
+      5. The sparks definition is saved in a global variable so you need to set the variable Global
+       and name it PA_Copilot_Sparks.sparkGroups and/or Global.PA_Copilot_Sparks.sparks.
+       This populates the flyout with your prompts. Next, add a step to set variable value.
+                                            
+       6. Search for the sparks definition name from the previous step, such as
+        Global.PA_Copilot_Sparks.sparkGroups, and set the value to the following Power Fx
+        merge function.
+         PowerApps Formula
+         ForAll(Sequence(CountRows(Global.PA_Copilot_Sparks.sparkGroups)+CountRows(Topic
+         .SparkGroupCustom)), 
+         If(Value<=CountRows(Global.PA_Copilot_Sparks.sparkGroups),Index 
+         (Global.PA_Copilot_Sparks.sparkGroups,Value), Index(Topic.SparkGroupCustom, 
+         Value - CountRows(Global.PA_Copilot_Sparks.sparkGroups))))
+     
+        Merge
+        Replace the variable name with the variable name you used for the custom prompts,
+        which in this example is SparkGroupCustom.
+       7. Publish the agent and play the app.
+                                                  
+     Prompt guide customizations topic sample
+     Here is the full topic code, which can be copied directly into the new topic.
+      yml
+      kind: AdaptiveDialog
+      beginDialog:
+        kind: OnEventActivity
+        id: main
+        priority: 200
+        eventName: Microsoft.PowerApps.Copilot.RequestSparks
+        actions:
+          - kind: ParseValue
+            id: iCepPf
+            variable: Topic.SparkGroupCustom
+            valueType:
+              kind: Table
+              properties:
+                displayName: String
+                displaySubtitle: String
+                iconName: String
+                sparks:
+                  type:
+                    kind: Table
+                    properties:
+                        displayName: String
+                        eventName: String
+                        iconName: String
+                        payload: String
+                        type: String
+              value: |-
+                =[{displayName:"Power Apps Help",displaySubtitle:"Power Apps 
+        Help",iconName:"List24Regular",
+                sparks:[
+                {displayName:"What is Copilot chat?",type:"MCSMessageSkill"},
+                {displayName:"How can I use the record picker?",type:"MCSMessageSkill"},
+                {displayName:"What types of questions can I ask 
+        Copilot?",type:"PromptTextSkill"},
+                {displayName:"How do I provide feedback on Copilot’s 
+        responses?",type:"PromptTextSkill"}
+                ]}]
+            - kind: SetVariable
+              id: setVariable_pDu9cr
+              variable: Global.PA_Copilot_Sparks.sparkGroups
+              value: 
+        =ForAll(Sequence(CountRows(Global.PA_Copilot_Sparks.sparkGroups)+CountRows(Topic.Spa
+        rkGroupCustom)), If(Value<=CountRows(Global.PA_Copilot_Sparks.sparkGroups),Index 
+        (Global.PA_Copilot_Sparks.sparkGroups,Value), Index(Topic.SparkGroupCustom, Value - 
+        CountRows(Global.PA_Copilot_Sparks.sparkGroups))))
+         ７ Note
+         If your agent supports multiple languages and needs prompt guide translation, all your
+         user facing question strings must be set using a SetTextVariable.
+           FAQ for Copilot chat in model-driven apps
+           Responsible AI FAQs for Power Apps
+           Enable copilots and generative AI features in Power Apps
+       ） Note: The author created this article with assistance from AI. Learn more
+        Last updated on 01/09/2026
+             Zero prompt experience (preview)
+             Article • 03/11/2025
+             [This topic is pre-release documentation and is subject to change.]
+             The zero prompt experience helps makers enhance user engagement and streamline
+             interactions at the start of a Copilot chat session. By presenting a zero prompt
+             experience adaptive card at the beginning of a chat session, users receive relevant
+             information and options right away, reducing the need for additional prompts and
+             iterations. The zero prompt experience can be context aware and hence, can be
+             selectively shown for targeted pages.
+                                                                                                
+               ） Important
+                    This is a preview feature.
+                    Preview features aren't meant for production use and might have restricted
+                    functionality. These features are subject to supplemental terms of use   , and
+                    are available before an official release so that customers can get early access
+                    and provide feedback.
+             Customize the zero prompt experience
+             These steps detail how to customize the zero prompt experience.
+        1. Open the agent backing the app in Copilot Studio and add a new blank topic.
+                                                  
+        2. Rename the topic to reflect the topic intent and change the topic trigger to Event
+          received.
+                                                  
+        3. Select Edit under Event received, and then set the event name as
+          Microsoft.PowerApps.Copilot.RequestZeroPrompt, which is the reserved name for
+          the zero prompt experience. Set priority to higher than 99 but lower than 100000.
+          The priority is important because custom zero prompt experiences need to
+          override the default platform provided ones.
+                                                  
+                4. Optionally, you can also set the conditions to the zero prompt experience in case
+                  it's specific to the page context. For example, this entry checks if the page context's
+                  table type name matches account. If the condition is true, the custom zero prompt
+                  experience is shown.
+                  condition:Global.PA__Copilot_Model_PageContext.pageContext.entityTypeName =
+                  "account" After this step, you can build your zero prompt messages using adaptive
+                  cards. For more information regarding building adaptive cards go to this
+                  information: https://adaptivecards.microsoft.com/   . Once you have zero prompt
+                  experience cards, you can set the global variable Global.PA_Copilot_ZeroPrompt to
+                  your adaptive card definition.
+                5. The zero prompt includes all the flexibility of adaptive cards and you can trigger
+                  different skills from within it. When an adaptive card contains a button or anything
+                  that requires an Action.Submit, you have a few options you can use to handle that
+                  event. These event handlers are called SkillTypes. Action.Submit types should
+                  include the following properties: a data object with SkillType and scenario
+                  properties. You can use MCSMessageSkill, which are directly sent to Copilot Studio
+                  as user messages, or PromptTextSkill when you want to populate the Chat Input
+                  box. PromptTextSkill is useful when you want additional input from the user, such
+                  as specifying a record or table name among other things. For example: How many
+                  [table name] are active? What are the [table name] assigned to me?
+                6. When you trigger zero prompts, your select an action structure that should look
+                  like the action structure here. The scenario value should be ZeroPromptCard along
+                  with the source value as ZeroPrompt. Lastly, the value corresponds to the actual
+                  prompt.
+               yml
+                  selectAction: {
+                  type: "Action.Submit",
+                  data: {
+                   scenario: "ZeroPromptCard",
+                   skillType: "MCSMessageSkill",
+                   value:  "What are accounts in Redmond?",
+                   source: "ZeroPrompt"
+                  }
+               },
+             Zero prompt experience topic sample
+       Here is the full topic code, which can be copied directly into the new topic. You can edit
+       the zero prompt experience questions in the options shown here and reuse the
+       predefined cards.
+         yml
+         kind: AdaptiveDialog
+         beginDialog:
+           kind: OnEventActivity
+           id: main
+           condition: 
+         =Global.PA__Copilot_Model_PageContext.pageContext.entityTypeName = "account"
+           priority: 100
+           eventName: Microsoft.PowerApps.Copilot.RequestZeroPrompt
+           actions:
+             - kind: SetVariable
+               id: setVariable_acI6It
+               variable: Topic.WelcomeMessage
+               value: Welcome to the Zero Prompt Experience
+             - kind: SetTextVariable
+               id: setTextVariable_g4rSG0
+               variable: Topic.FooterMessage
+               value: This is custom ZPE footer message
+             - kind: SetVariable
+               id: setVariable_QUoZ5c
+               variable: Topic.OverviewIcon
+               value: 
+         "=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3
+         g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3
+         ZnIj4NCjxwYXRoIGQ9Ik0zLjUgNEMyLjY3MTU3IDQgMiA0LjY3MTU3IDIgNS41VjcuNUMyIDguMz
+         I4NDMgMi42NzE1NyA5IDMuNSA5SDUuNUM2LjMyODQzIDkgNyA4LjMyODQzIDcgNy41VjUuNUM3ID
+         QuNjcxNTcgNi4zMjg0MyA0IDUuNSA0SDMuNVpNMyA1LjVDMyA1LjIyMzg2IDMuMjIzODYgNSAzLj
+         UgNUg1LjVDNS43NzYxNCA1IDYgNS4yMjM4NiA2IDUuNVY3LjVDNiA3Ljc3NjE0IDUuNzc2MTQgOC
+         A1LjUgOEgzLjVDMy4yMjM4NiA4IDMgNy43NzYxNCAzIDcuNVY1LjVaTTkuNSA1QzkuMjIzODYgNS
+         A5IDUuMjIzODYgOSA1LjVDOSA1Ljc3NjE0IDkuMjIzODYgNiA5LjUgNkgxNy41QzE3Ljc3NjEgNi
+         AxOCA1Ljc3NjE0IDE4IDUuNUMxOCA1LjIyMzg2IDE3Ljc3NjEgNSAxNy41IDVIOS41Wk05LjUgN0
+         M5LjIyMzg2IDcgOSA3LjIyMzg2IDkgNy41QzkgNy43NzYxNCA5LjIyMzg2IDggOS41IDhIMTUuNU
+         MxNS43NzYxIDggMTYgNy43NzYxNCAxNiA3LjVDMTYgNy4yMjM4NiAxNS43NzYxIDcgMTUuNSA3SD
+         kuNVpNMy41IDExQzIuNjcxNTcgMTEgMiAxMS42NzE2IDIgMTIuNVYxNC41QzIgMTUuMzI4NCAyLj
+         Y3MTU3IDE2IDMuNSAxNkg1LjVDNi4zMjg0MyAxNiA3IDE1LjMyODQgNyAxNC41VjEyLjVDNyAxMS
+         42NzE2IDYuMzI4NDMgMTEgNS41IDExSDMuNVpNMyAxMi41QzMgMTIuMjIzOSAzLjIyMzg2IDEyID
+         MuNSAxMkg1LjVDNS43NzYxNCAxMiA2IDEyLjIyMzkgNiAxMi41VjE0LjVDNiAxNC43NzYxIDUuNz
+         c2MTQgMTUgNS41IDE1SDMuNUMzLjIyMzg2IDE1IDMgMTQuNzc2MSAzIDE0LjVWMTIuNVpNOS41ID
+         EyQzkuMjIzODYgMTIgOSAxMi4yMjM5IDkgMTIuNUM5IDEyLjc3NjEgOS4yMjM4NiAxMyA5LjUgMT
+         NIMTcuNUMxNy43NzYxIDEzIDE4IDEyLjc3NjEgMTggMTIuNUMxOCAxMi4yMjM5IDE3Ljc3NjEgMT
+         IgMTcuNSAxMkg5LjVaTTkuNSAxNEM5LjIyMzg2IDE0IDkgMTQuMjIzOSA5IDE0LjVDOSAxNC43Nz
+         YxIDkuMjIzODYgMTUgOS41IDE1SDE1LjVDMTUuNzc2MSAxNSAxNiAxNC43NzYxIDE2IDE0LjVDMT
+         YgMTQuMjIzOSAxNS43NzYxIDE0IDE1LjUgMTRIOS41WiIgZmlsbD0iIzcwNzA3MCIvPg0KPC9zdm
+         c+\""
+             - kind: SetVariable
+              id: setVariable_zeAjbE
+              variable: Topic.ClockIcon
+              value: 
+        "=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3
+        g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3
+        ZnIj4NCjxwYXRoIGQ9Ik0xMCA2LjUwMDEyQzEwIDYuMjIzOTggOS43NzYxNCA2LjAwMDEyIDkuNS
+        A2LjAwMDEyQzkuMjIzODYgNi4wMDAxMiA5IDYuMjIzOTggOSA2LjUwMDEyVjEwLjUwMDFDOSAxMC
+        43NzYzIDkuMjIzODYgMTEuMDAwMSA5LjUgMTEuMDAwMUgxMi41QzEyLjc3NjEgMTEuMDAwMSAxMy
+        AxMC43NzYzIDEzIDEwLjUwMDFDMTMgMTAuMjI0IDEyLjc3NjEgMTAuMDAwMSAxMi41IDEwLjAwMD
+        FIMTBWNi41MDAxMlpNMy4zNTI3MSA3Ljc5OTk4QzIuNTM0ODEgNy4yMjM4MSAyIDYuMjY3ODIgMi
+        A1LjE4NzA1QzIgMy40MzA2NyAzLjQxMzUzIDIgNS4xNjU2MiAyQzYuMjQyNzQgMiA3LjE5MjE4ID
+        IuNTQxNTEgNy43NjMxNCAzLjM2NTAxQzguNDY1NTMgMy4xMjgzIDkuMjE3NzggMyAxMCAzQzEwLj
+        c3OTQgMyAxMS41MjkgMy4xMjczNyAxMi4yMjkyIDMuMzYyNDNDMTIuODAxIDIuNTM5OTcgMTMuNz
+        UyNiAyIDE0LjgzMTEgMkMxNi41ODIzIDIgMTcuOTk5OSAzLjQyMjY4IDE3Ljk5OTkgNS4xNzUxNk
+        MxNy45OTk5IDYuMjU0NzIgMTcuNDYyIDcuMjA4MjkgMTYuNjQxMiA3Ljc4MTU5QzE2Ljg3MzkgOC
+        40Nzg3IDE3IDkuMjI0NjMgMTcgMTBDMTcgMTEuNzUzIDE2LjM1NTYgMTMuMzU1NSAxNS4yOTA4ID
+        E0LjU4MzZMMTYuODUzNiAxNi4xNDYzQzE3LjA0ODggMTYuMzQxNiAxNy4wNDg4IDE2LjY1ODIgMT
+        YuODUzNiAxNi44NTM0QzE2LjY1ODMgMTcuMDQ4NyAxNi4zNDE3IDE3LjA0ODcgMTYuMTQ2NCAxNi
+        44NTM0TDE0LjU4MzcgMTUuMjkwN0MxMy4zNTU2IDE2LjM1NTYgMTEuNzUzMSAxNyAxMCAxN0M4Lj
+        I0Njk2IDE3IDYuNjQ0NDQgMTYuMzU1NiA1LjQxNjM4IDE1LjI5MDdMMy44NTM1NiAxNi44NTM2Qz
+        MuNjU4MyAxNy4wNDg5IDMuMzQxNzIgMTcuMDQ4OSAzLjE0NjQ1IDE2Ljg1MzZDMi45NTExOSAxNi
+        42NTg0IDIuOTUxMTggMTYuMzQxOCAzLjE0NjQ0IDE2LjE0NjVMNC43MDkyNyAxNC41ODM2QzMuNj
+        Q0NDEgMTMuMzU1NiAzIDExLjc1MyAzIDEwQzMgOS4yMzE0NCAzLjEyMzg2IDguNDkxODEgMy4zNT
+        I3MSA3Ljc5OTk4Wk0zIDUuMTg3MDVDMyA1Ljg0OTE1IDMuMjkwOTggNi40NDE4NiAzLjc1MDcxID
+        YuODQyODZDNC40MTk0NiA1LjUyMTc0IDUuNDk0ODMgNC40NDEzNiA2LjgxMjIyIDMuNzY2MzJDNi
+        40MTQwOSAzLjI5NjExIDUuODIzMjYgMyA1LjE2NTYyIDNDMy45NzMzNSAzIDMgMy45NzUzOSAzID
+        UuMTg3MDVaTTE2LjI0MTYgNi44Mjc2NEMxNi43MDYyIDYuNDI4NDEgMTYuOTk5OSA1LjgzNjE2ID
+        E2Ljk5OTkgNS4xNzUxNkMxNi45OTk5IDMuOTcyNzMgMTYuMDI3OCAzIDE0LjgzMTEgM0MxNC4xNz
+        E0IDMgMTMuNTc5NyAzLjI5NTMgMTMuMTgxMyAzLjc2MzAyQzE0LjQ5NjYgNC40MzUyNCAxNS41Nz
+        EyIDUuNTExMjggMTYuMjQxNiA2LjgyNzY0Wk00IDEwQzQgMTMuMzEzNyA2LjY4NjI5IDE2IDEwID
+        E2QzEzLjMxMzcgMTYgMTYgMTMuMzEzNyAxNiAxMEMxNiA2LjY4NjI5IDEzLjMxMzcgNCAxMCA0Qz
+        YuNjg2MjkgNCA0IDYuNjg2MjkgNCAxMFoiIGZpbGw9IiM3MDcwNzAiLz4NCjwvc3ZnPg==\""
+            - kind: SetVariable
+              id: setVariable_i1e9qL
+              variable: Topic.ExclamationIcon
+              value: 
+        "=\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3
+        g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3
+        ZnIj4NCjxwYXRoIGQ9Ik0xMCAyQzE0LjQxODMgMiAxOCA1LjU4MTcyIDE4IDEwQzE4IDE0LjQxOD
+        MgMTQuNDE4MyAxOCAxMCAxOEM1LjU4MTcyIDE4IDIgMTQuNDE4MyAyIDEwQzIgNS41ODE3MiA1Lj
+        U4MTcyIDIgMTAgMlpNMTAgM0M2LjEzNDAxIDMgMyA2LjEzNDAxIDMgMTBDMyAxMy44NjYgNi4xMz
+        QwMSAxNyAxMCAxN0MxMy44NjYgMTcgMTcgMTMuODY2IDE3IDEwQzE3IDYuMTM0MDEgMTMuODY2ID
+        MgMTAgM1pNMTAgMTIuNUMxMC40MTQyIDEyLjUgMTAuNzUgMTIuODM1OCAxMC43NSAxMy4yNUMxMC
+        43NSAxMy42NjQyIDEwLjQxNDIgMTQgMTAgMTRDOS41ODU3OSAxNCA5LjI1IDEzLjY2NDIgOS4yNS
+        AxMy4yNUM5LjI1IDEyLjgzNTggOS41ODU3OSAxMi41IDEwIDEyLjVaTTEwIDZDMTAuMjQ1NSA2ID
+        EwLjQ0OTYgNi4xNzY4OCAxMC40OTE5IDYuNDEwMTJMMTAuNSA2LjVWMTFDMTAuNSAxMS4yNzYxID
+        EwLjI3NjEgMTEuNSAxMCAxMS41QzkuNzU0NTQgMTEuNSA5LjU1MDM5IDExLjMyMzEgOS41MDgwNi
+        AxMS4wODk5TDkuNSAxMVY2LjVDOS41IDYuMjIzODYgOS43MjM4NiA2IDEwIDZaIiBmaWxsPSIjNz
+        A3MDcwIi8+DQo8L3N2Zz4=\""
+            - kind: SetVariable
+              id: setVariable_x6BNry
+              variable: Topic.OptionOne
+              value: "={skillType: \"PromptTextSkill\", optionGroup: \"Redmond 
+        Accounts!\", prompt: \"What are the accounts located in Redmond?\" }"
+            - kind: SetVariable
+              id: setVariable_4jjXcz
+              variable: Topic.OptionTwo
+              value: "={skillType: \"MCSMessageSkill\", optionGroup: \"Missing Phone 
+        Numbers\", prompt: \"Which accounts have missing phone numbers?\" }"
+            - kind: SetVariable
+              id: setVariable_DzjFpB
+              variable: Topic.OptionThree
+              value: "={skillType: \"MCSMessageSkill\", optionGroup: \"Active 
+        Accounts\", prompt: \"How many active accounts are there?\" }"
+            - kind: SetVariable
+              id: setVariable_q8Ne5M
+              variable: Global.PA_Copilot_ZeroPrompt
+              value: |-
+                ={
+                                  type: "AdaptiveCard",
+                                  body: [
+                                      {
+                                        type: "ColumnSet",
+                                        id: "ms-platform-zpe-columnsetheader-
+        dc291457-0726-4472-9264-ab644fe9b13e",
+                                        columns: [
+                                            {
+                                                type: "Column",
+                                                items: [
+                                                {
+                                                    type: "TextBlock",
+                                                    wrap: true,
+                                                    text: "Hi 
+        "&System.User.FirstName&","
+                                                },
+                                                {
+                                                    type: "TextBlock",
+                                                    wrap: true,
+                                                    text: 
+        ""&Topic.WelcomeMessage&"",
+                                                    id: "ms-platform-zpe-header-
+        74453ffe-b4e3-4c81-9a6c-5c03dc4a3661",
+                                                    spacing: "Medium"
+                                                },
+                                                ]
+                                            }
+                                        ]
+                                      },
+                                      {
+                                          type: "Container",
+                                          id: "ms-platform-zpe-actionscontainer-
+        d44c003a-b977-4e0b-a3fc-f8d30d60110b",
+                                          isVisible: 
+        ""&!IsBlank(Topic.OptionOne.prompt)&"",
+                                          showBorder: true,
+                                          roundedCorners: true,
+                                          selectAction: {
+                                              type: "Action.Submit",
+                                              data: {
+                                                  scenario: "ZeroPromptCard",
+                                                  skillType: 
+        Topic.OptionOne.skillType,
+                                                  value:  
+        ""&Topic.OptionOne.prompt&"",
+                                                  source: "ZeroPrompt"
+                                              }
+                                          },
+                                          items: [
+                                              {
+                                                  type: "ColumnSet",
+                                                  columns: [
+                                                      {
+                                                          type: "Column",
+                                                          width: "auto",
+                                                          items: [
+                                                              {
+                                                                  type: "Image",
+                                                                  url: 
+        ""&Topic.ExclamationIcon&"",
+                                                                  altText: 
+        ""&Topic.OptionOne.optionGroup&""
+                                                              }
+                                                          ]
+                                                      },
+                                                      {
+                                                          type: "Column",
+                                                          width: "stretch",
+                                                          items: [
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionOne.optionGroup&"",
+                                                                  weight: "bolder"
+                                                              },
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionOne.prompt&""
+                                                              }
+                                                          ]
+                                                      }
+                                                  ]
+                                              }
+                                          ]
+                                      },
+                                      {
+                                          type: "Container",
+                                          id: "ms-platform-zpe-actionscontainer-
+        477da7ce-bd52-4870-a8c2-04071daa56e2",
+                                          isVisible: 
+        ""&!IsBlank(Topic.OptionTwo.prompt)&"",
+                                          showBorder: true,
+                                          roundedCorners: true,
+                                          selectAction: {
+                                              type: "Action.Submit",
+                                              data: {
+                                                  scenario: "ZeroPromptCard",
+                                                  skillType: 
+        Topic.OptionTwo.skillType,
+                                                  value: 
+        ""&Topic.OptionTwo.prompt&"",
+                                                  source: "ZeroPrompt"
+                                              }
+                                          },
+                                          items: [
+                                              {
+                                                  type: "ColumnSet",
+                                                  columns: [
+                                                      {
+                                                          type: "Column",
+                                                          width: "auto",
+                                                          items: [
+                                                              {
+                                                                  type: "Image",
+                                                                  url:  
+        ""&Topic.ClockIcon&"",
+                                                                  altText: 
+        ""&Topic.OptionTwo.optionGroup&""
+                                                              }
+                                                          ]
+                                                      },
+                                                      {
+                                                          type: "Column",
+                                                          width: "stretch",
+                                                          items: [
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionTwo.optionGroup&"",
+                                                                  weight: "bolder"
+                                                              },
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionTwo.prompt&""
+                                                              }
+                                                          ]
+                                                      }
+                                                  ]
+                                              }
+                                          ]
+                                      },
+                                      {
+                                          type: "Container",
+                                          id: "ms-platform-zpe-actionscontainer-
+        ff8b54c0-ba5a-435f-a66f-3978115ef39a",
+                                          isVisible: 
+        ""&!IsBlank(Topic.OptionThree.prompt)&"",
+                                          showBorder: true,
+                                          roundedCorners: true,
+                                          selectAction: {
+                                              type: "Action.Submit",
+                                              data: {
+                                                  scenario: "ZeroPromptCard",
+                                                  skillType: 
+        Topic.OptionThree.skillType,
+                                                  value: 
+        ""&Topic.OptionThree.prompt&"",
+                                                  source: "ZeroPrompt"
+                                              }
+                                          },
+                                          items: [
+                                              {
+                                                  type: "ColumnSet",
+                                                  columns: [
+                                                      {
+                                                          type: "Column",
+                                                          width: "auto",
+                                                          items: [
+                                                              {
+                                                                  type: "Image",
+                                                                  url:  
+        ""&Topic.OverviewIcon&"",
+                                                                  altText: 
+        ""&Topic.OptionThree.optionGroup&""
+                                                              }
+                                                          ]
+                                                      },
+                                                      {
+                                                          type: "Column",
+                                                          width: "stretch",
+                                                          items: [
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionThree.optionGroup&"",
+                                                                  weight: "bolder"
+                                                              },
+                                                              {
+                                                                  type: "TextBlock",
+                                                                  text: 
+        ""&Topic.OptionThree.prompt&""
+                                                              }
+                                                          ]
+                                                      }
+                                                  ]
+                                              }
+                                          ]
+                                      },
+                                      {
+                                                  type: "Container",
+                                                  id: "ms-platform-zpe-collapsed-footer-
+                79fb882f-ec4e-4abd-bc65-8c523849da40",
+                                                  items: [
+                                                      {
+                                                          type: "ColumnSet",
+                                                          columns: [
+                                                              {
+                                                                  type: "Column",
+                                                                  width: "auto",
+                                                                  items: [
+                                                                      {
+                                                                          type: "TextBlock",
+                                                                          wrap: true,
+                                                                          text: 
+                ""&Topic.FooterMessage&"",
+                                                                          id: "fsFooterId"
+                                                                      },
+                                                                  ]
+                                                              }
+                                                          ]
+                                                      },
+                                                  ]
+                                              },
+                                          ],
+                                          '$schema': 
+                "http://adaptivecards.io/schemas/adaptive-card.json",
+                                          version: "1.5"
+                                      }
+              Related articles
+                    FAQ for Copilot chat in model-driven apps
+                    Responsible AI FAQs for Power Apps
+                    Enable copilots and generative AI features in Power Apps
+              ） Note: The author created this article with assistance from AI. Learn more
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+             Use Excel and Word templates
+             Article • 02/15/2022
+             You can use templates in a variety of ways to speed your work and improve consistency.
+             With Excel templates, you can easily create and share your customized analysis with
+             others in your organization. You can use Word templates to create standardized
+             documents automatically populated with Microsoft Dataverse data.
+             Enable and work with Excel and Word
+             templates
+                1. Sign in to Power Apps   and in the upper-right corner, select the     (upper
+                  right), and then select Advanced settings.
+                2. Select Settings > Templates.
+                3. On the Templates page, select Document Template to work with Excel or Word
+                  templates.
+      For information on using templates, see the following documentation:
+        Word templates: Use Word templates to create standardized documents
+        Excel templates: Analyze and share your data with Excel templates
+    Use modern themes in model-driven apps
+    Users of model-driven apps with the modern, refreshed look for model-driven apps enabled
+    experience updated styling aligned to the Microsoft Fluent 2 design system. Because this modern
+    refreshed look comes with a new theming system, classic theming isn't honored; however, makers
+    can modify the colors used by the app to help align with their organizational branding for users
+    who have enabled the modern, refreshed look. In this article, you learn about the styling
+    overrides available with the modern, refreshed look and how to implement them for your
+    organization.
+      ７ Note
+        Modern themes currently support providing a custom theme for the entire app,
+        overriding the app header colors, and setting a custom app logo. Other customizations
+        like customizing the business process flow control aren't available.
+        For modern themes to work, the model-driven app must be using the New look. More
+        information: Modern, refreshed look for model-driven apps
+    Modify the app theme
+    With the modern, refreshed look enabled in the app, makers can create a custom theme that
+    helps align to their organizational branding. With a custom theme you can change the app
+    header, hyperlinks, lookups, primary buttons, active tab indicators, row selection, and hover
+    effects. The custom theme also lets you change the font that is used in the application. To
+    accomplish this, you encapsulate the desired theme information into an XML resource, use an
+    app setting to point to this web resource, and then verify the new modern theme matches your
+    expectations.
+      ７ Note
+      Most of the UI uses your custom theme. However, some areas don’t use modern theming
+      yet for example, legacy grids, row summaries, focus view, and the sales pipeline.
+    Overview of the custom theme XML resource
+        The first step to creating a custom modern theme is to create an XML file with your desired
+        theme parameters, with one or more of the following attributes defined inside a CustomTheme tag.
+             BasePaletteColor – The seed color (HEX code) used as a basis to generate a 16-slot color
+             palette for the theme.
+             LockPrimary – A boolean that determines how the selected seed color is used to generate
+             the 16-slot color palette.
+               False (Default): The palette is optimized for accessibility, but doesn't guarantee the seed
+               color will appear in any slot of the generated palette. This is the default setting. Use the
+               Fluent theme generator   to preview the generated palette based on your selections for
+                basePaletteColor, vibrancy, and hueTorsion.
+               True: The seed color is placed in primary (middle) slot of the palette. The remaining
+               colors are generated by making the colors incrementally lighter on one side and darker
+               on the other side. The generated palette might not meet contrast ratio accessibility
+               requirements.
+             Font – The font for your custom theme. The font that the custom theme renders depends
+             on the browser and target machine's ability to show that font.
+             Vibrancy – An optional parameter that impacts the muteness or brightness of the palette,
+             especially the lighter colors. The allowed values are between -100 and 100, with a default
+             value of 0. This option is only applicable when lockPrimary="true".
+             HueTorsion – An optional parameter that impacts the tint, shade, or tone of the palette,
+             especially the lighter colors. The allowed values are between -100 and 100, with a default
+             value of 0. This option is only applicable when lockPrimary="true".
+             LogoWebResource – The logical name of the image web resource to use as the logo in the
+             app header. Logos that are too large don't display. The recommended image size is 156
+             pixels wide × 48 pixels high.
+             LogoTooltip – The tooltip text displayed when a user hovers over the app logo. Defaults to
+             Dynamics 365 if not specified.
+        Override the palette
+        Overriding individual slots in the theme palette provides the creator with full control over the slot
+        colors, which is particularly useful when additional modifications are required beyond the
+        standard theme parameters mentioned above. To override a specific slot, assign a value to the
+        desired slot by its name. For instance, you can specify the HEX code for darker70, primary, or
+        lighter10 to tailor the appearance precisely to your preference. Setting values for all 16 slots
+        completely overrides all the palette options described in the previous section, allowing for a
+        highly customized and unique color scheme.
+        The slot names for the palette from darkest to lightest are: darker70, darker60, … <>, darker10,
+        primary, lighter10, lighter20, …, lighter80. Refer to the Fluent theme    designer to find out
+        how these slots are generally used in Fluent controls.
+        Example XML for a custom theme
+        As an example, this XML specifies a custom theme that is green with a different font and a
+        custom logo.
+          XML
+          <CustomTheme 
+              basePaletteColor="#00FF00"
+              vibrancy="0"
+              hueTorsion="-50"
+              font="'GreatVibes', cursive"
+              logoWebResource="contoso_company-logo"
+              logoTooltip="Contoso"
+          />
+        This XML specifies a custom theme using the alternate palette generation algorithm with an
+        override for a single slot.
+          XML
+          <CustomTheme 
+              basePaletteColor="#00FF00"
+           lockPrimary="false"
+           font="'GreatVibes', cursive"
+           lighter70="#FFFFFF"
+       />
+      Modify the app header colors
+      Makers can customize the styling of the app header to deviate from the app theme. To make
+      these customizations, extend the XML created for the custom modern theme by adding one or
+      more of the following attributes inside an AppHeaderColors tag.
+         Background – The background color of the app header. This element must be defined for
+         any changes to take effect.
+         Foreground – The text color of the app header. If this isn't specified, the system attempts to
+         calculate an appropriate color that has sufficient contrast to the provided background color.
+         BackgroundHover – The background color of buttons on the app header when they're
+         hovered over. If no value is specified, the system calculates a color based on the
+         background color.
+         ForegroundHover – The text color of buttons on the app header when they're hovered over.
+         If no value is specified, the system attempts to calculate an appropriate color that has
+         sufficient contrast to the backgroundHover color.
+         BackgroundPressed – The background color of buttons on the app header when they're
+         pressed. The defaulting logic is the same as backgroundHover.
+         ForegroundPressed – The text color of buttons on the app header when they're pressed. The
+         defaulting logic is the same as foregroundHover.
+         BackgroundSelected – The background color of buttons on the app header when they're
+         selected. The defaulting logic is the same as backgroundHover.
+         ForegroundSelected – The text color of buttons on the app header when they're selected.
+         The defaulting logic is the same as backgroundHover.
+      Example XML for a modern theme
+      As an example, this XML extends the green custom theme with a black app header. For optimal
+      usability, we recommend specifying different color values for each interaction state.
+       XML
+       <CustomTheme
+           basePaletteColor="#00FF00"
+           vibrancy="0"
+           hueTorsion="-50"
+              font="'GreatVibes', cursive"
+          >  
+            <AppHeaderColors
+              background="#000000" 
+              foreground="#FFFFFF" 
+              backgroundHover="#313131" 
+              foregroundHover="#FFFFFF"
+              backgroundPressed="#494949"
+              foregroundPressed="#FFFFFF"
+              backgroundSelected="#717171" 
+              foregroundSelected="#FFFFFF"  
+            />
+          </CustomTheme>
+          ７ Note
+          These settings cause any colors specified in the Override app header color setting to be
+          ignored.
+        Create the web resource
+           1. Using a text or XML editor, save the XML that is used to create the web resource. Example
+             XML for a modern theme
+           2. Sign into Power Apps  .
+           3. Select Solutions on the left navigation pane, and then create a New solution.
+           4. Select New > More > Web resource.
+           5. Select Choose file, browse to and select the XML text file you created earlier.
+           6. In the New web resource property pane, enter the following values:
+                  Display name: Enter a display name, such as Green custom theme.
+                  Name. Accept the automatically generated or enter a unique name for the web
+                  resource.
+                  Type: Data (XML)
+           7. Select Save. You publish this customization with the steps in the next section.
+        Apply the custom theme to apps in your environment
+    After you select your colors and create the web resource, follow these steps to enable this app
+    header styling for all the apps in your environment that have the New look enabled.
+     1. In the solution you used to create the web resource, select Add existing > More > Setting.
+     2. Type custom theme in the Search box, select Custom theme definition, select Next, and
+      then select Add.
+     3. In the solution, select Custom theme definition, and then select Edit on the command bar.
+     4. On the right Edit Custom theme definition properties pane, select New environment value
+      under Setting environment value and enter the unique name of your web resource you
+      created earlier (observe the Name column in the solution for the unique name). Remove the
+      double quotes and make sure to add the publisher prefix for the web resource. For example,
+      the name might appear as contoso_green-custom-theme as in this example.
+                                             
+     5. Select Save.
+     6. Expand Settings on the left Objects pane, select Setting definitions, and then select Publish
+      all customizations on the command bar. (This command appears when no components in
+      the solution are selected).
+    Wait for the customization publish to complete. Then, open a model-driven app in the
+    environment to display the theme.
+     Custom model-driven app using the extended green theme sample.
+     Verifying new app header colors
+     After publishing your custom theme, validate the application of the theme in the app to ensure
+     everything appears as you expect.
+     Modify the app header colors only
+     Makers can choose to only customize the styling of the app header to deviate from the default
+     app theme. This can be done by following these steps:
+      1. Create an XML file with your various color selections, with one or more of the attributes
+        from app header color overrides section defined inside an AppHeaderColors tag.
+      2. Create a web resource using the same process described for custom themes, but be sure to
+        give the XML resource an appropriate descriptive display name, such as Green app header
+        XML.
+      3. Apply custom app header colors to apps in your environment by assigning this web
+        resource to the environment or app in the Override app header color setting. Follow the
+        steps from Applying custom themes to your environment but use the Override app header
+        color setting instead.
+         ７ Note
+          The Override app header color setting is ignored if the Custom theme definition
+          setting is defined.
+       4. Verify your custom app header visuals, including all button states, to ensure everything
+         appears as you expect and there are sufficient contrast ratios for accessibility. Verify the
+         following color choices:
+            The desired colors are shown for the app header at rest and for each button
+            interaction state.
+            There's a minimum of a 4.5:1 contrast ratio between foreground and background
+            colors for the rest state and each button interaction state.
+     Example XML for app header color override
+     As an example, this XML specifies a green background color for the app header with white text,
+     with darker background colors for the various button interaction states. For optimal usability, we
+     recommend specifying different color values for each state.
+      XML
+      <AppHeaderColors 
+        background="#12783F"
+        foreground="#FFFFFF" 
+        backgroundHover="#165A31" 
+        foregroundHover="#FFFFFF"
+        backgroundPressed="#0F1C12"
+        foregroundPressed="#FFFFFF"
+        backgroundSelected="#153D23" 
+        foregroundSelected="#FFFFFF"
+      />
+     When you play the app, the app header looks like the following image. You might need to refresh
+     the browser tab to display the theme.
+                                                              
+     See also
+     Classic theming
+     Modern refreshed look
+     Style components with modern theming
+      Last updated on 07/07/2026
+     Use a theme to create a custom look for
+     your app
+     You can create a custom look and feel (a theme), for your app by making changes to the
+     default colors and visual elements provided in the uncustomized system. For example, you can
+     create your personal product branding by adding a company logo and providing table-specific
+     coloring. A theme can be created without requiring a developer to write code. You can create,
+     clone, change, or delete themes that are used in your environment.
+      ７ Note
+      There's newer way to create themes in model-driven apps for customizing the model-
+      driven app header. More information: Use modern themes
+      You can define multiple themes, but only a single theme can be active in an environment
+      and is identified as the default theme. To make a theme active, you publish it.
+     Use themes to enhance the user interface and
+     create your product branding
+     Theming is used to enhance the app user interface, not drastically alter it. The theme colors are
+     applied globally throughout your model-driven apps. For example, you can enhance the
+     following visual elements in the UI:
+        Change navigation colors to create product branding.
+        Adjust accent colors, such as hover or selection colors.
+        Provide table-specific coloring.
+        Logo. (Use an existing or add a new image file as a web resource.)
+        Logo tooltip.
+        Navigation bar color.
+        Title text color.
+              Selected link color.
+              Hover link color.
+              Legacy accent color (primary background for process controls).
+              Default color for tables.
+              Default custom tables color.
+              Control fill color.
+              Control border color.
+         Solution awareness
+         Themes aren't solution aware. The changes made for an organization's theme aren't included
+         in solutions exported from the organization. The data is stored in the theme table that can be
+         exported and reimported in another environment. The imported theme must be published to
+         take effect.
+         Copy and alter the existing theme
+         The easiest and quickest way to create a new theme is to clone and alter an existing theme.
+         Then save, preview, and publish it.
+            1. Sign in to Power Apps   , select Settings     (upper right), and then select Advanced
+              settings.
+            2. On the classic settings page, select Settings > Customizations > Themes.
+            3. Under All themes, select the theme you want to clone, such as the CRM Default Theme.
+              Select Clone on the command bar.
+            4. Open the cloned theme, and then replace an existing UI item's hexadecimal number, such
+              as the Title Text Color, with the hexadecimal value that represents the color you want.
+         For example, the CRM Default Theme was cloned and changed using mostly varying shades of
+         green color. The following screenshots show the new colors for navigation and highlighting. A
+         custom logo was also added that appears in the upper left corner of an app.
+    The following image shows an app account view with the new colors and logo.
+     ） Important
+       Logos that are too large don't display. The image used in the example is 156 pixels wide x
+       48 pixels height.
+      Preview and publish a theme
+      To preview and publish a theme, do the following steps:
+       1. Create a New theme from scratch or Clone an existing one.
+       2. Preview the new theme. To exit the preview mode, choose Exit Preview on the command
+         bar.
+       3. Publish the theme. Select Publish Theme on the command bar to make it the active
+         (default) theme in the environment.
+      The following screenshot shows the buttons on the command bar for preview and publishing.
+      Best practices
+      Following are the recommendations for designing theme contrasts and choosing colors.
+      Theme contrast
+      We recommend the following approach to providing contrast colors:
+         Carefully choose the contrasting colors. The Microsoft Dataverse out-of-the-box default
+         theme has the correct contrast ratios to ensure optimal usability. Use similar contrast
+         ratios for your new themes.
+         For high contrast mode, use the default color settings.
+      Theme colors
+      We recommend that you don't use a large number of different colors. Although you can set a
+      different color for every table, we recommend one of two patterns:
+         Make all tables in neutral colors and highlight the key tables.
+         Use the same color for similar tables or related tables, such as queue and queue item, or
+         product catalog tables. Keep the total number of groups low.
+      Custom theme considerations
+      You should consider the following when planning on using custom themes:
+         Most updated user interface (UI) areas will be displayed in the custom theme colors.
+         Even though the theme colors are applied globally throughout the application, some
+         legacy UI areas, such as gradient buttons, retain the default colors.
+         Certain areas must use dark or light colors to contrast with the default icon colors. The
+         icon color isn't customizable.
+         A table can't be displayed in different colors under different Sitemap nodes.
+         The Sitemap nodes colors aren't customizable.
+      Known issues with mobile devices and themes
+      The custom theme isn't applied on devices running the Power
+      Apps mobile app
+      When you run the Power Apps mobile app with an environment that is using a custom theme
+      as the default theme, the mobile device displays the system CRM Default Theme.
+      Card forms aren't displayed in table views in a web browser
+      On a mobile device running the app in a web browser, the view is displayed in the standard
+      view, which isn't optimized for small screens and is displayed similar to the image here. For
+      more information about card forms, see Create a card form.
+      See also
+      Query and edit an organization theme
+      Last updated on 04/03/2026
+     Create guided help for your model-
+     driven app
+     Use custom help panes and guided tasks to give your Unified Interface application a custom in-
+     product help experience that is tailored to your organization. Use custom help panes to provide
+     table, form, and language-specific help and guidance that includes rich text, content links,
+     images, and video links.
+      ） Important
+         Custom help panes replace the previous learning path guided help feature used with
+         legacy web client apps.
+         Custom help panes don’t work with Unified Interface apps running on a mobile device,
+         such as Android and iOS tablets and smartphones.
+     Custom help panes and learning path
+     The new guided help implementation of custom help panes differs from the previous learning
+     path guided help feature. Both features let you create custom help for your application. However,
+     custom help panes are optimized for the most common guided help scenarios.
+     Custom help panes provide the following key features that are not available with learning path:
+        Free-form rich text, including bullets and numbering.
+        Visibly linked coach marks and help balloons.
+        More options for video sources, including private sources.
+        Storage of help content in Microsoft Dataverse as part of your solution.
+     Custom help panes don't provide the following key features that are available with learning path:
+        Sequential help balloons.
+        Help pages per role.
+        Help pages for per-device form factor, such as smartphones.
+     Prerequisites
+        To use the custom help panes feature, your environment needs the custom help panes
+        environment setting enabled.
+        Enable custom help panes for your environment
+          1. Sign in to the Power Platform admin center at
+             https://admin.powerplatform.microsoft.com  .
+          2. Select Manage on the left pane, and then open the environment you want.
+          3. Select Settings on the command bar, and then select Product > Features.
+          4. Under Help features turn Enable Custom Help Panes to On.
+          ） Important
+          Make sure that Custom help for customizable entities is set to No, otherwise you can't turn
+          on Enable Custom Help Panes. This is because you can't use both custom help panes and
+          customizable help at the same time.
+        Privileges required
+             To author help panes, app makers need global create, read, write, delete, append, and
+             append to privileges on the Help Page table. By default, System Administrator and System
+             Customizer security roles both have this privilege.
+             To view help panes in an app, users need read privilege on the Help Page table. By default,
+             the Help Page Consumer security role has this privilege. By default, the Basic User security
+             role doesn’t have any privileges on the Help Page table.
+        More information: Security roles and privileges
+        Context-sensitive custom help
+        Each help pane is unique for these contexts:
+             Table
+             Form
+             Dashboard
+             Language
+             Application
+        Help pane navigation
+    By default, a help pane stays open and on the help content you first opened it with even when
+    you navigate to a different form. This allows for the help content to remain intact as you direct
+    users to different parts of the app.
+    To author help pane content
+     1. To view the help pane, open a model-driven app, and then on the command bar select
+      Help.
+     2. On the Help pane, select the vertical ellipsis, and then select Edit.
+      The help pane is now in edit mode and the cursor is positioned on the help pane title.
+     3. From the edit pane you can perform the following tasks:
+         Enter text by typing directly in the help pane area.
+         Format text through rich text capabilities and add bullet/numbered lists, sections,
+         videos, images, links, coach marks, and balloon help.
+     4. To save your changes, select Save.
+    Free-form text
+    Text can be placed anywhere within the help pane. Enter free-form text before, in, or after
+    sections. Text supports bold, italic, underline, and strikeout font formats. Cut, copy, and paste can
+    be used as well as multilevel undo.
+    Bullets and numbered lists
+    Selecting the bullet or number icon toggles the current line to become bulleted or numbered. If
+    you have selected multiple lines in a list, each line becomes bulleted or numbered. Tabbing and
+    indenting subnumbers align within the list.
+    Sections
+    A section is a collapsible text box. You can put links or free-form text in it. Use a section to group
+    similar items. A section can be either open or collapsed by default.
+    Video and static images
+    You can insert videos and static images into your help pane. Videos and images are links to
+    content on the internet. Custom help panes do not store the video and image files in your help
+    pane. When the help pane is opened, custom help panes bring the content in from the link to
+    display it. You can use a link to a Microsoft Stream video if you want to reference corporate
+    private content.
+      Tip
+     Remember to copy the link URL for the video or image you want so you can paste it into
+     your help pane.
+    Custom help panes support the following video sources:
+      Microsoft Stream (Classic) (use for private content)
+      YouTube
+      Facebook
+      Vimeo
+    Links
+    Links can be to websites and open in the same window (the default) or open in a separate
+    window. The ability to link to an existing help page is not yet enabled.
+    Balloons and coach marks
+    Balloons and coach marks can be used to point to specific UI elements. A balloon can have text in
+    it.
+    A coach mark simply highlights an element with a coach pointer to draw the user's attention to
+    that UI element.
+    Author needs to define the target through drag and drop capability in the properties of balloons
+    and coach marks. Author can input the text for title and description for coach marks.
+     ７ Note
+       Balloons and coach marks don't work well with custom components. This feature only
+       applies to default Unified Interface UI components.
+       Sequential help balloons and coachmarks are not supported yet.
+        Solutions and custom help pane content
+        All help content is stored in a help page component in Dataverse as part of your solution. When
+        you move your solution from one environment to another, such as from test to production, you
+        can define that your help rows are exported so that they are included in the solution. This enables
+        you to keep your help content in sync with features in your solution as it moves to different
+        environments. As a part of your solution, custom help panes support all standard solution
+        application lifecycle management (ALM) features.
+        Moving content via solutions
+        By default, all new help pages appear in the default solution. If you want to move your content to
+        another environment, first add your existing help pages into an unmanaged solution before you
+        export them. To add a help page to an unmanaged solution, follow these steps:
+           1. Sign into Power Apps  .
+           2. On the left navigation pane, select Solutions. If the item isn’t in the side panel pane, select
+             …More and then select the item you want.
+           3. Open the unmanaged solution you want.
+           4. Select Add Existing on the command bar, and then select Help Page.
+           5. Select the help pages that you want to add, and then select Add. More information: Export
+             solutions
+        Help page documentation automation
+        You might want to back up or store your content in a source code control system. You might also
+        like to use documentation automation tools, such as translation tools or checkers, on help pane
+        content. The custom help pane data is stored directly in Dataverse and can be exported and
+        imported for this purpose.
+        Custom help panes support a custom XML format. This format is documented below. More
+        information: Custom help XML definition
+        When exported, each help page is exported as a separate file.
+        About the Contextual Help managed solution
+        The custom help panes and guided tasks feature consists of the solution components in the
+        Contextual Help managed solution. Customizing or creating records using the tables outside of
+     the custom help panes and guided tasks feature isn’t supported.
+     Notice that some apps, such as Dynamics 365 Sales and Dynamics 365 Service, include first run
+     experiences that are built by using tables included in the Contextual Help managed solution. For
+     example, both the Help Page (msdyn_helppage) and Tour (msdyn_tour) tables are used in the
+     creation of these first run experiences. Currently, the custom help panes and guided tasks feature
+     doesn’t support creating these first run experiences.
+     Frequently asked questions
+     This section discusses frequently asked questions about custom help pages.
+     Are custom help pages the same as customizable help?
+     Custom help panes and guided tasks are an option in the Set custom help URL section of system
+     settings. Custom help panes and guided tasks enable a customizable help pane that shows up
+     right next to the user’s form. The other options in this system settings set custom help section
+     comprise the customizable help features. They allow you to override the default apps help and
+     point users in your organization to a different URL for help. Alternatively, you can override the
+     help for a highly customized table so that you can better describe your workflow.
+     For more information about customizable help, see Enable and use customizable help.
+     How do I migrate my data from learning path to custom
+     help pages?
+     Learning path has two types of help: help panes and sequential help balloons. The sequential
+     help balloon locations are deeply integrated with the legacy web client UI and are not
+     transferrable to the new custom help panes.
+     Depending on how much text you have in your guided help it might be easiest to simply copy
+     the information directly from the learning path user interface to the new custom help pane user
+     interface. However, you can also export your learning path help content. The simplest way to do
+     this is to export your content using the Learning Path > Content Library > Localize > Export
+     feature. Select the rows you want and then export them. This creates an XLIFF file for each help
+     pane and guided task. Then, use a publicly available XLIFF editor or XLIFF to HTML converter to
+     retrieve your content.
+     Custom help XML definition
+     This section describes the custom help XML definition.
+     PPHML
+      <pphml>
+          <h1>FAQ</h1>
+          <collapsible title="What is PPHML?">
+              <p>PPHML is a domain specific language for help content. It is used to create 
+      help content that includes elements such as images, videos, balloons, coach marks, 
+      etc.</p>
+          </collapsible>
+          <collapsible title="What does PPHML stand for?">
+              <p>PPHML stands for Power Platform Help Markup Language</p>
+          </collapsible>
+      </pphml>
+     Definition and usage
+     The <pphml> element tells the help browser that this is a PPHML document.
+     The <pphml> element represents the root of a PPHML document.
+     The <pphml> element is the container for all other PPHML elements.
+     Title
+     Presents a title in a help page.
+      <h1>This will be displayed at the top of the help page</h1>
+     Definition and Usage
+     The <h1> element defines the title of a help page.
+     <h1> This must be the first element inside <pphml>.
+     Image
+     Presents an image in a help page.
+       <img src="smiley.gif" alt="Smiley face" title="Smiley face"/>
+      Definition and usage
+      The <img> element embeds an image in a help page.
+      Attributes
+          src: Specifies the URL of an image. This attribute is required.
+          title: Specifies a title to show along with the image, typically as a hover tooltip.
+          alt: Specifies an alternate text for an image. This text is used by screen readers.
+      Video
+      Presents a video in a help page.
+       <video src="https://www.youtube.com/watch?v=WSWmn7WM3i4" />
+      Definition and usage
+      The <video> element embeds a video, such as a tutorial or training movie, in a help page.
+      Supported sources
+         Microsoft Stream
+         YouTube
+         Facebook
+         Vimeo
+      Attributes
+          src: Specifies the URL of the video. This attribute is required.
+          allowFullScreen: Specifies whether the user can switch the video to full screen. Possible
+         values are "true" or "false". This attribute is not supported for all video sources.
+          autoplay: Specifies that the video will start playing as soon as the help page loads. Possible
+         values are "true" or "false". This attribute is not supported for all video sources.
+         startTime: Specifies, in seconds, from which point to start playing the video.
+     Paragraph
+     Presents a paragraph in a help page.
+      <p>This is some text in a paragraph.</p>
+     Definition and usage
+     The <p> element defines a paragraph.
+     Text inside a paragraph can be decorated in the following ways:
+        Bold, with <strong> element
+        Italic, with <em> element
+        Strikethrough, with <del> element
+        Underline, with <u> element
+     These decorations can be combined. For example, make a fragment of text that is both bold and
+     underlined.
+     Bulleted list
+     Presents a bulleted list in a help page.
+      <ul>
+          <li>Coffee</li>
+          <li>Tea</li>
+          <li>Milk</li>
+      </ul>
+     Definition and usage
+     The <ul> element defines a bulleted list.
+     Use the <ul> element together with the <li> element to create bulleted lists.
+     Numbered list
+      Presents a numbered list in a help page.
+       <ol>
+           <li>First step</li>
+           <li>Second step</li>
+           <li>Third step</li>
+       </ol>
+      Definition and usage
+      The <ol> element defines an ordered (numbered) list. Use the <ol> tag together with the <li>
+      element to create numbered lists.
+      Collapsible
+      Presents a collapsible section in a help page.
+       <collapsible title="This is a Section">
+           <p>This is a paragraph inside a section</p>
+           <img src=smiley.gif" title="This is an image inside a section" />
+       </collapsible>
+      Definition and usage
+      The <collapsible> element defines a section of content that the user can view or hide on
+      demand.
+      Attributes
+         collapsed: Specifies whether the section is collapsed or expanded initially. Possible values
+         are "true" (collapsed) or "false" (expanded).
+      Link
+      Presents a link in a help page.
+      Link to a website that opens in a new browser window:
+         <a href="https://www.microsoft.com" target="_blank">Microsoft Home Page</a>
+       Link to another help page:
+         <a href="./LearnMore">Learn More</a>
+       Definition and usage
+       The <a> tag   defines a link, which allows the user to navigate from a help page to a website, or
+       to another help page.
+       Attributes
+            href: Specifies the URL of the website or help page to which to navigate. This attribute is
+            required.
+            target: Specifies where to open the linked URL.
+               If not present or _self, the link is assumed to be to another help page and it's opened in
+               the help browser.
+               If  _blank, the link is opened in a new browser window.
+               If  _top, the link is opened in the current browser window.
+               If the value is the name of an iframe, the link is opened in that iframe.
+       Coach mark
+       Presents a coach mark in a help page.
+         <coachmark target="#my-html-button">Click to highlight the HTML element with id [my-
+         html-button]</coachmark>
+       Definition and usage
+       A coach mark is an interactive element that can be used to draw the user's attention to a specific
+       point in the UI of the application hosting the help browser.
+       Attributes
+              target: CSS selector   that specifies the HTML element over which the coach mark will be
+             shown. This attribute is required.
+        Balloon
+        Presents a balloon in a help page.
+          <balloon target="#my-html-button" title="This button submits the form" details="Please 
+          click this button to continue and submit the form">Click to show a balloon over the 
+          HTML element with id [my-html-button]</balloon>
+        Definition and usage
+        A balloon is an interactive element that can be used to help the user perform an action in the UI
+        of the application hosting the help browser.
+        Attributes
+              target: CSS selector that specifies the HTML element over which the balloon link will
+             appear. This attribute is required.
+              title: Specifies the title of the balloon.
+              details: Specifies the content to show inside the balloon.
+         Last updated on 07/23/2025
+         Validate and publish a model-driven app
+         using the app designer
+              Summarize this article for me
+         ﾃ
+         Model-driven apps can't be published when they don't include all the required components.
+         Some components rely on others and this relationship between components is known as a
+         dependency.
+            ７ Note
+            This article discusses a feature that's only available or needed when you use the classic
+            app designer. The modern designer validates your app as part of the app building
+            process.
+         For example, the position table has been added to the site map, but is no longer showing in
+         the app.
+         The process of checking for dependencies within a model-driven app is known as validation.
+         When the app is validated, the app designer canvas shows details about the assets that are
+         missing.
+         How to validate an app and add in dependencies
+            1. Sign in to Power Apps   .
+            2. Select the environment in which the unmanaged model-driven app is located.
+            3. Select the model-driven app, and then on the command bar select Edit.
+                 ７ Note
+                 Customizations to a model-driven app should take place within a solution. To update
+                 a model-driven app within a solution, open your solution from the Solutions area,
+                 select the Model-Driven App solution component, and then on the command bar
+                 select Edit.
+            4. In the app designer, select Validate.
+       A notification bar appears and shows whether the app has any errors or warnings. The
+       notification bar shows warnings in cases where, for example, a table has no forms or
+       views, or the app doesn’t contain any components. An error might appear if a site map
+       isn't configured for the app. You can save and publish the app without addressing
+       warnings, but errors must be fixed before you can publish.
+       The app designer also shows a warning symbol with the number of dependencies on
+       each artifact or asset tile that is missing a required asset.
+      5. To add the required assets, select the Required tab. The Required tab is visible when at
+       least one required asset is missing from the app.
+              The tab displays an alternate list of required components.
+            6. Select the assets that are missing, and then select Add Dependencies. When the required
+              asset is added, the error count for the asset decreases.
+                ７ Note
+                If a common asset is required across various app components, such as a form is
+                required for a dashboard and a table, and you add that asset only once from the
+                dashboard dependency tree, the dependency count decreases only on the
+                dashboard tile, but not on the table tile. However, the dependency is resolved for
+                both.
+                Select Get Latest Dependencies      or select Validate again to get the latest set of
+                dependencies. These buttons are only visible after the app is saved.
+              Select Hide Dependencies if you don't want to add the suggested required components.
+              Any unresolved warnings appear again when the app is opened in the app designer and
+              select Validate or Get Latest Dependencies   .
+                ７ Note
+             If the dependencies are hidden now and the app is exported later, all of these
+             dependencies appear again.
+       Publish an app using the app designer
+       Publish an app to make it available to users.
+       After you've added components, validated and saved the app, on the command bar, select
+       Publish. In the Apps Being Edited view, in the lower right corner of the app tile you want to
+       publish, select the More options button (...), and then select Publish.
+       The app status changes to Published. This is displayed in the top-right corner of the app
+       designer. The app moves from the Apps Being Edited view to the Published Apps view, and
+       the published date is shown on the app tile.
+         ７ Note
+             If your app has a validation error, this is displayed in the notification bar. It isn't be
+             possible to publish the app until the error is resolved.
+             The app can't be published until it is saved.
+       Next steps
+       Share a model-driven app with Power Apps
+       Run a model-driven app on a mobile device
+        Last updated on 02/13/2026
+     Share a model-driven app
+     Share a model-driven app to make it available so other users can play it. Sharing includes the
+     following steps:
+       1. Identify the security roles to use for the app
+       2. Assign security roles or people to a model-driven app
+       3. Share the link to the app
+                                                   
+     If your app contains only out-of-the-box tables, such as account or contact, you can use an
+     existing predefined security role.
+     Model-driven app sharing basics
+     Model-driven apps use role-based security for sharing. The fundamental concept in role-based
+     security is that a security role contains privileges that define a set of actions that can be
+     performed on tables within the app. This approach means that while two people are able to
+     use the app, one user might only be able to read records, or records that they themselves
+     created. The other user might be able to see all records and have the rights to delete those
+     records.
+     All app users must be assigned one or more predefined or custom security roles. Or, security
+     roles can be assigned to teams. When a user or team is assigned to one of these roles, the
+     person or team members are granted the set of privileges associated with that role.
+         The process for sharing a model-driven app is different from sharing a canvas app. Model-
+         driven app sharing depends on how the Microsoft Dataverse data table privileges are assigned
+         for the tables that are in the app. If security roles aren't already defined for your app, contact
+         your Power Platform administrator to create them for you.
+         More information: Create or edit a security role to manage access
+         Assign security roles or people to a model-driven
+         app
+         When you share a model-driven app, you can share it with all members of one or more security
+         roles or a user or team.
+            1. Sign in to the Power Apps  , on the left navigation pane select Apps, next to the app you
+              want to share select …, and then select Share.
+            2. From the Share app name pane, choose from the following options:
+                    Select the app, and then select the drop-down list in the right pane to display all
+                    available security roles. Select the security roles you want from the security role
+                    dropdown list.
+                 ） Important
+                 If your app has one or more custom tables, contact a Power Platform administrator
+                 to configure privileges to the custom tables in a security role. This is necessary in
+        order for users to work with your custom table's records in the app. More
+        information: Create or edit a security role to manage access
+         To assign an individual user or team, select the user name or team from the People
+         list.
+         If your app contains premium components, such as a map or address input
+         components, users must have a Power Apps license to use the app. To request
+         licenses for the users of your app, select Request licenses to submit a license
+         request to your admin.
+          ７ Note
+          You can't request licenses for security groups or distribution lists. For more
+          information about requesting licenses, see Request Power Apps licenses for
+          your app users.
+      3. Select Share.
+         Share the link to the app
+         Unlike sharing canvas apps, sharing model-driven apps doesn't currently send an email with a
+         link to the app.
+         To get the direct link to an app:
+            1. Sign in to Power Apps   , and then select Apps on the left navigation pane.
+            2. Select the model-driven app you want, and then select Details on the command bar.
+            3. Copy the Web link. Alternatively, you can make a copy of the Mobile QR code for mobile
+              users.
+            4. Paste the app URL in a location so that your users can access it, such as by posting it on a
+              SharePoint site or send via email.
+         App sharing privilege and licensing requirements
+         There are a few key environment and licensing prerequisites required when sharing a model-
+         driven app with a user.
+              A Microsoft 365 user with Power Platform administrator rights must exist within the
+              organization. Learn how to assign Power Platform Administrator rights. This provides the
+              user with administrator rights over all environments.
+              The app sharer must have admin privileges to the specific environment (or be a Power
+              Platform administrator). The app sharer must have a security role with equal or greater
+              privileges than the security role they're assigning to the app and to other users. Usually,
+              this takes the form of the app sharer having the Dataverse System Administrator or
+              System Customizer security role. These roles can be assigned by Power Platform
+              administrators (who have rights over all Dataverse environments). The system
+              administrator and system customizer security roles are standard roles that exist within all
+              Dataverse environments.
+              The user must exist as a user within the environment. It isn't enough to only be a
+              Microsoft 365 user. This is because all users in an environment are accounted for and
+              described within tables in the environment. Learn how to add a user to an environment
+              Users must have the correct license to be able to use the app. Users can request a license
+              themselves, or a maker can request licenses for their app users. Also, for custom model
+              driven apps, the license must be assigned in either the users home tenant or the tenant
+              hosting the app. Dynamics 365 model driven apps require a license in the same tenant
+              the app is hosted.
+            ７ Note
+         Users who have the Environment Maker security role assigned don't require licenses to use
+         model-driven apps.
+         ７ Note
+         Users who have the Environment Maker security role assigned don't require licenses to use
+         model-driven apps.
+       About predefined security roles
+       There are several predefined roles available with Dataverse. To run apps that use only out-of-
+       the-box tables, there's the Basic User security role, where members can play the app within the
+       environment and perform common tasks for the records that they own. More information:
+       Predefined security roles
+       Use Microsoft Entra groups to manage access
+       Administrators can use their organization's Microsoft Entra groups to manage access rights for
+       licensed Dataverse users. Both types of Microsoft Entra groups—Microsoft 365 and Security—
+       can be used to secure user-access rights to an app. More information: About group teams
+       See also
+       Discover more about creating users and assign security roles
+       Minimum privileges for common tasks
+       Run a model-driven app on a mobile device
+        Last updated on 03/31/2026

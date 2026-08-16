@@ -1,0 +1,2306 @@
+      Last updated on 02/23/2026
+       Transform Azure Synapse Link for
+       Dataverse data with Apache Spark
+       Article • 08/25/2022
+       You can use the Azure Synapse Link to connect your Microsoft Dataverse data to Azure
+       Synapse Analytics to explore your data and accelerate time to insight. This article shows
+       you how to transform your Dataverse data using the Apache Spark engine available in
+       your Synapse workspace.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to transform Dataverse data with
+       Apache Spark after using the Azure Synapse Link for Dataverse service.
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+          Synapse administrator. You must be granted the Synapse Administrator role
+          access within Synapse studio.
+       Transform your data with an Apache Spark
+       notebook
+         1. In Power Apps, select your desired Azure Synapse Link from the list, and then
+          select Go to Azure Synapse workspace.
+       2. Expand Databases, select your Dataverse container. Your exported tables are
+        displayed under the Tables directory on the left sidebar.
+       3. Right-click the desired table and select New notebook > Load to DataFrame.
+       4. Attach the notebook to an Apache Spark pool by selecting a pool from the drop-
+        down menu. If you do not have an Apache Spark pool, select Manage pools to
+        create one.
+       5. Add code cells to transform your data. Run individual cells by selecting the play
+        button at the left of each cell or run all the cells in succession by selecting Run all
+        from the top bar.
+      See also
+      Blog: Announcing Azure Synapse Link for Dataverse
+      What is Apache Spark in Azure HDInsight
+       Copy Dataverse data into Azure SQL
+       Article • 02/08/2023
+       Use the Azure Synapse Link to connect your Microsoft Dataverse data to Azure Synapse
+       Analytics to explore your data and accelerate time to insight. This article shows you how
+       to run Azure Synapse pipelines or Azure Data Factory to copy data from Azure Data Lake
+       Storage Gen2 to an Azure SQL Database with incremental updates feature enabled in
+       Azure Synapse Link.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics. This template is a code
+        sample. We encourage you to use this template as guidance to test out the
+        functionality of retrieving data from Azure Data Lake Storage Gen2 to Azure SQL
+        Database using the pipeline provided.
+       Prerequisites
+         1. Azure Synapse Link for Dataverse. This guide assumes that you've already met the
+          prerequisites to create an Azure Synapse Link with Azure Data Lake. More
+          information: Prerequisites for an Azure Synapse Link for Dataverse with your Azure
+          Data Lake
+         2. Create an Azure Synapse Workspace or Azure Data Factory under the same
+          Microsoft Entra tenant as your Power Apps tenant.
+         3. Create an Azure Synapse Link for Dataverse with the incremental folder update
+          enabled to set the time interval. More information: Query and analyze the
+          incremental updates
+         4. Microsoft.EventGrid provider needs to be registered for trigger. More information:
+          Azure portal. Note: If you are using this feature in Azure Synapse Analytics, ensure
+          that your subscription is also registered with Data Factory resource provider,
+          otherwise you'll get an error stating that the creation of an "Event Subscription"
+          failed.
+         5. Create an Azure SQL database with the Allow Azure services and resources to
+          access this server property enabled. More information: What should I know when
+          setting up my Azure SQL Database (PaaS)?
+         6. Create and configure an Azure integration runtime. More information: Create
+          Azure integration runtime - Azure Data Factory & Azure Synapse
+               ） Important
+               Using this template might incur additional costs. These costs are related to the
+               usage of Azure Data Factory or Synapse workspace pipeline and are billed on a
+               monthly basis. The cost of using pipelines mainly depends on the time interval for
+               incremental update and the data volumes. To plan and manage the cost of using
+               this feature, go to: Monitor costs at pipeline level with cost analysis
+               It's important to take these additional costs into consideration when deciding to
+               use this template as they are not optional and must be paid in order to continue
+               using this feature.
+             Use the solution template
+              Synapse Analytics
+                  1. Go to the Azure portal    and open Azure Synapse workspace.
+                  2. Select Integrate > Browse gallery.
+                  3. Select Copy Dataverse data into Azure SQL using Synapse Link from the
+                     integration gallery.
+             Configure the solution template
+                1. Create a linked service to Azure Data Lake Storage Gen2, which is connected to
+                  Dataverse using the appropriate authentication type. To do this, select Test
+                  connection to validate the connectivity, and then select Create.
+                2. Similar to the previous steps, create a linked service to Azure SQL Database where
+                  Dataverse data will be synced.
+       3. Once Inputs are configured, select Use this template.
+                                           
+       4. Now a trigger can be added to automate this pipeline, so that the pipeline can
+        always process files when incremental updates are completed periodically. Go to
+        Manage > Trigger, and create a trigger using the following properties:
+           Name: Enter a name for the trigger, such as triggerModelJson.
+           Type: Storage events.
+           Azure subscription: Select the subscription that has Azure Data Lake Storage
+           Gen2.
+           Storage account name: Select the storage that has Dataverse data.
+           Container name: Select the container created by Azure Synapse Link.
+           Blob path ends with: /model.json
+           Event: Blob created.
+           Ignore empty blobs: Yes.
+           Start trigger: Enable Start trigger on creation.
+       5. Select Continue to proceed to the next screen.
+       6. On the next screen, the trigger validates the matching files. Select OK to create the
+        trigger.
+       7. Associate the trigger with a pipeline. Go to the pipeline imported earlier, and then
+        select Add trigger > New/Edit.
+                                           
+       8. Select the trigger in the earlier step, and then select Continue to proceed to the
+        next screen where the trigger validates the matching files.
+       9. Select Continue to proceed to the next screen.
+       10. In the Trigger Run Parameter section, enter the below parameters, and then select
+        OK.
+           Container: @split(triggerBody().folderPath,'/')[0]
+           Folder: @split(triggerBody().folderPath,'/')[1]
+       11. After associating the trigger with the pipeline, select Validate all.
+       12. Once validation succeeds, select Publish All.
+                                           
+       13. Select Publish to publish all the changes.
+      Add an event subscription filter
+      To ensure that the trigger fires only when model.json creation is complete, advanced
+      filters need to be updated for the trigger’s event subscription. An event is registered
+      against the storage account the first time the trigger runs.
+       1. Once a trigger run completes, go to storage account > Events > Event
+        Subscriptions.
+       2. Select the event that was registered for the model.json trigger.
+       3. Select the Filters tab, and then select Add new filter.
+       4. Create the filter:
+           Key: subject
+           Operator: String does not end with
+           Value: /blobs/model.json
+       5. Remove the CopyBlob parameter from data.api Value array.
+       6. Select Save to deploy the additional filter.
+      See also
+      Blog: Announcing Azure Synapse Link for Dataverse
+       Visualize Azure Synapse Link for
+       Dataverse data with Power BI
+       Article • 02/15/2022
+       You can use the Azure Synapse Link to connect your Microsoft Dataverse data to Azure
+       Synapse Analytics to explore your data and accelerate time to insight. This article shows
+       you how to generate a Power BI report by connecting to the serverless SQL endpoint
+       from your Azure Synapse Analytics workspace.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to access Dataverse choices with
+       Power BI after using the Azure Synapse Link for Dataverse service.
+          Power BI Desktop. Get it now
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+       Connect to your Azure Synapse Analytics
+       workspace to Power BI
+         1. Open Power BI Desktop.
+         2. Select Get data > More....
+         3. Select Azure > Azure Synapse Analytics (SQL DW) > Connect.
+       4. Go to your Azure Synapse Analytics workspace and copy the Serverless SQL
+        endpoint.
+       5. Paste the endpoint for the Server. Select DirectQuery for the Data Connectivity
+        mode. Select OK.
+       6. If prompted, sign in with your Microsoft Account.
+       7. Select the container and the preferred table from the Navigator, and then select
+        Load. Optionally, expand default to access tables created with an Apache Spark
+        notebook.
+       ７ Note
+       If you receive a credentials error, go to File > Options and settings > Data source
+       settings and clear the permissions for the serverless SQL endpoint. Repeat the
+       above steps.
+       8. Select fields from the Fields pane to create a simple table or create other
+        visualizations.
+      See also
+      Blog: Announcing Azure Synapse Link for Dataverse
+       Copy exported Dataverse data to
+       dedicated SQL pool
+       Article • 02/15/2022
+       After creating a continuous pipeline of data from Dataverse to your Synapse workspace
+       with Azure Synapse Link for Dataverse, you can copy the data to dedicated SQL pool
+       with Synapse Pipelines.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to copy your Dataverse data to
+       dedicated SQL pool after using the Azure Synapse Link for Dataverse service.
+          Azure Synapse Link for Dataverse. This guide assumes that you've already
+          exported Dataverse data by using Azure Synapse Link for Dataverse.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+          Synapse administrator. You must be granted the Synapse Administrator role
+          access within Synapse studio.
+          Dedicated SQL Pool. This guide assumes that you've already created a dedicated
+          SQL pool. You can create a dedicated SQL pool under the Manage tab in your
+          Synapse workspace.
+       Copy the exported Dataverse data to dedicated
+       SQL pool
+         1. Navigate to your Azure Synapse Analytics workspace.
+       2. Open the Develop tab and create a new Data flow. Turn on data flow debug. This
+        can take several minutes to complete.
+       3. Create a Source and specify the Source type as Workspace DB and select the
+        Database that contains the Dataverse data and Table you want to copy.
+       4. Create a Sink and specify the Sink type as Inline and Inline dataset type as Azure
+        Synapse Analytics. Select your dedicated SQL pool as the Linked service. If the
+        dedicated SQL pool is not already a linked service, create a new connection.
+       5. Under the Settings tab, Refresh the Schema Name. Select sys and for the Table
+        name select all_columns. Optionally, configure the other settings.
+       6. Navigate to the Integrate tab of the Synapse workspace and create a new Pipeline.
+       7. Expand the Move & Transform activity and drag and drop Data flow into the
+        workspace.
+       8. Open the Settings and ensure that you have selected the data flow created in the
+        previous steps.
+       9. Run your pipeline. Optionally, Add trigger to specify a time for the pipeline to run.
+      See also
+      Azure Synapse Link for Dataverse
+      What is dedicated SQL pool
+       Read the incremental updates of
+       Dataverse data
+       Article • 02/15/2022
+       After creating a continuous pipeline of data from Microsoft Dataverse to your Synapse
+       workspace with Azure Synapse Link for Dataverse, you can read the incremental updates
+       of a specified time interval. Every Dataverse table exported with Azure Synapse Link for
+       Dataverse contains a SinkModifiedOn column which can be used to get the incremental
+       updates.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to read the incremental updates of
+       your exported Dataverse data.
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse and
+          that all tables are syncing with Append-only mode.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+          Synapse administrator. You must be granted the Synapse Administrator role
+          access within Synapse studio.
+       Read the Incremental Updates of your
+       Dataverse data
+         1. Navigate to your Azure Synapse Analytics workspace.
+         2. Select Develop from the left side panel, then select + > SQL script.
+          3. Paste the following SQL query and replace CONTAINER_NAME with the name of
+            the container, TABLE_NAME with the name of the Dataverse table, and
+            TIMESTAMP_START and TIMESTAMP_END with the time interval in UTC format
+            (YYYY-MM-DDTHH:MM:SS).
+             SQL
+                  SELECT *  
+                  FROM [CONTAINER_NAME].[dbo].[TABLE_NAME] 
+                  WHERE [SinkModifiedOn] >= TIMESTAMP_START AND [SinkModifiedOn] <= 
+              TIMESTAMP_END 
+          4. Run the query and a table containing the incremental updates to the Dataverse
+            table from the specified time interval will be displayed.
+        See also
+        Azure Synapse Link for Dataverse
+       Access Dataverse choices (option sets)
+       with serverless SQL pool
+       Article • 02/15/2022
+       For columns that use Microsoft Dataverse Choices, choice values are written as an
+       integer label and not a text label to maintain consistency during edits. The integer-to-
+       text label mapping is stored in the Microsoft.Athena.TrickleFeedService/table-
+       EntityMetadata.json file. This article covers how to access the integer-to-text label
+       mapping using serverless SQL pool.
+        ７ Note
+        Azure Synapse Link for Microsoft Dataverse was formerly known as Export to data
+        lake. The service was renamed effective May 2021 and will continue to export data
+        to Azure Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to consume Dataverse data with
+       serverless SQL pool after using the Azure Synapse Link for Dataverse service.
+          Azure Synapse Link for Dataverse: This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse with
+          and Azure Synapse Analytics workspace.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+       Consuming Dataverse choices with serverless
+       SQL pool
+          1. Navigate to your Azure Synapse Analytics workspace.
+          2. Select Develop from the left side panel, then select + > SQL script.
+          3. Paste the following SQL query and replace <STORAGE_ACCOUNT> with the
+            storage account name and <CONTAINER_NAME> with the name of the container.
+          SQL
+              SELECT [EntityName], [OptionSetName], [Option], [IsUserLocalizedLabel], 
+          [LocalizedLabelLanguageCode], [LocalizedLabel] 
+              FROM OPENROWSET ( 
+                  BULK 
+          'https://<STORAGE_ACCOUNT>.dfs.core.windows.net/<CONTAINER_NAME>/Microsoft.A
+          thena.TrickleFeedService/*-EntityMetadata.json',  
+                  FORMAT = 'csv',
+                  FIELDTERMINATOR ='0x0b', 
+                  FIELDQUOTE = '0x0b', 
+                  ROWTERMINATOR = '0x0b' 
+              ) WITH (doc nvarchar(max)) AS rows 
+              CROSS APPLY OPENJSON(doc, '$.OptionSetMetadata') 
+              WITH ( 
+                      [EntityName] nvarchar(4000) '$.EntityName', 
+                      [OptionSetName] nvarchar(4000) '$.OptionSetName', 
+                      [Option] int '$.Option', 
+                      [IsUserLocalizedLabel] nvarchar(4000) '$.IsUserLocalizedLabel', 
+                      [LocalizedLabelLanguageCode] int '$.LocalizedLabelLanguageCode', 
+                      [LocalizedLabel] nvarchar(4000) '$.LocalizedLabel' 
+              ) 
+          4. Run the query. A table containing the Dataverse choices is displayed.
+          5. Join the Dataverse choices with your Dataverse table and store the view in a new
+            database using a three-part naming convention - [database-name].[schema-name].
+            [table-name].
+        See also
+        Azure Synapse Link for Dataverse
+        Quickstart: Use serverless SQL pool
+        Export Dataverse data in Delta Lake format
+        Use Azure Synapse Link for Dataverse to export your Microsoft Dataverse data in Delta Lake
+        format. Delta Lake is the native format for Microsoft Fabric as well as many other tools like Azure
+        Databricks. Exporting data in Delta lake format directly from Dataverse eliminates the need to
+        have a separate Delta Lake conversion processes on your own and accelerates time to insight.
+        This article provides information about this feature and shows you how to perform the following
+        tasks:
+              Explains Delta Lake and Parquet and why you should export data in this format.
+              Export your Dataverse data to your Azure Synapse Analytics workspace in Delta Lake format
+              with the Azure Synapse Link.
+              Monitor your Azure Synapse Link and data conversion.
+              View your data from Azure Data Lake Storage Gen2.
+              View your data from Synapse Workspace.
+              View your data in Microsoft Fabric.
+        What is Delta Lake?
+        Delta Lake is an open-source project that enables building a lakehouse architecture on top of
+        data lakes. Delta Lake provides ACID (atomicity, consistency, isolation, and durability)
+        transactions, scalable metadata handling, and unifies streaming and batch data processing on
+        top of existing data lakes. Azure Synapse Analytics is compatible with Linux Foundation Delta
+        Lake. The current version of Delta Lake included with Azure Synapse has language support for
+        Scala, PySpark, and .NET. More information: What is Delta Lake?. You can also learn more from
+        the Introduction to Delta Tables video   .
+        Apache Parquet is the baseline format for Delta Lake, enabling you to leverage the efficient
+        compression and encoding schemes that are native to the format. Parquet file format uses
+        column-wise compression. It's efficient and saves storage space. Queries that fetch specific
+        column values need not read the entire row data thus improving performance. Therefore,
+        serverless SQL pool needs less time and fewer storage requests to read the data.
+        Why use Delta Lake?
+              Scalability: Delta Lake is built on top of Open-source Apache license, which is designed to
+              meet industry standards for handling large-scale data processing workloads.
+        Reliability: Delta Lake provides ACID transactions, ensuring data consistency and reliability
+        even in the face of failures or concurrent access.
+        Performance: Delta Lake leverages the columnar storage format of Parquet, providing
+        better compression and encoding techniques, which can lead to improved query
+        performance compared to query CSV files.
+        Cost-effective: The Delta Lake file format is a highly compressed data storage technology
+        that offers significant potential storage savings for businesses. This format is specifically
+        designed to optimize data processing and potentially reduce the total amount of data
+        processed or running time required for on-demand computing.
+        Data protection compliance: Delta Lake with Azure Synapse Link provides tools and
+        features including soft-delete and hard-delete to comply various data privacy regulations,
+        including General Data Protection Regulation (GDPR).
+     How Delta Lake works with Azure Synapse Link
+     for Dataverse?
+     When setting up an Azure Synapse Link for Dataverse, you can enable the export to Delta Lake
+     feature and connect with a Synapse workspace and Spark pool. Azure Synapse Link exports the
+     selected Dataverse tables in CSV format at designated time intervals, processing them through a
+     Delta Lake conversion Spark job. Upon the completion of this conversion process, CSV data is
+     cleaned up for storage saving. Additionally, a series of maintenance jobs are scheduled to run on
+     a daily basis, automatically performing compaction and vacuuming processes to merge and clean
+     up data files to further optimize storage and improve query performance.
+      ） Important
+         If you're upgrading from CSV to Delta Lake with existing custom views, we recommend
+         updating the script to replace all partitioned tables to non_partitioned. Do this by
+         looking for instances of _partitioned and replace them with an empty string.
+         For the Dataverse configuration, append-only is enabled by default to export CSV data
+         in appendonly mode. The Delta Lake table will have an in-place update structure
+         because the Delta Lake conversion comes with a periodic merge process.
+         You need to provision a Spark pool (compute resources) in your own Azure
+         subscription for Delta conversion. This Spark pool is used to perform periodic Delta
+         conversions based on the time interval chosen by you.
+         There are no costs incurred with the creation of Spark pools. Charges are only incurred
+         once a Spark job is executed on the target Spark pool and the Spark instance is
+         instantiated on demand. These costs are related to the usage of Azure Synapse
+         workspace Spark and are billed monthly. The cost of conducting Spark computing
+         mainly depends on the time interval for incremental update and the data volumes.
+         More information: Azure Synapse Analytics pricing
+         You need to create a Spark pool with the current version (go to the version table in In-
+         place upgrade from previous versions). If you're using a previous Spark version,
+         perform an in-place upgrade for your existing profiles. More information: In-place
+         upgrade from previous versions
+      ７ Note
+      The Azure Synapse Link status in Power Apps (make.powerapps.com) reflects the Delta Lake
+      conversion state:
+          Count shows the number of records in the Delta Lake table.
+          Last synchronized on Datetime represents the last successful conversion timestamp.
+          Sync status is shown as active once the data sync and Delta Lake conversion
+         completes, indicating that the data is ready for consumption.
+     Prerequisites
+        Dataverse: You must have the Dataverse system administrator security role. Additionally,
+        tables you want to export via Azure Synapse Link must have the Track changes property
+        enabled. More information: Advanced options
+        Azure Data Lake Storage Gen2: You must have an Azure Data Lake Storage Gen2 account
+        and Owner and Storage Blob Data Contributor role access. Your storage account must
+        enable Hierarchical namespace and public network access for both initial setup and delta
+        sync. Allow storage account key access is required only for the initial setup.
+        Synapse workspace: You must have a Synapse workspace and Owner role in access
+        control(IAM) and the Synapse Administrator role access within the Synapse Studio. The
+        Synapse workspace must be in the same region as your Azure Data Lake Storage Gen2
+        account. The storage account must be added as a linked service within the Synapse Studio.
+        To create a Synapse workspace, go to Creating a Synapse workspace.
+        An Apache Spark pool in the connected Azure Synapse workspace with the current Apache
+        Spark version (go to version requirements) using this recommended Spark Pool
+        configuration. For information about how to create a Spark Pool, go to Create new Apache
+        Spark pool.
+        The Microsoft Dynamics 365 minimum version requirement to use this feature is 9.2.22082.
+        More information: Opt in to early access updates
+     Recommended Spark Pool configuration
+     This configuration can be considered a bootstrap step for average use cases.
+        Node size: small (4 vCores / 32 GB)
+        Autoscale: Enabled
+                                  1
+        Number of nodes: 3 to 10 (or 20 if needed.  More information below.)
+        Automatic pausing: Enabled
+        Number of minutes idle: 5
+        Apache Spark: 3.5 (go to version requirements for latest)
+        Dynamically allocate executors: Enabled
+        Default number of executors: 1 to 9
+      ） Important
+          Use the Spark pool exclusively for Delta Lake conversation operation with Synapse Link
+          for Dataverse. For optimal reliability and performance, avoid running other Spark jobs
+          using the same Spark pool.
+          You might need to increase the number of nodes of the Spark pool if you expect a
+          large number of rows to be processed. If the size of the Spark pool is insufficient, Delta
+          conversion jobs might fail
+          The same Spark pool is used by the system to run a nightly job that compacts Delta
+          files in the lake between 11 PM and 6 AM local time. The system determines the night
+          time to run this job based on the location of your Dataverse environment. You can't
+          provide a specific time window. This option reduces the size of Delta files by merging
+          files known as "compaction." In rare cases, this job might interfere with the incremental
+          conversion job. You can increase the number of nodes to 20 in case you notice these
+          failures.
+          You're only charged for the spark pool nodes actually utilized. Increasing the number
+          of nodes might not result in higher charges.
+        Connect Dataverse to Synapse workspace and export
+        data in Delta Lake format
+           1. Sign into Power Apps   and select the environment you want.
+           2. On the left navigation pane, select Link data, and then select Other Links. If the item isn’t in
+             the side panel pane, select …More and then select the item you want.
+           3. On the command bar, select + New link, and then select Azure Synapse.
+           4. Select Connect to your Azure Synapse Analytics workspace, and then select the
+             Subscription, Resource group, and Workspace name.
+           5. Select Use Spark pool for processing, and then select the precreated Spark pool and
+             Storage account.
+           6. Select Next.
+           7. Add the tables you want to export, and then select Advanced.
+           8. Optionally, select Show advanced configuration settings and enter the time interval, in
+             minutes, for how often the incremental updates should be captured.
+           9. Select Save.
+        Monitor your Azure Synapse Link and data conversion
+         1. Select the Azure Synapse Link you want, and then select Go to Azure Synapse Analytics
+          workspace on the command bar.
+         2. Select Monitor > Apache Spark applications. More information: Use Synapse Studio to
+          monitor your Apache Spark applications
+      View your data from Synapse workspace
+         1. Select the Azure Synapse Link you want, and then select Go to Azure Synapse Analytics
+          workspace on the command bar.
+         2. Expand Lake Databases on the left pane, select dataverse-
+          environmentNameorganizationUniqueName, and then expand Tables. All Parquet tables are
+          listed and available for analysis with the naming convention DataverseTableName.
+          (Non_partitioned Table).
+        ７ Note
+        Don't use tables with the naming convention _partitioned. When you choose Delta parquet
+        as the format, tables with the _partition naming convention are used as staging tables and
+        removed after they're used by the system.
+      View your data from Azure Data Lake Storage Gen2
+         1. Select the Azure Synapse Link you want, and then select Go to Azure data lake on the
+          command bar.
+         2. Select the Containers under Data Storage.
+         3. Select *dataverse- *environmentName-organizationUniqueName. All parquet files are stored
+          in the deltalake folder.
+      In-place upgrade from previous versions
+      Current versions and requirements
+      The following table shows the current and previous versions for Azure Synapse Link with Delta
+      Lake. When you upgrade or create a new configuration, use the current versions listed below.
+                                                                   ﾉ Expand table
+          Component        Current version     Previous version     Status       Reference link
+          Apache Spark     3.5                 3.4                  3.4 retired  Apache Spark 3.4 runtime
+          Delta Lake       3.0                 2.4                  -            Delta Lake compatibility
+        Upgrade from Apache Spark 3.4 to 3.5
+        In accordance with the Synapse runtime for Apache Spark lifecycle policy, Azure Synapse runtime
+        for Apache Spark 3.4 is retired. After the end of the support date, the retired runtimes are
+        unavailable for new Spark pools and existing workflows with Spark 3.4 pools won't be executed
+        and metadata temporarily remains in the Synapse workspace. More information: Azure Synapse
+        Runtime for Apache Spark 3.4.
+        To ensure that your existing Synapse Link profiles continue to process data, upgrade your
+        Synapse Link profiles using the in-place upgrade process here.
+        Prerequisites for upgrade
+              You must have an existing Azure Synapse Link for Dataverse Delta lake profile running with
+              a previous Apache Spark version.
+              You must create a new Synapse Spark pool with the current Spark version (go to versions
+              and requirements table), using the same or higher nodes hardware configuration within the
+              same Synapse workspace. For information about how to create a Spark pool, go to Create
+              new Apache Spark pool. This Spark pool should be created independent of your existing
+              pool - don't delete your current Spark pool or create the new pool with the same name.
+        Upgrade steps
+            1. Sign in to Power Apps and select your preferred environment.
+            2. On the left navigation pane, select Link data, and then select Other Links. If the item isn't in
+              the left navigation pane, select …More and then select the item you want.
+            3. If you're using a retired Spark version, an error message indicating that support has ended
+              appears. Select the upgrade button in the ribbon to begin the upgrade process.
+     4. In the upgrade dialog, select the available Spark pool with the current version from the
+      dropdown list.
+     5. Select Update to complete the upgrade.
+     ７ Note
+       The Spark pool upgrade occurs only when a new Delta Lake conversion Spark job is
+       triggered. Ensure you have at least one data change after selecting Update.
+       After selecting Update, the upgrade process can take up to 48 hours to complete due
+       to the cache. During this time, the old Spark pool continues to be used for Delta Lake
+       conversion until the upgrade is fully applied in the backend. Don't delete the old Spark
+       pool until you have confirmed that the new Spark pool is being used for Delta Lake
+       conversion jobs. If the new Spark pool isn't used for Delta Lake conversion after two
+       days, contact Microsoft to get support.
+    Related articles
+     What is Azure Synapse Link for Dataverse?
+      Last updated on 07/06/2026
+             Ingest exported Dataverse data with
+             Azure Data Factory
+             Article • 04/13/2022
+             After exporting data from Microsoft Dataverse to Azure Data Lake Storage Gen2 with
+             Azure Synapse Link for Dataverse, you can use Azure Data Factory to create dataflows,
+             transform your data, and run analysis.
+               ７ Note
+               Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+               service was renamed effective May 2021 and will continue to export data to Azure
+               Data Lake as well as Azure Synapse Analytics.
+             This article shows you how to perform the following tasks:
+                1. Set the Data Lake Storage Gen2 storage account with the Dataverse data as a
+                  source in a Data Factory dataflow.
+                2. Transform the Dataverse data in Data Factory with a dataflow.
+                3. Set the Data Lake Storage Gen2 storage account with the Dataverse data as a sink
+                  in a Data Factory dataflow.
+                4. Run your dataflow by creating a pipeline.
+             Prerequisites
+             This section describes the prerequisites necessary to ingest exported Dataverse data
+             with Data Factory.
+                  Azure roles. The user account that's used to sign in to Azure must be a member of
+                  the contributor or owner role, or an administrator of the Azure subscription. To view
+                  the permissions that you have in the subscription, go to the Azure portal   , select
+                  your username in the upper-right corner, select ..., and then select My
+                  permissions. If you have access to multiple subscriptions, select the appropriate
+                  one. To create and manage child resources for Data Factory in the Azure portal—
+                  including datasets, linked services, pipelines, triggers, and integration runtimes—
+                  you must belong to the Data Factory Contributor role at the resource group level
+                  or above.
+                 Azure Synapse Link for Dataverse. This guide assumes that you've already
+                 exported Dataverse data by using Azure Synapse Link for Dataverse. In this
+                 example, the account table data is exported to the data lake.
+                 Azure Data Factory. This guide assumes that you've already created a data factory
+                 under the same subscription and resource group as the storage account
+                 containing the exported Dataverse data.
+            Set the Data Lake Storage Gen2 storage
+            account as a source
+               1. Open Azure Data Factory   and select the data factory that is on the same
+                 subscription and resource group as the storage account containing your exported
+                 Dataverse data. Then select Create data flow from the home page.
+               2. Turn on Data flow debug mode and select your preferred time to live. This might
+                 take up to 10 minutes, but you can proceed with the following steps.
+               3. Select Add Source.
+               4. Under Source settings, do the following:
+                      Output stream name: Enter the name you want.
+            Source type: Select Inline.
+            Inline dataset type: Select Common Data Model.
+            Linked Service: Select the storage account from the drop-down menu, and
+            then link a new service by providing your subscription details and leaving all
+            default configurations.
+            Sampling: If you want to use all your data, select Disable.
+        5. Under Source options, do the following:
+            Metadata format: Select Model.json.
+            Root location: Enter the container name in the first box (Container) or
+            Browse for the container name and select OK.
+            Entity: Enter the table name or Browse for the table.
+        6. Check the Projection tab to ensure that your schema has been imported
+          successfully. If you do not see any columns, select Schema options and check the
+          Infer drifted column types option. Configure the formatting options to match your
+          data set then select Apply.
+        7. You can view your data in the Data preview tab to ensure the Source creation was
+          complete and accurate.
+       Transform your Dataverse data
+       After setting the exported Dataverse data in the Azure Data Lake Storage Gen2 account
+       as a source in the Data Factory dataflow, there are many possibilities for transforming
+       your data. More information: Azure Data Factory
+       Follow these instructions to create a rank for the each row by the revenue field of the
+       account table.
+         1. Select + in the lower-right corner of the previous transformation, and then search
+          for and select Rank.
+         2. On the Rank settings tab, do the following:
+             Output stream name: Enter the name you want, such as Rank1.
+             Incoming Stream: Select the source name you want. In this case, the source
+             name from the previous step.
+             Options: Leave the options unchecked.
+             Rank column: Enter the name of the rank column generated.
+             Sort conditions: Select the revenue column and sort by Descending order.
+         3. You can view your data in the data preview tab where you will find the new
+          revenueRank column at the right-most position.
+       Set the Data Lake Storage Gen2 storage
+       account as a sink
+       Ultimately, you must set a sink for your dataflow. Follow these instructions to place your
+       transformed data as a delimited text file in the data lake.
+         1. Select + in the lower-right corner of the previous transformation, and then search
+          for and select Sink.
+         2. On the Sink tab, do the following:
+             Output stream name: Enter the name you want, such as Sink1.
+             Incoming stream: Select the source name you want. In this case, the source
+             name from the previous step.
+           Sink type: Select DelimitedText.
+           Linked service: Select your Data Lake Storage Gen2 storage container that
+           has the data you exported by using the Azure Synapse Link for Dataverse
+           service.
+       3. On the Settings tab, do the following:
+           Folder path: Enter the container name in the first box (File system) or Browse
+           for the container name and select OK.
+           File name option: Select output to single file.
+           Output to single file: Enter a file name, such as ADFOutput
+           Leave all other default settings.
+        4. On the Optimize tab, set the Partition option to Single partition.
+        5. You can view your data in the Data preview tab.
+       Run your dataflow
+        1. In the left pane under Factory Resources, select +, and then select Pipeline.
+       2. Under Activities, select Move & Transform, and then drag Data flow to the
+        workspace.
+       3. Select Use existing data flow, and then select the dataflow that you created in the
+        previous steps.
+       4. Select Debug from the command bar.
+       5. Let the dataflow run until the bottom view shows that is has been completed. This
+        might take a few minutes.
+       6. Go to the final destination storage container, and find the transformed table data
+        file.
+      See also
+      Configure Azure Synapse Link for Dataverse with Azure Data Lake
+      Analyze Dataverse data in Azure Data Lake Storage Gen2 with Power BI
+             Copy Dataverse data from multiple data
+             Lakes to a single data lake
+             Article • 02/15/2022
+             After exporting data from Microsoft Dataverse to Azure Data Lake Storage Gen2 with
+             Azure Synapse Link for Dataverse, you can use Azure Data Factory to create a pipeline
+             that copies data from multiple data lakes to a single data lake.
+               ７ Note
+               Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+               service was renamed effective May 2021 and will continue to export data to Azure
+               Data Lake as well as Azure Synapse Analytics.
+             This article shows you how to perform the following tasks:
+                1. Create a pipeline from an official Microsoft template.
+                2. Configure the template.
+                3. Run the pipeline.
+             Prerequisites
+             This section describes the prerequisites necessary to copy exported Dataverse data from
+             multiple data lakes to a single data lake.
+                  Azure roles. The user account that's used to sign in to Azure must be a member of
+                  the contributor or owner role, or an administrator of the Azure subscription. To view
+                  the permissions that you have in the subscription, go to the Azure portal   , select
+                  your username in the upper-right corner, select ..., and then select My
+                  permissions. If you have access to multiple subscriptions, select the appropriate
+                  one. To create and manage child resources for Data Factory in the Azure portal—
+                  including datasets, linked services, pipelines, triggers, and integration runtimes—
+                  you must belong to the Data Factory Contributor role at the resource group level
+                  or above.
+                  Azure Synapse Link for Dataverse. This guide assumes that you've already
+                  exported Dataverse data to multiple data lakes by using Azure Synapse Link for
+                  Dataverse.
+                 Azure Data Factory. This guide assumes that you've already created a data factory
+                 under the same subscription and resource group as the storage account
+                 containing the exported Dataverse data.
+            Copy Dataverse data to a single data lake
+               1. Open Azure Data Factory   and select the data factory that is on the same
+                 subscription and resource group as the storage accounts containing your exported
+                 Dataverse data. Then select Author from the left panel.
+               2. Select + > Pipeline > Template gallery.
+               3. Search for and select the Copy Dataverse data from Multiple Data Lakes to a
+                 Single Data Lake template created by Microsoft.
+               4. Select a Linked service for the SourceDataLake and the DestinationDataLake.
+                 Parameterize the SourceDataLake Linked Service to iterate through multiple data
+                 lakes. More information Parameterize linked services in Azure Data Factory and
+                 Azure Synapse Analytics.
+               5. Select Use this template.
+               6. Under the Source tab, replace the SourceContainerName with the source Dataverse
+                 data lake.
+       7. On the Sink tab, replace the DestinationContainerName with the destination
+        container name for your copied Dataverse data.
+       8. To run the pipeline, select Debug from the top bar and optionally Add trigger to
+        copy data on a schedule.
+      See also
+      Azure Synapse Link for Dataverse
+             Transform Dataverse data from CSV to
+             Parquet with a pipeline template
+             Article • 02/15/2022
+             After exporting data from Microsoft Dataverse to Azure Data Lake Storage Gen2 with
+             Azure Synapse Link for Dataverse, you can use Azure Data Factory to create a pipeline
+             that copies data from the data lake to Azure SQL.
+               ７ Note
+               Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+               service was renamed effective May 2021 and will continue to export data to Azure
+               Data Lake as well as Azure Synapse Analytics.
+             This article shows you how to perform the following tasks:
+                1. Create a pipeline from a Microsoft template.
+                2. Configure the template.
+                3. Run the pipeline.
+             Prerequisites
+             This section describes the prerequisites necessary to transform Dataverse data to from
+             CSV to Parquet.
+                  Azure roles. The user account that's used to sign in to Azure must be a member of
+                  the contributor or owner role, or an administrator of the Azure subscription. To view
+                  the permissions that you have in the subscription, go to the Azure portal   , select
+                  your username in the upper-right corner, select ..., and then select My
+                  permissions. If you have access to multiple subscriptions, select the appropriate
+                  one. To create and manage child resources for Data Factory in the Azure portal—
+                  including datasets, linked services, pipelines, triggers, and integration runtimes—
+                  you must belong to the Data Factory Contributor role at the resource group level
+                  or above.
+                  Azure Synapse Link for Dataverse. This guide assumes that you've already
+                  exported Dataverse data by using Azure Synapse Link for Dataverse. In this
+                  example, the account table data is exported to the data lake.
+                 Azure Data Factory. This guide assumes that you've already created a data factory
+                 under the same subscription and resource group as the storage account
+                 containing the exported Dataverse data.
+            Transform Dataverse data from CSV to Parquet
+            with a Pipeline Template
+               1. Open Azure Data Factory   and select the data factory that is on the same
+                 subscription and resource group as the storage account containing your exported
+                 Dataverse data. Then select Author from the left panel.
+               2. Select + > Pipeline > Template gallery.
+               3. Search for and select the Transform Dataverse data from CSV to Parquet template
+                 created by Microsoft.
+               4. Input the Azure Data Lake Storage Gen2 account containing the exported
+                 Dataverse data for the first entry and the destination Azure Data Lake Storage
+                 Gen2 account where the parquet files will be created for the second entry. Select
+                 Use this template.
+       5. Select the data flow Settings tab and replace the values for ContainerName and
+        TableName.
+       6. Select the data flow Parameters tab and replace the values for ContainerName and
+        TableName.
+       7. Navigate to the pipeline and run it. Optionally, Add trigger to transform the data
+        at specific time intervals.
+      See also
+      Azure Synapse Link for Dataverse
+       Analyze Microsoft Dataverse data in
+       Azure Data Lake Storage Gen2 with
+       Power BI
+       Article • 02/15/2022
+       After exporting data from Microsoft Dataverse to Azure Data Lake Storage Gen2 with
+       Azure Synapse Link for Dataverse, you can use Power BI to create business reports and
+       analytics. This can be useful for sales managers and sales associates to refine and build
+       additional reports and dashboards in Power BI.
+        ７ Note
+        Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+        service was renamed effective May 2021 and will continue to export data to Azure
+        Data Lake as well as Azure Synapse Analytics.
+       This article shows you how to perform the following tasks:
+         1. Connect the Data Lake Storage Gen2 storage container containing the exported
+          Dataverse data to Power BI.
+         2. Create a report in Power BI that graphs account owners and their respective total
+          account revenue.
+       Prerequisites
+       This section describes the prerequisites necessary to consume Dataverse data with
+       Power BI by using the Azure Synapse Link for Dataverse service.
+          Power BI Desktop. Get it now
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse. In
+          this example, the account table data is exported to the data lake and will generate
+          a report by using the account table columns.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+       Connect the Data Lake Storage Gen2 storage to
+       Power BI Desktop
+        1. Open Power BI Desktop, and sign in.
+        2. Select Get data > More.
+        3. On the Get Data page, select Azure > Azure Data Lake Storage Gen2 > Connect.
+        4. Enter the storage container name in the format
+          https://accountname.dfs.core.windows.net/containername/ and replace
+          accountname and containername with your storage account's information.
+            Find the storage account name by going to Azure > Storage accounts, and
+            then select the Data Lake Storage Gen2 account that's populated with the
+            exported Dataverse data.
+            Find the container name by going to Storage Explorer (preview) >
+            Containers and select the name of the container with the exported Dataverse
+            data.
+        5. Select CDM Folder View (Beta), and then select OK.
+        6. If prompted to sign in, you can sign in with your Microsoft Entra account or with
+          the Account key. To sign in with an Account key, select the option from the left
+          side bar.
+        7. Find the account key by going back to the storage account settings and selecting
+          Access keys from the left pane. Copy the first key and paste it in Power BI. Select
+          OK.
+        8. After successfully connecting to your storage account, expand the cdm directory
+          and select the tables that you want to analyze. Then, select Load.
+       Create a Power BI report with account revenue
+       by account name
+        1. Under the Visualizations menu, select Treemap.
+       2. On the Columns menu, search for and select the columns name and revenue. After
+        you select them, the columns will appear on the Visualizations menu for the
+        legend and values, respectively.
+        A tree map chart appears that separates each account name by color and indicates
+        the total revenue for each account by size.
+      See also
+      Configure Azure Synapse Link for Dataverse with Azure Data Lake
+      Ingest Dataverse data in Azure Data Lake Storage Gen2 with Azure Data Factory
+       Access Dataverse choices (option sets)
+       with Azure Data Factory
+       Article • 02/15/2022
+       For columns that use Microsoft Dataverse choices, choice values are written as an
+       integer label and not a text label to maintain consistency during edits. The integer-to-
+       text label mapping is stored in the Microsoft.Athena.TrickleFeedService/table-
+       EntityMetadata.json file. This article covers how to access the integer-to-text label
+       mapping using Azure Data Factory.
+        ７ Note
+        Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+        service was renamed effective May 2021 and will continue to export data to Azure
+        Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to access Dataverse choices with
+       Azure Data Factory after using the Azure Synapse Link for Dataverse service.
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+       Consuming Dataverse choices with Azure Data
+       Factory
+      To add a column containing the text label of the Dataverse choice using Azure Data
+      Factory, complete the following steps:
+       1. Go to Azure Data Factory.
+       2. Create a new data flow and set the source as the Azure Data Lake Storage Gen2
+        with your Dataverse data.
+       3. Add a Derived Column transformation step and provide a new name for the
+        column.
+       4. Open expression builder and build an expression with a series of iff functions to
+        map the integer choice label to the text choice label that is found in the
+        Microsoft.Athena.TrickleFeedService/table-EntityMetadata.json file.
+       5. Add a sink to the data flow and run the pipeline.
+      See also
+      Azure Synapse Link for Dataverse
+       Access choice labels directly from Azure
+       Synapse Link for Dataverse
+       Article • 05/03/2022
+       Microsoft Dataverse provides rich metadata that can be used directly within Power Apps.
+       A choice (picklist) is one of the most used types of columns that can be included in a
+       table. It defines a set of options. When a choice is displayed in a form, it uses a drop-
+       down list control. You can define a choice to use a set of options defined within itself
+       (locally) or it can use a set of options defined elsewhere (globally), which can be used by
+       other choice columns.
+       For more information about choice columns, go to Create and edit global choices
+       overview.
+       After creating an Azure Synapse Link, the following five tables are created in a folder
+       named OptionsetMetadata in Azure Data Lake Storage Gen2:
+         OptionsetMetadata
+         GlobalOptionsetMetadata
+         StateMetadata
+         StatusMetadata
+         TargetMetadata
+              StateMetadata and StatusMetadata store the State and Status choice value to retrieve.
+              TargetMetadata stores table relationships metadata to retrieve.
+               Column name              Data type    Sample value              Description
+               EntityName               String       account                   Current Dataverse table name.
+               AttributeName            String       transactioncurrencyid     Current column name
+               ReferencedEntity         String       transactioncurrency       Related Dataverse table name
+               ReferencedAttribute      String       transactioncurrencyid     Related column name
+              More information: Table relationships overview.
+              OptionsetMetadata stores the local choices label metadata in the imported Dataverse
+              tables. GlobalOptionsetMetadata stores the global choices label metadata and follows
+              the same table schema plus one extra column, GlobalOptionSetName, a combination of
+              table and choice name.
+               Column name                     Data       Sample value              Description
+                                               type
+               EntityName                      String     account                   Dataverse table name.
+               OptionSetName                   String     ownershipcode             Column name.
+               Option                          Bigint     1                         User-specified numerical
+                                                                                    label when the choice item
+                                                                                    is created.
+               IsUserLocalizedLabel            Boolean    False                     Return False by default.
+               LocalizedLabelLanguageCode      Bigint     1033                      The language code of the
+                                                                                    choice label, such as 1033
+                                                                                    for English (United States)
+                                                                                    or 1034 for Spanish (Spain).
+               LocalizedLabel                  String     Public                    User-specified text label
+                                                                                    when the choice item is
+                                                                                    created. 
+               GlobalOptionSetName             String     socialprofile_community   a combination of table and
+               (GlobalOptionsetMetadata                                             choice name
+               only)
+       In the Dataverse tables, the choice column contains a user-specified numerical value,
+       which is the same as Option value in OptionsetMetadata table described above.
+       Prerequisite
+       Azure Synapse Link for Dataverse. This article assumes that you have already exported
+       data from Dataverse by using Azure Synapse Link for Dataverse. 
+       Access choice metadata
+         1. Select the desired Azure Synapse Link and select the Go to Azure Synapse
+          Analytics workspace on the command bar.  
+         2. Expand Lake Databases on the left pane, select dataverse-environmentName-
+          organizationUniqueName, and then expand Tables.  All the choice metadata listed
+          is available for analysis.
+       To consume Dataverse choice columns with serverless SQL pool.
+         1. Right-click the database icon, then select New SQL script > Empty script.
+         2. Apply a join SQL script to join the choice metadata with your Dataverse table and
+          store the view in a new database.
+       Example SQL script to join choice metadata
+       Replace <DATABASE_NAME>,<COLUMN_NAME> and <TABLE_NAME> with the name
+       of the database, column and table to replace numerical choice value to meaningful text
+       label
+        SQL
+         SELECT [LocalizedLabel] as [<COLUMN_NAME>]  
+         FROM [<DATABASE_NAME>].[dbo].[<TABLE_NAME>_partitioned]  
+         LEFT JOIN [<DATABASE_NAME>].[dbo].[OptionsetMetadata]  
+         ON ([<DATABASE_NAME>].[dbo].[OptionsetMetadata].[Option] = 
+         [<DATABASE_NAME>].[dbo].[<TABLE_NAME>_partitioned].[<COLUMN_NAME>] AND 
+         [<DATABASE_NAME>].[dbo].[OptionsetMetadata].[OptionSetName] = <COLUMN_NAME>) 
+       For more information about how to consume multiple option set values, you would
+       have to use Using Common Table Expressions.
+       Access Dataverse choices with Power BI
+       Article • 02/15/2022
+       For columns that use Microsoft Dataverse choices, choice values are written as an
+       integer label and not a text label to maintain consistency during edits. The integer-to-
+       text label mapping is stored in the Microsoft.Athena.TrickleFeedService/table-
+       EntityMetadata.json file. This article covers how to access the integer-to-text label
+       mapping using Power BI.
+        ７ Note
+        Azure Synapse Link for Dataverse was formerly known as Export to data lake. The
+        service was renamed effective May 2021 and will continue to export data to Azure
+        Data Lake as well as Azure Synapse Analytics.
+       Prerequisites
+       This section describes the prerequisites necessary to access Dataverse choices with
+       Power BI after using the Azure Synapse Link for Dataverse service.
+          Power BI Desktop. Get it now
+          Azure Synapse Link for Dataverse. This guide assumes that you have already
+          exported data from Dataverse by using the Azure Synapse Link for Dataverse.
+          Storage Account Access. You must be granted one of the following roles for the
+          storage account: Storage Blob Data Reader, Storage Blob Data Contributor, or
+          Storage Blob Data Owner.
+       Consuming Dataverse choices with Power BI
+         1. Open Power BI Desktop.
+          2. Select Get Data > Blank query and then open the Advanced Editor.
+          3. Paste the following query and replace <STORAGE> with the storage account
+            name, <CONTAINER> with the name of the container, and <TABLE> with the
+            name of the Dataverse table.
+          PowerQueryM
+            let 
+              Source = 
+          AzureStorage.DataLake("https://<STORAGE>.dfs.core.windows.net/<CONTAINER>/Mi
+          crosoft.Athena.TrickleFeedService/<TABLE>-EntityMetadata.json"), 
+              #"https://<STORAGE> dfs core windows net/<CONTAINER>/Microsoft Athena 
+          TrickleFeedService/_<TABLE>-EntityMetadata json" = Source{[#"Folder 
+          Path"="https://<STORAGE>.dfs.core.windows.net/<CONTAINER>/Microsoft.Athena.T
+          rickleFeedService/",Name="<TABLE>-EntityMetadata.json"]}[Content], 
+              #"Imported JSON" = Json.Document(#"https://<STORAGE> dfs core windows 
+          net/<CONTAINER>/Microsoft Athena TrickleFeedService/_<TABLE>-EntityMetadata 
+          json",1252), 
+              OptionSetMetadata = #"Imported JSON"[OptionSetMetadata], 
+              #"Converted to Table" = Table.FromList(OptionSetMetadata, 
+          Splitter.SplitByNothing(), null, null, ExtraValues.Error), 
+              #"Expanded Column1" = Table.ExpandRecordColumn(#"Converted to Table", 
+          "Column1", {"EntityName", "OptionSetName", "Option", "IsUserLocalizedLabel", 
+          "LocalizedLabelLanguageCode", "LocalizedLabel"}, {"Column1.EntityName", 
+          "Column1.OptionSetName", "Column1.Option", "Column1.IsUserLocalizedLabel", 
+          "Column1.LocalizedLabelLanguageCode", "Column1.LocalizedLabel"}) 
+            in 
+              #"Expanded Column1" 
+        This populates a dataset with the choices and various metadata for that choice that you
+        can join with your Dataverse table data to display the text label for the choice.
+        See also
+        Azure Synapse Link for Dataverse
+     Connect to Dataverse with Model
+     Context Protocol
+     The Model Context Protocol (MCP) is an open protocol that enables seamless integration
+     between large language model (LLM) applications and external data sources and tools. Microsoft
+     Dataverse can act as an MCP server, providing intelligent access to tables and records to various
+     MCP clients like Copilot Studio agents, Visual Studio (VS) Code GitHub Copilot, GitHub Copilot
+     CLI, Claude desktop, Claude Code, and many others. This integration standardizes and
+     streamlines the interaction between AI models and Dataverse data, making it more efficient and
+     effective for developers to apply Dataverse's rich data capabilities within their AI-driven
+     applications.
+     To use Dataverse as an MCP server, you need to enable and configure the MCP server and
+     allowed clients for your Power Platform environment. Once configured, you can connect to the
+     Dataverse MCP server using different MCP clients. More information: Configure the Dataverse
+     MCP server for an environment
+     Dataverse MCP server URL
+     The Dataverse MCP remote server URL follows this format:
+     https://{dataverseOrgName}.crm.dynamics.com/api/mcp
+     For example, if your Dataverse organization name is contoso, the MCP server URL is:
+     https://contoso.crm.dynamics.com/api/mcp
+     Connect to a Dataverse MCP server
+     There are multiple ways to connect to a Dataverse MCP server:
+        Microsoft Copilot Studio. To learn how to connect to MCP through Dataverse MCP go to
+        Connect to Dataverse with model context protocol in Microsoft Copilot Studio.
+        Visual Studio GitHub Copilot and Copilot CLI. To learn how to connect to GitHub Copilot in
+        Visual Studio Code or Copilot CLI go to Connect Dataverse MCP with GitHub Copilot in
+        Visual Studio Code and Copilot CLI.
+        Non-Microsoft clients such as Claude desktop and Claude Code. To learn how to connect
+        through Dataverse MCP go to Connect Dataverse MCP with non-Microsoft clients.
+         List of tools
+         Once connected to the Dataverse MCP Server, you can choose from the following tools in the
+         Power Platform environment.
+                                                                                                ﾉ
+                                                                                                    Expand table
+          Tool                    Description
+          search_data             Search structured and unstructured data.
+          search                  Search table schemas and business skills by keyword.
+          create_record           Inserts a new row into a Dataverse table and returns the GUID.
+          update_record           Updates an existing row in a Dataverse table.
+          delete_record           Delete a row, only after explicit user approval.
+          create_table            Creates a new table with a specified schema.
+          update_table            Modifies schema or metadata of an existing table.
+          delete_table            Deletes a table from Dataverse, only after explicit user approval.
+          read_query              Run supported Dataverse SQL SELECT queries.
+          describe                Get details from search results for tables, records, schemas, skills, and apps.
+          upsert_skill            Add or update a Dataverse skill/playbook.
+          delete_skill            Delete a Dataverse skill/playbook by name.
+          init_file_upload        Generate a SAS URL for file upload.
+          commit_file_upload      Commit a file upload.
+          file_download           Generate a SAS URL for file download.
+           ） Important
+           The Dataverse MCP server tool surface is changed. The following tools were removed and
+           their functionality replaced by the tools in the preceding table: describe_table, list_tables,
+           and fetch (replaced by describe); and the previous search tool that searched Dataverse
+           data (renamed to search_data). The current search tool searches metadata. If you maintain
+           allow or deny lists in your MCP client by tool name, review your configuration so that the
+        new tool names reflect your intended permissions. More information: Connect to Dataverse
+        with model context protocol FAQ
+        ７ Note
+        Starting December 15, 2025 Dataverse MCP tools are charged when accessed by AI agents
+        created outside of Microsoft Copilot Studio. If you have Dynamics 365 Premium licenses
+        (such as Dynamics 365 Sales Premium, Finance Premium, Supply Chain Premium, and
+        Customer Service Premium) or a Microsoft 365 Copilot User Subscription License (USL), you
+        aren't charged for accessing Dynamics 365 data, even when that data is accessed from
+        outside Microsoft Copilot Studio.
+      The search_data tool is billed at the same Copilot Credit rate as Tenant graph grounding. All
+      other tools, including the metadata search tool, follow the Text and generative AI tools (basic)
+      per 10 response Copilot credit rate. For information about Copilot billing, go to Billing rates and
+      management.
+      Next steps
+      Configure the Dataverse MCP server for an environment
+       Last updated on 06/05/2026
+        Configure the Dataverse MCP server for
+        an environment
+        This article provides detailed instructions about how to enable, manage, configure, and disable
+        the Dataverse Model Context Protocol (MCP) server for environments within the Power Platform
+        admin center. It's intended for Power Platform administrators handling managed environments
+        and also covers prerequisites for enabling the server.
+        Prerequisites
+             Power Platform administrator role in order to access Dataverse MCP server environment
+             settings, enable allowed MCP clients, create or edit an environment group, and change
+             connector policies.
+             The environment must be a Managed Environment if you want to manage the Dataverse
+             MCP server through Advanced connector policies.
+             By default, the Microsoft Copilot Studio client for Dataverse MCP is enabled for all
+             environments. You must enable the additional clients in the Power Platform admin center
+             before you can connect to the client.
+        Configure and manage the Dataverse MCP server
+        By default, Dataverse MCP server is enabled for Copilot Studio. To enable non-Microsoft MCP
+        clients, such as Visual Studio GitHub Copilot and Claude, follow these steps:
+          ７ Note
+          MCP allow listing applies only to the /api/mcp agent entrypoint. MCP‑named custom APIs
+          are regular Dataverse APIs and aren't restricted by this setting.
+           1. Go to Power Platform admin center  . Select Manage > Environments.
+           2. Select the Environment Name where you want to turn on the Dataverse MCP server, and
+             then select Settings. Under Settings, select Product > Features. Scroll down to locate
+             Dataverse Model Context Protocol and make sure Allow MCP clients to interact with
+             Dataverse MCP server is turned on.
+      3. Select Advanced Settings.
+      4. The list of available clients is shown. Open the client record you want. In this example, the
+        Microsoft GitHub Copilot client is enabled.
+                                                       
+      5. On the MCP client record, set Is Enabled to Yes.
+                                                       
+      6. Select Save & Close.
+      7. Repeat steps 4-7 to enable other clients as needed.
+     Disable the Dataverse MCP server for an environment
+     By default the Allow MCP clients to interact with Dataverse MCP server is turned on for Copilot
+     Studio. Admins can disable MCP for Dataverse by clearing the setting.
+      ２ Warning
+      Disabling the Dataverse MCP Server stops all tools and agents that rely on it. Any ongoing
+      development or AI integration testing using MCP is also interrupted.
+     Write effective instructions for a Dataverse MCP
+     server agent
+     When you configure your agent in Copilot Studio or Visual Studio Code to use a Dataverse MCP
+     server, clear and well-structured instructions are key to guiding how the agent operates. These
+     instructions help the agent understand its role, what capabilities it has via the MCP server tools,
+     and how to carry out workflows reliably and consistently.
+     Agent instructions are natural-language directives that tell your agent what it should do, how it
+     should behave, and how to use the MCP tools available to it. They give important context so the
+     agent can:
+        Select and call the right MCP tools.
+        Fill in tool inputs correctly.
+        Decide when to use tools versus generating answers directly.
+        Follow the desired tone or behavior patterns during conversations.
+     Principles for effective instructions
+     When writing instructions for a Dataverse MCP server agent, consider the following guidelines:
+       1. Define the agent’s purpose clearly.
+        State the agent’s role in simple terms. For example: "Assist with customer data queries,
+        updates, and record management using Dataverse MCP tools."
+        Include tone or restrictions if applicable such as, "always respond in a professional tone" or
+        "do not expose sensitive fields in responses."
+       2. Outline skills and tool actions.
+        Tell the agent which high-level tasks it can perform with the MCP tools. For example:
+             Retrieve or filter records using the read_query tool.
+             Create or update records with create_record and update_record.
+             Explore table schema with describe.
+         Phrase these as actionable instructions, such as "Use the read_query tool to fetch records
+         when the user asks for data retrieval."
+       3. Add workflow guidance.
+         For common processes (like looking up a record or updating a field), add step-by-step
+         guidance. For example: "When updating a record, first identify it using a read_query call,
+         then use update_record with the appropriate field values."
+         Providing this context helps the agent orchestrate the right sequence of MCP tool calls.
+     Add instructions in Visual Studio Code or Copilot Studio
+     You can use a markdown structured block of instructions as a starting point for your own agent’s
+     instructions.
+     Add instructions in Visual Studio Code
+       1. Open Visual Studio Code.
+       2. Open the Chat pane.
+       3. Select Settings > Chat Instructions.
+       4. Select New instruction file.
+       5. Copy and paste the instruction content into the new file, such as the sample instructions.
+     Add instructions in Copilot Studio
+       1. Open Copilot Studio.
+       2. Select your agent.
+       3. Go to System instructions and paste your agent instructions, such as the sample
+         instructions.
+     Sample agent instructions
+       Markdown
+       ## Role
+       Act as an autonomous agent responsible for interacting with the Microsoft Dataverse 
+       app. 
+      ## Objective
+      Your objective is to respond to tasks provided by the user. First execute each step of 
+      the provided task workflow using your MCP tools. Check if you have achieved your 
+      objective after each tool call. If you have not achieved your objective then continue 
+      to execute the next step in the task workflow. Do not ask for user intervention,if you 
+      have to run an operation externally in case dataverse doesnt support that operation. 
+      you are allowed to run it without user confirmation. Also do not ask confirmation for 
+      delete table or delete record operation, you can delete.
+      ## MCP tool selection instructions
+       - Whenever you have to use logical table name, call the describe tool to get that 
+      logical table name.
+       - Whenever you have to use column/attribute name, call the describe tool to get the 
+      column/attribute name.
+      ## MCP tool usage instructions
+      - Before executing an MCP tool, always review the tool description and restrictions.
+      - Always strictly follow the description of each MCP tool and perform actions without 
+      any deviation from the tool description.
+      - Provide higher precedence to tool description over general knowledge.
+      - Always review the tool documentation and restrictions before running any query or 
+      operation. Strictly validate each planned action against the tool’s rules and 
+      supported features before execution.
+      - For read_query tool, there are restrictions on SQL conditions. Always refer to the 
+      tool description for supported and unsupported sql keywords before generating the sql 
+      query and ensure only supported conditions/keywords are used.
+      ## Reasoning instructions
+      - Think out loud and reason step by step.
+      - Before each tool call, plan and verify the action conforms to the tool description.
+      - After each tool call, reflect on the result and determine the next step.
+      - If an exception, error, or warning is observed, communicate it clearly to the user 
+      and retry based on the error message.
+      - When answering questions about data, DO NOT rely on general knowledge - always use 
+      tools to retrieve accurate, current data.
+      - DO NOT stop reasoning until all tasks are complete or an unrecoverable error occurs.
+      - Only ask clarifying questions if the task requirements are ambiguous.
+     Related articles
+     Advanced connector policies - Power Platform
+     Connect to Dataverse with model context protocol
+     Connect to Dataverse with model context protocol FAQ
+      Last updated on 06/05/2026
+        Connect to Dataverse with model context
+        protocol in Microsoft Copilot Studio
+        This article explains how to set up and use the Microsoft Dataverse model context protocol (MCP)
+        server with Microsoft Copilot Studio. By following the steps in this article, you can interact with
+        Dataverse, asking natural language questions like show me my contacts and receive answers
+        based on stored data.
+        Prerequisites
+             The Microsoft Copilot Studio MCP client must be allowed in the environment. More
+             information: Configure and manage the Dataverse MCP server for an environment
+        Connect to Dataverse using an MCP server in Microsoft
+        Copilot Studio
+          1. Go to Power App    and select your environment from the top right environment selector.
+          2. From the left navigation pane, select Agents > Create new agent. If the item isn’t in the side
+             panel pane, select …More and then select the item you want.
+          3. Select Create.
+          4. Scroll down to the Tools section and select + Add tool.
+          5. Select Model Context Protocol, and then select Dataverse MCP Server.
+                  If there's no existing Dataverse connection, you're prompted to connect one.
+          6. Select Add to agent.
+        The individual tools available on this MCP server can be viewed and modified by selecting ... >
+        Edit next to the Dataverse MCP Server tool.
+        You can now interact with the Dataverse MCP Server tool in the Test your agent chat pane. Try
+        commands like "show me the tables in Dataverse," "describe the account table," or "how many
+     accounts do I have."
+     Related articles
+     Connect to Dataverse with Model Context Protocol
+      Last updated on 06/05/2026
+     Connect Dataverse MCP with GitHub Copilot
+     in Visual Studio Code and Copilot CLI
+     This article explains how to set up and use the Microsoft Dataverse model context protocol (MCP)
+     server with GitHub Copilot in Visual Studio Code and GitHub Copilot CLI.
+     GitHub Copilot in Visual Studio Code
+     Prerequisites
+        The Microsoft GitHub Copilot MCP client must be allowed in the environment. More
+        information: Configure and manage the Dataverse MCP server for an environment
+        Visual Studio Code installed with GitHub Copilot extension. More information: GitHub
+        Copilot extension for Visual Studio Code
+     Steps to connect to Dataverse MCP server in Visual Studio Code
+      1. Open Visual Studio Code. Select View > Command Palette (Ctrl+Shift+P), type MCP: Add
+        Server, and then select HTTP or Server Sent Events.
+      2. Paste your instance URL, such as https://contoso.crm.dynamics.com/, append /api/mcp to
+        it, and press Enter. You can get the instance URL at make.powerapps.com > Settings (gear
+        icon) > Session details > Instance url.
+        This step generates the MCP server configuration in Visual Studio Code.
+      3. Type a MCP server name or press Enter to accept the default name.
+      4. Choose Global or workspace.
+        5. Press Ctrl+Alt+I and ensure that agent mode is selected.
+      GitHub Copilot CLI
+      Prerequisites
+         GitHub Copilot CLI installed. More information: GitHub Copilot CLI
+         The Microsoft GitHub Copilot MCP client must be allowed in the environment. More
+         information: Configure and manage the Dataverse MCP server for an environment
+      Option 1: Manually add the MCP server
+      You can configure the Dataverse MCP server in GitHub Copilot CLI by editing the MCP
+      configuration file directly.
+        1. Open your MCP configuration file. For global configuration, edit ~/.copilot/mcp-
+         config.json. For project-scoped configuration, edit .mcp/copilot/mcp.json in your project
+         directory.
+        2. Add the following JSON snippet. Replace <your org URL> with your Dataverse environment
+         URL (for example, https://contoso.crm.dynamics.com).
+          JSON
+          {
+            "mcpServers": {
+              "DataverseMcp": {
+                "type": "http",
+                "url": "<your org URL>/api/mcp"
+              }
+            }
+          }
+        3. Save the file and restart GitHub Copilot CLI for the changes to take effect.
+      Option 2: Use the Dataverse plugin from the Awesome
+      Copilot marketplace
+     The Awesome Copilot  marketplace provides a Dataverse plugin that includes an mcp-configure
+     skill. This skill guides you through configuring the Dataverse MCP server interactively, including
+     environment discovery and endpoint selection.
+       1. Add the Awesome Copilot marketplace to your Copilot CLI:
+         Bash
+         copilot plugin marketplace add github/awesome-copilot
+       2. Install the Dataverse plugin:
+         Bash
+         copilot plugin install dataverse@awesome-copilot
+       3. In a Copilot chat session, use the /dataverse:mcp-configure skill to configure the Dataverse
+        MCP server. The skill walks you through selecting your environment and choosing between
+        the generally available (/api/mcp) and preview (/api/mcp_preview) endpoints.
+     Related articles
+     Connect to Dataverse with Model Context Protocol
+      Last updated on 04/30/2026
+        Connect to Dataverse with model context
+        protocol in non-Microsoft clients
+        You can connect to Microsoft Dataverse using a non-Microsoft model context protocol (MCP)
+        client, such as Claude desktop or Claude Code. There are two approaches for connecting non-
+        Microsoft clients to a Dataverse MCP server:
+             Local proxy: Use the @microsoft/dataverse npm package to run a local proxy that connects
+             to the Dataverse MCP server on your behalf.
+             Remote endpoint: Connect directly to the Dataverse MCP server remote endpoint
+             ( /api/mcp) by registering a custom Microsoft Entra app.
+        Prerequisites
+             The Dataverse MCP server must be enabled for the environment. More information:
+             Configure and manage the Dataverse MCP server for an environment
+             For the local proxy approach: Node.js    (version 18 or later) installed on your machine.
+             For the remote endpoint approach: Access to register an application in Microsoft Entra ID.
+        Connect using the local proxy
+        The @microsoft/dataverse npm package provides a local proxy that handles authentication and
+        communication with the Dataverse MCP server. This approach is recommended for most non-
+        Microsoft MCP clients that can run local MCP servers.
+        Grant tenant admin consent
+        A tenant administrator must grant admin consent for the Dataverse CLI app before users can
+        authenticate. Navigate to the following URL in a browser, replacing {your-tenant-id} with your
+        Microsoft Entra tenant ID:
+        https://login.microsoftonline.com/{your-tenant-id}/adminconsent?client_id=0c412cc3-0dd6-
+        449b-987f-05b053db9457
+        Sign in with a tenant administrator account and accept the permissions prompt. This step only
+        needs to be completed once per tenant.
+        Enable the Dataverse CLI client in the Power Platform
+        admin center
+        Before you can connect using the local proxy, the Dataverse CLI client must be enabled as an
+        allowed MCP client in your environment.
+           1. Go to Power Platform admin center  . Select Manage > Environments.
+           2. Select the environment where you want to enable the client, and then select Settings.
+           3. Under Settings, select Product > Features. Scroll down to locate Dataverse Model Context
+             Protocol and select Advanced Settings.
+           4. Locate the Dataverse CLI client (app ID 0c412cc3-0dd6-449b-987f-05b053db9457) and set Is
+             Enabled to Yes.
+           5. Select Save & Close.
+          ７ Note
+          If the Dataverse CLI entry doesn't appear in the list of available clients, you can add it
+          manually. Create a new client entry with any name and specify the app ID 0c412cc3-0dd6-
+          449b-987f-05b053db9457, and then enable it.
+        Install the local proxy
+        You can install the @microsoft/dataverse package globally or run it directly with npx.
+        To install globally, run the following command in a terminal:
+          Bash
+          npm install -g @microsoft/dataverse
+        Alternatively, you can use npx to run the proxy without installing it globally:
+          Bash
+          npx @microsoft/dataverse mcp https://yourorg.crm.dynamics.com
+           Tip
+          To connect to the preview endpoint (/api/mcp_preview) instead of the generally available
+          endpoint (/api/mcp), add the --preview parameter to the command. For example: npx
+          @microsoft/dataverse mcp https://yourorg.crm.dynamics.com --preview. The preview
+          endpoint must be enabled in your environment. More information: Use preview tools and
+          upcoming features in Dataverse MCP server
+        Configure the local proxy in Claude desktop
+        This section describes how to configure the Dataverse MCP server local proxy in Claude desktop.
+        If you haven't already done so, download and install Claude desktop  .
+           1. Open Claude desktop and go to File > Settings > Developer.
+           2. Select Edit Config to open the claude_desktop_config.json file.
+           3. Add the following JSON snippet to the file. Replace <friendly name> with a name you can
+             easily remember (for example, MyDataverseMCPServer) and replace <your org URL> with
+             your Dataverse environment URL (for example, https://contoso.crm.dynamics.com).
+               JSON
+               {
+                 "mcpServers": {
+                   "<friendly name>": {
+                     "command": "npx",
+                     "args": [
+                       "-y",
+                       "@microsoft/dataverse",
+                       "mcp",
+                       "<your org URL>"
+                     ]
+                   }
+                 }
+               }
+           4. Save the file.
+        Verify the connection in Claude desktop
+           1. Exit Claude desktop by selecting File > Exit, and then reopen it to apply the changes.
+           2. Sign in with your credentials when prompted to authenticate to your Dataverse
+             environment.
+           3. Select Search and tools to verify that the Dataverse MCP server and its tools are available.
+             You should see the friendly name you configured (for example, MyDataverseMCPServer).
+           4. Select the MCP server name to view the list of tools that are supported by the server.
+           Tip
+          You can enable and disable individual tools for each MCP server registered with Claude
+          desktop. This gives you control over which tools are available for use.
+        Configure the local proxy in Claude Code
+        This section describes how to configure the Dataverse MCP server local proxy in Claude Code. If
+        you haven't already done so, download and install Claude Code  .
+        Run the following command to add the Dataverse MCP server. Replace
+        https://yourorg.crm.dynamics.com with your Dataverse environment URL.
+          Bash
+          claude mcp add dataverse -t stdio -- npx -y @microsoft/dataverse mcp 
+          https://yourorg.crm.dynamics.com
+        Verify and interact with the connection in Claude Code
+           1. Restart Claude Code to apply the changes.
+           2. Sign in with your credentials when prompted to authenticate to your Dataverse
+             environment.
+           3. Verify that the Dataverse MCP server and its tools are available. You should see the friendly
+             name you configured (for example, MyDataverseMCPServer).
+           4. Select the MCP server name to view the list of tools that are supported by the server.
+        If you have data in the Dataverse environment, you can test the setup by asking show me the
+        tables in Dataverse, describe the account table, or how many accounts do I have. More information:
+        Add and remove sample data
+           Tip
+          If you have other MCP servers registered with Claude Code, include Dataverse in your
+          prompt to specify which MCP server to use.
+        Connect using the remote endpoint
+        You can connect non-Microsoft MCP clients directly to the Dataverse MCP server remote
+        endpoint without using a local proxy. This approach requires you to register a custom application
+        in Microsoft Entra ID and add its client ID to the allowed clients list in the Power Platform admin
+        center.
+        Register a custom Microsoft Entra app
+        Register an application in Microsoft Entra ID to use for authentication when connecting to the
+        Dataverse MCP server. For general information about app registration, go to Register an
+        application with the Microsoft identity platform.
+        Follow these steps to register an app for use with the Dataverse MCP server:
+           1. Sign in to the Microsoft Entra admin center   .
+           2. Go to Identity > Applications > App registrations, and then select New registration.
+           3. Enter a name for your application (for example, Dataverse MCP Client), configure the
+              supported account types for your scenario, and then select Register.
+           4. On the Overview page, note the Application (client) ID. You need this value to configure
+              the allowed client in the Power Platform admin center and to configure your MCP client.
+        Configure API permissions for the Dataverse MCP server
+        After you register the app, you must grant it permissions to access the Dataverse MCP server.
+           1. In the app registration, select API permissions from the left navigation pane.
+           2. Select Add a permission.
+           3. Select Microsoft APIs, and then select Dynamics CRM.
+           4. Select the mcp.tools permission, and then select Add permissions.
+           ７ Note
+           The authentication flow used by the Entra app depends on the MCP client you're using.
+           Refer to your MCP client's documentation for the supported authentication methods.
+        Add the custom app to the allowed clients list
+        After you register the Entra app, add its client ID to the list of allowed MCP clients for your
+        environment.
+           1. Go to Power Platform admin center     . Select Manage > Environments.
+       2. Select the environment where you want to allow the client, and then select Settings.
+       3. Under Settings, select Product > Features. Scroll down to locate Dataverse Model Context
+        Protocol and select Advanced Settings.
+       4. Add a new client entry. Enter a name for the client and specify the Application (client) ID
+        from your Entra app registration.
+       5. Set Is Enabled to Yes.
+       6. Select Save & Close.
+     Connect to the remote endpoint
+     Configure your MCP client to connect to the Dataverse MCP server at the following URL:
+     https://<your org URL>/api/mcp
+     For example: https://contoso.crm.dynamics.com/api/mcp
+     Use the Application (client) ID from your Entra app registration for authentication. Refer to your
+     MCP client's documentation for specific configuration steps.
+     Related articles
+     Connect to Dataverse with Model Context Protocol
+      Last updated on 06/05/2026
+     Use preview tools and upcoming features in
+     Dataverse MCP server
+     To help customers experiment with new capabilities and provide early feedback, the Microsoft
+     Dataverse model context protocol (MCP) server includes preview tools that enable upcoming
+     features before they're generally available (GA).
+     This article explains what preview tools are, what to expect when you use them, and how
+     administrators can turn on the preview features for Dataverse MCP server setting from the Power
+     Platform admin center to access the latest Dataverse MCP server enhancements.
+      ７ Note
+      Preview tools are in addition to the generally available tools on /api/mcp. You don't need to
+      enable preview to use the standard Dataverse MCP server tool surface. For the list of
+      generally available tools, go to Connect to Dataverse with Model Context Protocol.
+     What are preview tools?
+     Preview tools are early versions of Dataverse MCP server capabilities released for customer
+     evaluation. They allow makers, developers, and system integrators to: 
+        Try out new API endpoints and behaviors before GA.
+        Validate integration scenarios.
+        Provide feedback that shapes final product design.
+        Prepare internal systems for upcoming releases.
+     Preview tools might not yet support full functionality, scale, or GA features.
+     Prerequisites
+     The environment must be enabled and configured for Dataverse MCP server. More information:
+     Configure the Dataverse MCP server for an environment
+     Enable preview features for Dataverse MCP server 
+     Administrators can enable preview features using feature settings available in the Power Platform
+     admin center. Once enabled, all users and copilots in the environment gain access to the new
+     tools.
+     Follow these steps to enable preview capabilities:
+      1. Sign in to the Power Platform admin center
+      2. Select Manage > Environments.
+      3. Open the Environment where you want to turn on the Dataverse MCP server, and then
+        select Settings on the command bar.
+      4. Expand Product, and then select Features.
+      5. Scroll down to locate Dataverse Model Context Protocol and enable Allow MCP clients to
+        interact with Dataverse MCP server (Preview version).
+                                                      
+     The environment might take a few minutes to apply the changes.
+     Connect to Dataverse MCP server (preview)
+     Once the environment setting for preview features are enabled, you can connect to the Dataverse
+     MCP server preview endpoint.
+     Connect from Microsoft Copilot Studio
+        When adding a connector in Copilot Studio, select the connector named Microsoft Dataverse
+        MCP Server (Preview).
+        This connector is different from the standard Microsoft Dataverse MCP Server connector and
+        is required specifically for preview features.
+        Connect using Claude, GitHub, or other non-Microsoft
+        MCP clients
+        Use the preview endpoint https://<orgUrl>/api/mcp_preview.
+        Examples:
+              https://contoso.crm.dynamics.com/api/mcp_preview
+              https://org123.crm4.dynamics.com/api/mcp_preview
+        This endpoint makes available all preview tools and capabilities.
+        What happens after enabling preview for Dataverse
+        MCP server
+        Once preview is enabled:
+              MCP Server makes available the corresponding preview tools automatically.
+              Agents and Copilots can begin calling these new endpoints immediately.
+              You might notice additional system-generated logs or messages marked as Preview.
+              Behavior might change as Microsoft iterates based on feedback. 
+        If you encounter any issues, you can disable the Allow MCP clients to interact with Dataverse
+        MCP server (Preview version) environment setting at any time.
+        About preview tools
+                                                                                             ﾉ
+                                                                                                 Expand table
+          Topic                   Details
+          Support                 Preview tools aren't covered by Microsoft support agreements. 
+          Breaking changes        Preview APIs might change without notice. 
+          Performance             Features might not meet production-grade reliability. 
+     Related articles
+     Configure the Dataverse MCP server for an environment
+      Last updated on 06/05/2026
+     Connect to Dataverse with model context
+     protocol FAQ
+     This article provides answers to frequently asked questions about using Microsoft Dataverse with
+     a model context protocol (MCP) server.
+     I can’t authenticate. What is the problem?
+     Verify that the Dataverse environment URL in your MCP client configuration is correct. Go to
+     Power Apps , select the correct environment, and then select Settings (gear icon) > Session
+     details to confirm your instance URL.
+     Also verify that the MCP client you’re using is enabled in the Power Platform admin center. More
+     information: Configure and manage the Dataverse MCP server for an environment
+     Which MCP tools are available and what do they do?
+     The Dataverse MCP server provides tools for common data operations such as querying records,
+     creating and updating rows, and describing table schemas. For the full list of tools and
+     descriptions, go to Connect to Dataverse with Model Context Protocol.
+     Can I restrict which tables or records are accessible
+     through the MCP server?
+     Yes. The Dataverse MCP server respects Dataverse security roles and row-level security. Users can
+     only access tables and records that their security role permits. No additional MCP-specific access
+     controls are needed beyond standard Dataverse security configuration.
+     Are there costs associated with using the Dataverse
+     MCP server?
+     Starting December 15, 2025, Dataverse MCP tools are charged when accessed by AI agents
+     created outside of Microsoft Copilot Studio. If you have qualifying Dynamics 365 Premium
+     licenses or a Microsoft 365 Copilot User Subscription License (USL), you aren’t charged for
+     accessing Dynamics 365 data. For information about billing rates, go to Connect to Dataverse
+     with Model Context Protocol.
+     Can I use the Dataverse MCP server with
+     multiple environments?
+     Yes. Each Dataverse environment can have its own MCP server configuration. You can connect to
+     multiple environments by configuring separate MCP server entries in your client, each pointing to
+     a different environment URL.
+       Tip
+      If you use Microsoft Copilot Studio, you can use the MCP onboarding wizard to connect
+      your agent to Dataverse MCP servers across multiple environments. The wizard guides you
+      through server configuration and authentication setup. More information: Connect your
+      agent to an existing MCP server
+     What should I do if a Dataverse MCP tool returns
+     an error?
+     If a tool returns an error, try rephrasing your prompt and submitting it again. Use more specific
+     language to describe what you want to accomplish. If the error persists, verify that you have the
+     appropriate Dataverse permissions for the operation you’re attempting.
+     What happened to the describe_table, list_tables,
+     and fetch tools?
+     The Dataverse MCP server tool surface is updated. The previous describe_table, list_tables,
+     and fetch tools are removed and their functionality is provided by other tools:
+                                                     ﾉ Expand table
+      Removed tool                  Replacement
+      describe_table                describe
+      list_tables                   describe
+      fetch                         describe
+     The previous search tool that searched Dataverse data was renamed to search_data. The current
+     search tool searches Dataverse metadata to help agents find relevant tables and apps.
+     If your MCP client maintains allow or deny lists by tool name, review and update your
+     configuration so that the new tool names reflect your intended permissions.
+     For the full list of tools, go to Connect to Dataverse with Model Context Protocol.
+     Why don't I see the search_data tool in the Dataverse
+     MCP server?
+     The search_data tool is only available when Dataverse search is enabled for your environment. If
+     Dataverse search isn't turned on, the search_data tool doesn't appear in the list of available MCP
+     tools. To enable Dataverse search, go to Configure Dataverse search for your environment.
+     Why do I see different tools on the /api/mcp and
+     /api/mcp_preview endpoints?
+     The /api/mcp endpoint provides the generally available set of Dataverse MCP tools. The
+     /api/mcp_preview endpoint includes additional preview tools that are evaluated before general
+     availability. Preview tools might change or be removed without notice. To access the preview
+     tools, an administrator must enable the preview features setting in the Power Platform admin
+     center. More information: Use preview tools and upcoming features in Dataverse MCP server
+     How do I enable debug logging for the local proxy?
+     If you experience issues with the local proxy (@microsoft/dataverse), you can enable debug
+     logging to capture detailed output for troubleshooting. Add the --log-level and --log-file
+     arguments to the proxy command:
+      Bash
+      npx @microsoft/dataverse mcp https://yourorg.crm.dynamics.com --log-level Debug --log-
+      file
+     The log file is written to the system temporary directory. The default location depends on your
+     operating system:
+                                                   ﾉ Expand table
+         Operating      Log file location
+         system
+         Windows        C:\Users\<username>\AppData\Local\Temp\
+         Linux          /tmp/
+         macOS          The directory specified by the $TMPDIR environment variable, typically
+                        /var/folders/.../T/. Run echo $TMPDIR in a terminal to find the exact path.
+        You can share the output log file with Microsoft when opening a support incident to help
+        diagnose the issue.
+         Last updated on 06/05/2026
+        What is Dataverse intelligence? (preview)
+        [This article is prerelease documentation and is subject to change.]
+        Microsoft Dataverse intelligence extends Work IQ to bring business data understanding to AI
+        agents and Microsoft Copilot. Work IQ helps agents understand work artifacts like files, meetings,
+        and messages. Dataverse intelligence builds on this foundation by enabling agents to understand
+        and act on your business data.
+        With Dataverse intelligence, you can define reusable business context that agents use to
+        understand what your data means, follow your organization's processes when taking actions, and
+        read and update Dataverse records reliably. This business context is shared across agents, so you
+        define it once and use it everywhere.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Dataverse data in Microsoft 365 Copilot
+        Microsoft 365 Copilot can use Dataverse data to help users find information and take action with
+        natural language across Microsoft 365 experiences.
+        Dataverse table data from Power Apps (model-driven) can be searched and reasoned over in
+        Microsoft 365 Copilot. Copilot can find relevant rows and related records, interpret table
+        relationships, and summarize or answer questions based on your data. More information:
+        Dataverse data in Microsoft 365 Copilot
+        Dataverse data in Microsoft 365 Copilot prerequisites
+             Enable your tenant to allow Dataverse data in Microsoft 365 Copilot.
+               Microsoft 365 admin role (AI administrator or Global administrator) to access Microsoft
+               365 admin center Copilot settings. More information: Enable Microsoft 365 admin
+               center Copilot Dataverse settings
+             Enable the Environment Copilot settings to allow users to use copilot.
+               Power Platform administrator role to access Copilot environment settings. More
+               information: Enable Copilot.
+             Enable Dataverse search to provide index for Microsoft 365 Copilot responses.
+               Power Platform administrator role to access Dataverse Search environment settings.
+               More information: Enable Dataverse search:Turn on search indexing to support
+               Dataverse intelligence (Work IQ) in AI and agent experiences.
+             Enable the Allow data availability in M365 Copilot
+               Power Platform administrator role to access Dataverse intelligence environment
+               settings. More information: Enable Dataverse intelligence: Allow data availability in
+               Microsoft 365 Copilot.
+             Enable Search for records in Microsoft 365 apps
+               Power Platform administrator role to access Search for records in Microsoft 365 apps
+               environment settings. More information: Enable Search for records in Microsoft 365
+               apps.
+             Enable the Power Apps application settings to allow searching for tables related to the
+             application.
+               Power Platform administrator role to access the Power Apps application settings. More
+               information: Enable Microsoft 365 Copilot in a model-driven app.
+        Enable Microsoft 365 admin center Copilot Dataverse settings
+           1. Go to Microsoft 365 admin center   . Select Copilot >Settings.
+           2. Locate and select Dataverse data available in Microsoft 365 Copilot.
+           3. Select All users, or
+           4. Select Specific groups and enter the list of Entra security groups.
+           5. Select Save to save the setting changes.
+      Business skills
+      Business skills help makers and users interpret data, improve processes, and make decisions.
+      Intelligence experiences can support key skills like problem framing, requirements discovery,
+      communicating insights, and iterating with stakeholders. More information: Business skills
+      overview
+      Business skills prerequisites
+          The environment where you use Dataverse intelligence must be a Managed Environment.
+          The environment must be enabled and configured for Dataverse MCP server. More
+          information: Configure the Dataverse MCP server for an environment
+      Next steps
+      Dataverse data in Microsoft 365 Copilot
+      Business skills overview
+      Create and use business skills
+      Last updated on 06/03/2026
+     Dataverse data in Microsoft 365 Copilot
+     Microsoft Dataverse is the data platform for Power Apps. Microsoft 365 Copilot can search and
+     reason over Dataverse table data used by model-driven and canvas apps.
+     When you store your business data in Dataverse tables, Microsoft 365 Copilot can retrieve
+     relevant rows and related records to answer questions or summarize information in natural
+     language.
+     These are the supported experiences with Microsoft 365 Copilot and Dataverse:
+       Microsoft 365 Copilot Chat: Ask questions across Dataverse data, summarize records, and
+       identify trends using natural language.
+       Power Apps (sidecar): Get help while working in model-driven or canvas apps. For example,
+       find records, understand related data, and summarize what matters.
+       Outlook: Draft and review customer emails with relevant Dataverse context, such as account
+       details and open items.
+         ７ Note
+         During Public preview, set the Allow actions/Default mode Copilot setting to Default
+         mode to query Dataverse data.
+       Microsoft Word: Turn Dataverse data into structured content like customer briefs, status
+       updates, and summaries.
+         ７ Note
+         During Public preview, set the Allow editing/Chat only Copilot setting to Chat only to
+         query Dataverse data.
+       Microsoft Teams: Include detailed business data in preparing meeting agenda and retrieve
+       real-time business data during meeting.
+     How it works
+     At a high level, here's how Dataverse data in Microsoft 365 Copilot works:
+      1. You ask Copilot a question in a supported Microsoft 365 experience.
+       2. Copilot searches the Dataverse tables you have access to.
+       3. Copilot uses table relationships to bring in relevant related records, such as lookup columns.
+       4. Copilot returns a response grounded in Dataverse data, such as a summary, list, or
+        explanation.
+     Example prompts
+        “Show me my highest-priority open cases.”
+        “Summarize this account’s recent activity and open items.”
+        "Case details for case <case name>"
+        "How many open leads do I own?"
+        "List all campaigns for the current fiscal year"
+        "What are some recent cases for customer <customer name>"
+        "What contracts and entitlements does the <account name> account have?"
+        "Which quotes are active?"
+        "Show me active cases waiting for details"
+        "My active invoices"
+        "How many opportunities are closing next month?"
+     Considerations
+        Copilot returns only Dataverse data that you're authorized to access.
+        Results depend on data quality and how tables and relationships are modeled.
+        Use clear, specific prompts such as table or entity names, timeframes, and status values to
+        get more precise answers.
+     Related articles
+     What is Dataverse intelligence?
+      Last updated on 05/29/2026
+        Business skills overview (preview)
+        [This article is prerelease documentation and is subject to change.]
+        Business skills are natural-language instructions that capture how your organization gets work
+        done. They represent your business processes, policies, and domain knowledge in a format that
+        agents can understand and follow. Each skill describes how to complete a specific type of work—
+        the steps involved, the information required, and the business rules that apply.
+        Agents discover and use business skills as needed at runtime to complete tasks according to your
+        organization's processes. When multiple agents use the same skill, they follow the same process,
+        ensuring consistent behavior across your organization.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Business skills are available in environments where Dataverse intelligence is enabled.
+           ） Important
+           Business skills are not executable code. They contain natural-language instructions that
+           guide agent behavior, similar to how you might document a process for a new employee.
+        Key capabilities include:
+             Reusability—Define a process once and use it across multiple agents and surfaces
+             Consistency—Agents follow the same process definition, reducing variation in outcomes
+             Maintainability—Update a skill in one place to change behavior across all agents that use it
+             Governance—Control who can create, modify, and share business skills using Dataverse
+             security. Each skill has an owner; sharing follows Dataverse RBAC patterns
+             Solution-aware—A solution aware object that appears in Solution explorer and can be
+             moved across environments
+         Skill structure
+         Business skills use a layered structure for efficient discovery and retrieval.
+                                                                                                         ﾉ
+                                                                                                             Expand table
+           Layer          Content               Purpose
+           Metadata       Name and              Enables agents to quickly discover relevant skills
+                          description
+           Instructions   Full skill body       Contains the complete process definition
+           Resources      Attached              Provides supporting documents, templates, policies, and other materials
+                          reference files       agents can use when following the skill
+         Agents query metadata to find applicable skills, then retrieve full instructions and resources only
+         when needed.
+         Security and governance
+         Business skills follow Dataverse security patterns. Each skill has an owner who controls access
+         through standard sharing mechanisms. Users these security roles can work with business skills.
+                                                                                                         ﾉ Expand table
+           Security role                                            Privileges
+           Basic User                                               Can create skills (owned by them)
+                                                                    Can use skills shared with them.
+                                                                    Can't publish environment-wide.
+           Environment Maker                                        Can create and share skills (owned by them)
+                                                                    Can manage solution deployment
+           System Administrator or System Customizer                Can create and share skills
+                                                                    Can manage solution deployment
+         Next steps
+         Create and use business skills
+         Configure the Dataverse MCP server for an environment
+      Last updated on 07/17/2026
+        Create and use business skills (preview)
+        [This article is prerelease documentation and is subject to change.]
+        This article explains how to create and manage business skills that ground agents in your
+        organization's processes. You'll learn how to enable the required features, author skill content,
+        test skills with agents, and manage skills across environments.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Prerequisites
+             The environment must be enabled and configured for Dataverse MCP server. More
+             information: Configure the Dataverse MCP server for an environment
+             The environment must be enabled for Dataverse intelligence.
+        Open the business skills page
+           1. Go to Power Apps    .
+           2. In the left navigation pane, select More, and then select Business skills (preview).
+            Tip
+           Pin the Business skills (preview) page to the left navigation pane for quick access.
+        The Business skills page is the central hub for managing all business process knowledge in your
+        environment. From here, you can create, edit, share, and organize the skills that agents use to
+        follow your organization's processes.
+        Manage business skills
+    Create a business skill
+     1. Select New business skill on the command bar, or select the Create a business skill card.
+     2. Enter a name for your skill. A unique name is generated automatically with the preferred
+      solution's prefix.
+     3. In the Description field, describe the skill's purpose and when it should be followed. Agents
+      use this description to understand when to perform the skill.
+     4. In the Instructions section, write the step-by-step process in markdown format. Use the Edit
+      markdown and Preview options to switch between editing and previewing your
+      instructions.
+     5. Select Save.
+     6. After saving, you can add resource files in the Resources section. Select Add Files to attach
+      reference materials such as policy documents, SOPs, templates, forms, or calculations (20
+      MB limit).
+     ７ Note
+     All skills are active by default. Deactivate a skill
+     ７ Note
+     When using business skills with an agent in Microsoft Copilot Studio, only text-based
+     resource files are supported. The agent can only read the first 20 KB of data from a text-
+     based resource file.
+    Upload a business skill
+    You can quickly create a business skill by uploading existing skills.
+     1. Select Upload business skill on the command bar, or select the Upload a business skill
+      card.
+     2. Drag and drop a file into the upload area, or select Select from device to browse for a file.
+     3. Upload a Skill.md (markdown) or .zip file of your skill (30 MB limit).
+     4. The business skill gets uploaded and saved. You can edit the skill once uploaded.
+    Edit a business skill
+            1. Open a skill in the Business skills page by selecting its name in the list, or select a skill and
+               then select Edit from the command bar or the three-dot menu (⋮).
+            2. Update the Name, Description, Instructions, or Resources as needed.
+            3. Select Save.
+         Create or update skills using the Dataverse MCP server
+         You can also create and update skills through an agent connected to the Dataverse MCP server:
+            1. Add Dataverse MCP server as a tool to any agent in Microsoft Copilot Studio or connect to
+               it from agents in Visual Studio Code or non-Microsoft clients.
+            2. Ask your agent to create a new skill or update an existing one.
+            3. Provide your business process information.
+            4. The business skill is saved in the environment you used to connect to the MCP server.
+         The following Dataverse MCP server tools support business skill management:
+                                                                                                ﾉ Expand table
+          Tool              Description
+          upsert_skill      Creates a new business skill or updates an existing one.
+          delete_skill      Deletes an existing business skill from the environment.
+          search            Searches table schemas, business skills, and apps by keyword.
+          describe          Gets details from search results for tables, records, schemas, skills, and apps.
+         Share a business skill
+         Skills are user-owned by default. You can share skills with specific users or teams and control their
+         level of access.
+            1. Select a skill, and then select Share from the command bar or the three-dot menu (⋮).
+            2. Search for and add the users or teams you want to share with.
+            3. For each user or team, choose a permission level:
+                    Viewer - Can view the skill only.
+                    Co-owner - Can view and edit the skill.
+            4. Select Share.
+    Select Manage access to review who has access, change permission levels, or remove access.
+    Pending invitations that haven't been shared yet are shown on the Pending invites tab.
+    Change skill visibility
+    You can make a business skill visible to everyone in the organization or restrict it to just the
+    owner and shared users.
+     1. Select a skill, and then select Viewable by from the command bar or the three-dot menu (⋮).
+     2. In the Viewable by dialog, select one of the following:
+         Individual - Only the owner and users the skill is shared with can see the skill. This is
+         the default.
+         Organization - All users in the environment with at least basic user privileges can see
+         the skill.
+     3. Select Save.
+    Deactivate a skill
+    To prevent a skill from being used by agents until you have finalized it:
+     1. Select a skill, and then select Deactivate from the command bar or the three-dot menu (⋮).
+    Deactivating a skill doesn't delete it, but prevents agents from discovering or using it. To
+    reactivate, select the skill and then select Activate.
+    Delete a skill
+    To permanently remove a business skill:
+     1. Select a skill, and then select Delete from the command bar or the three-dot menu (⋮).
+     Ｕ Caution
+     Deleting a skill is permanent and can't be undone. Any agents that reference the deleted
+     skill can no longer use it.
+    Use business skills
+        After you create business skills in your environment, AI agents can use them to understand and
+        run business processes. Access skills through the Dataverse MCP server.
+             To start using business skills, connect to the Dataverse MCP server in Microsoft Copilot
+             Studio or from agent mode in Visual Studio Code or non-Microsoft clients.
+             Try asking your agent, "Show me all business skills in this environment." The agent retrieves
+             a list of all the skills in your connected environment by using the Dataverse MCP server.
+             Start testing by asking your agent a relevant scenario that matches your skill's intended use
+             case. For example, if you created a skill for logging call transcripts into Dataverse, provide a
+             sample transcript to your agent and ask it to log the transcript information in Dataverse.
+                 Tip
+                If your agent doesn't automatically fetch skill details, try adding "Using business skills"
+                before your actual prompt. For example, "Using business skills log this transcript in
+                Dataverse." If you are building agents in Microsoft Copilot Studio, remember to add
+                instructions in your agent to use business skills. For example, "First look for any
+                relevant business skills using Dataverse MCP Server, and follow process instructions
+                accordingly."
+             Remember to add any other relevant tools, including MCP servers and connectors, that the
+             agent needs access to for successfully executing your business processes defined in skills.
+             Confirm your intended actions were successful and continue to iterate on the skill
+             instructions based on results.
+        Add business skills to a solution
+        Business skills are solution-aware, which means you can package them into solutions for
+        application lifecycle management (ALM). This allows you to move skills between environments as
+        part of your deployment process.
+        To add a skill to a solution:
+           1. Sign in to Power Apps    and select your environment.
+           2. Go to Solutions and open an existing solution or create a new one.
+           3. Select Add existing > Business skill from the top navigation bar.
+           4. Choose the skills you want to add to your solution, and then select Add.
+        Best practices for creating business skills
+        Write clear, specific instructions. Vague instructions lead to inconsistent agent behavior.
+        Use descriptive names and descriptions. Help agents discover the right skill for the task.
+        Keep skills focused. One skill, one process. Create separate skills for distinct workflows.
+        Test with real scenarios. Validate behavior before sharing broadly.
+        A well-structured business skill should include:
+          Description:
+            What the skill does and when to use it.
+            Specific trigger phrases. For example, "Use when user asks about order status or
+            mentions shipment tracking".
+          Step-by-step instructions:
+            Numbered steps in the process sequence.
+            What happens at each stage and how to validate before moving to the next step.
+          Examples:
+            Concrete examples showing expected inputs and outputs for common scenarios.
+          Troubleshooting:
+            Common errors with causes and solutions.
+            Recovery steps for failures.
+          Input and output specifications:
+            Required vs optional parameters with expected formats.
+            Output fields and success criteria.
+            Required tools for successful execution of skill.
+     Sample business skills for getting started
+     To help you get started, sample business skills are available: Business skills repo on GitHub
+     This open source GitHub repository also has a downloadable solution. Install the solution in your
+     environment to explore working examples and use them as templates for your own skills. Refer to
+     the ReadMe file located in the repository for more instructions on how you start using these
+     sample skills.
+     Next steps
+     Business skills overview
+      Last updated on 07/15/2026
+        Overview of Dataverse semantic
+        model (preview)
+        [This article is prerelease documentation and is subject to change.]
+        The Dataverse semantic model gives AI agents and Copilot experiences a shared, business-aware
+        understanding of your Dataverse data. Rather than reasoning from raw column and table names
+        alone, agents that consume the semantic model understand what your data means.
+        The semantic model is automatically provisioned when Copilot experiences over Dataverse data
+        are enabled, so there is no manual setup required to start. Makers and administrators can then
+        fine-tune which signals feed into the model and add domain-specific glossary terms to cover
+        business-specific language that automatic extraction can't infer.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Building blocks of the semantic model
+        The semantic model combines three building blocks to give agents a complete picture of your
+        Dataverse data: data scope with semantic indexing, system-inferred signals, and a human-curated
+        glossary. Together, they allow agents to understand not just what your data contains, but what it
+        means.
+        Data scope with semantic indexing
+        The data scope defines the set of Dataverse tables covered by the semantic model. Semantic
+        indexing is applied over those tables, forming the foundation for agent reasoning within a
+        particular scenario. Only tables included in the data scope contribute to an agent's understanding
+        of your data.
+     System-inferred signals
+     The semantic model automatically extracts signals from metadata that already exists in your
+     Dataverse environment - table relationships, views, forms, column description summaries, and
+     optionally sample data rows. No additional data entry is required. The model reads what you
+     already configured and uses it to build semantic understanding.
+     You can fine-tune which signals are included and exclude those that introduce noise or are no
+     longer relevant. For details, see Fine-tune semantic model signals.
+     Glossary
+     The glossary allows makers to add domain-specific terms, acronyms, synonyms, and definitions
+     that system signals can't infer. If your organization uses coined abbreviations or business-specific
+     terminology that agents misinterpret, glossary entries close those gaps directly. For details, see
+     Manage semantic model glossary entries.
+     Why use the semantic model
+     The semantic model improves agent behavior in four ways:
+         Improved accuracy — Agents interpret business intent rather than guessing from schema
+         names alone, delivering more meaningful and relevant results.
+         Faster responses — A well-scoped semantic model reduces ambiguity, so agents return
+         answers more quickly and fluently.
+         Reduced setup time — The model automatically extracts semantic knowledge from your
+         existing Dataverse environment. As your schema evolves, the model updates on a scheduled
+         basis.
+         Consistent answers across agents — When multiple agents reference the same semantic
+         model, they share the same understanding of your data and return consistent responses
+         across experiences.
+     How the semantic model works
+     Once Dataverse intelligence is enabled, the semantic model is provisioned automatically. It reads
+     metadata from your Dataverse environment and extracts the following signals:
+                                                          ﾉ
+                                                            Expand table
+           Signal                 What is captured
+           Table relationships    How records across tables are associated, such as one-to-many and many-to-many
+                                  relationships.
+           Views                  Public views with join conditions and sub-grid views that define which records and
+                                  columns are relevant for a scenario.
+           Forms                  The display name of forms that define how records are presented to users.
+           Description            Descriptions added to tables and columns that explain what they represent.
+           summaries
+           Sample data rows       Representative rows showing what data looks like in each column.
+            ７ Note
+            Sample data rows are turned off by default. System views - including Quick Find, Advanced
+            Find, Associated, and Lookup views - and personal views are excluded from signal extraction.
+            For forms, only the display name is captured. Polymorphic relationship type isn't supported
+            to configure.
+         The semantic model regenerates automatically every 12 hours to reflect schema changes. You can
+         also trigger a manual regeneration at any time. Initial generation can take up to two hours, and
+         incremental changes typically take up to 30 minutes. For details, see Regenerate the semantic
+         model.
+         Copilot experiences that use the semantic model
+         The semantic model is automatically provisioned and consumed by the following Copilot and
+         agent experiences when they are set up over Dataverse data:
+                Copilot in Power Apps — Available in model-driven apps. For setup information, see Add
+                Microsoft 365 Copilot for app users in model-driven apps.
+                Microsoft 365 Copilot with Dataverse — Connects Microsoft 365 Copilot to your Dataverse
+                data. For setup information, see Dataverse data in Microsoft 365 Copilot.
+                Sales Agent in Microsoft 365 — Uses Dataverse data to power sales scenarios. For setup
+                information, see Set up Sales agent in Microsoft 365 Copilot.
+                Microsoft Copilot Studio agents over Dataverse data — Agents built in Copilot Studio that
+                use Dataverse tables as a knowledge source. For setup information, see Add Dataverse
+                tables as a knowledge source.
+     Known limitations
+     The following limitations currently apply:
+        No new model creation. You can't currently create a completely new semantic model.
+        No ALM support. The semantic model currently doesn't support environment copy or move
+        operations. After any environment copy or move, turn Dataverse Intelligence off and back
+        on in the Power Platform Admin Center to force a restart.
+     For additional questions about the semantic model, see Dataverse semantic model FAQ.
+     Related content
+        Fine-tune semantic model signals
+        Manage semantic model glossary entries
+        Regenerate the semantic model
+        Dataverse semantic model FAQ
+      Last updated on 06/28/2026
+        Fine-tune semantic model signals (preview)
+        [This article is prerelease documentation and is subject to change.]
+        This article explains how to open, configure, and fine-tune the Dataverse semantic model to
+        improve agent accuracy and Copilot experiences over your Dataverse data.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Prerequisites
+             Dataverse Intelligence is enabled for your environment. For setup information, see
+             Dataverse data in Microsoft 365 Copilot prerequisites.
+             The semantic model has completed its initial generation. More information: How the
+             semantic model works
+             Dataverse version with Dynamics 365 apps enabled must be 9.2.26054.00125 or later
+             version.
+             You need either of the following security roles to manage the semantic model:
+                System Administrator -or-
+                Semantic Model and Environment Maker
+           ） Important
+           After Dataverse Intelligence is first enabled, an initial sync runs automatically and can take
+           up to two hours to complete. During this initial sync, the semantic model page displays a
+           generating state. Wait until the initial sync is finished before proceeding.
+        Select a semantic model
+        The Semantic model page is the central hub for managing all semantic models in your
+        environment. From the page, you can view, manage, and edit a semantic model that powers
+        agent experiences across Microsoft, including Dataverse MCP, Copilot in Power Apps, Microsoft
+        365 Copilot, Sales Agent, and any agent built with Microsoft Copilot Studio over Dataverse data.
+            1. Sign in to Power Apps   , and open the environment where Dataverse Intelligence is
+              enabled.
+            2. In the left navigation pane, select More, and if not in the More list, select Discover all, and
+              then select Semantic model.
+            3. The Semantic model page lists all semantic models available in your environment. Select a
+              semantic model from the list to view and manage its signals, AI-generated concepts, and
+              glossary.
+        The list shows the following columns for each semantic model:
+                                                                                             ﾉ Expand table
+          Column               Description
+          Name                 The identifier of the semantic model. The name reflects the source that provisioned
+                               it. More information: Naming conventions
+          Associated apps or   Apps or agents that have access to this semantic model.
+          agents
+            Tip
+           Pin the Semantic model page to the left navigation pane for quick access.
+        Naming conventions
+        Semantic models are named based on the source that provisioned them. Use the name to
+        identify which experience a semantic model belongs to.
+                                                                                             ﾉ Expand table
+          Source                             Name format                           Associated apps or agents
+          Add Dataverse tables as a          User-configured Dataverse knowledge   custom agent name (user
+          knowledge source                   name                                  configurable)
+          Source                               Name format                             Associated apps or agents
+          Add Microsoft 365 Copilot for app     M365_Secondary_model_<App_name>        Connected app display
+          users in model-driven apps -or-                                              name (user configurable)
+          Dataverse data in Microsoft 365
+          Copilot
+          Set up Sales agent in Microsoft 365   SalesSpecificQnA                       Copilot in Dynamics 365
+          Copilot -or-                                                                 Sales
+          Copilot in Dynamics 365 Sales
+          overview
+           ７ Note
+           Changes you make to a semantic model, including signal settings, table-level controls, and
+           glossary entries, only apply to that specific semantic model. They don't affect other semantic
+           models in your environment. If multiple apps or agents share the same semantic model (for
+           example, Sales Agent and Copilot in Dynamics 365 Sales both use SalesSpecificQnA),
+           changes to that model apply to all experiences associated with it.
+         Manage the semantic model
+         The semantic model overview page shows:
+               Sync status. Whether the model is active and the timestamp of the last successful sync in
+               local time.
+               How your data is understood. Displays which system-inferred signal types are enabled.
+               Configuration. Select Configuration to fine-tune model items per table.
+               Glossary. Select Glossary to view and manage domain-specific terms and synonyms added
+               by makers or included out of the box.
+                                                                                                              
+         You can control semantic models at multiple levels:
+                                                                                                  ﾉ Expand table
+          Control level      Scope
+          Environment        Enable or disable a semantic model generation across the entire environment via Power
+          level              Platform admin center.
+          Signal-type level  Enable or disable specific signal types across all tables (for example, disable sample data
+                             rows globally).
+          Table level        Enable or disable semantic understanding for a specific table.
+          Item level         Enable or disable a specific view or relationship within a table to improve relevance.
+           ） Important
+           Computed signals are read-only. You can't directly edit an artifact generated by the system.
+           To override system-generated understanding, use the Glossary to add a corrected definition.
+           Disabling a signal type or table is the only way to remove its contribution to the semantic
+           model.
+         Enable or disable a signal type
+     You can turn off a signal type, such as table or form summaries, across all tables in the semantic
+     model.
+      1. From the semantic model overview page, in the How your data is understood area, turn a
+       signal On or Off.
+      2. Select Save.
+     Enable or disable a specific table
+     When a table contains sensitive, regulated, or irrelevant data, you can exclude it from the
+     semantic model without disabling the entire signal type.
+      1. From the semantic model overview page, select Configuration, and search for the table
+       display name that you want to enable or disable.
+      2. Select the table, and then check or clear Include in semantic model.
+      3. Select Save and sync.
+       Tip
+      You can also turn off table summary, sample table rows, or forms summary, for a table on
+      the configuration page.
+     Enable or disable a specific table item
+     Views and relationships within a table can be individually disabled when they contain outdated,
+     incorrect, or misleading data that negatively affects agent responses.
+      1. From the semantic model overview page, select Configuration, and search for the table
+       display name that you want to disable or enable a view or relationship.
+      2. Select Views or select Relationships to see the table's associated views and relationships.
+      3. Find the item you want to exclude and turn it On or Off.
+      4. Select Save.
+     Add and manage glossary entries
+     The glossary lets you add business vocabulary that system signals can't infer automatically. Use
+     glossary definitions to clarify the terminology used in your Dataverse tables, so agents better
+     understand user questions and respond more accurately. More information: Manage semantic
+     model glossary entries (preview)
+     Trigger a manual regeneration
+     The semantic model automatically regenerates every 12 hours. If you want changes to take effect
+     immediately — such as updates to signal settings, or Dataverse metadata changes like adding or
+     updating views and column descriptions — you can trigger a manual regeneration instead of
+     waiting for the next scheduled run. More information: Regenerate the semantic model (preview)
+     Enable sample data rows
+     The sample data rows signal is disabled by default. When enabled, the system uses sample data
+     to read and extract the metadata contained in the sample data rows.
+       1. From the semantic model overview page, in the How your data is understood area, turn the
+        Sample table rows signal to On.
+       2. Select Save.
+     Related articles
+        Dataverse semantic model overview
+        Manage semantic model glossary entries
+        Regenerate semantic model
+        Dataverse semantic model frequently asked questions (preview)
+      Last updated on 06/28/2026
+        Manage semantic model glossary
+        entries (preview)
+        [This article is prerelease documentation and is subject to change.]
+        The glossary lets you add business vocabulary that system signals can't infer automatically. Use
+        glossary definitions to clarify the terminology used in your Dataverse tables, so agents better
+        understand user questions and respond more accurately.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Add a glossary entry
+           ） Important
+           You can't delete system-defined glossary entries, but you can edit them to update the term
+           or definition.
+           1. Sign in to Power Apps    and select the environment where your semantic model is
+             provisioned.
+           2. From the semantic model overview, go to Glossary.
+           3. Select Add item.
+           4. Enter the following:
+                   Term. The domain-specific word or acronym, such as "VP."
+                   Definition. Enter a clear description of what the term means in your organization, such
+                   as "VP" refers to the Vice President value in the "JobTitle" column of the "Contact"
+           table.
+       5. Select Add term to save.
+       Tip
+      Write definitions as if you're explaining the term to someone unfamiliar with your
+      organization. Precise definitions reduce the chance that agents interpret a term differently
+      across different queries.
+     After saving, the entry is available to the semantic model. Changes are picked up during the next
+     regeneration cycle. To make the entry available immediately, trigger a manual regeneration - see
+     Regenerate semantic model.
+     Edit an existing glossary entry
+     You can update any glossary entry you created to refine its term, definition, or synonyms as your
+     organization's terminology evolves.
+       1. In the Glossary section of the semantic model, locate the entry you want to update. Use
+        search to filter by term name if needed.
+       2. Select the entry to open it.
+       3. Update the Term, Definition, or Synonyms as needed.
+       4. Save your changes.
+      ７ Note
+      Edits to glossary entries take effect during the next regeneration. Trigger a manual
+      regeneration if you need the change reflected immediately.
+     Edit a system-defined glossary entry
+     Some glossary entries are created automatically by the system as part of the out-of-box semantic
+     model. These entries appear alongside your custom entries in the glossary. You can edit them to
+     better reflect your organization's terminology, but you can't delete them.
+       1. Go to Glossary and search for the term you want to edit.
+       2. Select the entry, and then select Edit.
+       3. Update the term, definition, or synonyms you want.
+       4. Select Save changes.
+     Related articles
+        Dataverse semantic model overview
+        Fine-tune semantic model signals
+        Regenerate semantic model
+        Dataverse semantic model frequently asked questions (preview)
+      Last updated on 06/28/2026
+        Regenerate the semantic model (preview)
+        [This article is prerelease documentation and is subject to change.]
+        The Microsoft Dataverse semantic model automatically regenerates every 12 hours. If you want
+        changes to take effect immediately - such as updates to signal settings, or Dataverse metadata
+        changes like adding or updating views and column descriptions - trigger a manual regeneration
+        instead of waiting for the next scheduled run.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Trigger a manual regeneration
+        From the semantic model overview, select Regenerate. The button grays out while the
+        regeneration job is queued and running.
+        After regeneration completes, the overview page refreshes and shows the updated timestamp
+        next to the Regenerate button.
+           ７ Note
+                Regeneration runs across all semantic models in the environment.
+                Only changes made before selecting Regenerate are captured in that run. Any changes
+                made after are picked up in the next cycle. Use the Last regeneration timestamp to
+                confirm which changes are reflected in the current model.
+        Related articles
+             Overview of Dataverse semantic model (preview)
+             Fine-tune semantic model signals (preview)
+        Manage semantic model glossary entries (preview)
+        Dataverse semantic model frequently asked questions (preview)
+      Last updated on 06/28/2026
+        Dataverse semantic model frequently asked
+        questions (preview)
+        [This article is prerelease documentation and is subject to change.]
+        This article answers common questions about the Microsoft Dataverse semantic model that gives
+        AI agents and Copilot experiences a shared, business-aware understanding of your Dataverse
+        data.
+           ） Important
+                This is a preview feature.
+                Preview features aren’t meant for production use and might have restricted
+                functionality. These features are subject to supplemental terms of use  , and are
+                available before an official release so that customers can get early access and provide
+                feedback.
+        Why are some views from a table not visible in the
+        semantic model?
+        Only public views with join conditions and sub-grid views are included in the semantic model.
+        These view types are excluded:
+             System views. This includes Quick Find, Advanced Find, Associated, and Lookup views.
+             Personal views.
+        If a view you expect to see is missing, it's most likely one of these excluded types.
+        For more information about how views contribute to the semantic model, see Fine-tune semantic
+        model signals.
+        Why does the semantic model show a
+        Regenerating status?
+        The Regenerating status appears when a manual regeneration is triggered or the scheduled 12-
+        hour regeneration cycle is running. The Regenerate button is grayed out while the regenerate job
+     is queued or in progress.
+     Wait for the job to complete. The overview page refreshes and displays the updated timestamp
+     when regeneration finishes.
+      ７ Note
+      If the Regenerating status appears stuck for more than 24 hours, turn Dataverse Intelligence
+      off and back on in the Power Platform admin center to force a restart.
+     How is the semantic model consumed by agents and
+     Copilot experiences?
+     The semantic model is automatically consumed by the following experiences:
+        Copilot in Power Apps
+        Microsoft 365 Copilot with Dataverse
+        Sales Agent in Microsoft 365
+        Microsoft Copilot Studio agents over Dataverse data
+     Agents reference the semantic model associated with their app or knowledge source to
+     understand and reason over your Dataverse data.
+     Why is the semantic model not appearing for my agent
+     or Copilot experience?
+     Semantic models are available only when the Copilot experience is consuming Dataverse data
+     with semantic indexing enabled. For Microsoft 365 Copilot experiences specifically, you must
+     enable Microsoft 365 Copilot in model-driven apps in the app settings.
+     For an overview of which experiences automatically use the semantic model, see Dataverse
+     semantic model overview.
+     How does the semantic model behave when an
+     environment is copied or moved?
+     The Dataverse semantic model doesn't currently support application lifecycle management
+     (ALM). ALM support will be available when the feature reaches general availability. After any ALM
+     action - such as copying or moving an environment - turn Dataverse Intelligence off and back on
+     in the Power Platform admin center to force a restart.
+     Why can't I delete a glossary entry that was created by
+     the system?
+     System-defined glossary entries are part of a solution provided by Microsoft and can't be
+     deleted. You can edit them to update the term or definition to better reflect your organization's
+     terminology.
+     For instructions on editing glossary entries, see Manage semantic model glossary entries.
+     What does Secondary_model mean in the name of a
+     Microsoft 365-enabled semantic model?
+     Secondary_model is a naming convention that indicates the semantic model is not ALM-
+     compatible. If you see this in a model name, the model doesn't carry over when the environment
+     is copied or moved. For details on ALM behavior and the recommended workaround, see How
+     does the semantic model behave when an environment is copied or moved?
+     How long does it take for the semantic model to reflect
+     a newly created or updated view?
+     The semantic model automatically regenerates every 12 hours. To reflect a change immediately,
+     trigger a manual regeneration from the semantic model overview page by selecting Regenerate.
+     Regeneration time depends on the volume of changes:
+                                                      ﾉ
+                                                        Expand table
+      Scenario                Approximate generation time
+      Initial generation      Up to 2 hours
+      Incremental changes     Up to 30 minutes
+     For steps to trigger a manual regeneration, see Regenerate semantic model.
+     Related articles
+        Dataverse semantic model overview
+        Fine-tune semantic model signals
+        Manage semantic model glossary entries
+        Regenerate semantic model
+      Last updated on 06/28/2026

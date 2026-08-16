@@ -151,11 +151,25 @@ Backups of the originals: `/tmp/docx_backup/`. Edit script: `update_docs_schema.
   Resources/PublishInfo.json, Assets/Images, Src/*.pa.yaml, AppCheckerResult.sarif).
   Byte-identical to the content inside the committed `src/APP-MRMS_Project_app.msapr`;
   kept flat so it can be grepped without unzipping.
-- `reference/canvas-apps/official-docs/` — page-range text extractions of
+- `reference/canvas-apps/msapr-metadata/` — small JSON metadata extracted from the
+  `.msapr` (header, properties, data-source connections, publish info).
+- `reference/canvas-apps/official-docs/` — curated page-range text extractions of
   `power-apps-maker.pdf` (the full Microsoft Learn Power Apps maker docs,
   6,765 pp, ~404 MB, too large to keep/extract wholesale) covering the canvas-apps
   topics: source file format (p~3500), coding guidelines (p~3600–4000).
   Filenames encode the starting page; see `reference/canvas-apps/README.md`.
+- `reference/canvas-apps/pdf-scan/` — all remaining page-range probes of the PDF
+  (45 files, pages 61–6,600) so full scan coverage survives without the PDF.
+- `reference/canvas-apps/round-trip/` — unpacked output of the **repacked** msapp;
+  `Src/` is byte-identical to the original unpacked source (pack→unpack round-trip proof).
+- `reference/docs-extracted/` — plain-text extractions of the Word docs
+  (`*2.txt` = post-schema-update, bare names = pre-update).
+- `reference/docs-original/` — pre-update `.docx` originals, backed up before
+  `update_docs_schema.py` ran.
 - `BEST_PRACTICES.md` added at repo root — distilled canvas-apps best practices
   and gap analysis of the current app (delegation, naming, collections,
   App.Formulas, source-format workflow).
+- `backup/` — pristine pre-change snapshots: `original-pack/APP-MRMS_Project_app.msapp`
+  (byte-identical to the top-level pack) and `unpacked/` (byte-identical to the
+  original `pac canvas unpack` output). Restore points in case edits break the app.
+- README.md refreshed to document all of the above and the current app state.

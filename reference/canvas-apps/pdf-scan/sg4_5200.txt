@@ -1,0 +1,2076 @@
+         Forms provide the user interface (UI) that people use to create, view, or edit table records. Use
+         the form designer in Power Apps   to create and edit forms.
+         There are four types of forms: main, quick create, quick view, and card.
+         More information:
+              Form Types
+              Opening the form designer
+              Learn about creating and designing forms
+              Add a section to or remove a section from a form
+              Add a tab to or remove a tab from a form
+         Form designer
+         The design experience for creating and editing forms.
+         Opening the form designer
+         Group
+         A part of the model-driven app navigation experience. Group names appear as a navigation
+         element in an app with the subarea names (tables) within the group listed beneath it.
+         Legacy
+         This refers to features that have either been deprecated, or the way in which they're authored,
+         has been moved to a more modern experience, such as the web-based unified interface.
+         Lookup
+         A lookup is a field type that exists when two tables are related. Lookups can be seen in table
+         views on the many side of a one-to-many relationship. Lookups are generally populated using
+         a form on the many side of the relationship.
+              Learn more about the lookup field user experience
+              How to configure a lookup
+         Main form
+     Every table has at least one main form. The main form represents the primary method of
+     interaction with a record. The main form is responsive to the device using the screen form and
+     can contain controls that are optimized to the device whether it's phone, tablet, or web. Main
+     forms are edited using the form designer.
+     Learn about other form types
+     Monitor
+     Also know as the app monitor. It lets you understand aspects of the performance of a model-
+     driven app. App monitor can an also be used to monitor canvas apps.
+       Learn how to use the app monitor
+       Use Monitor to understand form performance
+     Page
+     Modern apps have the concept of pages, which can be either a model-driven app component
+     (table, dashboard, navigation link, or web resource) or a canvas-based page using a custom
+     page. Custom pages allow flexible layout, low-code Power Fx functions, and Power Apps
+     connector data.
+     A custom page is a tool for enabling model-driven apps and canvas apps to function together.
+       Working with custom pages
+       Learn about creating modern apps
+     Power Automate
+     A Power Platform service that allows users to streamline repetitive tasks. Typically, this
+     automation is performed using cloud flows.
+     Model-driven app business process flows that direct users to complete table records in a
+     specific fashion, are authored within Power Automate.
+     Power Automate flows exist within an environment and can also exist within Power Apps
+     solutions.
+     Learn more about Power Automate
+     Power BI
+     A data visualization tool that has the capacity to be embedded within model-driven apps or to
+     operate independently of them. Power BI can connect to a wide range of data sources, of
+     which Dataverse is just one.
+     Power BI reports aren't stored within Dataverse environments.
+        Use Power BI within a model driven app
+        Learn more about Power BI
+     Publish
+     The process by which you make the latest iteration of the app available to users within an
+     environment.
+     Publisher
+     Every solution has a publisher. You specify the publisher when you create a solution. The
+     solution publisher indicates who developed the app, and defines the prefix, such as
+     Contoso_MyNewTable, for all the solution assets.
+     Learn more about publishers
+     Record
+     A record contains one or more columns of information about a person, a place, or a thing. For
+     example, a record might contain the name, the email address, and the phone number of a
+     single customer. Other tools refer to a record as a "row" or an "item." Records exist within
+     Dataverse tables.
+     Relationship
+     The way columns in different tables relate to each other. There are three types of relationship:
+        One-to-many. For example, one author to many novels.
+        Many-to-one. For example, many pages to one book.
+        Many-to-many. For example, many books borrowed by many people.
+     Model-driven apps often contain tables with relationships between them. Where relationships
+     exist, users navigate to the record within the related table. For example, when looking at a sales
+     invoice record, you can open the related account record to investigate details for that account.
+     Learn about creating table relationships
+     Responsive apps
+     An app that is responsive renders itself in a way that depends on the device that is accessing
+     the app. This can also mean that there might be a different control displayed, such as a date
+     picker, depending on whether the user is running the app on a computer, tablet, or phone.
+     Additionally, tables and fields render themselves according to screen size of the device.
+     Section
+     Tabs within forms are arranged into sections. Sections can be arranged into one to four
+     columns and let you arrange the record metadata in a way that is most relevant to the current
+     tab and the current section.
+     Learn more about working with sections
+     Security role
+     A security role defines what people can see and do with features and data in Dataverse. For
+     records, security roles determine the create, read, write, delete, update, and append actions
+     available to a user.
+     Security roles are created and users are put into security roles either as individual user names
+     or by using active directory security groups.
+     You grant access to model-driven apps through security roles.
+        Find out more about security roles
+        General overview of security in Microsoft Dataverse
+        Get started with security roles in Dataverse
+     Site map
+     A model-driven app is essentially a collection of tables, dashboards, views, and pages, and
+     these are described via the site map. The site map defines the tables and pages that are
+     included within a model-driven app and the navigation experience users have when moving
+     between them.
+     When configuring the navigation experience you're editing the areas, groups, and subarea
+     navigation elements. Tables exist at the level of the subarea, and are arranged into groups.
+     Groups are effectively collections of tables and pages and are visible in the navigation pane.
+     Areas allow you to toggle between visible groups.
+     Both modern and classic methods of creating a model-driven app include site maps. However,
+     with the modern app designer you can design the site map with a drag and drop experience
+     whereas the classic site map designer doesn't support drag and drop.
+     To open the site map in the classic site map designer from the modern app building
+     experience, select Switch to classic.
+     Find out more about app navigation
+     Solution
+     A solution is a wrapper for a wide range of components including tables, cloud flows, and
+     security roles.
+     When you make a model-driven app, ensure that the assets associated with it are held inside a
+     solution.
+     Solutions have two types:
+        Managed solutions generally permit only a small amount of customization or no
+        customization at all.
+        Unmanaged solutions give makers full control over the project that they're creating.
+     Unmanaged solutions are used by makers and developers for exporting projects as a managed
+     solution for use in nondevelopment environments, such as a production environment. This
+     allows for a high level of control for application lifecycle management.
+        Find out more about solutions here
+        Discover solutions in the context of Dataverse
+     Solution explorer
+     This is the classic experience that makers and customizers can use to view and make changes
+     to most any solution component. More modern experiences are available from
+     make.powerapps.com and the model-driven app designers and solution explorer will
+     eventually be replaced with those modern experiences.
+     To access the modern solution interface, follow these steps:
+       1. Sign in to make.powerapps.com.
+       2. Select an environment.
+       3. On the left pane, select Solutions, and then open an unmanaged solution where you
+        want to add a model-driven app. Create a solution if one doesn't already exist.
+       4. Explore the components of the solution.
+     Find out more about solutions
+     Subarea
+     A part of the model driven app navigation experience. Subareas (tables) and pages appear
+     under the group that they're configured within in the app designer.
+     Subgrid
+     Subgrids are areas of main forms that display a list of records from a Dataverse table, while
+     remaining on the form. Typically, a subgrid is used to display child records that relate to the
+     parent record currently under review. For example, books written by an author.
+     While subgrids are displayed in a model-driven app, they're a property of the form.
+        Create a subgrid
+        Subgrid properties - legacy
+     Tab
+     Every form has at least one tab and these are relevant to how we present table record data. A
+     form can have multiple tabs. This lets you, the maker, offer the user a range of ways of looking
+     at the same record. Tabs often offer a better user experience by providing a more logical way
+     of presenting the data in the record.
+     From a site map perspective, a tab is a "group" when using the site map designer versus a
+     subarea for tables and an area to hold subareas.
+     Learn more about working with tabs
+     Table
+     A table is a method of storing data in columns (or fields) within Dataverse. Tables where
+     formerly called entities.
+     Tables, in the context of model-driven apps, only exist within a Dataverse database.
+     A single row within a table is known as a record. For example, a single customer, and the
+     columns describe metadata associated with the customer such as the name, telephone
+     number, or credit limit.
+     Every model-driven app must contain at least one table. Much of the process of creating a
+     model-driven app is selecting the tables most relevant to solving the business problem.
+     Tables have views, forms, and business rules associated with them.
+     Additionally, tables also have charts as well as dashboards where charts are presented.
+     Tables can relate to other tables and these are defined via the relationships that have been set
+     up between them.
+     Find out more about configuring tables
+     Table designer
+     The design experience for creating and editing tables. This lets you create tables, columns,
+     relationships, business rules, and views.
+     Create a custom table using the table designer
+     Unified Interface
+     The Unified Interface provides a consistent and accessible user experience across devices—
+     whether on a desktop, laptop, tablet, or phone. The predecessor to the Unified Interface was
+     known as the web interface.
+     Find out more about the unified interface here
+     Validate
+     The process by which an app maker confirms if the model-driven app has all the components
+     required for it to function properly.
+     Learn how to validate an app
+      View
+      A tabular representation of records in a Dataverse table. Tables can have multiple views.
+      Views can be prefiltered and it's possible to define the specific views that a model-driven app
+      makes available to users.
+      Tables can have multiple views associated with them and you can define the table views
+      relevant to a model-driven app at the time that you create them.
+      Find out more about views here
+      Workflow
+      A classic workflow is a series of functions or methods, called steps, that are performed
+      sequentially and apply to data contained within tables. The workflow can change the
+      processing direction by using conditionals, referred to as conditional branches.
+      In many cases classic workflows should be replaced with Power Automate flows.
+      Last updated on 04/03/2026
+        Install the Power Apps mobile app
+        If you're not signed up for Power Apps, sign up for free   . Then choose the download link or scan
+        a QR code to download Power Apps mobile.
+                                                                                           ﾉ Expand table
+                       iOS                            Android                          Windows
+           ７ Note
+           For more information on Power Apps for Windows, see Power Apps for Windows.
+        Required privileges and supported devices
+        Review the following privileges and supported devices to run Power Apps Mobile app:
+              Required privileges
+              Supported platforms for running apps using the Power Apps mobile app.
+        Sign in
+        Open Power Apps on your mobile device, and sign in by using your Azure Active Directory
+        credentials.
+        If you have the Microsoft Authenticator app installed on your mobile device, enter your username
+        when prompted, and then approve the notification sent to your device. If you run into issues
+        signing in, see Troubleshoot issues for Power Apps mobile app.
+     Find the app
+     When you create an app, or someone shares an app with you—either a canvas app or model-
+     driven app—you can run that app on Power Apps mobile.
+      ７ Note
+      To see a model-driven app in the list of apps on Power Apps mobile, you need to have a
+      predefined security role in the environment that the app is in. If a predefined security role is
+      assigned to a user using a Dataverse team, you need to use an Azure Active Directory (AAD)
+      group team. Users will not see model-driven apps if a predefined security role is assigned
+      using a Dataverse owner team.
+    Legend:
+     1. Model-driven apps
+     2. Canvas apps
+    The apps that you used recently will show on the default screen when you sign in to Power Apps
+    mobile.
+    The Home is the default screen when you sign in. It shows the apps that you used recently and
+    the apps that have marked as favorites.
+    Filter apps
+    If you don't have any apps, then when you sign in, you will land on the All apps screen. The list of
+    apps is organized in alphabetical order. Type in an app name in the search bar to find an app.
+     1. Settings: Access app settings and sign out.
+     2. Search: Search for apps. When you run a search, the system searches for apps that are on
+      the screen only.
+     3. Favorites (canvas apps only): Displays canvas apps that you have pinned to favorites.
+     4. Recent apps: Displays both model-driven and canvas apps that you have recently used.
+     5. Home: Displays favorite apps, recently accessed and recommended apps sorted by open
+      date.
+     6. All apps: Displays all canvas apps and model-driven apps to which you have access,
+      including apps you created and apps that others shared with you.
+     7. Featured apps (canvas apps only): Displays featured apps.
+     8. More (canvas apps only): Displays sample apps.
+     9. Details: View information about the app including run the app, add a shortcut for the app,
+      and add the app to favorites.
+     10. Recommended apps: Displays recommended apps based on groups associated with your
+      organization.
+     11. Sort apps: Sort by the app name or modified date.
+        Add to favorites
+        You can add canvas and model-driven apps to your list of favorite apps.
+              Swipe left and then select Favorite. A yellow star will appear next to app name when it's
+              added to favorites. You can also select Details     and then add the app to favorites.
+              To remove the app from the list, swipe left again and then select Unfavorite.
+     Sort apps
+     You can sort both canvas apps and model-driven apps. You can sort apps alphabetically by name
+     or by modified date. The sort option is available on Home, All apps, Featured apps, and Sample
+     apps screen.
+     Search apps
+     If you know the name of the app that you want to run, then use search to quickly find the app.
+     You can search for both canvas apps and model-driven apps.
+     To find an app, enter the app name in the search field. The app will only search for apps that are
+     on the screen you're on.
+    Refresh the list of apps
+    On the Home, All apps or any other screen with a list of apps, swipe down to refresh the app list.
+     Add shortcuts
+     You can add a shortcut for both canvas apps and model-driven apps to the home screen of your
+     device for quick access.
+     Use Safari to add a shortcut (iOS 13 or earlier)
+      1. On the app that you want to create a shortcut for, swipe to the right and select Shortcut.
+            2. Select     .
+     3. Scroll down and select Add to Home Screen
+     4. Select Add.
+          ７ Note
+          For iOS devices that have multiple browsers installed, use Safari when pinning an app to
+          home.
+        Use Siri shortcuts to add a shortcut to the Home screen (iOS 14
+        or later)
+        The Power Apps mobile app is now integrated with Siri shortcuts, which gives you the ability to
+        add a shortcut to the Home screen, launch apps with Siri, and create new workflows. For more
+        information on how shortcuts work on iOS, see Shortcuts User Guide  . This feature requires
+        Power Apps mobile version 3.20092.x or later.
+        Users on iOS 14 or later can use Siri Shortcuts to pin an app to the home screen. The new
+        experience works for both model-driven and canvas apps. When you add a Siri shortcut, the app
+        is added to the iOS Shortcuts app and from there you can add the app to your home screen.
+     1. On the app that you want add a shortcut for, swipe to the right and select Shortcut.
+     2. Add a custom phrase to open the app using voice commands and then select Add to Siri.
+     3. The app is added to the Shortcuts app on your mobile device. Open the Shortcuts app and
+      select the ellipsis (...) above the app name.
+     4. Select Add to Home Screen.
+     5. On the upper right corner, select Add and then select Done.
+     6. Go to your home screen to find the pinned app.
+        You can customize the shortcut icon but it is limited to the customization options in iOS. For
+        more information, go to Modify shortcut icons  .
+        Pin to home on Android
+        Select the ellipsis (...) on the app tile, select Pin to Home, and then follow the instructions that
+        appear.
+        See non-production apps
+        By default, only production model-driven apps are shown in the list of apps.
+        To see model-driven apps from non-production environments, select the Settings menu    , and
+        then turn on Show non-production apps. Follow the instructions that appear.
+    Run an app
+    To run an app on a mobile device, select the app tile from the Home or All apps screen in the
+    Power Apps mobile app.
+    Considerations when opening apps:
+       If you created the app, you see the app in the Home page > Recommended apps section.
+       If you didn't create the app and the app is shared with you, use search box in the Apps
+       screen to find the app the first time. After you open the app, it shows up on the Home
+       screen the next time you access it.
+    Run a canvas app
+    If this is the first time you're running a canvas app by using Power Apps mobile, a screen shows
+    the swipe gestures.
+    Close a canvas app
+    Use your finger to swipe from the left edge of the app to the right to close an app. On Android
+    devices, you can also press the Back button and then confirm that you intended to close the app.
+    Pinch and zoom in on a canvas app
+    Give consent to a canvas app
+    If an app requires a connection to a data source or permission to use the device's capabilities
+    (such as the camera or location services), you must give consent before you can use the app.
+    Typically, you're prompted only the first time you run the app.
+    Use a model-driven app
+    The following image shows an example of a model-driven app screen after you've signed in. To
+    learn how to use model-driven apps running on Power Apps mobile, go to Use model-driven
+    apps on Power Apps mobile.
+    Give consent to a model-driven app
+    If an app requires a connection to a data source or permission to use the device's capabilities
+    (such as the camera or location services), you must give consent before you can use the app.
+    Typically, you're prompted only the first time you use the app.
+        Close a model-drive app
+        Select the site map     , and then select Apps.
+           ７ Note
+           An app maker can customize the navigation bar and show or hide the Home, Recent,
+           Pinned buttons in the site map. An app maker can also make groups collapsible. For more
+           information, see Hide or show the Home, Pinned, Recent, and collapsible groups.
+         Other mobile apps
+         The table below outlines which other mobile apps you can use to run your app.
+                                                                                               ﾉ
+                                                                                                   Expand table
+          Mobile App                         Apps you can run
+          Power Apps mobile (covered in            Model-driven apps
+          this topic)                              Canvas apps
+                                                   Dynamics 365 Marketing
+                                                   Dynamics 365 Customer Service
+         Mobile App                       Apps you can run
+         Power Apps for Windows                 Model-driven apps
+                                                Canvas apps
+         Dynamics 365 for phone and             Microsoft Dynamics 365 Customer Engagement (on-premises)
+         tablets                                Note: Dynamics 365 for Tablets is deprecated, and won't be
+                                                supported in 2023.
+         Dynamics 365 Sales Mobile              Dynamics 365 Sales
+         Field Service Mobile                   Field Service (Dynamics 365)
+        Regional availability of Power Apps mobile app
+        Power Apps mobile app is available to users in Azure global cloud and also in the following
+        regions:
+             US Department of Defense (US DoD)
+             US Government Community Cloud (GCC) High
+             US Government Community Cloud (GCC)
+             China Sovereign Cloud
+        Mobile users have an option to select their region on Power Apps mobile app sign in screen.
+     More information:
+        Azure Government documentation
+        Dynamics 365 US Government
+        Power Platform and Dynamics 365 apps in China
+     Privacy notice
+     Power Apps mobile app for Android registers for a system event that is broadcasted when the
+     device is finished booting. Power Apps mobile app for Android registers for this event to support
+     push notifications sent to the app.
+     Power Apps mobile app and wrapped native mobile apps may use device sensors, such as the
+     device accelerometer, to respond to user actions. For example, wrapped native mobile apps
+     would automatically show the app menu when the user shakes the device.
+     See also
+     Use model-driven apps on Power Apps mobile
+     Troubleshoot issues for Power Apps mobile
+      Last updated on 06/12/2026
+         Manage your mobile app with Microsoft
+         Intune
+         Article • 05/26/2025
+         Mobile application management software enables IT administrators to apply and enforce
+         corporate policies on mobile apps. One mobile application management option for IT
+         administrators is Microsoft Intune, which offers a suite of features that lets you publish, push,
+         configure, secure, monitor, and update mobile apps - including Power Apps mobile, Dynamics
+         365 Sales Mobile, and Field Service Mobile. Mobile application management is essential to
+         organizations whose users use mobile app primarily because:
+            1. Users frequently travel to multiple locations, and protecting sensitive company data is
+              critical.
+            2. Many organizations have a bring-your-own-device policy, which means that the mobile
+              app needs management among many devices and apps for personal use.
+         With an Intune-enabled mobile app, IT administrators can:
+              Add and assign the mobile app to user groups and devices, including users in specific
+              groups, devices in particular groups, and more.
+              See reports and track app usage.
+              Limit sharing of corporate data among apps by restricting data leakage through cut, copy,
+              paste, and save-as.
+              Provide encryption at rest.
+         Intune is a separate Microsoft product that is not included with Power Apps mobile. Refer to
+         the documentation on What is Microsoft Intune app management? and Assign apps to groups
+         with Microsoft Intune to get started.
+         A configuration can be set up through the Device Management portal  . Each supported
+         platform (iOS, Android, and Windows) requires a separate configuration.
+         Enhanced security support in Intune
+         Intune advanced app settings aren't currently supported with Power Apps Mobile. However,
+         organization admins and makers have complete control over authentication, user access,
+         managing sensitive data access, configuring notifications, setting data sync policies across
+         sources, and defining access to organizational data and documents, through combination of
+         Power Platform environment settings and Azure conditional access policies.
+            Set the appearance of your app to dark
+            or light mode
+            Article • 11/30/2022
+            Easily change the display of your app to dark mode, light mode, or set it to the system
+            default on iOS and Android devices.
+            When you choose the System default, the display setting for Power Apps mobile will
+            match the dark or light mode display setting on your iOS    or Android   device.
+            The default display mode for Power Apps mobile is set to Light.
+                                                                                   ﾉ Expand table
+              Light mode appearance                      Dark mode appearance
+               1. To change the display, open Power Apps mobile and sign in.
+               2. From the Home screen, select your profile picture.
+       3. Under Settings, select Appearance.
+       4. Select your display setting: Light, Dark, or System default.
+                 5. When you're done, select the X to close the window.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+       Use model-driven apps in the Power
+       Apps mobile app
+       Article • 08/02/2023
+       Use Power Apps mobile to run model-driven apps on your mobile device. For more
+       information about how to install and get started with an app, see Install Power Apps
+       mobile.
+        ） Important
+           To use your model-driven app in the Power Apps mobile app, your app maker
+           must have set the Primary mobile player setting to Power Apps mobile. For
+           more information, see Manage model-driven app settings in the app
+           designer.
+       Home screen
+       It's easy to get around in Power Apps mobile. The following illustration shows the
+       primary navigation elements on the Home screen.
+       Legend:
+        1. Site map: Open the menu and move between apps, get to your favorite and
+         recently used rows, access settings, and more.
+        2. Search: Search for app rows in Microsoft Dataverse.
+        3. New: Create a new row and quickly enter almost any type of information into the
+         system.
+        4. Assistant: Use the assistant to monitor and track daily actions and
+         communications. It helps you stay on top of your day with insight cards that are
+         displayed prominently throughout the app to provide tailored and actionable
+         insights.
+       Site map
+            From the Home screen, select the site map      to access tables, favorite or most-used
+            rows, other apps, and settings.
+            Your site map might look different if your app maker has customized the navigation bar
+            to show or hide the Home, Recent, Pinned buttons in the site map. An app maker can
+            also make groups collapsible. For more information, see Hide or show the Home,
+            Pinned, Recent, and collapsible groups.
+            The following illustration shows the primary navigation elements on the site map screen.
+      Legend
+       1. App selector: Open this menu to close your app and switch to another app.
+       2. Home screen: Select this to go back to the Home screen.
+       3. Profile: Go to the Profile screen to sign out or reconfigure the app.
+       4. Recent rows: View a list of rows you were recently using.
+       5. Pinned rows: View and open your favorite (pinned) rows.
+       6. Table navigator: This area lists the table available in the app.
+       7. Help: Access help content for more information about how to use Power Apps
+        mobile.
+       8. Offline status: Work with your data in offline mode, even when you don't have
+        internet access. More information: Work offline on your mobile device
+       9. Settings: Access settings.
+             Pin favorite rows
+             The Pinned and Recent lists provide quick access to rows that you've recently used or
+             pinned to favorites. Use the Recent list to pin favorite rows.
+                1. From the site map    , select Recent   .
+                2. On the Recent rows screen, select the push-pin icon next to a row to add it to your
+                  favorites (pinned rows).
+                3. To view the newly pinned rows, select X, and then select Pinned   .
+             Unpin a row
+                1. From the site map    , select Pinned   .
+                2. Select the remove-pin icon    next to a row to remove it from favorites (pinned
+                  rows).
+             Change views
+                  From the Home screen, select the down arrow       next to the current view, and
+                  then select a new view.
+       Add a row quickly
+        1. From the Home screen, select New  .
+        2. Fill in the columns, and then select Save.
+        3. After the row is created, you can view the new row.
+                  To save and open the row that you created, select More       , and then select
+                  Save and Open.
+                  To save and create another row, select More       , and then select Save and
+                  Create new.
+       Sort rows
+       Sort in ascending or descending order: From a list view, select the arrow to sort the list
+       in ascending or descending order.
+      Sort by field: Select the current Sort by field and then select another field to sort by.
+       Access the actions menu
+       From a list view, swipe left to access the actions menu for a row.
+               ７ Note
+               The Flow actions menu in Power Apps mobile doesn't support flows created in a
+               solution.
+            Access more commands (Android)
+               1. From the Home screen, open a row.
+               2. On the open row, select More        to access more commands.
+       Edit a row
+         1. From the Home screen, open a row that you want to edit.
+         2. When you're done editing the row, select Save. To cancel your changes, select
+          Discard.
+            Go back to the Home screen
+                  To get back to the Home screen when you're in a row, select Back     .
+                  At any point, press and hold Back     to go back to the Home screen.
+              Sign out
+              From the site map        , select the profile icon    , and then select Sign out.
+              Enhancements (preview)
+              [This section has pre-release documentation and is subject to change.]
+              This section describes enhancements that have been made to model-driven apps on
+              mobile devices.
+       Lock tabs at the top of forms
+       Your app maker can choose to lock the tabs at the top of a form so they are always
+       visible while users scroll through the data on the form.
+       Your app maker can turn on this feature. For more inforamtion, see Features.
+       Mobile commanding improvements
+       Your app maker can enable Mobile commanding improvements to provide easy access
+       to contextual commands when you're using Power Apps mobile. Here's a list of
+       improvements:
+          The Delete command on a grid page is automatically hidden when a row is not
+          selected thus, making room for other commands. When one or more rows is
+          selected the Delete command is automatically displayed.
+           The Process command is hidden when there's no process enabled for a table.
+           Removing a nonfunctional command makes room for other commands.
+                                                     ﾉ Expand table
+                       Before                    After
+           Some commands have been moved from the main set of commands to an
+           overflow menu. This gives priority to other commands, including custom
+           commands.
+        Tablet optimization for command bar
+        The command bar on Power Apps mobile for tablets was at the bottom, now the
+        command bar is located at the top.
+              Your app maker can turn on this feature. For more inforamtion, see Features.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+       Use Dataverse search for model-driven
+       apps in the Power Apps mobile app
+       Article • 01/28/2023
+       You can quickly find the information that you're looking for by using Dataverse search.
+       The Dataverse search experience delivers fast and comprehensive results across multiple
+       tables, in a single list, sorted by relevance.
+       Dataverse search is already available when you're using a model-driven app in a web
+       browser. The functionality is the same in Power Apps Mobile, but it works a little
+       differently. More information: Search for tables and rows by using Dataverse search
+       Before you begin using Dataverse search, the new experience needs to be enabled by
+       the administrator for your organization. More information: Enable Dataverse search
+       When Dataverse search is turned on, it becomes your default and only global search
+       experience for all of your model-driven apps. You won't be able to switch to quick find
+       search also known as categorized search.
+       Run a search
+       View suggested search results inline as you type, minimizing keystrokes and simplifying
+       page navigation.
+        1. Select the search button.
+       2. Enter the words you want to search for in the search box.
+       3. As you enter search text, rows that match your text begin to appear.
+       Early access: Use the barcode scanner
+       [This topic is pre-release documentation and is subject to change.]
+       If you're on early access, you can use the barcode scanner to look up rows. The scanner
+       automatically detects a barcode, a QR code, or a data-matrix code.
+       You also enter text in the search box such as contoso and then use the barcode scanner
+       to scan a barcode, such as 12345. In this case, the system will search for contoso12345.
+         1. To use the barcode scanner, select the search button.
+         2. Select the barcode scanner button and then scan your item.
+       View search results
+       Search results are ranked and grouped by table.
+      Legend
+       1. Search box: Enter the words you want to search for.
+       2. Top results: This tab shows the rows that best match the search query.
+       3. Table-specific tab: To narrow your search results to a specific table, select the table
+        tab.
+       4. Filter: Refine the search results by using filters. When you select filters, the number
+        of tables that have been filtered on appears next to the filter option.
+       5. See all: Up to three rows will appear; if there are more, select See all.
+      Filter search results
+      Use filters to drill into and explore the results of your current search without having to
+      repeatedly refine your search terms. Immediately after you perform a search, you can
+      filter by Owner, Created On, or Modified On.
+      Legend
+        1. Back: Go back to the search results screen.
+        2. Filter: Select a filter type to filter the search results.
+        3. Clear all: Clear all filters and return to the search results screen.
+      Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       In-app notifications in the Power Apps
+       mobile app
+       Article • 01/28/2023
+       In-app notifications allow users to receive notifications in the notification center and as
+       a notification toast. For more information, see In-app notifications in model-driven apps.
+       In Power Apps mobile, toast notifications appear one at a time.
+       Access notifications
+       1. To access notifications in Power Apps mobile, go to site map and then select the
+        bell icon.
+       2. The notification center opens which displays all your notifications.
+         3. To dismiss and delete a notification, select the close X button on a notification. Or,
+          select Dismiss all to dismiss and delete all notifications.
+       Turn toast notifications on or off
+         1. To turn toast notifications on or off, from the site map, go to Settings
+         2. Under In-App Notifications, go to the Enable toasts and move the toggle to on or
+          off.
+                 3. If you've enabled toast notifications, then select Total duration and enter how long
+                    you want the toast to appear.
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+       Create push notifications for the Power
+       Apps mobile app using Power Automate
+       Article • 03/14/2023
+       Push notifications are used in Power Apps mobile to engage app users and help them
+       prioritize key tasks. In Power Apps, you can create notifications for Power Apps mobile
+       by using the Power Apps Notification connector. You can send notifications to any app
+       that you create in Power Apps.
+       Add a push notification to your app if:
+                 Your users need to know information immediately.
+                 Your users must complete important tasks by using your app, in a preloaded
+                 context.
+                 You want to engage your users on a specific interval, or you need users to enter
+                 the app in a specific context.
+              ７ Note
+              To receive push notification, each user must have opened the app in Power Apps
+              Mobile once or gotten the app from the Microsoft 365 apps page   .
+            Before you can create push notification you need to have access to an app and have the
+            row ID if you're creating a notification for a form.
+            Create an app
+            You need to have Contributor permission for a model-driven app or canvas app. If you
+            don't have an app, you can create one. For information, see:
+                 Create a model-drive app
+                 Create a canvas app
+            Create a notification from a flow
+            When you trigger a push notification from a flow, you can send the notification to only
+            one user or security group at a time.
+               1. Go to Power Automate    and select Create.
+               2. Select Automated flow.
+       3. On the Build an automated flow screen, choose one of the flow trigger or select
+        Skip and manually create one.
+       4. From the list of connectors and triggers select Microsoft Dataverse (current
+        environment).
+         5. Select the action that will trigger the notification.
+         6. Enter the trigger condition information and then select New step.
+                                                 ﾉ
+                                                   Expand table
+                      Name                          Description
+                      Trigger condition             Select the condition for the notification.
+                      The table name                Select which table the notification is for.
+                      Scope                         Select the scope.
+                  7. In the Choose an action search box, enter send push notification. In the list of
+                     Actions choose Send push notification V2.
+       8. On the Send push notification screen, enter the following information:
+           Mobile app: Select Power Apps.
+           Your app: Select the app that you want to set up the notification for. Model-
+           driven apps and canvas apps have different parameters. The next step will
+           depend on the type of app you select here.
+       9. Depending on the type of app that you selected in the previous step, do one of
+        the following:
+        For a model-driven app, enter this information:
+          Recipient Items-1: Select how the flow is triggered.
+          Message: Enter the notification message.
+          Open app: Select whether to open the model-driven app or not when the user
+          selects the notification.
+          Table: Select which table the notification is for.
+            Form or view: Select if the notification is for a form or view.
+            Row ID: If the notification is for a form, then enter the row ID.
+          For a canvas app, enter this information:
+            Recipient Items-1: Select how the flow is triggered.
+            Message: Enter the notification message.
+            Open app: Select whether to open the canvas app or not when the user selects
+            the notification.
+            Parameters: Key-value parameters to pass with the notification. Your push
+            notification can pass specific parameters to the app. These can be further
+            processed in the app to open a specific page and load a specific state. For more
+            information, see Perform an action when a user taps the notification.
+         8. When you're done, select Save.
+         9. Select Flow checker to check for error or warnings.
+        10. Test the flow by selecting Test and follow the prompts.
+       Perform an action when a user taps the
+       notification
+         Pass parameters
+         For canvas apps, you can pass key-value pairs using the Parameters field as JSON. For
+         example, if you wanted to pass the CaseID, you would put the following as Parameters:
+         { "CaseID": 42 }. You can also use dynamic values from earlier steps as shown below.
+         Read parameters
+         To read the passed parameters, use Param("ParameterName"). For example, to read the
+         CaseID value, use Param("CaseID"). To quickly identify this parameter, add a Label
+         control to your app. Set the Text property of that control to Param("CaseID"). If the user
+         opens the app from the All apps list, the value is empty. If the user opens the app from
+         another location on the device, the value is populated with the CaseID value.
+         Set the start page
+         You can set your app to open, for example, the Case details page as soon as the app
+         opens:
+           1. Add a Timer control, and set its OnTimerEnd property to this formula:
+            Navigate(EditCase, ScreenTransition.None)
+           2. (optional) Hide the Timer control by setting its Visible property to false.
+           3. Set the OnVisible property of the screen to Timer.Start().
+           Tip
+          It's a good idea to create a unique first page in the app for the notification:
+            1. Create an empty page that your app doesn't already open, add a Text Input
+              control, and set its timer.Duration value.
+                    2. When you create the app, set the timer to a non-zero value. When you're
+                      ready to publish the app, set the value to 0 to immediately trigger the timer.
+              Considerations
+                    You can send a push notification from one app to another or to the same app. For
+                    more information, see Send notification from an app.
+                    Notifications show the generic Power Apps icon instead of a specific app icon.
+                    Notifications are not supported in China on Android devices.
+                    Battery optimization settings on an Android device can interfere with receiving
+                    notifications for Power Apps mobile. To receive notifications for Power Apps
+                    mobile, turn off battery optimization for the app.
+                    The example push notifications that are mentioned in this topic are only supported
+                    on Power Apps mobile. Other mobile apps such as Dynamics 365 Sales mobile app
+                    or Dynamics 365 for phones and tablets do not support these types of
+                    notifications.
+              For reference information, see Power Apps Notification reference.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+     Use deep links with the Power Apps mobile
+     app
+     10/15/2025
+     Deep links let users move from one application to another on computers and mobile devices.
+     Simple examples include a mobile app deep-linking to Facebook to sign in, an email address
+     deep-linking to a mail app to compose a message, or a website deep-linking to an app store to
+     download a related mobile app.
+     Supported deep links in the Power Apps mobile
+     app
+     You can open an entityrecord or an entitylist view in the Power Apps mobile app by using
+     deep-link URLs from other apps. When you follow the link from an external app, the target
+     element opens in Power Apps mobile
+     If you're already signed in to your instance in the app, the target record is displayed when you
+     follow the link from an external app. Otherwise, you're prompted to sign in to your instance in
+     the mobile app; after you're signed in, the target element is displayed. You must have the
+     Power Apps mobile app installed on your mobile device to use this feature.
+     Supported Urls parameters for a model-driven app
+     Use the following application handler and query string parameters to compose the URL.
+     Deep links for the Power Apps mobile app should start with the following:
+     ms-apps://<org-url>_<app-id>?tenantId=<tenant-id>&environmentId=<environment-
+     id>&appLogicalName=
+     <appLogicalName>&appType=AppModule&openApp=true&restartApp=true&forceOfflineDataSync=true
+      ） Important
+      The org-url can't contain https://. The following is an example of a model-driven app
+      deep link:
+      ms-apps://contoso.onmicrosoft.com_e6429eba-2204-40e8-b9dd-fc74791ff2c2?
+      tenantId=aaaabbbb-0000-cccc-1111-
+      dddd2222eeee&environmentId=g67tfyufhkjfg&appLogicalName=cr12_e567
+                                                                                                           ﾉ Expand table
+             Parameter                         Description                                                          Required
+             <targeted-app>                           ms-dynamicsxrm -> Dynamics 365 for phones                     Yes
+                                                      ms-apps-fs -> Field Service
+                                                      ms-apps -> Power Apps
+                                                      ms-mobile-apps -> wrapped native mobile apps
+             <org-url>                         Connects to the correct org URL.                                     Yes
+             <app-id>                          Opens the correct app module.                                        Yes
+             tenantId=<tenand-id>              Connects to the correct tenant.                                      Yes
+             *environmentId=                   Uniquely identifies the environment within a tenant.                 Yes
+             <environment-id>
+             *appLogicalName=<app-             Unique Name of the app. For more information on how to               Yes
+             logical-name>                     find this unique name of the app in modern studio, refer
+                                               Manage model-driven app settings in the app designer and
+                                               for classic editor, refer Manage model-driven app properties
+                                               in the app designer (classic)
+             appType=AppModule                 Indicates that the targeted app is a model-driven app.               Yes
+             restartApp=true                   Restarts the model-driven app. Required to ensure parameters         No
+                                               are passed when the app is already open.
+             autoLoginUpn=<e-mail>             Autopopulates e-mail and triggers sign-in.                           No
+                                               Note: This parameter will be ignored if a user is already signed
+                                               into the app.
+             forceOfflineDataSync=true         Ensures that data sync is triggered so that all the latest data is   No
+                                               available.
+           *Considerations
+                  The environment ID and appLogicalName are mandatory for all new deep links.
+                  Existing deep links without an environment ID or appLogicalName will experience slower
+                  performance until December 2025, after which they won't be supported.
+                  Update all existing deep links to include the environment ID and appLogicalName to
+                  improve performance and reduce wait time.
+           If opening an entityrecord form or creating a new entityrecord, use the following
+           parameters:
+                                                                                                         ﾉ Expand table
+            Parameter                    Description                                                              Required
+            etn=<entity-logical-         Designates which table to go to.                                         Yes
+            name>
+            pagetype=entityrecord        Indicates that the target is a form.                                     Yes
+            id=<record-id>               Designates which specific record to go to; if left blank, the created    Yes
+                                         form for the table opens.
+            extraqs=<form-id>            Designates which form to open for the entityrecord; if not               No
+                                         specified, the default form opens. The extraqs parameter can also
+                                         be used to default field values.
+           If the link goes to an entitylist view, add the following parameters:
+                                                                                                         ﾉ Expand table
+            Parameter                                       Description                                           Required
+            etn=<entity-logical-name>                       Designates which table to go to.                      Yes
+            pagetype=entitylist                             Indicates that we're going to a view.                 Yes
+            viewid=<view-id>                                Designates which view to open.                        No
+            Viewtype= <1039 if system view, 4230 if         Indicates whether the targeted view is a system       No
+            personal view>                                  view or a personal view.
+           Supported Urls parameters for a canvas app
+           ms-apps:///providers/Microsoft.PowerApps/apps/<appID>?tenantId=<tenantId>&environmentId=
+           <environment-id>&restartApp=true
+                                                                                                         ﾉ Expand table
+            Parameter                        Description                                                          Required
+            <app-id>                         Opens the correct app module.                                        Yes
+            tenantId=<tenantId>              Connects to the correct tenant.                                      Yes
+            *environmentId=                  Uniquely identifies the environment within a tenant.                 Yes
+            <environment-id>
+           Parameter                    Description                                                  Required
+           restartApp=true              Restarts the Canvas app. Required to ensure parameters are   No
+                                        passed when the app is already open.
+           autoLoginUpn=<e-mail>        Autopopulates e-mail and triggers sign-in.                   No
+                                        Note: This parameter will be ignored if a user is already signed
+                                        into the app.
+          *Considerations
+               The environment ID is mandatory for all new deep links.
+               Existing deep links without an environment ID will experience slower performance until
+               December 2025, after which they won't be supported.
+               Update all existing deep links to include the environment ID to improve performance and
+               reduce wait time.
+               Supported Urls parameters for a wrapped native
+               mobile app
+          ms-mobile-apps:///providers/Microsoft.PowerApps/apps/<appID>?tenantId=
+          <tenantId>&restartApp=true
+            ） Important
+            The deep link URL for a wrapped app works only when one wrapped app is installed on
+            the mobile device. It doesn't work if more than one wrapped app is installed.
+                                                                                             ﾉ
+                                                                                                 Expand table
+           Parameter              Description                                                        Required
+           <app-id>               Opens the correct app module.                                      Yes
+           tenantId=<tenantId>    Connects to the correct tenant.                                    Yes
+           restartApp=true        Restarts the model-driven app. Required to ensure parameters are   No
+                                  passed when the app is already open.
+           autoLoginUpn=<e-       Autopopulates e-mail and triggers sign-in.                         No
+           mail>
+       Parameter     Description                              Required
+                     Note: This parameter will be ignored if a user is already signed into
+                     the app.
+      Troubleshooting
+      Deep links can open in your browser depending on the company's organizational policies and
+      the user's device settings. Mobile Device Management (MDM) tools and device operating
+      systems have different options and settings that affect how deep links are handled. If deep
+      links are opening in a browser instead of directly in Power Apps mobile, make sure your MDM
+      policies and device settings are appropriately configured.
+      As an example, on some Android devices, go to Settings > Apps > Power Apps > Open by
+      default and add apps.powerapps.com to make deep links open directly in Power Apps mobile.
+      See also
+      Important upcoming changes (deprecations) in canvas apps
+             Open an app in the Power Apps mobile
+             app by scanning a QR code
+             Article • 01/28/2023
+             Users can easily open a Power Apps canvas or model-driven app on their mobile device
+             by scanning a QR code, shown in Power Apps     , from their desktop computer. To do
+             this, complete the following steps on your desktop computer.
+                1. Sign in to Power Apps  .
+                2. In the left pane, select Apps.
+                3. Select the check mark icon next to the app that you want to open on your mobile
+                  device.
+                4. Select the More Commands (...) icon for the app you want to open, and then select
+                  Details.
+                5. A page showing the details of your app is shown. With your mobile device, scan
+                  the QR code.
+                6. The app will open on your mobile device.
+             Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+       Switch to a different directory in the
+       Power Apps mobile app
+       Article • 03/06/2023
+       When a user signs into the Power Apps mobile app, they sign into their home tenant,
+       which is the Azure Active Directory (Azure AD) tenant where their credentials are
+       provisioned. After signing in, a user can easily change the tenant or directory with which
+       they intend to use the Power Apps mobile app. This enables users to easily access the
+       Power Apps that have been shared with them in different directories.
+       This means that:
+         Users no longer need to log out of the Power Apps mobile app to switch
+         directories.
+         Users can specify the directory they want to work in from a list of directories on the
+         user profile page.
+         Users, including guest users, can access apps shared with them in different
+         directories.
+       To switch to a different directory in the Power Apps mobile app:
+        1. Open the Power Apps mobile app.
+        2. From the Home, All apps, or More page, select your profile image. Your user
+         profile page appears.
+           ７ Note
+           Users signing into the Power Apps mobile app with a Microsoft account
+           cannot switch directories from their user profile page. They must use a
+           deeplink, instead.
+           For more information about how to share canvas apps with guest users, see
+           Share a canvas app with guest users.
+        3. Select the directory you're signed in to. A list of directories appears.
+                 4. Select the directory you want to switch to.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+       Optimize for devices overview (preview)
+       Article • 05/02/2024
+       [This article is prerelease documentation and is subject to change.]
+       Optimize for devices is a feature that changes the way canvas app screens are loaded
+       and displayed on Android and iOS devices. This feature lets makers build stunning,
+       native apps for mobile users with device-optimized screens that use native UI elements,
+       instead of rendering inside of web view. Device-optimizes screens provide the following
+       benefits:
+          Modern mobile user experiences and interaction patterns
+          Improved performance and reliability
+          Integrated device capabilities with maker-defined UI
+       There's no need to rebuild apps as makers can use all the familiar app-building elements
+       to create device-optimized experiences, though there are some limitations. Apps that
+       are optimized for devices work with other mobile features such as offline, push
+       notifications, and wrap.
+        ） Important
+           This is a preview feature.
+           Preview features aren't meant for production use and may have restricted
+           functionality. These features are available before an official release so that
+           customers can get early access and provide feedback.
+       Allow screens to be device-optimized
+        1. Select Settings > Upcoming features > Preview > Optimize for devices.
+        2. Only use supported controls on the screen.
+       After this feature is turned on, you can find which controls are supported in the Insert
+       pane by selecting the Device optimized (preview) filter. Learn more about which
+       controls are supported natively today.
+       Screens made solely with device-optimized controls automatically render natively on
+       Android and iOS devices. An app can have screens which are optimized, while some
+       others aren't. This only depends on the controls chosen by the maker to create that
+       screen.
+              How screens are optimized for devices
+              For a canvas app running on Power Apps mobile, there are UI elements, their current
+              state, and the related business logic that determines how screens are optimized. For
+              example, on a screen you might have a button at position 0, with a width and height of
+              200 and 40 respectively, and with fill color blue. The business logic, with Power Fx, lets
+              you navigate the user to a different screen.
+              If the Optimize for devices option is off for that screen, the screen loads and displays in
+              a web view, running similarly to how it would in a desktop's web browser. When
+              Optimize for devices is on, each element's current state is passed over to the device
+              where it renders that same element, but using native UI. So now we have a natively
+              rendered, long blue button in the upper-left corner. Business logic modifies state or
+              takes actions, which runs the same way it did before. When the natively rendered button
+              is selected, the device runs Power Fx and the user is navigated to the specified screen.
+              Each control needs a device-optimized, native equivalent that supports the same
+              properties so it can render the way a maker expects. During preview, there are some
+              limitations to which controls and properties are supported. Whether a control is classic
+              or modern, it filters the list of controls for device-optimized ones.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+     Optimize for devices (preview)
+     07/28/2025
+     For a screen to be optimized for devices, it must use controls that are supported natively. You
+     can filter the control Insert pane to only show device-optimized controls.
+      ） Important
+         This is a preview feature. Documentation is subject to change.
+         Preview features aren't meant for production use and may have restricted
+         functionality. These features are available before an official release so that customers
+         can get early access and provide feedback.
+     Device-optimized controls
+     The following controls are optimized for iOS and Android devices. All other controls are
+     currently unsupported. A screen that has one or more unsupported controls automatically
+     renders in a web view instead of native UI. Learn more: Optimize for devices overview.
+     Controls
+        Add picture
+        Attachment
+        Barcode reader
+        Button
+        Camera
+        Check box
+        Circle
+        Components
+        Container (horizontal and vertical included)
+        Form
+        Gallery (vertical, horizontal, flexible height)
+        Icon (all icons supported)
+        Image
+        Radio
+        Rectangle
+        Text input
+        Text label
+        Timer
+     Modern controls
+        Button
+        Check box
+        Date picker
+        Text
+        Text input
+        Toggle
+     Learn more: Overview of modern controls and themes in canvas apps
+     Unsupported controls
+     If a screen has an unsupported control, the screen automatically reverts to render with a web
+     view.
+     Device-optimized properties
+     Some properties must be configured so they're optimized for devices. For example, consider
+     the barcode reader control. The maker can select Scan Inline for the Scanning mode property.
+     In Power Apps Studio, when this mode is selected, the control displays as a warning box
+     indicating that the control only works on mobile devices. On a device, in a screen optimized for
+     devices, the control displays a camera feed to allow barcode scanning.
+     Known limitations
+     Note the following limitations with the 'optimize for devices' feature.
+        The Image control, when showing an SVG file, only supports the fit, fill, and stretch image
+        position options. Its default behavior is to fit, if another option is selected. All other image
+        types work as expected for all image positions.
+        In the modern Text input control, the Value property, when set to a Power Fx variable,
+        isn't displayed at first navigation. Instead, it shows the placeholder value until the user
+        navigates away and back to the screen with the modern Text input control.
+        In the modern Text input control, the OnChange property is called each time the user
+        interacts with the control, instead of when navigating away from the control.
+        In the modern Text input control, the Validate state property doesn't display a red border
+        around the control.
+        In the Image control, the Image rotation property isn't supported. The image isn't
+        rotated.
+        In the Dropdown and Radio control, the Items property doesn't support references to
+        other controls. Items aren't shown if they're complex values, like references.
+        In the modern Date picker control, tapping on the control opens a modal with a calendar
+        instead of allowing users to type into the control directly.
+       In the modern Date picker control, the Base palette color and modern theme aren't
+       applied on Android devices. Instead, it displays as the device's theme color.
+       In the Button, Image, Label, and Icon controls, the SetFocus Power Fx function doesn't
+       support keyboard focus, only accessibility focus (for example, screen reader).
+       In Horizontal and vertical containers, the Scroll option only works for a single direction,
+       depending on the Wrap property. If Wrap is off, the container is scrollable in the primary
+       direction, otherwise it's scrollable in the secondary direction.
+       Multiple Barcode reader controls on a single screen aren't supported.
+       Multiple Camera controls on a single screen aren't supported.
+       In the Camera control, the Display mode property of the parent control isn't supported.
+       For example, if the camera control is part of a form that is set to view mode, the camera
+       might still be in edit mode.
+    Related information
+    Supported platforms for running apps using the Power Apps mobile app
+      How offline first functionality works in
+      Power Apps mobile
+      Offline first functionality in Power Apps mobile enables users to access and work with app data
+      on their mobile devices without an active internet connection. This feature uses a local
+      database on the device to store data. When your device is connected to a network, any writes
+      made in the app sync to Dataverse immediately. If you perform updates while the network is
+      offline, those changes sync automatically with Dataverse as soon as connectivity returns. Reads
+      performed while the device is connected to the internet follow the sync frequency configured
+      by the maker in the app’s offline settings. When the device transitions from no network to an
+      active connection, read operations are triggered again to refresh data.
+      Offline profile
+      First, to create an offline-first app, maker must create the offline profile. The profile defines:
+         Tables and columns available for offline use
+         Optional filters to limit the data downloaded per table
+         Relationships between tables for linked data access
+      After you create the profile, when you first open the app, the data for the offline profile
+      downloads and stores locally on the device in a SQLite-based cache. This local copy becomes
+      the primary data source for all app operations. Learn more about setting up offline for canvas
+      apps in Set up mobile offline for canvas apps and about setting up offline for model-driven
+      apps in Set up mobile offline for model-driven apps.
+      Data synchronization
+      The sync process keeps offline data up to date with Dataverse through automatic
+      synchronization:
+         Initial download: When the app first opens, all data defined in the offline profile is
+         downloaded to the local device.
+         Incremental updates: Subsequent down-syncs fetch only changes (inserts, updates,
+         deletes) since the last sync, reducing data transfer.
+         Configurable frequency: Makers can set down-sync intervals (every few minutes, hourly,
+         or daily) for each table in the offline profile in the maker studio.
+         Smart sync: If no changes are detected across tables, the down-sync is skipped to save
+         bandwidth.
+        Automatic resumption: When the mobile device reconnects to the network, the down-
+        sync operation resumes automatically.
+        Platform differences: On iOS, syncs happen only in the foreground. On Android, syncs
+        that start in the foreground continue even when the app moves to the background.
+     Local storage and data access
+     All offline data is stored in a local database on the device, ensuring data availability regardless
+     of network status.
+     Read operations: In an offline first app, the app reads from the local cache for all data
+     operations, regardless of network connectivity. This includes viewing records, searching, and
+     filtering data.
+     Write operations: Changes made when the network is offline are queued locally and pushed to
+     Dataverse when connectivity is restored. Users can continue making modifications without
+     interruption. Changes made when network is online are saved locally and instantly synced to
+     Dataverse.
+     Data retention: Retention duration isn't fixed by the platform. Data persists as long as the app
+     and offline profile remain installed on the device. There's no automatic expiry unless:
+        The user clears the app cache or uninstalls the app
+        The maker updates the offline profile, which can trigger a full refresh
+        The user sign out of the app before the sync is complete
+     Maker controls and optimization
+     Makers have several tools to optimize data download, offline performance and control the
+     offline experience:
+        Column selection: Choose specific columns to minimize payload size and reduce
+        download time
+        Relationship configuration: Define parent-child table relationships for linked data access
+        Sync frequency: Configure sync intervals and filters for each table individually
+        Media settings: Configure which images and files should be downloaded for offline
+        access
+     These controls allow makers to balance offline functionality with performance and storage
+     constraints on mobile devices. Learn more about how to optimize offline profile in Optimize
+     the offline profile
+      Building offline app screens
+      Screens in an offline-enabled app are built on top of the offline profile and should be designed
+      with offline scenarios in mind:
+      Data binding: Controls such as galleries and forms bind to tables defined in the offline profile,
+      ensuring data availability offline.
+      Conditional logic: Screens should handle offline scenarios by disabling actions that require live
+      server calls, such as certain API integrations or real-time data operations.
+      Optimized layouts: Galleries and forms should show essential columns only, reducing load
+      time and improving performance on mobile devices.
+      Write-back handling: Input controls queue changes locally and should display status indicators
+      (for example, "Pending Sync") until connectivity returns and synchronization completes.
+      Offline-first design benefits
+      The offline-first architecture provides several advantages over traditional online-only
+      applications:
+         Faster load times: No round trips to the server for every screen or data query, resulting in
+         near-instantaneous data access
+         Consistent experience: Users interact with the same local dataset whether online or
+         offline, eliminating connectivity-dependent behavior changes
+         Reduced network dependency: Only sync operations hit the server, not every read
+         operation, minimizing bandwidth usage and improving reliability
+      This design ensures that users can work productively in any network environment, from stable
+      Wi-Fi connections to areas with intermittent or no connectivity.
+      Last updated on 01/07/2026
+         FetchXML editor for offline profiles
+         (preview)
+         [This article is prerelease documentation and is subject to change.]
+         FetchXML is Dataverse's native query language that lets makers write data filters as XML code,
+         similar to writing a formula, but more powerful. Use the FetchXML editor to optimize complex
+         profiles for better performance and avoid sync timeouts on large tables (100K+ records).
+         This feature is best suited for advanced makers and developers who are comfortable working
+         with XML and need more control than what the visual filter builder provides.
+            ） Important
+                 This is a preview feature.
+                 Preview features aren't meant for production use and might have restricted
+                 functionality. These features are subject to supplemental terms of use   , and are
+                 available before an official release so that customers can get early access and
+                 provide feedback.
+                 This feature is being gradually rolled out across regions and might not be available
+                 yet in your region.
+         Benefits of the FetchXML editor
+         The FetchXML editor offers several advantages over the visual expression builder for defining
+         offline data filters.
+               Support for hierarchical conditions:
+               The FetchXML editor supports building complex, hierarchical conditions such as under,
+               eq-or-under, above, and eq-or-above on hierarchy-enabled lookups. Learn more about
+               querying hierarchical data
+                XML
+                <fetch>
+                  <entity
+                    name="account">
+            <filter
+                type="and">
+                <condition
+                attribute="statecode"
+                operator="eq"
+                value="0" />
+            </filter>
+            <link-entity
+                name="businessunit"
+                from="businessunitid"
+                to="owningbusinessunit"
+                link-type="any">
+                <filter
+                type="and">
+                <condition
+                   attribute="businessunitid"
+                   operator="eq-or-under"
+                   value="{YOUR-PARENT-BU-GUID}" />
+                </filter>
+           </link-entity>
+         </entity>
+         </fetch>
+        Support for checks against unrelated tables:
+        The FetchXML editor lets you link to other tables even if they don't have a direct
+        relationship with the primary table, provided you specify valid from and to attributes. This
+        capability is especially useful in complex offline scenarios where multiple entities share a
+        common foreign key but aren't directly related.
+         XML
+         <fetch
+             distinct="false"
+             latematerialize="true"
+             options="DisableRowGoal, EnableOptimizerHotfixes">
+         <entity
+             name="cr57f_producttranslation">
+             <filter
+                type="and">
+                <link-entity
+                name="cr57f_userlanguagepreference"
+                from="cr57f_language_id"
+                to="cr57f_language_id"
+                link-type="any">
+                <filter
+                   type="and">
+                   <condition
+                      attribute="cr57f_user_id"
+                      operator="eq"
+                      value="user_002" />
+                </filter>
+                </link-entity>
+            </filter>
+           </entity>
+         </fetch>
+        Query optimization support by using late materialization and query hints:
+        The editor exposes advanced optimization controls directly on the <fetch> element,
+        including:
+        latematerialize="true": By using latematerialize="true", you optimize query
+        performance by narrowing down matching records before retrieving all their column data.
+        This attribute reduces the load when syncing large tables during offline sync. Learn more
+        about using late materialize
+         XML
+         <fetch
+           distinct="false"
+           latematerialize="true"
+           options="OptimizeForUnknown,ENABLE_HIST_AMENDMENT_FOR_ASC_KEYS">
+         <entity
+           name="msdyn_workorder">
+           <filter
+              type="and">
+              <condition
+              attribute="statecode"
+              operator="eq"
+              value="0" />
+              <condition
+              attribute="msdyn_systemstatus"
+              operator="in">
+              <value>690970000</value>
+              <value>690970001</value>
+              </condition>
+           </filter>
+           <!-- Booking chain -->
+           <link-entity
+              name="bookableresourcebooking"
+              from="msdyn_workorder"
+              to="msdyn_workorderid"
+              link-type="any">
+              <filter
+              type="and">
+              <condition
+                 attribute="statecode"
+                 operator="eq"
+                 value="0" />
+              <filter
+                 type="or">
+                 <condition
+                    attribute="starttime"
+                    operator="today" />
+                 <condition
+                    attribute="starttime"
+                    operator="next-seven-days" />
+              </filter>
+              </filter>
+              <link-entity
+                 name="bookingstatus"
+                 from="bookingstatusid"
+                 to="bookingstatus"
+                 link-type="any">
+                 <filter
+                    type="and">
+                    <condition
+                       attribute="statecode"
+                       operator="eq"
+                       value="0" />
+                 </filter>
+              </link-entity>
+              <link-entity
+                 name="bookableresource"
+                 from="bookableresourceid"
+                 to="resource"
+                 link-type="any">
+                 <filter
+                    type="and">
+                    <condition
+                       attribute="userid"
+                       operator="eq-userid" />
+                 </filter>
+              </link-entity>
+           </link-entity>
+           <!-- Customer asset -->
+           <link-entity
+                 name="msdyn_customerasset"
+                 from="msdyn_customerassetid"
+                 to="msdyn_customerasset"
+                 link-type="any">
+              <filter
+              type="and">
+              <condition
+                 attribute="statecode"
+                 operator="eq"
+                 value="0" />
+              </filter>
+              <!-- Account -->
+              <link-entity
+                 name="account"
+                 from="accountid"
+                 to="msdyn_account"
+                 link-type="any">
+              <filter
+                 type="and">
+                        <condition
+                           attribute="statecode"
+                           operator="eq"
+                           value="0" />
+                   </filter>
+                  </link-entity>
+                 </link-entity>
+                </entity>
+                </fetch>
+              The options attribute passes SQL Server query hints. Learn more about using these
+              options
+         How the FetchXML editor works
+         You access the FetchXML editor through the offline profile configuration experience in Power
+         Apps. You write or paste a FetchXML query, and the editor validates it in real time before you
+         save.
+            1. In Power Apps  , go to your environment's settings and open the Offline Profiles page.
+              Select an existing offline profile or create a new one, and then select Edit profile.
+            2. In the offline profile editor, add or select the table whose data you want to filter for
+              offline use.
+            3. Under Filter, choose Custom or Related rows, and then select Edit filter.
+            4. In the filter editor, scroll down and select View/Edit FetchXML to open the FetchXML
+              code editor.
+       5. Modify the existing FetchXML query or paste a new one. The editor automatically
+        validates syntax and structure as you edit, checking for:
+           A required <fetch> root element with at least one <entity> element
+           Only supported FetchXML tags
+           Elements placed inside the correct parent elements
+           A maximum of 500 filter clauses
+        If the editor detects an issue, such as a missing required element or an unsupported
+        <link-entity> usage, it shows a clear error message so you can fix it before saving.
+       6. After your FetchXML query is valid, select Apply to convert the filter, and then Save the
+        offline profile.
+       ） Important
+       Always select Apply and then Save after editing FetchXML. If you don't save, your changes
+       are discarded.
+     After saving, the offline profile uses your custom FetchXML filter for data sync. If your query
+     uses only features supported by the visual builder, those filters continue to display in the
+     Expression Builder UI. If you use advanced FetchXML-only features, the visual filter UI might
+     not render them. Use the FetchXML Editor for any future edits to that filter.
+     Best practices
+        Apply performance hints like latematerialize="true" or hint="union" for large datasets.
+        Validate your FetchXML by using the built-in editor checks before saving.
+        Save your offline profile immediately after applying FetchXML changes.
+        Use only supported FetchXML constructs for offline profiles, such as link-type="any" or
+        link-type="not any".
+        Avoid unsupported join types like inner or outer in offline filters.
+        Keep filter clauses under the 500-clause limit per query.
+        Don't ignore validation errors. Queries must be well-formed and complete.
+     Limitations
+        Queries must start with a <fetch> root element and include at least one <entity>
+        element.
+         Only supported FetchXML elements are allowed. Unknown or unsupported tags trigger
+         validation errors.
+         Elements must follow proper parent-child nesting rules.
+         <link-entity> inside <filter> must use link-type="any" or link-type="not any". Inner and
+         outer joins aren't supported.
+         FetchXML <attribute> tags aren't used for column selection in offline sync. Use the Filter
+         Columns option instead.
+         Explicit pagination attributes like page and count are ignored in offline profiles.
+         Queries are limited to a maximum of 500 filter clauses.
+      Last updated on 04/08/2026
+       Mobile offline for canvas apps overview
+       Article • 06/05/2024
+       If users of your Dataverse-based canvas app have spotty or no Internet access, you can
+       easily provide offline-first access with simple switches and a canvas control. Basic
+       offline-first apps are easy to make. Just build your app with normal Power Fx formulas,
+       and Power Apps offline features handle everything else.
+       You can also build complex offline apps using custom offline profiles. An offline profile is
+       the configuration that determines the data synchronized to users’ devices. Offline
+       profiles help you to optimize your app's performance by reducing the amount of data
+       downloaded to the device. For example, while you may have access rights to millions of
+       records in a table, your app may need only a thousand of them. If you download only a
+       thousand records, your app performs better. If you need more than 15 tables in your
+       offline app, you may want to consider using a custom offline profile.
+       To get started with mobile offline, turn on the offline feature in your app and in the
+       tables your app uses. A basic offline screen template is automatically inserted into the
+       app for you to use directly or as a starting point. Set up mobile offline for canvas apps.
+       Mobile offline-first
+       Offline-first means that all the data users need when they're offline is copied to their
+       mobile device. It requires network access to download the data initially, but after that,
+       users work exclusively with the data stored locally on their device, even when they're
+       online. Moving on and off the network doesn't affect the performance of the app
+       because it's using local data. Power Apps monitors your app's network access. When it
+       detects a connection, it automatically syncs any local changes to the server and
+       downloads any updates from the server. The offline features handle conflict detection
+       and minimize the use of system resources.
+       When you turn on the offline capability in your app, the app always runs offline-first,
+       with or without an Internet connection. This functionality optimizes offline performance
+       and creates a consistent experience for users as they change locations.
+       Why use offline for canvas apps instead of
+       LoadData/SaveData?
+       There are some key benefits to using the built-in offline functionality for canvas apps
+       instead of LoadData/SaveData Power Fx functions.
+                                                                                       ﾉ Expand table
+              Topic                    LoadData/SaveData                   Built-in offline
+              Power Apps Studio        Custom                              Built-in
+              support
+              Code complexity          Power Fx code complexity scales up  No code
+                                       with data complexity
+              Supported Power Fx       All                                 Partial (See Mobile offline
+              functions                                                    limitations for canvas apps.)
+              App checker rules        None                                Common configuration
+                                                                           problems are flagged
+              Offline or connectivity  Not provided/custom only            Automatic
+              user experience
+              Sync user experience or  Not provided/custom only            Automatic
+              status
+              Image and file support   Yes, but may run into performance   Yes
+                                       and memory limits
+              Optimized delta sync     No                                  Yes
+              Conflict resolution      Manual                              Automatic
+              Local data store         Files                               Transactional database
+              Automatically handles    No                                  Yes
+              schema changes
+              Fast app launch with     No                                  Yes
+              large datasets
+              Data size limit          Device dependent, 30-70 MB in       Device dependent, 3 million
+                                       most cases                          rows
+             See also
+             Work with canvas apps offline
+             Feedback
+             Was this page helpful?           
+                                       Yes       No
+       Provide product feedback
+         Set up mobile offline for canvas apps
+         Turn on offline mode in your canvas app if users need to work without worrying about their
+         Internet connection.
+         Prerequisites
+              You must have the Environment Maker, System Administrator, or System Customizer role
+              to set up offline mode for canvas apps. These roles have create, read, write, delete, and
+              share privileges on Canvas App, Mobile offline profile, and Sync Error tables. Learn about
+              predefined security roles.
+              Users with the Basic User role can't open an offline application. You must create a custom
+              security role with read privileges on Canvas App, Mobile offline profile, and Sync
+              Error tables.
+              If you already have a custom security role, make sure it grants read privileges on Canvas
+              App, Mobile offline profile, and Sync Error tables. Learn about Create or edit a security
+              role to manage access.
+           ７ Note
+           It's recommended that the canvas app is in a solution. The offline profile App usage field
+           in the Power Platform admin center   (Environements > select an environment >
+           Settings > User + permissions > Mobile configuration) only applies to apps within a
+           solution.
+         Optimize your app for mobile offline
+         Mobile apps run on small screens with limited connectivity. Before you set up offline mode,
+         make sure your canvas app is optimized for offline and mobile use. Consider the user scenarios
+         you want to cover and the amount of data the app uses. Create an app that's simple and
+         lightweight.
+         Follow these best practices when you build an app for mobile offline use:
+              Performance is critical when you run an app on mobile. For more information about
+              creating performant canvas apps, see Overview of creating performant apps.
+              Identify the on-the-go scenarios that are functionally related, such as tasks that are
+              performed by users who work in the field.
+              Reduce the complexity of your app by limiting the number of tables that need to be
+              downloaded. Sometimes it's better to have two apps instead of one.
+              Use views that are optimized for the experience rather than displaying a large set of data.
+              For example, it's preferable to use the My active accounts view, rather than the All
+              accounts view.
+         Turn on offline capability for tables
+         Tables included in an offline app must be configured for offline use. Some built-in tables have
+         it by default. Some tables can't be used offline. However, you can turn on offline capability for
+         any new, custom table.
+            1. Sign in to Power Apps   .
+            2. In the left side panel, select Tables.
+            3. Select a table, and then select Edit.
+            4. Select Edit table properties.
+            5. Select Advanced options, and then scroll to the Rows in this table section.
+            6. Select Can be taken offline.
+       7. Select Save.
+     Turn on offline capability for your app
+       1. In Power Apps Studio, in the left side panel, select Apps.
+       2. Select your canvas app, and then select Edit.
+       3. Select Settings.
+       4. Select General.
+       5. Turn on the Can be used offline option.
+        If you don't see the Can be used offline option, make sure the app is in a solution.
+       6. Select an offline profile. You have two options:
+           Autogenerated profile: This setting downloads all the tables used in your app
+           automatically. Autogenerated profiles are a starting point to create an offline profile
+           and help makers validate their offline data. These profiles can be resource-intensive
+           as they don't compute optimal filters for each table or assess the amount of data
+           the app must download offline. App makers need to review and refine these profiles
+           based on their use case.
+           Custom mobile profile: Custom offline profiles let makers add only relevant tables,
+           limit data usage and include filters based on their needs and best practices. These
+           profiles offer flexibility and control, enhancing the user experience by downloading
+           relevant data, improving sync times, and boosting query performance.
+       7. Close the Settings window, and then save and publish your app.
+     A page that's based on the Offline template is automatically inserted in the app. The page
+     contains an icon that uses the Connection Power Fx function to reflect the app's offline sync
+     status. You can use it as-is or customize it, as appropriate.
+       ７ Note
+          You can use the same, offline profile in different canvas apps. The users can use the
+          apps and share the same, offline profile in disconnected mode. The updates done in
+          one app are reflected in the other apps since the apps share the same, local storage
+          with this setup.
+          ALM isn't currently supported for autogenerated profiles.
+                 If your organization uses ALM and you're moving your app between environments,
+                 ensure that your offline profile is tested for all use cases in the target environment.
+         If the automatically generated offline profile doesn't meet your needs, create your own. Learn
+         about guidelines for offline profiles.
+         Create an offline profile
+         You need to publish your new offline profile before you can select it in your canvas app's
+         settings. If you edit and publish an offline profile, you must also publish any canvas apps that
+         use it.
+         There are two ways you can create offline profile.
+         Create a custom mobile offline profile from within Power apps
+         studio
+            1. Sign in to Power Apps Studio   .
+            2. In the left side panel, select Apps.
+            3. Select your app, and then select Edit.
+            4. Select Settings > General.
+            5. Turn on the Can be used offline setting.
+            6. In the drop-down menu, select an offline profile. You can select the Auto-generated
+              option or New profile with current app data.
+            7. Enter a name and description for the profile. Add the tables you need for the profile. For
+              those tables, apply filters and choose columns as described in optimize the offline profile.
+            8. Save the profile.
+            9. Publish the profile.
+         Create profiles from within Power Platform admin center (with
+         admin rights)
+            1. Sign in to the Power Platform admin center    using an admin account.
+            2. In the left side panel, select Environments.
+            3. Select an environment, and then select Settings.
+            4. Expand Users + permissions, and then select Mobile configuration.
+            5. Select Create new profile.
+              6. Enter a name and description, and then select Create.
+              7. After the profile is created, select it to continue editing it.
+             ） Important
+             Don't add users in the offline profile in the Users with offline access area. This capability is
+             only applicable to model-driven apps and is restricted to selected users.
+           Add a table to an offline profile and apply filters
+           Applying an appropriate filter for each of the tables configured in the offline profile is critical to
+           limiting the amount of data that downloads on users' devices.
+           Be sure that you configure at least one of the profile rules for each table to download its data.
+                                                                                                      ﾉ
+                                                                                                          Expand table
+            Customization                  Recommendation
+            Organization rows - if         If you want to define this filter, then you have to pick at least one of the
+            selected, then select at       given options. It's highly recommended to not have a business unit-level
+            least one of these options:    filter for a table, unless there's a strong justification. It's recommended for a
+                                           master data scenario with a small data set, like country codes.
+            - User's rows
+            - Team rows
+            - Business unit rows
+            All rows                       If you select this filter, you can't define any other filter rules.
+            Related rows only              Be sure that the related table has been added to the offline profile.
+            Custom                         You can define a custom filter up to three levels deep.
+              1. In the Data available offline section, select Add table.
+              2. Select a table, and then define the filters.
+              3. Select Next.
+              4. Set the following filters:
+                  a. Choose the row that you want to make available offline. For the Custom option, use
+                    the expression builder to set up advanced conditions.
+        b. Relationships lists the different relationships available between the current table and
+          other tables added in the offline profile. Selecting a relationship ensures that related
+          rows following that relationship are downloaded and made available offline.
+         c. Sync interval defines the sync frequency to be applied on the device that syncs with
+          the data with the server. If a table's data doesn't change frequently, like a catalog or a
+          product table, you might want to focus on only syncing data when necessary, such as
+          refreshing only once a day.
+       5. Select Save.
+       ７ Note
+       Each table in your offline setup can link to up to 15 other tables through filters or
+       relationships. If you link to a table that already connects to other tables, those connections
+       count toward the limit. For example, if Table B connects to two other tables and you link
+       Table A to Table B, Table A has three relationships: one for Table B and two for the tables
+       Table B connects to. This setup is a transitive relationship. If any table has more than 15
+       total connections, you get an error and can't publish the offline profile.
+     Using the Offline template and offline status icon
+     To make it easier to create or convert a canvas app for offline use, we created the Offline
+     template. The template includes a globe icon in the navigation bar that shows the connectivity
+     and sync state, putting offline at the center of the experience. Users always know whether their
+     device and data are ready to go.
+     A new page created from the Offline template is automatically inserted as soon as you turn on
+     the offline capability in your canvas app.
+     You can also add a new page based on the Offline template the same way you add pages from
+     any other template.
+     The globe icon in the template's navigation bar uses different icons depending on the value of
+     the Power Fx Connection.Sync function. You can create your own icon and set the Icon
+     property using the following Power Fx script:
+      PowerApps Formula
+      Switch(Connection.Sync, 
+         ConnectionSync.Connected, Icon.Globe,  
+         ConnectionSync.ConnectedWithWarning, Icon.GlobeWarning, 
+         ConnectionSync.ConnectedPendingUpsync, Icon.GlobeChangesPending, 
+         ConnectionSync.ConnectedError, Icon.GlobeError, 
+              ConnectionSync.ConnectedRefresh, Icon.GlobeRefresh, 
+              ConnectionSync.NotConnected, Icon.GlobeNotConnected,  
+              ConnectionSync.NotConnectedWithWarning, Icon.GlobeWarning, 
+              ConnectionSync.NotConnectedPendingUpsync, Icon.GlobeChangesPending, 
+              ConnectionSync.NotConnectedSyncError, Icon.GlobeError) 
+         You can set the OnSelect property using the Power Fx function ShowHostInfo to show the
+         Device status page when selecting the globe icon.
+           PowerApps Formula
+           ShowHostInfo(HostInfo.OfflineSync)
+         You can set the Visible property using the Power Fx function Host to only show the globe icon
+         when the app is used on a player that's supporting the offline mode.
+           PowerApps Formula
+           Host.OfflineEnabled
+         Export a solution that contains a canvas app
+         enabled for offline
+         When you export a solution with an offline canvas app, you also need to export the offline
+         profile for the app, as it's a dependency of the app.
+            1. Sign in to Power Apps    and in the left navigation pane, select Solutions.
+            2. Select the solution that you want to export and then select Edit.
+            3. Select the canvas app that is enabled for offline and then select Advanced > Add
+              required objects.
+         Make sure that the associated offline profile is in the solution and then you can export it.
+         See also
+              Mobile offline limitations for canvas apps
+              Best practices for developing an app for offline use
+              Optimize the offline profile
+      Last updated on 01/08/2026
+         Configure files and images in offline canvas
+         apps
+              Summarize this article for me
+         ﾃ
+         This article explains how to configure files and images in a Power Apps table for offline canvas
+         apps.
+         Prerequisites
+         Have an existing canvas app with Dataverse tables. For more information, see Build an app.
+         View column properties for a file or image
+            1. Sign in to Power Apps   .
+            2. In the left navigation menu, select Tables. If the item isn’t in the side panel pane, select …
+              More and then select the item you want.
+            3. Select the table that has the columns you want to view.
+            4. Under Schema, select Columns.
+            5. Select the Display name of a column where Data type is set to File or Image.
+            6. The column properties show the Data type. Expand Advanced options to view the
+              maximum size for a file or image. For more information about columns, see Columns
+              overview.
+         Download options
+         In an offline-enabled canvas app, there are two ways to download files and images:
+              On view: Downloaded when you view them—the default option.
+              On sync: Downloaded during offline sync when device is connected.
+         Download files and images on view
+         When files and images are configured to download on view, the content is downloaded on the
+         device when the user opens a file or when an image is presented to the user. Files and images
+         are downloaded when the device is connected to the network and can be used afterward
+         without connectivity.
+         This mode is enabled by default without any specific configuration.
+         If you want to keep this default, then you don't need to proceed with this article.
+         Download files and images on sync
+         When files and images are configured to download on sync, they download during the offline
+         sync when the device is connected to internet. After the download is complete, users can
+         access this content from the device's local storage, even when the device is offline. Users are
+         notified when the download of files and images is complete. Use download on sync when you
+         only need to make a limited number of files or images available offline.
+         The remainder of this article helps you configure on sync.
+         Configure on sync
+         To configure the automatic download of files and images on sync, you need to create a
+         custom, mobile offline profile. There are two ways to configure sync.
+         Configure on sync from within Power apps studio
+            1. Sign in to Power Apps   .
+            2. In the left navigation pane, select Apps.
+            3. Select a canvas app, and then on the command bar, select Edit to open your app in
+              editing mode in canvas app designer.
+            4. Select Settings > General.
+            5. Set the Can be used offline toggle to On.
+            6. Under Select offline profile, select Edit selected profile from the "...".
+            7. Select the table that has file or image column that you want to enable for offline.
+            8. In the table details pane that appears, under the section Related rows + Files and
+              Images, select the file and image column that you want to configure on sync.
+            9. Go back and select Save.
+         Configure on sync from within Power Platform admin center
+         (requires admin access)
+         You can add both the Image Descriptor and FileAttachment tables to your mobile offline
+         profile by configuring the settings of your environment.
+            1. Go to Power Platform admin center   and sign-in as an admin.
+            2. Select Environments from the navigation menu.
+            3. Choose an environment and then select Settings on the menu bar.
+            4. Expand Users + permissions, then select Mobile configuration.
+            5. Select a mobile offline profile to edit it.
+            6. In the Data available offline section, select Add the table that contains the images or
+              files.
+            7. To enable offline access for images and files, add the Image Descriptor and
+              FileAttachment tables to your mobile offline profile. To add the Image Descriptor table,
+              follow these steps:
+               a. Select Image Descriptor and then select Next.
+              b. Under Choose the rows that you want to make available offline, select Related rows
+                 only.
+               c. Expand Relationships and select Column name: Display name for each column where
+                 Data type is set to Image. In this example, we select the unnamed column names from
+                 the DemoTable1 and DemoTable3 tables.
+              d. Select Save.
+            8. To add the FileAttachment table, follow these steps:
+               a. Select FileAttachment and then select Next.
+              b. Under Choose the rows that you want to make available offline, select Related rows
+                 only.
+               c. Expand Relationships and select Column name: My column name for each column
+                 where Data type is set to File. In this example we add Column name: MyFile from the
+                 DemoTable3 table. Don't select Column name: Regarding..
+              d. Select Save.
+          Last updated on 02/20/2026
+        Work with canvas apps offline
+        Article • 07/23/2024
+        If a canvas app is designed for offline use, you can work with it on your mobile device
+        even when you don't have Internet access. All the data the app needs is stored locally on
+        your device. Any changes you make are synchronized with the app server the next time
+        your device connects to the network. If you're in the middle of changing some data and
+        you lose your network connection, the app saves your changes and uploads them to the
+        server when you're back online.
+        Initial offline sync
+        Before the app can work offline, it needs to download to your device all the data it
+        needs to have available. This process is called the initial offline sync. It can take a few
+        minutes or longer, depending on how the app was designed.
+        The initial offline sync happens automatically when you open the app. A message tells
+        you the app is syncing the offline data and the number of rows and tables that are
+        downloaded. If the initial sync doesn't complete, it's triggered every time you open the
+        app.
+        Offline delta sync
+        After the initial offline sync, the data that's stored locally is kept in sync with data on the
+        app server whenever your device has a network connection. These periodic updates are
+        known as "delta" syncs. "Delta" means the minimum data that's changed between two
+        syncs on the device. Power Apps syncs every five minutes when you're online.
+        Sync status icons
+        Depending on how the app was designed, it includes information about its
+        synchronization status in the form of a globe with various icons. At a glance, you can tell
+        whether:
+           The app is connected to the network
+           A data update is in progress
+           Updated data is waiting to sync
+           An error or warning occurred while data was syncing
+        The following table describes the icons and their meanings.
+                                                                                            ﾉ Expand table
+               Icon          Description
+                             The app is connected to the Internet.
+                             The app isn't connected to the Internet.
+                             The app is syncing data.
+                             The app has pending changes to upload.
+                             The synchronization process encountered an error.
+                             The synchronization process encountered a warning.
+              To get a description of the sync state, select the icon.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+         Sync data offline in the background
+         06/25/2025
+         To use an app in offline mode, download the app and sync data to your device.
+         You can sync data reliably only when the Power Apps mobile app or Field Service app is open,
+         running in the foreground, and your device screen is unlocked. Learn more about sync
+         behavior in Work with canvas apps offline.
+         The background sync can be enabled on Windows by changing the Let this app run in the
+         background setting.
+              If you're using Windows 10, see Manage background activity for apps in Windows    for
+              more information.
+              If you're using Windows 11, complete the following steps:
+                 1. Go to Settings > Apps > Installed apps.
+                 2. Next to Power Apps or Field Service, select the More options icon (three horizontal
+                   dots). Then select Advanced options.
+                 3. In the Background apps permissions area, go to the Let this app run in the
+                   background setting. Select Power optimized (recommended) from the list.
+        Mobile offline limitations for canvas apps
+        Before you set up the mobile app in offline mode, review the following limitations. Also, see Best
+        practices for developing an app for offline use and Optimize the offline profile.
+        Capabilities not supported in offline-enabled apps
+                                                                                              ﾉ
+                                                                                                 Expand table
+          Area              Description
+          Canvas app types  The offline-first feature works for standalone canvas apps only. It doesn't work
+                            for embedded canvas apps, custom pages, or canvas apps in Teams.
+          Connectors        Non-Dataverse connectors, like SharePoint, aren't supported in offline mode.
+          Dataverse table   Virtual tables and elastic tables aren't supported in offline mode.
+          types
+          Power Automate    Power Automate flows aren't supported in offline mode.
+          flows
+           ７ Note
+           If your app connects to data from Excel, CSV files, or SharePoint lists, you can start with
+           Copilot to import data to Dataverse. Once your data is in Dataverse, you can turn on offline
+           support for your canvas apps with one selection.
+        Offline runtime limitations
+                                                                                              ﾉ Expand table
+          Area                Description
+          Offline record      The total number of records synced is limited to 3,000,000. Attempts to sync a larger
+          limit               number of records fail. This number also includes hidden tables used for offline
+                              capabilities.
+          Power Fx functions  The offline-first feature works with Dataverse tables only and doesn't support the
+                              following Power Fx functions: Relate, Unrelate
+          Area                  Description
+          Relationship          In offline mode, canvas apps don't support many-to-many relationships.
+                                Filtering on column lookups is limited to one level of the relationship when the app is
+                                configured for offline use. Self-referential lookups are also not supported in offline
+                                mode. Consider following examples to understand the relationship with Account and
+                                Contact information.
+                                Supported Lookups:
+                                Lookups are supported for one level of relationship. For example:
+                                Filter(Account, 'ContactID'.'Zipcode' = "11056")
+                                This retrieves all accounts with the zipcode 11056.
+                                Unsupported Lookups:
+                                1. Self-referential Lookups: Self-referential lookups aren't supported. For example:
+                                Filter(Account, 'Parent Account'. 'Name' = "John Doe")
+                                This doesn't work because the parent account is a self-reference to the account table.
+                                2. Multi-level Relationship Lookups: Lookups involving more than one level of the
+                                relationship aren't supported. For example:
+                                Filter(Account, 'ContactID'.'Map'.Latitude = "38'53")
+                                This doesn't work because it involves more than one level of relationship (Account >
+                                Contact > Map).
+                                Note: The same limitations apply to the lookup function and the filter function
+                                mentioned earlier.
+          Tables                Notes aren't supported in offline mode in canvas apps.
+          Column types          Calculated and roll-up fields—that are part of rows synced to the client—aren't
+                                reevaluated by the client. The reevaluation happens on the server when the updated
+                                row is synced.
+                                When you run an app in offline mode, mapped fields aren’t prepopulated when you
+                                create a new record from a table that has fields mapped to another table.
+          Sort order            Items in a gallery may appear in a different order in an offline-capable app if no sort
+                                order is selected. Choose a sort order in the gallery control to make sure the app
+                                behaves consistently in mobile apps and web browsers.
+         Area              Description
+         Background        Data can only be synced regularly when Power Apps is running in the foreground of
+         synchronization   your device, with the screen unlocked. Learn more in Sync data offline in the
+                           background.
+        Profile filters limitations
+                                                                                     ﾉ
+                                                                                         Expand table
+         Area              Description
+         Relationship      A maximum of 15 relationships is allowed. There's a maximum of one many-to-many
+         defined for each  (M:M) or one-to-many (1:M) relationships within the 15 relationships. If any custom
+         table             tables demand this scenario, then revisit the data model. No circular references or self-
+                           references are supported.
+         Images and files  Images and files have the same limitations as any other table. Because of implicitly
+                           defined relationships, an offline profile can only contain up to 14 image columns,
+                           across all entities.
+         Auto-generated    The auto-generated offline profile doesn't handle filters. As a result, for each table used
+         offline profile   in the app, it downloads all rows to which the user has permissions.
+        See also
+        Troubleshoot offline sync errors in the Power Apps mobile app
+        Supported platforms for running apps using the Power Apps mobile app
+         Last updated on 06/17/2026
+        Mobile offline for model-driven apps
+        overview
+        Article • 05/29/2024
+        Wouldn't it be great to use your mobile app without worrying about spotty internet
+        connectivity? With model-driven apps made with Power Apps and the new, mobile
+        offline-first experience, it's possible. People who need to work from remote locations
+        can continue to work seamlessly without worrying about their internet connection.
+        With the new, mobile offline experience enabled for your model-driven apps, not only
+        can you continue working in offline mode, you also have better device performance, a
+        more responsive app, and less drain on the battery because fewer connections are being
+        made to the server.
+        An internet connection is required to sync data between your mobile device and
+        Microsoft Dataverse.
+        To get started with mobile offline, an app maker needs to enable and define the tables
+        that are available for offline use by using the modern app designer. For more
+        information, go to Set up mobile offline.
+        Mobile offline is offline-first by default
+        Offline-first means that all the data you might need when offline is copied to your
+        mobile device. This requires initial network access to download the data. Once you have
+        your data, you only work with the data on your local device all the time. This is true both
+        when your device is connected and disconnected to the network.
+        Moving in and out of network access doesn't affect performance of the app because it's
+        using local data. Power Apps monitors network access and automatically syncs the
+        changes you make locally with the server, and downloads any updates made on the
+        server. The offline features automatically handle spotty network connections, download
+        data, upload data, handle conflict detection, and more. The built-in, offline features
+        minimize system resources and are highly performant.
+        When offline mode is configured and enabled for your model-driven app, anyone who
+        uses the Power Apps mobile app can also use the app in offline mode. By default, the
+        Power Apps mobile app runs offline-first, either with or without an internet connection.
+        This functionality optimizes offline performance and creates a consistent experience for
+        users as they change locations:
+                     Online: Occurs when an internet connection is available, but offline mode isn't set
+                     up. The mobile app functions similar to using the app with an internet connection
+                     on your PC. When the internet connection is lost, the mobile app is unusable. This
+                     isn't recommended.
+                     Offline-first without an internet connection: Data is downloaded and all changes
+                     are saved to your mobile device. When the internet connection is restored, the
+                     changes are automatically synced to the server.
+                     Offline-first with an internet connection: Data is downloaded to the device and all
+                     changes are saved locally. Because there's an internet connection, the app
+                     automatically attempts to sync every few minutes.
+                 ） Important
+                 For more information about how to set up mobile offline for canvas apps, go to
+                 Develop offline-capable canvas apps
+              Offline-first vs. classic offline
+              With the offline-first experience, it's important to understand the key benefits of the
+              offline-first experience versus the classic offline experience.
+                                                                                                ﾉ
+                                                                                                    Expand table
+                Offline-first                                  Classic offline
+                      Your data is always the same,                   Users have the option to skip the initial
+                      regardless of your network                      offline sync and stay online, which means
+                      connection.                                     that users in your organization might not
+                      There's no toggle for users to switch           have the same experience.
+                      from offline to online mode. A user             Users have to remember to disable
+                      never forgets to sync their changes             the Work in offline mode toggle before
+                      back to the server because the app              they can sync changes with the server.
+                      does it automatically.                          To save your changes in offline mode, you
+                                                                      need to set the Work in offline
+                                                                      mode toggle to On. Otherwise, when you're
+                                                                      working on a row and suddenly lose your
+                                                                      internet connection, your changes are lost.
+                                                                      The rows you see in offline mode are listed
+                                                                      from the local database. This means that the
+                                                                      rows you see in offline mode vs. online
+                                                                      mode can be different.
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+         Set up mobile offline for model-driven
+         apps
+         07/31/2025
+         Use the modern app designer to enable your model-driven apps for offline use on a mobile
+         device. When offline mode is enabled, users interact with their data without internet
+         connectivity on the Power Apps mobile app  .
+         Prerequisites
+         Verify the following prerequisites before you enable mobile offline:
+              You need the environment maker, system administrator, or system customizer role to
+              configure offline mode for model-driven apps. These roles have Create, Read, Write,
+              Delete, and Share privileges on the Mobile offline profile table. For more information, see
+              About predefined security roles
+              Users with the basic user role can open and use an offline app. This role has the Read
+              privilege for the Mobile offline profile table.
+              If you have a custom security role, ensure you have the read privilege for the Mobile
+              offline profile table. For more information, see Miscellaneous privileges
+         Optimize your app for mobile offline
+         Mobile apps run on smaller screens with limited connectivity. Before you enable offline mode,
+         make sure your model-driven app is optimized for offline and mobile use. Consider the
+         number of user scenarios that you want to cover and the amount of data the app uses. Create
+         an app that's simple and lightweight.
+         If you have desktop and remote mobile users, optimize the user experience by creating two
+         separate apps. Create an online app for your office users and another app for your mobile
+         users who might have limited connectivity.
+         Follow these best practices when building an app for mobile offline use:
+              Identify the on-the-go scenarios that functionally relate, such as tasks performed by users
+              working in the field.
+              Reduce the complexity of your app by limiting the amount of app metadata that needs to
+              be downloaded on a user's device. Only add the tables and views that are needed for
+              your mobile users. For more information, go to Add a page to your app
+              Only keep views that are necessary, and remove any that aren't needed on a day-to-day
+              basis. For example, keep the My active accounts view and remove the All accounts view.
+              Keep your forms lightweight for a smooth and intuitive experience on small-screen
+              devices. The following are possible optimizations for forms on mobile:
+                 Build dedicated forms for mobile use.
+                 Share forms across the mobile and desktop experience, but disable some fields on
+                 mobile.
+         Enable your app for offline use
+            1. Sign in to Power Apps   .
+            2. On the left pane, select Apps, and then select the model-driven app that you want to
+              enable for offline.
+            3. Select More (...) > Edit to open the modern app designer.
+            4. On the command bar, select Settings.
+            5. On the General tab, set the Can be used offline toggle to On.
+            6. Select the type of offline profile: Default or Restricted to selected users.
+                    If you select Default, the app is enabled for offline use for all users. Select an
+                    existing offline profile, or select New profile with current app data. To set up a new
+                    offline profile, see Set up a mobile offline profile.
+                    If you select Restricted to selected users, the app is enabled for offline use only for
+                    a selected list of users. Select one or multiple offline profiles, or select New profile
+                    with current app data. To set up a new offline profile, see Set up a mobile offline
+                    profile.
+                    You must have admin privileges to assign users to an offline profile.
+            7. Close the Settings page, and then save and publish your app. When you're done, the app
+              is set up for offline use.
+         Set up a mobile offline profile
+         The mobile offline profile represents the dataset that syncs on a user's device. The profile
+         contains the tables, including related filters, that are applied when data is synced to a user's
+         device. For more information about offline profiles, see Offline profile guidelines.
+         If the offline profile is in advanced mode, you'll need to add users to the offline profile. If you
+         don't add a user to the offline profile, the user can't use the app in offline mode.
+         Enable a table for offline
+         A table needs to be enabled for offline to add it to an offline profile. Some tables are enabled
+         for offline by default. Follow these steps to verify whether a table is enabled for offline.
+            1. Sign in to Power Apps   .
+            2. In the left pane, select Data > Tables.
+            3. Select the table that you want to add to an offline profile, and then, on the command bar,
+              select Settings.
+            4. In the Edit table settings, select Advanced options, and in the Rows in this table section,
+              select Can be taken offline.
+         An app can only be linked to one profile. However, a profile can be shared between multiple
+         apps. This can be useful when multiple apps share the same dataset, as it only needs to be
+         downloaded once on the device and is shared between the apps.
+    Generate a default profile
+    The modern app designer generates a default offline profile based on how the app is
+    configured.
+    The default offline profile is a starting point to help you quickly build an offline profile. The
+    default profile doesn't compute the optimal filters for each table. It's important that you review
+    and adjust the proposed filters based on your organization's needs.
+      1. Select New profile with current app data.
+      2. Review the proposed filters for each table. Make sure that the data downloaded on users'
+       devices is limited to only what's necessary. Focus on the tables used most often in your
+       app, which in most cases have the Organization rows filter set.
+           The tables that are added to the profile also have the Related rows only filter. These are tables
+           used in certain views that require related information. You might not need to modify them
+           according to your organization's needs.
+           Add a table to an offline profile and apply filters
+           Applying an appropriate filter for each of the tables configured in the offline profile is critical to
+           limiting the amount of data that downloads on users' devices.
+           Be sure that you configure at least one of the profile rules for each table to download its data.
+                                                                                                      ﾉ Expand table
+            Customization                  Recommendation
+            Organization rows - if         If you want to define this filter, then you have to pick at least one of the
+            selected, then select at       given options. It's highly recommended to not have a business unit-level
+            least one of these options:    filter for a table, unless there's a strong justification. It's recommended for a
+                                           master data scenario with a large data set, like a price list.
+            - User's rows
+            - Team rows
+            - Business unit rows
+            All rows                       If you're selecting this filter, you can't define any other filter rules.
+          Customization             Recommendation
+          Related rows only         Be sure that the related table has been added to the offline profile.
+          Custom                    You can define a custom filter up to three levels deep.
+         Keep in mind that you can have 15 related tables in a custom filter. You can also have 15
+         relationships. These are distinct checks that might not add up. The 15-relationships limit is
+         transitive, meaning if table B has N relationships, and you add a reference to table B in table A,
+         then it increases the relationship count of A by N+1; one plus the N already in table B. This
+         limit is per profile item for a table in the profile.
+            1. Select Add table.
+            2. Choose a table, and then define the filters.
+            3. Set the following filters:
+       a. Choose the rows that you want to make available offline. For the Custom option, use
+        the expression builder to set up advanced conditions.
+       b. Relationships lists the different relationships available between the current table and
+        other tables added in the offline profile. Selecting a relationship ensures that related
+        rows following that relationship are downloaded and made available offline.
+       c. Files and Images define which columns for a file or image need to be downloaded
+        offline. For files, you can choose to download every column or none at all. For images,
+        you can select each column you want to download granularly.
+       d. Sync interval defines the sync frequency to be applied on the device to sync the data
+        with the server. If a table's data doesn't change frequently, like a catalog or a product
+        table, you might want to focus on only syncing data when necessary, such as
+        refreshing only once a day.
+        You can only have up to 15 related tables in a profile. If you exceed the limit, you get
+        an error and won't be able to publish the offline profile.
+      4. Select Add + save to add your table and filters to the profile.
+      5. When all tables are properly configured for the profile, select Done > Publish your
+       application.
+       When the app is published, the app is enabled for offline use.
+    Add users to an offline profile
+    If you selected the Default offline profile mode, all your users who have access to the app can
+    also use it in offline mode.
+    However, if you selected Restricted to selected users, you have to manually add users (requires
+    admin privileges) to the offline profile. The app is enabled for offline use only for those
+    configured users.
+      1. Select Add users (requires admin privileges).
+            2. Sign in to the Power Platform admin center.
+            3. In the Users with offline access area, select Add users.
+            4. Select the users that you want to add to the mobile offline profile. The users that are
+              added, based on teams, are listed under each team. Users that are added individually are
+              listed as individual users.
+            5. When you're done adding people, select Save.
+              If you made any changes to a Microsoft Entra ID group team, you must remove and add
+              the team back to the mobile offline profile for the changes to take effect.
+         Enable mobile offline classic
+         Offline-first is the default mode when you enable an app for offline use. If you want to switch
+         to the offline classic mode, you need to enable it for your model-driven app. It's a separate app
+         setting for each app.
+            1. Sign in to Power Apps   .
+            2. On the left pane, select Apps, and then select the model-driven app that you want to
+              enable for offline.
+       3. Select More (...) > Edit to open the modern app designer.
+       4. On the command bar, select Settings.
+       5. On the Features tab, set the Enable offline classic toggle to Yes.
+       6. Select Save and then publish the app.
+     Define sync settings on mobile
+     You can allow users to control the automatic sync intervals or the connection type to
+     synchronize the data.
+       1. On the command bar, select Settings.
+       2. Select the Upcoming tab:
+           Set the Allow users to adjust sync frequency option to On to adjust the sync
+           interval to sync more or less frequently depending on individual needs. Users can
+           choose to not automatically sync, if they only want to sync on demand.
+           Set the Allow users to sync on Wi-Fi only option to On to let users choose if their
+           automatic sync happens on cellular networks and Wi-Fi connections or only when
+           connected to a Wi-Fi network.
+     Turn on Online mode
+     Offline-first mode provides the best experience for users in no and low network conditions.
+     Once your data is synchronized, you work with the data on your local device regardless of the
+     network status. However, if your offline profile includes filters, you may not be able to access all
+     the data you could when online in a browser, even when your device is connected to the
+     network.
+     If it's important for users to access data that's not downloaded to their devices, you can
+     activate the Online mode toggle that's visible to users in the Device status page. When users
+     use the Online mode toggle, they can access data that's not synchronized to the local device.
+     The toggle can be activated only when the device is connected to a network.
+       1. On the command bar, select Settings.
+       2. Select the Upcoming tab.
+       3. Set the Allow users to work in online mode option to On to let users choose if they want
+        to use the app in online mode when connected to a network.

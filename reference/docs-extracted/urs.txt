@@ -1,0 +1,205 @@
+
+APP-MRMS
+User Requirements Specification &amp; Stakeholder Validation Guide
+Version 1.0 — pre-build-out validation instrument
+Department of Public Works and Roads (DPWR), North West Province
+Prepared By: Oratile Tshipo , Solution Owner &amp; Implementation Lead
+Prepared For: Deputy Director Monitoring and Evaluation – End User
+
+1. Purpose of this Document
+The BRD/FDS/TDS produced so far describe the system as we have designed and are building it. They have not yet been validated against the people who will actually use it day to day, or against the one person whose role changes most: the Deputy Director: Monitoring &amp; Evaluation, who is moving from sole reviewer of every report to a cross-cutting escalation authority sitting above a new Supervisor tier.
+This document has two purposes:
+Capture User Requirements (URS) in the stakeholders' own words, independent of the schema/screens already built, so we can check the build actually matches the need rather than the other way around.
+Provide a structured interview/validation guide for a short round of stakeholder conversations — with a dedicated deep-dive for the Deputy Director: M&amp;E — before we lock down Phase 1 sign-off and commit further Phase 2 build effort.
+⚠ Recommended sequencing: run the Deputy Director: M&amp;E session first. If the escalation model doesn't hold up, it changes assumptions for every other role's requirements below.
+2. Confirmed Core Hierarchy (corrected)
+Programme (1) └─ Directorate (Many) └─ Project (Many) └─ Activity (Many) └─ MonthlyReport (Many)
+Programme is the top-level grouping (4 program budget structures); each Directorate sits within one Programme; Projects, Activities, and Reports cascade beneath. Note for the schema: Directorates.Programme is currently a text field rather than a Lookup — functionally correct direction, but not yet referentially enforced (tracked as an open item in TDS §3.13).
+
+3. Stakeholder Map &amp; Validation Priority
+Stakeholder
+ | Why validate with them
+ | Priority
+ | 
+Deputy Director: M&amp;E
+ | Role changes most — from sole reviewer to escalation authority; their buy-in determines whether the whole distributed-review model succeeds or gets bypassed in practice
+ | Critical — session 1
+ | 
+A sample of 2–3 Directors/Deputy Directors (Supervisors)
+ | New review workload lands on them; need to confirm capacity and appetite before rolling out to all 17 directorates
+ | High
+ | 
+1–2 Programme Managers
+ | Currently get no visibility in the old Excel process — need to confirm the roll-up view actually matches how they make decisions
+ | High
+ | 
+2–3 Contributors (activity owners)
+ | Day-to-day users of Report Submission; usability and friction here determines adoption
+ | High
+ | 
+HoD / Accounting Officer office (or delegate)
+ | Consumer of consolidated output; confirms the reporting cadence and format still serves DMC/EMC needs
+ | Medium
+ | 
+SITA / IT governance (if applicable)
+ | Confirms no conflict with CGICT/GITO prescripts already referenced in the APP Implementation Plan (ICTM directorate)
+ | Medium
+ | 
+
+4. Draft User Requirements (to validate, not to assume)
+Each requirement below is written as a hypothesis drawn from the current build. Stakeholder sessions should confirm, correct, or reject each one — treat the checkbox column as a literal sign-off field to complete during or after each session.
+4.1 Contributor requirements
+ID
+ | Requirement (as currently assumed)
+ | Confirmed?
+ | Stakeholder notes
+ | 
+UR-C1
+ | I need to see only the activities assigned to me, for the current and recent reporting months, without wading through other directorates' data.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-C2
+ | I need to save a report as a draft and come back to it before the due date, without losing my work.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-C3
+ | When a report is rejected, I need to see exactly why, in plain language, without having to ask my supervisor separately.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-C4
+ | I need to attach supporting evidence (documents/photos) to a report at the point of submission.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-C5
+ | I need a reminder before my report is due, not just an overdue notice after the fact.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+4.2 Supervisor requirements
+ID
+ | Requirement (as currently assumed)
+ | Confirmed?
+ | Stakeholder notes
+ | 
+UR-S1
+ | I need a single queue of reports awaiting my review, not scattered emails or a shared spreadsheet.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-S2
+ | I need to reject a report with a reason without it disappearing from my sight — I need to track whether the contributor actually corrected and resubmitted it.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-S3
+ | I need to know my review workload (how many directorates/activities I'm responsible for) before this rolls out, so capacity is realistic.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-S4
+ | I need the ability to flag a report for the Deputy Director's attention without formally rejecting it.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+4.3 Programme Manager requirements
+ID
+ | Requirement (as currently assumed)
+ | Confirmed?
+ | Stakeholder notes
+ | 
+UR-P1
+ | I need a roll-up view across all directorates in my programme, not per-directorate detail by default.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-P2
+ | I need to see which directorates/projects are consistently late or rejected, to raise at programme-level meetings.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-P3
+ | I do not need approval authority myself — oversight and escalation-flagging is sufficient.
+ | ☐ Yes ☐ No ☐ Partial
+ | Confirm this — current design gives ProgrammeManager view-only, no approve/reject
+ | 
+4.4 Deputy Director: M&amp;E requirements — see dedicated §5 for the interview guide
+ID
+ | Requirement (as currently assumed)
+ | Confirmed?
+ | Stakeholder notes
+ | 
+UR-M1
+ | I need visibility of every report across all 17 directorates and 4 programmes, at any time, without waiting for a monthly consolidation.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-M2
+ | I need to be able to intervene on any report, at any stage, if a Supervisor is not acting or a matter is urgent — not just after Supervisor sign-off.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-M3
+ | I am comfortable NOT being the first reviewer of every report, provided I retain full override/escalation visibility.
+ | ☐ Yes ☐ No ☐ Partial
+ | This is the central assumption of the whole redesign — validate explicitly, do not assume
+ | 
+UR-M4
+ | I need a way to see, at a glance, which Supervisors are not reviewing promptly, so I can manage them rather than do their job for them.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-M5
+ | I need the system to produce something I can hand to DMC/EMC without manually reformatting it.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+4.5 Administrator requirements
+ID
+ | Requirement (as currently assumed)
+ | Confirmed?
+ | Stakeholder notes
+ | 
+UR-A1
+ | I need to create/deactivate users and correct role assignments without depending on a developer.
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+UR-A2
+ | I need to add/edit Directorates, Programmes, Projects, and Activities as the department's structure changes year to year (new FY, new projects).
+ | ☐ Yes ☐ No ☐ Partial
+ | | 
+
+5. Deep-Dive Interview Guide — Deputy Director: Monitoring &amp; Evaluation
+This session matters more than any other single input to this project. The current design removes the Deputy Director from the first line of review — that is a significant change to how M&amp;E currently exercises control, and it needs explicit, informed buy-in rather than passive acceptance of a diagram.
+Logistics: 45–60 minutes, in person or video call, Oratile Tshipo + Deputy Director: M&amp;E only (avoid a large group for this one — candour matters more than optics).
+5.1 Warm-up &amp; current-state grounding (10 min)
+Q1. Walk me through what happens today, from when a directorate submits their monthly Excel tab, to when you've finished reviewing it. Where does most of your time actually go?
+Q2. Of everything you currently review, roughly what proportion do you think a capable Director/Deputy Director could reasonably sign off on themselves, without it coming to you first?
+↳ Probe: Listen for: is the bottleneck about volume, about quality-control distrust, about accountability/liability, or about needing the full picture before anything is 'final'? Each implies a different fix.
+5.2 Reaction to the proposed model (15 min)
+Q3. Here is the proposed model: each Directorate's Director/Deputy Director/Delegate reviews their own directorate's submissions first. You retain the ability to view and act on anything, at any time, across all directorates. What's your honest first reaction?
+Q4. What would make you NOT trust a Supervisor's approval — i.e. what would still make you want to check it yourself even after they've signed off?
+↳ Probe: This directly informs whether we need a 'DDME review required' flag on certain report types/directorates, rather than a blanket after-the-fact escalation right.
+Q5. If a Supervisor approves something you would have rejected, how do you want to find out — immediately, at your own review cadence, or only if something goes wrong later (e.g. an audit finding)?
+Q6. Are there specific directorates, projects, or types of activity (e.g. high budget, high political visibility, recurring AGSA findings) where you want mandatory sign-off from you regardless of Supervisor approval?
+↳ Probe: If yes, this is a real functional requirement we have not yet built — an escalation rule engine, not just a blanket role permission.
+5.3 What you actually need to do your job (15 min)
+Q7. What does a 'red flag' look like to you today — late submission, low percentage complete, a rejected-then-resubmitted report, a Supervisor sitting on something too long? Which of these matters most?
+Q8. How do you currently report up to the HoD/DMC/EMC? What format, what frequency, and what would 'good' look like coming out of this system instead?
+Q9. For audit purposes (AGSA or internal), what evidence do you currently have to keep, and what's missing today that this system should capture?
+↳ Probe: Ties directly to AuditLog/ReportComments — confirm what 'who changed what and why' detail is actually required vs. nice-to-have.
+Q10. If a Director consistently fails to review on time, what do you need the system to show you to manage that performance conversation?
+5.4 Trust, adoption, and change management (10 min)
+Q11. Realistically, how will the 17 Directors/Deputy Directors/Delegates react to suddenly having review responsibility they didn't have before? Who do you expect to resist, and why?
+Q12. Is there anything about giving up first-line review that feels like a loss of control you're not actually comfortable with, even if it's operationally sensible?
+↳ Probe: Ask this plainly and give room for an honest answer — a diplomatic "yes, in principle" now and quiet workaround-by-email later is the outcome we most want to avoid.
+Q13. What would you need to see in a pilot (e.g. with ICTM, which is furthest along) before you'd be comfortable recommending this roll out to all 17 directorates?
+5.5 Wrap-up (5 min)
+Q14. Is there anything about how M&amp;E works today that this conversation hasn't touched on, that you'd want reflected in this system?
+Thank them. Confirm next steps: findings will be reflected back into the URS sign-off table (§6) and, where they change the approval model, into an updated FDS.
+
+6. Validation Outcomes &amp; Sign-off
+To be completed after each stakeholder session. This table becomes the record of what changed between the assumed design (BRD/FDS/TDS v2) and the validated design, and should drive a v3 update only for items that actually changed — not a wholesale rewrite.
+Requirement ID
+ | Session / Date
+ | Outcome
+ | Action required
+ | 
+UR-M3
+ | | | | 
+UR-M2
+ | | | | 
+ | | | | 
+6.1 Open questions surfaced by this exercise (to track, not answer here)
+Should certain directorates/project categories require mandatory DeputyDirectorME sign-off regardless of Supervisor approval? (Depends on Q6 answer.)
+Does DeputyDirectorME need a proactive 'Supervisor not reviewing' alert, or is on-demand visibility sufficient? (Depends on Q10 answer.)
+What is the minimum audit detail actually required (vs. what AuditLog currently plans to capture)? (Depends on Q9 answer.)
+Is a phased rollout (pilot directorates first) a hard requirement before wider release, and if so what's the go/no-go criteria? (Depends on Q13 answer.)

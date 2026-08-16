@@ -1,0 +1,729 @@
+
+APP-MRMS
+Annual Performance Plan Monthly Reporting Management System
+Business Requirements, Functional Design &amp; Technical Design Specification — Version 2.0
+Department of Public Works and Roads (DPWR), North West Province
+Financial Year 2026/27
+Prepared By: Oratile Tshipo, Solution Owner &amp; Implementation Lead
+
+Document Control &amp; Changelog: v1 → v2
+This version supersedes the original Technical Design Specification (APP Master / Departments model) with the schema now actually implemented and live in SharePoint Online, verified directly from CSV exports of the production lists in July 2026. Naming, roles, and list structures below reflect ground truth, not the original architecture pack.
+Area
+ | v1 (original TDS/FDS)
+ | v2 (live, this document)
+ | 
+Core hierarchy
+ | Departments → APP Master → APP Activities → APP Monthly Reports
+ | Directorate → Programme → Project → Activity → MonthlyReport
+ | 
+Roles
+ | User / Manager / Administrator / M&amp;E (4 roles)
+ | Contributor / Supervisor / ProgrammeManager / DeputyDirectorME / Administrator (5 roles)
+ | 
+Approval model
+ | Single Manager role approves all reports
+ | Distributed: Supervisor approves first, DeputyDirectorME is cross-cutting M&amp;E escalation — replaces the old single-bottleneck reviewer
+ | 
+Audit / comments / notifications
+ | Recommended in FDS, not built
+ | AuditLog, ReportComments, Notifications lists are now live in SharePoint (schemas confirmed; population pending Phase 2 flows)
+ | 
+Report versioning
+ | Not specified
+ | MonthlyReports.Version (number) enables in-place revision history per report
+ | 
+Review metadata
+ | ManagerComments (single free-text field)
+ | ReviewedBy (Person), ReviewDate, RejectionReason — structured, queryable review trail
+ | 
+Evidence/attachments
+ | List attachments (v1) / Document Library suggested as improvement
+ | Still list-based attachments on MonthlyReports; Evidence Library remains a Phase 2 recommendation
+ | 
+⚠ Two data-quality items surfaced during this review and are flagged for your decision, not silently fixed: (1) MonthlyReports.DirectorateLabel stores the short code (e.g. "ICTM") while Activities.DirectorateLabel stores the full directorate name — inconsistent denormalization pattern. (2) Directorates.Programme and parts of the Projects list use plain text instead of a SharePoint Lookup column, so referential integrity to Programmes is not enforced at the list level. Both are addressed in TDS §4.6 with options, not unilateral fixes.
+
+PART 1 — BUSINESS REQUIREMENTS DOCUMENT (BRD)
+1.1 Business Context
+DPWR North West currently tracks Annual Performance Plan (APP) delivery through a single Excel workbook spanning 17 directorate tabs, populated monthly by directorate staff and consolidated manually by the Directorate: Planning, Monitoring &amp; Evaluation (PM&amp;E). The Deputy Director: Monitoring has historically been the sole reviewer of every submitted report across all 17 directorates and 4 programmes — a single point of failure that delays consolidated reporting to the DMC (Departmental Management Committee) and EMC (Executive Management Committee), and creates a bottleneck at month-end and quarter-end review cycles.
+APP-MRMS replaces this workbook with a governed, role-based Power Platform application that distributes review responsibility, enforces a consistent reporting structure, and produces auditable, queryable performance data for M&amp;E, DMC/EMC reporting, and eventual AGSA audit evidence.
+1.2 Business Objectives
+Eliminate the single-reviewer bottleneck by introducing a Supervisor tier that reviews Contributor submissions before escalation to the Deputy Director: M&amp;E.
+Normalise 17 unstructured Excel tabs into a single relational data model (Directorate → Programme → Project → Activity → MonthlyReport) that supports filtering, roll-up, and trend reporting.
+Provide real-time visibility of overdue, flagged, and pending reports to Programme Managers and M&amp;E without manual consolidation.
+Establish an auditable review trail (who submitted, who reviewed, when, and why a report was rejected) sufficient to support internal control and audit requirements.
+Reduce the reporting cycle time from current multi-week email/Excel consolidation to a same-day submission-to-review turnaround for the majority of reports.
+1.3 Stakeholders
+Stakeholder
+ | Interest
+ | 
+HoD / Accounting Officer
+ | Consolidated, credible APP performance data for DMC/EMC and provincial reporting
+ | 
+Deputy Director: M&amp;E
+ | Cross-cutting oversight without being the sole bottleneck; escalation authority
+ | 
+Programme Managers (Prog 1–4)
+ | Programme-level roll-up and ability to intervene on lagging directorates/projects
+ | 
+Directors / Deputy Directors / Delegates (17 directorates)
+ | Supervisory review of their own directorate's Contributor submissions
+ | 
+Contributors (activity reporters)
+ | Simple, low-friction monthly capture of progress against assigned activities
+ | 
+Solution Owner (Oratile Tshipo)
+ | Delivery, data integrity, and long-term maintainability of the platform
+ | 
+1.4 Scope
+In scope (Phase 1 — MVP, current build):
+Splash, Home, My Activities, Report Submission, My Reports, Approval Queue screens (6 screens)
+Core data model: Directorate, Programme, Project, Activity, MonthlyReport, APP_Users
+Role-based visibility and filtering by Directorate/Programme/Project/Activity
+Draft → Submit → Approve/Reject workflow with rejection reason capture
+Denormalized label columns for gallery performance (no chained lookups in Power Fx)
+In scope (Phase 2 — roadmap, not yet built):
+Power Automate flows: reminders, submission notifications, approval/rejection notifications, overdue escalation, quarterly/annual consolidation
+Remaining ~10 screens: Directorate/Project/Activity administration, User administration, Reports Dashboard, Comments panel
+Power BI reporting layer over the normalized data model
+Population and active use of AuditLog, Notifications, ReportComments (lists exist; write-paths not yet implemented)
+Evidence Library (Document Library) as an upgrade path from list attachments
+Out of scope:
+Replacement of Persal/BAS/Reapatala or any transversal government system
+Automated data pull from the existing Excel APP Implementation Plan (one-time migration only, not an ongoing sync)
+1.5 Business Rules
+#
+ | Rule
+ | 
+BR-01
+ | Every MonthlyReport must be linked to exactly one Activity, which is linked to exactly one Project, which is linked to exactly one Directorate.
+ | 
+BR-02
+ | A report cannot be Submitted while in Draft edit unless PlannedAct and Output are both populated.
+ | 
+BR-03
+ | Only the Supervisor recorded against the report's Activity (or an Administrator) may Approve or Reject a Submitted report.
+ | 
+BR-04
+ | A Rejected report returns to Draft status for the Contributor, with RejectionReason mandatory and visible to the Contributor.
+ | 
+BR-05
+ | DeputyDirectorME may view and act on any report across all directorates/programmes, regardless of Supervisor assignment (cross-cutting escalation right).
+ | 
+BR-06
+ | IsOverdue is set when the current date exceeds the Activity's DueDate for the current ReportingMonth and Status is not Approved.
+ | 
+BR-07
+ | isFlagged may be set by any Supervisor/ProgrammeManager/DeputyDirectorME to mark a report for follow-up outside the normal approval flow.
+ | 
+BR-08
+ | Each edit to a Submitted or Approved report increments Version and should be captured in AuditLog once Phase 2 flows are live.
+ | 
+
+PART 2 — FUNCTIONAL DESIGN SPECIFICATION (FDS)
+2.1 User Roles &amp; Permissions Matrix
+Capability
+ | Contributor
+ | Supervisor
+ | ProgrammeManager
+ | DeputyDirectorME
+ | Administrator
+ | 
+View own assigned activities
+ | Yes
+ | Yes
+ | Yes
+ | Yes
+ | Yes
+ | 
+Capture/save draft report
+ | Yes
+ | Yes
+ | No
+ | No
+ | Yes
+ | 
+Submit report
+ | Yes
+ | Yes
+ | No
+ | No
+ | Yes
+ | 
+Approve / Reject report
+ | No
+ | Own directorate only
+ | No (view/roll-up only)
+ | Any directorate
+ | Yes
+ | 
+View directorate roll-up
+ | No
+ | Own directorate
+ | Own programme
+ | All programmes
+ | All
+ | 
+Flag a report
+ | No
+ | Yes
+ | Yes
+ | Yes
+ | Yes
+ | 
+Manage Directorates/Programmes/Projects/Activities
+ | No
+ | No
+ | No
+ | No
+ | Yes
+ | 
+Manage users &amp; roles
+ | No
+ | No
+ | No
+ | No
+ | Yes
+ | 
+View audit log
+ | No
+ | No
+ | No
+ | Read-only
+ | Yes
+ | 
+⚠ This matrix reflects the roles as designed. Enforcement in Phase 1 is via Power Fx visibility/filter conditions in the Canvas App (client-side); genuine row-level security still depends on SharePoint permissions or a Phase 2 Dataverse migration — see TDS §11.
+2.2 Functional Requirements
+ID
+ | Feature
+ | Description
+ | Priority
+ | 
+FR-01
+ | Home Dashboard
+ | Show counts of Pending/Submitted/Approved/Rejected/Overdue reports scoped to the signed-in user's role, plus monthly trend and programme-performance charts.
+ | Must
+ | 
+FR-02
+ | My Activities
+ | Gallery of activities owned by (or supervised by) the current user, filterable by FinancialYear, Quarter, ReportingMonth, with Active=true default filter.
+ | Must
+ | 
+FR-03
+ | Report Submission
+ | Form to capture PlannedAct, Output, PercentageComplete, and attachment(s) against a selected Activity/ReportingMonth; Save Draft and Submit actions.
+ | Must
+ | 
+FR-04
+ | My Reports
+ | History of the current user's own reports across statuses, with ability to re-open a Draft or Rejected report for editing.
+ | Must
+ | 
+FR-05
+ | Approval Queue
+ | List of Submitted reports awaiting the current Supervisor's (or DeputyDirectorME's) action, with Approve / Reject (with reason) / Return-for-correction actions.
+ | Must
+ | 
+FR-06
+ | Filtering &amp; Search
+ | Filter any gallery by Directorate, Programme, Project, FinancialYear, Quarter, Month, Status; free-text search on Title/ActivityShortDescription.
+ | Must
+ | 
+FR-07
+ | Comments
+ | Contributors and reviewers can attach threaded comments to a MonthlyReport via ReportComments (Phase 2 UI; list already live).
+ | Should
+ | 
+FR-08
+ | Notifications
+ | In-app and/or email notification on submission, approval, rejection, and overdue escalation via the Notifications list and Power Automate (Phase 2).
+ | Should
+ | 
+FR-09
+ | Audit Trail
+ | Every create/update/status-change on Directorate/Programme/Project/Activity/MonthlyReport is written to AuditLog with before/after values (Phase 2 flow).
+ | Should
+ | 
+FR-10
+ | KPI / Progress Indicators
+ | Visual progress bar per Activity/Project based on PercentageComplete and Status distribution; overdue and flagged badges.
+ | Must
+ | 
+FR-11
+ | Reports Dashboard (Power BI)
+ | Cross-directorate/programme performance dashboard for M&amp;E and EMC, refreshed on a schedule from the SharePoint data model.
+ | Could (Phase 2)
+ | 
+FR-12
+ | User &amp; Role Administration
+ | Administrator screen to create/deactivate APP_Users records and assign Role/Directorate/Programme.
+ | Must
+ | 
+2.3 Approval Workflow (Functional View)
+Contributor drafts report (Status = Draft) │ ▼ [Submit]Status = Submitted ──► Notification to Activity.Supervisor │ ▼ Supervisor reviews ┌────┴─────────────────┐ ▼ ▼[Approve] [Reject]Status = Approved Status = Draft (returned)ReviewedBy/ReviewDate RejectionReason requiredset Notification to SubmittedBy │ ▼ (edit + resubmit) Version += 1, back to SubmittedDeputyDirectorME may intervene on ANY report at ANY stage(cross-cutting escalation — replaces old single-reviewer model)
+
+PART 3 — TECHNICAL DESIGN SPECIFICATION (TDS)
+3.1 Architecture Overview
+Microsoft 365 / SharePoint Online (data layer) │Power Apps Canvas App ◄──────────────┐ │ │Power Automate (Phase 2 flows) │ │ │Power BI (Phase 2 reporting) ─────────┘ │Microsoft Forms (optional lightweight capture channel — see S3.7)
+The Canvas App is desktop-first (1366×768 baseline) with responsive containers so it also renders acceptably on tablet. All screens use varMode ("View" / "Edit" / "New") rather than duplicate screens per state, per your established pattern.
+3.2 SharePoint Data Model — As Built (v2, verified from live lists)
+3.2.1 Directorates
+Column
+ | Type
+ | Notes
+ | 
+Title (DirectorateID)
+ | Single line text
+ | e.g. "ICTM" — used as the natural key referenced elsewhere as a code
+ | 
+DirectorateName (LinkTitle)
+ | Computed / Title display
+ | Full name, e.g. "Information Communications &amp; Technology Management"
+ | 
+Programme
+ | Single line text
+ | ⚠ Plain text, not a Lookup to Programmes — see §4.6
+ | 
+Director
+ | Person
+ | | 
+DeputyDirector
+ | Person
+ | | 
+Deligate
+ | Person
+ | Note: SharePoint internal name is spelled "Deligate" (not "Delegate") — must match exactly in Power Fx
+ | 
+ActiveStatus (Active)
+ | Yes/No
+ | Default = true
+ | 
+3.2.2 Programmes
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Programme name, e.g. "Programme 1"
+ | 
+ProgrammeCode
+ | Single line text
+ | Indexed — used for lookups/filters, e.g. "Prog1"
+ | 
+ProgrammeManager
+ | Person
+ | | 
+Description
+ | Multiple lines of text
+ | | 
+Active
+ | Yes/No
+ | Default = true
+ | 
+3.2.3 Projects
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Project ID (Title display name), e.g. "COMM-PJ-002"; unique &amp; indexed
+ | 
+ProjectCode
+ | Single line text
+ | Optional project code (e.g. "COMM-PJ-002")
+ | 
+PriorityChallenge
+ | Multiple lines of text
+ | | 
+ProjectGoalDescription
+ | Multiple lines of text
+ | | 
+KeyDeliverable
+ | Multiple lines of text
+ | | 
+AnnualTarget
+ | Multiple lines of text
+ | Free text target
+ | 
+Reference
+ | Single line text
+ | e.g. "Lekgotla 2025/26"
+ | 
+Budget
+ | Single line text
+ | Rand value; free-text variants stored as text per live CSV schema
+ | 
+Directorate (+ Directorate: Title)
+ | Lookup (Directorates)
+ | Directorate code; "Directorate: Title" projection shows the full directorate name
+ | 
+Programme
+ | Single line text
+ | ⚠ Text, not a Lookup to Programmes — same pattern as Directorates.Programme
+ | 
+Responsibility
+ | Person
+ | Accountable Director/Deputy Director (project owner)
+ | 
+StartDate / CompletionDate
+ | Date only
+ | | 
+FinancialYear
+ | Choice
+ | 2026/27 … 2022/23, colour-coded
+ | 
+Status
+ | Choice
+ | Active / Closed / Cancelled, colour-coded
+ | 
+⚠ ⚠ The live CSV export contains a single Projects list (Projects.csv). There is no separate "Projects_1" list — the earlier duplicate export was a snapshot artefact and should not be referenced.
+3.2.4 Activities
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Activity ID, e.g. "ICTM-AC-0001"
+ | 
+ActivityCode
+ | Single line text
+ | Activity code (e.g. "ICTM-AC-0001"); also carried in Title
+ | 
+ActivityDescription
+ | Multiple lines of text
+ | Full description
+ | 
+ActivityShortDescription
+ | Single line text
+ | Denormalized short label for gallery display
+ | 
+Directorate
+ | Single line text
+ | Directorate short code, e.g. "ICT" (matches Directorates.DirectorateID)
+ | 
+DirectorateLabel
+ | Single line text
+ | Full directorate name (denormalized)
+ | 
+ProgrammeLabel
+ | Single line text
+ | Programme name (denormalized)
+ | 
+Project
+ | Lookup (Projects)
+ | | 
+Project: Reference
+ | Lookup projection
+ | Read-only projected field
+ | 
+Frequency
+ | Choice
+ | Monthly / Quarterly / Annual, colour-coded
+ | 
+Owner
+ | Person
+ | 
+ | 
+ActivityOwner
+ | Person
+ | Contributor accountable for capture (separate 'ActivityOwner' column)
+ | 
+Supervisor
+ | Person
+ | Denormalized from Owner's assignment for fast approval routing
+ | 
+StartDate / EndDate
+ | Date only
+ | | 
+DueDate
+ | Date only
+ | Report due date (EndDate + 3 days in current data)
+ | 
+Active
+ | Yes/No
+ | Default = true
+ | 
+Status
+ | Choice
+ | Active / Completed / Not Started, colour-coded
+ | 
+3.2.5 MonthlyReports
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Report ID, e.g. "ICTM-RP-0001"
+ | 
+Programme / ProgrammeLabel
+ | Lookup / Text
+ | Denormalized programme name
+ | 
+Directorate / DirectorateLabel
+ | Lookup / Text
+ | ⚠ DirectorateLabel here stores the short CODE (e.g. "ICTM"), inconsistent with Activities.DirectorateLabel which stores the full name
+ | 
+Project / ProjectOwnerLabel
+ | Lookup / Text
+ | ProjectOwnerLabel is the denormalized Responsibility person's display name
+ | 
+Activity / ActivityOwnerLabel
+ | Lookup / Text
+ | Plus read-only Activity: ActivityShortDescription / StartDate / EndDate / DueDate projections
+ | 
+ReportingMonth
+ | Choice
+ | April … March
+ | 
+Quarter
+ | Choice
+ | Q1–Q4 (+ All)
+ | 
+FinancialYear
+ | Choice
+ | e.g. 2026/27
+ | 
+PlannedAct
+ | Multiple lines of text
+ | | 
+ReasonForDeviation
+ | Multiple lines of text
+ | Free-text reason when progress deviates from plan
+ | 
+RemedialAction
+ | Multiple lines of text
+ | Corrective action taken/planned
+ | 
+Output
+ | Multiple lines of text
+ | Reported output / achievement narrative
+ | 
+PercentageComplete
+ | Number
+ | | 
+Status
+ | Choice
+ | Draft / Submitted / Approved / Rejected / Escalated
+ | 
+Version
+ | Number
+ | Increments on each resubmission — enables revision history
+ | 
+SubmittedBy / SubmissionDate
+ | Person / Date
+ | | 
+ReviewedBy / ReviewDate
+ | Person / Date
+ | Populated on Approve/Reject
+ | 
+RejectionReason
+ | Multiple lines of text
+ | Mandatory when Status = Rejected
+ | 
+IsOverdue
+ | Yes/No
+ | Set by scheduled flow (Phase 2) or on-demand formula (Phase 1)
+ | 
+isFlagged
+ | Yes/No
+ | Manually settable by any reviewer role
+ | 
+3.2.6 APP_Users
+Column
+ | Type
+ | Notes
+ | 
+Title
+ | Single line text
+ | Display name
+ | 
+UserAccount
+ | Person
+ | Used in LookUp(APP_Users, UserAccount.Email = User().Email)
+ | 
+Role
+ | Choice
+ | Contributor / Supervisor / ProgrammeManager / DeputyDirectorME / Administrator
+ | 
+Directorate (+ Directorate:DirectorateID)
+ | Lookup (Directorates)
+ | | 
+Programme
+ | Single line text
+ | | 
+Active
+ | Yes/No
+ | | 
+3.2.7 Governance lists — now live (schema confirmed, not yet populated)
+List
+ | Columns
+ | Status
+ | 
+AuditLog
+ | Title, EntityType, EntityId, Action, FieldChanged, OldValue, NewValue, ActionBy, ActionDate, Reason
+ | List exists, empty — needs a write-path (Power Automate on item change, or Patch calls from the Canvas App)
+ | 
+Notifications
+ | Title, RecipientUser, RelatedEntity, Message, IsRead, CreatedDate
+ | List exists, empty — needs Phase 2 flow triggers
+ | 
+ReportComments
+ | Title, MonthlyReport (lookup), CommentText, Author, CommentDate
+ | List exists with 1 test row — needs a comments panel UI (Phase 2 screen)
+ | 
+⚠ Your memory notes these three lists as "not created / dropped from MVP scope" — that's now out of date. They exist with confirmed schemas. Recommend updating Phase 1 vs Phase 2 scope conversation: the lists are ready, only the write-paths (flows/UI) are outstanding.
+3.3 Entity Relationship Diagram
+Programmes (1) ──────┐ │ Programme (Lookup)Directorates (1) ─────┼──► Projects (Many) Programme(text ⚠) │ │ │ │ Project (Lookup) │ ▼ │ Activities (Many) │ │ │ │ Activity (Lookup) │ ▼ │ MonthlyReports (Many) │ │ │ ├──► ReportComments (Many, via MonthlyReport lookup) │ └──► AuditLog (Many, via EntityId text ref) │APP_Users ─────────────┘ Directorate (Lookup)
+3.4 Power Apps Screens (Phase 1 MVP — built/in progress)
+#
+ | Screen
+ | Purpose
+ | Key controls
+ | 
+1
+ | scr_Splash
+ | App init, load collections, resolve varUserRole/varCurrentUser
+ | Timer, loading spinner
+ | 
+2
+ | scr_Home
+ | Dashboards: pending/approved/rejected/overdue counts, monthly trend, programme performance
+ | KPI cards, charts driven by colMonthlyTrend, colProgrammeProgress
+ | 
+3
+ | scr_MyActivities
+ | Gallery of activities scoped to role
+ | Gallery, Year/Quarter/Month filter dropdowns
+ | 
+4
+ | scr_ReportSubmission
+ | Capture/edit a MonthlyReport (varMode = New/Edit)
+ | Form fields, attachment control, Save Draft / Submit buttons
+ | 
+5
+ | scr_MyReports
+ | History of own reports
+ | Gallery with status badges, tap-to-reopen
+ | 
+6
+ | scr_ApprovalQueue
+ | Supervisor/DeputyDirectorME review queue
+ | Gallery, Approve/Reject/Return buttons, rejection-reason input
+ | 
+Phase 2 adds: Directorate/Programme/Project/Activity administration screens, User administration, Reports Dashboard (Power BI embed or native filters), and a Comments panel on the report detail view.
+3.5 Container Hierarchy (per responsive standards on file)
+scr_Home (Screen) └─ conBaseRoot (Manual Layout Container) [X:0 Y:0 W:Parent.Width H:Parent.Height] ├─ conMainContent (Vertical Container) │ ├─ conStaticHeader (Horizontal, Visible: App.ActiveScreen.Size &lt;= ScreenSize.Medium) │ │ ├─ btnHamburger (OnSelect: Set(varMenuExpanded, !varMenuExpanded)) │ │ ├─ imgLogo │ │ └─ imgProfile │ ├─ conHeaderDivider (Height:1, Fill: RGBA(200,200,200,1)) │ └─ conScrollableContent (Vertical, VerticalOverflow: Scroll) │ ├─ conKPICards (Horizontal, Wrap: true) │ └─ conCharts (Horizontal, Wrap: true) └─ conPopupOverlay (Manual Layout Container, Z-index overlay) Visible: varMenuExpanded &amp;&amp; App.ActiveScreen.Size &lt;= ScreenSize.Medium ├─ btnBackdropDismiss (Fill: RGBA(0,0,0,0.3), OnSelect: Set(varMenuExpanded,false)) └─ conSlideOutDrawer (Width: Parent.Width * 0.8)
+3.6 Responsive Formulas (per project responsive-design standard)
+Engine configuration (Settings → Display):
+App format: Tablet (never Mobile — mobile cannot scale up cleanly)
+Scale to fit: OFF
+Lock orientation: OFF
+Show mobile notification area: ON
+Root sizing — every root container:
+X = 0Y = 0Width = Parent.WidthHeight = Parent.Height
+Adaptive font sizing:
+FontSize: Switch( App.ActiveScreen.Size, ScreenSize.Small, 12, ScreenSize.Medium, 14, ScreenSize.Large, 16, ScreenSize.ExtraLarge, 18, 14)
+Conditional visibility (desktop nav vs mobile header):
+// Desktop side navVisible: App.ActiveScreen.Size &gt;= ScreenSize.Large// Mobile headerVisible: App.ActiveScreen.Size &lt;= ScreenSize.Medium
+⚠ Given the confirmed 1366×768 desktop baseline for this build, full mobile-breakpoint work is reasonable to defer — but keep root containers relative from day one so Phase 2 tablet/mobile support doesn't require a rebuild.
+3.7 Power Fx Formulas — Core Patterns
+3.7.1 Resolve current user &amp; role (App.OnStart / scr_Splash.OnVisible)
+Set( varCurrentUserRecord, LookUp(APP_Users, UserAccount.Email = User().Email));Set(varUserRole, varCurrentUserRecord.Role.Value);Set(varUserDirectorate, varCurrentUserRecord.Directorate.DirectorateName);Set(varUserProgramme, varCurrentUserRecord.Programme);
+3.7.2 Role-scoped report collection (built AFTER dependencies, per your ordering rule)
+// 1. Base scope by roleClearCollect( colReportsInScope, Switch( varUserRole, "Administrator", MonthlyReports, "DeputyDirectorME", MonthlyReports, "ProgrammeManager", Filter(MonthlyReports, ProgrammeLabel = varUserProgramme), "Supervisor", Filter(MonthlyReports, DirectorateLabel = varUserDirectorate), /* Contributor */ Filter(MonthlyReports, SubmittedBy.Email = User().Email) ));// 2. Dependent collections — built AFTER colReportsInScope existsClearCollect( colProgrammeProgress, AddColumns( GroupBy(colReportsInScope, "ProgrammeLabel", "GroupedReports"), "AvgComplete", Average(GroupedReports, PercentageComplete) ));ClearCollect( colMonthlyTrend, AddColumns( GroupBy(colReportsInScope, "ReportingMonth", "GroupedReports"), "SubmittedCount", CountRows(Filter(GroupedReports, Status.Value = "Submitted")), "ApprovedCount", CountRows(Filter(GroupedReports, Status.Value = "Approved")) ));
+3.7.3 Submit / Approve / Reject
+// Submit (scr_ReportSubmission, btnSubmit.OnSelect)Patch( MonthlyReports, varMode = "New" ? Defaults(MonthlyReports) : varEditingReport, { Activity: varSelectedActivity, DirectorateLabel: varSelectedActivity.DirectorateLabel, ProgrammeLabel: varSelectedActivity.ProgrammeLabel, ActivityOwnerLabel: User().FullName, PlannedAct: txtPlannedAct.Text, Output: txtProgress.Text, PercentageComplete: Value(sldPercent.Value), Status: { Value: "Submitted" }, SubmittedBy: { '@odata.type':"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser", Claims:"i:0#.f|membership|" &amp; User().Email, DisplayName: User().FullName, Email: User().Email }, SubmissionDate: Now(), Version: varMode = "New" ? 1 : varEditingReport.Version + 1 });// Approve (scr_ApprovalQueue, btnApprove.OnSelect)Patch( MonthlyReports, ThisItem, { Status: { Value: "Approved" }, ReviewedBy: { DisplayName: User().FullName, Email: User().Email }, ReviewDate: Now() });// Reject — RejectionReason mandatory (BR-04)If( IsBlank(txtRejectionReason.Text), Notify("Please provide a rejection reason before rejecting.", NotificationType.Warning), Patch( MonthlyReports, ThisItem, { Status: { Value: "Rejected" }, ReviewedBy: { DisplayName: User().FullName, Email: User().Email }, ReviewDate: Now(), RejectionReason: txtRejectionReason.Text } ));
+3.7.4 Overdue calculation (client-side, until the Phase 2 daily flow exists)
+IsOverdue:With( { dueThisMonth: Date(Year(Today()), Month(Today()), Activity.DueDate) }, Today() &gt; dueThisMonth &amp;&amp; Status.Value &lt;&gt; "Approved")
+3.7.5 Known Power Fx gotchas — carried forward from build notes
+Distinct() returns a column named .Value, not .Result.
+Choice columns require the .Value suffix (e.g. varUserRole.Value) when compared as text.
+Collections must be built in dependency order — colProgrammeProgress and colMonthlyTrend must come after colReportsInScope, not before.
+App.Formulas (Named Formulas) cannot reference Set() variables — role-scoping filters must live in OnVisible/OnStart, not Named Formulas.
+Table({Title:"All"}) &amp; Programmes union pattern fails for a "clear filters" control — use a dedicated Clear Filters button instead.
+SharePoint Lookup columns only expose .Id and .Value — always denormalize a flat label column onto the child list rather than chaining Lookups.
+3.8 Power Automate Flows (Phase 2)
+Flow
+ | Trigger
+ | Action
+ | Writes to
+ | 
+Submission Notification
+ | MonthlyReports item modified, Status → Submitted
+ | Email + Notifications row to Activity.Supervisor
+ | Notifications
+ | 
+Approval/Rejection Notification
+ | MonthlyReports item modified, Status → Approved/Rejected
+ | Email + Notifications row to SubmittedBy
+ | Notifications
+ | 
+Monthly Reminder
+ | Recurrence, monthly on the 20th
+ | Email all Contributors with open Activities for the current ReportingMonth
+ | Notifications
+ | 
+Overdue Escalation
+ | Recurrence, daily
+ | Set IsOverdue on qualifying reports; notify Contributor + Supervisor; escalate to DeputyDirectorME after 5 business days
+ | MonthlyReports, Notifications
+ | 
+Audit Capture
+ | Item created/modified on Directorates/Programmes/Projects/Activities/MonthlyReports
+ | Write before/after values to AuditLog
+ | AuditLog
+ | 
+Quarterly Consolidation
+ | Recurrence, quarterly
+ | Compile Approved reports per Quarter into a summary for DMC
+ | Power BI dataset refresh
+ | 
+3.9 Security Architecture
+Phase 1: role enforcement is in Power Fx (client-side visibility/filtering) — sufficient for an internal, trusted-user MVP but not a hard security boundary.
+SharePoint list permissions should be tightened at minimum to: Contributors get Contribute (no Delete) on MonthlyReports scoped by their own items where possible via item-level permissions; broad list-level access otherwise, accepting the Phase 1 trade-off.
+Administrator and DeputyDirectorME roles should be the only ones with Full Control / Design access to the underlying lists.
+APP_Users.Role is the single source of truth for role — never hardcode role checks against email addresses in Power Fx.
+Recommend Microsoft Entra ID group-based SharePoint permissions once user count grows, rather than per-user list permissions.
+Phase 2 candidate: migrate from SharePoint lists to Dataverse for genuine row-level security (business units / security roles) if audit requirements tighten.
+3.10 Error Handling
+Wrap all Patch() calls with IfError() and surface a Notify() banner rather than a silent failure.
+Validate required fields (PlannedAct, Output) client-side before enabling the Submit button, in addition to any list-level required-field enforcement.
+On Patch failure, do not clear the form — preserve user input so nothing is lost on retry.
+Log Patch failures to a lightweight local collection (colErrorLog) during Phase 1 for developer diagnosis; migrate to AuditLog-based capture once Phase 2 flows exist.
+Guard all LookUp() calls against blank results with IsBlank() checks before dereferencing nested fields, to avoid delegation/runtime errors on first load.
+IfError( Patch(MonthlyReports, ThisRecord, { Status: {Value:"Submitted"} }), Notify("Could not submit report. Please try again or contact support.", NotificationType.Error))
+3.11 Performance Optimization
+Denormalized label columns (DirectorateLabel, ProgrammeLabel, ActivityOwnerLabel, ProjectOwnerLabel) avoid chained LookUp/Lookup-of-Lookup calls in galleries — already applied consistently across Activities and MonthlyReports.
+Use ClearCollect once on OnVisible rather than repeated Filter() calls directly on gallery Items — already your pattern for colReportsInScope.
+Delegation: Filter/Search/SortByColumns on SharePoint sources delegate for standard operators (=, &lt;&gt;, StartsWith); GroupBy/AddColumns used for colProgrammeProgress/colMonthlyTrend run against the already-collected (non-delegated) set, which is safe once colReportsInScope itself was built with a delegable Filter.
+Set a delegation warning check before shipping — any red-underlined formula against MonthlyReports directly (not via colReportsInScope) risks silently truncating at the 500/2000-row threshold as report volume grows across 17 directorates × 12 months.
+Keep galleries' visible template controls minimal; hide non-essential fields at Small/Medium breakpoints per the responsive standard already on file.
+3.12 Deployment Strategy
+Stage
+ | Activity
+ | 
+Dev
+ | Current environment — manual list build (provisioning script abandoned due to PnP.PowerShell/Ubuntu threading issues); continue manual Studio-based development
+ | 
+Export/Import
+ | Use pac canvas pack/unpack cautiously — hand-authored YAML galleries lack EditorState metadata and crash PA3001; import with galleries stripped as placeholder labels, then rebuild galleries in Studio (established workaround)
+ | 
+Test/UAT
+ | Promote to a separate SharePoint site collection with a copy of the 6 lists; UAT with 1 Contributor, 1 Supervisor, 1 ProgrammeManager, DeputyDirectorME, Administrator
+ | 
+Production
+ | Publish app; assign SharePoint permissions per §3.9; Power Automate flows enabled last, after data model is stable
+ | 
+Change management
+ | All schema changes (new columns, choice values) go through you as solution owner before implementation — per established co-architect working agreement
+ | 
+3.13 Governance Recommendations
+Maintain a single source-of-truth schema document (this TDS) and update it every time a list column changes in Studio — the v1→v2 drift that prompted this rebuild should not recur.
+Reconcile the DirectorateLabel inconsistency (code vs. full name) before Phase 2 reporting is built on top of it — a Power BI measure built against one convention will silently miscount if the other list uses the other convention.
+Decide and document whether Directorate/Programme text fields should be converted to Lookups, or intentionally kept as text with validation — don't leave it ambiguous.
+Establish a data retention/archival rule for MonthlyReports once multiple financial years accumulate (the FinancialYear choice field already supports this).
+Define who owns the AuditLog/Notifications/ReportComments write-paths in Phase 2 — recommend Power Automate rather than Canvas App Patch calls, so the audit trail is not bypassable by the app itself.
+Before onboarding all 17 directorates, pilot with 2–3 (as already done with ICTM) and capture friction points in Approval Queue and rejection flow specifically, since these are new to end users vs. the old Excel process.
