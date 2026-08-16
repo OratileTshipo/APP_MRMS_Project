@@ -104,7 +104,10 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
   master-detail: role-scoped activities list on the left (all for admins/DDME, own
   only otherwise), inline MonthlyReports form in the detail pane. The "Monthly
   Reports" sidebar icon on every screen and Home's "New Monthly Report" button both
-  open it.
+  open it. Since CHANGES.md §19, selecting an activity **loads its existing report
+  for the current FY + month into the form (Edit mode)** via the
+  `fnReportForCurrentPeriod` named formula — a new report is only started when none
+  exists for that period.
 - **CSV data normalized** (CHANGES.md §18): Activities.csv DirectorateLabel/
   ProgrammeLabel now use the canonical Directorates.csv/Programmes.csv names;
   RISK/IC kept separate (`Risk Management`/`Internal Control`); **RIC retired**

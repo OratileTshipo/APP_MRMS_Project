@@ -40,10 +40,24 @@ Screens:
             )
         );
 
-        // 3. Default selection + fresh report form state
+        // 3. Default selection + report form state — load the existing report
+        //    for the selected activity + current period (Edit), else start fresh (New)
         Set(varReportActivity, If(CountRows(colReportActivities) > 0, First(colReportActivities), Blank()));
-        Set(varReportMode, "New");
-        Set(varEditReport, Blank());
+        Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+        Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
+
+        // 3b. Reset the form controls so their Default re-evaluates with the
+        //     loaded record (Power Apps only re-evaluates Default on Reset())
+        Reset(RepActTitle_txt);
+        Reset(RepActMonth_drp);
+        Reset(RepActQuarter_drp);
+        Reset(RepActFY_drp);
+        Reset(RepActPlanned_txt);
+        Reset(RepActPct_txt);
+        Reset(RepActFormStatus_drp);
+        Reset(RepActReason_txt);
+        Reset(RepActRemedial_txt);
+        Reset(RepActOutput_txt);
 
         // 4. Reference collections for the form dropdowns
         ClearCollect(colProgrammes, Programmes);
@@ -298,10 +312,22 @@ Screens:
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
                               OnSelect: |-
-                                =// Select an activity → open its report form in the detail pane (fresh report)
+                                =// Select an activity → load its existing report for the current
+                                // period into the detail form (Edit), or start a fresh one (New).
+                                // Reset() re-evaluates the form controls' Default with the new record.
                                 Set(varReportActivity, RepActItems_gal.Selected);
-                                Set(varReportMode, "New");
-                                Set(varEditReport, Blank())
+                                Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+                                Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
+                                Reset(RepActTitle_txt);
+                                Reset(RepActMonth_drp);
+                                Reset(RepActQuarter_drp);
+                                Reset(RepActFY_drp);
+                                Reset(RepActPlanned_txt);
+                                Reset(RepActPct_txt);
+                                Reset(RepActFormStatus_drp);
+                                Reset(RepActReason_txt);
+                                Reset(RepActRemedial_txt);
+                                Reset(RepActOutput_txt)
                               TemplateSize: =90
                               Width: =Parent.Width
                             Children:
@@ -427,7 +453,7 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =11
-                                    Text: =If(IsBlank(varReportActivity), "No activity selected", "Reporting on: " & varReportActivity.Title)
+                                    Text: =If(IsBlank(varReportActivity), "No activity selected", If(varReportMode = "Edit", "Editing existing report · ", "Reporting on: ") & varReportActivity.Title)
                         - RepActFormScroll_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -857,10 +883,21 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnSelect: |-
-                                      =// Cancel — clear the selection and reset to a fresh report form
+                                      =// Cancel — clear the selection and reset to a fresh report form.
+                                      // Reset() re-evaluates the form controls' Default to New-mode values.
                                       Set(varReportActivity, Blank());
                                       Set(varReportMode, "New");
-                                      Set(varEditReport, Blank())
+                                      Set(varEditReport, Blank());
+                                      Reset(RepActTitle_txt);
+                                      Reset(RepActMonth_drp);
+                                      Reset(RepActQuarter_drp);
+                                      Reset(RepActFY_drp);
+                                      Reset(RepActPlanned_txt);
+                                      Reset(RepActPct_txt);
+                                      Reset(RepActFormStatus_drp);
+                                      Reset(RepActReason_txt);
+                                      Reset(RepActRemedial_txt);
+                                      Reset(RepActOutput_txt)
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8
@@ -878,9 +915,11 @@ Screens:
                                     OnSelect: |-
                                       =
                                       // RepActSave_btn.OnSelect — validates required fields, then inserts a
-                                      // new MonthlyReports record for the selected activity (MonthlyReports.csv
-                                      // schema; denormalised activity fields pulled from varReportActivity).
-                                      // Stays on the screen so the user can keep reporting other activities.
+                                      // new MonthlyReports record (New mode) or updates the loaded one (Edit
+                                      // mode) using the MonthlyReports.csv schema; denormalised activity
+                                      // fields are pulled from varReportActivity. After saving, the record is
+                                      // reloaded so the form reflects the saved state (subsequent saves update
+                                      // rather than duplicate). Stays on the screen for the next activity.
                                       If(
                                           IsBlank(varReportActivity),
                                           Notify("Select an activity before saving the report.", NotificationType.Error),
@@ -889,13 +928,13 @@ Screens:
                                           || IsBlank(RepActMonth_drp.Selected)
                                           || IsBlank(RepActQuarter_drp.Selected)
                                           || IsBlank(RepActFY_drp.Selected)
-                                          || IsBlank(RepActStatus_drp.Selected),
+                                          || IsBlank(RepActFormStatus_drp.Selected),
 
                                           Notify("All required fields must be completed before saving.", NotificationType.Error),
 
                                           Patch(
                                               MonthlyReports,
-                                              Defaults(MonthlyReports),
+                                              If(varReportMode = "New", Defaults(MonthlyReports), varEditReport),
                                               {
                                                   Title: RepActTitle_txt.Text,
                                                   Activity: { Id: varReportActivity.ID, Value: varReportActivity.Title },
@@ -911,15 +950,26 @@ Screens:
                                                   ReasonForDeviation: RepActReason_txt.Text,
                                                   RemedialAction: RepActRemedial_txt.Text,
                                                   Output: RepActOutput_txt.Text,
-                                                  Version: 1
+                                                  Version: If(varReportMode = "New", 1, Coalesce(varEditReport.Version, 1))
                                               }
                                           );
-                                          Notify("Report saved.", NotificationType.Success);
-                                          Set(varReportMode, "New");
-                                          Set(varEditReport, Blank())
+                                          Notify(If(varReportMode = "New", "Report saved.", "Report updated."), NotificationType.Success);
+                                          // Reload the saved record so the form reflects it (Edit mode going forward)
+                                          Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+                                          Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
+                                          Reset(RepActTitle_txt);
+                                          Reset(RepActMonth_drp);
+                                          Reset(RepActQuarter_drp);
+                                          Reset(RepActFY_drp);
+                                          Reset(RepActPlanned_txt);
+                                          Reset(RepActPct_txt);
+                                          Reset(RepActFormStatus_drp);
+                                          Reset(RepActReason_txt);
+                                          Reset(RepActRemedial_txt);
+                                          Reset(RepActOutput_txt)
                                       )
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8
                                     RadiusTopRight: =8
-                                    Text: ="Save Report"
+                                    Text: =If(varReportMode = "Edit", "Update Report", "Save Report")

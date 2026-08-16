@@ -559,3 +559,37 @@ trip byte-identical.
 - **Effect**: the RIC user now matches 60 activities; every directorate/programme
   filter dropdown value now matches the data exactly. Note: the live SharePoint
   lists need the same cleanup to match the CSVs.
+
+## 19. scr_ReportActivities — load existing report for activity/period (Edit mode)
+
+- **Request**: the detail pane should load an existing report for the selected
+  activity + period instead of always starting a new one.
+- **New named formula** `fnReportForCurrentPeriod` (App.Formulas):
+  `First(Filter(MonthlyReports, Activity.Id = varReportActivity.ID,
+  'FinancialYear '.Value = varCurrentFY, ReportingMonth.Value = varCurrentMonth))` —
+  the existing report for the selected activity in the current FY + reporting month.
+  Re-evaluates whenever `varReportActivity` changes.
+- **Form behaviour** (OnVisible, gallery OnSelect, Save, Cancel): after setting
+  `varReportActivity`/`varEditReport`, `varReportMode` is now `"Edit"` when a report
+  exists for the activity + current period, else `"New"`. Because Power Apps only
+  re-evaluates `Default` on `Reset()`, every form control (`RepActTitle_txt` …
+  `RepActOutput_txt`, the three period dropdowns, `RepActFormStatus_drp`) is
+  explicitly `Reset()` after the state changes so switching activities actually
+  reloads the loaded record.
+- **Save** now `Patch(MonthlyReports, If(varReportMode = "New", Defaults(MonthlyReports),
+  varEditReport), …)` — inserts on New, updates the loaded record on Edit (Version kept
+  via `Coalesce(varEditReport.Version, 1)`), then reloads the record so the form stays
+  in Edit mode with the saved values. Notify text distinguishes "Report saved." vs
+  "Report updated."; the Save button label switches to "Update Report" and the mode
+  label shows "Editing existing report · …" in Edit mode.
+- **Bug fixed**: Save's required-field validation checked `RepActStatus_drp` (the
+  filter-bar dropdown, which always has a selection) instead of the form's
+  `RepActFormStatus_drp` — the "Status required" check could never fire. Now checks
+  `RepActFormStatus_drp.Selected`.
+- **Verifier improvement**: `tools/verify_powerfx.py` var/collection reference checks
+  are now a second pass after all files' definitions are collected, so cross-file
+  references (e.g. App.pa.yaml named formulas referencing vars Set in screen files)
+  no longer produce false positives.
+- Verified: `tools/verify_powerfx.py` (10,544 formulas, 0 warnings, 0 errors), pack→
+  unpack round trip byte-identical, packed app contains the formula + Edit logic.
+  Top-level `APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.

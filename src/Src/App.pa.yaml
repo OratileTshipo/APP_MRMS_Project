@@ -62,6 +62,20 @@ App:
       )
     varTodaysDate: =DateValue(Today())
 
+    # 5. Report lookup — existing MonthlyReport for the selected activity in the
+    #    current reporting period. Used by scr_ReportActivities so that selecting
+    #    an activity loads its existing report (Edit) instead of always starting
+    #    fresh (New). Re-evaluates whenever varReportActivity changes.
+    fnReportForCurrentPeriod: |-
+      =First(
+          Filter(
+              MonthlyReports,
+              Activity.Id = varReportActivity.ID,
+              'FinancialYear '.Value = varCurrentFY,
+              ReportingMonth.Value = varCurrentMonth
+          )
+      )
+
     # ============================================================
     # App.OnStart — only genuinely mutable state remains here.
     # ============================================================

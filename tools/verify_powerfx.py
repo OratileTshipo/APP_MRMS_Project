@@ -364,6 +364,8 @@ def main():
     patch_keys = {}     # list -> set of patch keys
     screen_nav = set()
     screen_files = set()
+    pending_var_refs = []   # (base, loc, prop, var) — checked after all files define vars
+    pending_col_refs = []   # (base, loc, prop, col) — checked after all files define collections
 
     # Pre-register named formulas (App.Formulas) so var references resolve
     app_path = os.path.join(SRC, "App.pa.yaml")
@@ -440,15 +442,11 @@ def main():
                             if bdepth == 0:
                                 patch_keys.setdefault(m_ds.group(1), set()).add(km.group(1))
                 # record literals of the form { key: expr } used anywhere (named formulas etc.)
-                # references
+                # references — deferred to a second pass so cross-file definitions resolve
                 for m in re.finditer(r"\b(var[A-Za-z0-9_]*)\b", clean):
-                    v = m.group(1)
-                    if v not in defined_vars and v not in defined_named:
-                        WARNINGS.append(f"[{base}] {loc}.{prop}: var '{v}' is never Set()/named-formula'd anywhere")
+                    pending_var_refs.append((base, loc, prop, m.group(1)))
                 for m in re.finditer(r"\b(col[A-Za-z0-9_]*)\b", clean):
-                    v = m.group(1)
-                    if v not in defined_cols:
-                        WARNINGS.append(f"[{base}] {loc}.{prop}: collection '{v}' is never ClearCollect/Collect'd anywhere")
+                    pending_col_refs.append((base, loc, prop, m.group(1)))
                 # Reset/Select control references
                 for m in re.finditer(r"\b(?:Reset|Select)\(\s*([A-Za-z_][A-Za-z0-9_]*)", clean):
                     target = m.group(1)
@@ -478,6 +476,14 @@ def main():
             sm = re.search(r"^Screens:\s*\n\s*([A-Za-z_][A-Za-z0-9_]*):", head, re.M)
             if sm:
                 SCREENS.add(sm.group(1))
+
+    # second pass: var/col references — all Set()/ClearCollect() definitions are now known
+    for base, loc, prop, v in pending_var_refs:
+        if v not in defined_vars and v not in defined_named:
+            WARNINGS.append(f"[{base}] {loc}.{prop}: var '{v}' is never Set()/named-formula'd anywhere")
+    for base, loc, prop, v in pending_col_refs:
+        if v not in defined_cols:
+            WARNINGS.append(f"[{base}] {loc}.{prop}: collection '{v}' is never ClearCollect/Collect'd anywhere")
 
     # navigation targets
     for t in sorted(screen_nav):
