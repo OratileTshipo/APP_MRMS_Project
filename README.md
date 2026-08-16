@@ -82,7 +82,7 @@ Rejected / Escalated), `Version`, `SubmittedBy` (User), `SubmissionDate`, `Revie
 Screens (in `_EditorState.pa.yaml` order):
 `scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` → `scr_ReportForm` →
 `scr_ReportView` → `scr_Projects` → `scr_Activities` → `scr_ReportActivities` →
-`scr_Reports` → `scr_ApprovedReports` → `MainScreen1`
+`scr_Reports` → `scr_ApprovedReports`
 
 Connected data sources: Programmes, Projects, Activities, MonthlyReports, APP_Users,
 Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceLibrary

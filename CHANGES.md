@@ -67,8 +67,10 @@ Single source of truth for SharePoint list schemas: the CSV files in this folder
   reference collections (`colProgrammes/colProjects/colActivities/colDirectorates`),
   current-user role resolution (`APP_Users` lookup by `UserAccount.Email`), notifications,
   current FY/month/quarter.
-- **9 screens**: `scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` →
-  `scr_Projects` → `scr_Activities` → `scr_Reports` → `scr_Reports_1` → `MainScreen1`.
+- **9 screens (original pack)**: `scr_Splash` → `scr_Home` → `scr_Users` →
+  `scr_MyActivities` → `scr_Projects` → `scr_Activities` → `scr_Reports` →
+  `scr_Reports_1` → `MainScreen1`. (Both `scr_Reports_1` and `MainScreen1` have
+  since been retired — see §16 and §20.)
 - **11 connected data sources**: Programmes, Projects, Activities, MonthlyReports,
   APP_Users, Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments,
   EvidenceLibrary (plus static samples CustomGallerySample, ComboBoxSample).
@@ -593,3 +595,25 @@ trip byte-identical.
 - Verified: `tools/verify_powerfx.py` (10,544 formulas, 0 warnings, 0 errors), pack→
   unpack round trip byte-identical, packed app contains the formula + Edit logic.
   Top-level `APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.
+
+## 20. Retire the empty MainScreen1 (no-duplicate-screens cleanup complete)
+
+- **Problem**: `MainScreen1` was a 13-line empty screen left over from the original
+  template (only `Fill` + `LoadingSpinnerColor`, no children). Nothing navigated to it
+  and it was never the start screen (`StartScreen: scr_Splash`), so it was dead weight
+  in the app — the last item from the BEST_PRACTICES.md row-3 cleanup.
+- **The one wrinkle**: `scr_Reports.pa.yaml` referenced `MainScreen1.Size` in 4
+  responsive formulas (sidebar `FillPortions`/`Visible`, back-button `Visible`).
+  `MainScreen1` was never displayed, so reading its `Size` was a fragile legacy
+  template pattern.
+- **Fix**: replaced all 4 references with the canonical **`App.Size = ScreenSize.Small`**
+  (the documented App-object property returning the `ScreenSize` enum — same semantics,
+  works regardless of which screen is active), then deleted `MainScreen1.pa.yaml` and
+  removed it from `_EditorState.pa.yaml` ScreensOrder.
+- **Result**: 11 screens remain (scr_Splash, scr_Home, scr_Users, scr_MyActivities,
+  scr_ReportForm, scr_ReportView, scr_Projects, scr_Activities, scr_ReportActivities,
+  scr_Reports, scr_ApprovedReports) — the no-duplicate-screens cleanup is now complete.
+- Verified: `tools/verify_powerfx.py` (10,542 formulas across 13 files, 0 warnings,
+  0 errors), pack→unpack round trip byte-identical, packed app has 13 YAML files with
+  no `MainScreen1`. Top-level `APP-MRMS_Project_app.msapp` repacked with
+  `--layout SourceCode`.

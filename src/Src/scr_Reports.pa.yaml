@@ -453,14 +453,14 @@ Screens:
                             Variant: AutoLayout
                             Properties:
                               Fill: =RGBA(255, 255, 255, 1)
-                              FillPortions: =If(And(MainScreen1.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), 0, 3)
+                              FillPortions: =If(And(App.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), 0, 3)
                               LayoutDirection: =LayoutDirection.Vertical
                               LayoutGap: =10
                               LayoutMinWidth: =16
                               PaddingLeft: =16
                               PaddingRight: =16
                               PaddingTop: =10
-                              Visible: =If(And(MainScreen1.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), false, true)
+                              Visible: =If(And(App.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), false, true)
                             Children:
                               - SearchContainer1:
                                   Control: GroupContainer@1.5.0
@@ -719,7 +719,7 @@ Screens:
                               RadiusBottomRight: =0
                               RadiusTopLeft: =0
                               RadiusTopRight: =0
-                              Visible: =If(Or(deleteMode, And(MainScreen1.Size = ScreenSize.Small, !newMode, !editMode, !itemSelected)), false, true)
+                              Visible: =If(Or(deleteMode, And(App.Size = ScreenSize.Small, !newMode, !editMode, !itemSelected)), false, true)
                               Width: =0
                             Children:
                               - SelectedRecordHeaderContainer1:
@@ -756,7 +756,7 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           TabIndex: =0
-                                          Visible: =If(MainScreen1.Size = ScreenSize.Small, And(!editMode, !newMode, !deleteMode), false)
+                                          Visible: =If(App.Size = ScreenSize.Small, And(!editMode, !newMode, !deleteMode), false)
                                           Width: =50
                                     - SelectedRecordTitle1:
                                         Control: Label@2.5.1
