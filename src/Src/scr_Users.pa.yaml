@@ -348,6 +348,7 @@ Screens:
                               Icon: =Icon.CalendarBlank
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)

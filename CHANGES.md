@@ -496,3 +496,34 @@ trip byte-identical.
   source byte-for-byte, `scr_Reports_1` absent from / `scr_ApprovedReports` present
   in the packed app. Top-level `APP-MRMS_Project_app.msapp` repacked with
   `--layout SourceCode`.
+
+## 17. New screen — scr_ReportActivities (Activities → Report master-detail)
+
+- **Purpose** (product decision): the reporting screen is an Activities
+  master-detail — the left pane lists activities; clicking one opens the
+  MonthlyReports **report form in the detail pane** so the user reports on the
+  selected activity inline.
+- **Master list scope** (role-based, per product decision):
+  - `varCanViewAllReports` (Administrator / DeputyDirectorME) → **all** active
+    activities (`colReportActivities = Filter(Activities, 'Active ' = true)`).
+  - Everyone else → **only their own** activities
+    (`Filter(Activities, ActivityOwner.Email = varUserEmail, 'Active ' = true)`).
+  - Search (title/code/short description/description) + Programme / Status
+    dropdowns filter the gallery over `colReportActivities`.
+- **Detail pane**: inline report form (Title, Reporting Month, Quarter, Financial
+  Year, Planned Activity, % Complete, Status, Reason for Deviation, Remedial
+  Action, Output) defaulting month/quarter/FY to the current period. Gallery
+  OnSelect sets `varReportActivity` + resets to New mode; **Save** validates
+  required fields then `Patch(MonthlyReports, Defaults(MonthlyReports), {…})`
+  with the same denormalised activity fields as scr_ReportForm
+  (Activity lookup `{Id, Value}`, ActivityOwnerLabel, ProgrammeLabel,
+  DirectorateLabel), notifies success and stays on screen for the next report.
+  Cancel clears the selection.
+- **Wiring**: registered in `_EditorState.pa.yaml`; the previously-dead
+  "Monthly Reports" (CalendarBlank) sidebar icon now navigates here on ALL
+  screens (scr_Home/scr_Projects/scr_Activities/scr_MyActivities/scr_Users/
+  scr_Reports); scr_Home "New Monthly Report" now opens this screen
+  (scr_ReportForm remains reachable from scr_MyActivities for per-activity edits).
+- Verified: `tools/verify_powerfx.py` (10,543 formulas across 14 files, 0 errors),
+  pack→unpack round trip byte-identical, all Navigate targets resolve.
+  Top-level `APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.

@@ -609,14 +609,11 @@ Screens:
                                     Height: =40
                                     Icon: ="Add"
                                     OnSelect: |-
-                                      =// Button2 — New Monthly Report: open the report form for the user's first
-                                      // own activity (colMyActivities is built in OnVisible). A blank ID falls
-                                      // back to a blank form; Save guards against a missing activity.
-                                      Navigate(
-                                          scr_ReportForm,
-                                          ScreenTransition.Fade,
-                                          { selectedActivityID: If(CountRows(colMyActivities) > 0, First(colMyActivities).ID, Blank()) }
-                                      )
+                                      =// Button2 — New Monthly Report: open the Activities → Report master-detail
+                                      // (scr_ReportActivities) so the user picks the activity and fills the
+                                      // report form in the detail pane. scr_ReportForm remains reachable from
+                                      // scr_MyActivities for the per-activity edit flow.
+                                      Navigate(scr_ReportActivities, ScreenTransition.Fade)
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8

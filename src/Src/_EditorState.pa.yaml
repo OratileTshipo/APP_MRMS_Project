@@ -16,6 +16,7 @@ EditorState:
     - scr_ReportView
     - scr_Projects
     - scr_Activities
+    - scr_ReportActivities
     - scr_Reports
     - scr_ApprovedReports
     - MainScreen1
