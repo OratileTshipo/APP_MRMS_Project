@@ -74,8 +74,8 @@ App:
       Set(varTodaysDate, DateValue(Today()));
 
       // 5. Filter defaults — mutated by screen controls (scr_Home, scr_Users, scr_MyActivities)
+      // Search text lives in the cmp_AppHeader component instances (SearchText output), not app vars.
       Set(varHomeFilter, "All");
-      Set(varHomeSearchTerm, "");
       Set(varFilterFY, "All");
       Set(varFilterProgramme, "All");
       Set(varFilterDirectorate, "All");

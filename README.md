@@ -61,7 +61,9 @@ full verification record.
    (See CHANGES.md §24 for the full import-failure root causes — named formulas
    can't live in pa.yaml, single-line formulas can't contain `:` or `#`, control
    names are app-global, and `--sources src` (with the `.msapr`) is required for
-   `pac canvas pack` in 2.11.2.)
+   `pac canvas pack` in 2.11.2. For round-trip verification, `pac canvas unpack`
+   in 2.11.2 also requires the explicit `--layout SourceCode` flag — without it
+   the unpack crashes with an NRE, even on the pristine backup.)
 3. **Open [make.powerapps.com](https://make.powerapps.com)** and sign in with an
    account that can create apps in the target environment (the one holding the
    SharePoint lists).
@@ -133,6 +135,13 @@ Screens (in `_EditorState.pa.yaml` order):
 `scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` → `scr_ReportForm` →
 `scr_ReportView` → `scr_Projects` → `scr_Activities` → `scr_ReportActivities` →
 `scr_Reports` → `scr_ApprovedReports`
+
+**Reusable components** (`src/Src/Component/`): every screen uses
+`cmp_AppHeader` (navy header — PageTitle / ShowBack / ShowSearch / Subtitle inputs,
+`SearchText` output) and `cmp_NavRail` (left nav rail — `ActiveScreen` input drives the
+active-icon highlight). Canonical shell: root horizontal → `[NavRail, column
+(Width = App.Width − NavRail.Width) → [AppHeader, body]]`. See BEST_PRACTICES.md row 8
+and CHANGES.md §26.
 
 Connected data sources: Programmes, Projects, Activities, MonthlyReports, APP_Users,
 Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceLibrary

@@ -19,8 +19,7 @@ Screens:
         // reference/filter collections the form and list depend on.
 
         Set(varMode, "View");
-        Set(varActivitySearchTerm, "");
-        Set(varActivityFilterProgramme, "All");
+                Set(varActivityFilterProgramme, "All");
         Set(varActivityFilterDirectorate, "All");
         Set(varActivityFilterStatus, "All");
         Set(varConfirmDelete, false);
@@ -59,410 +58,31 @@ Screens:
           Properties:
             Height: =App.Height
             LayoutAlignItems: =LayoutAlignItems.Center
-            LayoutDirection: =LayoutDirection.Vertical
+            LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            - ActivitiesHeader_con:
-                Control: GroupContainer@1.5.0
-                Variant: AutoLayout
+            - ActivitiesNavRail:
+                Control: CanvasComponent
+                ComponentName: cmp_NavRail
                 Properties:
-                  DropShadow: =DropShadow.Semilight
-                  Fill: =varNavy
-                  FillPortions: =0
-                  Height: =App.Height * 0.13
-                  LayoutAlignItems: =LayoutAlignItems.Center
-                  LayoutDirection: =LayoutDirection.Horizontal
-                  LayoutGap: =20
-                  RadiusBottomLeft: =0
-                  RadiusBottomRight: =0
-                  RadiusTopLeft: =0
-                  RadiusTopRight: =0
-                  Width: =App.Width - ActSidebar_con.Width
-                Children:
-                  - HeaderLeft_con:
-                      Control: GroupContainer@1.5.0
-                      Variant: AutoLayout
-                      Properties:
-                        FillPortions: =0
-                        Height: =Parent.Height
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        PaddingLeft: =8
-                        PaddingTop: =8
-                        Width: =Parent.Width * .55
-                      Children:
-                        - ActivitiesTitle_lbl:
-                            Control: Label@2.5.1
-                            Properties:
-                              AlignInContainer: =AlignInContainer.Stretch
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              BorderStyle: =BorderStyle.None
-                              BorderThickness: =2
-                              Color: =RGBA(255, 255, 255, 1)
-                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                              DisabledColor: =RGBA(161, 159, 157, 1)
-                              FocusedBorderThickness: =4
-                              Font: =Font.'Segoe UI'
-                              FontWeight: =FontWeight.Bold
-                              Height: =Parent.Height * .5
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Size: =25
-                              Text: ="Activities"
-                        - ActivitiesSubtitle_lbl:
-                            Control: Label@2.5.1
-                            Properties:
-                              AlignInContainer: =AlignInContainer.Stretch
-                              AutoHeight: =true
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              BorderStyle: =BorderStyle.None
-                              BorderThickness: =2
-                              Color: =RGBA(255, 255, 255, 1)
-                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                              DisabledColor: =RGBA(161, 159, 157, 1)
-                              FocusedBorderThickness: =4
-                              Font: =Font.'Segoe UI'
-                              Height: =Parent.Height * .5
-                              Size: =12
-                              Text: =varUserDirectorate & " · " & varUserProgramme
-                  - HeaderCenter_con:
-                      Control: GroupContainer@1.5.0
-                      Variant: AutoLayout
-                      Properties:
-                        Height: =Parent.Height
-                        LayoutAlignItems: =LayoutAlignItems.Center
-                        LayoutDirection: =LayoutDirection.Horizontal
-                        LayoutGap: =20
-                        LayoutJustifyContent: =LayoutJustifyContent.End
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        PaddingBottom: =8
-                        PaddingLeft: =8
-                        PaddingRight: =8
-                        PaddingTop: =8
-                        Width: =Parent.Width / 3
-                      Children:
-                        - HeaderSearchBox_con:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              AlignInContainer: =AlignInContainer.Center
-                              Fill: =varBgLight
-                              Height: =Parent.Height * .4
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Horizontal
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PaddingBottom: =8
-                              PaddingLeft: =10
-                              PaddingRight: =8
-                              PaddingTop: =8
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
-                              Width: =Parent.Width - 50
-                            Children:
-                              - HeaderSearch_ico:
-                                  Control: Classic/Icon@2.5.0
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    Color: =RGBA(153, 153, 153, 1)
-                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                    DisabledColor: =RGBA(225, 223, 221, 1)
-                                    DisabledFill: =RGBA(0, 0, 0, 0)
-                                    FocusedBorderThickness: =4
-                                    Height: =Parent.Height * 0.65
-                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                    HoverColor: =RGBA(16, 110, 190, 1)
-                                    HoverFill: =RGBA(0, 0, 0, 0)
-                                    Icon: =Icon.Search
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                    PressedColor: =RGBA(16, 110, 190, 1)
-                                    PressedFill: =RGBA(0, 0, 0, 0)
-                                    Width: =Parent.Width * 0.08
-                              - HeaderSearch_txt:
-                                  Control: Classic/TextInput@2.3.2
-                                  Properties:
-                                    BorderColor: =RGBA(245, 245, 245, 1)
-                                    BorderThickness: =0
-                                    Clear: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    Default: =
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    DisabledFill: =RGBA(242, 242, 241, 0)
-                                    Fill: |-
-                                      =varBgLight
-                                    Font: =Font.'Segoe UI'
-                                    Height: =Parent.Height * 0.65
-                                    HintText: ="Search activities by title or description..."
-                                    HoverBorderColor: =RGBA(16, 110, 190, 1)
-                                    HoverColor: =RGBA(50, 49, 48, 1)
-                                    HoverFill: =RGBA(255, 255, 255, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    OnChange: =Set(varActivitySearchTerm, HeaderSearch_txt.Text)
-                                    PressedBorderColor: =RGBA(0, 120, 212, 1)
-                                    PressedColor: =RGBA(50, 49, 48, 1)
-                                    PressedFill: =RGBA(255, 255, 255, 1)
-                                    RadiusBottomLeft: =0
-                                    RadiusBottomRight: =0
-                                    RadiusTopLeft: =0
-                                    RadiusTopRight: =0
-                                    Size: =15
-                                    Width: =Parent.Width - HeaderSearch_ico.Width - 25
-                        - HeaderBell_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height * .4
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Bell
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width / 15
+                  ActiveScreen: ="scr_Activities"
             - ActivitiesMain_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
-                  LayoutDirection: =LayoutDirection.Horizontal
-                  Width: =App.Width
+                  LayoutDirection: =LayoutDirection.Vertical
+                  Width: =App.Width - ActivitiesNavRail.Width
                 Children:
-                  - ActSidebar_con:
-                      Control: GroupContainer@1.5.0
-                      Variant: AutoLayout
+                  - ActivitiesAppHeader:
+                      Control: CanvasComponent
+                      ComponentName: cmp_AppHeader
                       Properties:
-                        DropShadow: =DropShadow.None
-                        Fill: =varBgLight
-                        FillPortions: =0
-                        Height: =App.Height
-                        LayoutAlignItems: =LayoutAlignItems.Center
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutGap: =30
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        PaddingBottom: =20
-                        PaddingLeft: =10
-                        PaddingRight: =10
-                        PaddingTop: =20
-                        Width: =App.Width * 0.05
-                      Children:
-                        - ActHome_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Home
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - Projects_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Manufacture
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - ActActivities_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.RadarActivityMonitor
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - ActMonthlyReports_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.CalendarBlank
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - MyActivities_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.ListWatchlistRemind
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - ActTrending_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Trending
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - Users_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.People
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - ActSidebarSpacer_con:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              DropShadow: =DropShadow.None
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Vertical
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PaddingBottom: =8
-                              PaddingLeft: =8
-                              PaddingRight: =8
-                              PaddingTop: =8
-                        - ActSettings_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Settings
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
-                        - ActSupport_ico:
-                            Control: Classic/Icon@2.5.0
-                            Properties:
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              Color: =RGBA(0, 120, 212, 1)
-                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                              DisabledColor: =RGBA(225, 223, 221, 1)
-                              DisabledFill: =RGBA(0, 0, 0, 0)
-                              FocusedBorderThickness: =4
-                              Height: =Parent.Height / 20
-                              HoverBorderColor: =RGBA(0, 0, 0, 0)
-                              HoverColor: =RGBA(16, 110, 190, 1)
-                              HoverFill: =RGBA(0, 0, 0, 0)
-                              Icon: =Icon.Support
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PressedBorderColor: =RGBA(0, 0, 0, 0)
-                              PressedColor: =RGBA(16, 110, 190, 1)
-                              PressedFill: =RGBA(0, 0, 0, 0)
-                              Width: =Parent.Width - 20
+                        PageTitle: ="Activities"
+                        ShowBack: =false
+                        ShowSearch: =true
+                        SearchHint: ="Search activities by title, code, or description..."
                   - ActivitiesScreen_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -472,7 +92,7 @@ Screens:
                         Height: =App.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Horizontal
-                        Width: =App.Width
+                        Width: =Parent.Width
                       Children:
                         - ActivityGallery_con:
                             Control: GroupContainer@1.5.0
@@ -536,61 +156,6 @@ Screens:
                                           RadiusTopRight: =8
                                           Text: ="New Activity"
                                           Width: =160
-                              - ActivitySearch_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    Fill: =RGBA(255, 255, 255, 1)
-                                    FillPortions: =0
-                                    Height: =Parent.Height * .07
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutGap: =6
-                                    PaddingBottom: =6
-                                    PaddingLeft: =10
-                                    PaddingRight: =10
-                                    PaddingTop: =6
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Width: =Parent.Width
-                                  Children:
-                                    - ActivitySearch_ico:
-                                        Control: Classic/Icon@2.5.0
-                                        Properties:
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
-                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                          DisabledColor: =RGBA(225, 223, 221, 1)
-                                          DisabledFill: =RGBA(0, 0, 0, 0)
-                                          FocusedBorderThickness: =4
-                                          Height: =20
-                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                          HoverColor: =RGBA(16, 110, 190, 1)
-                                          HoverFill: =RGBA(0, 0, 0, 0)
-                                          Icon: =Icon.Search
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                          PressedColor: =RGBA(16, 110, 190, 1)
-                                          PressedFill: =RGBA(0, 0, 0, 0)
-                                          Width: =20
-                                    - ActivitySearch_txt:
-                                        Control: Classic/TextInput@2.3.2
-                                        Properties:
-                                          BorderThickness: =0
-                                          Clear: =true
-                                          Color: =RGBA(50, 49, 48, 1)
-                                          Default: =
-                                          Fill: =RGBA(255, 255, 255, 0)
-                                          Font: =Font.'Segoe UI'
-                                          Height: =Parent.Height - 12
-                                          HintText: ="Search activities by title, code, or description..."
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnChange: =Set(varActivitySearchTerm, ActivitySearch_txt.Text)
-                                          Width: =Parent.Width - ActivitySearch_ico.Width - 20
                               - ActivityFilter_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -680,10 +245,10 @@ Screens:
                                           (varActivityFilterProgramme = "All" || ProgrammeLabel = varActivityFilterProgramme) &&
                                           (varActivityFilterStatus = "All" || Status.Value = varActivityFilterStatus) &&
                                           (
-                                              IsBlank(varActivitySearchTerm) ||
-                                              Lower(varActivitySearchTerm) in Lower(Title) ||
-                                              Lower(varActivitySearchTerm) in Lower(ActivityShortDescription) ||
-                                              Lower(varActivitySearchTerm) in Lower(ActivityDescription)
+                                              IsBlank(ActivitiesAppHeader.SearchText) ||
+                                              Lower(ActivitiesAppHeader.SearchText) in Lower(Title) ||
+                                              Lower(ActivitiesAppHeader.SearchText) in Lower(ActivityShortDescription) ||
+                                              Lower(ActivitiesAppHeader.SearchText) in Lower(ActivityDescription)
                                           )
                                       )
                                     LayoutMinHeight: =16

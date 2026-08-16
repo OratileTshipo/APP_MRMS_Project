@@ -351,7 +351,9 @@ def datasource_columns():
 # Main
 # ---------------------------------------------------------------------------
 def main():
-    files = sorted(glob.glob(os.path.join(SRC, "*.pa.yaml")))
+    files = sorted(
+        glob.glob(os.path.join(SRC, "*.pa.yaml")) + glob.glob(os.path.join(SRC, "Component", "*.pa.yaml"))
+    )
     if not files:
         print("No Src/*.pa.yaml files found under", SRC)
         sys.exit(2)
@@ -363,6 +365,7 @@ def main():
     patch_keys = {}     # list -> set of patch keys
     screen_nav = set()
     screen_files = set()
+    component_files = set()
     pending_var_refs = []   # (base, loc, prop, var) — checked after all files define vars
     pending_col_refs = []   # (base, loc, prop, col) — checked after all files define collections
 
@@ -373,6 +376,10 @@ def main():
     for path in files:
         base = os.path.basename(path)
         screen_files.add(base)
+        # Components live in Src/Component/ and are NOT screens — keep them out of
+        # the screen-registry comparison (they're registered via ComponentDefinitions).
+        if os.path.dirname(path).endswith("Component"):
+            component_files.add(base)
         names = extract_control_names(path)
         dup = {x for x in names if names.count(x) > 1}
         if dup:
@@ -493,7 +500,7 @@ def main():
             ERRORS.append(f"Navigate target '{t}' is not a known screen ({sorted(SCREENS)})")
 
     # screens in _EditorState vs files
-    expected = {f[:-8] for f in screen_files if f != "App.pa.yaml" and f != "_EditorState.pa.yaml"}
+    expected = {f[:-8] for f in screen_files if f != "App.pa.yaml" and f != "_EditorState.pa.yaml" and f not in component_files}
     missing_in_editor = expected - SCREENS
     if missing_in_editor:
         ERRORS.append(f"Screens missing from _EditorState: {sorted(missing_in_editor)}")

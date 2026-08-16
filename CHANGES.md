@@ -773,3 +773,68 @@ and verified; the msapp was repacked and is ready to re-import.
 - Regenerable via `tools/gen_troubleshoot_md.py <pdf>` (runs pdftotext itself;
   verified reproducible — stable hash across runs).
 - Updated `reference/canvas-apps/README.md` manifest with the new folder.
+
+## 26. Reusable header + sidebar components on every screen (BEST_PRACTICES row 8)
+
+User request: every screen must have the sidebar (like Home) and the header
+(like Home), as reusable components customised to the screen's context.
+
+### What was built
+
+- **`src/Src/Component/cmp_AppHeader.pa.yaml`** — reusable navy header with
+  input properties `PageTitle`, `ShowBack`, `ShowSearch`, `SearchHint`,
+  `Subtitle`, and an output `SearchText` (the search box's live text). The
+  subtitle falls back to the user's directorate · programme context line when
+  `Subtitle` is blank, so detail screens can pass their own context
+  (role text, report count, activity description, report title).
+- **`src/Src/Component/cmp_NavRail.pa.yaml`** — reusable left navigation rail
+  with an `ActiveScreen` input that drives the active-icon highlight (navy vs
+  blue), matching the original 9-icon rail (6 wired + 3 decorative footer
+  icons).
+- Verified `pac canvas pack` packs a `Src/Component/` folder and the
+  pack→unpack round trip preserves it byte-identical.
+
+### Canonical shell layout (normalised across all 10 screens)
+
+```
+Root (horizontal, App.Width × App.Height)
+  ├─ <Screen>NavRail        (cmp_NavRail instance)
+  └─ <Screen>Main_con       (vertical, Width = App.Width − NavRail.Width)
+      ├─ <Screen>AppHeader  (cmp_AppHeader instance)
+      └─ …screen body…
+```
+
+- scr_Home already used this layout (it was the reference); the other **5 nav
+  screens** (Projects, Activities, MyActivities, Reports, Users) were
+  restructured from the broken header-on-top + rail-below arrangement — the old
+  layout also overflowed (header 95% + rail 5% + content 100% = 105%). Content
+  containers now size to `Parent.Width` inside the rail-subtracted column.
+- The **4 detail screens** (scr_ReportActivities, scr_ApprovedReports,
+  scr_ReportForm, scr_ReportView) had inline hand-built headers and no sidebar;
+  each now uses the components with `ShowBack: true`, `ShowSearch: false` (they
+  have contextual in-body search boxes where relevant), and a context subtitle.
+
+### Search consolidation
+
+- Search text now lives in the header component's `SearchText` output; the
+  galleries on scr_Home / scr_Projects / scr_Activities / scr_Reports /
+  scr_MyActivities filter on it.
+- Removed dead code: scr_Projects' duplicated in-body `ProjectSearch_con` box
+  (which even called `Set()` on the component's read-only output — invalid),
+  scr_Reports' duplicated `SearchContainer1`/`SearchInput1`, and the stale
+  `varHomeSearchTerm` in App.pa.yaml OnStart.
+- scr_Users' header search is hidden (`ShowSearch: false`) — it's a
+  registration form with its own Entra-ID search combo, no list to filter.
+
+### Verification
+
+- YAML compose: 15/15 files clean; 0 single-line formulas with `:`/`#`.
+- `verify_powerfx.py`: 8,466 formulas, 0 warnings, 0 errors.
+- Screen registry: 11/11 screens registered; 0 cross-file duplicate control
+  names.
+- Pack → unpack round trip **byte-identical** (13 Src pa.yaml files + 2
+  Component files); top-level `APP-MRMS_Project_app.msapp` repacked.
+- Note: `pac canvas unpack` in CLI 2.11.2 now requires the explicit
+  `--layout SourceCode` flag (without it the unpack crashes with an NRE —
+  reproduced even on the pristine backup, so it's environmental, not this
+  change).

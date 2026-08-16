@@ -148,7 +148,7 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
 | 5 | Delegation & payloads | Base scope `ClearCollect(colReportsInScope, Filter(MonthlyReports, ...OR...))` mixes roles/directorates in one filter; heavy `Distinct`/`ForAll`/`GroupBy` on collections; SharePoint OR filters likely non-delegable | Keep base filter simple & delegable (scope by role first), index filter columns, stay within 500–2,000-row collected set; avoid `CountRows` on raw SharePoint |
 | 6 | Long formulas | `scr_Home` `MonthlyTrend_gal.Items` is a very long inline `ForAll(Sequence(12)...)`; several OnVisible blocks are long | Extract to named formulas / `With` blocks |
 | 7 | Naming conventions | Uses `var`/`col` prefixes and `scr` screen names consistently — good | Align new screens with the same scheme; drop `var` prefix only for named-formula conversions |
-| 8 | Components for repeated UI | Every screen hand-builds the same navy header + icon sidebar (with `_1`…`_8` suffix duplicates). **Measured (§22)**: ~1,117 lines of near-identical rail YAML across 6 screens (9 icons × ~22 lines ≈ 197 lines per screen on 5 screens + 132 on Home) | Extract header/sidebar into a component library (**Phase 2** — see §22 recommendation; a `cmp_NavRail` component would also have prevented the §22 drift where Home's rail was left unwired) |
+| 8 | Components for repeated UI | Every screen hand-builds the same navy header + icon sidebar (with `_1`…`_8` suffix duplicates). **Measured (§22)**: ~1,117 lines of near-identical rail YAML across 6 screens | ~~Extract header/sidebar into a component library~~ **Done (§26)** — `src/Src/Component/cmp_AppHeader` + `cmp_NavRail` now used on all 10 screens, customised per screen (PageTitle/ShowBack/ShowSearch/Subtitle/ActiveScreen) |
 | 9 | Import-safety | Round trip verified lossless (Part 1.2); original msapp untouched | Follow Part 1.3 rules for every future edit → pack → import |
 | 10 | ALM | msapp import/export is basic transfer only (no Dataverse) | Keep schemas in CSV (source of truth) + YAML in git; treat msapp as a build artifact. **CI added (§21)**: `.github/workflows/ci.yml` runs `tools/check_screen_registry.py` (screen file ↔ `_EditorState` drift) + `tools/verify_powerfx.py` on every push/PR |
 
@@ -172,8 +172,12 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
   delegable (`colReportsInScope`, `colProjectsInScope`); the two inline dashboard
   galleries (trend/progress) now filter the collected `colActivities`; `colOverdueItems`
   restored (was commented out but consumed by live KPI cards).
-- **Open**: row 8 (header/sidebar component extraction — Phase 2, quantified in §22),
-  row 10 (ALM via git + CSV source of truth).
+- **Done** (CHANGES.md §26): row 8 — header/sidebar extracted into reusable
+  `cmp_AppHeader` / `cmp_NavRail` components (in `src/Src/Component/`) and applied to all
+  10 screens, including the 4 detail screens that previously had no sidebar. The
+  header's search box is now the single search source (component `SearchText` output);
+  duplicated in-body search boxes and the stale `varHomeSearchTerm` were removed.
+- **Open**: row 10 (ALM via git + CSV source of truth).
   scr_Activities was rebuilt as a full Activities master-detail (CHANGES.md §12);
   `scr_Reports_1` was repurposed as the `scr_ApprovedReports` dashboard (§16);
   `MainScreen1` was retired (§20); the navigation audit (§22) wired every remaining
