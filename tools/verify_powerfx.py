@@ -551,6 +551,97 @@ def delegation_checks(clean, defined_cols):
 
 
 # ---------------------------------------------------------------------------
+# Component-root guard (import PA2108)
+# ---------------------------------------------------------------------------
+# The canvas component ROOT control only supports basic properties (Fill,
+# Height, Width, OnReset, ChildTabPriority, EnableChildFocus, ContentLanguage)
+# plus custom output values. Auto-layout properties (DropShadow, Layout*,
+# Padding*, Radius*) are NOT valid on the root and make Studio import fail
+# with PA2108 ("Unknown property ... for canvas component definition"). They
+# must live on a child GroupContainer instead. See CHANGES.md §30.
+COMPONENT_ROOT_INVALID_PROPS = [
+    "DropShadow",
+    "LayoutAlignItems",
+    "LayoutDirection",
+    "LayoutGap",
+    "LayoutJustifyContent",
+    "LayoutMode",
+    "LayoutOverflowX",
+    "LayoutOverflowY",
+    "LayoutWrap",
+    "PaddingBottom",
+    "PaddingLeft",
+    "PaddingRight",
+    "PaddingTop",
+    "RadiusBottomLeft",
+    "RadiusBottomRight",
+    "RadiusTopLeft",
+    "RadiusTopRight",
+]
+
+
+def component_root_props(path):
+    """Return the property names in a component definition's root Properties block.
+
+    Structure: ComponentDefinitions: <Name>: Properties: <props>  — the root
+    block is the first Properties: directly under the component name; its keys
+    sit exactly one indent deeper, and the block ends at the sibling Children:
+    key (same indent as Properties:).
+    """
+    with open(path, encoding="utf-8-sig") as f:
+        lines = f.read().split("\n")
+    props = []
+    props_indent = None   # indent of the root Properties: key
+    child_indent = None   # indent of the property keys inside that block
+    active = False
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        indent = len(line) - len(line.lstrip())
+        # skip list items (dash lines) — they start nested control blocks
+        if stripped.startswith("-"):
+            if active:
+                # a nested control under Children — stop collecting
+                active = False
+            continue
+        key = stripped.split(":")[0].strip()
+        if not active:
+            if key == "Properties" and props_indent is None:
+                props_indent = indent
+                child_indent = indent + 2
+                active = True
+            continue
+        if indent <= props_indent:
+            # back at or above the Properties: key — block ended
+            active = False
+            continue
+        if indent == child_indent:
+            m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*):", stripped)
+            if m:
+                props.append(m.group(1))
+    return props
+
+
+def check_component_roots(files):
+    """Return PA2108-style errors for invalid properties on component roots."""
+    errs = []
+    for path in files:
+        if not os.path.dirname(path).endswith("Component"):
+            continue
+        base = os.path.basename(path)
+        props = component_root_props(path)
+        bad = [p for p in props if p in COMPONENT_ROOT_INVALID_PROPS]
+        if bad:
+            errs.append(
+                f"[{base}] PA2108: auto-layout properties on the component ROOT are "
+                f"not valid and break Studio import: {sorted(bad)}. Move them onto "
+                f"a child GroupContainer (see CHANGES.md §30)."
+            )
+    return errs
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 def main():
@@ -659,6 +750,10 @@ def main():
                     if target not in controls_per_file[base] and target not in SCREENS \
                             and target != "Parent" and target != "Self":
                         WARNINGS.append(f"[{base}] {loc}.{prop}: Reset/Select target '{target}' not found in {base}")
+
+    # Component-root guard (import PA2108): auto-layout props on component roots
+    for e in check_component_roots(files):
+        ERRORS.append(e)
 
     # Cross-file duplicate control names (PA2110 on import — names are app-global)
     name_owner = {}   # control name -> list of files defining it

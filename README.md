@@ -10,7 +10,7 @@ and Roads (DPWR), North West Province.
 | Path | Purpose |
 |---|---|
 | `*.csv` | **Single source of truth** for the SharePoint list schemas and seed data (Directorates, APP_Users, MonthlyReports, Activities, Projects, Programmes) |
-| `APP-MRMS_Project_app.msapp` | Importable Power Apps package — **freshly repacked from `src/`** (the pristine original is in `backup/original-pack/`) |
+| `APP-MRMS_Project_app_v3_fixed.msapp` | **Current importable Power Apps package** — repacked from `src/` after the component-root fix (CHANGES.md §30). Older packs are kept as `*_v1_pristine.msapp` and `*_v2_components.msapp` (see Versioned packs below) |
 | `src/` | Unpacked msapp source (`pac canvas unpack`, `SourceCode` layout): `App.pa.yaml`, `_EditorState.pa.yaml`, one `.pa.yaml` per screen, and the `.msapr` resources archive |
 | `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation — **updated to match the CSV list schemas** (see CHANGES.md §4–5) |
 | `Project Instructions` | Working brief for the solution build |
@@ -29,10 +29,10 @@ outside Power Apps Studio.
 
 ```bash
 # Unpack
-pac canvas unpack --msapp APP-MRMS_Project_app.msapp --sources src --layout SourceCode
+pac canvas unpack --msapp APP-MRMS_Project_app_v3_fixed.msapp --sources src --layout SourceCode
 
-# Edit screen .pa.yaml files under src/Src, then repack
-pac canvas pack --sources src --msapp APP-MRMS_Project_app.msapp --layout SourceCode --overwrite
+# Edit screen .pa.yaml files under src/Src, then repack (to a NEW versioned name)
+pac canvas pack --sources src --msapp APP-MRMS_Project_app_vN_next.msapp --layout SourceCode --overwrite
 ```
 
 Round-trip is verified: pack → unpack yields byte-identical Src YAML and
@@ -44,6 +44,19 @@ full verification record.
 **Before making changes:** `backup/` holds pristine copies of the original
 `.msapp` and the unpacked source — restore from there if anything breaks.
 
+## Versioned packs
+
+Every pack is saved under a new name so multiple working versions coexist.
+
+| File | What it is | Status |
+|---|---|---|
+| `APP-MRMS_Project_app_v1_pristine.msapp` | Original pre-component pack (copy of `backup/original-pack/`) | ✅ imports clean |
+| `APP-MRMS_Project_app_v2_components.msapp` | First component build (header/sidebar as components) | ❌ **fails Studio import — PA2108** (root layout props, fixed in v3) |
+| `APP-MRMS_Project_app_v3_fixed.msapp` | Current build: schema-valid components + all fixes | ✅ verified pack→unpack byte-identical; import this one |
+
+Rule going forward: **never overwrite an existing pack** — `cp`/rename to the
+next `_vN_` name and record it in CHANGES.md.
+
 ## Importing the repacked app into Power Apps Studio (checklist)
 
 > Note: `pac` has **no import command** and no auth profile is required for the
@@ -52,7 +65,7 @@ full verification record.
 
 1. **Repack the latest source** (if you just edited `src/`):
    ```bash
-   pac canvas pack --sources src --msapp APP-MRMS_Project_app.msapp --layout SourceCode --overwrite
+   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v3_fixed.msapp --layout SourceCode --overwrite
    ```
 2. **Sanity-check the pack locally first** (catches breakage before Studio):
    ```bash
@@ -69,7 +82,7 @@ full verification record.
 3. **Open [make.powerapps.com](https://make.powerapps.com)** and sign in with an
    account that can create apps in the target environment (the one holding the
    SharePoint lists).
-4. **Apps → Import canvas app** (top toolbar) → upload `APP-MRMS_Project_app.msapp`
+4. **Apps → Import canvas app** (top toolbar) → upload `APP-MRMS_Project_app_v3_fixed.msapp`
    from the repo root.
 5. **Re-link the data sources if prompted** — the pack references SharePoint
    lists by name (Programmes, Projects, Activities, MonthlyReports, APP_Users,

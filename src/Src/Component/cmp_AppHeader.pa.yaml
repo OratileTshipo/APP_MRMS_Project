@@ -7,13 +7,23 @@
 #   - ShowBack    : show a back arrow that calls Back() (detail screens)
 #   - ShowSearch  : show the search box (screens with searchable galleries)
 #   - SearchHint  : placeholder text for the search box
+#   - Subtitle    : optional context line (falls back to directorate · programme)
 # Output:
 #   - SearchText  : current search box text (declarative — screens' gallery Items
 #                   formulas read this instead of Set()-on-OnChange variables)
 #
-# AccessAppScope: true — the component reads app-scope globals (varNavy, varBgLight,
-# varUserDirectorate, varUserProgramme). Custom input properties are referenced from
-# child controls as Parent.<PropName>.
+# Schema notes (import PA2108-safe):
+#   - The component ROOT control only supports basic properties (Fill, Height,
+#     Width, OnReset, …) plus custom output values. Auto-layout properties
+#     (LayoutDirection, LayoutGap, Padding*, Radius*, DropShadow) are NOT valid
+#     on the root — they live on the HeaderMain_con GroupContainer child below.
+#   - Custom properties are referenced from inside the component by the
+#     component's own name (cmp_AppHeader.PageTitle), which works at any
+#     nesting depth (Microsoft's documented pattern).
+#   - Parent.Width / Parent.Height refer to the immediate parent control only.
+#
+# AccessAppScope: true — the component reads app-scope globals (varNavy,
+# varBgLight, varUserDirectorate, varUserProgramme).
 ComponentDefinitions:
   cmp_AppHeader:
     DefinitionType: CanvasComponent
@@ -50,200 +60,210 @@ ComponentDefinitions:
         DataType: Text
         Description: "Current search box text — screens filter galleries on this."
     Properties:
-      # Output value: the search box text (declared above, computed here per schema)
+      # Root control: basic properties only + custom output values (schema-valid).
+      # Output value: the search box text (declared above, computed here per schema).
       SearchText: =HeaderSearchInput_txt.Text
-      DropShadow: =DropShadow.Semilight
       Fill: =varNavy
-      FillPortions: =0
       Height: =App.Height * 0.13
-      LayoutAlignItems: =LayoutAlignItems.Center
-      LayoutDirection: =LayoutDirection.Horizontal
-      LayoutGap: =20
-      PaddingBottom: =8
-      PaddingLeft: =8
-      PaddingRight: =8
-      PaddingTop: =8
-      RadiusBottomLeft: =0
-      RadiusBottomRight: =0
-      RadiusTopLeft: =0
-      RadiusTopRight: =0
       Width: =App.Width * 0.95
     Children:
-      - HeaderBack_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =RGBA(255, 255, 255, 1)
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height * 0.5
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(255, 255, 255, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.ArrowLeft
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Back()
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(255, 255, 255, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Go back"
-            Visible: =Parent.ShowBack
-            Width: =Parent.Width * 0.04
-      - HeaderTitles_con:
+      - HeaderMain_con:
           Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
-            FillPortions: =0
-            Height: =Parent.Height
-            LayoutDirection: =LayoutDirection.Vertical
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            Width: =Parent.Width * 0.55
-          Children:
-            - HeaderTitle_lbl:
-                Control: Label@2.5.1
-                Properties:
-                  AlignInContainer: =AlignInContainer.Stretch
-                  BorderColor: =RGBA(0, 0, 0, 0)
-                  BorderStyle: =BorderStyle.None
-                  BorderThickness: =2
-                  Color: =RGBA(255, 255, 255, 1)
-                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                  DisabledColor: =RGBA(161, 159, 157, 1)
-                  FocusedBorderThickness: =4
-                  Font: =Font.'Segoe UI'
-                  FontWeight: =FontWeight.Bold
-                  Height: =Parent.Height * 0.5
-                  LayoutMinHeight: =16
-                  LayoutMinWidth: =16
-                  Size: =25
-                  Text: =Parent.PageTitle
-            - HeaderSubtitle_lbl:
-                Control: Label@2.5.1
-                Properties:
-                  AlignInContainer: =AlignInContainer.Stretch
-                  AutoHeight: =true
-                  BorderColor: =RGBA(0, 0, 0, 0)
-                  BorderStyle: =BorderStyle.None
-                  BorderThickness: =2
-                  Color: =RGBA(255, 255, 255, 1)
-                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                  DisabledColor: =RGBA(161, 159, 157, 1)
-                  FocusedBorderThickness: =4
-                  Font: =Font.'Segoe UI'
-                  Height: =Parent.Height * 0.5
-                  Size: =12
-                  Text: =If(IsBlank(Parent.Subtitle), varUserDirectorate & " · " & varUserProgramme, Parent.Subtitle)
-                  X: =40
-                  Y: =40
-      - HeaderActions_con:
-          Control: GroupContainer@1.5.0
-          Variant: AutoLayout
-          Properties:
+            # Auto-layout lives on this container, not the component root.
+            DropShadow: =DropShadow.Semilight
             Height: =Parent.Height
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutDirection: =LayoutDirection.Horizontal
             LayoutGap: =20
-            LayoutJustifyContent: =LayoutJustifyContent.End
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
             PaddingBottom: =8
             PaddingLeft: =8
             PaddingRight: =8
             PaddingTop: =8
-            Width: =Parent.Width / 3
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+            X: =0
+            Y: =0
           Children:
-            - HeaderSearch_con:
+            - HeaderBack_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height * 0.5
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.ArrowLeft
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Back()
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(255, 255, 255, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Go back"
+                  Visible: =cmp_AppHeader.ShowBack
+                  Width: =Parent.Width * 0.04
+            - HeaderTitles_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
-                  AlignInContainer: =AlignInContainer.Center
-                  Fill: =varBgLight
-                  Height: =Parent.Height * 0.65
+                  FillPortions: =0
+                  Height: =Parent.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Width: =Parent.Width * 0.55
+                Children:
+                  - HeaderTitle_lbl:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(161, 159, 157, 1)
+                        FocusedBorderThickness: =4
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.Height * 0.5
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =25
+                        Text: =cmp_AppHeader.PageTitle
+                  - HeaderSubtitle_lbl:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(161, 159, 157, 1)
+                        FocusedBorderThickness: =4
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.Height * 0.5
+                        Size: =12
+                        Text: =If(IsBlank(cmp_AppHeader.Subtitle), varUserDirectorate & " · " & varUserProgramme, cmp_AppHeader.Subtitle)
+                        X: =40
+                        Y: =40
+            - HeaderActions_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Height: =Parent.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =20
+                  LayoutJustifyContent: =LayoutJustifyContent.End
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
                   PaddingBottom: =8
-                  PaddingLeft: =10
+                  PaddingLeft: =8
                   PaddingRight: =8
                   PaddingTop: =8
-                  RadiusBottomLeft: =8
-                  RadiusBottomRight: =8
-                  RadiusTopLeft: =8
-                  RadiusTopRight: =8
-                  Visible: =Parent.ShowSearch
-                  Width: =Parent.Width - 50
+                  Width: =Parent.Width / 3
                 Children:
-                  - HeaderSearch_ico:
+                  - HeaderSearch_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        Fill: =varBgLight
+                        Height: =Parent.Height * 0.65
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =10
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Visible: =cmp_AppHeader.ShowSearch
+                        Width: =Parent.Width - 50
+                      Children:
+                        - HeaderSearch_ico:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(153, 153, 153, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height * 0.65
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Search
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width * 0.08
+                        - HeaderSearchInput_txt:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              BorderColor: =RGBA(245, 245, 245, 1)
+                              BorderThickness: =0
+                              Clear: =true
+                              Color: =RGBA(50, 49, 48, 1)
+                              Default: =
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              DisabledFill: =RGBA(242, 242, 241, 0)
+                              Fill: =varBgLight
+                              Font: =Font.'Segoe UI'
+                              Height: =Parent.Height * 0.65
+                              HintText: =cmp_AppHeader.SearchHint
+                              HoverBorderColor: =RGBA(16, 110, 190, 1)
+                              HoverColor: =RGBA(50, 49, 48, 1)
+                              HoverFill: =RGBA(255, 255, 255, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 120, 212, 1)
+                              PressedColor: =RGBA(50, 49, 48, 1)
+                              PressedFill: =RGBA(255, 255, 255, 1)
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Size: =15
+                              Width: =Parent.Width - HeaderSearch_ico.Width - 25
+                  - HeaderBell_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         BorderColor: =RGBA(0, 0, 0, 0)
-                        Color: =RGBA(153, 153, 153, 1)
+                        Color: =RGBA(0, 120, 212, 1)
                         DisabledBorderColor: =RGBA(245, 245, 245, 1)
                         DisabledColor: =RGBA(225, 223, 221, 1)
                         DisabledFill: =RGBA(0, 0, 0, 0)
                         FocusedBorderThickness: =4
-                        Height: =Parent.Height * 0.65
+                        Height: =Parent.Height * 0.4
                         HoverBorderColor: =RGBA(0, 0, 0, 0)
                         HoverColor: =RGBA(16, 110, 190, 1)
                         HoverFill: =RGBA(0, 0, 0, 0)
-                        Icon: =Icon.Search
+                        Icon: =Icon.Bell
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
-                        Width: =Parent.Width * 0.08
-                  - HeaderSearchInput_txt:
-                      Control: Classic/TextInput@2.3.2
-                      Properties:
-                        BorderColor: =RGBA(245, 245, 245, 1)
-                        BorderThickness: =0
-                        Clear: =true
-                        Color: =RGBA(50, 49, 48, 1)
-                        Default: =
-                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                        DisabledColor: =RGBA(161, 159, 157, 1)
-                        DisabledFill: =RGBA(242, 242, 241, 0)
-                        Fill: =varBgLight
-                        Font: =Font.'Segoe UI'
-                        Height: =Parent.Height * 0.65
-                        HintText: =Parent.SearchHint
-                        HoverBorderColor: =RGBA(16, 110, 190, 1)
-                        HoverColor: =RGBA(50, 49, 48, 1)
-                        HoverFill: =RGBA(255, 255, 255, 1)
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        PressedBorderColor: =RGBA(0, 120, 212, 1)
-                        PressedColor: =RGBA(50, 49, 48, 1)
-                        PressedFill: =RGBA(255, 255, 255, 1)
-                        RadiusBottomLeft: =0
-                        RadiusBottomRight: =0
-                        RadiusTopLeft: =0
-                        RadiusTopRight: =0
-                        Size: =15
-                        Width: =Parent.Width - HeaderSearch_ico.Width - 25
-            - HeaderBell_ico:
-                Control: Classic/Icon@2.5.0
-                Properties:
-                  BorderColor: =RGBA(0, 0, 0, 0)
-                  Color: =RGBA(0, 120, 212, 1)
-                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                  DisabledColor: =RGBA(225, 223, 221, 1)
-                  DisabledFill: =RGBA(0, 0, 0, 0)
-                  FocusedBorderThickness: =4
-                  Height: =Parent.Height * 0.4
-                  HoverBorderColor: =RGBA(0, 0, 0, 0)
-                  HoverColor: =RGBA(16, 110, 190, 1)
-                  HoverFill: =RGBA(0, 0, 0, 0)
-                  Icon: =Icon.Bell
-                  LayoutMinHeight: =16
-                  LayoutMinWidth: =16
-                  PressedBorderColor: =RGBA(0, 0, 0, 0)
-                  PressedColor: =RGBA(16, 110, 190, 1)
-                  PressedFill: =RGBA(0, 0, 0, 0)
-                  Width: =Parent.Width / 15
+                        Width: =Parent.Width / 15

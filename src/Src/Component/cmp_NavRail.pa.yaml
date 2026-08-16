@@ -5,6 +5,16 @@
 # driven by the ActiveScreen input (pass the current screen's name, e.g. "scr_Home").
 # Navigation targets are fixed app-wide; the three footer icons (Trending/Settings/
 # Support) stay decorative, matching the original app.
+#
+# Schema notes (import PA2108-safe):
+#   - The component ROOT control only supports basic properties (Fill, Height,
+#     Width, …). Auto-layout properties (LayoutDirection, LayoutGap, Padding*,
+#     DropShadow) are NOT valid on the root — they live on the NavMain_con
+#     GroupContainer child below.
+#   - Custom properties are referenced from inside the component by the
+#     component's own name (cmp_NavRail.ActiveScreen), which works at any
+#     nesting depth (Microsoft's documented pattern).
+#   - Parent.Width / Parent.Height refer to the immediate parent control only.
 ComponentDefinitions:
   cmp_NavRail:
     DefinitionType: CanvasComponent
@@ -17,235 +27,243 @@ ComponentDefinitions:
         Description: "Name of the current screen (scr_Home, scr_Projects, ...) — drives the active icon highlight."
         Default: ="scr_Home"
     Properties:
-      DropShadow: =DropShadow.None
+      # Root control: basic properties only (schema-valid).
       Fill: =varBgLight
-      FillPortions: =0
       Height: =App.Height
-      LayoutAlignItems: =LayoutAlignItems.Center
-      LayoutDirection: =LayoutDirection.Vertical
-      LayoutGap: =30
-      LayoutMinHeight: =16
-      LayoutMinWidth: =16
-      PaddingBottom: =20
-      PaddingLeft: =10
-      PaddingRight: =10
-      PaddingTop: =20
       Width: =App.Width * 0.05
     Children:
-      - NavHome_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Home"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_Home", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.Home
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Home"
-            Width: =Parent.Width - 20
-      - NavProjects_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Projects"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_Projects", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.Manufacture
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Projects"
-            Width: =Parent.Width - 20
-      - NavActivities_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Activities"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_Activities", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.RadarActivityMonitor
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Activities"
-            Width: =Parent.Width - 20
-      - NavMonthlyReports_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Monthly Reports"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_ReportActivities", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.CalendarBlank
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Monthly Reports"
-            Width: =Parent.Width - 20
-      - NavMyActivities_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="My Activities"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_MyActivities", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.ListWatchlistRemind
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="My Activities"
-            Width: =Parent.Width - 20
-      - NavTrending_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Trending"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =RGBA(0, 120, 212, 1)
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.Trending
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Trending"
-            Width: =Parent.Width - 20
-      - NavUsers_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Users"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =If(Parent.ActiveScreen = "scr_Users", varNavy, RGBA(0, 120, 212, 1))
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.People
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Users"
-            Width: =Parent.Width - 20
-      - NavRailSpacer_con:
+      - NavMain_con:
           Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
+            # Auto-layout lives on this container, not the component root.
             DropShadow: =DropShadow.None
+            Height: =Parent.Height
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutDirection: =LayoutDirection.Vertical
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            PaddingBottom: =8
-            PaddingLeft: =8
-            PaddingRight: =8
-            PaddingTop: =8
-      - NavSettings_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Settings"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =RGBA(0, 120, 212, 1)
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.Settings
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Settings"
-            Width: =Parent.Width - 20
-      - NavSupport_ico:
-          Control: Classic/Icon@2.5.0
-          Properties:
-            AccessibleLabel: ="Support"
-            BorderColor: =RGBA(0, 0, 0, 0)
-            Color: =RGBA(0, 120, 212, 1)
-            DisabledBorderColor: =RGBA(245, 245, 245, 1)
-            DisabledColor: =RGBA(225, 223, 221, 1)
-            DisabledFill: =RGBA(0, 0, 0, 0)
-            FocusedBorderThickness: =4
-            Height: =Parent.Height / 20
-            HoverBorderColor: =RGBA(0, 0, 0, 0)
-            HoverColor: =RGBA(16, 110, 190, 1)
-            HoverFill: =RGBA(0, 0, 0, 0)
-            Icon: =Icon.Support
-            LayoutMinHeight: =16
-            LayoutMinWidth: =16
-            PressedBorderColor: =RGBA(0, 0, 0, 0)
-            PressedColor: =RGBA(16, 110, 190, 1)
-            PressedFill: =RGBA(0, 0, 0, 0)
-            Tooltip: ="Support"
-            Width: =Parent.Width - 20
+            LayoutGap: =30
+            PaddingBottom: =20
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =20
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+          Children:
+            - NavHome_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Home"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_Home", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.Home
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Home"
+                  Width: =Parent.Width - 20
+            - NavProjects_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Projects"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_Projects", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.Manufacture
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Projects"
+                  Width: =Parent.Width - 20
+            - NavActivities_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Activities"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_Activities", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.RadarActivityMonitor
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Activities"
+                  Width: =Parent.Width - 20
+            - NavMonthlyReports_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Monthly Reports"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_ReportActivities", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.CalendarBlank
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Monthly Reports"
+                  Width: =Parent.Width - 20
+            - NavMyActivities_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="My Activities"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_MyActivities", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.ListWatchlistRemind
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="My Activities"
+                  Width: =Parent.Width - 20
+            - NavTrending_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Trending"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(0, 120, 212, 1)
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.Trending
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Trending"
+                  Width: =Parent.Width - 20
+            - NavUsers_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Users"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =If(cmp_NavRail.ActiveScreen = "scr_Users", varNavy, RGBA(0, 120, 212, 1))
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.People
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Users"
+                  Width: =Parent.Width - 20
+            - NavRailSpacer_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =8
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =8
+            - NavSettings_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Settings"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(0, 120, 212, 1)
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.Settings
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Settings"
+                  Width: =Parent.Width - 20
+            - NavSupport_ico:
+                Control: Classic/Icon@2.5.0
+                Properties:
+                  AccessibleLabel: ="Support"
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(0, 120, 212, 1)
+                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                  DisabledColor: =RGBA(225, 223, 221, 1)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =Parent.Height / 20
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverColor: =RGBA(16, 110, 190, 1)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Icon: =Icon.Support
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedColor: =RGBA(16, 110, 190, 1)
+                  PressedFill: =RGBA(0, 0, 0, 0)
+                  Tooltip: ="Support"
+                  Width: =Parent.Width - 20

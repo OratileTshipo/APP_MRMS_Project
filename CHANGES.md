@@ -935,3 +935,50 @@ and fixed the two genuine non-delegable spots the new guard surfaced.
   ...))` is caught under `--strict` (exit 1) and tolerated as a warning
   otherwise; real repo is clean under `--strict` (8747 formulas, 0 errors,
   0 warnings). Importable msapp repacked with the scr_Users fix.
+
+## 30. Fixed Studio import failure (PA2108) on the reusable components —
+      layout props moved off the component root; versioned msapp packs
+
+**Failure (from `import_errors_components`):** the repacked app failed to
+import in Power Apps Studio with 20 × `PA2108 : Unknown property '<prop>' for
+canvas component definition` — `DropShadow`, `LayoutAlignItems`,
+`LayoutDirection`, `LayoutGap`, `Padding*`, `Radius*` on the **component
+root** of `cmp_AppHeader` / `cmp_NavRail`. `pac canvas pack` validates YAML
+structure only, so the round trip was byte-identical while Studio still
+rejected the schema-invalid root properties.
+
+**Root cause (confirmed against the official schema + Microsoft's own
+test fixtures):**
+- The canvas component **root control** only supports a closed set of basic
+  properties (`Fill`, `Height`, `Width`, `OnReset`, `ChildTabPriority`,
+  `EnableChildFocus`, `ContentLanguage`) plus custom output values —
+  *no* auto-layout properties (schema: `pa.schema.yaml` v3.0
+  `ComponentDefinition-instance` → `Properties`).
+- Auto-layout properties must live on a **child GroupContainer**.
+- Custom properties are referenced from inside a component by the
+  **component's own name** (`cmp_AppHeader.PageTitle`), which resolves at any
+  nesting depth — `Parent.X` only refers to the immediate parent control
+  (Microsoft's `MyHeaderComponent.pa.yaml` fixture + component-properties docs).
+
+**Fix:**
+- `cmp_AppHeader.pa.yaml` / `cmp_NavRail.pa.yaml` rewritten: root `Properties:`
+  now holds only the schema-valid basics (`Fill`, `Height`, `Width`, and the
+  `SearchText` output value); all auto-layout properties moved onto a new
+  full-size child container (`HeaderMain_con` / `NavMain_con`); every
+  `Parent.<CustomProp>` reference replaced with the component-name form.
+- **Verifier regression guard added** (`tools/verify_powerfx.py`,
+  `check_component_roots`): any auto-layout property on a component root is
+  now a hard error (PA2108 would fail Studio import). Negative-tested with an
+  injected `DropShadow` on the root — caught. CI runs `--strict`, so this
+  fails the build too.
+- **Versioned msapp packs** (per request: keep multiple working versions):
+  - `APP-MRMS_Project_app_v1_pristine.msapp` — the original pre-component pack
+    (copy of `backup/original-pack/`), known-good import.
+  - `APP-MRMS_Project_app_v2_components.msapp` — the previous build that
+    **failed** Studio import (PA2108), kept for comparison.
+  - `APP-MRMS_Project_app_v3_fixed.msapp` — **this fix**; verified
+    `pack → unpack` byte-identical, `Component/` folder included, valid zip.
+
+**Verification:** verifier `--strict` 8751 formulas, 0 errors; round trip
+byte-identical; v3 unpacks to the exact `src/Src` tree including both
+components.
