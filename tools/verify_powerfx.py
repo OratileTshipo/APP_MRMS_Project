@@ -11,6 +11,9 @@ the Power Fx formulas themselves as far as possible without Studio:
   5. Control names: uniqueness per screen, referenced controls exist (Reset/Select)
   6. Patch() record keys checked against the CSV schemas + DataSources.json
   7. _EditorState screens vs actual screen files
+  8. Delegation guard: non-delegable patterns over raw SharePoint lists
+     (aggregates, N+1 ForAll, Not()/string casts/'in' on related columns in
+     Filter/LookUp/Sort) — reported as WARNINGS, or ERRORS under --strict
 
 Exit code 0 = no errors (warnings are reported but tolerated).
 Usage: python3 tools/verify_powerfx.py [--strict]
@@ -61,6 +64,29 @@ Programmes Projects Activities MonthlyReports APP_Users Directorates
 KPIDefinitions Notifications AuditLog ReportComments EvidenceLibrary
 Office365Users CustomGallerySample ComboBoxSample
 """.split())
+
+# SharePoint (the app's back end) does not delegate aggregate functions, so
+# CountRows/CountIf/Sum/... over a raw list is capped at the 500/2000-row
+# local limit (see reference/canvas-apps/troubleshooting-guide.md Part 4 §4.6).
+NON_DELEGABLE_AGGREGATES = [
+    "CountRows", "CountIf", "CountA", "CountUnique", "Count",
+    "Sum", "Average", "Min", "Max", "StdevP", "Stdev", "VarP", "Var",
+]
+
+# Functions that delegate for SharePoint but only when their predicate uses
+# delegable operators. Anything else inside the predicate forces local
+# evaluation (500/2000-row cap).
+DELEGABLE_QUERY_FUNCS = ["Filter", "LookUp", "First", "FirstN", "Sort", "SortByColumns"]
+
+# Function calls inside a query predicate that are never delegable (they must
+# run locally on every row).
+NON_DELEGABLE_PREDICATE_FUNCS = [
+    "Lower", "Upper", "Mid", "Left", "Right", "Len", "Trim", "TrimEnds",
+    "Text", "Value", "Concatenate", "Find", "IsMatch", "Match",
+]
+
+# Aggregates applied inside a query argument are also non-delegable.
+NON_DELEGABLE_INSIDE_QUERY = ["FirstN", "Last", "LastN", "GroupBy", "Ungroup", "Concat"]
 
 SCREENS = set()
 FORMULA_FILES = []          # (path, name)
@@ -128,7 +154,14 @@ def extract_formulas(path):
             # quoted formula  "=..." or '=...'
             elif (rest.startswith('"') and rest.endswith('"') and rest[1:2] == "=") or \
                  (rest.startswith("'") and rest.endswith("'") and rest[1:2] == "="):
-                body = rest[2:-1].replace('""', '"')
+                if rest.startswith('"'):
+                    # YAML double-quoted scalar: \r\n, \", \\, \uXXXX are escapes.
+                    # Unescape so //-comments and balance checks see real newlines
+                    # (Studio writes multi-line formulas as one escaped line, which
+                    # previously hid them from every check after the first //).
+                    body = _unescape_yaml_dq(rest[2:-1])
+                else:
+                    body = rest[2:-1].replace("''", "'")
                 formulas.append((list(control_path), key, "=" + body))
             # block scalar
             elif re.match(r"^\|[-+]?\d*$", rest):
@@ -152,6 +185,62 @@ def extract_formulas(path):
                 i = j - 1
         i += 1
     return formulas
+
+
+# ---------------------------------------------------------------------------
+# YAML double-quoted scalar unescaping
+# ---------------------------------------------------------------------------
+def _unescape_yaml_dq(s):
+    """Unescape a YAML double-quoted scalar body (no surrounding quotes).
+
+    Handles \\n, \\r, \\t, \\", \\\\ and \\uXXXX; anything else is kept
+    literally (e.g. \\x is left as-is rather than guessed at).
+    """
+    out = []
+    i = 0
+    n = len(s)
+    while i < n:
+        c = s[i]
+        if c == "\\" and i + 1 < n:
+            nxt = s[i + 1]
+            if nxt == "n":
+                out.append("\n")
+                i += 2
+                continue
+            if nxt == "r":
+                out.append("\r")
+                i += 2
+                continue
+            if nxt == "t":
+                out.append("\t")
+                i += 2
+                continue
+            if nxt == '"':
+                out.append('"')
+                i += 2
+                continue
+            if nxt == "\\":
+                out.append("\\")
+                i += 2
+                continue
+            if nxt == "0":
+                out.append("\0")
+                i += 2
+                continue
+            if nxt == "u" and i + 5 < n:
+                try:
+                    out.append(chr(int(s[i + 2:i + 6], 16)))
+                    i += 6
+                    continue
+                except ValueError:
+                    pass
+            # unknown escape — keep the backslash literally
+            out.append(c)
+            i += 1
+            continue
+        out.append(c)
+        i += 1
+    return "".join(out)
 
 
 # ---------------------------------------------------------------------------
@@ -348,6 +437,120 @@ def datasource_columns():
 
 
 # ---------------------------------------------------------------------------
+# Delegation guard
+# ---------------------------------------------------------------------------
+def _matching_arg_block(text, start):
+    """Return the text between the paren at index `start` and its matching close."""
+    depth = 0
+    i = start
+    while i < len(text):
+        c = text[i]
+        if c == "(":
+            depth += 1
+        elif c == ")":
+            depth -= 1
+            if depth == 0:
+                return text[start + 1:i]
+        i += 1
+    return text[start + 1:]
+
+
+def _is_raw_list(name, defined_cols):
+    """True if `name` is a data source that is NOT redefined as a local collection."""
+    return name in DATA_SOURCES and name not in defined_cols
+
+
+def delegation_checks(clean, defined_cols):
+    """
+    Return a list of delegation warnings for one formula (strings/comments
+    already blanked). Only raw SharePoint list references are considered;
+    local collections and variables are already in memory and exempt.
+    """
+    out = []
+
+    # 1. Aggregates over a raw list (CountRows/CountIf/Sum/Average/...) —
+    #    SharePoint has no delegable aggregate, so results cap at 500/2000 rows.
+    #    Handles both CountRows(Activities) and CountRows(Filter(Activities, ...)).
+    for m in re.finditer(
+        r"\b(" + "|".join(NON_DELEGABLE_AGGREGATES) + r")\s*\(", clean,
+    ):
+        args = _matching_arg_block(clean, m.end() - 1)
+        target = None
+        fm = re.match(r"\s*([A-Za-z_][A-Za-z0-9_]*)", args)
+        if fm and _is_raw_list(fm.group(1), defined_cols):
+            target = fm.group(1)
+        else:
+            # wrapped: CountRows(Filter(List, ...))
+            wm = re.match(
+                r"\s*(?:Filter|LookUp)\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)", args
+            )
+            if wm and _is_raw_list(wm.group(1), defined_cols):
+                target = wm.group(1)
+        if target:
+            out.append(
+                f"{m.group(1)}() over '{target}' is not delegable on a SharePoint "
+                f"list (500/2000-row cap) — pre-collect {target} into a local "
+                f"collection first, or use a delegable LookUp for existence checks"
+            )
+
+    # 2. N+1 anti-pattern: ForAll over a raw list whose body queries another
+    #    raw list per row (one server round trip per row).
+    for m in re.finditer(r"\bForAll\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)", clean):
+        if not _is_raw_list(m.group(1), defined_cols):
+            continue
+        body = _matching_arg_block(clean, clean.index("(", m.start()))
+        for fm in re.finditer(
+            r"\b(Filter|LookUp)\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)", body
+        ):
+            if _is_raw_list(fm.group(2), defined_cols):
+                out.append(
+                    f"ForAll over '{m.group(1)}' queries '{fm.group(2)}' per row "
+                    f"(N+1 round trips) — pre-collect '{fm.group(2)}' once and "
+                    f"filter the local collection instead"
+                )
+                break
+
+    # 3. Non-delegable constructs inside a query over a raw list:
+    #    Not(), string/cast functions, 'in' on a related column, and
+    #    non-delegable sub-queries (FirstN/Last/LastN/GroupBy/Ungroup/Concat).
+    for m in re.finditer(
+        r"\b(" + "|".join(DELEGABLE_QUERY_FUNCS) + r")\s*\(\s*([A-Za-z_][A-Za-z0-9_]*)",
+        clean,
+    ):
+        if not _is_raw_list(m.group(2), defined_cols):
+            continue
+        fn = m.group(1)
+        args = _matching_arg_block(clean, clean.index("(", m.start()))
+        if re.search(r"\bNot\s*\(", args):
+            out.append(f"Not() inside {fn}({m.group(2)}) is not delegable")
+        if re.search(r"[A-Za-z_][A-Za-z0-9_']*\.[A-Za-z_][A-Za-z0-9_']*\s+in\s+", args):
+            out.append(
+                f"'in' on a related column inside {fn}({m.group(2)}) is not delegable"
+            )
+        pm = re.search(
+            r"\b(" + "|".join(NON_DELEGABLE_PREDICATE_FUNCS) + r")\s*\(", args
+        )
+        if pm:
+            out.append(
+                f"{pm.group(1)}() inside {fn}({m.group(2)}) predicate is not "
+                f"delegable — filter into a local collection first"
+            )
+        qm = re.search(
+            r"\b(" + "|".join(NON_DELEGABLE_INSIDE_QUERY) + r")\s*\(", args
+        )
+        if qm:
+            out.append(
+                f"{qm.group(1)}() inside {fn}({m.group(2)}) is not delegable"
+            )
+        if fn in ("Sort", "SortByColumns") and re.search(
+            r"[A-Za-z_][A-Za-z0-9_']*\.[A-Za-z_][A-Za-z0-9_']*", args
+        ):
+            out.append(f"{fn}({m.group(2)}) sorts on a related column — not delegable")
+
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 def main():
@@ -508,6 +711,25 @@ def main():
     # formula count + balance summary
     bad = [f for f in all_formulas if not scan_formula(f[3])[0]]
     INFOS.append(f"Formulas checked: {len(all_formulas)} across {len(files)} files; {len(bad)} unbalanced")
+
+    # ------------------------------------------------------------------
+    # Delegation guard (pass 3 — needs the full set of defined collections)
+    # Non-delegable patterns over raw SharePoint lists are capped at the
+    # 500/2000-row limit, so they're correctness bugs once a list grows.
+    # ------------------------------------------------------------------
+    delegation_warnings = []
+    for base, cpath, prop, formula in all_formulas:
+        loc = ".".join(c for c, _ in cpath) or base
+        clean = strip_strings_and_comments(formula)
+        for w in delegation_checks(clean, defined_cols):
+            delegation_warnings.append(f"[{base}] {loc}.{prop}: {w}")
+
+    # aggregate functions over a raw list are not delegable
+    for w in sorted(set(delegation_warnings)):
+        if STRICT:
+            ERRORS.append("DELEGATION: " + w)
+        else:
+            WARNINGS.append("DELEGATION: " + w)
 
     # patch keys vs CSV/DataSources
     ds_cols = datasource_columns()

@@ -26,5 +26,5 @@ jobs:
       - name: Screen registry check (src/Src vs _EditorState)
         run: python3 tools/check_screen_registry.py
 
-      - name: Power Fx static verification
-        run: python3 tools/verify_powerfx.py
+      - name: Power Fx static verification (strict — delegation findings fail)
+        run: python3 tools/verify_powerfx.py --strict

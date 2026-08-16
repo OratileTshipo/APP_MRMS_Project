@@ -903,3 +903,35 @@ actual app source before re-import:
 - Verification after the fix: YAML/verifier/registry all clean, `pac canvas
   pack` → `unpack` round trip **byte-identical**, importable
   `APP-MRMS_Project_app.msapp` repacked with the fix.
+
+## 29. Delegation guard in the verifier + CI, and the two non-delegable
+      `CountRows(Filter(APP_Users, ...))` checks fixed (scr_Users)
+
+Follow-up to §28: made the audit's delegation findings a permanent CI check
+and fixed the two genuine non-delegable spots the new guard surfaced.
+
+- **`tools/verify_powerfx.py` — delegation guard (pass 3).** Flags four
+  non-delegable patterns over raw SharePoint lists (aggregates like
+  `CountRows`/`CountIf`/`Sum` over a raw list or a wrapped `Filter`,
+  N+1 `ForAll` loops that query another raw list per row, `Not()` / string-
+  cast functions / `'in'` on related columns inside `Filter`/`LookUp`/`Sort`
+  predicates, and non-delegable sub-queries like `FirstN`/`Last`/`GroupBy`
+  inside a query). Reported as warnings by default; **errors under
+  `--strict`**. Local collections are exempt (already in memory).
+- **Verifier blind spot fixed.** Quoted multi-line formulas store newlines as
+  literal `\r\n` escape sequences, so `//`-comment handling blanked everything
+  after the first `//` to the (nonexistent) end of line — those formulas were
+  invisible to every check. `extract_formulas` now properly unescapes YAML
+  double-quoted scalars (`\n`, `\r`, `\t`, `\"`, `\\`, `\uXXXX`) before
+  scanning.
+- **CI (`ci.yml`)**: the static-verification step now runs with `--strict`,
+  so any new delegation hazard fails the build.
+- **FIXED — scr_Users (2 spots):** `CountRows(Filter(APP_Users,
+  UserAccount.Email = ...)) > 0` is not delegable on a SharePoint list
+  (500/2000-row cap) — replaced with the delegable existence check
+  `Not(IsBlank(LookUp(APP_Users, UserAccount.Email = ...)))` in both
+  `cmb_RegEmail.OnChange` and `RegSubmit_btn.OnSelect`.
+- Guard negative-tested: an injected `ForAll(Activities, Filter(MonthlyReports,
+  ...))` is caught under `--strict` (exit 1) and tolerated as a warning
+  otherwise; real repo is clean under `--strict` (8747 formulas, 0 errors,
+  0 warnings). Importable msapp repacked with the scr_Users fix.
