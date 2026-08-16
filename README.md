@@ -42,6 +42,49 @@ full verification record.
 **Before making changes:** `backup/` holds pristine copies of the original
 `.msapp` and the unpacked source — restore from there if anything breaks.
 
+## Importing the repacked app into Power Apps Studio (checklist)
+
+> Note: `pac` has **no import command** and no auth profile is required for the
+> browser flow — importing a canvas app is done in make.powerapps.com. The
+> checklist below is the reproducible path.
+
+1. **Repack the latest source** (if you just edited `src/`):
+   ```bash
+   pac canvas pack --sources src --msapp APP-MRMS_Project_app.msapp --layout SourceCode --overwrite
+   ```
+2. **Sanity-check the pack locally first** (catches breakage before Studio):
+   ```bash
+   python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
+   python3 tools/verify_powerfx.py          # formula balance, nav targets, patch keys
+   ```
+3. **Open [make.powerapps.com](https://make.powerapps.com)** and sign in with an
+   account that can create apps in the target environment (the one holding the
+   SharePoint lists).
+4. **Apps → Import canvas app** (top toolbar) → upload `APP-MRMS_Project_app.msapp`
+   from the repo root.
+5. **Re-link the data sources if prompted** — the pack references SharePoint
+   lists by name (Programmes, Projects, Activities, MonthlyReports, APP_Users,
+   Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments,
+   EvidenceLibrary). Confirm each connection resolves in the target environment.
+6. **Open the imported app once for edit** (it loads from embedded YAML) and let
+   it finish parsing — this is the real Studio-side validation step.
+7. **Spot-check the screens that changed most recently:**
+   - `scr_Reports` → resize the preview window; on small/phone width the sidebar
+     should collapse and the back button should appear (uses `App.Size`).
+   - `scr_ReportActivities` → select an activity and confirm an existing report
+     for the current FY/month loads in the detail pane (Edit mode), or a fresh
+     form opens (New mode) when none exists.
+   - `scr_ApprovedReports` → drill into a report and confirm the back button
+     returns to the dashboard.
+   - Sidebar rail on any screen → every icon should navigate (Home, Projects,
+     Activities, My Activities, Monthly Reports, Users).
+8. **Save once in Studio** (File → Save / Save as) so the app is persisted in the
+   environment, not just imported from the file.
+
+**If the import fails:** the msapp was likely packed from an inconsistent source
+state — re-run step 2, fix any reported errors, repack (step 1), and retry.
+Keep the pristine original in `backup/` untouched as the fallback.
+
 ## SharePoint list schemas (from CSV exports — source of truth)
 
 ### Directorates.csv

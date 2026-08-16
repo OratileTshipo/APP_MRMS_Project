@@ -680,3 +680,17 @@ rail footer (dead on every screen — candidates for removal or wiring in Phase 
 Verified: `tools/verify_powerfx.py` (10,549 formulas, 0 warnings, 0 errors),
 registry check clean, pack→unpack round trip byte-identical, top-level
 `APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.
+
+## 23. Studio import checklist (README)
+
+- **Context**: importing the repacked msapp cannot be scripted from this machine —
+  `pac` has no canvas import command (verbs are download/list/pack/unpack/validate/create,
+  and `validate` is retired in 2.11.2), and no auth profile is set up. Canvas app
+  import is a browser flow in make.powerapps.com.
+- **Added** a reproducible **Studio import checklist** to README §Workflow: repack →
+  local sanity checks (`check_screen_registry.py` + `verify_powerfx.py`) → import in
+  make.powerapps.com → re-link SharePoint data sources → open once for edit →
+  spot-check the recently changed screens (scr_Reports `App.Size` responsive
+  behavior, scr_ReportActivities edit-mode reload, scr_ApprovedReports back,
+  sidebar rail navigation) → save in Studio. Includes failure-recovery guidance
+  (fix verifier errors, repack, retry; pristine `backup/` as fallback).
