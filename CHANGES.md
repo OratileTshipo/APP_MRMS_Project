@@ -527,3 +527,35 @@ trip byte-identical.
 - Verified: `tools/verify_powerfx.py` (10,543 formulas across 14 files, 0 errors),
   pack→unpack round trip byte-identical, all Navigate targets resolve.
   Top-level `APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.
+
+## 18. CSV data normalization (Activities.csv + Directorates.csv + APP_Users.csv)
+
+- **Problem** (found during the scr_Activities wiring audit): the role filter
+  `DirectorateLabel = varUserDirectorate` matched almost nothing because
+  Activities.csv labels were inconsistent (typos, case, trailing spaces,
+  `&`/`,` variants), and the Risk/Internal Control family was split across
+  RIC / RISK / IC with mismatched names. 349 of 516 rows matched no canonical
+  directorate; the RIC user saw **zero** activities.
+- **Product decisions** (user-confirmed):
+  - RISK and IC stay **separate** directorates, with cleaned names
+    (`Risk Management`, `Internal Control`).
+  - **RIC (Risk and Internal Control) is retired**: `Active=False` in
+    Directorates.csv; the only APP_Users row on RIC (Oratile Tshipo) was
+    reassigned to **Internal Control** (IC).
+- **What changed**:
+  - `tools/normalize_activities.py` rewrites Activities.csv **DirectorateLabel**
+    from the authoritative `Directorate` short-code column → canonical
+    Directorates.csv name (blank-code rows resolved via ActivityCode/Title prefix
+    or fuzzy label) and maps every **ProgrammeLabel** variant to the canonical
+    Programmes.csv titles. Only the two label columns change — all other bytes
+    (multi-line ActivityDescription fields, ListSchema blob) preserved exactly.
+  - 242 directorate-label rows + 22 programme-label rows fixed; all 516 rows now
+    canonical. The one swapped row (id 241) had label↔programme transposed — fixed.
+  - Directorates.csv: `RISK MANAGEMENT ` → `Risk Management`,
+    `INTERNAL CONTROL` → `Internal Control`, RIC retired (`Active=False`).
+  - APP_Users.csv: Oratile Tshipo → `Internal Control` / `IC`.
+- **Mapping report**: `reference/data-normalization-report.md` (generated from the
+  git diff; regenerable with `tools/gen_normalization_report.py`).
+- **Effect**: the RIC user now matches 60 activities; every directorate/programme
+  filter dropdown value now matches the data exactly. Note: the live SharePoint
+  lists need the same cleanup to match the CSVs.

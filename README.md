@@ -105,6 +105,11 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
   only otherwise), inline MonthlyReports form in the detail pane. The "Monthly
   Reports" sidebar icon on every screen and Home's "New Monthly Report" button both
   open it.
+- **CSV data normalized** (CHANGES.md §18): Activities.csv DirectorateLabel/
+  ProgrammeLabel now use the canonical Directorates.csv/Programmes.csv names;
+  RISK/IC kept separate (`Risk Management`/`Internal Control`); **RIC retired**
+  (`Active=False`) and Oratile Tshipo reassigned to Internal Control. See
+  `reference/data-normalization-report.md`.
 - `scr_Activities` is now a full Activities master-detail (list + form CRUD over the
   Activities list) — see CHANGES.md §12. The only leftover is that nothing in the nav
   sidebar of other screens points at it yet (pre-existing).
