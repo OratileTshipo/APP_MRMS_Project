@@ -97,5 +97,10 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
 - `scr_Activities` Save button now writes to `Activities` (per Activities.csv), but the form
   fields/labels and the list gallery are still the Projects-copy versions (see CHANGES.md §9).
 - `scr_Reports_1` is a duplicate of `scr_Reports` (Form1_1, delete-confirm variant).
+- Best-practices pass applied (CHANGES.md §11): immutable OnStart `Set`s are now named
+  formulas (App.Formulas), base scope filters are role-first & delegable (colReportsInScope,
+  colProjectsInScope), dead/commented blocks were removed, and the two inline dashboard
+  galleries now filter the collected `colActivities`. Naming convention (`var`/`col`/`scr`)
+  kept as-is; `var` prefix retained on named formulas for minimal-diff safety.
 
 See BEST_PRACTICES.md for how these should be addressed per canvas-apps best practice.

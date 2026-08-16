@@ -160,5 +160,16 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
    Studio to validate.
 
 ---
+### Application status (2026-08-16)
+- **Done** (CHANGES.md §11): rows 1–2, 5–6, and part of 7 — OnStart immutable `Set`s →
+  named formulas; dead commented blocks removed; base scope filters made role-first and
+  delegable (`colReportsInScope`, `colProjectsInScope`); the two inline dashboard
+  galleries (trend/progress) now filter the collected `colActivities`; `colOverdueItems`
+  restored (was commented out but consumed by live KPI cards).
+- **Open**: row 3 (`scr_Reports_1` duplicate, `MainScreen1` empty, scr_Activities list
+  pane still on Projects), row 4 (unwired scr_Home buttons), row 8 (header/sidebar
+  components), row 10 (ALM via git + CSV source of truth).
+
+---
 *Supporting artifacts: CHANGES.md (session change log), update_docs_schema.py,
 APP_MRMS_Unpacked/ (working source), APP_MRMS/ repo (git-tracked copies).*

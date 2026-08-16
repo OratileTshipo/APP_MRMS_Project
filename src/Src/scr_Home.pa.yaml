@@ -33,24 +33,32 @@ Screens:
         Set(varFilterDirectorateID, "All");  // filter Monthlyreports or colReportsInScope
 
 
-        // Set once, outside the gallery — controls overall chart scale
-        // (a fixed max height in pixels that represents 100% of TotalActivities)
-        // Suggested: create this as a single variable in OnVisible for easy tuning
-
         // ------------------------------------------------------------
         // 2. BASE SCOPE — every report this user is allowed to see
         //    Contributors/Supervisors/ProgrammeManagers: own Directorate/Programme only
         //    DeputyDirectorME/Administrator: everything (varCanViewAllReports = true)
         // ------------------------------------------------------------
+        // Role-first scope: one simple single-column filter per role so the
+        // SharePoint query stays delegable (OR across columns is not delegated).
+        // MonthlyReports.DirectorateLabel stores the directorate SHORT CODE
+        // (e.g. "ICTM"), so Supervisor matches on varUserDirectorateID.
         ClearCollect(
             colReportsInScope,
-            Filter(
-                MonthlyReports,
-                varCanViewAllReports
-                    || DirectorateLabel = varUserDirectorateID
-                    || DirectorateLabel = varUserDirectorate
-                    || ProgrammeLabel = varUserProgramme
+            Switch(
+                varUserRole,
+                "Administrator", MonthlyReports,
+                "DeputyDirectorME", MonthlyReports,
+                "ProgrammeManager", Filter(MonthlyReports, ProgrammeLabel = varUserProgramme),
+                "Supervisor", Filter(MonthlyReports, DirectorateLabel = varUserDirectorateID),
+                Filter(MonthlyReports, SubmittedBy.Email = varUserEmail)
             )
+        );
+
+        // Refresh the collected Activities set — the inline trend/progress
+        // galleries below filter over colActivities, not the raw list.
+        ClearCollect(
+            colActivities,
+            Filter(Activities, 'Active ' = true)
         );
 
         // ------------------------------------------------------------
@@ -82,14 +90,13 @@ Screens:
             )
         );
 
-        /* ------------------------------------------------------------
-        // 6. OVERDUE ITEMS — scoped
+        // ------------------------------------------------------------
+        // 6. OVERDUE ITEMS — scoped (consumed by the KPI cards below)
         // ------------------------------------------------------------
         ClearCollect(
             colOverdueItems,
             Filter(colReportsInScope, IsOverdue = true, 'FinancialYear '.Value = varCurrentFY)
         );
-        */
 
         // ------------------------------------------------------------
         // 7. APPROVED THIS MONTH — scoped
@@ -104,142 +111,8 @@ Screens:
             )
         );
 
-        /*/ ------------------------------------------------------------
-        // 8. FLAGGED ITEMS — feeds the orange "N reports flagged" banner
         // ------------------------------------------------------------
-        ClearCollect(
-            colFlaggedItems,
-            Filter(colReportsInScope, isFlagged = true)
-        );
-        /*
-
-
-        // ------------------------------------------------------------
-        // 9. PROGRAMME PROGRESS — one row per Programme
-        //    Monthly Reporting Rate / Monthly Approval Rate / FY Cumulative Rate
-        //    Denominator throughout = Activities (Total Activities in the Programme),
-        //    NOT reports, so the % reflects how much of the planned work is covered.
-        // ------------------------------------------------------------
-        ClearCollect(
-            colProgrammeProgress,
-            ForAll(
-                Distinct(Activities, ProgrammeLabel) As Prog,
-                With(
-                    {
-                        progName: Prog.Value,
-                        progActivities: Filter(Activities, ProgrammeLabel = Prog.Value, 'Active ' = true),
-                        progReportsFY: Filter(colReportsInScope, ProgrammeLabel = Prog.Value, 'FinancialYear '.Value = varCurrentFY),
-                        progReportsThisMonth: Filter(
-                            colReportsInScope,
-                            ProgrammeLabel = Prog.Value,
-                            'FinancialYear '.Value = varCurrentFY,
-                            ReportingMonth.Value = varCurrentMonth
-                        )
-                    },
-                    {
-                        ProgrammeName: progName,
-                        TotalActivities: CountRows(progActivities),
-
-                        // Monthly: any report at all this month, per activity, counted once
-                        MonthlyReportedCount:
-                            CountRows(Distinct(progReportsThisMonth, Activity.Id)),
-                        MonthlyApprovedCount:
-                            CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)),
-
-                        // FY Cumulative: activities with >=1 Approved report so far this FY (simple binary version)
-                        FYApprovedActivityCount:
-                            CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)),
-
-                        MonthlyReportingRate:
-                            If(CountRows(progActivities) = 0, 0,
-                                RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-
-                        MonthlyApprovalRate:
-                            If(CountRows(progActivities) = 0, 0,
-                                RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-
-                        FYCumulativeRate:
-                            If(CountRows(progActivities) = 0, 0,
-                                RoundUp((CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-
-                        FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
-                    }
-                )
-            )
-        );
-
-        // ------------------------------------------------------------
-        // 10. MONTHLY SUBMISSION TREND — activities bucketed by their OWN
-        //     EndDate month. Denominator per month = activities actually due that month.
-        //     DueDate is a real Date column on Activities (EndDate + 3 days).
-        //     On Time = report exists, SubmissionDate <= DueDate
-        //     Late    = report exists, SubmissionDate > DueDate
-        //     Outstanding = no report exists yet for that activity
-        //Delete Step 10 from scr_Home.OnVisible — the whole ClearCollect(colMonthlyTrend, ForAll(Sequence(12,0,1)...)) block. It's dead weight once Items is live, and it's the thing lying to you every time you change a filter.
-        // ------------------------------------------------------------
-        /*
-        ClearCollect(
-            colMonthlyTrend,
-            ForAll(
-                Sequence(12, 0, 1) As MonthOffset,
-                With(
-                    {
-                        monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months)
-                    },
-                    With(
-                        {
-                            monthName: Text(monthAnchor, "mmmm"),
-
-                            dueThisMonth: Filter(
-                                Activities,
-                                'Active ' = true,
-                                Month(EndDate) = Month(monthAnchor),
-                                Year(EndDate) = Year(monthAnchor),
-                                (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
-                            )
-                        },
-                        With(
-                            {
-                                reportsForDueActivities: Filter(
-                                    colReportsInScope,
-                                    !IsBlank(LookUp(dueThisMonth, ID = Activity.Id)),
-                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY)
-                                )
-                            },
-                            {
-                                MonthName: monthName,
-                                TotalActivities: CountRows(dueThisMonth),
-
-                                OnTimeCount: CountRows(
-                                    Filter(
-                                        reportsForDueActivities,
-                                        SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate)
-                                    )
-                                ),
-
-                                LateCount: CountRows(
-                                    Filter(
-                                        reportsForDueActivities,
-                                        SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate)
-                                    )
-                                ),
-
-                                OutstandingCount:
-                                    Max(
-                                        0,
-                                        CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id))
-                                    )
-                            }
-                        )
-                    )
-                )
-            )
-        );
-        */
-
-        // ------------------------------------------------------------
-        // 11. KPI — Total APP Items in scope (distinct activities reported on)
+        // 8. KPI — Total APP Items in scope (distinct activities reported on)
         // ------------------------------------------------------------
         Set(varTotalAPPItems, CountRows(Distinct(colReportsInScope, Activity.Id)));
 
@@ -1640,8 +1513,7 @@ Screens:
                                                   {
                                                       monthName: Text(monthAnchor, "mmmm"),
                                                       dueThisMonth: Filter(
-                                                          Activities,
-                                                          'Active ' = true,
+                                                          colActivities,
                                                           Month(EndDate) = Month(monthAnchor),
                                                           Year(EndDate) = Year(monthAnchor),
                                                           (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
@@ -1986,16 +1858,15 @@ Screens:
                                           { effectiveFY: If(varFilterFY = "All", varCurrentFY, varFilterFY) },
                                           ForAll(
                                               Distinct(
-                                                  Filter(Activities, (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)),
+                                                  Filter(colActivities, (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)),
                                                   ProgrammeLabel
                                               ) As Prog,
                                               With(
                                                   {
                                                       progName: Prog.Value,
                                                       progActivities: Filter(
-                                                          Activities,
+                                                          colActivities,
                                                           ProgrammeLabel = Prog.Value,
-                                                          'Active ' = true,
                                                           (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
                                                       )
                                                   },

@@ -13,10 +13,12 @@ Screens:
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
         =
-        // scr_Projects.OnVisible
-        // Purpose: initialize mode/selection state, then load Projects
-        // scoped to the current user's Directorate, and populate the
-        // reference collections the form dropdowns depend on.
+        // scr_Activities.OnVisible
+        // Derived from scr_Projects.OnVisible: the list pane still runs on
+        // colProjectsInScope (Projects) — see CHANGES.md §9 for the pending
+        // rewire to colActivitiesInScope (Activities).
+        // Purpose: initialize mode/selection state, then load the scoped
+        // list, and populate the reference collections the form dropdowns depend on.
 
         Set(varMode, "View");
         Set(varProjectSearchTerm, "");
@@ -25,14 +27,15 @@ Screens:
         Set(varProjectFilterStatus, "All");
         Set(varDirFilterResetKey, 0);
 
-        // Scoped Projects list
+        // Scoped Projects list — role-first split keeps each branch a simple
+        // single-column delegable filter (SharePoint does not delegate OR across
+        // columns). Projects.Directorate is a Lookup; .Value is the full name.
         ClearCollect(
             colProjectsInScope,
-            Filter(
+            If(
+                varCanViewAllReports,
                 Projects,
-                varCanViewAllReports
-                || Directorate.Value = varUserDirectorateID
-                || Directorate.Value = varUserDirectorate
+                Filter(Projects, Directorate.Value = varUserDirectorate)
             )
         );
 
@@ -49,70 +52,7 @@ Screens:
         ClearCollect(colStatusFilter, {Value: "All"});
         Collect(colStatusFilter, Choices(Projects.Status));
 
-        /*
-        // 1. Reset UI state
-        Set(varMode, "View");
-        Set(varProjectSearchTerm, "");
-        Set(varProjectFilterDirectorate, "All");
-        Set(varProjectFilterProgramme, "All");
-        Set(varProjectFilterStatus, "All");
 
-        // 2. Build scoped projects collection
-        // FIX: Added .Value because the compiler confirms Directorate is a Lookup (Record), not plain Text.
-        ClearCollect(
-            colProjectsInScope,
-            Filter(
-                Projects,
-                varCanViewAllReports
-                || Directorate.Value = varUserDirectorateID
-                || Directorate.Value = varUserDirectorate
-            )
-        );
-
-        // 3. Set default selection safely
-        Set(varSelectedProject, If(CountRows(colProjectsInScope) > 0, First(colProjectsInScope), Blank()));
-
-        // 4. Build filter dropdown collections
-        ClearCollect(colProgrammesFilter, {Title: "All", ProgrammeCode: "All"});
-
-        // FIX: Removed ShowColumns. Collecting the filtered records directly avoids the "Expected identifier" parser error 
-        // and is perfectly performant for a small reference list.
-        Collect(colProgrammesFilter, Filter(Programmes, Active = true));
-
-        ClearCollect(colStatusFilter, {Value: "All"});
-        Collect(colStatusFilter, Choices(Projects.Status));
-        */
-
-
-        /*
-        // 1. Reset UI state
-        Set(varMode, "View");
-        Set(varProjectSearchTerm, "");
-        Set(varProjectFilterDirectorate, "All");
-        Set(varProjectFilterProgramme, "All");
-        Set(varProjectFilterStatus, "All");
-
-        // 2. Build scoped projects collection (.Value used because compiler confirmed Directorate is a Lookup/Record)
-        ClearCollect(
-            colProjectsInScope,
-            Filter(
-                Projects,
-                varCanViewAllReports
-                || Directorate.Value = varUserDirectorateID
-               // || Directorate.Value = varUserDirectorate
-            )
-        );
-
-        // 3. Set default selection safely
-        Set(varSelectedProject, If(CountRows(colProjectsInScope) > 0, First(colProjectsInScope), Blank()));
-
-        // 4. Build filter dropdown collections (ShowColumns removed to fix "Expected identifier" error)
-        ClearCollect(colProgrammesFilter, {Title: "All", ProgrammeCode: "All"});
-        Collect(colProgrammesFilter, Filter(Programmes, Active = true));
-
-        ClearCollect(colStatusFilter, {Value: "All"});
-        Collect(colStatusFilter, Choices(Projects.Status));
-        */
     Children:
       - scr_Projects_con_1:
           Control: GroupContainer@1.5.0

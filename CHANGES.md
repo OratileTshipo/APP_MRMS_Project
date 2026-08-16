@@ -271,3 +271,67 @@ Files: `src/Src/scr_ReportForm.pa.yaml`, `src/Src/scr_ReportView.pa.yaml` (new),
 ### Verification
 - `pac canvas pack` succeeds; unpacking the packed msapp reproduces all 12 screens
   including the two new ones (round-trip intact).
+
+## 11. App source change — best practices applied (App.Formulas, delegation, dead code)
+
+Per BEST_PRACTICES.md, applied to the live screens (2026-08-16).
+
+### App.pa.yaml — App.OnStart Set() → named formulas (App.Formulas)
+- Converted the immutable `Set()` calls in OnStart to **named formulas** (lazy,
+  immutable, re-evaluate on dependency change): theme colours (varNavy…varBgLight),
+  responsive breakpoints (varIsMobile/varIsTablet), current-user identity and derived
+  role/scope (varUserEmail, varUserFullName, varCurrentUserRecord, varUserRole,
+  varUserDirectorate, varUserProgramme, varUserDirectorateID, varCanViewAllReports),
+  and reporting-period defaults (varCurrentFY, varCurrentMonth, varCurrentQuarter,
+  varTodaysDate). Serialised as `App.Properties` entries (`name: =formula`); verified
+  they round-trip through `pac canvas pack/unpack` and are carried in the embedded
+  YAML (`LoadFromYaml: true`).
+- **OnStart keeps only genuinely mutable state**: filter defaults (mutated by screen
+  controls), the reference collections (screens re-collect colProgrammes /
+  colDirectorates on OnVisible), notifications, and UI-state flags.
+- Deleted the large `/* … */` commented block (the previous OnStart draft) and the
+  commented-out `colKPIDefinitions` load.
+- Naming note: the `var` prefix was **kept** on the named formulas (convention would
+  drop it) because renaming would touch every `=var…` reference across 12 screens;
+  the substance of the practice — immutable values as formulas, small fast OnStart —
+  is applied.
+
+### scr_Home — delegation fixes + dead code removal
+- **colReportsInScope**: base filter was a 4-way OR across columns
+  (`varCanViewAllReports || DirectorateLabel = … || DirectorateLabel = … ||
+  ProgrammeLabel = …`) — not delegable on SharePoint. Replaced with a **role-first
+  Switch** (per the BRD design): Administrator/DeputyDirectorME → MonthlyReports;
+  ProgrammeManager → `Filter(MonthlyReports, ProgrammeLabel = varUserProgramme)`;
+  Supervisor → `Filter(MonthlyReports, DirectorateLabel = varUserDirectorateID)`
+  (data stores the short code — see MonthlyReports.csv); Contributor →
+  `Filter(MonthlyReports, SubmittedBy.Email = varUserEmail)`. Each branch is a simple
+  delegable single-column filter.
+- **Overdue KPI fix**: the `colOverdueItems` ClearCollect was commented out (`/* */`)
+  even though the live KPI cards filter on it (`CountRows(Filter(colOverdueItems, …))`),
+  so the overdue counts were always 0. Restored the collection build.
+- **Accidental comment-out fixed by deletion**: a `/*/` … `/*` typo (line 114 `/*`
+  was meant to be `*/`) had swallowed sections 8–10 of OnVisible — the flagged-items
+  block, the whole `colProgrammeProgress` build, and the `colMonthlyTrend` build.
+  Neither collection is referenced by live controls (the programme-progress and
+  trend galleries carry their own inline formulas), so the entire dead region was
+  deleted and the remaining sections renumbered.
+- **Inline galleries now filter the collected `colActivities`** instead of raw
+  `Activities`: `MonthlyTrend_gal.Items` (`dueThisMonth`) and
+  `ProgrammeProgress_gal.Items` (Distinct + `progActivities`) — same data, local
+  execution, no delegation row-limit exposure. `colActivities` is refreshed at the
+  top of scr_Home.OnVisible so newly created activities still appear.
+
+### scr_Projects & scr_Activities — delegation fix + dead code removal
+- **colProjectsInScope** base filter was a 3-way OR
+  (`varCanViewAllReports || Directorate.Value = … || Directorate.Value = …`).
+  Replaced with a **role-first If**: `If(varCanViewAllReports, Projects,
+  Filter(Projects, Directorate.Value = varUserDirectorate))`. (The
+  `= varUserDirectorateID` clause never matched — a Lookup's `.Value` is the full
+  name, matching varUserDirectorate.)
+- Deleted the two large `/* … */` commented alternative OnVisible blocks in each screen.
+- scr_Activities header comment corrected (was a stale copy of scr_Projects'; the
+  list pane still operates on Projects — see §9).
+
+### Verification
+- `pac canvas pack` succeeds and unpack reproduces the source **byte-identical**
+  (`diff -rq` clean) — the app remains safe to import.
