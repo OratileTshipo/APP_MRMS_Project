@@ -92,8 +92,8 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
 - `scr_MyActivities` navigates to `scr_ReportForm` / `scr_ReportView`, which do not exist yet.
 - `scr_Splash` timer has no `OnTimerEnd` — the splash does not auto-navigate to Home.
 - `scr_Home` buttons ("New Monthly Report", "View Reports Dashboard") have no navigation wired.
-- `scr_Activities` currently duplicates the Projects form and its Save button still patches
-  the `Projects` list (not yet reworked for Activities).
+- `scr_Activities` Save button now writes to `Activities` (per Activities.csv), but the form
+  fields/labels and the list gallery are still the Projects-copy versions (see CHANGES.md §9).
 - `scr_Reports_1` is a duplicate of `scr_Reports` (Form1_1, delete-confirm variant).
 
 See BEST_PRACTICES.md for how these should be addressed per canvas-apps best practice.

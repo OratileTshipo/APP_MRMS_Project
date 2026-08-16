@@ -1138,38 +1138,35 @@ Screens:
                                                       Set(
                                                           varSelectedProject,
                                                           Patch(
-                                                              Projects,
-                                                              If(varMode = "New", Defaults(Projects), varSelectedProject),
+                                                              Activities,
+                                                              If(varMode = "New", Defaults(Activities), varSelectedProject),
                                                               {
-                                                                  PriorityChallenge: PriorityChallenge_txt_1.Text,
-                                                                  ProjectGoalDescription: ProjectGoalDescription_txt_1.Text,
-                                                                  KeyDeliverable: KeyDeliverable_txt_1.Text,
-                                                                  AnnualTarget: AnnualTarget_txt_1.Text,
-                                                                  Reference: Reference_txt_1.Text,
-                                                                  Budget: Value(Budget_txt_1.Text),
-                                                                  Programme: { Id: ProjectProgramme_drp_1.Selected.ID, Value: ProjectProgramme_drp_1.Selected.ProgrammeCode },
-                                                                  Directorate: { Id: ProjectDirectorate_drp_1.Selected.ID, Value: ProjectDirectorate_drp_1.Selected.DirectorateID },
-                                                              //    Programme: ProjectProgramme_drp.Selected,
-                                                               //   Directorate: ProjectDirectorate_drp.Selected,
-                                                                  Responsibility: Responsibility_cmb_1.Selected.UserAccount,
+                                                                  // scr_Activities Save — writes to the Activities list (schema per Activities.csv)
+                                                                  Title: Reference_txt_1.Text,
+                                                                  ActivityCode: Reference_txt_1.Text,
+                                                                  ActivityDescription: ProjectGoalDescription_txt_1.Text,
+                                                                  ActivityShortDescription: PriorityChallenge_txt_1.Text,
+                                                                  ProgrammeLabel: ProjectProgramme_drp_1.Selected.Title,
+                                                                  Directorate: ProjectDirectorate_drp_1.Selected.DirectorateID,
+                                                                  DirectorateLabel: ProjectDirectorate_drp_1.Selected.DirectorateName,
+                                                                  ActivityOwner: Responsibility_cmb_1.Selected.UserAccount,
                                                                   StartDate: ProjectStartDate_pkr_1.SelectedDate,
-                                                                  CompletionDate: ProjectCompletionDate_pkr_1.SelectedDate,
-                                                                  FinancialYear: ProjectFY_drp_1.Selected,
-                                                                  Status: ProjectStatus_drp_1.Selected
+                                                                  EndDate: ProjectCompletionDate_pkr_1.SelectedDate,
+                                                                  Active: true,
+                                                                  Status: ProjectStatus_drp_1.Selected.Value
                                                               }
                                                           )
                                                       );
                                                       Set(varMode, "View");
                                                       ClearCollect(
-                                                          colProjectsInScope,
+                                                          colActivitiesInScope,
                                                           Filter(
-                                                              Projects,
+                                                              Activities,
                                                               varCanViewAllReports
-                                                              || Directorate.Value = varUserDirectorateID
-                                                              || Directorate.Value = varUserDirectorate
+                                                              || Directorate = varUserDirectorate
                                                           )
                                                       );
-                                                      Notify("Project saved successfully.", NotificationType.Success)
+                                                      Notify("Activity saved successfully.", NotificationType.Success)
                                                   )
 
 
@@ -1735,14 +1732,14 @@ Screens:
                                                       Default: |-
                                                         =If(
                                                             varMode = "New",
-                                                            LookUp(Choices(Projects.Status), Value = "Active"),
+                                                            LookUp(Choices(Activities.Status), Value = "Active"),
                                                             varSelectedProject.Status
                                                         )
                                                       DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                       Fill: =RGBA(255, 255, 255, 1)
                                                       Height: =40
                                                       ItemDisplayText: =ThisItem.Value
-                                                      Items: =Choices(Projects.Status)
+                                                      Items: =Choices(Activities.Status)
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
                                                       Width: =Parent.Width

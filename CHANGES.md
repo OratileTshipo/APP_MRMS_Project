@@ -173,3 +173,49 @@ Backups of the originals: `/tmp/docx_backup/`. Edit script: `update_docs_schema.
   (byte-identical to the top-level pack) and `unpacked/` (byte-identical to the
   original `pac canvas unpack` output). Restore points in case edits break the app.
 - README.md refreshed to document all of the above and the current app state.
+
+## 9. App source change — scr_Activities Save now writes to Activities
+
+File: `src/Src/scr_Activities.pa.yaml` (editable source; unchanged elsewhere).
+
+### Save_btn_1.OnSelect (active block)
+- **Before:** `Patch(Projects, If(varMode = "New", Defaults(Projects), varSelectedProject), {...})`
+  writing Projects-only columns (`PriorityChallenge`, `ProjectGoalDescription`,
+  `KeyDeliverable`, `AnnualTarget`, `Budget`, `Responsibility`, `CompletionDate`,
+  `FinancialYear`).
+- **After:** `Patch(Activities, If(varMode = "New", Defaults(Activities), varSelectedProject), {...})`
+  writing the **Activities.csv** columns:
+  - `Title` ← `Reference_txt_1.Text` (free-text identifier, mirroring the Title pattern in Activities.csv)
+  - `ActivityCode` ← `Reference_txt_1.Text`
+  - `ActivityDescription` ← `ProjectGoalDescription_txt_1.Text`
+  - `ActivityShortDescription` ← `PriorityChallenge_txt_1.Text`
+  - `ProgrammeLabel` ← `ProjectProgramme_drp_1.Selected.Title` (text column per CSV)
+  - `Directorate` ← `ProjectDirectorate_drp_1.Selected.DirectorateID` (text per CSV)
+  - `DirectorateLabel` ← `ProjectDirectorate_drp_1.Selected.DirectorateName`
+  - `ActivityOwner` ← `Responsibility_cmb_1.Selected.UserAccount` (User column per CSV)
+  - `StartDate` / `EndDate` ← the two date pickers
+  - `Active: true`
+  - `Status` ← `ProjectStatus_drp_1.Selected.Value`
+- Post-save refresh switched from `colProjectsInScope` (Projects) to
+  `colActivitiesInScope` = `Filter(Activities, varCanViewAllReports || Directorate = varUserDirectorate)`.
+- Notify message: "Activity saved successfully."
+
+### ProjectStatus_drp_1 (form dropdown)
+- `Items` rebound from `Choices(Projects.Status)` (Active/Closed/Cancelled) to
+  **`Choices(Activities.Status)`** (Active/Completed/Not Started) and the New-mode
+  default to `LookUp(Choices(Activities.Status), Value = "Active")`, so the value
+  written by Save is a valid Activities choice.
+
+### Notes / intentionally left
+- The two commented-out legacy blocks (non-`_1` variants patching Projects) are dead
+  code and were left as-is.
+- Form control names/labels are still the Projects-copy ones (PriorityChallenge,
+  Budget, FinancialYear…) — relabelling the form UI to the Activities schema is a
+  separate task. Budget/FinancialYear/KeyDeliverable/AnnualTarget are still required
+  by the Save validation but are no longer written (Activities has no such columns).
+- `scr_Activities` gallery/filters still operate on `colProjectsInScope` (Projects) —
+  wiring the list pane to `colActivitiesInScope` is a follow-up.
+
+### Verification
+- `pac canvas pack --sources src --msapp … --layout SourceCode` succeeds (YAML valid;
+  pack emits only the standard "validate in Studio after import" notice).
