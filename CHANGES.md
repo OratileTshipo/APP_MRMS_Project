@@ -460,3 +460,39 @@ trip byte-identical.
   (`pac canvas pack --overwrite`). Verified the packed file now contains the
   Activities-schema labels and zero PriorityChallenge references in scr_Activities;
   all 13 screens present. The pristine original remains in `backup/`.
+
+## 16. scr_Reports_1 duplicate retired → repurposed as Approved Reports dashboard
+
+- **Problem**: `scr_Reports_1` was a full duplicate of `scr_Reports` (same CRUD form,
+  every control suffixed `_1`/`_6`/`_7`/`_8`, plus a delete-confirm dialog variant).
+  Nothing in the app navigated to it — dead weight flagged in BEST_PRACTICES §3.
+- **Decision**: repurpose, not delete — the Home "APPROVED" KPI had no drill-down, so
+  a read-only **Approved Reports dashboard** adds real value.
+- **What changed**:
+  - `scr_Reports_1.pa.yaml` → **`scr_ApprovedReports.pa.yaml`** (screen key + file
+    renamed; `_EditorState.pa.yaml` ScreensOrder updated).
+  - Full rebuild (34 KB) as a read-only dashboard: navy header with back button,
+    FY / Programme / Directorate / Quarter filter bar + Clear Filters,
+    three KPI cards (TOTAL APPROVED, APPROVED THIS FY, APPROVED THIS MONTH), search
+    box (title/output), and a gallery of approved reports. No edit form, no delete.
+  - `OnVisible` builds **colApprovedReports** with the same role-first delegable
+    scope as scr_Home's colReportsInScope (`Status.Value = "Approved"` + role filter;
+    Supervisor matches on `DirectorateLabel = varUserDirectorateID`).
+  - Gallery rows drill into `scr_ReportView` passing
+    `{viewReportID: ThisItem.ID, returnTo: "Approved"}`.
+  - **scr_ReportView back button is now context-aware**: OnVisible captures
+    `varViewReturnTo = Coalesce(returnTo, "MyActivities")`; both back controls
+    (header icon + bottom button) return to `scr_ApprovedReports` when entered from
+    the dashboard, else to `scr_MyActivities` (unchanged behaviour for existing
+    paths). Bottom button label switches accordingly.
+  - **scr_Home entry point**: the APPROVED KPI card's subtitle (previously the dead
+    text "placeholder") is now "View approved reports →" and navigates to
+    `scr_ApprovedReports`.
+- **Tooling note**: this pac version (2.11.2) crashes with a NullReferenceException
+  on the deprecated Experimental unpack layout — even on the pristine original pack.
+  The supported `--layout SourceCode` works; all round-trips now use it explicitly.
+- Verified: `tools/verify_powerfx.py` (9,995 formulas across 13 files, 0 errors),
+  pack→unpack round trip byte-identical, embedded YAML in the packed msapp matches
+  source byte-for-byte, `scr_Reports_1` absent from / `scr_ApprovedReports` present
+  in the packed app. Top-level `APP-MRMS_Project_app.msapp` repacked with
+  `--layout SourceCode`.

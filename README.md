@@ -82,7 +82,7 @@ Rejected / Escalated), `Version`, `SubmittedBy` (User), `SubmissionDate`, `Revie
 Screens (in `_EditorState.pa.yaml` order):
 `scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` → `scr_ReportForm` →
 `scr_ReportView` → `scr_Projects` → `scr_Activities` → `scr_Reports` →
-`scr_Reports_1` → `MainScreen1`
+`scr_ApprovedReports` → `MainScreen1`
 
 Connected data sources: Programmes, Projects, Activities, MonthlyReports, APP_Users,
 Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceLibrary
@@ -96,7 +96,10 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
 - `scr_Home` action buttons are wired (CHANGES.md §14): "New Monthly Report" → scr_ReportForm
   (with the user's first own activity as context; Save guards against a missing activity),
   "View Reports Dashboard" → scr_Reports.
-- `scr_Reports_1` is a duplicate of `scr_Reports` (Form1_1, delete-confirm variant).
+- `scr_Reports_1` (a duplicate of scr_Reports) has been **retired and repurposed** as
+  `scr_ApprovedReports`, a read-only Approved Reports dashboard (KPI cards + filters +
+  gallery → scr_ReportView, with context-aware back). Home's "APPROVED" KPI card links
+  to it. See CHANGES.md §16.
 - `scr_Activities` is now a full Activities master-detail (list + form CRUD over the
   Activities list) — see CHANGES.md §12. The only leftover is that nothing in the nav
   sidebar of other screens points at it yet (pre-existing).

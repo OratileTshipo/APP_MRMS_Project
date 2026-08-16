@@ -140,7 +140,7 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
 |---|---|---|---|
 | 1 | Named formulas vs OnStart Set/Collect | `App.pa.yaml` OnStart is a long ordered sequence of `Set`/`ClearCollect` (plus a large commented block) — theme, filters, collections, role, notifications, FY/quarter all inline | Convert immutable values to `App.Formulas` (theme colours, derived role/scope, FY/month/quarter, reference collections) |
 | 2 | Remove dead code | `App.pa.yaml` (commented block), `scr_Home` OnVisible (commented `colOverdueItems`/`colFlaggedItems`/`colMonthlyTrend`), `scr_Projects`/`scr_Activities` (`/* */` alternatives), `scr_MyActivities` (commented gallery Items) | Delete commented blocks before the next pack |
-| 3 | No duplicated screens | `scr_Reports_1` duplicates `scr_Reports`; `scr_Activities` is a copy of `scr_Projects` whose Save button still patches `Projects`; `MainScreen1` is empty | Rework `scr_Activities` to patch `Activities`; retire `scr_Reports_1`/`MainScreen1` or repurpose |
+| 3 | No duplicated screens | ~~`scr_Reports_1` duplicates `scr_Reports`~~ → **repurposed as `scr_ApprovedReports` (CHANGES.md §16)**; `scr_Activities` rebuilt as a true Activities master-detail (§12); `MainScreen1` still empty | Retire `MainScreen1` or give it a purpose |
 | 4 | No dangling references | `scr_MyActivities` navigates to `scr_ReportForm` and `scr_ReportView`, which don't exist; `scr_Splash` timer has no `OnTimerEnd`; `scr_Home` "New Monthly Report" / "View Reports Dashboard" buttons have no OnSelect | Build the missing screens (planned task) and wire navigation |
 | 5 | Delegation & payloads | Base scope `ClearCollect(colReportsInScope, Filter(MonthlyReports, ...OR...))` mixes roles/directorates in one filter; heavy `Distinct`/`ForAll`/`GroupBy` on collections; SharePoint OR filters likely non-delegable | Keep base filter simple & delegable (scope by role first), index filter columns, stay within 500–2,000-row collected set; avoid `CountRows` on raw SharePoint |
 | 6 | Long formulas | `scr_Home` `MonthlyTrend_gal.Items` is a very long inline `ForAll(Sequence(12)...)`; several OnVisible blocks are long | Extract to named formulas / `With` blocks |
@@ -156,8 +156,11 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
    `scr_Home` buttons.
 3. Convert `App.OnStart` immutable `Set`s → `App.Formulas`; delete commented blocks.
 4. Rework `scr_Activities` to CRUD the Activities list; retire `scr_Reports_1`.
+   ~~(Done — §12, §16.)~~
 5. Re-run the round-trip verification (unpack → diff → pack) and import once into
    Studio to validate.
+   **Note**: always pack/unpack with `--layout SourceCode` — the deprecated
+   Experimental layout crashes in pac 2.11.2 (NullReferenceException).
 
 ---
 ### Application status (2026-08-16)
@@ -166,10 +169,12 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
   delegable (`colReportsInScope`, `colProjectsInScope`); the two inline dashboard
   galleries (trend/progress) now filter the collected `colActivities`; `colOverdueItems`
   restored (was commented out but consumed by live KPI cards).
-- **Open**: row 3 (`scr_Reports_1` duplicate, `MainScreen1` empty), row 4 (unwired
-  scr_Home buttons), row 8 (header/sidebar components), row 10 (ALM via git + CSV
-  source of truth). scr_Activities was rebuilt as a full Activities master-detail
-  (CHANGES.md §12) — the duplicated-controls part of row 3 is resolved for that screen.
+- **Open**: row 3 (`MainScreen1` empty — `scr_Reports_1` resolved in §16), row 4
+  (scr_Home buttons wired §14; remaining unwired items to audit), row 8
+  (header/sidebar components), row 10 (ALM via git + CSV source of truth).
+  scr_Activities was rebuilt as a full Activities master-detail (CHANGES.md §12);
+  `scr_Reports_1` was repurposed as the `scr_ApprovedReports` dashboard (§16) —
+  rows 3 is fully resolved except for `MainScreen1`.
 
 ---
 *Supporting artifacts: CHANGES.md (session change log), update_docs_schema.py,

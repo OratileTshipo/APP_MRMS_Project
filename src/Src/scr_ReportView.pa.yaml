@@ -15,9 +15,11 @@ Screens:
         =
         // scr_ReportView.OnVisible
         // Purpose: load the report to display from the navigation context.
-        // Context param: viewReportID (MonthlyReports.ID)
+        // Context params: viewReportID (MonthlyReports.ID), returnTo (optional
+        // screen key — "Approved" when entered from the Approved dashboard).
 
-        Set(varViewReport, LookUp(MonthlyReports, ID = viewReportID))
+        Set(varViewReport, LookUp(MonthlyReports, ID = viewReportID));
+        Set(varViewReturnTo, Coalesce(returnTo, "MyActivities"))
     Children:
       - ReportView_con:
           Control: GroupContainer@1.5.0
@@ -57,7 +59,13 @@ Screens:
                         Icon: =Icon.ArrowLeft
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
-                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        OnSelect: |-
+                          =// Back — return to the screen we came from (Approved dashboard or My Activities)
+                          If(
+                              varViewReturnTo = "Approved",
+                              Navigate(scr_ApprovedReports, ScreenTransition.Fade),
+                              Navigate(scr_MyActivities, ScreenTransition.Fade)
+                          )
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
@@ -454,10 +462,16 @@ Screens:
                         Icon: ="Back"
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
-                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        OnSelect: |-
+                          =// Back — return to the screen we came from (Approved dashboard or My Activities)
+                          If(
+                              varViewReturnTo = "Approved",
+                              Navigate(scr_ApprovedReports, ScreenTransition.Fade),
+                              Navigate(scr_MyActivities, ScreenTransition.Fade)
+                          )
                         RadiusBottomLeft: =8
                         RadiusBottomRight: =8
                         RadiusTopLeft: =8
                         RadiusTopRight: =8
-                        Text: ="Back to My Activities"
-                        Width: =200
+                        Text: =If(varViewReturnTo = "Approved", "Back to Approved Reports", "Back to My Activities")
+                        Width: =220

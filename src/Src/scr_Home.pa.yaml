@@ -1114,14 +1114,15 @@ Screens:
                                         Control: ModernText@1.0.0
                                         Properties:
                                           AutoHeight: =true
+                                          Color: =RGBA(0, 120, 212, 1)
                                           Height: =Parent.Height * .2
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnSelect: =Set(varHomeFilter, "Approved")
+                                          OnSelect: =Navigate(scr_ApprovedReports, ScreenTransition.Fade)
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =12
-                                          Text: ="placeholder"
+                                          Text: ="View approved reports →"
                         - RejectedCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
