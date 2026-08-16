@@ -443,3 +443,20 @@ the app already used section-header style, which was extended rather than replac
 
 Verified: `tools/verify_powerfx.py` (13,186 formulas, 0 errors) and pack→unpack round
 trip byte-identical.
+
+## 15. scr_Activities form fields — confirmed relabeled; top-level pack refreshed
+
+- **Confirmed**: `scr_Activities` form fields were already relabeled to the
+  Activities.csv schema in the §12 rebuild — the form now shows ACTIVITY TITLE,
+  ACTIVITY CODE, SHORT DESCRIPTION, ACTIVITY DESCRIPTION, FREQUENCY, PROGRAMME,
+  DIRECTORATE, ACTIVITY OWNER, SUPERVISOR, START DATE, END DATE, DUE DATE, STATUS,
+  ACTIVE. No PriorityChallenge / Budget / FinancialYear remain anywhere in that
+  screen (they now only exist in scr_Projects, where they belong).
+- **Root cause of the confusion**: the top-level `APP-MRMS_Project_app.msapp` was
+  still the *original* pack (byte-identical to `backup/original-pack/`, SHA
+  74faade…), so importing it showed the old Projects-copy labels even though the
+  source had been rebuilt.
+- **Fix**: repacked `src/` → top-level `APP-MRMS_Project_app.msapp`
+  (`pac canvas pack --overwrite`). Verified the packed file now contains the
+  Activities-schema labels and zero PriorityChallenge references in scr_Activities;
+  all 13 screens present. The pristine original remains in `backup/`.

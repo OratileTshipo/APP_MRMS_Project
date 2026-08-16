@@ -8,7 +8,7 @@ and Roads (DPWR), North West Province.
 | Path | Purpose |
 |---|---|
 | `*.csv` | **Single source of truth** for the SharePoint list schemas and seed data (Directorates, APP_Users, MonthlyReports, Activities, Projects, Programmes) |
-| `APP-MRMS_Project_app.msapp` | Original Power Apps package (importable into Power Apps) |
+| `APP-MRMS_Project_app.msapp` | Importable Power Apps package — **freshly repacked from `src/`** (the pristine original is in `backup/original-pack/`) |
 | `src/` | Unpacked msapp source (`pac canvas unpack`, `SourceCode` layout): `App.pa.yaml`, `_EditorState.pa.yaml`, one `.pa.yaml` per screen, and the `.msapr` resources archive |
 | `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation — **updated to match the CSV list schemas** (see CHANGES.md §4–5) |
 | `Project Instructions` | Working brief for the solution build |
