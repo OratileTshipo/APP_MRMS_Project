@@ -30,6 +30,8 @@ reference/
 │   │   ├── pdf-p3600-coding-guidelines.txt     ← coding guidelines / best practices
 │   │   ├── pdf-p3800-coding-guidelines-2.txt   ← more guidelines (naming, delegation, variables)
 │   │   └── pdf-p4000-coding-guidelines-3.txt   ← more guidelines (collections, App.Formulas)
+│   ├── troubleshooting/              ← full-text markdown extraction of troubleshoot-power-platform-power-apps.pdf
+│   │   └── troubleshooting-guide.md  ← all 28 articles, TOC + page breaks (regenerate via tools/gen_troubleshoot_md.py)
 │   ├── pdf-scan/                     ← all other page-range probes of the PDF (45 files, named by start page)
 │   └── round-trip/                   ← pack → unpack verification output (byte-identical Src tree)
 ├── docs-extracted/                    ← plain-text extractions of the Word docs
@@ -87,6 +89,17 @@ gs -q -dNOPAUSE -dBATCH -sDEVICE=txtwrite -sOutputFile=out.txt -f <start> -l <en
 Note: the extracted text files contain the raw page text (including unrelated
 adjacent pages in each range). The distilled, actionable guidance is in
 `BEST_PRACTICES.md` at the repo root.
+
+### troubleshooting/ (extracted from troubleshoot-power-platform-power-apps.pdf)
+
+Full-text markdown extraction of the **Microsoft Learn Power Apps
+troubleshooting** guide (296 pages, 21.7 MB — `troubleshoot-power-platform-
+power-apps.pdf` in the project root). `troubleshooting-guide.md` contains all
+28 articles with a clickable TOC; page breaks are `---` separators. Regenerate
+with `python3 tools/gen_troubleshoot_md.py ../troubleshoot-power-platform-power-apps.pdf`.
+Relevant to this app: *Troubleshoot Power Apps canvas app* (startup/sign-in),
+*Debug canvas apps by using/without Live monitor*, *Power Apps troubleshooting
+strategies*, *Isolate issues in canvas apps*, *Common issues and resolutions*.
 
 ### round-trip/ (pack → unpack verification)
 

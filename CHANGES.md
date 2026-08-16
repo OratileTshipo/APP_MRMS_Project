@@ -759,3 +759,17 @@ and verified; the msapp was repacked and is ready to re-import.
   on the real src); verifier now 10,524 formulas **0 warnings 0 errors**; registry
   check clean; pack→unpack round trip **byte-identical**; top-level
   `APP-MRMS_Project_app.msapp` repacked (13 pa.yaml files, no MainScreen1).
+
+## 25. Troubleshooting PDF extracted to markdown (reference)
+
+- User added `troubleshoot-power-platform-power-apps.pdf` (Microsoft Learn
+  **Power Apps troubleshooting** guide, 296 pages, 21.7 MB) to the project root.
+- Extracted the full text with `pdftotext -layout` and built
+  `reference/canvas-apps/troubleshooting/troubleshooting-guide.md` (333 KB):
+  all 28 articles with a clickable TOC, `---` page separators, and a header
+  noting provenance. Article titles come from the PDF's own TOC; ambiguous
+  truncated page-start titles (e.g. the two date-and-time articles) are
+  disambiguated by keywords in the page body.
+- Regenerable via `tools/gen_troubleshoot_md.py <pdf>` (runs pdftotext itself;
+  verified reproducible — stable hash across runs).
+- Updated `reference/canvas-apps/README.md` manifest with the new folder.
