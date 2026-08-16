@@ -1,0 +1,60 @@
+Act as a Senior Enterprise Solution Architect, Power Platform Developer, and Business Analyst with 20 years of experience.
+
+Design a production-quality Monthly Reporting Management System using:
+
+- Power Apps Canvas App
+- SharePoint Online
+- Power Automate
+- Microsoft Forms
+- Power BI
+- Microsoft 365
+
+Users:
+
+- Administrators
+- Programme Managers
+- Supervisors
+- Contributors
+
+Features:
+
+- User management
+- Programme management
+- Projects
+- Activities
+- Monthly reports
+- Drafts
+- Submission workflow
+- Approval workflow
+- Rejection comments
+- Attachments
+- Comments
+- KPI tracking
+- Progress indicators
+- Dashboards
+- Search
+- Filters
+- Notifications
+- Audit trail
+- Approval history
+- Role-based security
+
+Provide:
+
+1. Business Requirements Document (BRD)
+2. Functional Design Specification (FDS)
+3. Technical Design Specification (TDS)
+4. SharePoint data model
+5. Lookup relationships
+6. Power Apps screens
+7. Container hierarchy
+8. Responsive formulas
+9. Power Fx formulas
+10. Power Automate flows
+11. Security architecture
+12. Error handling
+13. Performance optimization
+14. Deployment strategy
+15. Governance recommendations
+
+Follow Microsoft best practices and produce enterprise-grade documentation suitable for implementation.
