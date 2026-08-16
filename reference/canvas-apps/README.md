@@ -100,6 +100,9 @@ with `python3 tools/gen_troubleshoot_md.py ../troubleshoot-power-platform-power-
 Relevant to this app: *Troubleshoot Power Apps canvas app* (startup/sign-in),
 *Debug canvas apps by using/without Live monitor*, *Power Apps troubleshooting
 strategies*, *Isolate issues in canvas apps*, *Common issues and resolutions*.
+The canvas-relevant articles are **distilled into BEST_PRACTICES.md Part 4**
+(§27) with app-specific notes — use that as the quick reference; this file is
+the full-text source.
 
 ### round-trip/ (pack → unpack verification)
 

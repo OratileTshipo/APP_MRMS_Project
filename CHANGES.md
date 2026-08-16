@@ -838,3 +838,35 @@ Root (horizontal, App.Width × App.Height)
   `--layout SourceCode` flag (without it the unpack crashes with an NRE —
   reproduced even on the pristine backup, so it's environmental, not this
   change).
+
+## 27. Canvas-app troubleshooting playbook distilled into BEST_PRACTICES.md
+
+- Read the full extracted troubleshooting guide
+  (`reference/canvas-apps/troubleshooting/troubleshooting-guide.md`, §25) and
+  identified the **canvas-app-relevant** articles — startup/sign-in, broken
+  connections, HTTP 0 responses, Live monitor + Trace (with/without), minimal
+  repro, isolate issues, date & time, performance, common issues, SharePoint
+  integration, offline sync.
+- Added **BEST_PRACTICES.md Part 4** — a distilled troubleshooting playbook
+  (8 subsections) that condenses those articles into actionable guidance and
+  maps each to APP-MRMS specifics:
+  - §4.1 startup/sign-in (cookie/third-party-storage fixes; app-specific note
+    that first Studio open is the real import validation)
+  - §4.2 broken connections + HTTP 0 (client/network-side, not app bugs;
+    app-specific: 11 SharePoint lists + Entra search on scr_Users)
+  - §4.3 Live monitor + Trace, and no-monitor alternatives
+    (Application Insights / debug-log table / on-screen panel)
+  - §4.4 debug labels + minimal repros (innermost-expression-first, data
+    tables, self-contained repro apps)
+  - §4.5 date & time (stored-UTC vs control timezone; app computes periods
+    from choice values, so display controls are the risk)
+  - §4.6 performance table (OnStart size, payloads, delegation) mapped to
+    this app's existing wins (§11, §26) and remaining hot spots (trend
+    gallery, non-delegable raw-SharePoint ops)
+  - §4.7 common-issues quick reference (500-row limit, quoted column names,
+    null-save setting, screen-copy workaround)
+  - §4.8 SharePoint + offline (model-driven doc-management article is N/A;
+    offline is not enabled in this app)
+- Explicitly excluded the model-driven-app articles (Lookup/view/grid/ribbon,
+  Word templates, document management, conditional access) as not applicable to
+  a SharePoint-backed canvas app.

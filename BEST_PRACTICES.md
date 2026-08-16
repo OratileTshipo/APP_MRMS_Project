@@ -185,5 +185,158 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
   **rows 3 and 4 are fully resolved**; row 5's delegation work is done (§11).
 
 ---
+
+## Part 4 — Canvas-app troubleshooting playbook (distilled from the troubleshooting guide)
+
+> Source: `reference/canvas-apps/troubleshooting/troubleshooting-guide.md` (full extracted
+> text of Microsoft Learn's *Power Apps troubleshooting* PDF, 28 articles). This section
+> distills only the **canvas-app-relevant** articles and maps each to this app. Articles
+> about model-driven apps, Lookup/view/grid/ribbon, Word templates, document management,
+> and conditional access are omitted — not applicable to a SharePoint-backed canvas app.
+
+### 4.1 Startup & sign-in failures (article: *Troubleshooting startup or sign-in issues*)
+
+Symptoms: repeated sign-in prompts when the app is embedded (SharePoint/Teams), cookie
+errors, "Sign in required", "Hmmm… We couldn't sign you in".
+
+1. **Enable third-party cookies + local data** in the browser; for embedded scenarios
+   (Teams/SharePoint iframe) this is the #1 cause.
+2. **Clear browser cache/cookies** — stale cached data blocks sign-in.
+3. **Try a different supported browser** (Edge/Chrome are the safe pair).
+4. **Check the network connection** is stable.
+5. **Microsoft Entra (AAD) errors** are usually authN/authZ — read the error page; may need
+   IT help.
+6. **Disable "Third-party Storage Partitioning"** (Edge `edge://flags/#third-party-storage-partitioning`,
+   Chrome `chrome://flags/#third-party-storage-partitioning`) — only when sign-in/sign-out
+   misbehaves across multiple identities/tabs/iframes.
+7. Allow-list the Power Apps domains (`make.powerapps.com`, `apps.powerapps.com`,
+   `login.microsoftonline.com`, …) in cookie/site settings if a corporate policy blocks them.
+
+**App-specific:** after importing the repacked msapp, the first Studio open is the real
+validation step (§1.2). If it hangs at sign-in, the fix is browser-side (steps 1–2), not app-side.
+
+### 4.2 Broken connections & HTTP 0 responses (articles: *Troubleshoot broken connections*, *Troubleshoot HTTP 0 responses and other blocked calls*)
+
+Symptom: a connector/web request fails **before** the service responds — HTTP status `0`,
+`(failed)`/`(canceled)` in dev tools, or a proxy-issued `403/407/502/503`.
+
+- **HTTP 0 is not a server response** — the browser never got a reply. Causes: transient
+  network drops (Wi-Fi/VPN/cellular handoff), corporate proxies/firewalls/SSL-inspection
+  appliances, CORS headers stripped/rewritten by a network appliance, DNS filtering,
+  secure web gateways (Zscaler/Netskope), ad-blocker/antivirus extensions, browser
+  local-network protections, or the user navigating away mid-request.
+- **Verify the request reaches the network first** (dev-tools Network tab / Live monitor)
+  before blaming the app formula.
+- **Fix is usually network-side** — coordinate with the network admin; it's not an app bug.
+- Permission errors on a **secure implicit connection**: republish the app; for a non-secure
+  implicit connection, convert it to a secure implicit connection (sharing a non-secure one
+  is not recommended).
+
+**App-specific:** APP-MRMS uses 11 SharePoint lists + Office365Users (Entra ID) + static
+samples. HTTP 0 / connection drops here → check the environment's SharePoint connector
+permissions and the network path, not the formulas. The Office365Users search combo on
+scr_Users is the most likely place to see a blocked call (Entra endpoint).
+
+### 4.3 Debugging with Live monitor + Trace (articles: *Debug canvas apps by using Live monitor and Trace*, *Debug canvas apps without Live monitor*)
+
+- **Live monitor** shows real-time data operations (`getRows`, `createRow`, `patch`),
+  timing, errors (incl. HTTP 404/429), and **delegation indicators** — the fastest way to
+  see what the app actually sends to SharePoint.
+- **Trace()** (behavior properties only: `OnSelect`, `OnChange`, `OnVisible`, `OnStart`)
+  adds structured records with a message + payload; use `TraceSeverity` and reserve
+  `Error` for real failures. Remove/guard verbose traces before broad rollout.
+- **HTTP 429 = throttling** — look for a loop or repeated evaluation upstream; cache data
+  in collections to cut network calls.
+- **Without Live monitor** (embedded/SharePoint forms, intermittent issues): use
+  Application Insights (needs Azure), a Dataverse/SharePoint debug-log table (write with
+  `Collect`/`Patch`, prune entries), or an on-screen diagnostics panel (secure audiences
+  only — remove before rollout).
+
+**App-specific:** when diagnosing a gallery showing wrong rows or a slow screen, open Live
+monitor, filter to the screen, and watch for nondelegable-query warnings on the SharePoint
+filters (see 4.6).
+
+### 4.4 Isolate issues: debug labels & minimal repros (articles: *Isolate issues in canvas apps*, *How to create a minimal repro canvas app*)
+
+- **Debug labels** — a Label whose `Text` is a formula of interest, placed *outside*
+  Gallery/Form (avoids row-scope bugs). Work from the innermost expression outward:
+  `CountRows(Filter(...))`, `First(Filter(...)).Field`, `Concat(Filter(...), Field & ", ")`.
+  For datasets use a debug **Data table** + `FirstN`/`LastN`.
+- **Empty dropdown?** start with `DisplayFields`/`Items`; verify one record's field with a
+  debug label, then decide: empty data (check the source), broken formula (break it down),
+  or data not arriving (network/data source).
+- **Try a different control** of the same data type (e.g. Toggle vs Checkbox, Dropdown vs
+  Combo) — if the problem follows the control type it's a control bug; if it persists it's
+  the formula/data source.
+- **Minimal repro app** = the smallest app that reproduces the issue. Make it
+  self-contained: replace external data sources with `ClearCollect` sample data or CSV,
+  stub external services (Power BI/flow), simplify or remove components, and scrub
+  private data before sharing the exported app.
+
+**App-specific:** for a suspected formula bug in a screen (e.g. a filter bar producing no
+rows), drop a debug label next to the gallery showing `CountRows(colX)` + the first record's
+key field rather than guessing.
+
+### 4.5 Date & time (article: *Troubleshoot date and time issues in Power Apps canvas apps*)
+
+- **Check the stored value first** — if the server value is wrong it shows wrong
+  everywhere; verify the raw value in the data source (SharePoint stores UTC).
+- **Timezone mismatch is the classic cause** of ±1 day / ±a few hours: the data source's
+  stored timezone vs the control's `DateTimeZone` (e.g. UTC-stored column shown as Local,
+  or vice versa).
+- **Test by changing the user's timezone** to confirm a TZ/DST issue.
+- Investigate with: show the user's timezone, use "Date and Time" (not "Date Only")
+  format, avoid 2-digit years.
+
+**App-specific:** MonthlyReports carries `ReportingMonth` (choice) + `'FinancialYear '`
+(choice) + date fields, and screens compute the current period from `Today()` in OnStart.
+If a report date looks off, first check what's actually stored in the SharePoint list, then
+check the form/dropdown formatting — this app computes periods from choice values, not
+raw DateTimes, so the main risk is the date-display controls, not the period logic.
+
+### 4.6 Performance & data payloads (article: *Troubleshoot Power Apps canvas app performance issues*)
+
+| Symptom | Likely cause | Recommendation |
+|---|---|---|
+| Slow app/page load | Overloaded `OnStart`; large data sets; cross-screen refs; heavy media | Move calculations out of OnStart; defer loading; small payloads; optimize media/controls |
+| Large data payloads | Fetching unneeded data; large sets | Small payloads; **delegation**; prefilter at the source; limit retrieval |
+| Inefficient queries | Non-delegable queries; complex operations | **Delegation**; optimize query patterns |
+| Slow calculations | Complex/repeated formulas | Split formulas; `With` blocks; named formulas |
+| Overall slow app | Inefficient retrieval; many cross-screen refs; oversized app | Collections for small hot data; optimize formulas; split app |
+
+**App-specific:** this app already follows the key items — role-first delegable scope
+filters (§11), collections (`colReportsInScope`, `colProjectsInScope`, …) instead of raw
+SharePoint in galleries, and the component refactor (§26) removed 4,500 duplicated YAML
+lines. Watch for: `CountRows`/`Distinct`/`ForAll` on raw SharePoint (non-delegable → 500-row
+limit), and the `Sequence(12)` trend gallery formula (row 6) which is the heaviest per-screen
+calc.
+
+### 4.7 Common issues quick-reference (article: *Common issues and resolutions for Power Apps*)
+
+- **500-record limit:** non-delegable operations only see the first 500 rows of a data
+  source — keep filters delegable (see 4.6).
+- **Column names with spaces:** single-quote them, e.g. `someList.'Color Tag'` (this app
+  already does — `'FinancialYear '`, `'Active '`, `'ActivityDescription '`).
+- **Can't save null/blank values:** the *Formula-level error management* setting may be
+  disabled — Settings → Updates → Retired → enable it.
+- **Copying screens across apps** isn't supported; copy controls instead (relevant if we
+  ever seed a new app from this one).
+- **Newly shared app may take a moment** to become available.
+- **Date/time issues:** see 4.5.
+- **`Connection.Connected` can lie in Power Apps for Windows** during OnStart (returns
+  true while offline) — delay dependent logic with a Timer if we ever add offline logic.
+- **Form custom cards** can't write back unless the card has an `Update` property.
+
+### 4.8 SharePoint + offline (articles: *Troubleshoot SharePoint integration*, *Troubleshoot offline sync errors in the Power Apps mobile app*)
+
+- The SharePoint integration article is **model-driven document-management** content
+  (Documents button, FetchXML/LayoutXML) — not applicable to this canvas app; retained in
+  the reference only for completeness.
+- **Offline (mobile, preview):** sync errors on first open → strong connection + retry;
+  sync timeouts → simplify the table filters; server-maintenance timeouts → retry later.
+  APP-MRMS is not offline-enabled today — if that ever changes, simplify the SharePoint
+  filters per the offline-profile guidelines.
+
+---
 *Supporting artifacts: CHANGES.md (session change log), update_docs_schema.py,
 APP_MRMS_Unpacked/ (working source), APP_MRMS/ repo (git-tracked copies).*
