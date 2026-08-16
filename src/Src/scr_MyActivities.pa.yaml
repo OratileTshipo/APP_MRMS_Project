@@ -48,19 +48,18 @@ Screens:
                             Filter(
                                 MonthlyReports,
                                 Activity.Id = Act.ID,
-                                'FinancialYear '.Value = varCurrentFY,
-                                ActivityOwner.Email = varUserEmail
+                                'FinancialYear '.Value = varCurrentFY
                             )
                         )
                     },
                     {
                         ActivityID: Act.ID,
-                        ActivityName: Act.'Activity: ActivityShortDescription'.Value,
+                        ActivityName: Act.ActivityShortDescription,
                         ProjectName: Act.Project.Value,
                         ProgrammeName: Act.ProgrammeLabel,
                         DirectorateName: Act.DirectorateLabel,
                         Frequency: Act.'Frequency ',
-                        DueDay: Act.DueDay,
+                        DueDay: Day(Act.DueDate),
                         ReportStatus: Coalesce(latestReport.Status.Value, "Not Started"),
                         ReportID: Coalesce(latestReport.ID, Blank()),
                         RAG: Switch(
@@ -596,24 +595,21 @@ Screens:
                               Width: =Parent.Width
                             Children:
                               - ActHdrRAG_ico:
-                                  Control: Classic/Icon@2.5.0
+                                  Control: Circle@2.3.0
                                   Properties:
                                     BorderColor: =RGBA(0, 0, 0, 0)
-                                    Color: =RGBA(0, 0, 0, 0)
-                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                    DisabledColor: =RGBA(225, 223, 221, 1)
-                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(0, 120, 212, 1)
+                                    Fill: =RGBA(0, 120, 212, 1)
                                     FocusedBorderThickness: =4
                                     Height: =Parent.Height
                                     HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                    HoverColor: =RGBA(16, 110, 190, 1)
-                                    HoverFill: =RGBA(0, 0, 0, 0)
-                                    Icon: =Icon.CircleFill
+                                    HoverFill: =RGBA(0, 120, 212, 1)
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                    PressedColor: =RGBA(16, 110, 190, 1)
-                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
                                     Width: =28
                               - ActHdrActivity_lbl:
                                   Control: ModernText@1.0.0
@@ -756,11 +752,11 @@ Screens:
                                             =// Navigate to report form / view based on the report status
                                             If(
                                                 ThisItem.ReportStatus = "Not Started",
-                                                Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID}),
+                                                Navigate(scr_ReportForm, ScreenTransition.Fade, {selectedActivityID: ThisItem.ActivityID}),
                                                 ThisItem.ReportStatus = "Draft" || ThisItem.ReportStatus = "Rejected",
-                                                Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID, editReportID: ThisItem.ReportID}),
+                                                Navigate(scr_ReportForm, ScreenTransition.Fade, {selectedActivityID: ThisItem.ActivityID, editReportID: ThisItem.ReportID}),
                                                 ThisItem.ReportStatus = "Approved",
-                                                Navigate(scr_ReportView, Fade, {viewReportID: ThisItem.ReportID}),
+                                                Navigate(scr_ReportView, ScreenTransition.Fade, {viewReportID: ThisItem.ReportID}),
                                                 Notify("This report has already been submitted.", NotificationType.Information)
                                             )
                                           RadiusBottomLeft: =6

@@ -646,7 +646,10 @@ Screens:
                                                             InputTextPlaceholder: ="Search User by Email or Name"
                                                             ItemDisplayText: =ThisItem.UserPrincipalName
                                                             Items: |-
-                                                              =Office365Users.SearchUser({searchTerm: cmb_RegEmail.SearchText, top: 20})
+                                                              =// cmb_RegEmail.Items — live user search against Microsoft Entra ID (Office365Users connector).
+                                                              // SearchUserV2 returns user records (UserPrincipalName/DisplayName/Mail/JobTitle)
+                                                              // for the typed search text; the picker stores the selected record in .Selected.
+                                                              Office365Users.SearchUserV2({searchTerm: cmb_RegEmail.SearchText, top: 20})
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
                                                             OnChange: |-

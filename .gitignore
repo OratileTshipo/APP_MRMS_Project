@@ -3,3 +3,5 @@ Thumbs.db
 *.tmp
 *.log
 ~$*.docx
+__pycache__/
+*.pyc

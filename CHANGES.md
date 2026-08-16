@@ -383,3 +383,47 @@ scr_Activities was a copy of scr_Projects: only the Save button wrote to Activit
 - `pac canvas pack` succeeds and unpack reproduces the source **byte-identical**
   (`diff -rq` clean). Note: pac validates YAML structure, not Power Fx semantics —
   open the app once in Studio after import to validate the formulas.
+
+## 13. Verification pass — App Checker findings fixed + documentation comments
+
+### Background
+Requested a full verification of all prior work ("make sure nothing breaks"). Playwright
+cannot test a canvas app from this environment (no Power Apps runtime/credentials), so the
+strongest available checks were run instead:
+1. Full `pac canvas pack` → `pac canvas unpack` round trip (byte-identical source).
+2. New static verifier `tools/verify_powerfx.py` (paren/quote balance, control references,
+   variable definitions, navigation targets, Patch column audit against the CSV schemas and
+   DataSources.json) — **13,182 formulas, 0 errors, 0 warnings**.
+3. **App Checker SARIF deep-dive** — the `AppCheckerResult.sarif` carried inside the original
+   pack contains 797 findings; 45 are **High** (formula errors) and were triaged against the
+   current source. The SARIF travels with the pack, so these errors would also surface in
+   Studio on import.
+
+### High-severity formula errors fixed (5 root causes → ~45 findings)
+
+| Location | Error | Root cause | Fix |
+|---|---|---|---|
+| `scr_Users` cmb_RegEmail.Items | `app-ErrUnknownNamespaceFunction` + ~25 cascading `.Selected`/`.UserPrincipalName`/`.Mail`/`.JobTitle`/type errors | `Office365Users.SearchUser(...)` no longer exists (removed from the connector) | → `Office365Users.SearchUserV2(...)` |
+| `scr_MyActivities` OnVisible | `app-ErrInvalidName`/`InvalidDot` ×5 | `ActivityOwner.Email` used to filter **MonthlyReports** (that list has only the text `ActivityOwnerLabel`); `Act.'Activity: ActivityShortDescription'` and `Act.DueDay` don't exist on **Activities** (`ActivityShortDescription` is plain text; the date column is `DueDate`) | removed the owner predicate (redundant — `Act` is already the user's own activity); → `Act.ActivityShortDescription`; → `Day(Act.DueDate)` |
+| `scr_MyActivities` ActRowAction_btn.OnSelect | `app-ErrInvalidName` (Fade) | navigation used bare `Fade` instead of `ScreenTransition.Fade` (introduced in the earlier nav fix) | → `ScreenTransition.Fade` ×3 |
+| `scr_MyActivities` ActHdrRAG_ico | `app-ErrInvalidName` (CircleFill) | `Icon.CircleFill` is not in the Icon control's enum | converted control to `Circle@2.3.0` shape (same as the row RAG dots) |
+| `scr_Home` MonthlyReport_gal.Items | `app-ErrInvalidName` (ProgressNarrative) + `app-ErrInvalidArgs-Func` (Lower) | `ProgressNarrative` is not a MonthlyReports column; also a stray trailing `\|\| (varHomeFilter…)` block made the whole Filter predicate always-true (dropdowns/search silently disabled) | search term → `Output`; stray block removed |
+
+Field names were verified against the authoritative `DataSources.json` embedded in the pack
+(internal names, display names, and `ConnectedDataSourceInfoNameMapping`) plus the CSV
+schema files. Findings that were already resolved by earlier work (e.g. `scr_ReportForm` /
+`scr_ReportView` invalid-name flags from before those screens existed) were left as-is.
+
+### Documentation comments
+Added `//` block comments (Power Fx comments — the only kind that survive pack → import →
+unpack; YAML `#` comments are discarded by pac) to the key logic blocks across the app:
+App.pa.yaml (named formulas + OnStart sections, already documented), screen OnVisible
+loaders, Save/Submit/Delete handlers, gallery Items formulas, filter dropdowns, search box,
+and the user-search combobox. Comments explain intent/why per canvas-apps best practice;
+the app already used section-header style, which was extended rather than replaced.
+
+### Verification
+- `tools/verify_powerfx.py`: **13182 formulas, 0 errors, 0 warnings**.
+- `pac canvas pack` succeeds; unpack reproduces the source **byte-identical** — safe to import.
+- Reminder (as before): pac validates YAML structure, not Power Fx semantics — open once in
+  Studio after import to confirm; the SARIF in the import will no longer carry the fixed errors.

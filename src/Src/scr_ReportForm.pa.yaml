@@ -547,6 +547,10 @@ Screens:
                               LayoutMinWidth: =16
                               OnSelect: |-
                                 =
+                                // ReportFormSave_btn.OnSelect — validates required fields, then
+                                // inserts (New) or updates (Edit) the MonthlyReports record using
+                                // the MonthlyReports.csv schema; denormalised activity fields are
+                                // pulled from the selected activity. Returns to scr_MyActivities.
                                 If(
                                     IsBlank(ReportFormTitle_txt.Text)
                                     || IsBlank(ReportFormReportingMonth_drp.Selected)

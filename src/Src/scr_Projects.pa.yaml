@@ -1063,6 +1063,8 @@ Screens:
                                                   */
 
 
+                                                  =// Save_btn.OnSelect — validates every required field, then inserts or
+                                                  // updates the Projects record and refreshes the scoped list.
                                                   If(
                                                       IsBlank(PriorityChallenge_txt.Text) || IsBlank(ProjectGoalDescription_txt.Text)
                                                       || IsBlank(KeyDeliverable_txt.Text) || IsBlank(AnnualTarget_txt.Text) || IsBlank(Reference_txt.Text)

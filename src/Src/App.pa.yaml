@@ -40,19 +40,26 @@ App:
     varCanViewAllReports: =varUserRole = "DeputyDirectorME" || varUserRole = "Administrator"
 
     # 4. Reporting period defaults (derived from Today())
-    varCurrentFY: =If(
-        Month(Today()) >= 4,
-        Year(Today()) & "/" & Right(Year(Today()) + 1, 2),
-        Year(Today()) - 1 & "/" & Right(Year(Today()), 2)
-    )
-    varCurrentMonth: =Switch(Month(Today()),
-        4, "April", 5, "May", 6, "June", 7, "July", 8, "August", 9, "September",
-        10, "October", 11, "November", 12, "December", 1, "January", 2, "February", 3, "March")
-    varCurrentQuarter: =Switch(true,
-        Month(Today()) >= 4 And Month(Today()) <= 6, "Q1 (Apr-Jun)",
-        Month(Today()) >= 7 And Month(Today()) <= 9, "Q2 (Jul-Sep)",
-        Month(Today()) >= 10 And Month(Today()) <= 12, "Q3 (Oct-Dec)",
-        "Q4 (Jan-Mar)")
+    varCurrentFY: |-
+      =If(
+          Month(Today()) >= 4,
+          Year(Today()) & "/" & Right(Year(Today()) + 1, 2),
+          Year(Today()) - 1 & "/" & Right(Year(Today()), 2)
+      )
+    varCurrentMonth: |-
+      =Switch(
+          Month(Today()),
+          4, "April", 5, "May", 6, "June", 7, "July", 8, "August", 9, "September",
+          10, "October", 11, "November", 12, "December", 1, "January", 2, "February", 3, "March"
+      )
+    varCurrentQuarter: |-
+      =Switch(
+          true,
+          Month(Today()) >= 4 And Month(Today()) <= 6, "Q1 (Apr-Jun)",
+          Month(Today()) >= 7 And Month(Today()) <= 9, "Q2 (Jul-Sep)",
+          Month(Today()) >= 10 And Month(Today()) <= 12, "Q3 (Oct-Dec)",
+          "Q4 (Jan-Mar)"
+      )
     varTodaysDate: =DateValue(Today())
 
     # ============================================================

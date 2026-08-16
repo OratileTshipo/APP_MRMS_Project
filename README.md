@@ -103,5 +103,11 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
   colProjectsInScope), dead/commented blocks were removed, and the two inline dashboard
   galleries now filter the collected `colActivities`. Naming convention (`var`/`col`/`scr`)
   kept as-is; `var` prefix retained on named formulas for minimal-diff safety.
+- Verification pass (CHANGES.md §13): all 45 High-severity App Checker formula errors were
+  triaged and their 5 root causes fixed (SearchUser→SearchUserV2, invalid Activities/
+  MonthlyReports column refs in scr_MyActivities, bare `Fade`→`ScreenTransition.Fade`,
+  `Icon.CircleFill`→Circle shape, `ProgressNarrative`→`Output` + stray-`||` filter removal in
+  scr_Home). Key logic blocks now carry `//` documentation comments. `tools/verify_powerfx.py`
+  (13182 formulas) is clean and the pack→unpack round trip is byte-identical.
 
 See BEST_PRACTICES.md for how these should be addressed per canvas-apps best practice.

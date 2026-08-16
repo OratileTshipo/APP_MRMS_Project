@@ -670,7 +670,10 @@ Screens:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Height: =Parent.Height
                                     Items: |-
-                                      =Filter(
+                                      =// ActivityItems_gal.Items — master list filtered by the search term and
+                                      // the Directorate/Programme/Status dropdowns (all single-column clauses,
+                                      // delegable on the collected colActivitiesInScope).
+                                      Filter(
                                           colActivitiesInScope,
                                           (varActivityFilterDirectorate = "All" || DirectorateLabel = varActivityFilterDirectorate) &&
                                           (varActivityFilterProgramme = "All" || ProgrammeLabel = varActivityFilterProgramme) &&
@@ -1055,7 +1058,9 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnSelect: |-
-                                            =RemoveIf(Activities, ID = varSelectedActivity.ID);
+                                            =// ConfirmDelete_btn.OnSelect — deletes the selected activity, clears selection,
+                                            // refreshes the scoped list and confirms via toast.
+                                            RemoveIf(Activities, ID = varSelectedActivity.ID);
                                             Set(varSelectedActivity, Blank());
                                             Set(varMode, "View");
                                             Set(varConfirmDelete, false);

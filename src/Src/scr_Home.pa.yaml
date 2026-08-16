@@ -461,7 +461,9 @@ Screens:
                                           HoverFill: =RGBA(255, 255, 255, 1)
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnChange: =Set(varHomeSearchTerm, SearchBox_txt.Text)
+                                          OnChange: |-
+                                            =// Live search — updates the shared search term; gallery Items formulas re-filter reactively.
+                                            Set(varHomeSearchTerm, SearchBox_txt.Text)
                                           PressedBorderColor: =RGBA(0, 120, 212, 1)
                                           PressedColor: =RGBA(50, 49, 48, 1)
                                           PressedFill: =RGBA(255, 255, 255, 1)
@@ -776,7 +778,8 @@ Screens:
                                     LayoutMinWidth: =16
                                     OnSelect: |-
                                       =
-                                          Set(varFilterFY, "All");
+                                      // Clear all dashboard filters (KPI, FY, programme, directorate, quarter) and reset the controls
+                                      Set(varFilterFY, "All");
                                           Set(varFilterProgramme, "All");
                                           Set(varFilterDirectorate, "All");
                                           Set(varFilterQuarter, "All");
@@ -1505,7 +1508,10 @@ Screens:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Height: =Parent.Height
                                     Items: |-
-                                      =ForAll(
+                                      =// MonthlyTrend_gal.Items — 12-month submissions trend.
+                                      // Builds one row per month of the financial year (Apr→Mar) by filtering
+                                      // the already-collected colActivities (local execution, no delegation limits).
+                                      ForAll(
                                           Sequence(12, 0, 1) As MonthOffset,
                                           With(
                                               { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
@@ -1854,7 +1860,10 @@ Screens:
                                   Properties:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Items: |-
-                                      =With(
+                                      =// ProgrammeProgress_gal.Items — progress per programme for the effective FY.
+                                      // Groups the collected colActivities by ProgrammeLabel and aggregates
+                                      // % complete from the associated monthly reports.
+                                      With(
                                           { effectiveFY: If(varFilterFY = "All", varCurrentFY, varFilterFY) },
                                           ForAll(
                                               Distinct(
@@ -2386,17 +2395,8 @@ Screens:
                                         || Lower(varHomeSearchTerm) in Lower(ActivityOwnerLabel)
                                         || Lower(varHomeSearchTerm) in Lower(ProjectOwnerLabel)
                                         || Lower(varHomeSearchTerm) in Lower(SubmittedBy.DisplayName)
-                                        || Lower(varHomeSearchTerm) in Lower(ProgressNarrative)
+                                        || Lower(varHomeSearchTerm) in Lower(Output)
                                     )
-                                    ||
-                                    (varHomeFilter = "All"
-                                    || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
-                                    || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                    || (varHomeFilter = "Approved" && Status.Value = "Approved")
-                                    || (varHomeFilter = "Rejected" && Status.Value = "Rejected")
-                                )
-
-
                                 )
 
 
