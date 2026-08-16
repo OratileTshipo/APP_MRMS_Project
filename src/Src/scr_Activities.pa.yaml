@@ -14,34 +14,32 @@ Screens:
       OnVisible: |-
         =
         // scr_Activities.OnVisible
-        // Derived from scr_Projects.OnVisible: the list pane still runs on
-        // colProjectsInScope (Projects) — see CHANGES.md §9 for the pending
-        // rewire to colActivitiesInScope (Activities).
-        // Purpose: initialize mode/selection state, then load the scoped
-        // list, and populate the reference collections the form dropdowns depend on.
+        // Purpose: initialize mode/selection state, then load Activities
+        // scoped to the current user's Directorate, and populate the
+        // reference/filter collections the form and list depend on.
 
         Set(varMode, "View");
-        Set(varProjectSearchTerm, "");
-        Set(varProjectFilterDirectorate, "All");
-        Set(varProjectFilterProgramme, "All");
-        Set(varProjectFilterStatus, "All");
-        Set(varDirFilterResetKey, 0);
+        Set(varActivitySearchTerm, "");
+        Set(varActivityFilterProgramme, "All");
+        Set(varActivityFilterDirectorate, "All");
+        Set(varActivityFilterStatus, "All");
+        Set(varConfirmDelete, false);
 
-        // Scoped Projects list — role-first split keeps each branch a simple
-        // single-column delegable filter (SharePoint does not delegate OR across
-        // columns). Projects.Directorate is a Lookup; .Value is the full name.
+        // Scoped Activities list — role-first, single-column delegable filter.
+        // Activities.DirectorateLabel is text = directorate full name, which
+        // matches varUserDirectorate (APP_Users.Directorate.Value).
         ClearCollect(
-            colProjectsInScope,
+            colActivitiesInScope,
             If(
                 varCanViewAllReports,
-                Projects,
-                Filter(Projects, Directorate.Value = varUserDirectorate)
+                Activities,
+                Filter(Activities, DirectorateLabel = varUserDirectorate)
             )
         );
 
-        Set(varSelectedProject, If(CountRows(colProjectsInScope) > 0, First(colProjectsInScope), Blank()));
+        Set(varSelectedActivity, If(CountRows(colActivitiesInScope) > 0, First(colActivitiesInScope), Blank()));
 
-        // Reference collections for the form dropdowns (previously missing)
+        // Reference collections for the form dropdowns
         ClearCollect(colProgrammes, Programmes);
         ClearCollect(colDirectorates, Directorates);
 
@@ -49,12 +47,13 @@ Screens:
         ClearCollect(colProgrammesFilter, {Title: "All", ProgrammeCode: "All"});
         Collect(colProgrammesFilter, Filter(Programmes, Active = true));
 
+        ClearCollect(colDirectoratesFilter, {Title: "All", DirectorateID: "All"});
+        Collect(colDirectoratesFilter, Filter(Directorates, Active = true));
+
         ClearCollect(colStatusFilter, {Value: "All"});
-        Collect(colStatusFilter, Choices(Projects.Status));
-
-
+        Collect(colStatusFilter, Choices(Activities.Status));
     Children:
-      - scr_Projects_con_1:
+      - ActivityScreen_con:
           Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
@@ -63,7 +62,7 @@ Screens:
             LayoutDirection: =LayoutDirection.Vertical
             Width: =App.Width
           Children:
-            - ProjectsHomeHeader_con_1:
+            - ActivitiesHeader_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
@@ -78,9 +77,9 @@ Screens:
                   RadiusBottomRight: =0
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
-                  Width: =App.Width - ProjectsSidebar_con_1.Width
+                  Width: =App.Width - ActivitiesSidebar_con.Width
                 Children:
-                  - HomeHeaderLeft_con_6:
+                  - HeaderLeft_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -93,7 +92,7 @@ Screens:
                         PaddingTop: =8
                         Width: =Parent.Width * .55
                       Children:
-                        - HomeDashboard_lbl_6:
+                        - ActivitiesTitle_lbl:
                             Control: Label@2.5.1
                             Properties:
                               AlignInContainer: =AlignInContainer.Stretch
@@ -110,8 +109,8 @@ Screens:
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
                               Size: =25
-                              Text: '="Activities"  '
-                        - HomeDashboardSubtitle_lbl_6:
+                              Text: ="Activities"
+                        - ActivitiesSubtitle_lbl:
                             Control: Label@2.5.1
                             Properties:
                               AlignInContainer: =AlignInContainer.Stretch
@@ -126,10 +125,8 @@ Screens:
                               Font: =Font.'Segoe UI'
                               Height: =Parent.Height * .5
                               Size: =12
-                              Text: '=varUserDirectorate & " · " & varUserProgramme  '
-                              X: =40
-                              Y: =40
-                  - HomeHeaderCenter__con_7:
+                              Text: =varUserDirectorate & " · " & varUserProgramme
+                  - HeaderCenter_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -146,7 +143,7 @@ Screens:
                         PaddingTop: =8
                         Width: =Parent.Width / 3
                       Children:
-                        - SearchBox_con_7:
+                        - HeaderSearchBox_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -167,7 +164,7 @@ Screens:
                               RadiusTopRight: =8
                               Width: =Parent.Width - 50
                             Children:
-                              - Search_ico_7:
+                              - HeaderSearch_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
                                     BorderColor: =RGBA(0, 0, 0, 0)
@@ -187,7 +184,7 @@ Screens:
                                     PressedColor: =RGBA(16, 110, 190, 1)
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Width: =Parent.Width * 0.08
-                              - SearchBox_txt_7:
+                              - HeaderSearch_txt:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(245, 245, 245, 1)
@@ -198,17 +195,17 @@ Screens:
                                     DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                     DisabledColor: =RGBA(161, 159, 157, 1)
                                     DisabledFill: =RGBA(242, 242, 241, 0)
-                                    Fill: |
+                                    Fill: |-
                                       =varBgLight
                                     Font: =Font.'Segoe UI'
                                     Height: =Parent.Height * 0.65
-                                    HintText: ="Search projects by title, goal, or reference..."
+                                    HintText: ="Search activities by title or description..."
                                     HoverBorderColor: =RGBA(16, 110, 190, 1)
                                     HoverColor: =RGBA(50, 49, 48, 1)
                                     HoverFill: =RGBA(255, 255, 255, 1)
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    OnChange: =Set(varProjectSearchTerm, SearchBox_txt_7.Text)
+                                    OnChange: =Set(varActivitySearchTerm, HeaderSearch_txt.Text)
                                     PressedBorderColor: =RGBA(0, 120, 212, 1)
                                     PressedColor: =RGBA(50, 49, 48, 1)
                                     PressedFill: =RGBA(255, 255, 255, 1)
@@ -217,8 +214,8 @@ Screens:
                                     RadiusTopLeft: =0
                                     RadiusTopRight: =0
                                     Size: =15
-                                    Width: =Parent.Width - Search_ico_7.Width - 25
-                        - HomeBell_ico_7:
+                                    Width: =Parent.Width - HeaderSearch_ico.Width - 25
+                        - HeaderBell_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -239,7 +236,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width / 15
-            - ProjectsMainScreen_con_1:
+            - ActivitiesMain_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
@@ -248,7 +245,7 @@ Screens:
                   LayoutDirection: =LayoutDirection.Horizontal
                   Width: =App.Width
                 Children:
-                  - ProjectsSidebar_con_1:
+                  - ActivitiesSidebar_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -267,7 +264,7 @@ Screens:
                         PaddingTop: =20
                         Width: =App.Width * 0.05
                       Children:
-                        - Home_ico_6:
+                        - Home_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -283,12 +280,12 @@ Screens:
                               Icon: =Icon.Home
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Home,ScreenTransition.Cover)
+                              OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Projects_ico_6:
+                        - Projects_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -304,12 +301,12 @@ Screens:
                               Icon: =Icon.Manufacture
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Activities,ScreenTransition.Cover)
+                              OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Activities_ico_6:
+                        - Activities_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -325,12 +322,12 @@ Screens:
                               Icon: =Icon.RadarActivityMonitor
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Cover)
+                              OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - MonthlyReports_ico_6:
+                        - MonthlyReports_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -350,7 +347,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Activitiessds_ico_6:
+                        - MyActivities_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -366,12 +363,12 @@ Screens:
                               Icon: =Icon.ListWatchlistRemind
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Fade)
+                              OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Trending_ico_6:
+                        - Trending_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -391,7 +388,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Users_ico_6:
+                        - Users_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -407,12 +404,12 @@ Screens:
                               Icon: =Icon.People
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Users,ScreenTransition.UnCover)
+                              OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - SidebarSpacer_con_6:
+                        - SidebarSpacer_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -425,7 +422,7 @@ Screens:
                               PaddingLeft: =8
                               PaddingRight: =8
                               PaddingTop: =8
-                        - Settings_ico_6:
+                        - Settings_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -445,7 +442,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Support_ico_6:
+                        - Support_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -465,7 +462,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                  - ProjectScreen_con_1:
+                  - ActivitiesScreen_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -476,7 +473,7 @@ Screens:
                         LayoutDirection: =LayoutDirection.Horizontal
                         Width: =App.Width
                       Children:
-                        - ProjectGallery_con_1:
+                        - ActivityGallery_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -493,7 +490,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width * 0.38
                             Children:
-                              - GalleryHeader_con_1:
+                              - GalleryHeader_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -511,7 +508,7 @@ Screens:
                                     PaddingTop: =8
                                     Width: =Parent.Width
                                   Children:
-                                    - ProjectListTitle_lbl_1:
+                                    - ActivityListTitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
                                           AutoHeight: =true
@@ -522,7 +519,7 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =18
                                           Text: ="Activities"
-                                    - AddNew_btn_1:
+                                    - AddNew_btn:
                                         Control: ModernButton@1.0.0
                                         Properties:
                                           Icon: ="Add"
@@ -530,14 +527,15 @@ Screens:
                                           LayoutMinWidth: =16
                                           OnSelect: |-
                                             =Set(varMode, "New");
-                                            Set(varSelectedProject, Blank())
+                                            Set(varSelectedActivity, Blank());
+                                            Set(varConfirmDelete, false)
                                           RadiusBottomLeft: =8
                                           RadiusBottomRight: =8
                                           RadiusTopLeft: =8
                                           RadiusTopRight: =8
                                           Text: ="New Activity"
                                           Width: =160
-                              - ProjectSearch_con_1:
+                              - ActivitySearch_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -557,7 +555,7 @@ Screens:
                                     RadiusTopRight: =8
                                     Width: =Parent.Width
                                   Children:
-                                    - ProjectSearch_ico_1:
+                                    - ActivitySearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
                                           BorderColor: =RGBA(0, 0, 0, 0)
@@ -577,7 +575,7 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =20
-                                    - ProjectSearch_txt_1:
+                                    - ActivitySearch_txt:
                                         Control: Classic/TextInput@2.3.2
                                         Properties:
                                           BorderThickness: =0
@@ -587,12 +585,12 @@ Screens:
                                           Fill: =RGBA(255, 255, 255, 0)
                                           Font: =Font.'Segoe UI'
                                           Height: =Parent.Height - 12
-                                          HintText: ="Search projects by title, goal, or reference..."
+                                          HintText: ="Search activities by title, code, or description..."
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnChange: =Set(varProjectSearchTerm, ProjectSearch_txt_1.Text)
-                                          Width: =Parent.Width - ProjectSearch_ico_1.Width - 20
-                              - ProjectFilter_con_1:
+                                          OnChange: =Set(varActivitySearchTerm, ActivitySearch_txt.Text)
+                                          Width: =Parent.Width - ActivitySearch_ico.Width - 20
+                              - ActivityFilter_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -608,120 +606,42 @@ Screens:
                                     PaddingTop: =4
                                     Width: =Parent.Width
                                   Children:
-                                    - ProjectProgrammeFilter_drp_1:
+                                    - ProgrammeFilter_drp:
                                         Control: ModernDropdown@1.0.2
                                         Properties:
-                                          Default: |-
-                                            =/*If(
-                                                varMode = "New" || IsBlank(varSelectedProject),
-                                                Blank(),
-                                                LookUp(colProgrammesFilter, Title = varSelectedProject.Programme.Value || ProgrammeCode = varSelectedProject.Programme.Value)
-                                            )*/
-
-                                            /*
-                                            If(
-                                                varMode = "New",
-                                                Blank(),
-                                                LookUp(colProgrammes, ProgrammeCode = varSelectedProject.Programme.Value)
-                                            )
-                                            */
-
-                                            LookUp(colProgrammesFilter, Title = "All")
+                                          Default: =LookUp(colProgrammesFilter, Title = "All")
                                           Fill: =RGBA(255, 255, 255, 1)
                                           Height: =Parent.Height
                                           ItemDisplayText: =ThisItem.Title
-                                          Items: |-
-                                            =// ProjectProgrammeFilter_drp.Items — independent, full list, first
-                                            //colProgrammes
-                                            colProgrammesFilter
+                                          Items: =colProgrammesFilter
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |-
-                                            =
-                                            /*
-                                            // ProjectProgrammeFilter_drp.OnChange
-                                            Set(varProjectFilterProgramme, ProjectProgrammeFilter_drp.Selected.Title);
-                                            Reset(ProjectDirectorateFilter_drp);
-                                            */
-
-                                            Set(varProjectFilterProgramme, ProjectProgrammeFilter_drp_1.Selected.Title);
-                                            Set(varProjectFilterDirectorate, "All");
-                                            Set(varDirFilterResetKey, varDirFilterResetKey + 1);
-                                            Reset(ProjectDirectorateFilter_drp_1);
+                                            =Set(varActivityFilterProgramme, ProgrammeFilter_drp.Selected.Title);
+                                            Set(varActivityFilterDirectorate, "All");
+                                            Reset(DirectorateFilter_drp)
                                           Width: =Parent.Width / 3 - 4
-                                    - ProjectDirectorateFilter_drp_1:
+                                    - DirectorateFilter_drp:
                                         Control: ModernDropdown@1.0.2
                                         Properties:
-                                          Default: |-
-                                            =/*If(
-                                                varMode = "New" || IsBlank(varSelectedProject),
-                                                Blank(),
-                                                LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value || Title = varSelectedProject.Directorate.Value)
-                                            )
-                                            */
-                                            /*
-                                            If(
-                                                varMode = "New",
-                                                Blank(),
-                                                LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value)
-                                            )
-                                            */
-
-                                            If(varDirFilterResetKey >= 0, Blank(), LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value))
+                                          Default: =LookUp(colDirectoratesFilter, Title = "All")
                                           Fill: =RGBA(255, 255, 255, 1)
                                           Height: =Parent.Height
-                                          ItemDisplayText: =ThisItem.DirectorateID
-                                          Items: |
-                                            =/* DirectorateFilter_drp.Items — depends on selected Programme
-                                            If(
-                                                varProjectFilterProgramme = "All",
-                                                colDirectorates,
-                                                Filter(colDirectorates, Programme.Value = varProjectFilterProgramme || DirectorateID = "All")
-                                            )
-                                            */
-
-                                            /*
-                                            If(
-                                                IsBlank(ProjectProgrammeFilter_drp.Selected) || ProjectProgrammeFilter_drp.Selected.Title = "All",
-                                                colDirectorates,
-                                                Filter(colDirectorates, Programme = ProjectProgrammeFilter_drp.Selected.Title || Programme = ProjectProgrammeFilter_drp.Selected.ProgrammeCode)
-                                            )
-                                            */
-
-                                            /*
-                                            If(
-                                                IsBlank(ProjectProgrammeFilter_drp.Selected) ||
-                                                ProjectProgrammeFilter_drp.Selected.Title = "All",
-                                                colDirectorates,
-                                                Filter(
-                                                    colDirectorates,
-                                                    Programme.Id = ProjectProgrammeFilter_drp.Selected.ID
-                                                )
-                                            )
-                                            */
-
-                                            //DirectorateFilter_drp.Items — depends on selected Programme
-                                            If(
-                                                IsBlank(ProjectProgrammeFilter_drp_1.Selected) || 
-                                                ProjectProgrammeFilter_drp_1.Selected.Title = "All",
-                                                colDirectorates,
-                                                Filter(colDirectorates, Programme.Value = ProjectProgrammeFilter_drp_1.Selected.Title || 
-                                                Programme.Value = ProjectProgrammeFilter_drp_1.Selected.ProgrammeCode)
-                                            )
+                                          ItemDisplayText: =ThisItem.Title
+                                          Items: =colDirectoratesFilter
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |-
-                                            =// DirectorateFilter_drp.OnChange
-                                            //Set(varProjectFilterDirectorate, ProjectDirectorateFilter_drp.Selected.DirectorateID);
-
-                                            Set(varProjectFilterDirectorate, 
-                                            If(IsBlank(ProjectDirectorateFilter_drp_1.Selected), 
-                                            "All", ProjectDirectorateFilter_drp_1.Selected.DirectorateID))
+                                            =Set(
+                                                varActivityFilterDirectorate,
+                                                If(IsBlank(DirectorateFilter_drp.Selected), "All", DirectorateFilter_drp.Selected.Title)
+                                            )
                                           Width: =Parent.Width / 3 - 4
-                                    - ProjectStatusFilter_drp_1:
+                                    - StatusFilter_drp:
                                         Control: ModernDropdown@1.0.2
                                         Properties:
                                           AccessibleLabel: ="All"
+                                          Default: =LookUp(colStatusFilter, Value = "All")
                                           Fill: =RGBA(255, 255, 255, 1)
                                           Height: =Parent.Height
                                           ItemDisplayText: =ThisItem.Value
@@ -729,9 +649,9 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |+
-                                            =Set(varProjectFilterStatus, ProjectStatusFilter_drp_1.Selected.Value)
+                                            =Set(varActivityFilterStatus, StatusFilter_drp.Selected.Value)
                                           Width: =Parent.Width / 3 - 4
-                              - PrjResultCount_lbl_1:
+                              - ActivityResultCount_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     AlignInContainer: =AlignInContainer.Stretch
@@ -742,162 +662,134 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =4
                                     Size: =11
-                                    Text: |-
-                                      =CountRows(
-                                          Filter(
-                                              colProjectsInScope,
-                                              (varProjectFilterDirectorate = "All" || Directorate.Value = varProjectFilterDirectorate)
-                                              && (varProjectFilterProgramme = "All" || Programme.Value = varProjectFilterProgramme)
-                                              && (varProjectFilterStatus = "All" || Status.Value = varProjectFilterStatus)
-                                              && (
-                                                  IsBlank(varProjectSearchTerm)
-                                                  || Lower(varProjectSearchTerm) in Lower(ProjectID)
-                                                  || Lower(varProjectSearchTerm) in Lower(ProjectGoalDescription)
-                                                  || Lower(varProjectSearchTerm) in Lower(Reference)
-                                              )
-                                          )
-                                      ) & " projects"
-                              - PrjGallery_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
+                                    Text: =CountRows(ActivityItems_gal.AllItems) & " activities"
+                              - ActivityItems_gal:
+                                  Control: Gallery@2.15.0
+                                  Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
                                   Properties:
-                                    DropShadow: =DropShadow.None
-                                    Height: =Parent.Height * .7
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    Height: =Parent.Height
+                                    Items: |-
+                                      =Filter(
+                                          colActivitiesInScope,
+                                          (varActivityFilterDirectorate = "All" || DirectorateLabel = varActivityFilterDirectorate) &&
+                                          (varActivityFilterProgramme = "All" || ProgrammeLabel = varActivityFilterProgramme) &&
+                                          (varActivityFilterStatus = "All" || Status.Value = varActivityFilterStatus) &&
+                                          (
+                                              IsBlank(varActivitySearchTerm) ||
+                                              Lower(varActivitySearchTerm) in Lower(Title) ||
+                                              Lower(varActivitySearchTerm) in Lower(ActivityShortDescription) ||
+                                              Lower(varActivitySearchTerm) in Lower(ActivityDescription)
+                                          )
+                                      )
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: |-
+                                      =Set(varSelectedActivity, ActivityItems_gal.Selected);
+                                      Set(varMode, "View");
+                                      Set(varConfirmDelete, false)
+                                    TemplateSize: =90
                                     Width: =Parent.Width
                                   Children:
-                                    - Project_gal_3:
-                                        Control: Gallery@2.15.0
-                                        Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
+                                    - ActivityRowTitle_lbl:
+                                        Control: ModernText@1.0.0
                                         Properties:
-                                          BorderColor: =RGBA(245, 245, 245, 1)
-                                          Height: =Parent.Height
-                                          Items: |
-                                            =/*/ Project_gal.Items — scoped, filtered by Directorate/Programme/Status dropdowns, and searched
-                                            Filter(
-                                                colProjectsInScope,
-                                                (varProjectFilterDirectorate = "All" || Directorate.Value = varProjectFilterDirectorate)
-                                                && (varProjectFilterProgramme = "All" || Programme.Value = varProjectFilterProgramme)
-                                                && (varProjectFilterStatus = "All" || Status.Value = varProjectFilterStatus)
-                                                && (
-                                                    IsBlank(varProjectSearchTerm)
-                                                    || Lower(varProjectSearchTerm) in Lower(Title)
-                                                    || Lower(varProjectSearchTerm) in Lower(ProjectGoalDescription)
-                                                    || Lower(varProjectSearchTerm) in Lower(Reference)
-                                                )
-                                            )*/
-
-
-                                            Filter(
-                                                colProjectsInScope,
-                                                (varProjectFilterDirectorate = "All" || Directorate.Value = varProjectFilterDirectorate) &&
-                                                (varProjectFilterProgramme = "All" || Programme.Value = varProjectFilterProgramme) &&
-                                                (varProjectFilterStatus = "All" || Status.Value = varProjectFilterStatus) &&
-                                                (
-                                                    IsBlank(varProjectSearchTerm) ||
-                                                    Lower(varProjectSearchTerm) in Lower(ProjectID) ||
-                                                    Lower(varProjectSearchTerm) in Lower(ProjectGoalDescription) ||
-                                                    Lower(varProjectSearchTerm) in Lower(Reference)
-                                                )
+                                          Color: =RGBA(0, 0, 0, 1)
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =22
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =0
+                                          PaddingRight: =0
+                                          Size: =13
+                                          Text: =ThisItem.Title
+                                          Width: =Parent.Width * .65
+                                          X: =10
+                                          Y: =6
+                                    - ActivityRowStatus_rec:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: |-
+                                            =Switch(
+                                                ThisItem.Status.Value,
+                                                "Active", RGBA(45, 128, 40, 1),
+                                                "Completed", RGBA(113, 111, 110, 1),
+                                                "Not Started", RGBA(230, 161, 0, 1),
+                                                RGBA(150, 150, 150, 1)
                                             )
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: |-
-                                            =Set(varSelectedProject, Project_gal_3.Selected);
-                                            Set(varMode, "View")
-                                          TemplateSize: =90
-                                          Width: =Parent.Width
-                                        Children:
-                                          - PrjRowTitle_lbl_3:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                Color: =RGBA(0, 0, 0, 1)
-                                                FontWeight: =FontWeight.Bold
-                                                Height: =Project_gal_3.TemplateHeight / 1.5
-                                                OnSelect: =Select(Parent)
-                                                PaddingBottom: =0
-                                                PaddingRight: =0
-                                                Size: =13
-                                                Text: =ThisItem.ProjectID & " - " & ThisItem.PriorityChallenge
-                                                Width: =Parent.Width * .9
-                                                X: =1
-                                                Y: =2
-                                          - PrjRowStatus_rec_3:
-                                              Control: Rectangle@2.3.0
-                                              Properties:
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                BorderStyle: =BorderStyle.None
-                                                BorderThickness: =2
-                                                DisabledFill: =RGBA(161, 159, 157, 1)
-                                                Fill: |-
-                                                  =Switch(
-                                                      ThisItem.Status.Value,
-                                                      "Active", RGBA(45, 128, 40, 1),
-                                                      "Closed", RGBA(113, 111, 110, 1),
-                                                      "Cancelled", RGBA(189, 49, 51, 1),
-                                                      RGBA(150, 150, 150, 1)
-                                                  )
-                                                FocusedBorderThickness: =4
-                                                Height: =Project_gal_3.TemplateHeight * .7
-                                                HoverFill: =RGBA(0, 120, 212, 1)
-                                                OnSelect: =
-                                                PressedFill: =RGBA(0, 120, 212, 1)
-                                                Width: =6
-                                                Y: =15
-                                          - PrjRowStatus_lbl_3:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                Align: =Align.Center
-                                                FontWeight: =FontWeight.Semibold
-                                                OnSelect: =Select(Parent)
-                                                Size: =11.5
-                                                Text: =ThisItem.Status.Value
-                                                Width: =70
-                                                Y: =PrjRowFY_lbl_3.Y
-                                          - PrjRowFY_lbl_3:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                OnSelect: =Select(Parent)
-                                                Size: =11
-                                                Text: =ThisItem.FinancialYear.Value
-                                                Width: =60
-                                                X: =182
-                                                Y: =Project_gal_3.TemplateHeight / 2.8
-                                          - PrjRowChevron_ico_3:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(204, 204, 204, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =Parent.TemplateHeight * 0.4
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(0, 0, 0, 0)
-                                                Icon: =Icon.ChevronRight
-                                                OnSelect: =Select(Parent)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Width: =20
-                                                X: =222
-                                                Y: =PrjRowFY_lbl_3.Y
-                                          - PrjRowMeta_lbl_3:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                Color: =RGBA(113, 111, 110, 1)
-                                                Height: =Project_gal_3.TemplateHeight / 4
-                                                OnSelect: =Select(Parent)
-                                                PaddingTop: =0
-                                                Size: =11
-                                                Text: =ThisItem.Directorate.Value & " · " & ThisItem.Programme.Value
-                                                Width: =Parent.Width * .9
-                                                X: =1
-                                                Y: =PrjRowTitle_lbl_3.Y + PrjRowTitle_lbl_3.Height
-                        - ProjectForm_con_1:
+                                          FocusedBorderThickness: =4
+                                          Height: =ActivityItems_gal.TemplateHeight * .7
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          OnSelect: =
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =6
+                                          X: =ActivityItems_gal.TemplateWidth - 84
+                                          Y: =15
+                                    - ActivityRowStatus_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          FontWeight: =FontWeight.Semibold
+                                          OnSelect: =Select(Parent)
+                                          Size: =11.5
+                                          Text: =ThisItem.Status.Value
+                                          Width: =70
+                                          X: =ActivityItems_gal.TemplateWidth - 80
+                                          Y: =36
+                                    - ActivityRowMeta_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          Height: =18
+                                          OnSelect: =Select(Parent)
+                                          PaddingTop: =0
+                                          Size: =11
+                                          Text: =ThisItem.DirectorateLabel & " · " & ThisItem.ProgrammeLabel
+                                          Width: =Parent.Width * .9
+                                          X: =10
+                                          Y: =ActivityRowTitle_lbl.Y + ActivityRowTitle_lbl.Height
+                                    - ActivityRowDue_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          Height: =18
+                                          OnSelect: =Select(Parent)
+                                          PaddingTop: =0
+                                          Size: =11
+                                          Text: |-
+                                            =If(
+                                                IsBlank(ThisItem.DueDate),
+                                                "Frequency: " & ThisItem.Frequency.Value,
+                                                "Due " & Text(ThisItem.DueDate, "dd mmm yyyy")
+                                            )
+                                          Width: =Parent.Width * .9
+                                          X: =10
+                                          Y: =ActivityRowMeta_lbl.Y + ActivityRowMeta_lbl.Height
+                                    - ActivityRowChevron_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(204, 204, 204, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =ActivityItems_gal.TemplateHeight * 0.4
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.ChevronRight
+                                          OnSelect: =Select(Parent)
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =20
+                                          X: =ActivityItems_gal.TemplateWidth - 30
+                                          Y: =ActivityRowStatus_lbl.Y
+                        - ActivityForm_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -912,7 +804,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width * 0.62
                             Children:
-                              - FormHeader_con_1:
+                              - FormHeader_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -925,7 +817,7 @@ Screens:
                                     LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
                                     Width: =Parent.Width
                                   Children:
-                                    - FormHeaderButtons_con_1:
+                                    - FormHeaderButtons_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
@@ -936,7 +828,7 @@ Screens:
                                           LayoutDirection: =LayoutDirection.Horizontal
                                           LayoutGap: =8
                                         Children:
-                                          - FormTitle_lbl_1:
+                                          - FormTitle_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AutoHeight: =true
@@ -950,12 +842,10 @@ Screens:
                                                 Text: |-
                                                   =If(
                                                       varMode = "New",
-                                                      "New Project",
-                                                      "Activity: " & varSelectedProject.ProjectID & " - " & varSelectedProject.PriorityChallenge
+                                                      "New Activity",
+                                                      "Activity: " & varSelectedActivity.Title
                                                   )
-                                                X: =40
-                                                Y: =40
-                                          - Cancel_btn_1:
+                                          - Cancel_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -967,36 +857,21 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 OnSelect: |-
                                                   =Set(varMode, "View");
-                                                  Reset(PriorityChallenge_txt_1);
-                                                  Reset(ProjectGoalDescription_txt_1);
-                                                  Reset(KeyDeliverable_txt_1);
-                                                  Reset(AnnualTarget_txt_1);
-                                                  Reset(Reference_txt_1);
-                                                  Reset(Budget_txt_1);
-                                                  Reset(ProjectProgramme_drp_1);
-                                                  Reset(ProjectDirectorate_drp_1);
-                                                  Reset(Responsibility_cmb_1);
-                                                  Reset(ProjectStartDate_pkr_1);
-                                                  Reset(ProjectCompletionDate_pkr_1);
-                                                  Reset(ProjectFY_drp_1);
-                                                  Reset(ProjectStatus_drp_1)
-
-                                                  /*
-                                                  Set(varMode, "View");
-                                                  //Reset(ProjectTitle_txt);
-                                                  Reset(PriorityChallenge_txt);
-                                                  Reset(ProjectGoalDescription_txt);
-                                                  Reset(KeyDeliverable_txt);
-                                                  Reset(AnnualTarget_txt);
-                                                  Reset(Reference_txt);
-                                                  Reset(Budget_txt);
-                                                  Reset(ProjectProgramme_drp);
-                                                  Reset(Responsibility_cmb);
-                                                  Reset(ProjectStartDate_pkr);
-                                                  Reset(ProjectCompletionDate_pkr);
-                                                  Reset(ProjectFY_drp);
-                                                  Reset(ProjectStatus_drp)
-                                                  */
+                                                  Set(varConfirmDelete, false);
+                                                  Reset(Title_txt);
+                                                  Reset(ActivityCode_txt);
+                                                  Reset(ActivityShortDescription_txt);
+                                                  Reset(ActivityDescription_txt);
+                                                  Reset(Frequency_drp);
+                                                  Reset(ProgrammeLabel_drp);
+                                                  Reset(DirectorateLabel_drp);
+                                                  Reset(ActivityOwner_cmb);
+                                                  Reset(Supervisor_cmb);
+                                                  Reset(StartDate_pkr);
+                                                  Reset(EndDate_pkr);
+                                                  Reset(DueDate_pkr);
+                                                  Reset(Status_drp);
+                                                  Reset(Active_tgl)
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
@@ -1004,7 +879,7 @@ Screens:
                                                 Text: ="Cancel"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                          - Save_btn_1:
+                                          - Save_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -1016,125 +891,68 @@ Screens:
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 OnSelect: |-
-                                                  =/*
+                                                  =Set(
+                                                      varActivityFormValid,
+                                                      !IsBlank(Title_txt.Text) &&
+                                                      !IsBlank(ActivityShortDescription_txt.Text) &&
+                                                      !IsBlank(ActivityDescription_txt.Text) &&
+                                                      !IsBlank(ProgrammeLabel_drp.Selected) &&
+                                                      !IsBlank(DirectorateLabel_drp.Selected) &&
+                                                      !IsBlank(ActivityOwner_cmb.Selected) &&
+                                                      !IsBlank(Status_drp.Selected)
+                                                  );
                                                   If(
-                                                      //IsBlank(ProjectTitle_txt.Text) ||
-                                                             IsBlank(PriorityChallenge_txt.Text) || IsBlank(ProjectGoalDescription_txt.Text)
-                                                          || IsBlank(KeyDeliverable_txt.Text) || IsBlank(AnnualTarget_txt.Text) || IsBlank(Reference_txt.Text)
-                                                          || IsBlank(Budget_txt.Text) || IsBlank(ProjectProgramme_drp.Selected)
-                                                          || IsBlank(ProjectDirectorate_drp.Selected)
-                                                          || IsBlank(Responsibility_cmb.Selected) || IsBlank(ProjectStartDate_pkr.SelectedDate)
-                                                          || IsBlank(ProjectCompletionDate_pkr.SelectedDate) || IsBlank(ProjectFY_drp.Selected) || IsBlank(ProjectStatus_drp.Selected),
-
-                                                      Notify("All fields are required before saving.", NotificationType.Error),
-
+                                                      varActivityFormValid,
                                                       Set(
-                                                      varSelectedProject,
-                                                      Patch(
-                                                          Projects,
-                                                          If(varMode = "New", Defaults(Projects), varSelectedProject),
-                                                          {
-                                                              PriorityChallenge: PriorityChallenge_txt.Text,
-                                                              ProjectGoalDescription: ProjectGoalDescription_txt.Text,
-                                                              KeyDeliverable: KeyDeliverable_txt.Text,
-                                                              AnnualTarget: AnnualTarget_txt.Text,
-                                                              Reference: Reference_txt.Text,
-                                                              Budget: Value(Budget_txt.Text),
-                                                              Programme: ProjectProgramme_drp.Selected.Title,
-                                                              Directorate: Dropdown2.Selected.DirectorateID,
-                                                              Responsibility: Responsibility_cmb.Selected,
-                                                              StartDate: ProjectStartDate_pkr.SelectedDate,
-                                                              CompletionDate: ProjectCompletionDate_pkr.SelectedDate,
-                                                              FinancialYear: ProjectFY_drp.Selected,
-                                                              Status: ProjectStatus_drp.Selected
-                                                          }
-                                                      )
-                                                      );
-                                                      Set(varMode, "View");
-                                                      ClearCollect(
-                                                          colProjectsInScope,
-                                                          Filter(
-                                                              Projects,
-                                                              varCanViewAllReports
-                                                                  || Directorate.Value = varUserDirectorateID
-                                                                  || Directorate.Value = varUserDirectorate
-                                                          )
-                                                      );
-                                                      Notify("Project saved successfully.", NotificationType.Success)
-                                                  )
-                                                  */
-
-
-                                                  If(
-                                                      IsBlank(PriorityChallenge_txt_1.Text) || IsBlank(ProjectGoalDescription_txt_1.Text)
-                                                      || IsBlank(KeyDeliverable_txt_1.Text) || IsBlank(AnnualTarget_txt_1.Text) || IsBlank(Reference_txt_1.Text)
-                                                      || IsBlank(Budget_txt_1.Text) || IsBlank(ProjectProgramme_drp_1.Selected)
-                                                      || IsBlank(ProjectDirectorate_drp_1.Selected)
-                                                      || IsBlank(Responsibility_cmb_1.Selected) || IsBlank(ProjectStartDate_pkr_1.SelectedDate)
-                                                      || IsBlank(ProjectCompletionDate_pkr_1.SelectedDate) || IsBlank(ProjectFY_drp_1.Selected) || IsBlank(ProjectStatus_drp_1.Selected),
-
-                                                      Notify("All fields are required before saving.", NotificationType.Error),
-
-                                                      Set(
-                                                          varSelectedProject,
+                                                          varSelectedActivity,
                                                           Patch(
                                                               Activities,
-                                                              If(varMode = "New", Defaults(Activities), varSelectedProject),
+                                                              If(varMode = "New", Defaults(Activities), varSelectedActivity),
                                                               {
-                                                                  // scr_Activities Save — writes to the Activities list (schema per Activities.csv)
-                                                                  Title: Reference_txt_1.Text,
-                                                                  ActivityCode: Reference_txt_1.Text,
-                                                                  ActivityDescription: ProjectGoalDescription_txt_1.Text,
-                                                                  ActivityShortDescription: PriorityChallenge_txt_1.Text,
-                                                                  ProgrammeLabel: ProjectProgramme_drp_1.Selected.Title,
-                                                                  Directorate: ProjectDirectorate_drp_1.Selected.DirectorateID,
-                                                                  DirectorateLabel: ProjectDirectorate_drp_1.Selected.DirectorateName,
-                                                                  ActivityOwner: Responsibility_cmb_1.Selected.UserAccount,
-                                                                  StartDate: ProjectStartDate_pkr_1.SelectedDate,
-                                                                  EndDate: ProjectCompletionDate_pkr_1.SelectedDate,
-                                                                  Active: true,
-                                                                  Status: ProjectStatus_drp_1.Selected.Value
+                                                                  // scr_Activities Save — writes the Activities list (schema per Activities.csv)
+                                                                  Title: Title_txt.Text,
+                                                                  ActivityCode: ActivityCode_txt.Text,
+                                                                  ActivityDescription: ActivityDescription_txt.Text,
+                                                                  ActivityShortDescription: ActivityShortDescription_txt.Text,
+                                                                  Frequency: Frequency_drp.Selected.Value,
+                                                                  ProgrammeLabel: ProgrammeLabel_drp.Selected.Title,
+                                                                  Directorate: {Id: DirectorateLabel_drp.Selected.ID},
+                                                                  DirectorateLabel: DirectorateLabel_drp.Selected.Title,
+                                                                  ActivityOwner: ActivityOwner_cmb.Selected.UserAccount,
+                                                                  Supervisor: Supervisor_cmb.Selected.UserAccount,
+                                                                  StartDate: StartDate_pkr.SelectedDate,
+                                                                  EndDate: EndDate_pkr.SelectedDate,
+                                                                  DueDate: DueDate_pkr.SelectedDate,
+                                                                  Active: Active_tgl.Value,
+                                                                  Status: Status_drp.Selected.Value
                                                               }
                                                           )
-                                                      );
-                                                      Set(varMode, "View");
+                                                      ),
+                                                      Notify("Please complete all required fields.", NotificationType.Error)
+                                                  );
+                                                  If(
+                                                      varActivityFormValid,
+                                                      Set(varMode, "View")
+                                                  );
+                                                  If(
+                                                      varActivityFormValid,
+                                                      Set(varConfirmDelete, false)
+                                                  );
+                                                  If(
+                                                      varActivityFormValid,
                                                       ClearCollect(
                                                           colActivitiesInScope,
-                                                          Filter(
+                                                          If(
+                                                              varCanViewAllReports,
                                                               Activities,
-                                                              varCanViewAllReports
-                                                              || Directorate = varUserDirectorate
+                                                              Filter(Activities, DirectorateLabel = varUserDirectorate)
                                                           )
-                                                      );
+                                                      )
+                                                  );
+                                                  If(
+                                                      varActivityFormValid,
                                                       Notify("Activity saved successfully.", NotificationType.Success)
                                                   )
-
-
-                                                  /*
-                                                  Patch(
-                                                      Projects,
-                                                      If(varMode = "New", Defaults(Projects), varSelectedProject),
-                                                      {
-                                                          PriorityChallenge: PriorityChallenge_txt.Text,
-                                                          ProjectGoalDescription: ProjectGoalDescription_txt.Text,
-                                                          KeyDeliverable: KeyDeliverable_txt.Text,
-                                                          AnnualTarget: AnnualTarget_txt.Text,
-                                                          Reference: Reference_txt.Text,
-                                                          //Budget: Value(Budget_txt.Text),
-                                                          Budget: (Budget_txt.Text),
-                                                          //Programme: ProjectProgramme_drp.Selected,
-                                                          //Directorate: ProjectDirectorate_drp.Selected,
-                                                          Programme: { Id: ProjectProgramme_drp.Selected.ID, Value: ProjectProgramme_drp.Selected.ProgrammeCode },
-                                                          Directorate: { Id: ProjectDirectorate_drp.Selected.ID, Value: ProjectDirectorate_drp.Selected.DirectorateID },
-                                                          Responsibility: Responsibility_cmb.Selected.UserAccount,
-                                                          //Responsibility: {Id: Responsibility_cmb.Selected.ID, Value: Responsibility_cmb.Selected.UserAccount.DisplayName},
-                                                          StartDate: ProjectStartDate_pkr.SelectedDate,
-                                                          CompletionDate: ProjectCompletionDate_pkr.SelectedDate,
-                                                          FinancialYear: ProjectFY_drp.Selected,
-                                                          Status: ProjectStatus_drp.Selected
-                                                      }
-                                                  )
-                                                  */
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
@@ -1142,7 +960,7 @@ Screens:
                                                 Text: ="Save"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                          - Edit_btn_1:
+                                          - Edit_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -1158,39 +976,131 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Text: ="Edit"
-                                                Visible: =varMode = "View" && !IsBlank(varSelectedProject)
+                                                Visible: =varMode = "View" && !IsBlank(varSelectedActivity)
                                                 Width: =110
-                                                X: =40
-                                                Y: =40
-                              - FormFields_con_1:
+                                          - Delete_btn:
+                                              Control: ModernButton@1.0.0
+                                              Properties:
+                                                Appearance: =ButtonAppearance.Transparent
+                                                BasePaletteColor: =RGBA(189, 49, 51, 1)
+                                                BorderColor: =RGBA(214, 221, 224, 1)
+                                                BorderThickness: =1
+                                                Icon: ="Delete"
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Set(varConfirmDelete, true)
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Text: ="Delete"
+                                                Visible: =varMode = "View" && !IsBlank(varSelectedActivity)
+                                                Width: =110
+                              - DeleteConfirm_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    Fill: =RGBA(253, 231, 233, 1)
+                                    FillPortions: =0
+                                    Height: =50
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutGap: =12
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =6
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =6
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Visible: =varConfirmDelete
+                                    Width: =Parent.Width
+                                  Children:
+                                    - DeleteConfirm_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Color: =RGBA(189, 49, 51, 1)
+                                          FillPortions: =1
+                                          FontWeight: =FontWeight.Semibold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Delete this activity permanently?"
+                                    - CancelDelete_btn:
+                                        Control: ModernButton@1.0.0
+                                        Properties:
+                                          Appearance: =ButtonAppearance.Transparent
+                                          BorderColor: =RGBA(106, 122, 127, 1)
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =1
+                                          Icon: ="Cancel"
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varConfirmDelete, false)
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Text: ="Keep"
+                                          Width: =90
+                                    - ConfirmDelete_btn:
+                                        Control: ModernButton@1.0.0
+                                        Properties:
+                                          Appearance: =ButtonAppearance.Primary
+                                          BasePaletteColor: =RGBA(189, 49, 51, 1)
+                                          Icon: ="Delete"
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =RemoveIf(Activities, ID = varSelectedActivity.ID);
+                                            Set(varSelectedActivity, Blank());
+                                            Set(varMode, "View");
+                                            Set(varConfirmDelete, false);
+                                            ClearCollect(
+                                                colActivitiesInScope,
+                                                If(
+                                                    varCanViewAllReports,
+                                                    Activities,
+                                                    Filter(Activities, DirectorateLabel = varUserDirectorate)
+                                                )
+                                            );
+                                            Notify("Activity deleted.", NotificationType.Success)
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Text: ="Delete"
+                                          Width: =90
+                              - FormFields_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
                                     BorderStyle: =BorderStyle.None
                                     DropShadow: =DropShadow.None
-                                    Height: |-
-                                      =// === HEIGHT - Auto-adjusted ===
-                                       Parent.Height * 0.9         // 90% on desktop
+                                    Height: =Parent.Height * 0.85
                                     LayoutAlignItems: =LayoutAlignItems.Stretch
                                     LayoutDirection: =LayoutDirection.Vertical
                                     LayoutGap: =14
                                     LayoutOverflowY: =LayoutOverflow.Scroll
                                     PaddingBottom: =12
+                                    PaddingLeft: =4
+                                    PaddingRight: =4
                                     PaddingTop: =4
                                     Width: =Parent.Width
                                   Children:
-                                    - PriorityChallenge_field_con_1:
+                                    - Title_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
                                           DropShadow: =DropShadow.None
-                                          FillPortions: =0
-                                          Height: =85
                                           LayoutDirection: =LayoutDirection.Vertical
                                           LayoutGap: =4
                                           Width: =Parent.Width
                                         Children:
-                                          - PriorityChallenge_lbl_1:
+                                          - Title_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -1199,25 +1109,24 @@ Screens:
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 Size: =11
-                                                Text: ="PRIORITY / CHALLENGE *"
-                                          - PriorityChallenge_txt_1:
+                                                Text: ="ACTIVITY TITLE *"
+                                          - Title_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Center
                                                 BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.PriorityChallenge)
+                                                Default: =If(varMode = "New", "", varSelectedActivity.Title)
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Font: =Font.'Segoe UI'
-                                                Height: =Parent.Height - PriorityChallenge_lbl_1.Height - 15
+                                                Height: =40
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
-                                                Mode: =TextMode.MultiLine
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
-                                                Width: '=Parent.Width '
-                                    - ProjectGoalDescription_field_con_1:
+                                                Width: =Parent.Width
+                                    - ActivityCode_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
@@ -1226,249 +1135,33 @@ Screens:
                                           LayoutGap: =4
                                           Width: =Parent.Width
                                         Children:
-                                          - ProjectGoalDescription_lbl_1:
+                                          - ActivityCode_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
-                                                AutoHeight: =true
                                                 Color: =RGBA(96, 94, 92, 1)
                                                 FontWeight: =FontWeight.Semibold
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 Size: =11
-                                                Text: ="PROJECT GOAL DESCRIPTION *"
-                                          - ProjectGoalDescription_txt_1:
+                                                Text: ="ACTIVITY CODE (e.g. ICTM-AC-0001)"
+                                          - ActivityCode_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Center
                                                 BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.ProjectGoalDescription)
+                                                Default: =If(varMode = "New", "", varSelectedActivity.ActivityCode)
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Font: =Font.'Segoe UI'
-                                                Height: =70
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Mode: =TextMode.MultiLine
-                                                RadiusBottomLeft: =8
-                                                RadiusBottomRight: =8
-                                                RadiusTopLeft: =8
-                                                RadiusTopRight: =8
-                                                Width: '=Parent.Width '
-                                    - KeyDeliverable_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - KeyDeliverable_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AutoHeight: =true
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="KEY DELIVERABLE *"
-                                          - KeyDeliverable_txt_1:
-                                              Control: Classic/TextInput@2.3.2
-                                              Properties:
-                                                BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.KeyDeliverable)
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Font: =Font.'Segoe UI'
-                                                Height: =70
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Mode: =TextMode.MultiLine
-                                                RadiusBottomLeft: =8
-                                                RadiusBottomRight: =8
-                                                RadiusTopLeft: =8
-                                                RadiusTopRight: =8
-                                                Width: =Parent.Width
-                                    - AnnualTarget_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - AnnualTarget_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AutoHeight: =true
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="ANNUAL TARGET *"
-                                          - AnnualTarget_txt_1:
-                                              Control: Classic/TextInput@2.3.2
-                                              Properties:
-                                                BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.AnnualTarget)
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Font: =Font.'Segoe UI'
-                                                Height: =70
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Mode: =TextMode.MultiLine
-                                                Width: =Parent.Width
-                                    - Reference_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - Reference_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AutoHeight: =true
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="REFERENCE *"
-                                          - Reference_txt_1:
-                                              Control: Classic/TextInput@2.3.2
-                                              Properties:
-                                                BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.Reference)
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Font: =Font.'Segoe UI'
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                RadiusBottomLeft: =8
-                                                RadiusBottomRight: =8
-                                                RadiusTopLeft: =8
-                                                RadiusTopRight: =8
-                                                Width: =Parent.Width
-                                    - Budget_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - Budget_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AutoHeight: =true
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="BUDGET (R) *"
-                                          - Budget_txt_1:
-                                              Control: Classic/TextInput@2.3.2
-                                              Properties:
-                                                BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", Text(varSelectedProject.Budget))
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Font: =Font.'Segoe UI'
-                                                Format: =TextFormat.Number
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                RadiusBottomLeft: =8
-                                                RadiusBottomRight: =8
-                                                RadiusTopLeft: =8
-                                                RadiusTopRight: =8
-                                                Width: =Parent.Width
-                                    - ProjectDirectorate_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - ProjectProgramme_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AlignInContainer: =AlignInContainer.Stretch
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="PROGRAMME *"
-                                          - ProjectProgramme_drp_1:
-                                              Control: ModernDropdown@1.0.2
-                                              Properties:
-                                                BorderColor: =RGBA(214, 221, 224, 1)
-                                                BorderStyle: =BorderStyle.Solid
-                                                BorderThickness: =2
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Fill: =RGBA(255, 255, 255, 1)
                                                 Height: =40
-                                                ItemDisplayText: =ThisItem.Title
-                                                Items: |-
-                                                  =//colProgrammes
-                                                  Programmes
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
-                                                OnChange: =Reset(ProjectDirectorate_drp_1)
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                    - ProjectProgramme_field_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          FillPortions: =0
-                                          Height: =100
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =4
-                                          Width: =Parent.Width
-                                        Children:
-                                          - ProjectProgramme_hdr_lbl_1:
-                                              Control: ModernText@1.0.0
-                                              Properties:
-                                                AlignInContainer: =AlignInContainer.Stretch
-                                                Color: =RGBA(96, 94, 92, 1)
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =11
-                                                Text: ="DIRECTORATE (inherited from Programme)"
-                                          - ProjectDirectorate_drp_1:
-                                              Control: ModernDropdown@1.0.2
-                                              Properties:
-                                                BorderColor: =RGBA(214, 221, 224, 1)
-                                                BorderStyle: =BorderStyle.Solid
-                                                BorderThickness: =2
-                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value))
-                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Fill: =RGBA(255, 255, 255, 1)
-                                                ItemDisplayText: =ThisItem.DirectorateID
-                                                Items: |-
-                                                  =// Dropdown2.Items (rename it DirectorateForm_drp for sanity)
-                                                  If(
-                                                      IsBlank(ProjectProgramme_drp_1.Selected),
-                                                      colDirectorates,
-                                                      Filter(colDirectorates, Programme.Value = ProjectProgramme_drp_1.Selected.Title)
-                                                  )
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Width: =Parent.Width
-                                    - Responsibility_field_con_1:
+                                    - ActivityShortDescription_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
@@ -1477,54 +1170,69 @@ Screens:
                                           LayoutGap: =4
                                           Width: =Parent.Width
                                         Children:
-                                          - Responsibility_lbl_1:
+                                          - ActivityShortDescription_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
-                                                AutoHeight: =true
                                                 Color: =RGBA(96, 94, 92, 1)
                                                 FontWeight: =FontWeight.Semibold
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 Size: =11
-                                                Text: ="RESPONSIBILITY (ACCOUNTABLE PERSON) *"
-                                          - Responsibility_cmb_1:
-                                              Control: ModernCombobox@1.1.1
+                                                Text: ="SHORT DESCRIPTION *"
+                                          - ActivityShortDescription_txt:
+                                              Control: Classic/TextInput@2.3.2
                                               Properties:
-                                                BorderColor: =RGBA(214, 221, 224, 1)
-                                                BorderStyle: =BorderStyle.Solid
-                                                BorderThickness: =2
-                                                Color: =RGBA(0, 0, 0, 1)
-                                                DefaultSelectedItems: |-
-                                                  =/*If(
-                                                      varMode = "New",
-                                                      Blank(),
-                                                      [LookUp(App_Users, Email = varSelectedProject.Responsibility.Email)]
-                                                  )
-                                                  */
-
-                                                  If(
-                                                      varMode = "New",
-                                                      Blank(),
-                                                      [LookUp(APP_Users, UserAccount.Email = varSelectedProject.Responsibility.Email)]
-                                                  )
-
-
-                                                  //APP_Users
+                                                AlignInContainer: =AlignInContainer.Center
+                                                BorderColor: =RGBA(225, 223, 221, 1)
+                                                Default: =If(varMode = "New", "", varSelectedActivity.ActivityShortDescription)
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                                Fill: =RGBA(255, 255, 255, 1)
+                                                Font: =Font.'Segoe UI'
                                                 Height: =40
-                                                ItemDisplayText: =ThisItem.UserAccount.DisplayName
-                                                Items: =APP_Users
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
-                                                SelectMultiple: =false
                                                 Width: =Parent.Width
-                                    - ProjectDates_con_1:
+                                    - ActivityDescription_field_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutGap: =4
+                                          Width: =Parent.Width
+                                        Children:
+                                          - ActivityDescription_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Stretch
+                                                Color: =RGBA(96, 94, 92, 1)
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =11
+                                                Text: ="ACTIVITY DESCRIPTION *"
+                                          - ActivityDescription_txt:
+                                              Control: Classic/TextInput@2.3.2
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Center
+                                                BorderColor: =RGBA(225, 223, 221, 1)
+                                                Default: =If(varMode = "New", "", varSelectedActivity.ActivityDescription)
+                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                Font: =Font.'Segoe UI'
+                                                Height: =90
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Mode: =TextMode.MultiLine
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Width: =Parent.Width
+                                    - FrequencyProgramme_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
@@ -1533,16 +1241,16 @@ Screens:
                                           LayoutGap: =12
                                           Width: =Parent.Width
                                         Children:
-                                          - ProjectStartDate_field_con_1:
+                                          - Frequency_field_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
                                               Properties:
                                                 DropShadow: =DropShadow.None
                                                 LayoutDirection: =LayoutDirection.Vertical
                                                 LayoutGap: =4
-                                                Width: =Parent.Width / 2 - 6
+                                                Width: =Parent.Width / 3 - 8
                                               Children:
-                                                - ProjectStartDate_lbl_1:
+                                                - Frequency_lbl:
                                                     Control: ModernText@1.0.0
                                                     Properties:
                                                       AutoHeight: =true
@@ -1551,30 +1259,36 @@ Screens:
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
                                                       Size: =11
-                                                      Text: ="START DATE *"
-                                                - ProjectStartDate_pkr_1:
-                                                    Control: ModernDatePicker@1.0.1
+                                                      Text: ="FREQUENCY"
+                                                - Frequency_drp:
+                                                    Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       BorderColor: =RGBA(214, 221, 224, 1)
                                                       BorderStyle: =BorderStyle.Solid
                                                       BorderThickness: =2
-                                                      DefaultDate: =If(varMode = "New", Blank(), varSelectedProject.StartDate)
+                                                      Default: =If(varMode = "New", Blank(), LookUp(Choices(Activities.Frequency), Value = varSelectedActivity.Frequency.Value))
                                                       DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                       Fill: =RGBA(255, 255, 255, 1)
                                                       Height: =40
+                                                      ItemDisplayText: =ThisItem.Value
+                                                      Items: =Choices(Activities.Frequency)
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
                                                       Width: =Parent.Width
-                                          - ProjectCompletionDate_field_con_1:
+                                          - Programme_field_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
                                               Properties:
                                                 DropShadow: =DropShadow.None
                                                 LayoutDirection: =LayoutDirection.Vertical
                                                 LayoutGap: =4
-                                                Width: =Parent.Width / 2 - 6
+                                                Width: =Parent.Width * 2 / 3 - 4
                                               Children:
-                                                - ProjectCompletionDate_lbl_1:
+                                                - Programme_lbl:
                                                     Control: ModernText@1.0.0
                                                     Properties:
                                                       AutoHeight: =true
@@ -1583,14 +1297,204 @@ Screens:
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
                                                       Size: =11
-                                                      Text: ="COMPLETION DATE *"
-                                                - ProjectCompletionDate_pkr_1:
+                                                      Text: ="PROGRAMME *"
+                                                - ProgrammeLabel_drp:
+                                                    Control: ModernDropdown@1.0.2
+                                                    Properties:
+                                                      BorderColor: =RGBA(214, 221, 224, 1)
+                                                      BorderStyle: =BorderStyle.Solid
+                                                      BorderThickness: =2
+                                                      Default: =If(varMode = "New", Blank(), LookUp(colProgrammes, Title = varSelectedActivity.ProgrammeLabel))
+                                                      DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                      Fill: =RGBA(255, 255, 255, 1)
+                                                      Height: =40
+                                                      ItemDisplayText: =ThisItem.Title
+                                                      Items: =colProgrammes
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      OnChange: =Reset(DirectorateLabel_drp)
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
+                                                      Width: =Parent.Width
+                                    - Directorate_field_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutGap: =4
+                                          Width: =Parent.Width
+                                        Children:
+                                          - Directorate_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Stretch
+                                                Color: =RGBA(96, 94, 92, 1)
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =11
+                                                Text: ="DIRECTORATE *"
+                                          - DirectorateLabel_drp:
+                                              Control: ModernDropdown@1.0.2
+                                              Properties:
+                                                BorderColor: =RGBA(214, 221, 224, 1)
+                                                BorderStyle: =BorderStyle.Solid
+                                                BorderThickness: =2
+                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, Title = varSelectedActivity.DirectorateLabel))
+                                                DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                Fill: =RGBA(255, 255, 255, 1)
+                                                Height: =40
+                                                ItemDisplayText: =ThisItem.Title
+                                                Items: |-
+                                                  =If(
+                                                      IsBlank(ProgrammeLabel_drp.Selected),
+                                                      colDirectorates,
+                                                      Filter(colDirectorates, Programme.Value = ProgrammeLabel_drp.Selected.Title)
+                                                  )
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Width: =Parent.Width
+                                    - OwnerSupervisor_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =12
+                                          Width: =Parent.Width
+                                        Children:
+                                          - ActivityOwner_field_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                LayoutDirection: =LayoutDirection.Vertical
+                                                LayoutGap: =4
+                                                Width: =Parent.Width / 2 - 6
+                                              Children:
+                                                - ActivityOwner_lbl:
+                                                    Control: ModernText@1.0.0
+                                                    Properties:
+                                                      AutoHeight: =true
+                                                      Color: =RGBA(96, 94, 92, 1)
+                                                      FontWeight: =FontWeight.Semibold
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Size: =11
+                                                      Text: ="ACTIVITY OWNER *"
+                                                - ActivityOwner_cmb:
+                                                    Control: ModernCombobox@1.1.1
+                                                    Properties:
+                                                      BorderColor: =RGBA(214, 221, 224, 1)
+                                                      BorderStyle: =BorderStyle.Solid
+                                                      BorderThickness: =2
+                                                      Color: =RGBA(0, 0, 0, 1)
+                                                      DefaultSelectedItems: |-
+                                                        =If(
+                                                            varMode = "New",
+                                                            Blank(),
+                                                            [LookUp(APP_Users, UserAccount.Email = varSelectedActivity.ActivityOwner.Email)]
+                                                        )
+                                                      DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                      Fill: =RGBA(255, 255, 255, 1)
+                                                      Height: =40
+                                                      ItemDisplayText: =ThisItem.UserAccount.DisplayName
+                                                      Items: =APP_Users
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
+                                                      SelectMultiple: =false
+                                                      Width: =Parent.Width
+                                          - Supervisor_field_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                LayoutDirection: =LayoutDirection.Vertical
+                                                LayoutGap: =4
+                                                Width: =Parent.Width / 2 - 6
+                                              Children:
+                                                - Supervisor_lbl:
+                                                    Control: ModernText@1.0.0
+                                                    Properties:
+                                                      AutoHeight: =true
+                                                      Color: =RGBA(96, 94, 92, 1)
+                                                      FontWeight: =FontWeight.Semibold
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Size: =11
+                                                      Text: ="SUPERVISOR (APPROVER)"
+                                                - Supervisor_cmb:
+                                                    Control: ModernCombobox@1.1.1
+                                                    Properties:
+                                                      BorderColor: =RGBA(214, 221, 224, 1)
+                                                      BorderStyle: =BorderStyle.Solid
+                                                      BorderThickness: =2
+                                                      Color: =RGBA(0, 0, 0, 1)
+                                                      DefaultSelectedItems: |-
+                                                        =If(
+                                                            varMode = "New",
+                                                            Blank(),
+                                                            [LookUp(APP_Users, UserAccount.Email = varSelectedActivity.Supervisor.Email)]
+                                                        )
+                                                      DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                      Fill: =RGBA(255, 255, 255, 1)
+                                                      Height: =40
+                                                      ItemDisplayText: =ThisItem.UserAccount.DisplayName
+                                                      Items: =APP_Users
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
+                                                      SelectMultiple: =false
+                                                      Width: =Parent.Width
+                                    - Dates_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =12
+                                          Width: =Parent.Width
+                                        Children:
+                                          - StartDate_field_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                LayoutDirection: =LayoutDirection.Vertical
+                                                LayoutGap: =4
+                                                Width: =Parent.Width / 3 - 8
+                                              Children:
+                                                - StartDate_lbl:
+                                                    Control: ModernText@1.0.0
+                                                    Properties:
+                                                      AutoHeight: =true
+                                                      Color: =RGBA(96, 94, 92, 1)
+                                                      FontWeight: =FontWeight.Semibold
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Size: =11
+                                                      Text: ="START DATE"
+                                                - StartDate_pkr:
                                                     Control: ModernDatePicker@1.0.1
                                                     Properties:
                                                       BorderColor: =RGBA(214, 221, 224, 1)
                                                       BorderStyle: =BorderStyle.Solid
                                                       BorderThickness: =2
-                                                      DefaultDate: =If(varMode = "New", Blank(), varSelectedProject.CompletionDate)
+                                                      DefaultDate: =If(varMode = "New", Blank(), varSelectedActivity.StartDate)
                                                       DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                       Fill: =RGBA(255, 255, 255, 1)
                                                       Height: =40
@@ -1601,25 +1505,16 @@ Screens:
                                                       RadiusTopLeft: =8
                                                       RadiusTopRight: =8
                                                       Width: =Parent.Width
-                                    - ProjectFYStatus_con_1:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          LayoutDirection: =LayoutDirection.Horizontal
-                                          LayoutGap: =12
-                                          Width: =Parent.Width
-                                        Children:
-                                          - ProjectFY_field_con_1:
+                                          - EndDate_field_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
                                               Properties:
                                                 DropShadow: =DropShadow.None
                                                 LayoutDirection: =LayoutDirection.Vertical
                                                 LayoutGap: =4
-                                                Width: =Parent.Width / 2 - 6
+                                                Width: =Parent.Width / 3 - 8
                                               Children:
-                                                - ProjectFY_lbl_1:
+                                                - EndDate_lbl:
                                                     Control: ModernText@1.0.0
                                                     Properties:
                                                       AutoHeight: =true
@@ -1628,23 +1523,70 @@ Screens:
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
                                                       Size: =11
-                                                      Text: ="FINANCIAL YEAR *"
-                                                - ProjectFY_drp_1:
-                                                    Control: ModernDropdown@1.0.2
+                                                      Text: ="END DATE"
+                                                - EndDate_pkr:
+                                                    Control: ModernDatePicker@1.0.1
                                                     Properties:
                                                       BorderColor: =RGBA(214, 221, 224, 1)
                                                       BorderStyle: =BorderStyle.Solid
                                                       BorderThickness: =2
-                                                      Default: =If(varMode = "New", Blank(), varSelectedProject.FinancialYear)
+                                                      DefaultDate: =If(varMode = "New", Blank(), varSelectedActivity.EndDate)
                                                       DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                       Fill: =RGBA(255, 255, 255, 1)
                                                       Height: =40
-                                                      ItemDisplayText: =ThisItem.Value
-                                                      Items: =Choices(Projects.FinancialYear)
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
                                                       Width: =Parent.Width
-                                          - ProjectStatus_field_con_1:
+                                          - DueDate_field_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                LayoutDirection: =LayoutDirection.Vertical
+                                                LayoutGap: =4
+                                                Width: =Parent.Width / 3 - 8
+                                              Children:
+                                                - DueDate_lbl:
+                                                    Control: ModernText@1.0.0
+                                                    Properties:
+                                                      AutoHeight: =true
+                                                      Color: =RGBA(96, 94, 92, 1)
+                                                      FontWeight: =FontWeight.Semibold
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Size: =11
+                                                      Text: ="DUE DATE"
+                                                - DueDate_pkr:
+                                                    Control: ModernDatePicker@1.0.1
+                                                    Properties:
+                                                      BorderColor: =RGBA(214, 221, 224, 1)
+                                                      BorderStyle: =BorderStyle.Solid
+                                                      BorderThickness: =2
+                                                      DefaultDate: =If(varMode = "New", Blank(), varSelectedActivity.DueDate)
+                                                      DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                      Fill: =RGBA(255, 255, 255, 1)
+                                                      Height: =40
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
+                                                      Width: =Parent.Width
+                                    - StatusActive_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =12
+                                          Width: =Parent.Width
+                                        Children:
+                                          - Status_field_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
                                               Properties:
@@ -1653,7 +1595,7 @@ Screens:
                                                 LayoutGap: =4
                                                 Width: =Parent.Width / 2 - 6
                                               Children:
-                                                - ProjectStatus_lbl_1:
+                                                - Status_lbl:
                                                     Control: ModernText@1.0.0
                                                     Properties:
                                                       AutoHeight: =true
@@ -1663,7 +1605,7 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="STATUS *"
-                                                - ProjectStatus_drp_1:
+                                                - Status_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       BorderColor: =RGBA(214, 221, 224, 1)
@@ -1673,7 +1615,7 @@ Screens:
                                                         =If(
                                                             varMode = "New",
                                                             LookUp(Choices(Activities.Status), Value = "Active"),
-                                                            varSelectedProject.Status
+                                                            LookUp(Choices(Activities.Status), Value = varSelectedActivity.Status.Value)
                                                         )
                                                       DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                       Fill: =RGBA(255, 255, 255, 1)
@@ -1682,4 +1624,45 @@ Screens:
                                                       Items: =Choices(Activities.Status)
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
+                                                      RadiusBottomLeft: =8
+                                                      RadiusBottomRight: =8
+                                                      RadiusTopLeft: =8
+                                                      RadiusTopRight: =8
                                                       Width: =Parent.Width
+                                          - Active_field_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                LayoutDirection: =LayoutDirection.Vertical
+                                                LayoutGap: =4
+                                                Width: =Parent.Width / 2 - 6
+                                              Children:
+                                                - Active_lbl:
+                                                    Control: ModernText@1.0.0
+                                                    Properties:
+                                                      AutoHeight: =true
+                                                      Color: =RGBA(96, 94, 92, 1)
+                                                      FontWeight: =FontWeight.Semibold
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Size: =11
+                                                      Text: ="ACTIVE"
+                                                - Active_tgl:
+                                                    Control: Classic/Toggle@2.1.0
+                                                    Properties:
+                                                      BorderColor: =RGBA(0, 0, 0, 0)
+                                                      Color: =RGBA(50, 49, 48, 1)
+                                                      Default: =If(varMode = "New", true, varSelectedActivity.Active)
+                                                      DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                      DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                                      FalseFill: =RGBA(96, 94, 92, 1)
+                                                      FalseHoverFill: =RGBA(50, 49, 48, 1)
+                                                      FocusedBorderThickness: =4
+                                                      Font: =Font.'Segoe UI'
+                                                      Height: =40
+                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                                      TrueFill: =RGBA(0, 120, 212, 1)
+                                                      TrueHoverFill: =RGBA(16, 110, 190, 1)
+                                                      Width: =80

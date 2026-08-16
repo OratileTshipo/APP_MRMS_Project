@@ -335,3 +335,51 @@ Per BEST_PRACTICES.md, applied to the live screens (2026-08-16).
 ### Verification
 - `pac canvas pack` succeeds and unpack reproduces the source **byte-identical**
   (`diff -rq` clean) — the app remains safe to import.
+
+## 12. App source change — scr_Activities rebuilt as a true Activities master-detail
+
+scr_Activities was a copy of scr_Projects: only the Save button wrote to Activities;
+ the list pane, filters, form fields and selection state still operated on Projects
+ (colProjectsInScope / varSelectedProject / Projects columns). The screen has now
+ been rebuilt (1669 lines) as a clean Activities master-detail:
+
+### OnVisible
+- Builds **colActivitiesInScope** = role-first, delegable scope:
+  `If(varCanViewAllReports, Activities, Filter(Activities, DirectorateLabel = varUserDirectorate))`
+  (Activities.DirectorateLabel is text = directorate full name, matching
+  varUserDirectorate). No more Projects.
+- `varSelectedActivity` (renamed from varSelectedProject) defaults to the first row.
+- Rebuilds reference + filter collections: colProgrammes / colDirectorates for the
+  form, colProgrammesFilter / colDirectoratesFilter / colStatusFilter
+  (`Choices(Activities.Status)`) for the filter bar.
+
+### List pane (master)
+- Search (title/code/short description/description) + Programme / Directorate /
+  Status filter dropdowns, then a gallery over the filtered colActivitiesInScope.
+- Row shows Title, status colour chip (Active green / Completed grey / Not Started
+  amber), Directorate · Programme, and Due date (falls back to Frequency).
+- Result count = `CountRows(ActivityItems_gal.AllItems)`.
+
+### Detail form
+- Fields per Activities.csv (Power Apps field names verified against the
+  DataSources.json schema): Title, ActivityCode, ActivityShortDescription,
+  ActivityDescription (multiline), Frequency (Choice), ProgrammeLabel,
+  DirectorateLabel (cascades off Programme), ActivityOwner + Supervisor
+  (APP_Users comboboxes), StartDate / EndDate / DueDate (date pickers), Status
+  (Choice, defaults to Active on New), Active (toggle).
+- Save: validates required fields via `varActivityFormValid`, then
+  `Patch(Activities, If(varMode = "New", Defaults(Activities), varSelectedActivity), {…})`
+  writing Title, ActivityCode, ActivityDescription, ActivityShortDescription,
+  Frequency, ProgrammeLabel, **Directorate (lookup, `{Id: …}`)**,
+  DirectorateLabel, ActivityOwner, Supervisor, StartDate, EndDate, DueDate,
+  Active, Status. Refreshes colActivitiesInScope and notifies success only on the
+  valid path.
+- New / Edit / Cancel / **Delete** (with an inline confirm banner → `RemoveIf`)
+  complete the CRUD flow.
+- Control names cleaned (no `_1`/`_6`/`_7` copy-paste suffixes); all dead
+  commented Projects blocks from the copied screen were dropped.
+
+### Verification
+- `pac canvas pack` succeeds and unpack reproduces the source **byte-identical**
+  (`diff -rq` clean). Note: pac validates YAML structure, not Power Fx semantics —
+  open the app once in Studio after import to validate the formulas.

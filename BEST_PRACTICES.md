@@ -166,9 +166,10 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
   delegable (`colReportsInScope`, `colProjectsInScope`); the two inline dashboard
   galleries (trend/progress) now filter the collected `colActivities`; `colOverdueItems`
   restored (was commented out but consumed by live KPI cards).
-- **Open**: row 3 (`scr_Reports_1` duplicate, `MainScreen1` empty, scr_Activities list
-  pane still on Projects), row 4 (unwired scr_Home buttons), row 8 (header/sidebar
-  components), row 10 (ALM via git + CSV source of truth).
+- **Open**: row 3 (`scr_Reports_1` duplicate, `MainScreen1` empty), row 4 (unwired
+  scr_Home buttons), row 8 (header/sidebar components), row 10 (ALM via git + CSV
+  source of truth). scr_Activities was rebuilt as a full Activities master-detail
+  (CHANGES.md §12) — the duplicated-controls part of row 3 is resolved for that screen.
 
 ---
 *Supporting artifacts: CHANGES.md (session change log), update_docs_schema.py,

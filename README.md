@@ -94,9 +94,10 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
   `scr_MyActivities` navigates to them correctly; `scr_Splash` timer now navigates to Home on
   `OnTimerEnd`. (See CHANGES.md §10.)
 - `scr_Home` buttons ("New Monthly Report", "View Reports Dashboard") have no navigation wired.
-- `scr_Activities` Save button now writes to `Activities` (per Activities.csv), but the form
-  fields/labels and the list gallery are still the Projects-copy versions (see CHANGES.md §9).
 - `scr_Reports_1` is a duplicate of `scr_Reports` (Form1_1, delete-confirm variant).
+- `scr_Activities` is now a full Activities master-detail (list + form CRUD over the
+  Activities list) — see CHANGES.md §12. The only leftover is that nothing in the nav
+  sidebar of other screens points at it yet (pre-existing).
 - Best-practices pass applied (CHANGES.md §11): immutable OnStart `Set`s are now named
   formulas (App.Formulas), base scope filters are role-first & delegable (colReportsInScope,
   colProjectsInScope), dead/commented blocks were removed, and the two inline dashboard
