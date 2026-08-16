@@ -38,6 +38,14 @@ Screens:
         // 3. BUILD ACTIVITY STATUS — join each activity with its latest
         //    report for the selected FY/month, derive RAG and action label
         // ------------------------------------------------------------
+        // Performance (troubleshooting guide §4.6): pull the current-FY report
+        // set into a local collection ONCE, then filter it in the loop below —
+        // otherwise the ForAll issues one delegated query to the raw
+        // MonthlyReports list PER ACTIVITY (N round trips per screen visit).
+        ClearCollect(
+            colMyReportsFY,
+            Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY)
+        );
         ClearCollect(
             colMyActivityStatus,
             ForAll(
@@ -46,9 +54,8 @@ Screens:
                     {
                         latestReport: First(
                             Filter(
-                                MonthlyReports,
-                                Activity.Id = Act.ID,
-                                'FinancialYear '.Value = varCurrentFY
+                                colMyReportsFY,
+                                Activity.Id = Act.ID
                             )
                         )
                     },

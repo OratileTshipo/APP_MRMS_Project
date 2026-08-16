@@ -870,3 +870,36 @@ Root (horizontal, App.Width × App.Height)
 - Explicitly excluded the model-driven-app articles (Lookup/view/grid/ribbon,
   Word templates, document management, conditional access) as not applicable to
   a SharePoint-backed canvas app.
+
+## 28. Pre-import audit: startup & performance pre-check (troubleshooting guide §4.1/§4.6)
+
+Ran the troubleshooting guide's startup/performance checklists against the
+actual app source before re-import:
+
+- **OnStart (App.pa.yaml)** — audited: 2 sequential `LookUp`s (APP_Users,
+  Directorates) plus collections built with delegable filters
+  (`Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false)`
+  etc.). Acceptable weight; no overloaded-`OnStart` concern per §4.1.
+- **Person-column filters delegate** — verified against the official
+  "Power Apps delegable functions and operations for SharePoint" table:
+  `=` delegates for Complex types, and **only `Email` and `DisplayName` are
+  delegable in the Person data type**. So `ActivityOwner.Email = varUserEmail`
+  (scr_Home, scr_MyActivities, scr_ReportActivities) and
+  `RecipientUser.Email = varUserEmail` (notifications) are **delegable** —
+  not bugs, even with 608 activities (>500-row local limit).
+- **Cross-screen references** — none found (only comment-text matches); a
+  startup-checklist pass.
+- **scr_Home.OnVisible** — role-first delegable base filter, then local
+  collection filters. **MonthlyTrend_gal** — bounded `ForAll(Sequence(12))`
+  over local collections (the guide's recommended pattern), no delegation risk.
+- **scr_ReportActivities** — `First(Filter(MonthlyReports, ...))` fires once
+  per user click (detail load on selection): the correct pattern, not an N+1.
+- **FIXED — scr_MyActivities N+1** (the one real finding): the `ForAll` join
+  loop issued one delegated query to the raw `MonthlyReports` list **per
+  activity** (N round trips per screen visit). Per §4.6 "use collections for
+  frequently used data", the screen now pre-collects the current-FY report set
+  once (`colMyReportsFY`) and the loop filters that local collection — one
+  round trip per visit, identical results.
+- Verification after the fix: YAML/verifier/registry all clean, `pac canvas
+  pack` → `unpack` round trip **byte-identical**, importable
+  `APP-MRMS_Project_app.msapp` repacked with the fix.
