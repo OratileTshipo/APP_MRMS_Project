@@ -15,6 +15,8 @@ and Roads (DPWR), North West Province.
 | `BEST_PRACTICES.md` | Distilled canvas-apps best practices + gap analysis of the current app (delegation, naming, collections, `App.Formulas`, source-format workflow) |
 | `CHANGES.md` | Change log: tooling, unpack/pack verification, doc updates, findings |
 | `update_docs_schema.py` | Script used to align the Word docs with the CSV schemas |
+| `tools/check_screen_registry.py` | CI guard: fails if any screen file in `src/Src/` has no matching `_EditorState` entry (or vice versa) |
+| `.github/workflows/ci.yml` | GitHub Actions CI: runs the screen-registry check + `tools/verify_powerfx.py` on every push/PR |
 | `reference/` | Permanent reference material for future work (msapp internals, official-docs extractions, doc text, round-trip proof) — see `reference/canvas-apps/README.md` |
 | `backup/` | Pristine pre-change snapshots of the original pack and unpacked source — see `backup/README.md` |
 

@@ -617,3 +617,22 @@ trip byte-identical.
   0 errors), pack→unpack round trip byte-identical, packed app has 13 YAML files with
   no `MainScreen1`. Top-level `APP-MRMS_Project_app.msapp` repacked with
   `--layout SourceCode`.
+
+## 21. CI: screen-registry guard + GitHub Actions workflow
+
+- **Request**: a CI check that fails if any screen file exists without a matching
+  `_EditorState` entry (the drift that would silently drop a screen from the app).
+- **New tool** `tools/check_screen_registry.py` — standalone, dependency-free check
+  that scans `src/Src/*.pa.yaml` (excluding `App.pa.yaml` / `_EditorState.pa.yaml`)
+  and the `ScreensOrder` list, failing (exit 1) on **both** directions:
+  1. a screen file with no matching ScreensOrder entry, and
+  2. a ScreensOrder entry with no matching screen file (stale registration).
+  Screen names are read from the file's `Screens:` block (with a filename fallback)
+  so renames stay in sync. Accepts `--src` / `--editor` overrides for testing.
+- **New workflow** `.github/workflows/ci.yml` (GitHub Actions, ubuntu-latest,
+  Python 3.11) — runs on every push/PR: the registry check plus the existing
+  `tools/verify_powerfx.py` static verifier. No `pac`/.NET needed, so it runs
+  anywhere.
+- Verified: registry check passes on the current tree (11 files ↔ 11 entries) and
+  fails with exit 1 on both mismatch directions (negative-tested with a scratch
+  directory); workflow YAML parses; verifier still 0 errors.

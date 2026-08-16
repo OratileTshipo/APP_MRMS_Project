@@ -147,7 +147,7 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
 | 7 | Naming conventions | Uses `var`/`col` prefixes and `scr` screen names consistently — good | Align new screens with the same scheme; drop `var` prefix only for named-formula conversions |
 | 8 | Components for repeated UI | Every screen hand-builds the same navy header + icon sidebar (with `_1`…`_8` suffix duplicates) | Extract header/sidebar into a component library (Phase 2) |
 | 9 | Import-safety | Round trip verified lossless (Part 1.2); original msapp untouched | Follow Part 1.3 rules for every future edit → pack → import |
-| 10 | ALM | msapp import/export is basic transfer only (no Dataverse) | Keep schemas in CSV (source of truth) + YAML in git; treat msapp as a build artifact |
+| 10 | ALM | msapp import/export is basic transfer only (no Dataverse) | Keep schemas in CSV (source of truth) + YAML in git; treat msapp as a build artifact. **CI added (§21)**: `.github/workflows/ci.yml` runs `tools/check_screen_registry.py` (screen file ↔ `_EditorState` drift) + `tools/verify_powerfx.py` on every push/PR |
 
 ### Recommended remediation order (for the upcoming screen-build + pack task)
 1. Build `scr_ReportForm` + `scr_ReportView` (the referenced-but-missing screens),
