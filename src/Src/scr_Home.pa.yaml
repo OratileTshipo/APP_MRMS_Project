@@ -608,6 +608,15 @@ Screens:
                                     AlignInContainer: =AlignInContainer.End
                                     Height: =40
                                     Icon: ="Add"
+                                    OnSelect: |-
+                                      =// Button2 — New Monthly Report: open the report form for the user's first
+                                      // own activity (colMyActivities is built in OnVisible). A blank ID falls
+                                      // back to a blank form; Save guards against a missing activity.
+                                      Navigate(
+                                          scr_ReportForm,
+                                          ScreenTransition.Fade,
+                                          { selectedActivityID: If(CountRows(colMyActivities) > 0, First(colMyActivities).ID, Blank()) }
+                                      )
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8
@@ -1478,6 +1487,7 @@ Screens:
                                           AutoHeight: =true
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
+                                          OnSelect: =Navigate(scr_Reports, ScreenTransition.Fade)
                                           Text: ="View Reports Dashboard"
                                           Width: =Parent.Width * .3
                                     - ViewReportsDash_ico:
@@ -1496,6 +1506,7 @@ Screens:
                                           Icon: =Icon.ArrowRight
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
+                                          OnSelect: =Navigate(scr_Reports, ScreenTransition.Fade)
                                           PressedBorderColor: =RGBA(0, 0, 0, 0)
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)

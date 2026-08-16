@@ -552,6 +552,9 @@ Screens:
                                 // the MonthlyReports.csv schema; denormalised activity fields are
                                 // pulled from the selected activity. Returns to scr_MyActivities.
                                 If(
+                                    IsBlank(varReportActivity),
+                                    Notify("Select an activity before saving the report.", NotificationType.Error),
+
                                     IsBlank(ReportFormTitle_txt.Text)
                                     || IsBlank(ReportFormReportingMonth_drp.Selected)
                                     || IsBlank(ReportFormQuarter_drp.Selected)

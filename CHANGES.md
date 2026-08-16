@@ -427,3 +427,19 @@ the app already used section-header style, which was extended rather than replac
 - `pac canvas pack` succeeds; unpack reproduces the source **byte-identical** — safe to import.
 - Reminder (as before): pac validates YAML structure, not Power Fx semantics — open once in
   Studio after import to confirm; the SARIF in the import will no longer carry the fixed errors.
+
+## 14. App source change — scr_Home action buttons wired
+
+- **New Monthly Report** (`Button2`) now navigates to `scr_ReportForm`, passing the
+  user's first own activity (`colMyActivities`) as `selectedActivityID` — this is the
+  context the form needs to patch `Activity: { Id: … }` and denormalise the
+  owner/programme/directorate labels. Falls back to a blank ID when the user has no
+  activities.
+- **View Reports Dashboard** (`ViewReportsDashboard_lbl` + `ViewReportsDash_ico`) now
+  navigate to `scr_Reports`.
+- **scr_ReportForm Save guard**: added an `IsBlank(varReportActivity)` branch so a
+  report cannot be saved without an activity (previously the Patch would have written a
+  blank Activity ID when the form was opened without context).
+
+Verified: `tools/verify_powerfx.py` (13,186 formulas, 0 errors) and pack→unpack round
+trip byte-identical.
