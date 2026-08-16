@@ -708,15 +708,12 @@ Screens:
                                   Properties:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Items: |-
-                                      =// ActItems_gal.Items — filtered by FY, Month, Status
-                                      /*Filter(
+                                      =// ActItems_gal.Items — the joined activity+report status collection,
+                                      // filtered by Status (FY/Month are fixed to the current period in OnVisible)
+                                      Filter(
                                           colMyActivityStatus,
-                                          (varActFilterFY = "All" || true),
-                                          (varActFilterMonth = "All" || true),
-                                          (varActFilterStatus = "All" || ReportStatus = varActFilterStatus)
+                                          varActFilterStatus = "All" || ReportStatus = varActFilterStatus
                                       )
-                                      */
-                                      colActivities
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     TemplateSize: =90
@@ -728,7 +725,7 @@ Screens:
                                           AutoHeight: =true
                                           OnSelect: =
                                           Size: =10.5
-                                          Text: =ThisItem.ActivityShortDescription
+                                          Text: =ThisItem.ActivityName
                                           Width: =250
                                           X: =40
                                           Y: =40
@@ -756,20 +753,21 @@ Screens:
                                         Control: ModernButton@1.0.0
                                         Properties:
                                           OnSelect: |-
-                                            =// Navigate to report form based on status
+                                            =// Navigate to report form / view based on the report status
                                             If(
-                                                ThisItem.Status.Value = "Not Started",
+                                                ThisItem.ReportStatus = "Not Started",
                                                 Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID}),
-                                                ThisItem.Status.Value = "Active" || ThisItem.Status.Value = "Rejected",
+                                                ThisItem.ReportStatus = "Draft" || ThisItem.ReportStatus = "Rejected",
                                                 Navigate(scr_ReportForm, Fade, {selectedActivityID: ThisItem.ActivityID, editReportID: ThisItem.ReportID}),
-                                                ThisItem.Status.Value = "Completed",
-                                                Navigate(scr_ReportView, Fade, {viewReportID: ThisItem.ReportID})
+                                                ThisItem.ReportStatus = "Approved",
+                                                Navigate(scr_ReportView, Fade, {viewReportID: ThisItem.ReportID}),
+                                                Notify("This report has already been submitted.", NotificationType.Information)
                                             )
                                           RadiusBottomLeft: =6
                                           RadiusBottomRight: =6
                                           RadiusTopLeft: =6
                                           RadiusTopRight: =6
-                                          Text: =ThisItem.'Active '
+                                          Text: =ThisItem.ActionLabel
                                           Width: =130
                                           X: =1060
                                           Y: =30
@@ -780,7 +778,7 @@ Screens:
                                           FontWeight: =FontWeight.Bold
                                           OnSelect: =
                                           Size: =12
-                                          Text: =ThisItem.Status.Value
+                                          Text: =ThisItem.ReportStatus
                                           Width: =100
                                           X: =930
                                           Y: =30
@@ -789,7 +787,7 @@ Screens:
                                         Properties:
                                           OnSelect: =
                                           Size: =11.5
-                                          Text: ="Day " & ThisItem.DueDate
+                                          Text: ="Day " & ThisItem.DueDay
                                           X: =300
                                           Y: =40
                                     - Text2:
@@ -803,7 +801,7 @@ Screens:
                                         Properties:
                                           OnSelect: =Select(Parent)
                                           Size: =11.5
-                                          Text: =ThisItem.ActivityShortDescription
+                                          Text: =ThisItem.ActivityName
                                           Width: =200
                                           X: =40
                                     - ActRowName_lbl:
@@ -812,7 +810,7 @@ Screens:
                                           FontWeight: =FontWeight.Bold
                                           OnSelect: =Select(Parent)
                                           Size: =13.5
-                                          Text: =ActItems_gal.Selected.ActivityCode
+                                          Text: =ThisItem.ActivityName
                                           Width: =300
                                           X: =260
                                           Y: =40

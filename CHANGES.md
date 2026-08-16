@@ -219,3 +219,55 @@ File: `src/Src/scr_Activities.pa.yaml` (editable source; unchanged elsewhere).
 ### Verification
 - `pac canvas pack --sources src --msapp … --layout SourceCode` succeeds (YAML valid;
   pack emits only the standard "validate in Studio after import" notice).
+
+## 10. App source change — new report screens + fixed navigation & splash
+
+Files: `src/Src/scr_ReportForm.pa.yaml`, `src/Src/scr_ReportView.pa.yaml` (new),
+`src/Src/scr_MyActivities.pa.yaml`, `src/Src/scr_Splash.pa.yaml`,
+`src/Src/_EditorState.pa.yaml`.
+
+### New screen: scr_ReportForm
+- MonthlyReports create/edit form (plain controls + `Patch`, consistent with the
+  app's other forms). Consumes context params from navigation:
+  `selectedActivityID` (Activities.ID) and optional `editReportID`
+  (MonthlyReports.ID).
+- OnVisible sets `varReportMode` (New/Edit), `varReportActivity`
+  (LookUp colActivities), `varEditReport` (LookUp MonthlyReports).
+- Editable fields per MonthlyReports.csv: Title, ReportingMonth, Quarter,
+  FinancialYear, PlannedActivity, PercentageComplete, Status, ReasonForDeviation,
+  RemedialAction, Output. Read-only context card shows activity title/description
+  and programme · directorate labels.
+- Save: validates required fields, `Patch(MonthlyReports, If(New, Defaults,
+  varEditReport), {...})` writing the CSV-schema columns (Activity lookup,
+  ActivityOwnerLabel/ProgrammeLabel/DirectorateLabel denormalised from the
+  activity; Version 1 on new), then navigates back to scr_MyActivities.
+
+### New screen: scr_ReportView
+- Read-only report detail screen. Consumes `viewReportID` (MonthlyReports.ID),
+  sets `varViewReport` on OnVisible. Displays status/period/percentage cards plus
+  title, planned activity, output, deviation/remedial, owner, submitted/reviewed
+  by, rejection reason. Back button → scr_MyActivities.
+
+### scr_MyActivities fixes
+- Gallery `ActItems_gal.Items` was bound to raw `colActivities`; the action button
+  read `ThisItem.ActivityID`/`ReportID`/`Status.Value` which only exist on the
+  joined `colMyActivityStatus` collection built in OnVisible. Bound the gallery to
+  `Filter(colMyActivityStatus, …)` (status filter only; FY/month are fixed to the
+  current period in OnVisible) and updated the row field references
+  (ActivityName, DueDay, ReportStatus, ActionLabel).
+- Action button now navigates on **ReportStatus**: Not Started → scr_ReportForm
+  (new), Draft/Rejected → scr_ReportForm (edit with editReportID), Approved →
+  scr_ReportView, else informational notify. Labels use ActionLabel.
+
+### scr_Splash fix
+- `Timer_Splash` had no `OnTimerEnd` (timer started but never navigated). Added
+  `OnTimerEnd: =Navigate(scr_Home, ScreenTransition.Fade)`; app now proceeds from
+  the splash after the 1.8 s duration.
+
+### Screen registration
+- `_EditorState.pa.yaml` ScreensOrder now includes scr_ReportForm and
+  scr_ReportView (inserted after scr_MyActivities).
+
+### Verification
+- `pac canvas pack` succeeds; unpacking the packed msapp reproduces all 12 screens
+  including the two new ones (round-trip intact).

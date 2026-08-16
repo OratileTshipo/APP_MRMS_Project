@@ -12,6 +12,8 @@ EditorState:
     - scr_Home
     - scr_Users
     - scr_MyActivities
+    - scr_ReportForm
+    - scr_ReportView
     - scr_Projects
     - scr_Activities
     - scr_Reports

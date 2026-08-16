@@ -80,8 +80,9 @@ Rejected / Escalated), `Version`, `SubmittedBy` (User), `SubmissionDate`, `Revie
 ## App structure (unpacked src/Src)
 
 Screens (in `_EditorState.pa.yaml` order):
-`scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` → `scr_Projects` →
-`scr_Activities` → `scr_Reports` → `scr_Reports_1` → `MainScreen1`
+`scr_Splash` → `scr_Home` → `scr_Users` → `scr_MyActivities` → `scr_ReportForm` →
+`scr_ReportView` → `scr_Projects` → `scr_Activities` → `scr_Reports` →
+`scr_Reports_1` → `MainScreen1`
 
 Connected data sources: Programmes, Projects, Activities, MonthlyReports, APP_Users,
 Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceLibrary
@@ -89,8 +90,9 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
 
 ## Known open items (from code review)
 
-- `scr_MyActivities` navigates to `scr_ReportForm` / `scr_ReportView`, which do not exist yet.
-- `scr_Splash` timer has no `OnTimerEnd` — the splash does not auto-navigate to Home.
+- `scr_ReportForm` / `scr_ReportView` now exist (built per the MonthlyReports.csv schema) and
+  `scr_MyActivities` navigates to them correctly; `scr_Splash` timer now navigates to Home on
+  `OnTimerEnd`. (See CHANGES.md §10.)
 - `scr_Home` buttons ("New Monthly Report", "View Reports Dashboard") have no navigation wired.
 - `scr_Activities` Save button now writes to `Activities` (per Activities.csv), but the form
   fields/labels and the list gallery are still the Projects-copy versions (see CHANGES.md §9).
