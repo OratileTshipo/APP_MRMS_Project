@@ -1,0 +1,1783 @@
+Microsoft Power Apps documentation
+Discover how to make the most of Power Apps with online training courses, docs, and videos
+covering product capabilities and how-to articles. Learn how to quickly build low-code apps that
+modernize processes and solve tough business challenges in your organization using Power Apps.
+
+GET STARTED
+
+W H AT ' S N E W
+
+TRAINING
+
+HOW-TO GUIDE
+
+What is Power Apps?
+
+What's new in Power Apps?
+
+Power Apps training
+
+Troubleshoot
+
+Create and design
+Try/Buy
+
+Create apps
+
+AI copilot capabilities
+
+Try Power Apps
+
+Choose an app type
+
+Get started with AI copilot
+
+Buy Power Apps
+
+Use the Plan designer
+
+Use the Plan designer
+
+Create a canvas app
+
+Overview of the new
+experience (preview)
+
+Create a model-driven app
+Create a code app
+
+Build apps through
+conversation
+Build pages with generative
+pages
+Add a Copilot control to a
+canvas app (preview)
+
+Create and manage
+data
+What is Microsoft Dataverse?
+
+Use solutions
+What are solutions?
+
+Integrate with other
+products
+Visualize data with Power BI
+
+Create and use tables and
+metadata
+Apply business logic
+Create and use dataflows
+
+Implement healthy application
+lifecycle management (ALM)
+using solutions
+
+Get real-time insights with
+Azure Synapse Link
+Add and use apps in Teams
+
+Deploy solutions using
+pipelines
+
+Best practices guidance
+Power Apps coding guidelines
+Collaborate and co-develop
+apps
+
+Administer and extend
+Administer Power Apps
+Use the Power Platform admin
+center
+Understand Power Apps
+licensing
+Understand security and
+governance
+
+Extend the data
+platform
+
+Extend model-driven
+apps
+
+Dataverse developer guide
+
+Model-driven apps developer
+guide
+
+Work with data using code
+Apply business logic using
+code
+Create client applications
+
+Apply business logic using
+client scripting
+Use code components in
+model-driven apps
+
+Extend canvas apps
+Canvas apps developer guide
+Create and use custom
+connectors
+Develop offline-capable canvas
+apps
+Create and use canvas
+components
+
+Use
+Use apps on mobile
+devices
+
+Use apps in web
+browsers
+
+Use apps in Teams
+
+Install and use Power Apps
+mobile
+
+Understand basic navigation
+
+Embed a canvas app as a
+personal app
+
+Search records
+
+Embed a canvas app as a tab
+
+Use Power Apps for Windows
+
+View reports
+
+Troubleshoot issues
+
+Embed a model-driven app as
+a tab
+Embed a model-driven app as
+a personal app
+
+Related content
+Power Platform
+
+Power Automate
+
+Power BI
+
+One-stop learning resource for
+Power Platform applications
+and features, with admin,
+developer, and guidance…
+
+Create automated workflows
+between your favorite apps
+and services to synchronize
+files, get notifications, collect…
+
+Turn your unrelated sources of
+data into coherent, visually
+immersive, and interactive
+insights.
+
+Power Pages
+
+Dynamics 365
+
+Microsoft Azure
+
+Design, host, and administer
+secure, modern, and low-code
+business websites.
+
+Empower your organization
+with the next generation of
+CRM and ERP applications.
+
+Learn how this ever-expanding
+set of cloud computing
+services can help your
+organization meet its busines…
+
+What is Power Apps?
+Power Apps is a suite of apps, services, and connectors, as well as a data platform, that
+provides a rapid development environment to build custom apps for your business needs. With
+Power Apps, you can quickly build custom business apps that connect to your data stored
+either in the underlying data platform (Microsoft Dataverse) or in many online and on-premises
+data sources (such as SharePoint, Microsoft 365, Dynamics 365, SQL Server, and so on).
+
+Apps built with Power Apps provide rich business logic and workflow capabilities to transform
+your manual business operations into digital, automated processes. What's more, apps built
+with Power Apps have a responsive design and can run seamlessly in browser and on mobile
+devices (phone or tablet). Power Apps "democratizes" the business-app-building experience by
+enabling users to create feature-rich, custom business apps without writing code.
+Power Apps also provides an extensible platform that lets pro developers programmatically
+interact with data and metadata, apply business logic, create custom connectors, and integrate
+with external data.
+Power Apps and Microsoft Copilot let you describe the app you want and AI designs it. Make
+edits, add automation, and write code—all with Copilot in Power Apps.
+For more information:
+Try Power Apps for free
+Watch videos on the Power Apps channel
+
+on YouTube
+
+Power Apps for app makers and creators
+７ Note
+
+Try the new Power Apps experience—an AI-native solution designed to simplify app
+creation. Effortlessly automate workflows, connect data sources, and speed up
+development, all without needing advanced coding skills. For more information, see
+Overview of the New Power Apps experience (preview).
+With Power Apps, you can create two types of apps: canvas and model-driven. For more
+information, see Overview of creating apps in Power Apps.
+To create an app, start with make.powerapps.com
+
+.
+
+Plans in Power Apps is a copilot-first development tool that lets you quickly create
+comprehensive business solutions. Describe your business use case in natural language
+and add relevant images, like business process flows or screenshots of legacy apps. For
+more information, see Overview of plans.
+Power Apps Studio is the app designer you use to build canvas apps. The app designer
+makes creating apps feel more like building a slide deck in Microsoft PowerPoint. For
+more information, see Generate an app from data.
+App designer for model-driven apps lets you define the sitemap and add components to
+build a model-driven app. For more information, see Design model-driven apps using
+app designer.
+Ready to convert your ideas into an app? Start here: Planning a Power Apps project.
+
+Power Apps for app users
+Run apps that you created, or that someone else created and shared with you, in a browser or
+on mobile devices (phone or tablet). For more information, see:
+Find and run apps
+Run apps on Power Apps mobile
+
+Power Apps for admins
+Power Apps administrators can use the Power Platform admin center
+(admin.powerplatform.microsoft.com
+
+) to create and manage environments, view Dataverse
+
+analytics, and get real-time, self-help recommendations and support for Power Apps and
+Power Automate. For more information, see Administer Power Platform.
+
+Power Apps for developers
+
+Developers are app makers who write code to extend business app creation and customization.
+Use code to create data and metadata, apply server-side logic with Azure functions, plug-ins,
+and workflow extensions, apply client-side logic with JavaScript, integrate with external data by
+using virtual tables and webhooks, build custom connectors, and embed apps into your
+website experiences to create integrated solutions. For more information, see:
+Dataverse developer
+Model-driven apps developer
+Canvas apps developer
+
+Power Apps and Dynamics 365
+Dynamics 365 apps (such as Dynamics 365 Sales, Dynamics 365 Customer Service, and
+Dynamics 365 Marketing) also use the underlying Dataverse platform that Power Apps uses to
+store and secure data. This feature enables you to build apps by using Power Apps and
+Dataverse directly against your core business data already used within Dynamics 365, without
+the need for integration. For more information, see Dynamics 365 and Dataverse.
+
+Try Power Apps for free
+You can build Power Apps for free. Sign in to Power Apps
+
+. For more information, see Sign in
+
+to Power Apps for the first time. Initially, you have access to the default environment. You can
+build in your own developer environment with Dataverse by signing up for the Power Apps
+Developer Plan
+
+. For more information, see About the Power Apps Developer Plan.
+
+You need a license to play the apps you make with Power Apps. You can play Power Apps for
+free by signing up for a 30-day trial.
+
+Request a Power Apps license
+If you're a Power Apps user and want to run apps, request a Power Apps license while running
+the app. For more information, see Request a Power Apps license.
+
+Purchase Power Apps
+To purchase Power Apps, go to Purchase Power Apps for detailed information.
+
+Power Apps US Government plans
+
+Power Apps US Government offers several plans designed for US government organizations to
+address the unique and evolving requirements of the United States public sector. The Power
+Apps GCC environment complies with federal requirements for cloud services, including
+FedRAMP High, DoD DISA IL2, and requirements for criminal justice systems (CJI data types).
+For more information, see Power Apps US Government.
+
+Last updated on 11/18/2025
+
+Explore Power Apps for free for 30 days
+Get instant access to all Power Apps capabilities with a free 30-day trial. Whether you're new to
+Power Apps or want to explore premium features, this trial unlocks everything you need to
+build powerful business applications.
+If you don't have a license for Power Apps, the trial plan gives temporary access to these
+activities:
+Extend the capabilities of Office 365 (SharePoint Online, Teams, Excel, and more)
+Create and run canvas apps that connect to Microsoft Dataverse and over 200 other data
+sources, including premium connectors and on-premises data.
+Create and run model-driven apps
+Automate workflows with Power Automate
+Create and manage environments and Dataverse databases
+If you have a Power Apps license or a license through Office 365, you already have access to
+some of these features. However, the trial license temporarily expands your access to include
+all features in the previous list. Learn what capabilities each type of license offers on the pricing
+page
+
+.
+
+７ Note
+If you're an administrator, see Purchase Power Apps for your organization or Power
+Apps in your organization Q&A.
+Starting January 2020, self-service purchase, subscription, and license management
+capabilities for Power Platform products (Power BI, Power Apps, and Power
+Automate) are available for commercial cloud customers in the United States. For
+more information, including steps to enable or disable self-service purchasing in
+your organization, see the Self-service purchase FAQ.
+
+Need an account?
+If you don't have a work or school account, create a free account with Microsoft Entra and
+become a low-code developer with Power Apps. To keep building apps after the trial period,
+opt in to the free Power Apps Developer Plan
+
+.
+
+Ready to get started?
+1. Start your free trial now →
+
+- Go to PowerApps.com and select Start free.
+
+2. Enter your email. If your email isn't a work or school account, you're prompted to create a
+free Microsoft Entra account by using this sign-up experience
+
+.
+
+If you want to evaluate Power Apps integrations with Microsoft 365, sign up for an Office 365
+trial
+
+account.
+
+７ Note
+If you don't have an organization account or aren't part of a tenant or organization
+account, you can establish a developer's account through the Microsoft Developer
+Program.
+
+Identify your current license
+Compare license options: Learn what capabilities each type of license offers on the pricing
+page
+
+to choose the best plan for your needs.
+
+1. Sign in to Power Apps
+
+using your work or school credentials.
+
+） Important
+You can't sign in by using a personal email address, such as one that ends in
+outlook.com, hotmail.com, or gmail.com. For more information, see What email
+address can I use? later in this article.
+2. Select the gear icon in the upper-right corner, and then select Plan(s).
+
+Upgrade an existing license
+To start a free 30-day trial of Power Apps per user plan from an existing license, sign in to
+Power Apps
+
+. Then, try any feature that requires a premium Power Apps license. For example,
+
+select the gear icon near the upper-right corner, select Admin center, and select New
+
+environment near the upper-right corner. Follow the prompts to complete the sign-up
+process.
+
+Get a license from scratch
+Whether or not you have a license for Power Apps, start a free 30-day trial per user plan by
+following these steps:
+1. Open the Power Apps site
+
+, and then select Try free.
+
+If you're using a phone, select the menu in the top-right corner, and then select Try free.
+2. In the middle of the screen, select Pricing, and then select Start free trial.
+3. In the dialog box, enter your work or school email address, and then select Submit.
+） Important
+For more information, see What email address can I use? later in this article.
+4. If a dialog box indicates that Power Apps recognizes your organizational credentials,
+follow the prompts to finish signing in.
+
+Otherwise, follow the prompts to check your email, verify your email address, provide
+more information if necessary, and then select Start.
+You see the following message if your admin disables free trials.
+
+７ Note
+For more information, including the steps to enable or disable trial licenses in your
+organization, see Block trial licenses commands.
+
+FAQ
+What email address can I use?
+You can use a work or school email address, backed by Microsoft Entra ID, to sign up for a trial
+license. If you use a different kind of address, you might experience one of the symptoms in
+this table.
+ﾉ
+
+Expand table
+
+Symptom / error message
+
+Cause and workaround
+
+Personal email addresses (for example,
+@gmail.com email address)
+
+Power Apps doesn't support email addresses provided by
+consumer email services or telecommunications providers.
+
+You receive a message like the following
+during signup:
+
+To complete signup, try again using an email address
+assigned by your work or school.
+
+You entered a personal email address:
+Please enter your work email address so
+we can securely store your company's
+data.
+
+or
+That looks like a personal email
+address. Enter your work address so we
+can connect you with others in your
+
+Symptom / error message
+
+Cause and workaround
+
+company. And don’t worry. We won’t share
+your address with anyone.
+
+.gov or .mil addresses
+
+Power Apps doesn't support .gov or .mil addresses at this
+time.
+
+You receive a message like the following
+during signup:
+Power Apps unavailable: Power Apps is
+not available for users with .gov or
+.mil email addresses at this time. Use
+another work email address or check back
+later.
+
+or
+We can't finish signing you up. It looks
+like Microsoft Power Apps isn't
+currently available for your work or
+school.
+
+Email address is not an Office 365 ID
+
+Your organization signs in to Office 365 and other Microsoft
+services with IDs other than email addresses. For example,
+
+You receive a message like the following
+during signup:
+
+your email address might be Nancy.Smith@contoso.com,
+but your ID is nancys@contoso.com.
+
+We can't find you at contoso.com. Do you
+Try signing in with that, and if it
+
+To complete signup, use the ID that your organization has
+assigned to you for signing in to Office 365 or other
+Microsoft services. If you don't know what this is, contact
+
+doesn't work, contact your IT
+
+your IT administrator.
+
+use a different ID at work or school?
+
+department.
+
+Does the cloud environment I use Power Apps in allow the
+use of trial licenses?
+Power Apps trial licenses are available only in the Azure commercial cloud. They aren't available
+in Azure Government or Microsoft Azure China clouds.
+
+What happens when my trial expires?
+You're prompted to request an extension of the trial or purchase a plan 30 days after the trial
+starts. You can extend the trial two more times (30 days each)—with a maximum trial period of
+90 days. You can find details about all plans on the pricing page
+
+.
+
+If you don't extend the trial or purchase a plan but you still have another kind of license, you
+can use all the features of Power Apps that your other license provides. Any data in Dataverse
+remains unchanged, and any app or flow that uses Dataverse continues to run if your license
+supports them. If you try to use premium Power Apps features but your existing license doesn't
+support them (for example, modify a schema or entities in Dataverse), you are prompted to
+purchase a plan.
+
+More questions?
+Visit the Power Apps community
+
+Last updated on 01/13/2026
+
+.
+
+Request a Power Apps license for
+yourself
+Article • 05/08/2023
+
+You can request a Power Apps license from your admin directly using Power Apps.
+
+Request a license
+If you don't have a license and are trying to open apps made with Power Apps, you'll see
+the options in the following image. Select Request license to submit a license request to
+your admin.
+７ Note
+The options in the following image may differ depending on whether you've
+exhausted any Power Apps trials.
+
+Request a license through a trial
+If you're already in an active Power Apps trial, you can request a license by selecting
+Request license near the top of the page.
+
+Wait for a response from your admin
+After you request a license, you'll see a banner at the top of the page that confirms that
+your request was sent, and that it might take a few days for your admin to respond to
+the request.
+If you're using a Power Apps trial, you can continue to use the trial while you wait for
+your request to be approved.
+After your admin has reviewed your request, you'll receive an email notification
+indicating whether the request was approved.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Request Power Apps licenses for your
+app users
+Article • 06/30/2023
+
+As a Power Apps maker, you can create an app that requires a license for use. For
+example, if you create an app with premium components or connectors, users must
+have an appropriate Power Apps license to use it.
+When you share a canvas app or model-driven app that contains premium components,
+select Request licenses. The request is submitted to your admin for approval. You can't
+request licenses for security groups or distribution lists.
+
+After your admin has reviewed your request, you'll receive an email notification
+indicating whether the request was approved or denied.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Overview of creating apps in Power Apps
+Power Apps is a high-productivity development platform for business apps. It has these major
+components:
+Plans
+Copilot
+Canvas apps
+Model-driven apps
+Microsoft Dataverse
+Let's learn more about each of these components.
+７ Note
+Try the new Power Apps experience—an AI-native solution designed to simplify app
+creation. Effortlessly automate workflows, connect data sources, and speed up development,
+all without needing advanced coding skills. For more information, see Overview of the New
+Power Apps experience (preview)
+
+Plans
+Plans in Power Apps is a copilot-first development tool that helps you rapidly build end-to-end
+business solutions. Simply describe your business scenario in natural language and include
+relevant visuals, such as process flows or screenshots of existing systems. Plans then generates a
+complete Power Platform solution tailored to your requirements, including Microsoft Dataverse
+tables, canvas apps, model-driven apps, Power Pages sites, Power Automate flows, and Copilot
+Studio agents.
+
+Create apps using Copilot
+Copilot in Power Apps lets you to quickly create apps by simply describing your business
+requirements in natural language. Copilot automatically generates both the app and its data
+model—no coding needed. Users can interact with your app using everyday language, making
+the experience intuitive and engaging. For more information, see Copilot and AI features in
+Power Apps
+
+Canvas apps
+Canvas apps start with your user experience. You craft a highly tailored interface with the power
+of a blank canvas and connect it to your choice of more than 200 data sources. You can build
+canvas apps for web, mobile, and tablet applications.
+Canvas apps give you the flexibility to arrange the user experience and interface the way you
+want it. Let your creativity and business sense guide how you want your apps to look and feel.
+You can start to build your app from Microsoft tools where your data lives, such as:
+From a SharePoint list
+From a Power BI dashboard
+Creating a canvas app is easy. With Power Apps, you can find or create your app in several ways:
+From a Dataverse source
+From data in a SharePoint List
+From Excel data
+From a blank canvas
+Via Marketplace
+In addition to creating apps in Power Apps, you can also create apps directly within Microsoft
+Teams by using Power Apps. For more information, see Create apps in Microsoft Teams by using
+Power Apps.
+
+Model-driven apps
+Model-driven apps start with your data model. You build up from the shape of your core business
+data and processes in the Dataverse to model forms, views, and other components. Model-driven
+apps automatically generate a great UI that's responsive across devices.
+When you create a model-driven app, you can use all the power of the Dataverse to rapidly
+configure your forms, business rules, and process flows. You create a model-driven app from the
+Power Apps site.
+As part of the custom page public preview, you can add the new page type based on canvas into
+a new or existing model-driven app. This addition brings the power and flexibility of a canvas
+experience within the model-driven app. Custom pages allow
+Full control over page layout
+
+Out of box controls and custom components
+Power Apps connectors
+Low-code authoring
+Getting started with model-driven apps is simple. You can begin with these topics:
+Create an app
+Create and design forms
+Create or edit views
+Create or edit a system chart
+Create or edit dashboards
+Add security
+Add business logic
+Converging model and canvas using custom page (preview)
+
+Dataverse
+Dataverse is the data platform that comes with Power Apps and allows you to store and model
+business data. It's the platform on which Dynamics 365 apps (such as Dynamics 365 Sales,
+Customer Service, Field Service, Marketing, and Project Service Automation) are built. If you're a
+Dynamics 365 customer, your data is already in Dataverse.
+Dataverse allows you to securely store and manage data within a set of standard and custom
+tables. You can add columns to those tables when you need them.
+Start working with Dataverse by reading these topics:
+Create a custom table
+Manage columns
+Create custom choices
+Create a business rule
+
+Planning a Power Apps app or project
+It's easy to begin building your first app. Simply sign in to Power Apps
+
+. For more information,
+
+see Sign in to Power Apps for the first time. If you're interested in exploring even more
+functionality, such as creating environments, we have a 30-day trial or Developer Plan.
+If you're new to Power Apps and want to learn about how to convert your ideas into a fully
+working solution, start with Planning a Power Apps project.
+
+Last updated on 11/18/2025
+
+Sign in to Power Apps
+Sign in to Power Apps at https://make.powerapps.com
+
+to create, edit, or play an app.
+
+This article shows you how to access Power Apps for the first time, choose the right
+environment, and navigate different authentication options including Azure B2B and Microsoft
+Account sign-in.
+To create canvas apps, you need the environment maker predefined security role.
+If you don't have a work or school account, you can sign up for a trial account. For information,
+see Explore Power Apps for free for 30 days.
+What you'll learn:
+How to choose the right environment for your work
+Different sign-in options including Azure B2B and Microsoft Account
+How to access environments and create your first app
+For more information about the Power Apps
+
+home page, see Get started with Power Apps.
+
+Choose an environment
+When you create an app, a flow, a data connection, or a table in Microsoft Dataverse, most
+work in Power Apps happens in a specific environment. Environments set boundaries between
+types of work. For example, an organization can use separate environments for different
+departments. Many organizations use environments to separate apps in development from
+those ready for use. You might have access to multiple environments or just one. If you have
+the right permissions, you can create your own environment.
+To check which environment you're in, find the environment switcher near the right side of the
+header.
+
+With the environment selector, environments are grouped into two types: Build apps with
+Dataverse and Other environments. Select Filter to filter the list of environments by your role,
+data platform (Dataverse or none), and environment type, like production or sandbox.
+
+
+
+Environments where you have system administrator or system customizer security role
+membership appear under Build apps with Dataverse. The Other environments list shows
+environments where you have only environment maker or editing privileges to at least one
+canvas app in the environment.
+ Tip
+Hover over an environment in the list to see its details.
+
+Filter environments by role
+ﾉ
+
+Expand table
+
+Filter role
+
+Power Platform role or description
+
+Admin
+
+System administrator
+Environment admin
+
+Maker with data
+
+System administrator
+
+access
+
+System customizer
+
+Maker without full
+data access
+
+Environment maker (with or without Dataverse)
+
+Shared app
+
+User without a maker-level security role assigned but with edit permission to at
+
+contributor
+
+least one canvas app in the environment
+
+） Important
+To see the environment list in the environment switcher in Power Apps, you need the
+Environment Maker, System Customizer, or System Administrator security role in the
+environment. For information about predefined security roles, see Predefined
+security roles in the Microsoft Power Platform admin guide.
+Make sure you're in the right environment before you create an app, a flow, or a
+similar component. You can't easily move components from one environment to
+another.
+
+７ Note
+Every member in an organization can use the default environment. Like any
+environment, users can see apps where they have enough privileges to use an app.
+All users with the Environment Maker security role in an environment can see all
+model-driven apps in that environment, including the default environment. For more
+information, see Model-driven app privileges to view and access apps.
+When you create an app in one environment, you can't see it from another
+environment. People who want to run your app need access to the environment
+where you created it.
+For more information about environments, see Environments overview.
+
+Sign in by using Azure B2B collaboration
+
+７ Note
+A resource tenant is the Microsoft Entra tenant where an app is expected to exist,
+and where the user is expected to create and edit the app. For Azure B2B makers,
+this tenant is different from the tenant their account resides.
+A home tenant is where the user's account resides and authenticates against.
+To create and edit apps in a resource tenant, an admin must follow these steps to
+give Azure B2B users the prerequisite privileges to build apps.
+When a user signs into Power Apps
+
+, they sign into their home tenant - the Microsoft Entra
+
+tenant where their credentials are provisioned. After signing in, the user can change the
+directory they intend to build apps in by selecting the Switch directory link as shown here:
+
+The switch directory link opens Power Apps settings with a Directories tab that lists all the
+Microsoft Entra tenants where the user is a member or an Azure B2B guest. Selecting Switch
+signs out of the current tenant and then signs into the selected tenant in Power Apps
+
+.
+
+Frequently asked questions
+As an Azure B2B maker, why can't I share apps?
+The Power Apps sharing experience requires users to have permissions in the tenant when the
+Azure Microsoft Entra ID external collaboration settings lets guest user access to "(most
+inclusive)". Azure B2B makers without enough privileges see the following error dialog when
+sharing.
+
+Can I work in Power Apps in both my home tenant and a resource
+tenant?
+Yes, but only in separate browser sessions. For example, Microsoft Edge can be open in its
+standard mode, and you can start a separate session in a new InPrivate window.
+If you open multiple tabs in the same browser session, you can only access resources in
+the most recently signed-in tenant.
+
+Can I sign in to Power Apps, in a resource tenant with GDAP?
+No, https://make.powerapps.com
+
+doesn't recognize Granular delegated admin privileges
+
+(GDAP), but the Power Platform admin center does.
+
+Sign in by using Microsoft Account (preview)
+
+Anyone can build Power Apps, even if they don't have a work or school account. Sign up for a
+Dynamics 365 Sales trial by using a Microsoft Account
+to Power Apps
+
+and then use that account to sign in
+
+.
+
+During the 30-day trial period, you can make and play with as many apps as you like. You can
+also build apps with Dataverse or other premium connectors. However, if you plan to run these
+apps beyond the trial period or share them with others, you need to create a (free) Microsoft
+Entra account.
+） Important
+This is a preview feature.
+Preview features aren’t meant for production use and may have restricted
+functionality. These features are available before an official release so that customers
+can get early access and provide feedback.
+
+Where can I get a license with Power Apps use rights for my
+Microsoft Account?
+The Dynamics 365 Sales free trial includes Power Apps use rights, along with other Dynamics
+and Power Platform use rights. You can sign up here: Dynamics 365 free trial
+
+.
+
+７ Note
+Not all Power Apps free licenses support Microsoft Account sign-up. The list of free
+licenses that allow free sign-up is expected to grow over time.
+
+How do I create model-driven apps and use Dataverse?
+Select or create an environment with Dataverse. You can create Developer environments with
+Dataverse for free.
+1. Sign in to Power Apps
+
+.
+
+2. Select the environment picker.
+3. In the Need your own environment? prompt, select Try it now to create an environment
+with Dataverse.
+
+How do I access Power Platform admin center?
+Power Platform admin center (https://admin.powerplatform.microsoft.com
+
+) doesn't support
+
+Microsoft Account sign-in. However, your Microsoft Account is associated with a Microsoft
+Entra tenant and you can provision a Microsoft Entra based identity to use in the Power
+Platform admin center.
+1. Follow the steps under How do I create a Microsoft Entra identity with the same
+administrative privileges as my Microsoft Account?
+2. Using the newly created Microsoft Entra identity, sign in to
+https://admin.powerplatform.microsoft.com
+
+.
+
+How do I create a Microsoft Entra identity with the same
+administrative privileges as my Microsoft Account?
+1. Sign in to https://portal.azure.com
+
+.
+
+2. Search for Microsoft Entra ID.
+3. Add a new user.
+4. Associate or add an Azure subscription to your Microsoft Entra tenant. For administrative
+purposes, assign the same admin role as your Microsoft Account has in Microsoft Entra
+ID, such as Power Platform or Dynamics 365 admin.
+
+The free license assigned to my Microsoft Account expired,
+how can I access Power Apps?
+
+If your Microsoft Account is associated with a Microsoft Entra tenant, you can sign in to Power
+Apps
+
+and edit your apps. However, without an active license you can't play the apps.
+
+Today, Microsoft accounts are bound to limited trial periods. You can't sign up for the same
+free license twice with the same account. Also, Microsoft accounts can't purchase Power Apps
+plans .
+You might proceed with building and running apps by creating a Microsoft Entra identity in the
+same Microsoft Entra tenant your Microsoft Account is associated with and sign up for a Power
+Apps Developer plan
+
+by using that identity. With your Microsoft Account, you need to share
+
+your apps with your Microsoft Entra identity to proceed with editing and playing them.
+To create a Microsoft Entra identity with administrative rights, follow the steps under “How do I
+create a Microsoft Entra identity with the same administrative privileges as my Microsoft
+Account?”.
+
+Can I use my Microsoft Account with the Power Platform
+PowerShell cmdlets?
+No. In the meantime, follow the steps described in the previous questions. Add a new
+Microsoft Entra identity to the Microsoft Entra tenant associated with your Microsoft Account
+to use the Power Platform PowerShell cmdlets.
+
+Can I share my apps with other users?
+Yes, but you need to add users to the Microsoft Entra tenant associated with your Microsoft
+Account, assign a license to these users, and then share your app with these users. As an
+admin, you can assign free licenses to users but these licenses expire.
+1. To create a Microsoft Entra identity with administrative rights, follow the steps under How
+do I create a Microsoft Entra identity with the same administrative privileges as my
+Microsoft Account?.
+2. Add each user you want to share an app with to Microsoft Entra ID.
+a. Sign in to https://portal.azure.com
+
+.
+
+b. Search for Microsoft Entra ID.
+c. Add a new user or Add a guest user. You can add users that have either a Microsoft
+Account or Microsoft Entra identity.
+3. With your Microsoft Entra admin identity, either purchase Power Apps plans
+
+. As an
+
+admin, you receive 25 Power Apps per user trials. All of these trials expire.
+4. With your Microsoft Entra admin identity, assign licenses to the users you added to your
+Microsoft Entra tenant.
+5. Sign in to Power Apps
+
+to proceed with sharing your apps to users.
+
+Can I run my apps in Power Apps mobile?
+Yes. You must launch an app from an app link. Without launching an app directly, Power Apps
+mobile doesn't support Microsoft Account sign in out of the context of launching an app.
+You can get the app link for an app by going to Power Apps
+Details > See the Web link property.
+
+Next steps
+Build an app
+What is Microsoft Dataverse?
+
+Last updated on 01/21/2026
+
+> Apps > (select an app) >
+
+Get started with Power Apps
+ﾃ
+
+Summarize this article for me
+
+Get started with Power Apps to build your first app quickly and efficiently. The Power Apps
+home page is your starting point for creating apps, managing existing ones, and accessing
+powerful features that streamline your workflow.
+What you'll accomplish: By the end of this article, you'll learn how to navigate the interface,
+create your first app, and access Copilot AI features to accelerate development.
+Select the appropriate tab in the following section to learn more.
+
+
+
+Legend:
+1. Left navigation pane
+2. Search
+3. Environment information and settings
+4. Build apps
+5. View and edit plans
+6. View and edit apps
+７ Note
+Try the new Power Apps experience—an AI-native solution designed to simplify app
+creation. Effortlessly automate workflows, connect data sources, and speed up
+
+development, all without needing advanced coding skills. For more information, see
+Overview of the New Power Apps experience (preview).
+
+Quick start options
+New to Power Apps? Start with our 5-minute canvas app tutorial
+Have existing data? Create an app from SharePoint or Excel
+Need help choosing? Review which app type is right for you
+
+1 – Left navigation pane
+Your main control center. When you sign in to the Power Apps home page
+
+, the left
+
+navigation pane gives you quick access to everything you need. Here's what each option does:
+
+
+
+Legend:
+1. Home: Takes you to the Power Apps home page.
+2. Create: Create apps such as canvas apps, model-driven apps, chatbots, and AI models.
+3. Learn: The learn hub lets you explore documents, training material, get help from the
+Power Apps community, and other resources that help you to create and build Power
+Apps.
+4. Plans: View and edit your plans. For more information, see Overview of Plan designer.
+5. Apps: If you created an app or someone else created one and shared it with you, you can
+play or edit it. You can also filter the list of apps based on criteria such as whether you
+opened it recently.
+6. AI hub: Create and use AI models that optimize your business processes. For more
+information, see Overview of AI Builder.
+7. Your most used pages such as Tables, Connections, Flows: When you first sign in, the
+top three pages that you use most are pinned to the left navigation pane. Use the More
+option to unpin any of these pages and pin something else.
+8. More: Pin your most used items to the left navigation such as tables, flows, and more.
+9. Power Platform: Explore other Power Platform products or service.
+
+Pin and unpin
+Pin your most used pages in the navigation pane so you can quickly access features that you
+use frequently. Links to other pages are available through the More link. When you pin an item,
+it appears in the middle section above More.
+When you sign in, the system automatically pins your most and recently used pages on the left
+navigation pane. However, you can pin and unpin pages and customize it to your preference.
+To pin or unpin a page from the left navigation pane, select More, and then select the
+or
+
+unpin button.
+
+pin
+
+You can also unpin an item by selecting the more button and then select Unpin.
+
+Discover all
+To see all your Power Apps, from the left navigation pane, select More > Discover all. To keep
+it pinned, select the
+
+pin button.
+
+Move up or move down
+When you have a few pages pinned in the navigation pane, you can start moving them up or
+down.
+To move a page up or down, select the more button next to the page that you want to move,
+and then select Move up or Move down.
+
+Power Platform
+From the left navigation pane, select Power Platform to access Power Platform services such as
+Power Platform Admin Center, Power BI, and Power Automate.
+
+2 – Search
+Find anything fast. The search bar helps you:
+Locate your apps by typing any part of the name
+Discover new app templates
+Access help documentation
+Quick tip: Start typing in the search bar, and then select the banner icon next to your app to
+open or edit it.
+
+3 – Environment information and settings
+View your environment information and settings.
+
+Choose an environment
+For best results, start by ensuring that the home page is set to the right environment. For more
+information, see Choose an environment.
+
+Manage environments by using Power Platform admin center.
+
+Notifications
+Select the bell icon to see notifications. The notification center stores notifications until you
+dismiss them or when they expire.
+
+Settings
+Select the gear icon to perform tasks such as connecting to data sources, identify your Power
+Apps licenses, and open the page where you can perform administrative tasks.
+Admin center: Opens another window and goes to the Power Platform admin center.
+Plans(s): View your licenses. For more information, see Licensing overview.
+Advanced settings: Manage your admin settings. For more information, see Manage
+Microsoft Dataverse settings.
+Session details: View your Power Apps session details such as session ID, tenant ID,
+environment ID, and more.
+
+Developer resources: Access developer resources.
+Power Apps settings: View or update your language and time settings, notifications, or
+access directories.
+Themes: From the list of themes, select a theme for your organization.
+Password: Change your password.
+Contact preferences: Update your contact information.
+
+Help
+In the header, select the question mark icon to find more information about Power Apps.
+
+You find links to documentation, Power Apps training on Microsoft Learn, the Power Apps
+Community where you can share information with users in other organizations, and the Power
+Apps blog where the newest features are announced.
+
+4 – Build apps
+Ready to build your first app? Choose the option that best fits your needs:
+Start with a design →: Pick a layout or start with blank canvas app and design your app.
+Start with data →: Create a new table in Dataverse, or connect to an existing datasource,
+such as Dataverse, SharePoint, Excel, SQL, or upload a file.
+Start with a plan →: Use plans to describe your business problem and generate apps,
+tables, and more.
+You can also create app using the Create menu on the left navigation pane. Review the
+following articles, to learn more about creating apps:
+Create a blank canvas app from scratch.
+Create a canvas app using Microsoft Dataverse
+create a canvas app based on Excel data.
+Create a canvas app with data from a list
+７ Note
+If you're trying to create an app by using Dataverse but the option is unavailable,
+review the permissions table in this article.
+
+Permissions for Dataverse
+Can't create a Dataverse app? This table shows what happens based on your permissions and
+helps you understand your next steps.
+ﾉ
+
+Expand table
+
+Maker has access to
+a developer
+
+Maker has permission
+to create a developer
+
+Maker has access to
+another Dataverse
+
+environment
+
+environment
+
+environment with required
+permissions
+
+Yes
+
+n/a
+
+n/a
+
+Action
+
+Switch to the developer
+environment that appears
+first in the alphabetical list
+
+No
+
+Yes
+
+n/a
+
+Create a developer
+environment
+
+No
+
+No
+
+Yes
+
+Switch to another
+environment using the
+environment picker
+
+No
+
+No
+
+No
+
+Contact your admin
+
+5 - View and edit plans
+Select a plan to view and edit a plan. You can also, use the Plans menu in the left navigation
+pane to access your plans.
+
+6 – View and edit apps
+Manage your apps effectively:
+Access your apps: Use the Apps menu in the left navigation pane to find apps you own
+or apps shared with you
+Find apps quickly: Filter and sort apps to locate what you need
+Take action: Hover over any app name to Edit, Play, or access Commands for sharing,
+viewing details, and settings
+Ready to customize? Learn advanced app editing techniques →
+
+Last updated on 02/24/2026
+
+Copilot and AI features in Power
+Apps documentation
+Learn about Copilot and generative AI features in Microsoft Power Apps.
+
+Get started
+
+ｂ GET STARTED
+Copilot in Power Apps overview
+Copilot admin settings
+FAQ about using AI responsibly
+Enable or disable Copilot features
+Improve Copilot responses from Microsoft Dataverse
+
+Create and use plans
+
+ｅ OVERVIEW
+Overview and prerequisites
+FAQ for plans
+
+ｃ HOW-TO GUIDE
+Create a plan
+Create a plan from a solution
+
+Create and edit apps with Copilot
+
+ｃ HOW-TO GUIDE
+Build apps through conversation with Copilot
+Create a canvas app description with Copilot (preview)
+
+Create a model-driven app description with Copilot
+Use field suggestions by Copilot
+Create a generative page in a model-driven app (preview)
+Use Copilot to create and edit Power Fx formulas
+Rename controls in canvas apps with Copilot (preview)
+Add a Copilot control to a canvas app (preview)
+Add a custom Copilot to a canvas app (preview)
+
+Implement agent supervision and automation
+
+ｃ HOW-TO GUIDE
+Supervise agents using agent feed (preview)
+Add agents to be supervised in app (preview)
+Add an agent response control (preview)
+Build an agent to automate your business process
+Add agents to your model-driven app
+
+Explore Copilot chat features
+
+ｃ HOW-TO GUIDE
+Add Microsoft 365 Copilot in model-driven apps (preview)
+Use Microsoft 365 Copilot in model-driven apps (preview)
+Customize Microsoft 365 Copilot with an agent (preview)
+
+Streamline data entry
+
+ｃ HOW-TO GUIDE
+Get assistance filling forms
+Use smart paste
+
+Use Copilot in the email rich text editor
+
+Explore and visualize data
+
+ｃ HOW-TO GUIDE
+Explore data in a view
+Visualize data in a view
+See row summaries in a form and view
+Use prompt columns
+
+Summarize and provide contextual insight
+
+ｃ HOW-TO GUIDE
+Use Copilot case summary
+Use timeline highlights powered by generative AI
+Create a custom row summary
+
+Integrate custom AI experiences
+
+ｐ CONCEPT
+Use APIs to create custom AI powered experiences (preview)
+
+Copilot in Power Apps overview
+Copilot in Power Apps lets you quickly build apps using natural language. Describe your
+business needs, and the service generates an app and data model for you—no coding
+required. People interact with your app by asking questions or giving commands in everyday
+language, making the experience more intuitive and engaging. This article gives an overview of
+Copilot in Power Apps, including prerequisites, availability, and how to manage Copilot
+features in your environment. Learn about Copilot and generative AI features in Microsoft
+Power Apps.
+
+Prerequisites
+Each Copilot feature can have different requirements. Check the documentation for each
+feature to learn what you need.
+） Important
+This capability is powered by Azure OpenAI Service.
+Some Copilot features are in preview.
+Preview features aren't meant for production use and might have restricted
+functionality. These features are subject to supplemental terms of use
+
+, and are
+
+available before an official release so customers can get early access and provide
+feedback.
+
+Availability
+This capability might not be available in your region yet. Learn more in Explore Copilot
+features by geography and languages
+
+.
+
+This capability might be subject to usage limits or capacity throttling.
+Understand the capabilities and limitations of AI-powered and Copilot features in Power
+Apps. Learn more in FAQ about using AI responsibly in Power Apps.
+
+Enable or disable Copilot features
+Generally available Copilot features are on by default and can't be turned off except by
+Microsoft Support. To turn them off, a tenant admin needs to contact Support.
+
+Turn off Copilot preview features in Power Apps
+
+Copilot preview features are on by default, but your admin can turn them off for an
+environment or a tenant.
+
+Turn off Copilot preview features for an environment
+1. Sign in to the Power Platform admin center
+
+.
+
+2. In the navigation pane, select Environments, and then select an environment.
+3. On the command bar, select Settings > Features.
+4. Set the Copilot toggle to Off.
+
+Turn off Copilot preview features for your tenant
+1. Sign in to the Power Platform admin center
+
+.
+
+2. In the navigation pane, select Settings to open the Tenant settings page.
+3. Select Copilot in Power Apps (preview), and then set the toggle to Off.
+4. Select Save.
+７ Note
+Turning off Copilot for your tenant turns off Copilot for makers only. It doesn't turn off the
+Copilot control for canvas apps or Copilot for model-driven apps.
+
+Related information
+Copilot features in Power Apps
+FAQ about using AI responsibly in Power Apps
+Language availability for Power Platform
+Geographical availability for Power Platform
+） Note: The author created this article with assistance from AI. Learn more
+
+Last updated on 01/21/2026
+
+Use the Learn hub
+Article • 09/27/2023
+
+The Learn hub gives you easy access to resources that help you as you're learning to
+build Power Apps, include training material, product documentation, announcements
+and event notices, and help from the Power Apps community.
+1. To access the Learn hub, go to the Power Apps home page
+
+and select Learn in
+
+the left navigation pane.
+2. Use Experience level to select the content level that best suits your needs.
+3. Select a tab to access the information that you're looking for.
+
+The Learn hub includes the following sections:
+The banner at the top showcases the latest announcements, trending posts, and
+information about upcoming Microsoft events.
+
+The Experience Level menu provides learning content based on the experience
+level that you select. For instance, if you are a developer seeking information about
+extensibility points in Power Apps, choose Advanced to find relevant help
+resources.
+
+The Overview tab lists featured training paths and modules, posts from the
+community, help articles, and training videos on YouTube.
+
+The Courses tab provides guided training such as training paths, modules, and
+training events.
+The Articles tab lists relevant posts in public blogs.
+The Community tab provides access to content from the Power Apps community,
+including user groups, networking events, the LinkedIn Power Apps community,
+and more.
+The Support tab is where you can find help articles, report a problem, and submit
+an idea.
+
+From your org (preview)
+In Managed Environments, admins can provide customized welcome content to help
+makers get started with Power Apps. Learn about customizing maker welcome content
+(preview). If your organization has created custom welcome content, you see it when
+you sign in to Power Apps as a maker.
+You can select Don't show this again here if you prefer not to see the custom content
+when you sign in.
+To get back to it later, open the Learn hub and select From your org.
+
+What's new in Power Apps?
+Article • 08/14/2024
+
+This topic provides resources for you to learn about the new features that have been
+recently released, features that will be releasing over the next few months, and known
+limitations and resolutions.
+
+Weekly releases
+For information about the new features, fixes, and improvements released in the past
+few weeks, see Released versions for Microsoft Power Apps.
+To learn more about how to browse information in the weekly release notes, read this
+blog post
+
+.
+
+７ Note
+Releases are rolled out over several days. New or updated functionality might not
+appear immediately.
+
+Release plan
+For information about new features being released over the next few months that you
+can use for planning, see Release Planner .
+
+Monthly releases for model-driven apps
+Power Platform admins can define the release cadence for features in model-driven
+apps.
+ﾉ
+
+Expand table
+
+Channel
+
+Frequency
+
+Notes
+
+Semi-
+
+Twice per
+
+Rollout follows weekly releases starting in early April and early
+
+annual
+
+year
+
+October. Default release cadence within Power Apps and Dynamics
+365.
+
+Monthly
+
+Once per
+month
+
+Rollout follows the weekly release schedule starting with the first
+weekly release for the month.
+
+For more information about release channel options and monthly channel, go to Release
+channel overview.
+
+Known limitations
+For information about known limitations, see Common issues and resolutions.
+
+See also
+Power Platform release plans
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+Get your developer environment
+(preview)
+Article • 04/18/2023
+
+[This topic is pre-release documentation and is subject to change.]
+By default, Microsoft Power Platform app makers can create up to three developer type
+environments. Developer environments are special environments intended only for use
+by the owner. Use these environments to build, test, and perform application lifecycle
+management (ALM) with Power Apps, Power Automate, and Microsoft Dataverse.
+） Important
+This is a preview feature.
+Developer type environments allow you to:
+Create apps and flows without writing code, with full-featured Power Apps and
+Power Automate development tools. Easily share and collaborate on these
+solutions with others.
+Use a fully managed, scalable data platform with Dataverse, including support for
+common business application actions. Use out-of-the-box common tables or build
+your own data schema.
+Export the solutions you create in your developer environment and then import
+them into other Power Platform environments so users can test and use them.
+
+Prerequisites
+To create a developer environment, you need an active Power Platform plan that
+includes Dataverse. More information: Licensing overview for Microsoft Power Platform
+
+Create your own developer type environment
+1. Sign in to Power Apps .
+
+2. Select the environment picker > Try it now.
+
+3. Follow the instructions on your screen to create your environment.
+
+Create your own environment when you sign
+up for the Power Apps Developer Plan
+The Power Apps Developer Plan gives you up to three free development type
+environments to build and test with Power Apps, Power Automate, and Microsoft
+Dataverse. The developer environments maintained under this plan will be available as
+long as you actively use the Power Apps Developer Plan.
+More information: Create a developer environment with the Power Apps Developer Plan
+
+See also
+Environments overview
+
+Power Apps preview program
+Article • 05/15/2024
+
+Microsoft Power Apps updates the platform and its capabilities every few days or weeks.
+The Power Apps preview program is a way to get early access to features and updates
+before they become available in other regions (where customer production apps are
+deployed).
+With the Power Apps preview program, you can:
+Try out, learn, and dogfood upcoming features: Many features are rolled out first
+in the preview for a few days to get feedback. By participating in the preview
+program, you can learn about new features sooner and provide feedback. Also,
+you can quickly take advantage of new features as soon as they reach regions
+where their production apps are created.
+Enable business continuity by ensuring current apps continue to work with the
+upcoming updates (vNext) of Power Apps.
+
+What in Power Apps is available for preview?
+To access the preview features, you need to be in a preview environment or using a
+preview URL. We have preview features for the following areas across Power Apps.
+
+Canvas apps
+For preview, experimental, and retired features in canvas apps, use Power Apps Studio to
+turn the features On or Off while editing your app.
+For early access to upcoming changes in canvas apps, use the following environments:
+Preview environments - Upcoming changes are typically rolled out to preview
+environments 1-2 weeks before they're available to all other regions.
+Sandbox environments - To access preview version of Power Apps on sandbox
+environments, use make.preview.powerapps.com.
+
+Model-driven apps and app management
+You can create, manage, and share apps using Power Apps
+
+(make.powerapps.com). To
+
+use the preview features, we recommend that you are in a preview or sandbox
+environment and not in a production environment. Then, go to the preview version of
+Power Apps
+
+(make.preview.powerapps.com).
+
+How to get early access to the upcoming
+updates?
+７ Note
+Preview (United States) has been replaced with the Early release cycle option.
+Following the instructions below, you can create preview, or early release cycle
+environments in the United States region and other regions that may be closer to
+your location.
+For Power Platform, all the apps, flows, and related resources are stored in an
+environment. Early access to all preview features is available when an admin creates an
+environment that supports the Get new features early option. A subset of the regions
+currently have this capability and the environment must be created in one of those
+regions. For more information, see Early release cycle environments.
+All the apps and other resources created in this environment are on the vNext version of
+the platform.
+
+How to learn about the latest updates?
+You can get aware of the new features, which are available for preview at What’s new in
+Power Apps. The features that are only available in the preview have a ‘Preview’ tag.
+
+Key scenarios to test with the preview program
+1. Validate your production apps with the upcoming Power Apps updates (vNext)
+You might like to verify your production apps, to be working fine with the next
+upcoming updates on Power Apps. You can copy the apps from a production
+environment to an environment in First Release and play the apps to test out the
+scenarios. Note, all the other necessary resources like CustomAPI, Power Automate,
+etc., need to be moved along with it. This should just create another copy of these
+apps and required resources. You can start testing out the newer updates not just
+for playing an app, but also while editing and managing the apps.
+2. Trying out the new features available in preview
+We launch many new features initially in the Preview (United States) region. You
+can try out the new features before they become available in the rest of the
+
+regions (which might impact your production environment).
+
+How to provide feedback to the product team?
+You can provide feedback on the Power Apps forum
+
+and/or contact support
+
+.
+
+What are the known issues and limitations?
+1. Clients not available in preview
+There are certain features, and services available in preview:
+ﾉ
+
+Expand table
+
+Create an app
+
+Playing an app
+
+Others
+
+Available in
+preview?
+
+Web studio
+
+Web player
+
+Flow, Connectors
+and Gateways
+
+Yes
+
+Desktop version
+of studio
+
+Power Apps mobile for iOS,
+Android, and Windows
+
+No
+
+2. Using apps created in preview environments in production environments
+Power Apps doesn't support opening apps saved in preview only versions of Power
+Apps in production environments. Most versions of Power Apps eventually move
+from preview into production, but how and when this happens is influenced by
+many factors so it shouldn't be relied on. We recommend you use production
+environments to create or edit any app intended for use in a production
+environment.
+
+Feedback
+Was this page helpful?
+Provide product feedback
+
+ Yes
+
+ No
+
+System requirements, limits, and
+configuration values for Power Apps
+This article contains information on supported device platforms, web browser requirements,
+limits, and configuration values for Power Apps.
+
+Supported platforms for running apps by using the
+Power Apps mobile app
+７ Note
+To ensure an optimal user experience, test your app on the specific devices you plan
+to use for production deployment.
+Performance testing and results can vary between device types such as mobile,
+desktop, and laptops. Factors include processing power, memory capacity, network
+connectivity, app complexity, and other apps running in parallel on a device. Make
+sure the test results meet your business requirements before you roll out the
+solutions in production.
+
+ﾉ
+
+Expand table
+
+Platform
+
+Version
+
+iOS
+
+The latest version of iOS is always the recommended version to run Power Apps mobile. The
+previous version is the minimum required.
+
+Android
+
+The latest version of Android is always the recommended version to run Power Apps mobile.
+The previous three versions are the minimum required to run Power Apps mobile.
+
+Windows
+
+Windows 10 version 17763.0 or later to run Power Apps for Windows.
+
+７ Note
+New major versions of iOS and Android release each year. When a new version releases, if
+you're using the oldest previously supported version, you have 60 days to update your
+device to at least the new minimum supported version to continue to run Power Apps
+mobile.
+
+Supported browsers for running Power Apps
+ﾉ
+
+Expand table
+
+Browser
+
+Supported versions
+
+App type
+
+Google
+Chrome
+
+Latest three major
+releases
+
+Model-driven apps, canvas apps, app and component
+designers1.
+
+Microsoft Edge
+
+Latest three major
+releases
+
+Model-driven apps, canvas apps, app and component
+designers1.
+
+Mozilla Firefox
+
+Latest three major
+releases
+
+Model-driven apps and canvas apps.
+
+Apple Safari
+
+13 and later
+
+Model-driven apps and canvas apps.
+
+1App and component designers include Power Apps studio, model-driven app designer, and
+
+model-driven custom page designer.
+
+Supported operating systems for browsers running
+Power Apps
+ﾉ
+
+Expand table
+
+Operating
+
+Supported
+
+system
+
+versions
+
+Windows
+
+Windows 10 or
+
+Model-driven apps, canvas apps, app and component
+
+later
+
+designers1.
+
+10.13 or later
+
+Model-driven apps, canvas apps, app and component
+
+macOS
+
+App type
+
+designers1.
+iOS
+
+iOS 13 or later
+
+Model-driven apps2 and canvas apps.
+
+Android
+
+10 or later
+
+Model-driven apps2 and canvas apps.
+
+1
+
+App and component designers include Power Apps studio, model-driven app designer, and
+
+model-driven custom page designer.
+2
+
+Using the web browser on a phone to run a model-driven app isn't supported; use the Power
+
+Apps mobile app.
+For classic web application system requirements, see Web application requirements.
+
+

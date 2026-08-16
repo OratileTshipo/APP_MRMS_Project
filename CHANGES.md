@@ -143,3 +143,19 @@ Backups of the originals: `/tmp/docx_backup/`. Edit script: `update_docs_schema.
   CSVs, docs, original `.msapp`, unpacked source under `src/`, README, `.gitignore`.
 - This session's follow-up commit(s): updated Word docs (aligned to CSV schema),
   `update_docs_schema.py`, `CHANGES.md`.
+
+## 8. Reference material made permanent
+
+- `reference/canvas-apps/msapp-internals/` — the original `.msapp` internals
+  unzipped flat (Controls/*.json, References/*, Header.json, Properties.json,
+  Resources/PublishInfo.json, Assets/Images, Src/*.pa.yaml, AppCheckerResult.sarif).
+  Byte-identical to the content inside the committed `src/APP-MRMS_Project_app.msapr`;
+  kept flat so it can be grepped without unzipping.
+- `reference/canvas-apps/official-docs/` — page-range text extractions of
+  `power-apps-maker.pdf` (the full Microsoft Learn Power Apps maker docs,
+  6,765 pp, ~404 MB, too large to keep/extract wholesale) covering the canvas-apps
+  topics: source file format (p~3500), coding guidelines (p~3600–4000).
+  Filenames encode the starting page; see `reference/canvas-apps/README.md`.
+- `BEST_PRACTICES.md` added at repo root — distilled canvas-apps best practices
+  and gap analysis of the current app (delegation, naming, collections,
+  App.Formulas, source-format workflow).

@@ -1,0 +1,1440 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_Users:
+    Properties:
+      Fill: =varBgLight
+      LoadingSpinner: =LoadingSpinner.Data
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =// ============================================================
+        // scr_Registration.OnVisible — PRODUCTION VERSION
+        // Purpose: initialise registration form state and reset all fields
+        // ============================================================
+
+        // ------------------------------------------------------------
+        // 1. FORM STATE — reset every visit
+        // ------------------------------------------------------------
+        Set(varRegFullName, "");
+        Set(varRegEmail, "");
+        Set(varRegPhone, "");
+        Set(varRegDirectorate, "");
+        Set(varRegProgramme, "");
+        Set(varRegRole, "");
+        Set(varRegPassword, "");
+        Set(varRegConfirmPassword, "");
+        Set(varRegFormIsValid, false);
+        Set(varRegPasswordMismatch, false);
+        Set(varRegEmailExists, false);
+        Set(varRegSubmitSuccess, false);
+        Set(varRegErrorMessage, "");
+        Set(varRegPasswordStrength, "");
+        Set(varRegAcceptTerms, false);
+        Set(varRegShowPassword, false);
+        Set(varRegShowConfirmPassword, false);
+
+        // ------------------------------------------------------------
+        // 2. RESET FORM CONTROLS
+        // ------------------------------------------------------------
+        Reset(txt_RegFullName);
+        Reset(cmb_RegEmail);
+        Reset(txt_RegPhone);
+        Reset(drp_RegDirectorate);
+        Reset(drp_RegProgramme);
+        Reset(drp_RegRole);
+        Reset(txt_RegPassword);
+        Reset(txt_RegConfirmPassword);
+        Reset(chk_RegAcceptTerms);
+
+        // ============================================================
+        // END OF scr_Registration.OnVisible
+        // ============================================================
+    Children:
+      - scr_Registration_con:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =App.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Vertical
+            Width: =App.Width
+          Children:
+            - ProjectsHomeHeader_con_2:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.Semilight
+                  Fill: =varNavy
+                  FillPortions: =0
+                  Height: =App.Height * 0.13
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =20
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =App.Width - ProjectsSidebar_con_2.Width
+                Children:
+                  - HomeHeaderLeft_con_4:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        FillPortions: =0
+                        Height: =Parent.Height
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingLeft: =8
+                        PaddingTop: =8
+                        Width: =Parent.Width * .55
+                      Children:
+                        - HomeDashboard_lbl_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              Height: =Parent.Height * .5
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =25
+                              Text: '="Home Dashboard"  '
+                        - HomeDashboardSubtitle_lbl_4:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              Height: =Parent.Height * .5
+                              Size: =12
+                              Text: =varUserDirectorate & " · " & varUserProgramme  //
+                              X: =40
+                              Y: =40
+                  - HomeHeaderCenter__con_4:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =Parent.Height
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        LayoutJustifyContent: =LayoutJustifyContent.End
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        Width: =Parent.Width / 3
+                      Children:
+                        - SearchBox_con_4:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Center
+                              Fill: =varBgLight
+                              Height: =Parent.Height * .4
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =10
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width - 50
+                            Children:
+                              - Search_ico_4:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(153, 153, 153, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * 0.65
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Search
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =Parent.Width * 0.08
+                              - SearchBox_txt_4:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    BorderThickness: =0
+                                    Clear: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    Default: =
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    DisabledFill: =RGBA(242, 242, 241, 0)
+                                    Fill: |
+                                      =varBgLight
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * 0.65
+                                    HintText: ="Search projects, activities, reports"
+                                    HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                    HoverColor: =RGBA(50, 49, 48, 1)
+                                    HoverFill: =RGBA(255, 255, 255, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varHomeSearchTerm, SearchBox_txt_4.Text)
+                                    PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                    PressedColor: =RGBA(50, 49, 48, 1)
+                                    PressedFill: =RGBA(255, 255, 255, 1)
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Size: =15
+                                    Width: =Parent.Width - Search_ico_4.Width - 25
+                        - HomeBell_ico_4:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height * .4
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Bell
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width / 15
+            - ProjectsMainScreen_con_2:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Height: =Parent.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  Width: =App.Width
+                Children:
+                  - ProjectsSidebar_con_2:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Fill: =varBgLight
+                        FillPortions: =0
+                        Height: =App.Height
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =30
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =20
+                        PaddingLeft: =10
+                        PaddingRight: =10
+                        PaddingTop: =20
+                        Width: =App.Width * 0.05
+                      Children:
+                        - Home_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Home
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Home,ScreenTransition.Fade)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Projects_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Manufacture
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Projects,ScreenTransition.Cover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Activities_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.RadarActivityMonitor
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Cover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - MonthlyReports_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.CalendarBlank
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Activitiessds_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.ListWatchlistRemind
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Fade)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Trending_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Trending
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Users_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.People
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Users,ScreenTransition.UnCover)
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - SidebarSpacer_con_3:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                        - Settings_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Settings
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                        - Support_ico_3:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(0, 120, 212, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height / 20
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(16, 110, 190, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.Support
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(16, 110, 190, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Width: =Parent.Width - 20
+                  - RegMainScreen_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =App.Height +200
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        Width: =App.Width
+                      Children:
+                        - RegMainContent_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Start
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =8
+                              PaddingBottom: =20
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              Width: =App.Width - ProjectsSidebar_con_2.Width
+                            Children:
+                              - RegInstruction_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =Parent.Height * .12
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    Width: =Parent.Width * .7
+                                  Children:
+                                    - RegInstructionTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Stretch
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * 0.5
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =20
+                                          Text: ="Complete all fields to register a new system user"
+                                    - RegInstructionSub_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Stretch
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * 0.4
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =14
+                                          Text: ="The user will receive an email notification with their login credentials once registered"
+                              - RegFormTitle_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =20
+                                    Text: ="Account Details"
+                                    X: =40
+                                    Y: =40
+                              - RegFormCard_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Fill: =varBgLight
+                                    FillPortions: =0
+                                    Height: =Parent.Height
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =12
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    PaddingBottom: =16
+                                    PaddingLeft: =16
+                                    PaddingRight: =16
+                                    PaddingTop: =16
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width - 20
+                                  Children:
+                                    - RegSectionPersonal_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =RGBA(106, 122, 127, 1)
+                                          BorderThickness: =1
+                                          DropShadow: =DropShadow.None
+                                          Fill: =RGBA(0,0,0,0)
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .33
+                                          LayoutAlignItems: =LayoutAlignItems.Stretch
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =12
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegSectionPersonal_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =Parent.Height * .2
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =14
+                                                Text: ="PERSONAL INFORMATION"
+                                                X: =40
+                                                Y: =40
+                                          - Container8:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                DropShadow: =DropShadow.None
+                                                Height: '=Parent.Height '
+                                                LayoutAlignItems: =LayoutAlignItems.Center
+                                                LayoutDirection: =LayoutDirection.Horizontal
+                                                LayoutGap: =12
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Width: =Parent.Width
+                                              Children:
+                                                - Container9:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      DropShadow: =DropShadow.None
+                                                      FillPortions: =0
+                                                      Height: '=Parent.Height '
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Width: =Parent.Width / 2
+                                                    Children:
+                                                      - RegEmailLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Select User *"
+                                                            Width: =Parent.Width
+                                                      - cmb_RegEmail:
+                                                          Control: ModernCombobox@1.1.1
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderStyle: =BorderStyle.Solid
+                                                            BorderThickness: =2
+                                                            Fill: =RGBA(255, 255, 255, 1)
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            InputTextPlaceholder: ="Search User by Email or Name"
+                                                            ItemDisplayText: =ThisItem.UserPrincipalName
+                                                            Items: |-
+                                                              =Office365Users.SearchUser({searchTerm: cmb_RegEmail.SearchText, top: 20})
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: |-
+                                                              =Set(varRegEmail, cmb_RegEmail.Selected.UserPrincipalName);
+                                                                          Set(varRegEmailExists, CountRows(Filter(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName)) > 0);
+                                                                          Set(varRegFormIsValid, false)
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            SelectMultiple: =false
+                                                            Width: =Parent.Width - 10
+                                                      - RegFullNameLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            Height: =(Parent.Height /4) - 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Full Name *"
+                                                            Width: =Parent.Width
+                                                      - txt_RegFullName:
+                                                          Control: Classic/TextInput@2.3.2
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            Color: =RGBA(50, 49, 48, 1)
+                                                            Default: =cmb_RegEmail.Selected.DisplayName
+                                                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                            DisabledColor: =RGBA(161, 159, 157, 1)
+                                                            DisabledFill: =RGBA(242, 242, 241, 0)
+                                                            Font: =Font.'Segoe UI'
+                                                            Height: =(Parent.Height / 4 ) - 2
+                                                            HintText: ="Auto-fills user name"
+                                                            HoverBorderColor: =RGBA(0, 120, 212, 1)
+                                                            HoverColor: =RGBA(50, 49, 48, 1)
+                                                            HoverFill: =RGBA(255, 255, 255, 1)
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: |-
+                                                              =Set(varRegFullName, txt_RegFullName.Text);
+                                                              Set(varRegFormIsValid, false)
+                                                            PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                            PressedColor: =RGBA(50, 49, 48, 1)
+                                                            PressedFill: =RGBA(255, 255, 255, 1)
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Size: =12
+                                                            Width: =Parent.Width - 10
+                                                - Container10:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      DropShadow: =DropShadow.None
+                                                      Height: =Parent.Height
+                                                      LayoutAlignItems: =LayoutAlignItems.Center
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      Width: =Parent.Width / 2
+                                                    Children:
+                                                      - RegPhoneLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Stretch
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Phone Number"
+                                                      - txt_RegPhone:
+                                                          Control: Classic/TextInput@2.3.2
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            Color: =RGBA(50, 49, 48, 1)
+                                                            Default: =
+                                                            DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                            DisabledColor: =RGBA(161, 159, 157, 1)
+                                                            DisabledFill: =RGBA(242, 242, 241, 0)
+                                                            Font: =Font.'Segoe UI'
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            HintText: ="Enter contact number"
+                                                            HoverBorderColor: =RGBA(15, 108, 189, 1)
+                                                            HoverColor: =RGBA(50, 49, 48, 1)
+                                                            HoverFill: =RGBA(255, 255, 255, 1)
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: =Set(varRegPhone, txt_RegPhone.Text)
+                                                            PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                            PressedColor: =RGBA(50, 49, 48, 1)
+                                                            PressedFill: =RGBA(255, 255, 255, 1)
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Size: =12
+                                                            Width: =Parent.Width - 10
+                                                      - RegRoleLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Stretch
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="System Role *"
+                                                      - drp_RegRole:
+                                                          Control: ModernDropdown@1.0.2
+                                                          Properties:
+                                                            AccessibleLabel: ="System Role"
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderStyle: =BorderStyle.Solid
+                                                            BorderThickness: =2
+                                                            Fill: =RGBA(255, 255, 255, 1)
+                                                            Height: =(Parent.Height / 4) - 2
+                                                            ItemDisplayText: =ThisItem.Value
+                                                            Items: =["Contributor", "Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"]
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: |-
+                                                              =Set(varRegRole, drp_RegRole.Selected.Value);
+                                                              Set(varRegFormIsValid, false)
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Width: =Parent.Width - 10
+                                    - RegSectionOrg_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =RGBA(106, 122, 127, 1)
+                                          BorderThickness: =1
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .2
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =12
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegSectionOrg_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Stretch
+                                                AutoHeight: =true
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =(Parent.Height * .3) - 2
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =14
+                                                Text: ="ORGANISATIONAL DETAILS"
+                                          - RegFormRow3_con:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Center
+                                                DropShadow: =DropShadow.None
+                                                FillPortions: =0
+                                                Height: =Parent.Height * 0.7
+                                                LayoutAlignItems: =LayoutAlignItems.Center
+                                                LayoutDirection: =LayoutDirection.Horizontal
+                                                LayoutGap: =16
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                PaddingBottom: =8
+                                                PaddingLeft: =5
+                                                PaddingRight: =5
+                                                PaddingTop: =5
+                                                Width: =Parent.Width
+                                              Children:
+                                                - RegProgrammeField_con:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      DropShadow: =DropShadow.None
+                                                      Height: '=Parent.Height '
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      PaddingBottom: =8
+                                                      PaddingLeft: =3
+                                                      PaddingRight: =3
+                                                      PaddingTop: =3
+                                                    Children:
+                                                      - RegProgrammeLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            Height: =(Parent.Height * .5) - 4
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Programme *"
+                                                            Width: =Parent.Width - 10
+                                                      - drp_RegProgramme:
+                                                          Control: ModernDropdown@1.0.2
+                                                          Properties:
+                                                            AccessibleLabel: ="Programme"
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderStyle: =BorderStyle.Solid
+                                                            BorderThickness: =2
+                                                            Fill: =RGBA(255, 255, 255, 1)
+                                                            Height: =(Parent.Height * .5) - 4
+                                                            ItemDisplayText: =ThisItem.Title
+                                                            Items: =Filter(Programmes, Active = true)
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: |-
+                                                              =Set(varRegProgramme, drp_RegProgramme.Selected.Title);
+                                                              Set(varRegFormIsValid, false)
+                                                            PaddingBottom: =5
+                                                            PaddingLeft: =5
+                                                            PaddingRight: =5
+                                                            PaddingTop: =5
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Width: =Parent.Width - 10
+                                                - RegDirectorateField_con:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      DropShadow: =DropShadow.None
+                                                      Height: =Parent.Height
+                                                      LayoutAlignItems: =LayoutAlignItems.Stretch
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                    Children:
+                                                      - RegDirectorateLabel_lbl:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            Height: =(Parent.Height * .5) - 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Directorate *"
+                                                            Width: =Parent.Width - 10
+                                                      - drp_RegDirectorate:
+                                                          Control: ModernDropdown@1.0.2
+                                                          Properties:
+                                                            AccessibleLabel: ="Directorate"
+                                                            AlignInContainer: =AlignInContainer.Center
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderStyle: =BorderStyle.Solid
+                                                            BorderThickness: =2
+                                                            Fill: =RGBA(255, 255, 255, 1)
+                                                            Height: =(Parent.Height * .5) - 2
+                                                            ItemDisplayText: =ThisItem.DirectorateID
+                                                            Items: =Filter(Directorates, Active = true)
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            OnChange: |-
+                                                              =Set(varRegDirectorate, drp_RegDirectorate.Selected.DirectorateID);
+                                                              Set(varRegFormIsValid, false)
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Width: =Parent.Width - 10
+                                    - RegSectionSecurity_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =RGBA(106, 122, 127, 1)
+                                          BorderThickness: =1
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .2
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegSectionSecurity_lbl_1:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Stretch
+                                                AutoHeight: =true
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =Parent.Height * .2
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =14
+                                                Text: ="SECURITY CREDENTIALS"
+                                          - RegFormRow4_con_1:
+                                              Control: GroupContainer@1.5.0
+                                              Variant: AutoLayout
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Center
+                                                DropShadow: =DropShadow.None
+                                                FillPortions: =0
+                                                Height: =Parent.Height * .8
+                                                LayoutAlignItems: =LayoutAlignItems.Stretch
+                                                LayoutDirection: =LayoutDirection.Horizontal
+                                                LayoutGap: =16
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                PaddingBottom: =8
+                                                Width: =Parent.Width
+                                              Children:
+                                                - RegPasswordField_con_1:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      AlignInContainer: =AlignInContainer.SetByContainer
+                                                      DropShadow: =DropShadow.None
+                                                      FillPortions: =0
+                                                      Height: '=Parent.Height '
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      PaddingBottom: =8
+                                                      PaddingLeft: =8
+                                                      PaddingRight: =8
+                                                      Width: =Parent.Width / 2 - 14
+                                                    Children:
+                                                      - RegPasswordLabel_lbl_1:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Stretch
+                                                            Height: =Parent.Height / 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Temporary Password *"
+                                                      - RegPasswordInput_con_1:
+                                                          Control: GroupContainer@1.5.0
+                                                          Variant: AutoLayout
+                                                          Properties:
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderThickness: =2
+                                                            DropShadow: =DropShadow.None
+                                                            FillPortions: =0
+                                                            Height: =Parent.Height / 2 - 12
+                                                            LayoutDirection: =LayoutDirection.Horizontal
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Width: =Parent.Width
+                                                          Children:
+                                                            - txt_RegPassword:
+                                                                Control: Classic/TextInput@2.3.2
+                                                                Properties:
+                                                                  BorderColor: =RGBA(200, 200, 200, 1)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  Color: =RGBA(50, 49, 48, 1)
+                                                                  Default: =
+                                                                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                                  DisabledColor: =RGBA(161, 159, 157, 1)
+                                                                  DisabledFill: =RGBA(242, 242, 241, 0)
+                                                                  FillPortions: =1
+                                                                  Font: =Font.'Segoe UI'
+                                                                  Height: =Parent.Height
+                                                                  HintText: ="Enter temporary password"
+                                                                  HoverBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  HoverColor: =RGBA(50, 49, 48, 1)
+                                                                  HoverFill: =RGBA(255, 255, 255, 1)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  Mode: =If(varRegShowPassword, TextMode.SingleLine, TextMode.Password)
+                                                                  OnChange: |-
+                                                                    =Set(varRegPassword, txt_RegPassword.Text);
+                                                                    Set(varRegPasswordStrength, 
+                                                                        If(Len(txt_RegPassword.Text) >= 12, "Strong",
+                                                                            Len(txt_RegPassword.Text) >= 8, "Medium",
+                                                                            Len(txt_RegPassword.Text) > 0, "Weak",
+                                                                            ""));
+                                                                    Set(varRegFormIsValid, false)
+                                                                  PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  PressedColor: =RGBA(50, 49, 48, 1)
+                                                                  PressedFill: =RGBA(255, 255, 255, 1)
+                                                                  RadiusBottomLeft: =8
+                                                                  RadiusBottomRight: =8
+                                                                  RadiusTopLeft: =8
+                                                                  RadiusTopRight: =8
+                                                                  Size: =14
+                                                                  Width: =Parent.Width - RegPasswordToggle_ico_1.Width
+                                                            - RegPasswordToggle_ico_1:
+                                                                Control: Classic/Icon@2.5.0
+                                                                Properties:
+                                                                  AlignInContainer: =AlignInContainer.Center
+                                                                  BorderColor: =RGBA(200, 200, 200, 1)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  BorderThickness: =2
+                                                                  Color: =RGBA(100, 100, 100, 1)
+                                                                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                                                  DisabledColor: =RGBA(225, 223, 221, 1)
+                                                                  DisabledFill: =RGBA(0, 0, 0, 0)
+                                                                  Fill: =RGBA(255, 255, 255, 1)
+                                                                  FocusedBorderThickness: =4
+                                                                  Height: =Parent.Height / 1.3
+                                                                  HoverBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  HoverColor: =RGBA(16, 110, 190, 1)
+                                                                  HoverFill: =RGBA(0, 0, 0, 0)
+                                                                  Icon: =If(varRegShowPassword, Icon.View, Icon.Hide)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  OnSelect: =Set(varRegShowPassword, !varRegShowPassword)
+                                                                  PaddingLeft: =5
+                                                                  PaddingRight: =5
+                                                                  PaddingTop: =5
+                                                                  PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  PressedColor: =RGBA(16, 110, 190, 1)
+                                                                  PressedFill: =RGBA(0, 0, 0, 0)
+                                                                  Width: =40
+                                                      - RegPasswordStrength_con_1:
+                                                          Control: GroupContainer@1.5.0
+                                                          Variant: AutoLayout
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.SetByContainer
+                                                            DropShadow: =DropShadow.None
+                                                            FillPortions: =0
+                                                            Height: =6
+                                                            LayoutAlignItems: =LayoutAlignItems.Center
+                                                            LayoutDirection: =LayoutDirection.Horizontal
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Width: =Parent.Width
+                                                          Children:
+                                                            - RegStrengthBar1_rect_1:
+                                                                Control: Rectangle@2.3.0
+                                                                Properties:
+                                                                  BorderColor: =RGBA(0, 0, 0, 0)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  BorderThickness: =2
+                                                                  DisabledFill: =RGBA(161, 159, 157, 1)
+                                                                  Fill: |-
+                                                                    =If(varRegPasswordStrength = "", RGBA(230, 230, 230, 1),
+                                                                        varRegPasswordStrength = "Weak", RGBA(189, 49, 51, 1),
+                                                                        varRegPasswordStrength = "Medium", RGBA(197, 138, 22, 1),
+                                                                        RGBA(45, 128, 40, 1))
+                                                                  FocusedBorderThickness: =4
+                                                                  Height: =Parent.Height
+                                                                  HoverFill: =RGBA(0, 120, 212, 1)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  PressedFill: =RGBA(0, 120, 212, 1)
+                                                                  Width: =Parent.Width / 3
+                                                            - RegStrengthBar2_rect_1:
+                                                                Control: Rectangle@2.3.0
+                                                                Properties:
+                                                                  BorderColor: =RGBA(0, 0, 0, 0)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  BorderThickness: =2
+                                                                  DisabledFill: =RGBA(161, 159, 157, 1)
+                                                                  Fill: |-
+                                                                    =If(varRegPasswordStrength = "" || varRegPasswordStrength = "Weak", RGBA(230, 230, 230, 1),
+                                                                        varRegPasswordStrength = "Medium", RGBA(197, 138, 22, 1),
+                                                                        RGBA(45, 128, 40, 1))
+                                                                  FocusedBorderThickness: =4
+                                                                  Height: =Parent.Height
+                                                                  HoverFill: =RGBA(0, 120, 212, 1)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  PressedFill: =RGBA(0, 120, 212, 1)
+                                                                  Width: =Parent.Width / 3
+                                                            - RegStrengthBar3_rect_1:
+                                                                Control: Rectangle@2.3.0
+                                                                Properties:
+                                                                  BorderColor: =RGBA(0, 0, 0, 0)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  BorderThickness: =2
+                                                                  DisabledFill: =RGBA(161, 159, 157, 1)
+                                                                  Fill: =If(varRegPasswordStrength = "Strong", RGBA(45, 128, 40, 1), RGBA(230, 230, 230, 1))
+                                                                  FocusedBorderThickness: =4
+                                                                  Height: =Parent.Height
+                                                                  HoverFill: =RGBA(0, 120, 212, 1)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  PressedFill: =RGBA(0, 120, 212, 1)
+                                                                  Width: =Parent.Width / 3
+                                                - RegConfirmPasswordField_con_1:
+                                                    Control: GroupContainer@1.5.0
+                                                    Variant: AutoLayout
+                                                    Properties:
+                                                      AlignInContainer: =AlignInContainer.SetByContainer
+                                                      DropShadow: =DropShadow.None
+                                                      FillPortions: =0
+                                                      Height: '=Parent.Height '
+                                                      LayoutDirection: =LayoutDirection.Vertical
+                                                      LayoutMinHeight: =16
+                                                      LayoutMinWidth: =16
+                                                      PaddingBottom: =8
+                                                      PaddingLeft: =8
+                                                      PaddingRight: =8
+                                                      Width: =Parent.Width / 2 - 14
+                                                    Children:
+                                                      - RegConfirmPasswordLabel_lbl_1:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            AlignInContainer: =AlignInContainer.Stretch
+                                                            Height: =Parent.Height / 2
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =12
+                                                            Text: ="Confirm Password *"
+                                                      - RegConfirmPasswordInput_con_1:
+                                                          Control: GroupContainer@1.5.0
+                                                          Variant: AutoLayout
+                                                          Properties:
+                                                            BorderColor: =RGBA(214, 221, 224, 1)
+                                                            BorderThickness: =2
+                                                            DropShadow: =DropShadow.None
+                                                            FillPortions: =0
+                                                            Height: =Parent.Height * .5 - 12
+                                                            LayoutDirection: =LayoutDirection.Horizontal
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            PaddingBottom: =8
+                                                            RadiusBottomLeft: =8
+                                                            RadiusBottomRight: =8
+                                                            RadiusTopLeft: =8
+                                                            RadiusTopRight: =8
+                                                            Width: =Parent.Width
+                                                          Children:
+                                                            - txt_RegConfirmPassword:
+                                                                Control: Classic/TextInput@2.3.2
+                                                                Properties:
+                                                                  AlignInContainer: =AlignInContainer.Start
+                                                                  BorderColor: =If(varRegPasswordMismatch && Len(txt_RegConfirmPassword.Text) > 0, RGBA(189, 49, 51, 1), RGBA(200, 200, 200, 1))
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  BorderThickness: =1
+                                                                  Color: =RGBA(50, 49, 48, 1)
+                                                                  Default: =
+                                                                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                                  DisabledColor: =RGBA(161, 159, 157, 1)
+                                                                  DisabledFill: =RGBA(242, 242, 241, 0)
+                                                                  FillPortions: =1
+                                                                  Font: =Font.'Segoe UI'
+                                                                  Height: =Parent.Height
+                                                                  HintText: ="Confirm temporary password"
+                                                                  HoverBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  HoverColor: =RGBA(50, 49, 48, 1)
+                                                                  HoverFill: =RGBA(255, 255, 255, 1)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  Mode: =If(varRegShowConfirmPassword, TextMode.SingleLine, TextMode.Password)
+                                                                  OnChange: |-
+                                                                    =Set(varRegConfirmPassword, txt_RegConfirmPassword.Text);
+                                                                    Set(varRegPasswordMismatch, varRegPassword <> txt_RegConfirmPassword.Text);
+                                                                    Set(varRegFormIsValid, false)
+                                                                  PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  PressedColor: =RGBA(50, 49, 48, 1)
+                                                                  PressedFill: =RGBA(255, 255, 255, 1)
+                                                                  Size: =12
+                                                                  Width: =Parent.Width - RegConfirmPasswordToggle_ico_1.Width
+                                                            - RegConfirmPasswordToggle_ico_1:
+                                                                Control: Classic/Icon@2.5.0
+                                                                Properties:
+                                                                  AlignInContainer: =AlignInContainer.Center
+                                                                  BorderColor: =RGBA(200, 200, 200, 1)
+                                                                  BorderStyle: =BorderStyle.None
+                                                                  Color: =RGBA(100, 100, 100, 1)
+                                                                  DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                                                  DisabledColor: =RGBA(225, 223, 221, 1)
+                                                                  DisabledFill: =RGBA(0, 0, 0, 0)
+                                                                  Fill: =RGBA(255, 255, 255, 1)
+                                                                  FocusedBorderThickness: =4
+                                                                  Height: =Parent.Height / 1.3
+                                                                  HoverBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  HoverColor: =RGBA(16, 110, 190, 1)
+                                                                  HoverFill: =RGBA(0, 0, 0, 0)
+                                                                  Icon: =If(varRegShowConfirmPassword, Icon.View, Icon.Hide)
+                                                                  LayoutMinHeight: =16
+                                                                  LayoutMinWidth: =16
+                                                                  OnSelect: =Set(varRegShowConfirmPassword, !varRegShowConfirmPassword)
+                                                                  PaddingLeft: =5
+                                                                  PaddingRight: =5
+                                                                  PaddingTop: =5
+                                                                  PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                                                  PressedColor: =RGBA(16, 110, 190, 1)
+                                                                  PressedFill: =RGBA(0, 0, 0, 0)
+                                                                  Width: =40
+                                                      - RegPasswordMismatch_lbl_1:
+                                                          Control: ModernText@1.0.0
+                                                          Properties:
+                                                            Color: =RGBA(189, 49, 51, 1)
+                                                            LayoutMinHeight: =16
+                                                            LayoutMinWidth: =16
+                                                            Size: =11
+                                                            Text: ="Passwords do not match"
+                                                            Visible: =varRegPasswordMismatch
+                                    - RegSectionTerms_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .08
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =10
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - chk_RegAcceptTerms:
+                                              Control: Classic/CheckBox@2.1.0
+                                              Properties:
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                CheckboxBackgroundFill: =RGBA(0, 120, 212, 1)
+                                                CheckboxBorderColor: =RGBA(0, 0, 0, 0)
+                                                CheckboxSize: =20
+                                                Color: =RGBA(50, 49, 48, 1)
+                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                Height: =Parent.Height
+                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                                HoverColor: =RGBA(50, 49, 48, 1)
+                                                HoverFill: =RGBA(0, 0, 0, 0)
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnCheck: |-
+                                                  =Set(varRegAcceptTerms, chk_RegAcceptTerms.Value);
+                                                  Set(varRegFormIsValid, false)
+                                                OnUncheck: |-
+                                                  =Set(varRegAcceptTerms, chk_RegAcceptTerms.Value);
+                                                  Set(varRegFormIsValid, false)
+                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                                PressedColor: =RGBA(50, 49, 48, 1)
+                                                PressedFill: =RGBA(0, 0, 0, 0)
+                                                Size: =12
+                                                Text: ="I confirm that the user information provided is correct and the user agrees to the system terms of use"
+                                                Width: =Parent.Width
+                                    - RegError_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =40
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          Visible: =!IsBlank(varRegErrorMessage)
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegErrorMessage_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                Color: =RGBA(189, 49, 51, 1)
+                                                Fill: =RGBA(253, 207, 180, 1)
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                PaddingBottom: =8
+                                                PaddingLeft: =12
+                                                PaddingRight: =8
+                                                PaddingTop: =8
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Text: =varRegErrorMessage
+                                                Width: =Parent.Width
+                                    - RegSuccess_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .1
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          Visible: =varRegSubmitSuccess
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegSuccessMessage_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                Color: =RGBA(45, 128, 40, 1)
+                                                Fill: =RGBA(205, 240, 205, 1)
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                PaddingBottom: =8
+                                                PaddingLeft: =12
+                                                PaddingRight: =8
+                                                PaddingTop: =8
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Text: ="✓ User registered successfully. A confirmation email has been sent."
+                                                Width: =Parent.Width
+                                    - RegFormActions_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .1
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =16
+                                          LayoutJustifyContent: =LayoutJustifyContent.End
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RegCancel_btn:
+                                              Control: ModernButton@1.0.0
+                                              Properties:
+                                                Height: =40
+                                                Icon: ="Cancel"
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Navigate(scr_Home, Transition.Push)
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Text: ="Cancel"
+                                                Width: =120
+                                          - RegSubmit_btn:
+                                              Control: ModernButton@1.0.0
+                                              Properties:
+                                                Height: =40
+                                                Icon: ="Add"
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: "=// ============================================================\n// RegSubmit_btn.OnSelect — FINAL WORKING VERSION\n// ============================================================\n\n// ------------------------------------------------------------\n// 1. RESET ERROR STATE\n// ------------------------------------------------------------\nSet(varRegErrorMessage, \"\");\nSet(varRegSubmitSuccess, false);\n\n// ------------------------------------------------------------\n// 2. FIELD VALIDATION\n// ------------------------------------------------------------\nIf(\n    \n    IsBlank(varRegEmail),\n    Set(varRegErrorMessage, \"Please select a user.\"),\n    \n    CountRows(Filter(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName)) > 0,\n    Set(varRegErrorMessage, \"This user already exists in the system.\"), \n    \n    IsBlank(varRegRole),\n    Set(varRegErrorMessage, \"System Role is required.\"),\n    \n    IsBlank(varRegDirectorate),\n    Set(varRegErrorMessage, \"Directorate is required.\"),\n    \n    IsBlank(varRegProgramme),\n    Set(varRegErrorMessage, \"Programme is required.\"),\n    \n    IsBlank(varRegPassword),\n    Set(varRegErrorMessage, \"Password is required.\"),\n    \n    Len(varRegPassword) < 8,\n    Set(varRegErrorMessage, \"Password must be at least 8 characters.\"),\n    \n    IsBlank(varRegConfirmPassword),\n    Set(varRegErrorMessage, \"Please confirm the password.\"),\n    \n    varRegPassword <> varRegConfirmPassword,\n    Set(varRegErrorMessage, \"Passwords do not match.\"),\n    \n    !varRegAcceptTerms,\n    Set(varRegErrorMessage, \"You must accept the terms of use.\"),\n    \n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    With(\n        {\n        newUser: Patch(\n            APP_Users,\n            Defaults(APP_Users),\n            {\n                Title: varRegFullName,\n                UserAccount: {\n                    Claims: \"i:0#.f|membership|\" & Lower(varRegEmail),\n                    Department: \"Public Works and Roads\",\n                    DisplayName: varRegFullName,\n                    Email: Lower(cmb_RegEmail.Selected.Mail),\n                    JobTitle: cmb_RegEmail.Selected.JobTitle,\n                    Picture: \"\"\n                },\n                Role: {Value: varRegRole},\n                Programme: {\n                    Id: drp_RegProgramme.Selected.ID,\n                    Value: drp_RegProgramme.Selected.Title\n                },\n                Directorate: {\n                    Id: drp_RegDirectorate.Selected.ID,\n                    Value: drp_RegDirectorate.Selected.DirectorateID\n                }\n            }\n        )\n    },\n    Patch(\n        APP_Users,\n        newUser,\n        {'Active ': true}\n    )\n);\n    \n    // ------------------------------------------------------------\n    // 4. SUCCESS — reset form\n    // ------------------------------------------------------------\n    Set(varRegSubmitSuccess, true);\n    Set(varRegErrorMessage, \"\");\n    Set(varRegFullName, \"\");\n    Set(varRegEmail, \"\");\n    Set(varRegPhone, \"\");\n    Set(varRegRole, \"\");\n    Set(varRegDirectorate, \"\");\n    Set(varRegProgramme, \"\");\n    Set(varRegPassword, \"\");\n    Set(varRegConfirmPassword, \"\");\n    Set(varRegAcceptTerms, false);\n    Set(varRegPasswordMismatch, false);\n    Set(varRegEmailExists, false);\n    Set(varRegPasswordStrength, \"\");\n    Reset(txt_RegFullName);\n    Reset(cmb_RegEmail);\n    Reset(txt_RegPhone);\n    Reset(drp_RegRole);\n    Reset(drp_RegDirectorate);\n    Reset(drp_RegProgramme);\n    Reset(txt_RegPassword);\n    Reset(txt_RegConfirmPassword);\n    Reset(chk_RegAcceptTerms)\n)"
+                                                RadiusBottomLeft: =8
+                                                RadiusBottomRight: =8
+                                                RadiusTopLeft: =8
+                                                RadiusTopRight: =8
+                                                Text: ="Register User"
+                                                Width: =150
+                                    - Container11:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          FillPortions: =0
+                                          Height: =Parent.Height * .2
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8

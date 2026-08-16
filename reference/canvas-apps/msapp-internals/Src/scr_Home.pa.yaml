@@ -1,0 +1,2750 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_Home:
+    Properties:
+      Fill: =varBgLight
+      LoadingSpinner: =LoadingSpinner.Data
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |+
+        =// ============================================================
+        // scr_Home.OnVisible — PRODUCTION VERSION
+        // Purpose: initialize filter state, then build every collection
+        // this screen's KPI cards, gallery, progress panel, and trend
+        // chart depend on. Order matters — collections that reference
+        // colReportsInScope must be built AFTER it.
+        // ============================================================
+
+        // ------------------------------------------------------------
+        // 1. FILTER STATE — screen-local UI variables, reset every visit
+        // ------------------------------------------------------------
+        Set(varHomeFilter, "All");           // KPI card selection (All/PendingApprovals/Overdue/Approved)
+        Set(varHomeSearchTerm, "");          // Search box text
+        Set(varFilterFY, "All");             // Financial Year dropdown
+        Set(varFilterProgramme, "All");      // Programme dropdown
+        Set(varFilterDirectorate, "All");    // Directorate dropdown (cascades off Programme)
+        Set(varFilterQuarter, "All");        // Quarter dropdown
+        Set(varFilterDirectorateID, "All");  // filter Monthlyreports or colReportsInScope
+
+
+        // Set once, outside the gallery — controls overall chart scale
+        // (a fixed max height in pixels that represents 100% of TotalActivities)
+        // Suggested: create this as a single variable in OnVisible for easy tuning
+
+        // ------------------------------------------------------------
+        // 2. BASE SCOPE — every report this user is allowed to see
+        //    Contributors/Supervisors/ProgrammeManagers: own Directorate/Programme only
+        //    DeputyDirectorME/Administrator: everything (varCanViewAllReports = true)
+        // ------------------------------------------------------------
+        ClearCollect(
+            colReportsInScope,
+            Filter(
+                MonthlyReports,
+                varCanViewAllReports
+                    || DirectorateLabel = varUserDirectorateID
+                    || DirectorateLabel = varUserDirectorate
+                    || ProgrammeLabel = varUserProgramme
+            )
+        );
+
+        // ------------------------------------------------------------
+        // 3. NOTIFICATIONS — always personal, never scoped by directorate
+        // ------------------------------------------------------------
+        ClearCollect(
+            colMyNotifications,
+            Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false)
+        );
+        Set(varUnreadCount, CountRows(colMyNotifications));
+
+        // ------------------------------------------------------------
+        // 4. MY ACTIVITIES — always personal (this user's own assigned activities)
+        // ------------------------------------------------------------
+        ClearCollect(
+            colMyActivities,
+            Filter(Activities, ActivityOwner.Email = varUserEmail, 'Active ' = true)
+        );
+
+        // ------------------------------------------------------------
+        // 5. PENDING APPROVALS — only meaningful for reviewer roles
+        // ------------------------------------------------------------
+        ClearCollect(
+            colPendingApprovals,
+            If(
+                varUserRole in ["Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"],
+                Filter(colReportsInScope, Status.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
+                Table()
+            )
+        );
+
+        /* ------------------------------------------------------------
+        // 6. OVERDUE ITEMS — scoped
+        // ------------------------------------------------------------
+        ClearCollect(
+            colOverdueItems,
+            Filter(colReportsInScope, IsOverdue = true, 'FinancialYear '.Value = varCurrentFY)
+        );
+        */
+
+        // ------------------------------------------------------------
+        // 7. APPROVED THIS MONTH — scoped
+        // ------------------------------------------------------------
+        ClearCollect(
+            colApprovedThisMonth,
+            Filter(
+                colReportsInScope,
+                Status.Value = "Approved",
+                ReportingMonth.Value = varCurrentMonth,
+                'FinancialYear '.Value = varCurrentFY
+            )
+        );
+
+        /*/ ------------------------------------------------------------
+        // 8. FLAGGED ITEMS — feeds the orange "N reports flagged" banner
+        // ------------------------------------------------------------
+        ClearCollect(
+            colFlaggedItems,
+            Filter(colReportsInScope, isFlagged = true)
+        );
+        /*
+
+
+        // ------------------------------------------------------------
+        // 9. PROGRAMME PROGRESS — one row per Programme
+        //    Monthly Reporting Rate / Monthly Approval Rate / FY Cumulative Rate
+        //    Denominator throughout = Activities (Total Activities in the Programme),
+        //    NOT reports, so the % reflects how much of the planned work is covered.
+        // ------------------------------------------------------------
+        ClearCollect(
+            colProgrammeProgress,
+            ForAll(
+                Distinct(Activities, ProgrammeLabel) As Prog,
+                With(
+                    {
+                        progName: Prog.Value,
+                        progActivities: Filter(Activities, ProgrammeLabel = Prog.Value, 'Active ' = true),
+                        progReportsFY: Filter(colReportsInScope, ProgrammeLabel = Prog.Value, 'FinancialYear '.Value = varCurrentFY),
+                        progReportsThisMonth: Filter(
+                            colReportsInScope,
+                            ProgrammeLabel = Prog.Value,
+                            'FinancialYear '.Value = varCurrentFY,
+                            ReportingMonth.Value = varCurrentMonth
+                        )
+                    },
+                    {
+                        ProgrammeName: progName,
+                        TotalActivities: CountRows(progActivities),
+
+                        // Monthly: any report at all this month, per activity, counted once
+                        MonthlyReportedCount:
+                            CountRows(Distinct(progReportsThisMonth, Activity.Id)),
+                        MonthlyApprovedCount:
+                            CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)),
+
+                        // FY Cumulative: activities with >=1 Approved report so far this FY (simple binary version)
+                        FYApprovedActivityCount:
+                            CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)),
+
+                        MonthlyReportingRate:
+                            If(CountRows(progActivities) = 0, 0,
+                                RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+
+                        MonthlyApprovalRate:
+                            If(CountRows(progActivities) = 0, 0,
+                                RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+
+                        FYCumulativeRate:
+                            If(CountRows(progActivities) = 0, 0,
+                                RoundUp((CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+
+                        FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
+                    }
+                )
+            )
+        );
+
+        // ------------------------------------------------------------
+        // 10. MONTHLY SUBMISSION TREND — activities bucketed by their OWN
+        //     EndDate month. Denominator per month = activities actually due that month.
+        //     DueDate is a real Date column on Activities (EndDate + 3 days).
+        //     On Time = report exists, SubmissionDate <= DueDate
+        //     Late    = report exists, SubmissionDate > DueDate
+        //     Outstanding = no report exists yet for that activity
+        //Delete Step 10 from scr_Home.OnVisible — the whole ClearCollect(colMonthlyTrend, ForAll(Sequence(12,0,1)...)) block. It's dead weight once Items is live, and it's the thing lying to you every time you change a filter.
+        // ------------------------------------------------------------
+        /*
+        ClearCollect(
+            colMonthlyTrend,
+            ForAll(
+                Sequence(12, 0, 1) As MonthOffset,
+                With(
+                    {
+                        monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months)
+                    },
+                    With(
+                        {
+                            monthName: Text(monthAnchor, "mmmm"),
+
+                            dueThisMonth: Filter(
+                                Activities,
+                                'Active ' = true,
+                                Month(EndDate) = Month(monthAnchor),
+                                Year(EndDate) = Year(monthAnchor),
+                                (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                            )
+                        },
+                        With(
+                            {
+                                reportsForDueActivities: Filter(
+                                    colReportsInScope,
+                                    !IsBlank(LookUp(dueThisMonth, ID = Activity.Id)),
+                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY)
+                                )
+                            },
+                            {
+                                MonthName: monthName,
+                                TotalActivities: CountRows(dueThisMonth),
+
+                                OnTimeCount: CountRows(
+                                    Filter(
+                                        reportsForDueActivities,
+                                        SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate)
+                                    )
+                                ),
+
+                                LateCount: CountRows(
+                                    Filter(
+                                        reportsForDueActivities,
+                                        SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate)
+                                    )
+                                ),
+
+                                OutstandingCount:
+                                    Max(
+                                        0,
+                                        CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id))
+                                    )
+                            }
+                        )
+                    )
+                )
+            )
+        );
+        */
+
+        // ------------------------------------------------------------
+        // 11. KPI — Total APP Items in scope (distinct activities reported on)
+        // ------------------------------------------------------------
+        Set(varTotalAPPItems, CountRows(Distinct(colReportsInScope, Activity.Id)));
+
+        // ============================================================
+        // END OF scr_Home.OnVisible
+        // ============================================================
+
+    Children:
+      - MainScreen_con:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =App.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Horizontal
+            Width: =App.Width
+          Children:
+            - Sidebar_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Fill: =varBgLight
+                  FillPortions: =0
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =30
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =20
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =20
+                  Width: =App.Width * 0.05
+                Children:
+                  - Home_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Home
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - MonthlyReports_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.CalendarBlank
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - Activities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.ListWatchlistRemind
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - Trending_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Trending
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - Icon1_4:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.People
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - SidebarSpacer_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                  - Settings_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Settings
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+                  - Support_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Support
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Width: =Parent.Width - 20
+            - MainScreenDetails_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Fill: =RGBA(204, 218, 228, 1)
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =12
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  Width: =App.Width - Sidebar_con.Width
+                Children:
+                  - HomeHeader_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        DropShadow: =DropShadow.Semilight
+                        Fill: =varNavy
+                        FillPortions: =0
+                        Height: =App.Height * 0.13
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =App.Width - Sidebar_con.Width
+                      Children:
+                        - HomeHeaderLeft_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Width: =Parent.Width * .55
+                            Children:
+                              - HomeDashboard_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =Parent.Height * .5
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =25
+                                    Text: '="Home Dashboard"  '
+                              - HomeDashboardSubtitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * .5
+                                    Size: =12
+                                    Text: =varUserDirectorate & " · " & varUserProgramme  //
+                                    X: =40
+                                    Y: =40
+                        - HomeHeaderCenter__con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =20
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width / 3
+                            Children:
+                              - SearchBox_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Fill: =varBgLight
+                                    Height: =Parent.Height * .65
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =10
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width - 50
+                                  Children:
+                                    - Search_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(153, 153, 153, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height * 0.65
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.Search
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.08
+                                    - SearchBox_txt:
+                                        Control: Classic/TextInput@2.3.2
+                                        Properties:
+                                          BorderColor: =RGBA(245, 245, 245, 1)
+                                          BorderThickness: =0
+                                          Clear: =true
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          Default: =
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          DisabledFill: =RGBA(242, 242, 241, 0)
+                                          Fill: |
+                                            =varBgLight
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * 0.65
+                                          HintText: ="Search projects, activities, reports"
+                                          HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                          HoverColor: =RGBA(50, 49, 48, 1)
+                                          HoverFill: =RGBA(255, 255, 255, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnChange: =Set(varHomeSearchTerm, SearchBox_txt.Text)
+                                          PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                          PressedColor: =RGBA(50, 49, 48, 1)
+                                          PressedFill: =RGBA(255, 255, 255, 1)
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                          Size: =15
+                                          Width: =Parent.Width - Search_ico.Width - 25
+                              - HomeBell_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 120, 212, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * .4
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Bell
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: =
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =Parent.Width / 15
+                  - RoleBar_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Fill: =Color.Transparent
+                        FillPortions: =0
+                        Height: =Parent.Height * .1
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =12
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        Width: =Parent.Width - Sidebar_con.Width
+                        X: =40
+                        Y: =40
+                      Children:
+                        - Greeting_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              Height: =Parent.Height
+                              LayoutDirection: =LayoutDirection.Vertical
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * .7
+                            Children:
+                              - Greeting_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =Parent.Height * 0.5
+                                    PaddingBottom: =0
+                                    PaddingTop: =0
+                                    Size: =18
+                                    Text: '="Good Morning," & varUserFullName '
+                              - CurrentDate_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =Parent.Height * 0.4
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    PaddingBottom: =8
+                                    PaddingLeft: =5
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    Width: =Parent.Width
+                                  Children:
+                                    - lbl_RoleValue_Home:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Center
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FillPortions: =1
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height
+                                          PaddingLeft: =0
+                                          PaddingRight: =0
+                                          Size: =11
+                                          Text: |-
+                                            =Upper(Text(Today(),"dddd, d mmmm yyyy")) &
+                                             " · " & Upper(varCurrentQuarter) & " " & Upper(varCurrentFY) & 
+                                             //" · " & First(Distinct(Activities, ProgrammeLabel)).Value &
+                                             " · " & CountRows(Distinct(Directorates,DirectorateID)) &
+                                             " DIRECTORATES REPORTING"
+                                          Width: =Parent.Width
+                                          X: =40
+                                          Y: =40
+                        - MonthlyReportButton_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * 0.3
+                            Children:
+                              - Button2:
+                                  Control: ModernButton@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.End
+                                    Height: =40
+                                    Icon: ="Add"
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Text: ="New Monthly Report"
+                                    Width: =200
+                  - Filters_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =0
+                        Height: =Parent.Height * .1
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        Width: =Parent.Width
+                      Children:
+                        - FilterLabels_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =Parent.Height /2
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              Width: =Parent.Width
+                            Children:
+                              - FinancialYearFilter_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Text: ="Financial Year"
+                                    Width: =Parent.Width / 6
+                                    X: =FYFilter_drp.X
+                              - ProgrammeFilter_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Text: ="Programme"
+                                    Width: =Parent.Width / 6
+                                    X: =ProgrammeFilter_drp.X
+                              - DirectorateFilter_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Text: ="Directorate"
+                                    Width: =Parent.Width / 6
+                              - QuarterFilter_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Text: ="Quarter"
+                                    Width: =Parent.Width / 6
+                              - placeholder_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Width: =Parent.Width / 6
+                                  Children:
+                                    - Text1:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Text: =
+                                          X: =40
+                                          Y: =6
+                        - DropFilters_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =Parent.Height / 2
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              Width: =Parent.Width
+                            Children:
+                              - FYFilter_drp:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    AccessibleLabel: ="Financial Year"
+                                    Fill: =varBgLight
+                                    Height: '=Parent.Height '
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: |-
+                                      =//Choices(MonthlyReports.FinancialYear)
+                                      // drp_FYFilter.Items
+                                      Choices(MonthlyReports.'FinancialYear ')
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varFilterFY, FYFilter_drp.Selected.Value)
+                                    Width: =Parent.Width / 6
+                              - ProgrammeFilter_drp:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    Fill: =varBgLight
+                                    Height: '=Parent.Height '
+                                    ItemDisplayText: =ThisItem.Title
+                                    Items: =Programmes
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: |-
+                                      =//Set(varFilterProgramme, drp_ProgrammeFilter.Selected.Value)
+                                      Set(varFilterProgramme, ProgrammeFilter_drp.Selected.Title);
+                                      Reset(drp_DirectorateFilter)
+                                    Width: =Parent.Width / 6
+                              - drp_DirectorateFilter:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    Fill: =varBgLight
+                                    Height: =Parent.Height
+                                    ItemDisplayText: =ThisItem.DirectorateID
+                                    Items: |-
+                                      =/*If(
+                                          IsBlank(varFilterProgramme) || varFilterProgramme = "All",
+                                          Directorates,
+                                          Filter(Directorates, Programme.Value = varFilterProgramme)
+                                      )
+                                      */
+
+                                      If(
+                                          IsBlank(varFilterProgramme) || varFilterProgramme = "All",
+                                          Directorates,
+                                          Filter(Directorates, Programme.Value = varFilterProgramme)
+                                      )
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: |-
+                                      =
+                                      //Set(varFilterDirectorate, drp_DirectorateFilter.Selected.DirectorateID);
+
+                                      Set(varFilterDirectorate, drp_DirectorateFilter.Selected.Title);         // full name → filters Activities
+                                      Set(varFilterDirectorateID, drp_DirectorateFilter.Selected.DirectorateID) // short code → filters MonthlyReports
+                                    Width: =Parent.Width / 6
+                              - drp_QuarterFilter:
+                                  Control: ModernDropdown@1.0.2
+                                  Properties:
+                                    Fill: =varBgLight
+                                    Height: =Parent.Height
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =Choices(MonthlyReports.Quarter)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnChange: =Set(varFilterQuarter, drp_QuarterFilter.Selected.Value)
+                                    Width: =Parent.Width / 6
+                              - ClearFilters_btn:
+                                  Control: ModernButton@1.0.0
+                                  Properties:
+                                    Height: =Parent.Height
+                                    Icon: ="ArrowClockwise"
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: |-
+                                      =
+                                          Set(varFilterFY, "All");
+                                          Set(varFilterProgramme, "All");
+                                          Set(varFilterDirectorate, "All");
+                                          Set(varFilterQuarter, "All");
+                                          Set(varHomeFilter, "All");
+                                          Set(varHomeSearchTerm, "");
+                                          Reset(FYFilter_drp);
+                                          Reset(ProgrammeFilter_drp);
+                                          Reset(drp_DirectorateFilter);
+                                          Reset(drp_QuarterFilter);
+                                          Reset(SearchBox_txt)
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Text: ="Clear Filters"
+                                    Width: =Parent.Width / 6
+                  - Cards_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =0
+                        Height: =Parent.Height * .15
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =12
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        Width: =Parent.Width
+                        X: =60
+                        Y: =60
+                      Children:
+                        - AllReportsCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width / 5
+                            Children:
+                              - AllReports_rec:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(0, 120, 212, 1)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
+                                    Width: =5
+                              - AllReports_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    FillPortions: =0
+                                    Height: '=Parent.Height '
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    PaddingBottom: =12
+                                    PaddingLeft: =5
+                                    PaddingRight: =5
+                                    PaddingTop: =12
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: '=Parent.Width '
+                                  Children:
+                                    - AllReportsTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * .2
+                                          OnSelect: =Set(varHomeFilter, "All")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="TOTAL REPORTS"
+                                    - AllReportsCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * .6
+                                          OnSelect: =Set(varHomeFilter, "All")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =40
+                                          Text: |-
+                                            =//CountRows(colReportsInScope)
+
+                                            /*CountRows(
+                                                Filter(colReportsInScope,
+                                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                )
+                                            )*/
+
+                                            CountRows(Filter(colReportsInScope, (varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                    - AllReportsSubtitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Height: =Parent.Height * .2
+                                          OnSelect: =Set(varHomeFilter, "All")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="Across 4 Programmes"
+                        - PendingReviewCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width / 5
+                            Children:
+                              - Pending_rec:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(173, 150, 78, 1)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
+                                    Width: =5
+                              - PendingReview_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Height: '=Parent.Height '
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =12
+                                    PaddingLeft: =5
+                                    PaddingRight: =5
+                                    PaddingTop: =12
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                  Children:
+                                    - PendingTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "PendingApprovals")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="PENDING REVIEW"
+                                    - PendingCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * .6
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "PendingApprovals")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =40
+                                          Text: |-
+                                            =//CountRows(Filter(colReportsInScope, Status.Value = "Submitted"))
+
+                                            /*CountRows(
+                                                Filter(colReportsInScope,
+                                                    Status.Value = "Submitted",
+                                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                )
+                                            )*/
+
+                                            CountRows(Filter(colReportsInScope, Status.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                    - PendingSubtitile_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "PendingApprovals")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="Awaiting M&E sign-off"
+                        - ApprovedCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width / 5
+                            Children:
+                              - Approved_rec:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(45, 128, 40, 1)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
+                                    Width: =5
+                              - Approved_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Height: '=Parent.Height '
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =12
+                                    PaddingLeft: =5
+                                    PaddingRight: =5
+                                    PaddingTop: =12
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                  Children:
+                                    - ApprovedTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |+
+                                            =Set(varHomeFilter, "Approved")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="APPROVED"
+                                    - ApprovedCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * .6
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |+
+                                            =Set(varHomeFilter, "Approved")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =40
+                                          Text: |-
+                                            =//CountRows(Filter(colReportsInScope, Status.Value = "Approved"))
+                                            /*
+                                            CountRows(
+                                                Filter(colReportsInScope,
+                                                    Status.Value = "Approved",
+                                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                )
+                                            )
+                                            */
+
+                                            CountRows(Filter(colReportsInScope, Status.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                    - ApprovedSubtitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "Approved")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="placeholder"
+                        - RejectedCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width / 5
+                            Children:
+                              - Rejected_rec:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(189, 49, 51, 1)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
+                                    Width: =5
+                              - Rejected_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Height: '=Parent.Height '
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =12
+                                    PaddingLeft: =5
+                                    PaddingRight: =5
+                                    PaddingTop: =12
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                  Children:
+                                    - RejectedTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: = Set(varHomeFilter, "Rejected")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="REJECTED"
+                                    - RejectedCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * .6
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            = //Set(varHomeFilter, "Rejected")
+                                             CountRows(
+                                                Filter(colReportsInScope,
+                                                    Status.Value = "Rejected",
+                                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                )
+                                            )
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =40
+                                          Text: |-
+                                            =//CountRows(Filter(colReportsInScope, Status.Value = "Rejected"))
+
+                                            CountRows(Filter(colReportsInScope, Status.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                    - RejectedSubtitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: = Set(varHomeFilter, "Rejected")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="Returned for correction"
+                        - OverdueCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width / 5
+                            Children:
+                              - Overdue_rec:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(189, 49, 51, 1)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    PressedFill: =RGBA(0, 120, 212, 1)
+                                    Width: =5
+                              - Overdue_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Height: '=Parent.Height '
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =12
+                                    PaddingLeft: =5
+                                    PaddingRight: =5
+                                    PaddingTop: =12
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                  Children:
+                                    - OverdueTitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "Overdue")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: ="OVERDUE"
+                                    - OverdueCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height * .6
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =//Set(varHomeFilter, "Overdue")
+                                            CountRows(
+                                                Filter(colReportsInScope,
+                                                    IsOverdue,
+                                                    (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                )
+                                            )
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =40
+                                          Text: |-
+                                            =//CountRows(Filter(colReportsInScope, IsOverdue))
+
+                                            CountRows(Filter(colReportsInScope, IsOverdue,(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                    - OverdueSubtitle_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: |-
+                                            =// OverdueSubtitle_lbl.Color
+                                            /*With(
+                                                {
+                                                    overdueLastMonth: CountRows(Filter(colOverdueItems, ReportingMonth.Value = Text(DateAdd(Date(Year(Today()), Month(Today()), 1), -1, TimeUnit.Months), "mmmm"))),
+                                                    overdueThisMonth: CountRows(Filter(colOverdueItems, ReportingMonth.Value = varCurrentMonth))
+                                                },
+                                                If(
+                                                    overdueThisMonth > overdueLastMonth,
+                                                    RGBA(189,49,51,1),
+                                                    If(
+                                                        overdueThisMonth < overdueLastMonth,
+                                                        RGBA(45,128,40,1),
+                                                        RGBA(113,111,110,1)
+                                                    )
+                                                )
+                                            )*/
+
+                                            With(
+                                                {
+                                                    overdueScoped: Filter(
+                                                        colReportsInScope,
+                                                        IsOverdue = true,
+                                                        (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                        (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                        (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                        (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                    )
+                                                },
+                                                With(
+                                                    {
+                                                        overdueLastMonth: CountRows(Filter(overdueScoped, ReportingMonth.Value = Text(DateAdd(Date(Year(Today()), Month(Today()), 1), -1, TimeUnit.Months), "mmmm"))),
+                                                        overdueThisMonth: CountRows(Filter(overdueScoped, ReportingMonth.Value = varCurrentMonth))
+                                                    },
+                                                    If(
+                                                        overdueThisMonth > overdueLastMonth, RGBA(189,49,51,1),
+                                                        If(overdueThisMonth < overdueLastMonth, RGBA(45,128,40,1), RGBA(113,111,110,1))
+                                                    )
+                                                )
+                                            )
+                                          Height: =Parent.Height * .2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: =Set(varHomeFilter, "Overdue")
+                                          PaddingBottom: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: |-
+                                            =// Get last month's name, handling the April year-wrap correctly
+                                            // (if current month is January, "last month" is December of the previous calendar year — but
+                                            // since your FY starts in April, wrapping from April back to March is the only edge case that matters here)
+                                            /*
+                                            With(
+                                                {
+                                                    lastMonthName: Text(DateAdd(Date(Year(Today()), Month(Today()), 1), -1, TimeUnit.Months), "mmmm")
+                                                },
+                                                With(
+                                                    {
+                                                        overdueLastMonth: CountRows(Filter(colOverdueItems, ReportingMonth.Value = lastMonthName)),
+                                                        overdueThisMonth: CountRows(Filter(colOverdueItems, ReportingMonth.Value = varCurrentMonth))
+                                                    },
+                                                    If(
+                                                        overdueThisMonth > overdueLastMonth,
+                                                        "▲ " & (overdueThisMonth - overdueLastMonth) & " vs last month",
+                                                        If(
+                                                            overdueThisMonth < overdueLastMonth,
+                                                            "▼ " & (overdueLastMonth - overdueThisMonth) & " vs last month",
+                                                            "No change vs last month"
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                            */
+
+                                            With(
+                                                {
+                                                    overdueScoped: Filter(
+                                                        colReportsInScope,
+                                                        IsOverdue = true,
+                                                        (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                        (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                        (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                        (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                    ),
+                                                    lastMonthName: Text(DateAdd(Date(Year(Today()), Month(Today()), 1), -1, TimeUnit.Months), "mmmm")
+                                                },
+                                                With(
+                                                    {
+                                                        overdueLastMonth: CountRows(Filter(overdueScoped, ReportingMonth.Value = lastMonthName)),
+                                                        overdueThisMonth: CountRows(Filter(overdueScoped, ReportingMonth.Value = varCurrentMonth))
+                                                    },
+                                                    If(
+                                                        overdueThisMonth > overdueLastMonth, "▲ " & (overdueThisMonth - overdueLastMonth) & " vs last month",
+                                                        If(overdueThisMonth < overdueLastMonth, "▼ " & (overdueLastMonth - overdueThisMonth) & " vs last month", "No change vs last month")
+                                                    )
+                                                )
+                                            )
+                  - HomeMiddle_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =0
+                        Height: =Parent.Height * 0.5
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =12
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                      Children:
+                        - MonthlySubmissions_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Fill: =varBgLight
+                              FillPortions: =0
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width * .5
+                            Children:
+                              - ChartLabel_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =Parent.Height * .15
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                  Children:
+                                    - ChartLabel_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          FillPortions: =1
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =Parent.Height
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =20
+                                          Text: ="Monthly Submission Trend"
+                                          Width: =Parent.Width * .5
+                                    - ViewReportsDashboard_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="View Reports Dashboard"
+                                          Width: =Parent.Width * .3
+                                    - ViewReportsDash_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(0, 120, 212, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: '=Parent.Height '
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.ArrowRight
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.05
+                              - MonthlyTrend_gal:
+                                  Control: Gallery@2.15.0
+                                  Variant: BrowseLayout_Horizontal_TwoTextOneImageVariant_ver5.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    Height: =Parent.Height
+                                    Items: |-
+                                      =ForAll(
+                                          Sequence(12, 0, 1) As MonthOffset,
+                                          With(
+                                              { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
+                                              With(
+                                                  {
+                                                      monthName: Text(monthAnchor, "mmmm"),
+                                                      dueThisMonth: Filter(
+                                                          Activities,
+                                                          'Active ' = true,
+                                                          Month(EndDate) = Month(monthAnchor),
+                                                          Year(EndDate) = Year(monthAnchor),
+                                                          (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                          (
+                                                              IsBlank(varHomeSearchTerm)
+                                                              || Lower(varHomeSearchTerm) in Lower(Title)
+                                                              || Lower(varHomeSearchTerm) in Lower('ActivityDescription ')
+                                                          )
+                                                      )
+                                                  },
+                                                  With(
+                                                      {
+                                                          reportsForDueActivities: Filter(
+                                                              colReportsInScope,
+                                                              !IsBlank(LookUp(dueThisMonth, ID = Activity.Id)),
+                                                              (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
+                                                              (varHomeFilter = "All"
+                                                                  || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                                                  || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                                                  || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                                                  || (varHomeFilter = "Rejected" && Status.Value = "Rejected")
+                                                              )
+                                                          )
+                                                      },
+                                                      {
+                                                          MonthName: monthName,
+                                                          TotalActivities: CountRows(dueThisMonth),
+                                                          OnTimeCount: CountRows(Filter(reportsForDueActivities, SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                          LateCount: CountRows(Filter(reportsForDueActivities, SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                          OutstandingCount: Max(0, CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id)))
+                                                      }
+                                                  )
+                                              )
+                                          )
+                                      )
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    TemplatePadding: =6
+                                    TemplateSize: =Parent.Width / 6
+                                    Width: =Parent.Width
+                                  Children:
+                                    - MonthName_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          AutoHeight: =true
+                                          Text: =ThisItem.MonthName
+                                          Width: =Parent.TemplateWidth - 16
+                                          X: =OnTime_rect.X
+                                          Y: =Parent.TemplateHeight -30
+                                    - Rectangle3:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(214, 221, 224, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =1
+                                          HoverFill: =RGBA(214, 221, 224, 1)
+                                          PressedFill: =RGBA(214, 221, 224, 1)
+                                          Width: =Parent.Width
+                                          Y: =Parent.TemplateHeight -25
+                                    - Rectangle1:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(214, 221, 224, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(214, 221, 224, 1)
+                                          PressedFill: =RGBA(214, 221, 224, 1)
+                                          Width: =2
+                                    - Outstanding_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(189, 49, 51, 1)          // red
+                                          FocusedBorderThickness: =4
+                                          Height: |
+                                            =//If(ThisItem.TotalActivities = 0, 0, (ThisItem.OutstandingCount / ThisItem.TotalActivities) * varChartMaxBarHeight * 30)
+                                            If(ThisItem.TotalActivities = 0, 1,(ThisItem.OutstandingCount / ThisItem.TotalActivities) * (Parent.TemplateHeight - 50))
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =OnTime_rect.Width
+                                          X: =Late_rect.X + Late_rect.Width + 4
+                                          Y: =(Parent.TemplateHeight - 24) - Self.Height   // anchors bar to the bottom, grows upward
+                                    - OutstandingCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          Size: =12
+                                          Text: |
+                                            =ThisItem.OutstandingCount
+                                          Width: =Outstanding_rect.Width
+                                          X: =Outstanding_rect.X
+                                          Y: =Outstanding_rect.Y - 25
+                                    - Late_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(197, 138, 22, 1)         // amber
+                                          FocusedBorderThickness: =4
+                                          Height: =If(ThisItem.TotalActivities = 0, 1,(ThisItem.LateCount / ThisItem.TotalActivities) * (Parent.TemplateHeight - 50))
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =OnTime_rect.Width
+                                          X: =OnTime_rect.X + OnTime_rect.Width + 4
+                                          Y: =(Parent.TemplateHeight - 24) - Self.Height // anchors bar to the bottom, grows upward
+                                    - LateCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          Size: =12
+                                          Text: =ThisItem.LateCount
+                                          Width: =Late_rect.Width
+                                          X: =Late_rect.X
+                                          Y: =Late_rect.Y - 25
+                                    - OnTime_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(45, 128, 40, 1) //fill green
+                                          FocusedBorderThickness: =4
+                                          Height: =If(ThisItem.TotalActivities = 0, 1,(ThisItem.OnTimeCount / ThisItem.TotalActivities) * (Parent.TemplateHeight - 50))
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =(Parent.TemplateWidth - 16) / 3 - 4
+                                          X: =8
+                                          Y: =(Parent.TemplateHeight - 24) - Self.Height // anchors bar to the bottom, grows upward
+                                    - OnTimeCount_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Align: =Align.Center
+                                          Size: =12
+                                          Text: =ThisItem.OnTimeCount
+                                          Width: =OnTime_rect.Width
+                                          X: =OnTime_rect.X
+                                          Y: =OnTime_rect.Y - 25 // sits just above the bar's top edge
+                              - Legend_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.End
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =Parent.Height * .11
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutJustifyContent: =LayoutJustifyContent.End
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                  Children:
+                                    - LegendOnTime_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(45,128,40,1)
+                                          FocusedBorderThickness: =4
+                                          Height: =10
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =10
+                                    - LegendOnTime_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Submitted"
+                                          Width: =Parent.Width / 6
+                                    - LegendLate_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(197,138,22,1)
+                                          FocusedBorderThickness: =4
+                                          Height: =10
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =10
+                                    - LegendLate_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Late"
+                                          Width: =Parent.Width / 6
+                                    - LegendOutstanding_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(189,49,51,1)
+                                          FocusedBorderThickness: =4
+                                          Height: =10
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =10
+                                    - LegendOutstanding_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Outstanding"
+                                          Width: =Parent.Width / 6
+                        - ProgrammeProgress_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Fill: =varBgLight
+                              FillPortions: =0
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =10
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              LayoutOverflowY: =LayoutOverflow.Scroll
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width * .475
+                            Children:
+                              - ProgrammeProgressTitle_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    Height: =Parent.Height * .15
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ProgrammeProgressTitle_lbl:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =15
+                                          Text: ="Programme Progress"
+                                          Width: =Parent.Width * 0.6
+                                    - AllProgrammes_lbl:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Right
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="All Programmes"
+                                          Width: =Parent.Width * .25
+                                    - AllProgrammes_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(0, 120, 212, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: '=Parent.Height '
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.ArrowRight
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.05
+                              - ProgrammeProgress_gal:
+                                  Control: Gallery@2.15.0
+                                  Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                                  Properties:
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    Items: |-
+                                      =With(
+                                          { effectiveFY: If(varFilterFY = "All", varCurrentFY, varFilterFY) },
+                                          ForAll(
+                                              Distinct(
+                                                  Filter(Activities, (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)),
+                                                  ProgrammeLabel
+                                              ) As Prog,
+                                              With(
+                                                  {
+                                                      progName: Prog.Value,
+                                                      progActivities: Filter(
+                                                          Activities,
+                                                          ProgrammeLabel = Prog.Value,
+                                                          'Active ' = true,
+                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                                      )
+                                                  },
+                                                  With(
+                                                      {
+                                                          progReportsFY: Filter(
+                                                              colReportsInScope,
+                                                              ProgrammeLabel = Prog.Value,
+                                                              'FinancialYear '.Value = effectiveFY,
+                                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                                          ),
+                                                          progReportsThisMonth: Filter(
+                                                              colReportsInScope,
+                                                              ProgrammeLabel = Prog.Value,
+                                                              'FinancialYear '.Value = effectiveFY,
+                                                              ReportingMonth.Value = varCurrentMonth,
+                                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID)
+                                                          )
+                                                      },
+                                                      {
+                                                          ProgrammeName: progName,
+                                                          TotalActivities: CountRows(progActivities),
+                                                          MonthlyReportedCount: CountRows(Distinct(progReportsThisMonth, Activity.Id)),
+                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)),
+                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)),
+                                                          MonthlyReportingRate:
+                                                              If(CountRows(progActivities) = 0, 0,
+                                                                  RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                          MonthlyApprovalRate:
+                                                              If(CountRows(progActivities) = 0, 0,
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                          FYCumulativeRate:
+                                                              If(CountRows(progActivities) = 0, 0,
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                          FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
+                                                      }
+                                                  )
+                                              )
+                                          )
+                                      )
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    TemplateSize: =130
+                                    Width: =Parent.Width
+                                  Children:
+                                    - Meta_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Height: =28
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =0
+                                          PaddingLeft: =12
+                                          PaddingRight: =0
+                                          PaddingTop: =0
+                                          Text: =ThisItem.TotalActivities & " activities · " & ThisItem.FlaggedCount & " flagged"
+                                          VerticalAlign: =VerticalAlign.Top
+                                          Width: =250
+                                          Y: =FYTrack_rect.Y + FYTrack_rect.Height
+                                    - NextArrow_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          AccessibleLabel: =Self.Tooltip
+                                          BorderColor: =RGBA(0, 0, 0, 1)
+                                          Color: =RGBA(166, 166, 166, 1)
+                                          DisabledBorderColor: =RGBA(56, 56, 56, 1)
+                                          DisabledColor: =RGBA(119, 119, 119, 1)
+                                          Height: =50
+                                          Icon: =Icon.ChevronRight
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =16
+                                          PaddingLeft: =16
+                                          PaddingRight: =16
+                                          PaddingTop: =16
+                                          Tooltip: ="View item details"
+                                          Width: =50
+                                          X: =Parent.TemplateWidth - Self.Width - 12
+                                          Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+                                    - Separator_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Fill: =RGBA(255, 255, 255, 1)
+                                          Height: =1
+                                          OnSelect: =Select(Parent)
+                                          Width: =Parent.TemplateWidth
+                                          Y: =Parent.TemplateHeight - Self.Height
+                                    - FYPct_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =0
+                                          PaddingLeft: =12
+                                          PaddingRight: =0
+                                          PaddingTop: =0
+                                          Text: |-
+                                            ="FY Progress: " & ThisItem.FYCumulativeRate & "%"
+                                          Y: |-
+                                            =//lbl_ProgrammeName.Y + lbl_ProgrammeName.Height
+                                            MonthlyTrack_rect.Y + MonthlyTrack_rect.Height
+                                    - FYTrack_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(230, 230, 230, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =8
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          OnSelect: =Select(Parent)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =Parent.TemplateWidth - 70
+                                          X: =15
+                                          Y: =FYPct_lbl.Y + FYPct_lbl.Height
+                                    - FYFill_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(45, 128, 40, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =8
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          OnSelect: =Select(Parent)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =(Parent.TemplateWidth - 40) * (ThisItem.FYCumulativeRate / 100)
+                                          X: =FYTrack_rect.X
+                                          Y: =FYTrack_rect.Y
+                                    - MonthlyTrack_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(230, 230, 230, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =8
+                                          HoverFill: =RGBA(230, 230, 230, 1)
+                                          OnSelect: =Select(Parent)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =Parent.TemplateWidth - 70
+                                          X: =15
+                                          Y: =50
+                                    - MonthlyFill_rect:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 120, 212, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =8
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          OnSelect: =Select(Parent)
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =(Parent.TemplateWidth - 40) * (ThisItem.MonthlyApprovalRate / 100)
+                                          X: =MonthlyTrack_rect.X
+                                          Y: =MonthlyTrack_rect.Y
+                                    - MonthlyPct_lbl:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 1)
+                                          Color: =RGBA(96, 94, 92, 1)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                                          Height: =Self.Size * 1.8
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =0
+                                          PaddingLeft: =12
+                                          PaddingRight: =0
+                                          PaddingTop: =0
+                                          Size: =12
+                                          Text: |-
+                                            ="Monthly: " & ThisItem.MonthlyReportingRate & "% reported · " & ThisItem.MonthlyApprovalRate & "% approved"
+                                          VerticalAlign: =VerticalAlign.Top
+                                          Width: =ProgrammeName_lbl.Width
+                                          X: =ProgrammeName_lbl.X
+                                          Y: =ProgrammeName_lbl.Y + ProgrammeName_lbl.Height
+                                    - ProgrammeName_lbl:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 1)
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
+                                          Height: =Self.Size * 1.8
+                                          OnSelect: =Select(Parent)
+                                          PaddingBottom: =0
+                                          PaddingLeft: =12
+                                          PaddingRight: =0
+                                          PaddingTop: =0
+                                          Size: =14
+                                          Text: =ThisItem.ProgrammeName
+                                          VerticalAlign: =VerticalAlign.Top
+                                          Width: =Parent.TemplateWidth - 173
+                  - MonthlyReportGallery_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Fill: =varBgLight
+                        FillPortions: =0
+                        Height: =Parent.Height * .7
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =Parent.Width
+                      Children:
+                        - TopGallery_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              Fill: =varBgLight
+                              FillPortions: =0
+                              Height: =Parent.Height * 0.12
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                            Children:
+                              - WarningText_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    Color: =RGBA(160, 64, 8, 1)
+                                    Fill: =RGBA(253, 207, 180, 1)
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =Parent.Height / 2
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Text: |-
+                                      =//"⚠️" & CountRows(colFlaggedItems) & " reports flagged for attention"
+
+                                      "⚠️ " & CountRows(
+                                          Filter(colReportsInScope,
+                                              isFlagged = true,
+                                              (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                              (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                          )
+                                      ) & " reports flagged for attention"
+                                    Visible: |-
+                                      =//If(CountRows(colFlaggedItems) > 0, true,false)
+
+                                      CountRows(
+                                          Filter(colReportsInScope,
+                                              isFlagged = true,
+                                              (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                              (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                          )
+                                      ) > 0
+                              - RecentSubmissions_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Fill: =varBgLight
+                                    FillPortions: =0
+                                    Height: =Parent.Height / 2
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                  Children:
+                                    - RecentSubmissions_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="Recent Submissions"
+                                    - Spacer_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          DropShadow: =DropShadow.None
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                    - ViewAllReports_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          FontWeight: =FontWeight.Semibold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="View All Reports"
+                                    - ViewAllReports_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(0, 120, 212, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height * .8
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.ArrowRight
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.03
+                        - GalleryColumnHeaders_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              DropShadow: =DropShadow.None
+                              FillPortions: =0
+                              Height: =Parent.Height * 0.07
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutJustifyContent: =LayoutJustifyContent.Center
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingTop: =8
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                            Children:
+                              - GalHdrProject_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =0
+                                    Text: ="PROJECT"
+                              - GalHdrReportName_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =10
+                                    Text: ="REPORT"
+                              - Rectangle2_2:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =10
+                              - GalHdrDirectorate_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =0
+                                    Text: ="DIRECTORATE"
+                              - Rectangle2_4:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =30
+                              - GalHdrActivity_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =10
+                                    Text: ="ACTIVITY"
+                              - Rectangle2_3:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =30
+                              - GalHdrSubmittedBy_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =10
+                                    Text: ="SUBMITTED BY"
+                              - Rectangle2_5:
+                                  Control: Rectangle@2.3.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledFill: =RGBA(161, 159, 157, 1)
+                                    Fill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Width: =30
+                              - GalHrdStatus_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    Color: =RGBA(0, 0, 0, 1)
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingLeft: =10
+                                    Text: ="STATUS"
+                        - MonthlyReport_gal:
+                            Control: Gallery@2.15.0
+                            Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              BorderColor: =RGBA(245, 245, 245, 1)
+                              Height: =500
+                              Items: |
+                                =// MonthlyReport_gal.Items — PRODUCTION VERSION, case-insensitive search
+                                Filter(
+                                    colReportsInScope,
+
+                                    // --- KPI card filter (varHomeFilter) ---
+                                    (varHomeFilter = "All"
+                                        || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                        || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                        || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                    )
+
+                                    // --- Dropdown filters ---
+                                    && (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY)
+                                    && (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)
+                                    && (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID)
+                                    && (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+
+                                    // --- Free-text search, explicitly case-insensitive via Lower() ---
+                                    && (
+                                        IsBlank(varHomeSearchTerm)
+                                        || Lower(varHomeSearchTerm) in Lower(Activity.Value)
+                                        || Lower(varHomeSearchTerm) in Lower(Project.Value)
+                                        || Lower(varHomeSearchTerm) in Lower(ActivityOwnerLabel)
+                                        || Lower(varHomeSearchTerm) in Lower(ProjectOwnerLabel)
+                                        || Lower(varHomeSearchTerm) in Lower(SubmittedBy.DisplayName)
+                                        || Lower(varHomeSearchTerm) in Lower(ProgressNarrative)
+                                    )
+                                    ||
+                                    (varHomeFilter = "All"
+                                    || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                    || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                    || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                    || (varHomeFilter = "Rejected" && Status.Value = "Rejected")
+                                )
+
+
+                                )
+
+
+                                /*
+
+                                // Gallery4.Items
+                                Filter(
+                                    colReportsInScope,
+                                    (varHomeFilter = "All"
+                                        || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                        || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                        || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                    )
+                                    &&
+                                    (varFilterFY = "All" || FinancialYear.Value = varFilterFY)
+                                    &&
+                                    (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)
+                                    &&
+                                    (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                    &&
+                                    (
+                                        IsBlank(varHomeSearchTerm)
+                                        || varHomeSearchTerm in Title
+                                        || varHomeSearchTerm in 'ProgressNarrative '
+                                    )
+                                    &&
+                                    (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                )
+                                */
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              TemplateSize: =90
+                            Children:
+                              - Image4_1:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Min(Self.Width, Parent.TemplateHeight - 180)
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    ImagePosition: =ImagePosition.Fill
+                                    OnSelect: =Select(Parent)
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.TemplateWidth - 32
+                                    X: =16
+                                    Y: =90
+                              - conReportRow:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Fill: =RGBA(235, 239, 240, 0.22)
+                                    Height: =90
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ProjectName_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          FillPortions: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingLeft: =0
+                                          Text: =ThisItem.Project.Value
+                                    - ReportName_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          FillPortions: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingLeft: =0
+                                          Text: =ThisItem.Title
+                                    - Rectangle2_7:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(0, 120, 212, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 120, 212, 1)
+                                          Width: =10
+                                    - Directorate_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          FillPortions: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: =ThisItem.DirectorateLabel
+                                    - Rectangle2_1:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =40
+                                    - Acytivity_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          FillPortions: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: |-
+                                            =ThisItem.'Activity: ActivityShortDescription'.Value
+                                    - Rectangle2:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =40
+                                    - SubmittedBy_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          FillPortions: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: =ThisItem.SubmittedBy.DisplayName
+                                    - Rectangle2_8:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =40
+                                    - Status_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          Color: |-
+                                            =Switch(
+                                            ThisItem.Status.Value,
+                                            "Approved",Color.Green,
+                                            "In Review",Color.Orange,
+                                            "Submitted",Color.Black,
+                                            "Rejected",Color.Red,
+                                            Color.Gray
+                                            )
+                                          Fill: |-
+                                            =Switch(
+                                            ThisItem.Status.Value,
+                                            "Approved",Color.LightGreen,
+                                            "In Review",Color.LightGoldenRodYellow,
+                                            "Submitted",Color.LightGoldenRodYellow,
+                                            "Rejected",Color.LightCoral,
+                                            Color.LightGray
+                                            )
+                                          FillPortions: =1
+                                          FontWeight: =FontWeight.Lighter
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =0
+                                          PaddingLeft: =12
+                                          PaddingRight: =12
+                                          RadiusBottomLeft: =10
+                                          RadiusBottomRight: =10
+                                          RadiusTopLeft: =10
+                                          RadiusTopRight: =10
+                                          Text: =ThisItem.Status.Value
+                                    - Rectangle2_9:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =10

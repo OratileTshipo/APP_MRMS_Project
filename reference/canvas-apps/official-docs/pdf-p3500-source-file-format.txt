@@ -1,0 +1,1751 @@
+      Now that all the controls have been added, save and publish the app. On a mixed-reality
+      capable device (as defined in the Prerequisites section), open the app, and press the
+      Measure Area button. This action will open the Measuring camera experience, allowing
+      the user to define an area to be measured.
+      Follow the on-screen instructions to calibrate the device by slowly moving it left and
+      right while pointing the camera at a surface to be measured. Once the calibration is
+      complete, you'll see an array of dots on the surface as well as a circle and dot reticle in
+      the center of the screen. This reticle is used to define lengths, areas, and volumes by
+      using the + button to add points and line segments.
+      Photos can be captured using the camera button. These photos will show the lengths,
+      areas, and volumes defined by the user.
+      There's an undo button to undo any placed points.
+      Begin by placing a point using the + button. You'll notice that an orange line and
+      measurement now appear connected to the point you placed. Place a second point and
+      notice how a line with measurement appears between the two points you place.
+      Continue placing points until the desired shape has been fully defined. To close a shape,
+      place the reticle on the first point made and use the + button. You'll notice that the
+      center point of the reticle changes color from white to green, indicating that the shape
+      can be closed. If two of the sides of the shape intersect, or you try to close a shape using
+      any other point than the first one. You'll notice that the center point of the reticle
+      changes from white to red, indicating that a point cannot be placed there.
+      Once an area has been fully defined, position the device so that a picture can be taken
+      of the area you defined and use the camera button to do so. The select the Submit
+      button. A confirmation dialog will appear, asking if you've finished with your
+      measurements. If you have more measurements to enter, select Cancel to return to the
+      MR environment. If you're finished, select Submit to be taken back to the app screen.
+      You'll see the first picture taken as well as the calculated area of the shape you defined
+      as well as the units, in this case square-feet.
+      The measurement and photo can then be used like any other photo or text field in
+      Power Apps, for instance to be sent in an email or stored in a table in Microsoft
+      Dataverse.
+      See also
+        Measuring Camera control
+        Add mixed reality controls to your canvas app
+              Feedback
+                                                
+              Was this page helpful?     Yes        No
+              Provide product feedback
+            Create a canvas app with deep link to a
+            specific screen
+            Article • 12/16/2022
+            A common scenario when building apps is the need to share a "deep link" to a specific
+            screen. Deep links are useful when you want to get users straight to a specific screen
+            and data rather than asking them to navigate from the "home" screen of your app.
+            To deep link into Power Apps, you'll use this URL syntax:
+            https://apps.powerapps.com/play/{App ID}?{Query}.
+            In this syntax:
+                App ID—ID of the app. Go to Power Apps    > Apps > Select your app > Details.
+                Query—The query text allows you to supply the data to deep link to. You'll need to
+                make some code changes to your canvas app to use the provided parameters to
+                open the app using the query URL.
+            In this article, you'll learn about how to:
+                Set up a canvas app to handle the query parameter.
+                Create a UI for emailing a deep link directly from a screen of your app.
+                Use the app to browse to a specific account, send an email with the deep link, and
+                use the link from the received email to open the app directly to that account.
+            Prerequisites
+                Power Apps license
+                If you're new to Power Apps, familiarize yourself with Power Apps basics by
+                generating an app and then customizing that app's controls, gallery, forms, and
+                cards.
+                To create an app, you must be assigned to the Environment Maker security role.
+            Create the app
+            Create an app using the Accounts table in Microsoft Dataverse.
+            Your app opens to the BrowseScreen, that shows a list of accounts in a gallery. By
+            default, this gallery shows an email address, a city, and an account name. The app also
+            contains DetailScreen and EditScreen.
+       Update navigation
+       Now you'll set the navigation to use a context that we'll use to take the user to another
+       screen.
+         1. On BrowseScreen screen, select Layout under gallery properties, and select Title,
+          subtitle and body
+         2. Select first record of BrowseGallery gallery. And then, under OnSelect, enter the
+          following:
+            Power Fx
+            Navigate(DetailScreen1, Fade, {accountVal:ThisItem})
+          The Navigate() function creates a context variable called accountVal. This variable
+          is populated whenever you select a record from the gallery. Upon selecting record,
+          you'll be taken to the DetailScreen with the selected value (in this example,
+          account) in accountVal.
+       3. From the Tree view on the left-side of the screen, expand DetailScreen1, and select
+        DetailForm1.
+       4. From the properties pane on the right-side of the screen, select Edit fields, and
+        add Account, Primary Contact, and Email fields.
+       5. Select DetailForm, and set Item to accountVal.
+               6. Save with the name "Account deep linking".
+            Get the App ID
+            App ID is a unique GUID representing a given app, and generated when you save the
+            app to cloud.
+            To get the App ID, open a new tab and go to Power Apps    > Apps > Select your app >
+            Details. More information: Get an App ID
+            Enable deep link to a screen
+       The goal of this example is to take users to the DetailsScreen1 when the app is launched
+       with the accountId query parameter as part of the app URL. For this purpose, we'll use
+       function Param() that retrieves the query string parameter supplied while launching the
+       app.
+         1. Select App from the Tree view on the left-side of the screen.
+             Tip
+            If you've closed Power Apps Studio, reopen the saved "Account deep linking"
+            app by editing the app.
+         2. Select OnStart property from the list of properties.
+         3. To store the App ID value, update the OnStart property formula as below.
+            Power Fx
+            Set(AppID, "GUID");
+            If(Not(IsBlank(Param("accountId"))),Set(accountId,Param("accountId")));
+          In this formula, function Set() sets the App ID to the GUID of the app. And function
+          Param() stores the value in the accountId variable, when not blank.
+            ７ Note
+            Ensure you replace "GUID" in the above formula to your App ID as
+            appropriate.
+         4. Select StartScreen property for the app, and add the following:
+            Power Fx
+            If(Not(IsBlank(Param("accountId"))),DetailScreen1,BrowseScreen1)
+          This function checks if the Param is blank, then stay on the BrowseScreen1. Else, go
+          to DetailScreen1.
+         5. Select DetailScreen1 from the Tree view.
+         6. Select OnVisible property, and enter the following:
+            Power Fx
+            If(Not(IsBlank(accountId)), UpdateContext({accountVal:LookUp(Accounts, 
+            Account = GUID(accountId))}))
+          This function uses accountId stored from the previous step to set accountVal
+          variable.
+       Create the deep link URL
+       Your app is now configured to receive accountId as the parameter that contains the
+       GUID for an account from the Accounts table. And when this parameter is provided with
+       the request to the app, the app will directly open the details screen (DetailScreen1) with
+       the given accountId.
+       To invoke app with the parameter value, we have to use the following syntax:
+       https://apps.powerapps.com/play/{App ID}?{Query}
+       In the above syntax, we have to add the App ID and the query that contains accountId
+       variable with its value.
+       For example, when the following URL was entered in a browser for the sample tenant,
+       the app Account deep linking opened directly with the supplied accountId parameter
+       value (in this example, "A. Datum Corporation (Sample)"):
+       https://apps.powerapps.com/play/061b64cd-e5a0-4a7a-a77f-b6f8586dd6c7?
+       accountId=01e5bf81-7d44-ec11-8c60-002248094566
+       Send deep link in email
+       We can also supply a variable accountVal to point to the account's ID instead of using
+       absolute link explained above while invoking the URL for the given account from inside
+       the app.
+       For this purpose, we'll create a button and add the ability to invoke an email from within
+       the app with the deep link to the selected account's details screen from the Account
+       deep linking app.
+         1. Select Data from the left-side of the screen.
+         2. Select Add data > search for and select Office 365 Outlook > select Connect.
+            ７ Note
+            This action adds the Microsoft 365 Outlook connection so that we can use the
+            next steps to invoke composing an email to share the account information.
+         3. Select DetailScreen1 from the Tree view.
+         4. Insert a button at bottom-right of the screen, and rename it to Share Account.
+         5. On the button's OnSelect property, enter the following:
+            Power Fx
+            Office365Outlook.SendEmailV2("Recipient", "Subject", "Here's the deep 
+            link to the selected account - https://apps.powerapps.com/play/{App 
+            ID}?accountId=" & accountVal.Account)
+          This formula uses the Microsoft 365 connector for Outlook to send an email using
+          the SendEmailV2 operation.
+            ７ Note
+            Replace Recipient, Subject, and AppID in the above formula with the email
+            address of the recipient, subject for the email, and the ID of the app.
+         6. Save and publish the app.
+       Test the app
+      Run the app, and go to the details screen for any account. And then, select the button
+      Share account. The OnSelect button formula triggers an email to the recipient with the
+      subject and body configured earlier. Here's a sample email sent by the configured app:
+      Open the email, and copy the deep link that points to the selected account, and you'll
+      be taken directly to the account details screen in the Account deep linking app, instead
+      of the default browse screen.
+      See also
+         Create a canvas app from a template
+         Add and configure controls in canvas apps
+         Get started with formulas in canvas apps
+      Feedback
+        Was this page helpful?
+                     Yes  No
+        Provide product feedback
+             Work with the PDF function
+             (experimental)
+             Article • 04/11/2023
+             The PDF function in Power Apps generates a PDF document from the contents of a
+             screen or certain types of controls. You can pass the generated file to an action
+             connector—for example, to send it in an email using the Office 365 Outlook connector
+             —or to a Power Automate flow as part of an automation scenario.
+               ） Important
+                    This is an experimental feature. Experimental features aren't meant for
+                    production use and may have restricted functionality. These features are
+                    available before an official release so that customers can get early access and
+                    provide feedback. Understand experimental, preview, and retired features in
+                    canvas apps.
+                    You must turn on the PDF function in Settings > Upcoming features >
+                    Experimental. As an experimental feature, it's disabled by default.
+                    Send your feedback in the Power Apps experimental features community
+                    forum .
+             Turn on the PDF function
+             Since the PDF function is an experimental feature, it's turned off by default. To use it in
+             your apps, you need to turn it on manually.
+                1. Sign in to Power Apps   and create a canvas app or open an existing app.
+                2. In Power Apps Studio, on the command bar, select Settings.
+                3. Select Upcoming features.
+                4. On the Experimental tab, turn on PDF function.
+             Use the PDF function to generate a PDF file
+             In the following example, we use the PDF function in the OnSelect property of a button
+             to generate a PDF file. You can also use the PDF function in OnVisible, OnHidden, or any
+       other behavior property.
+        1. Select an existing button or add a new button to your canvas app.
+        2. In the button's OnSelect property, add the PDF function and enter the target of
+          the function as a parameter. Enter the formula: PDF(SubmitInspectionScreen);
+          In this example, we're targeting the screen SubmitInspectionScreen to generate a
+          PDF file from the contents of our sample app's Inspection screen. Replace it with
+          the name of a screen in your app.
+        3. Select Save and publish.
+       Play the app and select the button you added. The PDF file is generated and stored in
+       memory for future use. The following section suggests a few ways to work with the PDF
+       file in your app.
+       The PDF function can only target the screen that's currently visible. You can pass the
+       entire screen, as in our example, or enter more parameters to specify a container or
+       gallery to limit the content to pass.
+       Work with the generated PDF file
+       You can use the generated PDF file in many ways. Here are a few, using the example in
+       the previous section.
+       View the file with the PDF viewer control
+        1. In your canvas app, select the button that you created in the previous example or
+          add a new button.
+        2. In the button's OnSelect property, enter the following formula, replacing
+          SubmitInspectionScreen with the name of a screen in your app: Set(myPDF,
+          PDF(SubmitInspectionScreen));
+        3. Select Insert > PDF viewer (experimental).
+        4. From the properties list, select the Document property and then enter myPDF in
+          the formula bar.
+        5. Select Save and publish.
+       Play the app and select the button you added. The PDF file is generated, stored in the
+       variable myPDF, and visible in the PDF viewer control.
+       The PDF viewer control appears as a black shape inside the generated PDF file. To
+       exclude the control from the generated file, place the content you want to turn into a
+        PDF file inside a container or gallery and target that instead of the screen; for
+        example,PDF(Container1) or PDF(Gallery1).
+        Use an action connector
+        In this example, we generate a PDF file that we send as an email attachment using the
+        Office 365 Outlook connector.
+          1. In your canvas app, select the button that you created in the previous example or
+            add a new button.
+          2. In the button's OnSelect property, enter the following formula:
+             Office365Outlook.SendEmailV2(  
+                "sample@email.com",  
+                 "New Safety Inspection"  
+                 "A new safety inspection has been submitted for your review. Please 
+             see attached.",  
+                 {  
+                     Attachments: Table(  
+                          {  
+                              Name: "submittedInspection.pdf",  
+                              ContentBytes: PDF(SubmitInspectionScreen)  
+                          }  
+                      )  
+                 }  
+              );  
+          3. Select Save and publish.
+      Play the app and select the button you added. The PDF file is generated, and an email is
+      sent to the specified email address with the generated PDF file attached.
+      Use in a Power Automate flow
+      In this example, we generate a PDF file and pass it to a Power Automate flow that stores
+      the file in a document library using the SharePoint connector. This example replaces the
+      default PowerApps trigger in Power Automate with the PowerApps (V2) trigger.
+      Create a flow to use in your app
+       1. In your canvas app, select the button that you created in the previous example or
+        add a new button.
+       2. In the app authoring menu, select Power Automate > Create new flow.
+       3. Select Create from blank.
+       4. To delete the default PowerApps trigger, select the trigger menu (…), and then
+        select Delete.
+       5. Search for and select PowerApps (V2).
+       6. Select the PowerApps V2 trigger to expand the node, and then select Add an
+        input.
+       7. Select File as the type of user input.
+       8. Select Add an input again, and then select Text as the type of user input.
+       9. Rename the input File Name and change the description to Please enter the name
+        of the file.
+      Add the SharePoint connector to the flow
+       1. Select New step to add an action. Search for SharePoint and select Create file.
+       2. In Site Address, select a SharePoint site that you have permission to add files to.
+       3. In Folder Path, select a document library that you have permission to add files to.
+       4. Select the File Name input. In the Dynamic content tab, select a file name under
+        PowerApps (V2).
+       5. Select the File Content input, and then select File Content in the list.
+       6. Select Save, and then select the x in the upper-right corner to close the Power
+        Automate window.
+       7. The Power Automate pane refreshes, and the new PowerApps (V2) flow, Create file,
+        appears in the list.
+      Add the flow to a button in your app
+       1. Select the button in your app canvas. In the button's OnSelect property, enter the
+        following formula, replacing the flow name and generated PDF file name with your
+        own:
+              'PowerAppV2->Createfile'.Run(  
+                 "NewInspectionReport.pdf",  
+                  {          
+                     file: {  
+                          name: "NewInspectionReport.pdf",  
+                          contentBytes: PDF(InspectionDetails)  
+                      }                
+                  }  
+              );   
+          2. Select Save and publish.
+        Play the app and select the button you added. The Power Automate flow runs and adds
+        the generated PDF file into the document library.
+        See also
+        PDF function in Power Apps (experimental)
+         Overview of wrap
+         06/16/2025
+         The wrap feature in Power Apps lets you package your canvas app as a custom-branded
+         Android or iOS app for native distribution to mobile users. Distribute these wrapped native
+         mobile apps to users through the Google Play Store  , Apple Business Manager   , or
+         Microsoft Intune.
+         Key capabilities
+         With wrap, you can:
+              Package one or more Power Apps canvas apps in the same native mobile app package.
+              Customize your mobile app startup experience to match your organization's branding.
+              Specify the app icon, splash screen image, welcome screen image, and color palette.
+              Update wrapped mobile apps by publishing changes to the included canvas app through
+              the Power Apps     maker portal.
+              Distribute apps using MDM.
+           ７ Note
+           All published changes to the included canvas app(s) are downloaded automatically by
+           existing, released versions of your wrapped mobile apps.
+         Benefits of wrap
+         Wrap brings native mobile application development platform (MADP) capabilities to Power
+         Apps:
+                                                                                     ﾉ Expand table
+          Benefit                                      Description
+          No-code mobile app development               Create mobile apps with no previous experience
+          Managed mobile app builds                    We generate the app for you
+          Seamless end-to-end branding                 Use your own logo and color palette
+          Multiple canvas apps support                 Bundle multiple apps in a single mobile app
+          Enterprise governance with Microsoft Intune  Protect your data with app management
+         Software and device requirements
+         Platforms supported
+              iOS: Version 14.0 or later.
+              Android: Version 8.0 (API level 26) or later.
+         Device requirements
+              iOS: iPhone 6S or later, iPad 5th generation or later.
+              Android: Any device that runs Android 8.0 or later.
+         Developer requirements
+              Microsoft Power Apps account with appropriate licenses.
+              Access to Microsoft Entra ID (formerly Azure AD) for app registration.
+              Azure subscription (for Azure Key Vault and Blob Storage).
+              For manual code signing:
+                 iOS: macOS device with Xcode installed.
+                 Android: Windows PC with Android Studio installed.
+         Wrap process overview
+         The wrap feature packages your canvas app in a native mobile app shell and produces a
+         mobile package. You can digitally sign and distribute this mobile package as your custom-
+         branded Android and iOS app through native distribution channels, like Google Play Store
+         and Apple Business Manager    .
+     Step-by-step process
+       1. Select your primary canvas app and start the wrap wizard. A primary canvas app provides
+        the initial experience users see when launching your mobile app. Your canvas apps must
+        be part of a solution. More information: Add canvas app to solution.
+       2. Optionally, add secondary canvas apps to your mobile app in the wrap wizard. More
+        information: Wrapping multiple canvas apps together.
+       3. Select the target platforms (iOS and Android) for your mobile app. Optionally, select
+        automatically code sign your mobile app package.
+       4. Register your app. Use an existing app registration or create a new one in the wrap
+        wizard.
+       5. Customize app branding with icons, images, and a color palette to personalize your
+        mobile app.
+       6. Add the Azure blob storage account name and container name. Use an existing Azure
+        blob storage or create a new one.
+       7. Start the build process in the Wrap up step to generate your custom branded mobile
+        app.
+       8. Download your mobile app from the App blob storage location.
+       9. If you don't select automatically code sign in the wrap wizard, code sign the mobile app
+        package manually. More about signing your mobile app package manually: Signing your
+        mobile app package manually.
+      10. Test the app package.
+      11. Distribute the app package to mobile users.
+     Wrap multiple canvas apps together
+     You can wrap more than one canvas app into a single mobile app package. The mobile app
+     package needs a home app, called the primary app. This app becomes the entry point for all
+     other canvas apps included in the mobile app package, which are called secondary apps.
+     Secondary apps are optional. When you wrap only one canvas app, that app is considered the
+     primary app, and the mobile app package has no secondary apps.
+     As shown in the illustration below, a primary app can have links to multiple secondary apps.
+     You can manage navigation between primary and secondary apps using the Launch() function.
+     Brand your mobile app
+     Wrap supports customization of the mobile app bootstrap experience to match your
+     organization's branding requirements. You can specify:
+       App icon
+       Splash screen image
+       Welcome (sign in) screen image
+       Color palette for native experiences
+     Branding customization options are available when building your wrap project. More
+     information: Configure branding
+     Wrap terminology
+     Wrap involves multiple components across Power Apps and third-party platforms such as iOS
+     and Android. Understanding these components is important when working with the wrap
+     functionality.
+     App platform(s)
+         Target platforms for your app during the build process. You can create builds for:
+               iOS — creates IPA package
+               Android — creates APK package
+               Google Play Store — creates AAB package for distribution
+         Bundle ID
+         The bundle ID is a unique identifier for your app that follows a reverse domain name pattern. It
+         must contain one period (.) and no spaces. Example: com.contoso.myapp.
+         This bundle ID is used when creating the Azure key vault for wrap after iOS or Android
+         certificates are created and uploaded. If you've already created the Azure key vault, verify the
+         bundle ID in the Tags section of the Azure portal   . Use this same bundle ID in Step 2: Target
+         platform.
+         Code signing
+         Code signing completes a mobile app before distribution to end users. A code-signed app
+         assures users it comes from a known source and the app code hasn't changed since it was last
+         signed by the trusted source.
+         Primary app
+         A primary app is the entry point or home app for the mobile app experience when wrapping
+         multiple canvas apps together. If only one canvas app is wrapped, it's considered the primary
+         app.
+         Secondary app
+         Secondary apps are optional canvas apps that you wrap in the same build for mobile app
+         distribution along with the primary app.
+         Redirect URI
+         A redirect URI (reply URL) is the location where the authorization server sends the user after
+         successful app authorization and access token grant. The authorization server sends the code
+         or token to the redirect URI, so registering the correct location during app registration is
+         important. More information: Redirect URI
+     Common issues and limitations
+     Known limitations
+        The wrap feature only supports canvas apps (not model-driven apps)
+        All canvas apps in a wrap project must be from the same environment
+        Users must have a Power Apps license to use wrapped apps
+     Common issues
+        Bundle ID conflicts: Ensure your bundle ID is unique across your organization
+        Image format issues: All images must be in PNG format
+        Signing certificate problems: Verify certificate validity and expiration dates
+        Azure Key Vault access: Make sure proper permissions are configured
+     For troubleshooting details, see Troubleshoot issues with the wrap feature in Power Apps.
+     Next steps
+     System requirements and prerequisites for Wrap
+     See also
+        Use the wrap wizard to build your mobile app
+        Manual code sign on iOS
+        Manual code sign on Android
+        Code sign for Google Play Store
+        Create your Azure Key Vault for automated code signing
+        Frequently Asked Questions
+        Troubleshoot issues with the wrap feature in Power Apps
+        Benefits and limitations of Wrap
+         System requirements and prerequisites for
+         Wrap
+         07/09/2025
+         Before you use Wrap to create native mobile apps from your Power Apps canvas apps, check
+         that your system meets these requirements.
+         Software and device requirements
+              You need a Mac device for manual code signing with iOS.
+              You need a Windows PC for manual code signing with Android.
+              To run the wrapped mobile app:
+                 Android device with version 10 or higher
+                 iOS device with version 14 or higher
+           ７ Note
+           You need an Apple Developer Program       account to develop apps for iOS.
+         Permissions and access requirements
+            1. You need access to:
+                   One or more canvas apps to build the wrap project.
+                   Azure blob storage, including the account name and container name. More
+                   information: Create an Azure storage account.
+                   The Azure portal    to create app registration and register your app, which should be
+                   in the same environment as your Power Apps.
+            2. An Azure admin must grant you access to use the specific wrap app. More information:
+              API permissions.
+            3. Your apps must be part of a managed or unmanaged solution. If not, add them to an
+              existing or new solution. More information: Create a canvas app from within a solution.
+            4. You need an Azure key vault to perform the automatic sign-in process through Wrap
+              wizard. More information: Create a key vault using the Azure portal.
+            5. Check the policies enabled for your application. More information: Conditional Access
+              policy templates
+       6. If multifactor authentication (MFA) is enabled, make sure MFA is enabled for the accounts
+        you'll use to sign in, or disable the conditional access policies.
+     Sign-in options in Wrap
+        Manual code sign-in for Android and iOS: This option is best for most scenarios. For
+        Android, generate keys and generate a signature hash before you start. You need the
+        signature hash to set up the Redirect URI. More information: manual code sign-in for
+        Android.
+        Automatic sign-in using Wrap wizard: This option requires an Azure key vault. More
+        information: creating a key vault using the Azure portal.
+     Add canvas app to a solution
+     Wrap requires your apps to be part of a solution. If your canvas apps aren't already in a
+     solution, add them to an existing or new solution.
+       1. In the left navigation pane, select Solutions. If the item isn’t in the side panel pane, select
+        …More and then select the item you want.
+       2. Select a solution, and then select Edit.
+     Select + Add existing from the top menu, and then select App > Canvas app from the
+     dropdown.
+     Select the Outside Dataverse tab, select your app from the list, and then select Add to add the
+     app to the solution.
+     More information: Add an app to a solution
+     Next steps
+     Use the wrap wizard to build your mobile app
+     See also
+        Troubleshoot issues with the wrap feature in Power Apps
+        Manual code sign on iOS
+        Manual code sign on Android
+        Code sign for Google Play Store
+        Create your Azure Key Vault for automated code signing
+        Frequently Asked Questions
+        Wrap wizard: Step-by-step guide to building
+        your native mobile app
+        Use this guide to convert one or more canvas apps into a single custom-branded app package
+        that you can deploy on Google Play and the iOS App Store.
+        The wrap feature in Power Apps enables you to create native mobile versions of your canvas apps
+        as custom-branded Android and iOS mobile apps (IPA, APK, AAB packages). You can distribute
+        these wrapped native mobile apps to end users through Google Play     , Apple Business
+        Manager , or other native distribution methods.
+        When you update and republish your app, the wrapped app is automatically updated for users.
+        Steps to create a custom-branded native app using the
+        wrap wizard
+        Follow these steps to configure, build, sign, and distribute a custom-branded native mobile app
+        package (APK, AAB, or IPA) from your canvas apps using the wrap wizard in Power Apps.
+        1. Sign in and start a wrap project
+           1. Sign in to Power Apps maker portal  .
+           2. Select Wrap from the left navigation pane. If the item isn’t in the side panel pane, select …
+             More and then select the item you want.
+           3. Select the app you want to wrap, then select Wrap on the command bar.
+        2. Select apps
+           1. On the Select the app(s) to wrap screen, select your primary and secondary app.
+                   Primary app: The main app end users see when the mobile app launches.
+                   Secondary app(s): Optional other apps bundled in the same mobile app package.
+                ７ Note
+                     You can use the same primary app in multiple wrap projects.
+                      If the primary app name appears incorrect, proceed to the next step and return to
+                      refresh the name.
+           2. Select Next.
+        3. Choose target platform
+           1. On the Choose mobile platform to target screen, enter a Bundle ID.
+                ７ Note
+                The Bundle ID is a unique identifier for your app. It must contain one period (.) and no
+                spaces. Use this same bundle ID when creating the Azure key vault after generating
+                and uploading your iOS or Android certificates. If you have already created the Azure
+                Key Vault, verify the bundle ID in the Tags section of the Azure portal   .
+           2. Under Target platform(s), select all the mobile platforms that your end users use on their
+              mobile devices.
+           3. You need to have Azure key vault, to upload your build to Azure blob storage. If you haven't
+              already created, create one. Create an Azure key vault right within the Wrap wizard, or
+              follow the instructions manually.
+           4. Turn on the Autosigning toggle to automate the signing process.
+                ７ Note
+                Manual signing options:
+                      Code sign for iOS
+                      Code sign for Android
+                      Code sign for Google Play Store      You must manually sign AAB files regardless
+                      of the signing option selected in the wizard.
+           5. Set up autosigning through the wizard.
+              a. In the target platform step, toggle on Autosigning. The service checks if key vault and
+                 certificate are already attached.
+         ７ Note
+         Azure Key Vault is used to securely store and manage application secrets and
+         certificates, with centralized access and full audit logging.
+      b. If you don't have key vault and certificate or want to change them, select Configure.
+         ７ Note
+         Only Azure admins can create a key vault from the wrap wizard. Other users need to
+         follow the manual key vault creation process.
+                                             
+       c. On the side panel, select the subscription and resource group, and choose the key vault.
+        To create a new key vault, select Create a new keyvault. After you select the key vault,
+        select Next.
+                                             
+      d. The service checks if the appropriate service principal, reader role, access policies, and
+        environment variables are set up for the key vault. If errors appear, fix them. After all
+        checks pass, select Next.
+      e. On the next screen, enter the name of the certificate in the key vault.
+       f. If no certificate exists or you want to change the certificate, see Generate key and
+        signature hash to create a new certificate. Then select Create a certificate on this screen.
+        This action takes you to the Azure portal key vault location. Upload the generated
+        certificate into the configured key vault.
+         ７ Note
+         Users are responsible for creating the certificate.
+                                                                                                  
+              g. Select Finish.
+              h. On the main screen, the Azure Key Vault and certificate appear as confirmed.
+              i. On the main screen, select Next.
+           6. Set up autosigning from within Azure portal.
+              a. Refer to instructions in create an Azure key vault to create an Azure key vault. Once the
+                vault is created, you need to add the required tags, secrets, and certificates. Add the
+                environment variable if not created already.
+              b. To create the environment variable, go to Power Apps   > Solutions > Default solution.
+                Then select New > More > Environment variable, add the display name as
+                "PA_Wrap_KV_ResourceID".
+          
+                The name of the new environment variable must have the prefix "new." If it doesn't, see
+        Set Environment Variable Prefix for detailed steps.
+                                             
+       c. To add vault information to your environment variables, access the Azure portal as an
+        admin. Navigate to All Resources > Your Key Vault > Properties, and then copy the
+        Resource ID.
+                                             
+      d. To add the input to the environment variable, go to Power Apps > ApplicationName >
+        All > Environment variable. Click the three dots, select Edit, add the copied value to
+        Default value, and save.
+      e. To check whether the table value has been updated, go to Power Apps > Tables >
+        Environment variable definition > new_PA_Wrap_KV_ResourceID . The value in Default
+        value must be same as that of the resourceID for which you want to add the vault.
+         ７ Note
+         Guidelines for adding the input behind the environment variables for Key vault
+         information:
+           Environment variables must not be empty or can contain multiple entries.
+           Ensure that the resourceID added is correct (verify spelling).
+           Ensure that the resourceID added has non-empty tags and includes all the tags
+           expected with the bundle ID used in the wrap wizard.
+       f. Follow the steps in Steps for automated code signing to create the tags, secrets, and
+        certificates required during the automatic signing process.
+     4. Manage output
+     Configure where your app binaries (APK and IPA files) will be stored. Choose one of the following
+     options based on your storage and access requirements.
+                                                                  
+     Dataverse (Recommended)
+     Dataverse storage is the simpler option and is recommended for testing and evaluation of
+     deployments.
+     When you select Dataverse, build binaries are automatically stored in the
+      msdyn_PowerAppsWrapBuild table in your current environment. Builds count against your Dataverse
+     storage capacity.
+     Azure Blob Storage
+     Azure Blob Storage requires setup.
+     Prerequisites
+    Before you configure Azure Blob Storage, make sure you have:
+      An Azure Blob Storage account and container. If you don't have them, learn how to create a
+      storage account.
+      An Azure Key Vault that contains the access credentials for your storage account. If you
+      don't have one, learn how to create a key vault.
+      Sufficient permissions to read secrets from the key vault.
+    Configure Azure Blob Storage
+    To configure Azure blob storage follow these steps:
+     1. On the Manage output page, select Configure.
+                                             
+     2. In the Configure keyvault side panel, select the key vault that stores your Azure blob
+      storage credentials, and then select Next.
+     3. Enter the following details:
+         Storage account name: The name of your Azure Blob Storage account.
+         Container name: The container where build artifacts will be uploaded.
+     4. Select Save.
+     After you save, the configuration is applied to subsequent builds. To verify, run a build and
+     confirm that the APK or IPA file appears in your specified container.
+     5. Register your app
+     On the Register your app screen, register your application in Azure to establish trust with the
+     Microsoft identity platform.
+         If you have already registered an app:
+           Find your registration in the owned registration field.
+         If you do not see your registered app:
+           1. Select New app registration to create a new registration.
+           2. Provide:
+              Application name: The customer-facing name of your app
+              Android signature hash (if targeting Android): A 28-character alphanumeric string
+                                                                  
+           3. Save your changes.
+     Configure admin allowed third-party apps as an azure tenant admin
+     The registered app must be configured as a third-party app. To configure the app, the Azure
+     tenant admin follows these steps.
+       For Windows
+         1. Open Windows PowerShell as administrator.
+         2. Run these commands:
+         PowerShell
+         Install-Module -Name Microsoft.PowerApps.Administration.PowerShell -
+         AllowClobber -Force
+         Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+         Import-Module -Name Microsoft.PowerApps.Administration.PowerShell
+         Add-AdminAllowedThirdPartyApps
+         Get-AdminAllowedThirdPartyApps
+       3. Provide the App ID when prompted.
+    After completing these steps, the registration screen will look like this:
+                                                   
+    Grant API permissions as an Azure tenant admin
+    The app requires the following API permissions to function correctly.
+    Required API permissions
+                                                                                               ﾉ Expand table
+          API Type            Specific API                Reason
+          Microsoft APIs      Dynamics CRM                The application needs user_impersonation to call
+                                                          Dataverse for the user.
+          APIs my             Azure API Connections       The application needs Runtime.All to call any connector
+          organization uses                               from Power Platform.
+          APIs my             PowerApps Service           The application needs the User permission to contact
+          organization uses                               Power Apps backend services from Power Platform.
+          APIs my             Power BI                    The application needs Power BI permissions to access or
+          organization uses                               embed Power BI content.
+          APIs my             Microsoft Mobile            The application needs this permission because Power
+          organization uses   Application Management      Apps uses Intune SDK internally.
+         Configure permissions from within Wrap wizard
+         The wrap wizard checks and flags permissions that aren't available with the app. As an Azure
+         admin, select one click access in the wrap wizard to grant the pending permissions. Alternatively,
+         you can configure permissions through the Powershell commands below.
+                                                                                                           
+         Configure permissions through Powershell commands:
+        Make sure DeviceManagementManagedApplication is set to Yes when you grant admin consent
+        for your app.
+                                                                                               
+        Run these PowerShell commands as an Azure admin if you don't see permissions under APIs my
+        organization uses:
+           1. Ensure the module Microsoft Graph   is available or install it:
+               PowerShell
+               Install-Module -Name Microsoft.Graph
+           2. Grant Azure API Connections permission for the static AppId fe053c5f-3692-4f14-aef2-
+             ee34fc081cae:
+               PowerShell
+               Connect-MgGraph -TenantId <your tenant ID>
+               New-MgServicePrincipal -AppId fe053c5f-3692-4f14-aef2-ee34fc081cae -DisplayName 
+               "Azure API Connections"
+           3. Grant PowerApps Service permission for the static AppId 475226c6-020e-4fb2-8a90-
+             7a972cbfc1d4:
+               PowerShell
+               Connect-MgGraph -TenantId <your tenant ID>
+               New-MgServicePrincipal -AppId 475226c6-020e-4fb2-8a90-7a972cbfc1d4 -DisplayName 
+        "PowerApps Service"
+      ７ Note
+      If only the Application name field is visible, continue to the next steps and select Android as
+      a target platform to display the signature hash field.
+    Configure API permissions manually (optional)
+    If you get errors, manually configure API permissions. For more information, see Add and
+    configure.
+    Add Redirect URIs as an app admin
+      1. In the Azure Portal, go to your app registration > Authentication.
+      2. Select Add a platform and choose iOS or Android.
+      3. For iOS, enter the Bundle ID. For Android, enter both the Bundle ID and Signature hash
+       key.
+                                                   
+        6. Configure branding
+            1. On the Configure Branding step, set the following options for your app:
+           ７ Note
+           All images must be in .png format. Default images will be used if no custom images are
+           selected.
+                                                                                             ﾉ Expand table
+          Setting                    Description                              Requirements
+          App icons                  Icons for your app                       iOS: 1024x1024 px or larger
+                                                                              Android: 432x432 px or larger
+          Splash screen image        Image shown while the app loads          .png format
+          Welcome screen image       Image shown on the sign-in screen        .png format
+          Background fill color      Color for welcome screen background      Hexadecimal color code
+          Button fill color          Color for buttons                        Hexadecimal color code
+          Status bar text theme      Color for the status bar text            Light or Dark
+            2. Select Next.
+        7. Wrap up and build
+            1. On the Wrap up screen, review your app details and select Build.
+            2. After a successful build, your app package will be available in the Azure blob storage you
+              specified.
+        View your build
+        You can view your build in several ways:
+              After building, select View Builds
+              Go to Wrap projects in the side pane, hover over the required project, and select it
+              Select the View builds option in the top header
+                                                          
+      ７ Note
+      To manually code sign an iOS app, unzip the IPA file using a Mac device.
+     Test and distribute your app
+     Test your app and distribute it as needed. If you encounter issues, see the troubleshooting page.
+     Set environment variable prefix
+     The name of the new environment variable must have the prefix "new." If it doesn't, follow these
+     steps:
+       1. Go to Solutions > New solution.
+       2. Select a Publisher or create one.
+       3. Select the edit icon next to the Publisher to view or change the prefix.
+       4. If the prefix isn't "new," change it to "new."
+       5. Save your changes.
+     Register your app on Azure portal manually (optional)
+     You can create your app registration automatically in the wizard or manually in Azure. More
+     information: Quickstart: Register an application with the Microsoft identity platform.
+      ７ Note
+      Both single tenant and multitenant customers can use wrap to create native mobile apps
+      based on their Power Apps canvas apps.
+     When registering, select an account type containing Any Microsoft Entra directory -
+     Multitenant:
+        Accounts in any organizational directory (Any Microsoft Entra directory - Multitenant)
+        Accounts in any organizational directory (Any Microsoft Entra directory - Multitenant) and
+        personal Microsoft accounts such as Skype or Xbox
+      ） Important
+         Wrap only supports Multitenant account types currently. The single tenant account
+         type is not yet supported. More information: Account types in Microsoft identity
+         platform.
+         You must create a separate Redirect URI for each platform (iOS, Android).
+     Sign your mobile app package manually (optional)
+     You can sign your app automatically in Step 2 or manually after building. Code signing is
+     different for Android and iOS.
+     Advantages of automatic signing for iOS and Android (APK):
+        You don't need to repeat the signing process during rewrapping.
+        You don't have to wait for app developers to finish the process.
+        You don't need to set up Android Studio or remember passwords.
+        You don't need a Mac device for iOS signing.
+                                                     ﾉ Expand table
+      Platform           Signing Method
+      iOS                Manual code sign for iOS
+      Android            Manual code sign for Android
+      Google Play Store  Code signing for Google Play Store
+     See also
+        Troubleshoot issues with the wrap feature in Power Apps
+        Wrap overview
+        Manual code sign for iOS
+        Manual code sign for Android
+        Create your Azure Key Vault for automated code signing
+        Frequently asked questions for wrap
+      Last updated on 06/12/2026
+          Manual code sign for iOS
+          06/16/2025
+          This article explains how to code sign for iOS. You need to sign your app for iOS if you selected
+          iOS as one of the platforms while creating and building your wrap project.
+            ） Important
+            Using Xcode to digitally sign your wrapped mobile apps for iOS is not supported. Follow
+            the instructions below to sign your wrapped mobile app packages for iOS correctly.
+          Before you begin
+          Prerequisites
+          Before you start, make sure you have:
+               App ID
+               Device UDIDs (only for testing and development purposes)
+               A macOS device to code sign for iOS
+          Set up your Mac
+             1. Install Xcode. More information: Xcode
+             2. Install PowerShell for macOS. More information: Installing PowerShell on macOS
+             3. Enroll in the Apple Developer Program
+             4. For organization distribution, sign up for the Apple Enterprise Developer Program
+          Create App ID
+             1. Sign in to your developer account at https://developer.apple.com        and select the
+               Account tab.
+             2. Go to Certificates, IDs & Profiles > Identifiers   .
+             3. Select + to create a new identifier.
+       4. Select App IDs, then select Continue.
+       5. Select the type as App, then select Continue.
+       6. Register an App ID:
+            Description - Name of your app.
+            Bundle ID - Select Explicit Bundle ID.
+            Enter the bundle ID that you used while creating the wrap project. More
+            information: Bundle ID
+            Enable these capabilities:
+             Associated Domains
+             iCloud
+             NFC Tag Reading
+             Push Notifications
+            Select Continue.
+       7. Review and register the App ID.
+      Create distribution certificate
+          Create Certificate Signing Request (CSR)
+             1. On your Mac, go to the Applications folder > Utilities > open Keychain Access.
+             2. Select Keychain Access > Certificate Assistant > Request a Certificate from a Certificate
+               Authority.
+             3. Fill out the Certificate Information:
+                     In the User Email Address field, enter your Apple ID email address.
+                     In the Common Name field, enter your name.
+                     In the Request group, select Saved to disk.
+                     Save the file to your Mac.
+                     Select Continue.
+          Upload and install certificate
+             1. Sign in to your developer account at https://developer.apple.com        by selecting the
+               Account tab.
+             2. Go to Certificates, IDs & Profiles > Certificates  .
+             3. Select + to create a new certificate.
+             4. Select App Store and Ad Hoc > Continue.
+                 ７ Note
+                 If you have an Enterprise Developer Account, you'll have the option to create an
+                 Enterprise Distribution certificate.
+            5. Upload the Certificate Signing Request (CSR) file that you generated in the previous steps.
+            6. Select Continue, and download the certificate to your Mac.
+            7. Double-click the downloaded .cer file to install it in Keychain Access.
+            8. Make note of the Name of the certificate (usually formatted as iPhone Distribution:
+              Name (Team ID)). This value is the code signing identity needed for signing.
+         Register devices for testing
+            ７ Note
+            This step is only necessary if you're distributing the app to external users. It's not required
+            if the app is only for internal users.
+            1. Sign in to your developer account at https://developer.apple.com    by selecting the
+              Account tab.
+             2. Go to Certificates, IDs & Profiles > Devices  .
+             3. Select + to register one or more devices.
+             4. Enter the Device Name and Device ID (UDID).
+             5. Select Save.
+                  Tip
+                 You can register multiple devices at once by uploading a list of UDIDs.
+         Create iOS Provisioning Profile
+             1. Sign in to your developer account at https://developer.apple.com     and select the
+               Account tab.
+             2. Go to Certificates, IDs & Profiles > Profiles .
+             3. Select + to create a new profile.
+             4. Select Ad Hoc > Continue.
+        ７ Note
+        For production use, select the App Store distribution method.
+      5. Select the App ID you created earlier, then select Continue.
+      6. Select the certificate you created earlier, then select Continue.
+       7. Select all the test devices where you want to install your app, then select Continue.
+       8. Name your provisioning profile and note down the name.
+       9. Select Generate and download the profile to your Mac.
+      10. Double-click the downloaded file (*.mobileprovision) to register it with Xcode.
+     Sign the iOS Archive
+       1. Download and unzip the iOS-Archive.zip file from your Azure blob storage. This creates a
+        folder named after the Bundle ID. In the example below, the Bundle ID is
+        com.single.wrap.
+       2. For enterprise signing only: Open the file Distribution-exportOptions.plist with Xcode
+        and change the value for the method field to enterprise.
+         ７ Note
+         Enterprise signing is not supported with Key Vault signing.
+       3. Open Terminal and change directory to the unzipped folder.
+       4. Enter pwsh to start PowerShell in the terminal.
+       5. Run the PowerShell script with your certificate and provisioning profile information:
+         ./SignAndGenerateIPA.ps1 -CodeSigningIdentity "YOUR_CODE_SIGNING_IDENTITY" -
+         ProvisioningProfilePath "PATH_TO_PROVISIONING_PROFILE"
+         ７ Note
+         To find your CodeSigningIdentity value, right-click on the .mobileprovision file,
+         select More Info > Preview. Look for the Name field under Certificates.
+          Tip
+         The ProvisioningProfilePath is the path to the .mobileprovision file you downloaded.
+         For example: /Users/username/Downloads/MyProvisioningProfile.mobileprovision
+      6. When the script completes, a .ipa file is created (for example, com.single.wrap.ipa).
+         ） Important
+         If the script fails, delete the unzipped folder and files as they might be corrupted.
+         Unzip iOS-Archive.zip again before retrying.
+     Distribute the app
+     Install the .ipa file on registered devices using the Finder app.
+     For enterprise distribution with Microsoft Intune:
+        Add an iOS/iPadOS line-of-business app to Microsoft Intune
+        Give your app access to the Intune app protection service
+     See also
+        Wrap overview
+        Manual code sign on Android
+        Frequently asked questions for wrap
+        Troubleshoot issues with the wrap feature in Power Apps
+         Code sign for Android
+         07/30/2025
+         This article explains how to manually code sign your Android (APK) app for Power Apps wrap.
+         Sign your app for Android if you select Android as one of the platforms when you create and
+         build your wrap project.
+            ） Important
+            To sign an AAB app for Google Play distribution, see Sign your app  .
+         Before you begin
+         Required software
+         Before you begin, install and set up:
+              Android Studio
+              OpenSSL
+              apksigner tool    (included with Android Studio)
+         Prerequisites
+         You need:
+              The application name to create the hash key.
+              The latest APK file to sign in.
+            ７ Note
+            Use the .jks extension for manual signing and the .pfx extension for automatic signing.
+         Generate key and signature hash
+            ７ Note
+        Skip to Manual signing if you already generated keys and the signature hash when you
+        created the app registration.
+      Set up environment variables
+      If you don't set environment variables:
+        1. Download and install Android Studio and OpenSSL.
+        2. Add keytool and openssl to your PATH environment variable:
+             Add C:\Program Files\Android\Android Studio\jbr\bin to your PATH.
+             Add the path of openssl.exe (for example, C:\Program Files\OpenSSL-Win64\bin) to
+             your PATH.
+      For manual signing process
+      Generate signature hash key and certificate
+      Run this command in the command prompt:
+        keytool -genkey -alias powerappswrap -keyalg RSA -keystore powerappswrap.jks -
+        keysize 2048 -validity 10000
+      When prompted:
+        1. Enter a password for your keystore.
+        2. Enter your name, organization, location, and other required details.
+        3. Confirm the information.
+      Run this command to generate key and certificate:
+        keytool -exportcert -alias powerappswrap -keystore powerappswrap.jks | openssl 
+        sha1 -binary | openssl base64
+      When prompted, enter the keystore password you created earlier.
+                                                                 
+      Parameters explained:
+                                                          ﾉ
+                                                            Expand table
+       Parameter       Description
+       genkey          Command to generate a key
+       alias           Alias for the keystore entry
+       keyalg          Key algorithm name
+       keystore        Name of the keystore
+       keysize         Size of each key
+       validity        Validity of the key in days
+       exportcert      Reads the certificate from the keystore
+       openssl         Generates SHA1 key for Android
+      For automatic key vault signing process
+      Generate signature hash key and certificate
+      Run this command in the command prompt:
+       keytool -genkey -alias powerappswrap -keyalg RSA -keystore powerappswrap.pfx -
+       keysize 2048 -validity 10000
+      When prompted:
+       1. Enter a password for your keystore.
+       2. Enter your name, organization, location, and other required details.
+       3. Confirm the information.
+      Run this command to generate key and certificate:
+       keytool -exportcert -alias powerappswrap -keystore powerappswrap.pfx | openssl 
+       sha1 -binary | openssl base64
+      When prompted, enter the keystore password you created earlier.
+                                                         
+      Parameters explained:
+                                                   ﾉ Expand table
+      Parameter     Description
+      genkey        Generates a key.
+      alias         Alias for the keystore entry.
+      keyalg        Key algorithm name.
+       Parameter      Description
+       keystore       Name of the keystore.
+       keysize        Size of each key.
+       validity       Validity of the key in days.
+       exportcert     Reads the certificate from the keystore
+       openssl        Generates SHA1 key for Android
+      Manual signing of APK package (Not for KV
+      signing)
+      Follow these steps if you don't use automatic sign-in during wrap or if you try to upload an
+      AAB file for Play Store. To avoid repeating this process, use automatic sign-in when possible.
+      Locate the apksigner tool
+        1. Open Android Studio.
+        2. Go to Tools > SDK Manager > Android SDK Location to find your SDK path.
+        3. In the SDK directory, navigate to:
+             build-tools > [version number] > find apksigner.bat (Windows) or apksigner
+             (Mac/Linux)
+             Or: build-tools > [version number] > lib > find apksigner.jar
+                                                                                                                 
+          Sign the APK file
+          Run this command to sign your APK:
+             apksigner.bat sign --ks PATH_TO_KEYSTORE --ks-key-alias KEY_ALIAS PATH_TO_APK
+          Parameters explained:
+                                                                                                    ﾉ
+                                                                                                        Expand table
+            Parameter         Description
+            ks                Path to your keystore file (for example, C:\Users\name\Desktop\powerappswrap.jks)
+            ks-key-alias      The alias you used when generating the key (for example, powerappswrap)
+            PATH_TO_APK       Full path to your APK file (for example, C:\Users\name\Downloads\MyApp.apk)
+          When prompted, enter the keystore password.
+          Example:
+           apksigner.bat sign --ks C:\Users\name\Desktop\powerappswrap.jks --ks-key-alias 
+           powerappswrap C:\Users\name\Desktop\MyApp.apk
+         Verify the signature
+         After signing, verify the APK signature with:
+           apksigner.bat verify --verbose PATH_TO_APK
+         A successful verification confirms your APK is properly signed and ready for distribution.
+         For more information, see Android Studio command line tools: apksigner   .
+         Distribute the app
+         After signing your app, you can distribute it using several methods:
+         Distribution options
+              Microsoft Intune: To distribute using Microsoft Intune, see Add an Android line-of-
+              business app to Microsoft Intune.
+              Intune app protection: To give your app access to the Intune app protection service, see
+              Give your app access to the Intune app protection service.
+              Direct distribution: You can also distribute the signed APK directly to users for manual
+              installation.
+         See also
+              Wrap overview
+              Manually Signing the APK - Xamarin
+              Manual code sign on iOS
+              Frequently asked questions for wrap
+              Troubleshoot issues with the wrap feature in Power Apps
+          Code signing process for AAB file
+          06/16/2025
+          This article explains how to manually code sign an AAB file.
+          Prerequisite
+              1. Set up Android Studio     .
+              2. Install bundletool for converting AAB file to APK file. You can download the latest version
+                from the official site   .
+              3. Install jarsigner for signing in the AAB file. You can install jarsigner by downloading and
+                setting up the Java Development Kit (JDK)        .
+          Signing process for AAB file
+             ７ Note
+             You need to sign the AAB file even if you select the automatic signing process in the wrap
+             wizard.
+          To sign an AAB file, follow these steps:
+              1. Open a terminal or command prompt.
+              2. Go to the directory where jarsigner is installed.
+              3. Run the commands shown in the image.
+                Replace the placeholders: - <path-to-your-keystore>.jks – Path to your .jks keystore file -
+                 <output-signed-aab-file>.aab – Output file name. - <input-unsigned-aab-file>.aab –
+                Unsigned .aab file. - <bundleid> – Bundle ID used while wrapping.
+          Convert AAB to APK file for manual debugging
+     To convert an AAB file to an APK file, follow these steps:
+       1. Open a terminal or command prompt.
+       2. Run the commands shown in the screenshot.
+        Replace the placeholders: - <path-to-signed-aab-file>.aab – Path to the signed AAB file.
+        -  <output-directory> – Output directory for the .apks file.
+        Sign the APK if you use the manual signing process. For more information, see Code sign
+        for Android - Power Apps.
+     See also
+        Manual code sign for iOS
+        Manual code sign for Android
+        Set up Azure Key Vault for wrap wizard
+        code signing
+        08/19/2025
+        Azure Key Vault is a cloud service that securely stores secrets like certificates, passwords,
+        encryption keys, and other sensitive data. Use Key Vault to manage certificates and secrets for
+        automated code signing in wrap wizard. For more information, see Introduction to Azure Key
+        Vault.
+        This guide explains how new users create and configure an Azure Key Vault.
+        Prerequisites
+        Before you begin, ensure you have the following:
+             A Microsoft Entra subscription to create a key vault.
+             Admin access to your Azure tenant.
+             An Apple Developer account    enrolled in the Apple Developer Program or Apple
+             Enterprise Developer Program.
+             An Apple distribution certificate and either an ad-hoc provisioning profile or an enterprise
+             provisioning profile.
+        Step 1: Create an Azure Key Vault
+        If you do not already have a Key Vault, follow the steps in Create a vault using the Azure portal.
+        Step 2: Create a service principal for wrap Key Vault
+        access
+        A service principal is required so wrap wizard can access your Key Vault.
+           1. Sign in to your tenant as an admin.
+           2. Open PowerShell and run the following command:
+                Connect-AzureAD -TenantId <your tenant ID>
+                New-AzureADServicePrincipal -AppId 4e1f8dc5-5a42-45ce-a096-700fa485ba20 -
+                DisplayName "Wrap KeyVault Access App"
+     Step 3: Assign Reader Role to the Service Principal
+     Give the service principal permission to read your Key Vault.
+       1. In the Azure portal, navigate to your Key Vault.
+       2. Select Access control (IAM).
+       3. Select Add > Add role assignment.
+       4. On the Members tab, select Job function roles, and then choose Reader.
+       5. Select Select member, search for "Wrap KeyVault Access App", and select it.
+       6. Select Review + assign.
+                                                       
+     Repeat these steps to add user access permissions to your account.
+     Step 4: Configure access policies for Key Vault
+       1. Go to Key Vault settings.
+       2. In Access configuration, select Vault access policies.
+       3. Add a policy for the service principal and your user account.
+           For Secret permissions and Certificate permissions, select Get and List.
+                                                       
+     Step 5: Upload Certificates and Secrets
+     You need platform-specific certificates and secrets for Android and iOS apps.
+     For Android
+        Generate a .pfx certificate file.
+        Upload it to the Certificates section of your Key Vault.
+        For guidance, see Generate keys.
+                                                   
+       ７ Note
+       Ensure the certificate name is included in the tag step, and its password matches the store
+       pass parameter you set when creating the .pfx file.
+     For iOS
+       1. Install your .cer file using Keychain Access. For more information, see Create the
+        distribution certificate.
+       2. Export the certificate as a .p12 file and rename its extension to .pfx (required by Key
+        Vault).
+       3. Upload the .pfx file to your Key Vault and provide the password you set for the .p12 file.
+       4. Create a provisioning profile. For more information, see Create the provisioning profile.
+       5. Encode the provisioning profile to base64:
+           On Mac, run: base64 -i example.mobileprovision
+           On Windows, run: certutil -encode data.txt tmp.b64
+       6. Upload the base64 string as a secret in Key Vault and the .pfx file as a certificate.
+                                                       
+     Step 6: Add Certificate Tags
+     After uploading your iOS or Android certificates, add three tags:
+        Tag name: Use your app’s bundle ID.
+        Tag value: Use the name of the uploaded certificate.
+     Use the same bundle ID that you’ll use in the wrap wizard.
+                                                     
+     Reference Video
+     Watch a walkthrough video: How to configure access to key vault
+     Troubleshooting
+     If you run into issues, see Troubleshoot issues with the wrap feature in Power Apps.
+     See also
+        Wrap overview
+        Code sign for iOS
+        Code sign for Android
+        Code sign for Google Play Store
+        Frequently asked questions for wrap
+        Troubleshoot issues with the wrap feature in Power Apps
+              Use deep links with wrapped mobile
+              apps
+              Article • 12/06/2022
+              Deep links let users move from one application to another on computers and mobile
+              devices. For example, a mobile app can deep link to Facebook to sign in. Deep linking an
+              email address could open an email app to allow users to start composing a message. A
+              website could use a deep link to an app store to start download for a specfic mobile
+              app.
+              You can deep link to a wrapped native mobile app from other apps. Deep links for
+              wrapped mobile apps should start with the following:
+              ms-mobile-apps:///providers/Microsoft.PowerApps/apps/<appID>?tenantId=<tenantId>
+                                                                                            ﾉ
+                                                                                                Expand table
+               Parameter                    Description
+               <app-id>                     Opens the correct app module
+               <tenantId>                   Connects to the correct tenant
+              For information on how to deep link into other apps in Power Apps, see Use deep links
+              with Power Apps mobile.
+              Feedback
+              Was this page helpful?   Yes      No
+              Provide product feedback
+     Benefits and limitations of Wrap
+     06/17/2025
+     Wrap gives app makers benefits like improved adoption, better branding, and flexible
+     distribution options. But it also has some limitations you need to consider.
+     Benefits of wrap
+       1. Improved app adoption: Users easily find and use your app by searching for its name in
+        the App Store or Play Store. This direct access streamlines the experience and increases
+        adoption rates.
+       2. Enhanced branding flexibility: Makers customize their app's branding, improving both
+        distribution and user engagement.
+       3. Custom distribution channels: Distribute your apps through preferred channels, so you
+        have more control and can reach your target audience more effectively, instead of relying
+        only on standard platforms.
+       4. Power Apps mobile for frontline workers (FLWs): Power Apps Mobile is for frontline
+        workers. The wrap APK lets guest accounts sign in, so frontline workers outside your
+        organization can use it. For details, see Frequently asked questions for wrap: Why am I
+        not able to sign into my wrapped application?.
+       5. Access without MFA or Intune: You can use the Power Apps mobile app without
+        multifactor authentication (MFA) or Microsoft Intune if your organization's conditional
+        access policies allow it.
+       6. Offline features: Wrap apps support offline capabilities.
+     Limitations of Wrap
+       1. Logout button: There's no visible sign out button.
+         ７ Note
+         Users can select and hold the indented application to sign out. Makers should let
+         users know about this method.
+       2. Push notifications: Push notifications aren't supported.
+       3. Navigation between apps: You can't go directly from a specific screen in one app to a
+        specific screen in another app. Only the home screen of the other app opens.
+       4. APK size limit: APK files distributed through the Google Play Store are limited to 100 MB.
+        To support larger apps (up to 150 MB), create an AAB file during the wrap process.
+      5. Android hardware back button: The Android hardware back button doesn't always sync
+       with the application back button.
+      6. Feedback: You can't provide feedback in the wrap app.
+      7. Surveys: Surveys aren't available for wrap users.
+      8. Sovereign cloud: Wrap doesn't support sovereign cloud environments.
+      9. Full image view (offline): Offline-enabled wrap apps only show image thumbnails, not full
+       image views.
+     10. VPN: The wrap wizard doesn't support creating a wrapped app while you're connected to
+       a VPN. Updates are in progress.
+    See also
+       Troubleshoot issues with the wrap feature in Power Apps
+       Frequently Asked Questions
+        Frequently asked questions for wrap
+        Frequently asked questions about the wrap feature are listed below.
+        Can single tenant customers use wrap with
+        Power Apps?
+        Yes. Both single tenant and multitenant customers can use wrap. When registering your app
+        manually in Azure, ensure you select the correct account type. See App registration for directions.
+        Does the wrap feature in Power Apps
+        support Customer-Managed Keys (CMK) or
+        Lockbox capabilities?
+        No. The wrap feature in Power Apps doesn't support Customer-Managed Keys (CMK) or Lockbox.
+        Wrap uses Azure DevOps build pipelines, and customer assets might be exposed to Microsoft
+        service operators during the build process.
+        Can I create mobile apps with Power Apps?
+        Yes. See Creating mobile apps with Power Apps.
+        If I create a mobile app with Power Apps, does
+        Microsoft release it for me?
+        No. Microsoft wraps your app in a native mobile app shell for you to digitally sign and distribute.
+        How do I digitally sign my mobile app?
+        You can automatically sign your mobile app package in Step 2 of the wrap wizard if you have set
+        up Azure Key Vault. For manual signing, see Android, iOS, and Google Play Store   .
+        Can I use Xcode to digitally sign my mobile
+        apps for iOS?
+        No. Signing your mobile app with Xcode isn't supported in wrap. To digitally sign your wrapped
+        mobile app package for iOS, see Code sign for iOS.
+        How do I distribute my mobile app?
+        You can use Microsoft Intune, Google Play  , or Apple Business Manager   .
+        How do I configure my mobile app for
+        distribution through Microsoft Intune?
+        Wrap wizard automatically configures your app for distribution with Microsoft Intune. To
+        troubleshoot, you can manually grant all the canvas app(s) that you intend to wrap Microsoft
+        Mobile Application Management API permission manually. More information: Configure the API
+        permissions for your app manually.
+        Do I need to rewrap and redistribute my
+        mobile app frequently?
+        Power Apps Mobile is updated periodically. To ensure compatibility and benefit from bug fixes
+        and new features, we recommend that you rewrap and redistribute your mobile app at least
+        monthly.
+        Do I need to rewrap and redistribute my
+        mobile app after making changes to the canvas
+        app(s) included in the package?
+        No. Published changes to the included canvas app(s) are downloaded automatically by existing,
+        released versions of your mobile app. However, we recommend that you rewrap and redistribute
+        your mobile app on a monthly basis to benefit from platform bug fixes, updates, and new
+        features.
+    How do I update the icons and colors in my
+    mobile app?
+    Update icons and colors by rewrapping your apps with new assets and redistributing the updated
+    mobile app package.
+    How do I add or remove canvas apps in my
+    wrapped mobile app?
+    Add or remove canvas apps by rewrapping your mobile app package with the desired set of apps
+    and redistributing your mobile package.
+    What are Primary and Secondary apps in the
+    context of wrap?
+    The Primary app provides the main experience of your mobile app. Secondary apps are bundled
+    for performance reasons and must be linked from your primary app. See wrap multiple canvas
+    apps together.
+    What are the advantages of including
+    Secondary apps in the bundle, if I can still
+    Launch() them without doing so?
+    Including Secondary apps in the bundle provides better launch performance when opening them
+    for the first time. However, it's optional. If you have many Secondary apps, you may choose not
+    to bundle them to reduce the total app size.
+    Can I add apps that use Power BI data to wrap?
+    Yes. Wrap wizard automatically configures your mobile app to be able to use Power BI. To
+    troubleshoot, you can manually grant Power BI API permission to all your apps that use Power BI
+    data. More information: Configure the API permissions for your app manually.
+    Can I deep link into a wrapped mobile app?
+    Yes. You can use ms-mobile-apps:///providers/Microsoft.PowerApps/apps/<appID>?tenantId=
+    <tenantId> schema to deep link into your wrapped mobile apps. Refer to Using deep links with
+    wrapped mobile apps for more information.
+    Why do I see this error message when I
+    try to open my wrapped native app on a
+    mobile device: You can't get there from here
+    error message
+    Your organization might have a Require Approved Client App conditional access policy that
+    restricts access to mobile apps. To fix this issue, see Edit your conditional access policy.
+    Can I create B2C mobile apps with
+    Power Apps?
+    No. Power Apps is a platform for business applications and uses Microsoft Entra authentication.
+    The wrap feature wraps existing canvas apps for the same set of end users.
+    Do I need a premium license to package
+    the app?
+    No, you don't need a premium license for wrap. However, if your APK uses certain connectors,
+    you will need to pay according to the requirements of those connectors.
+    Can I delete wrap projects?
+    No, wrap projects can't be deleted but you can delete the project APK files from your storage
+    location.
+    How can I ensure that customers outside the
+    home tenant can't access the app even if I
+    enable multitenant access during registration?
+    Users outside the home tenant can't access wrap projects unless both the Azure admin and the
+    maker explicitly share the app with the user. The app ensures proper data separation across
+    organizations by embedding the tenant identifier in the authentication token.
+    Can we allow users from outside home tenant
+    to access wrap projects?
+    The Wrap App supports multi-tenancy. To enable this feature, the Azure admin must:
+      1. Add users from outside the home tenant as guests in Azure.
+      2. Include these guests in the Azure Conditional Access process.
+      3. The maker must share the app with these guest IDs within Power Apps.
+    Why am I not able to Sign into my
+    wrapped Application?
+      1. Verify if the user has access to the PowerApps application. More information: Share a canvas
+       app with your organization
+      2. If access is confirmed, check the app's Azure conditional policies. Admin access is required
+       to review these policies. More information: View applied Conditional Access details in the
+       Microsoft Entra activity logs
+      3. To troubleshoot sign-in errors, copy the correlation ID from the mobile screen where the
+       sign-in is failing and refer How to troubleshoot Microsoft Entra sign-in errors to understand
+       the error and the failing policies.
+      4. Check Microsoft Entra authentication and authorization error codes.
+      5. One common error code is 50194 (tag- 9n555). During the app registration stage, the
+       supported account type isn't configured for multi-tenant. Configure it to support multi-
+       tenant.
+    When do you need to re-wrap?
+       If you're an existing customer who has already created and successfully distributed a
+       wrapped app, you don't need to go through the wrapping process again. To ensure users
+       receive the latest published changes, follow the steps mentioned in Power Apps for Makers:
+       Get App Versions.
+       For new customers, we recommend re-wrapping if you have completed all the registration
+       steps mentioned in Use the wrap wizard to build your mobile app: Register app and have
+              either manually or automatically completed the sign-in process mentioned in Use the wrap
+              wizard to build your mobile app: Sign your mobile app package manually.
+              To ensure platform changes benefit end users, we recommend re-wrapping monthly and
+              distributing the updated app to users.
+        How to find your Azure admin?
+              Go to the Microsoft Entra roles and administration portal. More information: Microsoft Entra
+              admin center
+              Search for global administration in the search bar.
+              Select the Active assignments tab.
+              Review the list of owners for the active assignments.
+        Why is Azure key vault a mandatory step?
+        The Azure key vault securely stores the access key needed for Azure blob storage.
+        Do you need to pay for Azure key vault &
+        Azure blob storage?
+        Yes. See Key Vault pricing   .
+        What should I do if I don't have access to the
+        resource group while creating the key vault?
+        Contact your Azure tenant admin to create a key vault for you or request permission.
+        How can Entra B2B guest users access the
+        wrapped apps?
+            1. Add users from outside the home tenant as guests in Azure. See Quickstart: Add a guest
+              user and send an invitation.
+            2. Include these guests in the Azure Conditional Access process. Share the app with these
+              guest IDs in Power Apps. See Share a canvas app with your organization.
+            3. Replace the app ID and the user account in the following link: ms-mobile-
+              apps:///providers/Microsoft.PowerApps/apps/<appID>?tenantId=<tenantID>
+      4. Share the link with your client.
+      5. Install the APK on Android and the IPA on iOS.
+      6. Open the weblink and enter the external IDs to sign in.
+    How do I view and download my app binaries
+    from Dataverse after wrapping my app?
+    When you configure Power Apps Wrap to use Dataverse storage, your build binaries (APK, AAB,
+    and IPA files) are stored as file attachments in the msdyn_powerappswrapbuild table in your
+    environment. You can access the attachments in three ways, depending on your scenario.
+      1. Using the View builds page (recommended):
+       The simplest way to download a build is directly from the Power Apps Wrap interface:
+        a. Open your wrap project and select View builds.
+       b. Locate the build you want in the list.
+        c. Select Download next to the build.
+      2. Querying builds with the Dataverse Web API
+       For automation, CI/CD pipelines, or custom portals, you can query the
+       msdyn_powerappswrapbuild table using OData against your environment's Web API endpoint:
+       https://{your-environment}.crm.dynamics.com/api/data/v9.2/. The calling user or
+       application user must have Read privileges on the msdyn_powerappswrapbuild table.
+       Retrieve all builds, newest first: GET /msdyn_powerappswrapbuilds?
+       $select=msdyn_powerappswrapbuildid,name,msdyn_buildid,msdyn_platformtype,msdyn_apptype
+       ,createdon&$orderby=createdon desc
+       Retrieve builds for a specific mobile app: GET /msdyn_powerappswrapbuilds?
+       $filter=_msdyn_mobileappid_value eq{mobileAppId}&$orderby=createdon desc
+       Filter by artifact type (APK, AAB, or IPA): GET /msdyn_powerappswrapbuilds?
+       $filter=msdyn_apptype eq 'APK'
+       Filter by build ID: GET /msdyn_powerappswrapbuilds?$filter=msdyn_buildid eq '{buildId}'
+       Retrieve a single build by alternate key: GET
+       /msdyn_powerappswrapbuilds(msdyn_buildid='{buildId}', msdyn_mobileappid={mobileAppId})
+      3. Downloading artifacts programmatically using a SAS URL
+       The actual binary files aren't returned in OData query results — they're stored as file column
+       data. To download a binary programmatically, call the standard Dataverse GetFileSasUrl
+       message to generate a time-limited download URL, then fetch the file from that URL.
+       Key things to know:
+          - The SAS URL is valid for one hour from the time it's generated. 
+          - The URL provides anonymous access — anyone with the URL can download the file 
+        during the valid window, so generate URLs on demand rather than storing them. 
+          - The user or application user calling GetFileSasUrl must have Read access to 
+        the wrap build record. 
+          - GetFileSasUrl isn't supported in environments using self-managed database 
+        encryption keys (BYOK). If your environment uses BYOK, migrate to customer-
+        managed keys (CMK) first.              
+       Web API request:
+        POST [Organization URI]/api/data/v9.2/GetFileSasUrl            
+          Content-Type: application/json 
+          Accept: application/json  
+        {
+          "Target": 
+            { 
+              "@odata.type": "Microsoft.Dynamics.CRM.msdyn_powerappswrapbuild",            
+              "msdyn_powerappswrapbuildid": "{recordId}"        
+            }, 
+          "FileAttributeName": "msdyn_artifact" 
+          } 
+       Response:
+        { 
+          "FileName": "build-2026-05-17.apk", 
+          "FileSizeInBytes": 24576000, 
+          "MimeType": "application/vnd.android.package-archive", 
+          "SasUrl": "https://{storageaccount}.blob.core.windows.net/{container}/{blob}?
+        sv=..." 
+        } 
+        SDK for .NET example:
+         using Microsoft.Xrm.Sdk; 
+         using Microsoft.Crm.Sdk.Messages; 
+         var request = new GetFileSasUrlRequest 
+           { 
+             Target = new EntityReference("msdyn_powerappswrapbuild", recordId), 
+             FileAttributeName = "msdyn_artifact" 
+           }; 
+         var response = (GetFileSasUrlResponse)orgService.Execute(request); 
+         var sasUrl = response.Result.SasUrl; 
+         var fileName = response.Result.FileName; 
+     See also
+     Troubleshoot issues with the wrap feature in Power Apps
+      Last updated on 06/12/2026
+      Troubleshoot common issues when using
+      the wrap feature
+      08/04/2025
+      This guide provides solutions to common issues you might encounter when using the wrap
+      feature in Microsoft Power Apps.
+      Issue 1: Wrap build fails
+      If your wrap build fails, try the following actions:
+      Verify image formats
+      Ensure that all images in your wrap project are in PNG format. Using other formats can cause
+      the build to fail. Use an image converter to convert your images to .png format.
+        ） Important
+        Renaming a file extension to .png doesn't convert the image to PNG format.
+      Check Azure key vault setup
+         Ensure you create an Azure service principal and assign the correct role.
+         For more information, see Azure key vault for wrap in Power Apps.
+      Your key vault must contain:
+         For iOS: two tags, one certificate, and one secret.
+         For Android: one tag and one certificate.
+      Issue 2: Wrap button is disabled
+      Confirm you have edit permissions for the app and try again. For a list of requirements, see
+      Permissions and access requirements for wrap.
+     Issue 3: Unable to save your wrap project or trigger
+     a build
+     Update to the latest version of the wrap solution and try again.
+     Issue 4: Unable to install a wrapped mobile app
+     Ensure your app is properly signed by configuring a key vault during the build process or by
+     signing the app manually.
+     For more information, see:
+        Set up Key vault for automated signing
+        Code sign for iOS
+        Code sign for Android
+     Additionally, verify your device meets the minimum requirements.
+     Issue 5: Can't sign in or see data in a wrapped app
+     If you can't sign in or see data in your wrapped app, try the following actions:
+     Verify API permissions and access
+        Ensure all required API permissions are configured and that admin permissions are
+        granted.
+                                                        
+        Ensure the Add-AdminAllowedThirdPartyApps script runs successfully.
+        For more information, see Allow registered apps in your environment.
+     Check account types and redirect URIs
+        Verify the Microsoft Entra app type is set to Multitenant and that the supported account
+        type is Accounts in any organizational directory (Any Microsoft Entra ID tenant).
+        Configure proper redirect URIs for iOS and Android:
+          For Android, confirm the hash is correct.
+          For more information, see Configure platform settings and redirect URIs.
+     Issue 6: Fail to sign in to a wrapped app
+       1. Ensure the user has access to the app. For more information, see Share a canvas app with
+        your organization.
+       2. If the user has app access but still can't sign in, check the Conditional Access policies in
+        the Microsoft Entra admin center.
+       3. To troubleshoot sign-in errors, copy the correlation ID from the mobile screen where the
+        sign-in failed and refer to How to troubleshoot Microsoft Entra sign-in errors to
+        understand the error and the failed policies.
+       4. Check Microsoft Entra authentication and authorization error codes.
+         Other issues
+         If your issue isn't covered here, or if the preceding steps don't resolve your problem, search for
+         more support resources     or contact Microsoft support    with detailed steps to reproduce the
+         problem.
+         Collect diagnostic information
+         For sign-in issues, you can collect session details and include them when you contact Microsoft
+         support:
+              For the wrap wizard: On the sign-in screen, tap the gear icon in the upper-right corner
+              and select Session Details.
+              For mobile devices: After opening the app, press and hold the screen, and then select
+              Session Details.
+      Use code view for canvas app controls
+      Article • 05/21/2025
+      Use the code view feature to look at the underlying code for each control on your app's
+      screens. The code uses an improved format that's a subset of YAML.
+      With code view you can:
+         View the code for each control on your screen.
+         Copy the code for a control and share it outside of Power Apps Studio.
+         Paste the code for a control and create a new control based on it.
+      View, copy, and paste code
+      Code view shows the code for the selected control and all its child controls.
+      Code view lets you copy and paste code to any screen in your app or outside of Power Apps to
+      duplicate the control. This feature is helpful when controls are highly customized and you want
+      to share or duplicate them.
+      View code
+       1. Open your app for editing in Power Apps Studio.
+       2. Right-click the control in the tree view or on the screen, and then select View code.
+      Tip
+     Use the keyboard shortcut Ctrl+F to find a specific string in the code.
+    Copy and paste code
+      1. To copy the code of a selected control:
+         Use the menu to copy.
+         Use the shortcut  Ctrl + C .
+         When viewing your code in the code view popup, select Copy code.
+      2. To add a new control from the code:
+         Use the menu to paste.
+         Use the shortcut  Ctrl + V .
+      ） Important
+      Use the YAML format that Power Apps Studio generates. The code is validated before the
+      new control is created.
+     Browser clipboard access required
+     To paste code into Power Apps Studio using code view, your browser must have access to the
+     clipboard. If you encounter issues pasting code, check your browser settings and ensure
+     clipboard permissions are enabled for the site.
+     The first time you paste code, your browser will prompt you to grant clipboard access. Approve
+     this request to enable pasting functionality in Power Apps Studio.
+            Tip
+           If pasting doesn't work, check if clipboard access to Power Apps is blocked in your
+           browser. In Microsoft Edge, you can manually add https://make.powerapps.com   to the
+           allowed sites for clipboard access in your browser settings.
+         Known limitations
+              You can't copy and paste or view the code for the App Object.
+              You can't edit the code in the code view.
+         Related information
+              Get started with formulas in canvas apps
+              Use Find and Replace in the formula bar
+              Formula reference - canvas apps
+              Power Fx YAML formula grammar
+              Understand app functionality through code view (video)
+         ） Note: The author created this article with assistance from AI. Learn more
+          View source code files for canvas apps
+          10/23/2025
+          Use the source code for a canvas app to review changes made by makers in Power Apps
+          Studio. The generated canvas app YAML code is read-only and can't be modified. Any changes
+          to the file are ignored and might be lost.
+                  The YAML schema is in active development, and the content might be incomplete.
+                  The current static schema for *.pa.yaml files is available here  .
+          Power Fx and YAML are the languages used for Power Apps source code. YAML is valued for its
+          human-readable format and benefits from a wide array of editors, tools, and libraries for
+          manipulation.
+          Access source code files
+          You have access to the source code files if you're using the Power Platform Git Integration,
+          eliminating the need for .msapp files.
+          The Power Apps Studio creates the source code for canvas apps, which is stored as *.pa.yaml
+          files within the .msapp file. The .msapp file is a binary file that contains a collection of files,
+          including the source code.
+             Tip
+            To effectively use application lifecycle management (ALM), it's recommended to use
+            solutions. Canvas apps package doesn't support ALM and should only be used for basic
+            import and export capabilities when Dataverse isn't available.
+          You can also get the source code files either from the .msapp file or by using Power Platform
+          CLI.
+          The *.pa.yaml files can be found in the \Src folder of the extracted .msapp.
+            ） Important
+            Only files located in the \Src directory of the extracted .msapp are intended for use with
+            source control. The JSON files in the .msapp shouldn't be used as source code because
+            those aren't stable between save and load cycles.
+      Download and Extract the pa.yaml files using Power Platform
+      CLI
+      Connect to your environment using Power Platform CLI and then use the following commands:
+        1. To list the canvas apps in your current environment, use the command: pac canvas list.
+        2. To extract the source code files, use the command: pac canvas download with the
+          parameter -d.
+      Extract source code files from a .msapp file
+      To extract source code files from a .msapp file, you have two options:
+        1. Manually unzip the .msapp file.
+        2. Alternatively, you can use the following command:
+        PowerShell
+         Expand-Archive -Path "C:\path\to\yourFile.msapp" -DestinationPath 
+        "C:\path\to\destination"
+      File structure for a .msapp file
+      For older .msapp files without the \src folder, follow these steps to generate source code files:
+        1. Import and resave and download the new .msapp in Power Apps Studio.
+        2. After that, you can proceed to extract the source code files.
+      In the \src folder, find the following files and folders:
+          App.pa.yaml: Represents the App.
+          [screen Name].pa.yaml: One file for each screen, representing the screen.
+          \Component: A folder containing one file for each component, represented as
+          [component Name].pa.yaml.
+      Only *.pa.yaml files within the \src folder can be used as source code. Any other file shouldn't
+      be used as source code.
+      Power Apps YAML schema versions
+      Currently, the only active schema version of Power Apps source code is Source Code
+      (*.pa.yaml). The following table shows the other historical formats:
+                                                                                             ﾉ Expand table
+           Format         File          Description
+           name           extension
+           Experimental   *.fx.yaml     Retired. Version used by the experimental Power Apps Git version control
+                                        and pac canvas unpack—no longer in development.
+           Early preview  -             Retired. The version used by code view, copy code, and paste code.
+                                        There's no version information in this schema.
+           Source code    *.pa.yaml     Active. Includes enhancements and version details for source control.
+                          files
+          Experimental format (*.fx.yaml)
+          This schema is retired.
+          This schema describes an experimental format used by the Power Platform CLI to process and
+          convert canvas apps into a source code format. This format isn't actively developed anymore.
+          You can't directly convert *.fx.yaml files to the new formats. To convert older apps, package the
+          canvas app as a .msapp file and import it into Power Apps Studio.
+          Preview
+          This schema is retired.
+          This version was used by Code view during the preview period. It is designed to create canvas
+          apps in Power Apps Studio, letting you easily copy and paste controls. In this version, the
+          source code is used in Power Apps Studio instead of being converted, like the experimental
+          format.
+          The format during preview was temporary and is no longer in use. You cannot paste code from
+          the preview format.
+          Here are the changes made from the experimental format:
+             1. ZIndex property removal: The ZIndex property is removed. Instead, a screen is
+               represented as an array of controls. The order of controls determines their stacking order.
+               Normal controls are ordered in ascending order, while responsive controls are ordered in
+               descending order.
+             2. JSON object representation replacement: The "As" syntax is no longer used to define the
+               control type. Instead, the left side of the control's name identifier remains unique. Only
+        properties that differ from the default values are serialized. Two new properties define the
+        control type and default values:
+        Control: Represents the control type in YAML.
+        Variant: Identifies a variant of a control type, which might alter default property values,
+        add or remove properties, or modify the behavior or layout of the control.
+     These properties are used for instantiating controls and don't accept Power Fx expressions.
+     Source code (*.pa.yaml)
+      ） Important
+         The YAML source code for canvas apps is actively being developed. The content may
+         be incomplete and subject to change.
+         The .pa.yaml files are read-only and should only be used to review changes made in
+         Power Apps Studio. These files are not used when an app is loading.
+         External editing, merging, and conflict resolution is supported only in Power
+         Platform Git Integration.
+     This schema is designed for source control purposes and allows the use of a single YAML file.
+     Updates from the previous format include:
+       1. Grouping of Top-Level Node Elements:
+           The top-level keywords "App" and "Screens" are examples of how elements are now
+           grouped in a top-level node.
+       2. Control Version Specification:
+           You can now specify the version of a control using the Control Keyword followed by
+           the @ operator. If no version is specified, the most current version of the control is
+           used. The version is used to deserialize the properties of the source code. Runtime
+           version of the control is defined by the authoring version.
+       3. Simplified Variant Names:
+           Not all controls require a variant.
+       4. Consistent ZIndex for All Controls:
+                    All controls now use an ascending order to determine the ZIndex value, starting
+                    from 1. This behavior aligns with the CSS 2 spec   .
+         Disconnect Git version control to edit
+         canvas apps
+         Article • 05/14/2025
+         Git version control for editing apps has been removed and is no longer supported.
+         If your app currently uses this feature, follow these steps to disconnect it:
+            1. Open your canvas app for editing in Power Apps Studio. On the command bar, select
+               Settings.
+            2. Select Git version control and then select Disconnect.
+         If you are using PASopa, download your app from your Git provider and pack the .zip file to an
+         .msapp file   . Once your .msapp file is uploaded to Power Apps, follow the steps above to
+         disconnect.
+            ７ Note
+            Git version control is replaced with the source control integration feature. More
+            information: Source code integration
+     Canvas apps for enterprise developers,
+     partners, and ISVs
+     As a developer, you can extend canvas apps in Power Apps, enabling even more powerful
+     solutions for organizations and customers.
+     Canvas apps for enterprise developers
+     As an enterprise developer, empower your organization to build robust, tailored solutions on
+     Power Apps:
+        Build custom connectors: Develop custom connectors to connect to your organization's
+        data and web services. Learn more
+        Create canvas apps using Power Platform CLI: Use Microsoft Power Platform CLI to
+        create, pack (preview), and unpack (preview) canvas apps using a custom connector. More
+        information: Power Platform CLI - pac canvas
+        Build Azure Functions: Craft Azure Functions to extend apps with custom server-side
+        logic. Learn more
+        Embed apps: Embed apps directly into your website experiences to create integrated
+        solutions, surfacing apps where people in your organization already do their work. Learn
+        more
+        Build offline-capable apps: Develop offline-capable apps so your users are productive
+        whether they are online or offline. Learn more
+     Canvas apps for ISVs and Microsoft partners
+     As a Microsoft partner or Independent Software Vendor (ISV), accelerate customer adoption by
+     extending your products to integrate with your customers' data and business processes:
+        Build and certify custom connectors: Bring your product into the Microsoft cloud by
+        building a connector that enables Power Apps to talk to your service. Learn more
+        List your solution on Microsoft Marketplace: Generate new leads for your business by
+        building an app with Power Apps and publishing it to Microsoft Marketplace for new
+        customers to find. Learn more
+        Get started today for free: Sign-up for the Power Apps Developer Plan for free and start
+        building apps in a dedicated developer environment. Learn more
+      Last updated on 01/16/2026
+              Custom connectors for canvas apps
+              Article • 02/08/2023
+              Without writing any code, you can build workflows and canvas apps with Azure Logic
+              Apps , Power Automate , and Power Apps . To help you integrate your data and
+              business processes, these services offer 180+ connectors - for Microsoft services and
+              products, as well as other services, such as GitHub, Salesforce, and Twitter.
+              Sometimes though, you might want to call APIs, services, and systems that aren't
+              available as pre-built connectors. To support more tailored scenarios, you can build
+              custom connectors with their own triggers and actions. We have a complete set of basic
+              and advanced tutorials for custom connectors on the Connectors documentation site.
+              We recommend that you start with the custom connector overview, but you can also go
+              straight to the following topics for details on a specific area:
+                    Create a custom connector from an OpenAPI definition
+                    Create a custom connector from a Postman collection
+                    Create a custom connector from scratch
+                    Use a custom connector from Power Apps
+                    Share custom connectors in your organization
+                    Submit your connectors for Microsoft certification
+                    Custom connector FAQ
+              Feedback
+              Was this page helpful?            
+                                         Yes        No
+              Provide product feedback
+            Integrate canvas apps into websites and
+            other services
+            Article • 03/12/2025
+            The apps that you build are often most useful when they're available right where people
+            do their work. By embedding canvas apps in an iframe, you can integrate those apps
+            into websites and other services, such as Power BI or SharePoint.
+            In this topic, we'll show you how to set parameters for app embedding; then we'll
+            embed our Asset Ordering app in a website.
+              ７ Note
+                   Only Power Apps users in the same tenant can access the embedded app.
+                   Embedding canvas apps in any native desktop application isn't supported,
+                   which includes Andrioid and iOS. This excludes first-party integrations such as
+                   Power Apps in Teams.
+            You can also integrate canvas apps into SharePoint Online without using an iframe.
+            More information: Use the Power Apps web part  .
+            Set URI parameters for your app
