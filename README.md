@@ -116,8 +116,9 @@ Directorates, KPIDefinitions, Notifications, AuditLog, ReportComments, EvidenceL
   (`Active=False`) and Oratile Tshipo reassigned to Internal Control. See
   `reference/data-normalization-report.md`.
 - `scr_Activities` is now a full Activities master-detail (list + form CRUD over the
-  Activities list) — see CHANGES.md §12. The only leftover is that nothing in the nav
-  sidebar of other screens points at it yet (pre-existing).
+  Activities list) — see CHANGES.md §12. Navigation audit (CHANGES.md §22): the
+  "Activities" rail icon now points to scr_Activities on every screen, and all
+  sidebar rail icons + Home KPI arrows are wired.
 - Best-practices pass applied (CHANGES.md §11): immutable OnStart `Set`s are now named
   formulas (App.Formulas), base scope filters are role-first & delegable (colReportsInScope,
   colProjectsInScope), dead/commented blocks were removed, and the two inline dashboard

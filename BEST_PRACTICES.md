@@ -141,11 +141,11 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
 | 1 | Named formulas vs OnStart Set/Collect | `App.pa.yaml` OnStart is a long ordered sequence of `Set`/`ClearCollect` (plus a large commented block) — theme, filters, collections, role, notifications, FY/quarter all inline | Convert immutable values to `App.Formulas` (theme colours, derived role/scope, FY/month/quarter, reference collections) |
 | 2 | Remove dead code | `App.pa.yaml` (commented block), `scr_Home` OnVisible (commented `colOverdueItems`/`colFlaggedItems`/`colMonthlyTrend`), `scr_Projects`/`scr_Activities` (`/* */` alternatives), `scr_MyActivities` (commented gallery Items) | Delete commented blocks before the next pack |
 | 3 | No duplicated screens | ~~`scr_Reports_1`~~ → **repurposed as `scr_ApprovedReports` (§16)**; ~~`scr_Activities`~~ rebuilt as a true Activities master-detail (§12); ~~`MainScreen1`~~ **retired (§20)** — empty template screen deleted, its `MainScreen1.Size` refs replaced with `App.Size` | ~~Retire `MainScreen1`~~ **Done (§20)** |
-| 4 | No dangling references | `scr_MyActivities` navigates to `scr_ReportForm` and `scr_ReportView`, which don't exist; `scr_Splash` timer has no `OnTimerEnd`; `scr_Home` "New Monthly Report" / "View Reports Dashboard" buttons have no OnSelect | Build the missing screens (planned task) and wire navigation |
+| 4 | No dangling references | ~~`scr_ReportForm`/`scr_ReportView` missing~~ **built (§7)**; ~~`scr_Splash` timer~~ **wired (§8)**; ~~`scr_Home` buttons~~ **wired (§14)**; sidebar rails audited (§22) — **all nav icons now wired** (Home rail, MyActivities Home icon, KPI arrows; the `RadarActivityMonitor` "Activities" icon now points to `scr_Activities` on every screen) | ~~Wire navigation~~ **Done (§14, §22)** — residual decorative icons (Search/Bell/Trending/Settings/Support) are intentionally non-interactive |
 | 5 | Delegation & payloads | Base scope `ClearCollect(colReportsInScope, Filter(MonthlyReports, ...OR...))` mixes roles/directorates in one filter; heavy `Distinct`/`ForAll`/`GroupBy` on collections; SharePoint OR filters likely non-delegable | Keep base filter simple & delegable (scope by role first), index filter columns, stay within 500–2,000-row collected set; avoid `CountRows` on raw SharePoint |
 | 6 | Long formulas | `scr_Home` `MonthlyTrend_gal.Items` is a very long inline `ForAll(Sequence(12)...)`; several OnVisible blocks are long | Extract to named formulas / `With` blocks |
 | 7 | Naming conventions | Uses `var`/`col` prefixes and `scr` screen names consistently — good | Align new screens with the same scheme; drop `var` prefix only for named-formula conversions |
-| 8 | Components for repeated UI | Every screen hand-builds the same navy header + icon sidebar (with `_1`…`_8` suffix duplicates) | Extract header/sidebar into a component library (Phase 2) |
+| 8 | Components for repeated UI | Every screen hand-builds the same navy header + icon sidebar (with `_1`…`_8` suffix duplicates). **Measured (§22)**: ~1,117 lines of near-identical rail YAML across 6 screens (9 icons × ~22 lines ≈ 197 lines per screen on 5 screens + 132 on Home) | Extract header/sidebar into a component library (**Phase 2** — see §22 recommendation; a `cmp_NavRail` component would also have prevented the §22 drift where Home's rail was left unwired) |
 | 9 | Import-safety | Round trip verified lossless (Part 1.2); original msapp untouched | Follow Part 1.3 rules for every future edit → pack → import |
 | 10 | ALM | msapp import/export is basic transfer only (no Dataverse) | Keep schemas in CSV (source of truth) + YAML in git; treat msapp as a build artifact. **CI added (§21)**: `.github/workflows/ci.yml` runs `tools/check_screen_registry.py` (screen file ↔ `_EditorState` drift) + `tools/verify_powerfx.py` on every push/PR |
 
@@ -169,11 +169,13 @@ Verified against the unpacked source (`APP_MRMS_Unpacked/Src/*.pa.yaml`, no chan
   delegable (`colReportsInScope`, `colProjectsInScope`); the two inline dashboard
   galleries (trend/progress) now filter the collected `colActivities`; `colOverdueItems`
   restored (was commented out but consumed by live KPI cards).
-- **Open**: row 4 (scr_Home buttons wired §14; remaining unwired items to audit),
-  row 8 (header/sidebar components), row 10 (ALM via git + CSV source of truth).
+- **Open**: row 8 (header/sidebar component extraction — Phase 2, quantified in §22),
+  row 10 (ALM via git + CSV source of truth).
   scr_Activities was rebuilt as a full Activities master-detail (CHANGES.md §12);
   `scr_Reports_1` was repurposed as the `scr_ApprovedReports` dashboard (§16);
-  `MainScreen1` was retired (§20) — **row 3 is fully resolved**.
+  `MainScreen1` was retired (§20); the navigation audit (§22) wired every remaining
+  dead rail icon / KPI arrow and fixed the RadarActivityMonitor inconsistency —
+  **rows 3 and 4 are fully resolved**; row 5's delegation work is done (§11).
 
 ---
 *Supporting artifacts: CHANGES.md (session change log), update_docs_schema.py,

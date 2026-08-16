@@ -164,6 +164,7 @@ Screens:
                         Icon: =Icon.Home
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
@@ -184,6 +185,7 @@ Screens:
                         Icon: =Icon.CalendarBlank
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
@@ -204,6 +206,7 @@ Screens:
                         Icon: =Icon.ListWatchlistRemind
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
@@ -244,6 +247,7 @@ Screens:
                         Icon: =Icon.People
                         LayoutMinHeight: =16
                         LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
                         PressedBorderColor: =RGBA(0, 0, 0, 0)
                         PressedColor: =RGBA(16, 110, 190, 1)
                         PressedFill: =RGBA(0, 0, 0, 0)
@@ -1859,6 +1863,7 @@ Screens:
                                           Icon: =Icon.ArrowRight
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
+                                          OnSelect: =Navigate(scr_Reports, ScreenTransition.Fade)
                                           PressedBorderColor: =RGBA(0, 0, 0, 0)
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
@@ -2226,6 +2231,7 @@ Screens:
                                           Icon: =Icon.ArrowRight
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
+                                          OnSelect: =Navigate(scr_Reports, ScreenTransition.Fade)
                                           PressedBorderColor: =RGBA(0, 0, 0, 0)
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)

@@ -636,3 +636,47 @@ trip byte-identical.
 - Verified: registry check passes on the current tree (11 files ↔ 11 entries) and
   fails with exit 1 on both mismatch directions (negative-tested with a scratch
   directory); workflow YAML parses; verifier still 0 errors.
+
+## 22. Navigation audit (BEST_PRACTICES row 4) + header/sidebar duplication measure (row 8)
+
+### Row 4 — no dangling references: audit result
+Systematically scanned every Icon/Button across all 11 screens for missing `OnSelect`
+and cross-checked the verifier (0 dangling Navigate targets). **Verified already wired**:
+scr_Splash timer → Home (§8), scr_Home action buttons (§14), all CRUD buttons
+(block-form `OnSelect`), scr_Users register submit, scr_Reports classic-form buttons.
+
+**Found and fixed:**
+1. **scr_Home sidebar rail was entirely unwired** — `Home_ico`, `MonthlyReports_ico`
+   (CalendarBlank), `Activities_ico` (ListWatchlistRemind), `Icon1_4` (People) had no
+   OnSelect, while the identical rail navigates on every other screen. Wired them to
+   scr_Home / scr_ReportActivities / scr_MyActivities / scr_Users (same targets &
+   transitions as sibling screens).
+2. **scr_Home KPI arrows dead** — `AllProgrammes_ico` and `ViewAllReports_ico`
+   (next to "All Programmes" / "View All Reports") had no OnSelect → now both
+   `Navigate(scr_Reports, ScreenTransition.Fade)` (matching `ViewReportsDash_ico`).
+3. **scr_MyActivities `Home_ico_2` dead** — no OnSelect → now `Navigate(scr_Home)`.
+4. **RadarActivityMonitor inconsistency** — the "Activities" rail icon navigated to
+   `scr_MyActivities` on 4 screens (self-navigation on scr_MyActivities itself) but
+   to `scr_Activities` on scr_Activities. Fixed all 4 → `scr_Activities`; the
+   separate `ListWatchlistRemind` icon remains the MyActivities link (→ scr_MyActivities).
+
+**Deliberately left non-interactive** (decorative, not bugs): search-magnifier icons
+paired with text boxes, bell/notification icons, and the Trending/Settings/Support
+rail footer (dead on every screen — candidates for removal or wiring in Phase 2).
+
+### Row 8 — components for repeated UI: duplication measured
+- **~1,117 lines of near-identical rail YAML** across 6 screens: 9 icons × ~22 lines
+  ≈ 197 lines each on scr_Activities / scr_MyActivities / scr_Projects / scr_Users /
+  scr_Reports, plus a 6-icon ~132-line subset on scr_Home.
+- The rail differs between screens **only** by control-name suffixes (`_1`…`_6`),
+  the active-screen highlight, and one transition constant — classic component
+  material. The §22 drift (Home's rail unwired) is exactly the failure mode a
+  shared component prevents.
+- **Recommendation (Phase 2)**: extract `cmp_NavRail` (params: active screen,
+  optional back target) + `cmp_AppHeader` into a component library; screens then
+  declare one component instead of ~200 lines each. This is a Studio-side
+  refactor — keep the CSV source-of-truth and round-trip discipline (§3.5).
+
+Verified: `tools/verify_powerfx.py` (10,549 formulas, 0 warnings, 0 errors),
+registry check clean, pack→unpack round trip byte-identical, top-level
+`APP-MRMS_Project_app.msapp` repacked with `--layout SourceCode`.

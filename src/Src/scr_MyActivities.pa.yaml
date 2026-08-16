@@ -324,6 +324,7 @@ Screens:
                               Icon: =Icon.Home
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
+                              OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
@@ -365,7 +366,7 @@ Screens:
                               Icon: =Icon.RadarActivityMonitor
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_MyActivities,ScreenTransition.Cover)
+                              OnSelect: =Navigate(scr_Activities,ScreenTransition.Cover)
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
