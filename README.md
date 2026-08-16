@@ -1,5 +1,7 @@
 # APP-MRMS — Annual Performance Plan Monthly Reporting Management System
 
+[![CI status](https://github.com/OratileTshipo/APP_MRMS_Project/actions/workflows/ci.yml/badge.svg)](https://github.com/OratileTshipo/APP_MRMS_Project/actions/workflows/ci.yml)
+
 Power Apps Canvas app + SharePoint Online solution for the Department of Public Works
 and Roads (DPWR), North West Province.
 
