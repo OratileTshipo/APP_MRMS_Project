@@ -982,3 +982,20 @@ test fixtures):**
 **Verification:** verifier `--strict` 8751 formulas, 0 errors; round trip
 byte-identical; v3 unpacks to the exact `src/Src` tree including both
 components.
+
+## 31. CI round-trip gate: pack → unpack must be byte-identical
+
+Added a second CI job (`pack-roundtrip`) so a change that breaks the pack
+fails the build even when all static checks pass (the PA2108 failure in §30
+slipped through exactly because `pac canvas pack` validates structure only):
+
+- Installs the pac CLI (`dotnet tool install --global Microsoft.PowerApps.CLI.Tool`).
+- `pac canvas pack --sources src --msapp /tmp/roundtrip.msapp --layout SourceCode --overwrite`
+  (the `--layout SourceCode` flag is required in pac 2.11.x for BOTH pack and
+  unpack — unpack crashes with an NRE without it, see §6).
+- Unpacks to a temp dir and runs `diff -r src/Src <unpacked>/Src` — any
+  difference fails the job, proving the edited source survives pack → unpack
+  byte-identical before it ever reaches Studio import.
+- Verified locally: the exact CI command sequence passes (byte-identical),
+  and the workflow YAML validates with both jobs (`verify-source` +
+  `pack-roundtrip`).

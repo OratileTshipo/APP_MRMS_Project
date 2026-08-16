@@ -2,9 +2,10 @@ name: CI
 
 # Runs on every push and pull request to any branch. Keeps the unpacked
 # canvas-app source honest without requiring pac / .NET: the screen registry
-# guard fails fast when a screen file and _EditorState drift apart, and the
+# guard fails fast when a screen file and _EditorState drift apart, the
 # Power Fx verifier catches unbalanced formulas, dangling navigation targets,
-# duplicate control names and invalid Patch keys.
+# duplicate control names and invalid Patch keys, and the pack round trip
+# proves the source still packs into an importable msapp.
 
 on:
   push:
@@ -28,3 +29,26 @@ jobs:
 
       - name: Power Fx static verification (strict — delegation findings fail)
         run: python3 tools/verify_powerfx.py --strict
+
+  pack-roundtrip:
+    name: Pack → unpack round trip (byte-identical)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install pac CLI
+        run: |
+          dotnet tool install --global Microsoft.PowerApps.CLI.Tool
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
+      # --layout SourceCode is required for BOTH pack and unpack in pac 2.11.x
+      # (without it, unpack crashes with an NRE — see CHANGES.md §6).
+      - name: Pack src → msapp
+        run: pac canvas pack --sources src --msapp /tmp/roundtrip.msapp --layout SourceCode --overwrite
+
+      - name: Unpack msapp → compare
+        run: |
+          pac canvas unpack --msapp /tmp/roundtrip.msapp --sources /tmp/roundtrip_out --layout SourceCode --overwrite
+          diff -r src/Src /tmp/roundtrip_out/Src
+          echo "✓ round trip byte-identical — src/Src survives pack → unpack"
