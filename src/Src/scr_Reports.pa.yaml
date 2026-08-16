@@ -588,8 +588,9 @@ Screens:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Default: =CurrentItem
                                     Fill: =RGBA(250, 250, 250, 1)
-                                    Items: =// RecordsGallery1 — master list of monthly reports; Search() matches the search box against Title
-                                    Search([@MonthlyReports], SearchInput1.Text, Title, Title)
+                                    Items: |-
+                                      =// RecordsGallery1 — master list of monthly reports; Search() matches the search box against Title
+                                      Search([@MonthlyReports], SearchInput1.Text, Title, Title)
                                     LayoutMinWidth: =0
                                     OnSelect: |-
                                       =UpdateContext({ itemSelected: true, CurrentItem: ThisItem })
@@ -788,8 +789,9 @@ Screens:
                                           HoverColor: =RGBA(16, 110, 190, 1)
                                           HoverFill: =RGBA(0, 0, 0, 0)
                                           Icon: =Icon.Check
-                                          OnSelect: =// SubmitFormButton1 — submits the classic Form1 (MonthlyReports) after client-side validation
-                                          SubmitForm(Form1)
+                                          OnSelect: |-
+                                            =// SubmitFormButton1 — submits the classic Form1 (MonthlyReports) after client-side validation
+                                            SubmitForm(Form1)
                                           PaddingBottom: =12
                                           PaddingLeft: =12
                                           PaddingRight: =12

@@ -9,78 +9,71 @@
 App:
   Properties:
     # ============================================================
-    # NAMED FORMULAS (App.Formulas) — immutable, lazily evaluated.
-    # Replaces the App.OnStart Set() calls for values that never
-    # change after app load (theme, breakpoints, current user,
-    # reporting period). Keeps OnStart small and the first screen fast.
-    # ============================================================
-
-    # 1. Theme colours
-    varNavy: =ColorValue("#122952")
-    varBlue: =ColorValue("#2E75B6")
-    varLBlue: =ColorValue("#D9E6F2")
-    varGrey: =ColorValue("#595959")
-    varGreen: =ColorValue("#1E8A44")
-    varAmber: =ColorValue("#E6A100")
-    varRed: =ColorValue("#C0392B")
-    varBgLight: =ColorValue("#F8F8F8")
-
-    # 2. Responsive breakpoints (reactive — re-evaluate on resize)
-    varIsMobile: =App.Width < 640
-    varIsTablet: =App.Width >= 640 And App.Width < 1100
-
-    # 3. Current user + derived role/scope
-    varUserEmail: =User().Email
-    varUserFullName: =User().FullName
-    varCurrentUserRecord: =LookUp(APP_Users, UserAccount.Email = varUserEmail)
-    varUserRole: =varCurrentUserRecord.Role.Value
-    varUserDirectorate: =varCurrentUserRecord.Directorate.Value
-    varUserProgramme: =varCurrentUserRecord.Programme.Value
-    varUserDirectorateID: =LookUp(Directorates, Title = varUserDirectorate).DirectorateID
-    varCanViewAllReports: =varUserRole = "DeputyDirectorME" || varUserRole = "Administrator"
-
-    # 4. Reporting period defaults (derived from Today())
-    varCurrentFY: |-
-      =If(
-          Month(Today()) >= 4,
-          Year(Today()) & "/" & Right(Year(Today()) + 1, 2),
-          Year(Today()) - 1 & "/" & Right(Year(Today()), 2)
-      )
-    varCurrentMonth: |-
-      =Switch(
-          Month(Today()),
-          4, "April", 5, "May", 6, "June", 7, "July", 8, "August", 9, "September",
-          10, "October", 11, "November", 12, "December", 1, "January", 2, "February", 3, "March"
-      )
-    varCurrentQuarter: |-
-      =Switch(
-          true,
-          Month(Today()) >= 4 And Month(Today()) <= 6, "Q1 (Apr-Jun)",
-          Month(Today()) >= 7 And Month(Today()) <= 9, "Q2 (Jul-Sep)",
-          Month(Today()) >= 10 And Month(Today()) <= 12, "Q3 (Oct-Dec)",
-          "Q4 (Jan-Mar)"
-      )
-    varTodaysDate: =DateValue(Today())
-
-    # 5. Report lookup — existing MonthlyReport for the selected activity in the
-    #    current reporting period. Used by scr_ReportActivities so that selecting
-    #    an activity loads its existing report (Edit) instead of always starting
-    #    fresh (New). Re-evaluates whenever varReportActivity changes.
-    fnReportForCurrentPeriod: |-
-      =First(
-          Filter(
-              MonthlyReports,
-              Activity.Id = varReportActivity.ID,
-              'FinancialYear '.Value = varCurrentFY,
-              ReportingMonth.Value = varCurrentMonth
-          )
-      )
-
-    # ============================================================
-    # App.OnStart — only genuinely mutable state remains here.
+    # App.OnStart — one-time initialisation.
+    #
+    # NOTE: Named formulas (App.Formulas) cannot be represented in
+    # the pa.yaml source format — the official schema (v3.0) defines
+    # the App node with only "Properties", so importing an app that
+    # declares them fails with PA2108 "Unknown property". All values
+    # that never change after load (theme, breakpoints, current user,
+    # reporting period) are therefore initialised here with Set(),
+    # exactly as the original Studio-authored app did.
     # ============================================================
     OnStart: |-
-      =// 1. Filter defaults — mutated by screen controls (scr_Home, scr_Users, scr_MyActivities)
+      =// 1. Theme colours
+      Set(varNavy, ColorValue("#122952"));
+      Set(varBlue, ColorValue("#2E75B6"));
+      Set(varLBlue, ColorValue("#D9E6F2"));
+      Set(varGrey, ColorValue("#595959"));
+      Set(varGreen, ColorValue("#1E8A44"));
+      Set(varAmber, ColorValue("#E6A100"));
+      Set(varRed, ColorValue("#C0392B"));
+      Set(varBgLight, ColorValue("#F8F8F8"));
+
+      // 2. Responsive breakpoints (evaluated once at startup)
+      Set(varIsMobile, App.Width < 640);
+      Set(varIsTablet, App.Width >= 640 And App.Width < 1100);
+
+      // 3. Current user + derived role/scope
+      Set(varUserEmail, User().Email);
+      Set(varUserFullName, User().FullName);
+      Set(varCurrentUserRecord, LookUp(APP_Users, UserAccount.Email = varUserEmail));
+      Set(varUserRole, varCurrentUserRecord.Role.Value);
+      Set(varUserDirectorate, varCurrentUserRecord.Directorate.Value);
+      Set(varUserProgramme, varCurrentUserRecord.Programme.Value);
+      Set(varUserDirectorateID, LookUp(Directorates, Title = varUserDirectorate).DirectorateID);
+      Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
+
+      // 4. Reporting period defaults (derived from Today())
+      Set(
+          varCurrentFY,
+          If(
+              Month(Today()) >= 4,
+              Year(Today()) & "/" & Right(Year(Today()) + 1, 2),
+              Year(Today()) - 1 & "/" & Right(Year(Today()), 2)
+          )
+      );
+      Set(
+          varCurrentMonth,
+          Switch(
+              Month(Today()),
+              4, "April", 5, "May", 6, "June", 7, "July", 8, "August", 9, "September",
+              10, "October", 11, "November", 12, "December", 1, "January", 2, "February", 3, "March"
+          )
+      );
+      Set(
+          varCurrentQuarter,
+          Switch(
+              true,
+              Month(Today()) >= 4 And Month(Today()) <= 6, "Q1 (Apr-Jun)",
+              Month(Today()) >= 7 And Month(Today()) <= 9, "Q2 (Jul-Sep)",
+              Month(Today()) >= 10 And Month(Today()) <= 12, "Q3 (Oct-Dec)",
+              "Q4 (Jan-Mar)"
+          )
+      );
+      Set(varTodaysDate, DateValue(Today()));
+
+      // 5. Filter defaults — mutated by screen controls (scr_Home, scr_Users, scr_MyActivities)
       Set(varHomeFilter, "All");
       Set(varHomeSearchTerm, "");
       Set(varFilterFY, "All");
@@ -88,7 +81,7 @@ App:
       Set(varFilterDirectorate, "All");
       Set(varFilterQuarter, "All");
 
-      // 2. Reference data collections — mutable; screens re-collect these
+      // 6. Reference data collections — mutable; screens re-collect these
       Concurrent(
           ClearCollect(colProgrammes, Filter(Programmes, Active = true)),
           ClearCollect(colProjects, Filter(Projects, Status.Value = "Active")),
@@ -96,14 +89,14 @@ App:
           ClearCollect(colDirectorates, Filter(Directorates, Active = true))
       );
 
-      // 3. Notifications — personal, rebuilt on scr_Home.OnVisible
+      // 7. Notifications — personal, rebuilt on scr_Home.OnVisible
       ClearCollect(
           colMyNotifications,
           Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false)
       );
       Set(varUnreadCount, CountRows(colMyNotifications));
 
-      // 4. UI state flags
+      // 8. UI state flags
       Set(varNavOpen, false);
       Set(varSidePanelOpen, false);
       Set(varFormIsValid, false);

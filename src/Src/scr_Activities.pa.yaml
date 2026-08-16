@@ -77,7 +77,7 @@ Screens:
                   RadiusBottomRight: =0
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
-                  Width: =App.Width - ActivitiesSidebar_con.Width
+                  Width: =App.Width - ActSidebar_con.Width
                 Children:
                   - HeaderLeft_con:
                       Control: GroupContainer@1.5.0
@@ -245,7 +245,7 @@ Screens:
                   LayoutDirection: =LayoutDirection.Horizontal
                   Width: =App.Width
                 Children:
-                  - ActivitiesSidebar_con:
+                  - ActSidebar_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -264,7 +264,7 @@ Screens:
                         PaddingTop: =20
                         Width: =App.Width * 0.05
                       Children:
-                        - Home_ico:
+                        - ActHome_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -306,7 +306,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Activities_ico:
+                        - ActActivities_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -327,7 +327,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - MonthlyReports_ico:
+                        - ActMonthlyReports_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -369,7 +369,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Trending_ico:
+                        - ActTrending_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -410,7 +410,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - SidebarSpacer_con:
+                        - ActSidebarSpacer_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -423,7 +423,7 @@ Screens:
                               PaddingLeft: =8
                               PaddingRight: =8
                               PaddingTop: =8
-                        - Settings_ico:
+                        - ActSettings_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -443,7 +443,7 @@ Screens:
                               PressedColor: =RGBA(16, 110, 190, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =Parent.Width - 20
-                        - Support_ico:
+                        - ActSupport_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -491,7 +491,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width * 0.38
                             Children:
-                              - GalleryHeader_con:
+                              - ActGalleryHeader_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -520,7 +520,7 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =18
                                           Text: ="Activities"
-                                    - AddNew_btn:
+                                    - ActAddNew_btn:
                                         Control: ModernButton@1.0.0
                                         Properties:
                                           Icon: ="Add"
@@ -607,7 +607,7 @@ Screens:
                                     PaddingTop: =4
                                     Width: =Parent.Width
                                   Children:
-                                    - ProgrammeFilter_drp:
+                                    - ActProgrammeFilter_drp:
                                         Control: ModernDropdown@1.0.2
                                         Properties:
                                           Default: =LookUp(colProgrammesFilter, Title = "All")
@@ -618,7 +618,7 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |-
-                                            =Set(varActivityFilterProgramme, ProgrammeFilter_drp.Selected.Title);
+                                            =Set(varActivityFilterProgramme, ActProgrammeFilter_drp.Selected.Title);
                                             Set(varActivityFilterDirectorate, "All");
                                             Reset(DirectorateFilter_drp)
                                           Width: =Parent.Width / 3 - 4
@@ -808,7 +808,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width * 0.62
                             Children:
-                              - FormHeader_con:
+                              - ActFormHeader_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -821,7 +821,7 @@ Screens:
                                     LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
                                     Width: =Parent.Width
                                   Children:
-                                    - FormHeaderButtons_con:
+                                    - ActFormHeaderButtons_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
                                         Properties:
@@ -832,7 +832,7 @@ Screens:
                                           LayoutDirection: =LayoutDirection.Horizontal
                                           LayoutGap: =8
                                         Children:
-                                          - FormTitle_lbl:
+                                          - ActFormTitle_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AutoHeight: =true
@@ -849,7 +849,7 @@ Screens:
                                                       "New Activity",
                                                       "Activity: " & varSelectedActivity.Title
                                                   )
-                                          - Cancel_btn:
+                                          - ActCancel_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -883,7 +883,7 @@ Screens:
                                                 Text: ="Cancel"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                          - Save_btn:
+                                          - ActSave_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -964,7 +964,7 @@ Screens:
                                                 Text: ="Save"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                          - Edit_btn:
+                                          - ActEdit_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
                                                 Appearance: =ButtonAppearance.Transparent
@@ -1080,7 +1080,7 @@ Screens:
                                           RadiusTopRight: =8
                                           Text: ="Delete"
                                           Width: =90
-                              - FormFields_con:
+                              - ActFormFields_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
@@ -1333,7 +1333,7 @@ Screens:
                                           LayoutGap: =4
                                           Width: =Parent.Width
                                         Children:
-                                          - Directorate_lbl:
+                                          - ActDirectorate_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -1601,7 +1601,7 @@ Screens:
                                                 LayoutGap: =4
                                                 Width: =Parent.Width / 2 - 6
                                               Children:
-                                                - Status_lbl:
+                                                - ActStatus_lbl:
                                                     Control: ModernText@1.0.0
                                                     Properties:
                                                       AutoHeight: =true

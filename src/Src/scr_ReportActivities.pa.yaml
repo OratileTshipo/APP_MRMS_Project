@@ -43,7 +43,7 @@ Screens:
         // 3. Default selection + report form state — load the existing report
         //    for the selected activity + current period (Edit), else start fresh (New)
         Set(varReportActivity, If(CountRows(colReportActivities) > 0, First(colReportActivities), Blank()));
-        Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+        Set(varEditReport, If(IsBlank(varReportActivity), Blank(), First(Filter(MonthlyReports, Activity.Id = varReportActivity.ID, 'FinancialYear '.Value = varCurrentFY, ReportingMonth.Value = varCurrentMonth))));
         Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
 
         // 3b. Reset the form controls so their Default re-evaluates with the
@@ -242,7 +242,7 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Width: =32
                               - RepActSearch_txt:
-                                  Control: ModernTextInput@1.0.0
+                                  Control: ModernTextInput@1.1.1
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
                                     BorderStyle: =BorderStyle.Solid
@@ -252,7 +252,7 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: =Set(varRepActSearchTerm, RepActSearch_txt.Text)
-                                    PlaceholderText: ="Search activities..."
+                                    Placeholder: ="Search activities..."
                                     Width: =Parent.Width - 40
                         - RepActFilterBar_con:
                             Control: GroupContainer@1.5.0
@@ -316,7 +316,7 @@ Screens:
                                 // period into the detail form (Edit), or start a fresh one (New).
                                 // Reset() re-evaluates the form controls' Default with the new record.
                                 Set(varReportActivity, RepActItems_gal.Selected);
-                                Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+                                Set(varEditReport, If(IsBlank(varReportActivity), Blank(), First(Filter(MonthlyReports, Activity.Id = varReportActivity.ID, 'FinancialYear '.Value = varCurrentFY, ReportingMonth.Value = varCurrentMonth))));
                                 Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
                                 Reset(RepActTitle_txt);
                                 Reset(RepActMonth_drp);
@@ -453,7 +453,12 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =11
-                                    Text: =If(IsBlank(varReportActivity), "No activity selected", If(varReportMode = "Edit", "Editing existing report · ", "Reporting on: ") & varReportActivity.Title)
+                                    Text: |-
+                                      =If(
+                                          IsBlank(varReportActivity),
+                                          "No activity selected",
+                                          If(varReportMode = "Edit", "Editing existing report · ", "Reporting on: ") & varReportActivity.Title
+                                      )
                         - RepActFormScroll_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -955,7 +960,7 @@ Screens:
                                           );
                                           Notify(If(varReportMode = "New", "Report saved.", "Report updated."), NotificationType.Success);
                                           // Reload the saved record so the form reflects it (Edit mode going forward)
-                                          Set(varEditReport, If(IsBlank(varReportActivity), Blank(), fnReportForCurrentPeriod));
+                                          Set(varEditReport, If(IsBlank(varReportActivity), Blank(), First(Filter(MonthlyReports, Activity.Id = varReportActivity.ID, 'FinancialYear '.Value = varCurrentFY, ReportingMonth.Value = varCurrentMonth))));
                                           Set(varReportMode, If(IsBlank(varEditReport), "New", "Edit"));
                                           Reset(RepActTitle_txt);
                                           Reset(RepActMonth_drp);

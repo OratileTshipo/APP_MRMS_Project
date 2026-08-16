@@ -694,3 +694,68 @@ registry check clean, pack→unpack round trip byte-identical, top-level
   behavior, scr_ReportActivities edit-mode reload, scr_ApprovedReports back,
   sidebar rail navigation) → save in Studio. Includes failure-recovery guidance
   (fix verifier errors, repack, retry; pristine `backup/` as fallback).
+
+## 24. Import failure fixed (5 issue groups from the Studio import report)
+
+**Background.** The user imported the repacked msapp into Power Apps Studio and it
+failed. `import_errors` (in the project root) recorded the report. Root causes were
+split across two categories: (a) genuine source-format violations introduced by
+hand-editing, and (b) a schema misunderstanding about named formulas. All are fixed
+and verified; the msapp was repacked and is ready to re-import.
+
+### Issue 1 — PA2108 ×23: named formulas declared as App properties (App.pa.yaml)
+- The pa.yaml **Source Code schema (v3.0 — the only version) defines the App node
+  with `Properties` only; there is NO `Formulas` key**. Named formulas cannot be
+  represented in the source format at all, so declaring `varNavy: =…` under
+  `App.Properties` fails validation with “Unknown property for App”.
+  (Verified against the official schema: `PowerApps-Tooling/schemas/pa-yaml/v3.0`.)
+- **Fix:** reverted the named-formula refactor — all theme colours, breakpoints,
+  user/role values, reporting-period defaults and the report lookup are now plain
+  `Set()` calls in `App.OnStart`, exactly like the original Studio-authored app.
+  `fnReportForCurrentPeriod` was inlined into the 3 call sites in
+  `scr_ReportActivities` as `First(Filter(MonthlyReports, …))`.
+- **Lesson (BEST_PRACTICES §2.2 updated):** App.Formulas is a Studio-only concept;
+  hand-edited pa.yaml must use OnStart `Set()` for app-global values.
+
+### Issue 2 — PA2110 ×20: duplicate control names across screens (scr_Activities)
+- `scr_Activities` was rebuilt by copying scr_Projects/scr_Home, so 20 controls kept
+  their source names (`Save_btn`, `FormHeader_con`, `Home_ico`, `Status_lbl`, …)
+  and collided with the originals. Control names are **app-global** — every screen
+  must use unique names.
+- **Fix:** renamed all 20 in `scr_Activities` with the screen's existing `Act`
+  prefix (`Save_btn` → `ActSave_btn`, `Home_ico` → `ActHome_ico`, …), updating the
+  2 internal references (`ActivitiesSidebar_con.Width`, `ProgrammeFilter_drp`).
+  A full cross-file scan confirms 0 remaining collisions.
+
+### Issue 3 — PA2108: `PlaceholderText` on ModernTextInput (scr_ApprovedReports)
+- The property is named **`Placeholder`** on `ModernTextInput`; `PlaceholderText`
+  doesn't exist. Also bumped `ModernTextInput@1.0.0` → `@1.1.1` (clears the PA2105
+  “older than current version” warning). Fixed both instances
+  (scr_ApprovedReports, scr_ReportActivities — the latter's error was masked by its
+  YAML parse failure).
+
+### Issue 4 — PA2108: `HoverBorderColor`/`PressedBorderColor` on Circle (scr_MyActivities)
+- `Circle@2.3.0` has `HoverFill`/`PressedFill` but no border-hover properties.
+  Removed the two invalid lines (values duplicated the transparent `BorderColor`).
+
+### Issue 5 — PA1001 ×2: YAML parse errors (scr_ReportActivities:456, scr_Reports:592)
+- Per the Power Fx YAML grammar: **`:` and `#` are not allowed anywhere in
+  single-line formulas**, even inside quoted strings. Two violations:
+  - `scr_ReportActivities` `Text: =If(… "Reporting on: " …)` — the `: ` broke the
+    plain scalar → converted to a `|-` block scalar.
+  - `scr_Reports` `Items: =// comment` + continuation line — a comment embedded in
+    a plain scalar → converted to a `|-` block scalar. The scan also caught a third,
+    masked instance: `OnSelect: =// …` + `SubmitForm(Form1)` (line 792) → fixed.
+- **Lesson:** any formula containing `:` or `#` must use the `|-` multiline form.
+
+### Tooling & verification
+- `pac canvas pack` with **`--sources src`** (the dir holding the `.msapr`
+  reference + `Src/`) — packing bare `src/Src` triggers pac 2.11.2's
+  “must be validated in Studio first” gate (and its FormatException crash).
+- Verified: `yaml.compose` parses all 13 files (0 failures); new scan checks for
+  `:`/`#` in single-line formulas (0 hits); **`tools/verify_powerfx.py` gained a
+  cross-file duplicate-control-name check** (the PA2110 class — control names are
+  app-global; confirmed it flags an injected dup in a scratch copy and reports 0
+  on the real src); verifier now 10,524 formulas **0 warnings 0 errors**; registry
+  check clean; pack→unpack round trip **byte-identical**; top-level
+  `APP-MRMS_Project_app.msapp` repacked (13 pa.yaml files, no MainScreen1).

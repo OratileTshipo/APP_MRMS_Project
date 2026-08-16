@@ -85,19 +85,21 @@ workflow, and industry-standard app architecture. Written 2026-08-16.
 - Multi-condition `Filter` with `||` across columns is often **not** delegable on
   SharePoint — split into simple delegable filters or accept the row limit.
 
-### 2.2 Replace App.OnStart Set/Collect with named formulas (App.Formulas)
-- A long `App.OnStart` with ordered `Set`/`ClearCollect` calls blocks the first
-  screen and slows Studio (up to 80% Studio load-time reduction observed when
-  switching). Named formulas are **immutable, independent, lazily evaluated**:
-  - Theme colours, static filter defaults, derived role/scope values → named formulas.
-  - Do **not** put named formulas inside `App.OnStart` (they're formulas, not statements).
-  - Keep `Set` only for genuinely mutable state.
-- Example pattern:
-  ```
-  varNavy = ColorValue("#122952");
-  colProgrammes = Filter(Programmes, Active = true);
-  varCanViewAllReports = varUserRole = "DeputyDirectorME" || varUserRole = "Administrator";
-  ```
+### 2.2 App-level values: OnStart `Set()` (NOT named formulas in hand-edited YAML)
+- **Constraint discovered in §24 (import failure):** the pa.yaml **Source Code schema
+  (v3.0) defines the App node with `Properties` only — there is no `Formulas` key**.
+  Named formulas (App.Formulas) exist in Studio, but they **cannot be represented in
+  the source format**: declaring them under `App.Properties` fails import with
+  PA2108 “Unknown property 'X' for App”. Hand-edited pa.yaml must therefore
+  initialise app-global values in `App.OnStart` with `Set()` — exactly how the
+  original Studio-authored app did it.
+- Keep `App.OnStart` lean: put immutable values (theme colours, static filter
+  defaults, derived role/scope) in **named formulas in Studio** if you edit there;
+  when round-tripping through pa.yaml, express them as `Set()` calls and keep the
+  sections commented with `//` (Power Fx comments survive pack/import; YAML `#`
+  comments do not).
+- Reactive breakpoints (`varIsMobile` etc.) are evaluated once at startup in this
+  form — a `Width`-driven named formula is the Studio-only alternative.
 
 ### 2.3 Split long formulas
 - Formulas >256k characters are the top cause of Studio slowdown; split with named
@@ -110,7 +112,8 @@ workflow, and industry-standard app architecture. Written 2026-08-16.
 ### 2.4 Naming & structure conventions (coding guidelines)
 - Consistent prefixes: `var` for mutable variables, `col` for collections,
   semantic control names (e.g. `btnSubmit`, `lblTitle`), `scr` for screens.
-  (Named-formula convention drops the `var` prefix since they're immutable.)
+  (If named formulas are ever added from Studio, the `var` prefix is dropped
+  since they're immutable — but see §2.2: they can't round-trip through pa.yaml.)
 - No duplicated screens/controls (the app currently duplicates — see Part 3).
 - Remove dead code and commented-out formula blocks before packing.
 - Use `Concurrent()` for independent data calls; `With()` instead of nested

@@ -56,7 +56,12 @@ full verification record.
    ```bash
    python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
    python3 tools/verify_powerfx.py          # formula balance, nav targets, patch keys
+   python3 -c "import yaml,glob; [yaml.compose(open(f,encoding='utf-8')) for f in glob.glob('src/Src/*.pa.yaml')]"  # YAML parse gate
    ```
+   (See CHANGES.md §24 for the full import-failure root causes — named formulas
+   can't live in pa.yaml, single-line formulas can't contain `:` or `#`, control
+   names are app-global, and `--sources src` (with the `.msapr`) is required for
+   `pac canvas pack` in 2.11.2.)
 3. **Open [make.powerapps.com](https://make.powerapps.com)** and sign in with an
    account that can create apps in the target environment (the one holding the
    SharePoint lists).

@@ -606,11 +606,9 @@ Screens:
                                     Fill: =RGBA(0, 120, 212, 1)
                                     FocusedBorderThickness: =4
                                     Height: =Parent.Height
-                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
                                     HoverFill: =RGBA(0, 120, 212, 1)
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
                                     PressedFill: =RGBA(0, 120, 212, 1)
                                     Width: =28
                               - ActHdrActivity_lbl:

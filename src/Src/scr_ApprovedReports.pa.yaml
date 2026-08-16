@@ -517,7 +517,7 @@ Screens:
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Width: =32
                         - ApprSearch_txt:
-                            Control: ModernTextInput@1.0.0
+                            Control: ModernTextInput@1.1.1
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
                               BorderStyle: =BorderStyle.Solid
@@ -527,7 +527,7 @@ Screens:
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
                               OnChange: =Set(varApprSearchTerm, ApprSearch_txt.Text)
-                              PlaceholderText: ="Search approved reports by title or output..."
+                              Placeholder: ="Search approved reports by title or output..."
                               Width: =Parent.Width - 120
                         - ApprResultCount_lbl:
                             Control: ModernText@1.0.0

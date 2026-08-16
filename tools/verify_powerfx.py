@@ -360,19 +360,15 @@ def main():
     controls_per_file = {}
     defined_vars = set()
     defined_cols = set()
-    defined_named = set()
     patch_keys = {}     # list -> set of patch keys
     screen_nav = set()
     screen_files = set()
     pending_var_refs = []   # (base, loc, prop, var) — checked after all files define vars
     pending_col_refs = []   # (base, loc, prop, col) — checked after all files define collections
 
-    # Pre-register named formulas (App.Formulas) so var references resolve
-    app_path = os.path.join(SRC, "App.pa.yaml")
-    if os.path.exists(app_path):
-        for cpath, prop, formula in extract_formulas(app_path):
-            if prop not in ("OnStart", "StartScreen", "Theme"):
-                defined_named.add(prop)
+    # NOTE: named formulas (App.Formulas) cannot be represented in the pa.yaml
+    # source format (schema v3.0 has no Formulas key — see CHANGES.md §24), so
+    # there is nothing to pre-register here. App-global values are Set() in OnStart.
 
     for path in files:
         base = os.path.basename(path)
@@ -454,11 +450,17 @@ def main():
                             and target != "Parent" and target != "Self":
                         WARNINGS.append(f"[{base}] {loc}.{prop}: Reset/Select target '{target}' not found in {base}")
 
-        # named formulas in App.pa.yaml
-        if base == "App.pa.yaml":
-            for cpath, prop, formula in extract_formulas(path):
-                if prop not in ("OnStart", "StartScreen", "Theme"):
-                    defined_named.add(prop)
+    # Cross-file duplicate control names (PA2110 on import — names are app-global)
+    name_owner = {}   # control name -> list of files defining it
+    for base, names in controls_per_file.items():
+        for n in set(names):
+            name_owner.setdefault(n, []).append(base)
+    for n, owners in sorted(name_owner.items()):
+        if len(owners) > 1:
+            ERRORS.append(
+                f"control name '{n}' defined in multiple screens: {sorted(owners)} "
+                f"(import fails with PA2110 — rename in all but one screen)"
+            )
 
     # screens from _EditorState
     es_path = os.path.join(SRC, "_EditorState.pa.yaml")
@@ -479,8 +481,8 @@ def main():
 
     # second pass: var/col references — all Set()/ClearCollect() definitions are now known
     for base, loc, prop, v in pending_var_refs:
-        if v not in defined_vars and v not in defined_named:
-            WARNINGS.append(f"[{base}] {loc}.{prop}: var '{v}' is never Set()/named-formula'd anywhere")
+        if v not in defined_vars:
+            WARNINGS.append(f"[{base}] {loc}.{prop}: var '{v}' is never Set() anywhere")
     for base, loc, prop, v in pending_col_refs:
         if v not in defined_cols:
             WARNINGS.append(f"[{base}] {loc}.{prop}: collection '{v}' is never ClearCollect/Collect'd anywhere")
