@@ -37,7 +37,10 @@ ComponentDefinitions:
           Variant: AutoLayout
           Properties:
             # Auto-layout lives on this container, not the component root.
+            # Fill mirrors the root's varBgLight so the rail background always
+            # paints even if the component-root Fill is not rendered.
             DropShadow: =DropShadow.None
+            Fill: =varBgLight
             Height: =Parent.Height
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutDirection: =LayoutDirection.Vertical

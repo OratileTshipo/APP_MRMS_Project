@@ -92,7 +92,7 @@ Screens:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
-                        Height: =App.Height +200
+                        Height: =Parent.Height - UsersAppHeader.Height
                         LayoutAlignItems: =LayoutAlignItems.Center
                         LayoutDirection: =LayoutDirection.Horizontal
                         Width: =Parent.Width

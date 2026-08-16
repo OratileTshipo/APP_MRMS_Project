@@ -999,3 +999,47 @@ slipped through exactly because `pac canvas pack` validates structure only):
 - Verified locally: the exact CI command sequence passes (byte-identical),
   and the workflow YAML validates with both jobs (`verify-source` +
   `pack-roundtrip`).
+
+## 32. UI layout fix after successful v3 import — body overflow & shell gutters
+
+v3 imported cleanly (no PA2108), but the UI rendered broken: layout, spacing,
+header and sidebar all looked off. Root cause was a combination of layout
+arithmetic issues in the screen shells, not the components themselves:
+
+**1. Body containers were 100% tall under the 13% header → overflow/clipping.**
+The reusable header component is `App.Height * 0.13` tall; every converted
+screen's body container still said `Height: =App.Height` (100%), so the
+vertical details column summed to 113% and the bottom of the body was
+clipped/pushed off-screen. Fixed by sizing the body relative to the header
+instance (sibling reference):
+
+- `scr_Activities` → `ActivitiesScreen_con`: `Parent.Height - ActivitiesAppHeader.Height`
+- `scr_MyActivities` → `ActivitiesMainContent_con`: same pattern
+- `scr_Projects` → `ProjectScreen_con`: same pattern
+- `scr_ReportActivities` → `RepActBody_con`: same pattern
+- `scr_Reports` → `BodyContainer1`: same pattern + added
+  `LayoutAlignItems: Stretch` (it had none, so children sat at top)
+- `scr_Users` → `RegMainScreen_con`: was `App.Height + 200` (!!), now
+  `Parent.Height - UsersAppHeader.Height`
+- `scr_ApprovedReports` → `ApprGallery_con`: removed the conflicting explicit
+  `Height: =Parent.Height` and kept `FillPortions: =1` so it takes the
+  remaining space after the 7% filter bar and 12% KPI cards
+  (was 7% + 12% + 100% = 119%).
+
+**2. 8 px padding on root shell containers → white gutters around the shell.**
+`scr_Reports`, `scr_ReportActivities` and `scr_ApprovedReports` wrapped the
+whole shell (rail + details) in a container with `Padding: =8`, producing a
+white frame around the sidebar and content — Home (the reference) has none.
+Removed the padding so the rail sits flush like Home. (`scr_Reports` also
+had padding on the inner `ReportsSidebar_con` wrapper — removed.)
+
+**3. Component background insurance.** The wrapper containers inside the
+components (`HeaderMain_con`, `NavMain_con`) now carry an explicit `Fill`
+(`varNavy` / `varBgLight`) mirroring the root, so the header/sidebar
+background always paints even if the component-root Fill is not rendered.
+
+**Verification:** verifier `--strict` clean (8738 formulas, 0 errors,
+0 warnings), screen registry OK, pack → unpack byte-identical.
+
+**New importable pack (versioned per the repo rule):**
+`APP-MRMS_Project_app_v4_layout-fixed.msapp` — import this one.

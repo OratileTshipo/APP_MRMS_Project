@@ -139,7 +139,7 @@ Screens:
                       Variant: AutoLayout
                       Properties:
                         Fill: =RGBA(204, 218, 228, 1)
-                        Height: =App.Height
+                        Height: =Parent.Height - MyActivitiesAppHeader.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Vertical
                         LayoutGap: =12

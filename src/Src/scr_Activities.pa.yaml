@@ -89,7 +89,7 @@ Screens:
                       Properties:
                         DropShadow: =DropShadow.None
                         Fill: =varBgLight
-                        Height: =App.Height
+                        Height: =Parent.Height - ActivitiesAppHeader.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Horizontal
                         Width: =Parent.Width

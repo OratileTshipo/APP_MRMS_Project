@@ -76,10 +76,6 @@ Screens:
             Height: =App.Height
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutDirection: =LayoutDirection.Horizontal
-            PaddingBottom: =8
-            PaddingLeft: =8
-            PaddingRight: =8
-            PaddingTop: =8
             Width: =App.Width
           Children:
             - RepActNavRail:
@@ -110,7 +106,7 @@ Screens:
                       Properties:
                         DropShadow: =DropShadow.None
                         Fill: =varBgLight
-                        Height: =App.Height
+                        Height: =Parent.Height - RepActAppHeader.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Horizontal
                         Width: =Parent.Width

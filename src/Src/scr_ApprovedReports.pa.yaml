@@ -61,10 +61,6 @@ Screens:
             Height: =App.Height
             LayoutAlignItems: =LayoutAlignItems.Center
             LayoutDirection: =LayoutDirection.Horizontal
-            PaddingBottom: =8
-            PaddingLeft: =8
-            PaddingRight: =8
-            PaddingTop: =8
             Width: =App.Width
           Children:
             - ApprNavRail:
@@ -428,7 +424,6 @@ Screens:
                       Variant: AutoLayout
                       Properties:
                         FillPortions: =1
-                        Height: =Parent.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Vertical
                         LayoutMinHeight: =16
