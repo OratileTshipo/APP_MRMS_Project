@@ -18,6 +18,7 @@ and Roads (DPWR), North West Province.
 | `CHANGES.md` | Change log: tooling, unpack/pack verification, doc updates, findings |
 | `update_docs_schema.py` | Script used to align the Word docs with the CSV schemas |
 | `tools/check_screen_registry.py` | CI guard: fails if any screen file in `src/Src/` has no matching `_EditorState` entry (or vice versa) |
+| `tools/check_control_props.py` | CI guard: compares every control's declared properties against the control manifest (Templates.json) and fails on unknown properties — the PA2108 class Studio rejects on import (catches nested controls; see CHANGES.md §36) |
 | `.github/workflows/ci.yml` | GitHub Actions CI: runs the screen-registry check + `tools/verify_powerfx.py` on every push/PR |
 | `reference/` | Permanent reference material for future work (msapp internals, official-docs extractions, doc text, round-trip proof) — see `reference/canvas-apps/README.md` |
 | `backup/` | Pristine pre-change snapshots of the original pack and unpacked source — see `backup/README.md` |
@@ -78,6 +79,7 @@ next `_vN_` name and record it in CHANGES.md.
 2. **Sanity-check the pack locally first** (catches breakage before Studio):
    ```bash
    python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
+   python3 tools/check_control_props.py     # control properties vs Templates.json (PA2108 class)
    python3 tools/verify_powerfx.py          # formula balance, nav targets, patch keys
    python3 -c "import yaml,glob; [yaml.compose(open(f,encoding='utf-8')) for f in glob.glob('src/Src/*.pa.yaml')]"  # YAML parse gate
    ```

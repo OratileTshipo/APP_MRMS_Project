@@ -1204,3 +1204,47 @@ pac-consistent pack run:
 ```bash
 pac canvas pack --sources src --msapp APP-MRMS_Project_app_v5_contributor.msapp --layout SourceCode --overwrite
 ```
+
+## 36. v5 import failure fixed — PA2108 unknown properties (Label Radius ×56, ModernDropdown DefaultSelectedItems ×2)
+
+**Background.** The user imported `APP-MRMS_Project_app_v5_contributor.msapp` into Power Apps
+Studio and it failed. They pushed the Studio import report as `v5_import_errors` (commit
+19724d6) and asked for it to be read and fixed. The report contained 58 PA2108 errors:
+
+- **PA2108 ×56** — `RadiusBottomLeft` / `RadiusBottomRight` / `RadiusTopLeft` / `RadiusTopRight`
+  are **not properties of `Label@2.5.1`** (14 label clusters: 7 in `scr_MyActivities.pa.yaml`
+  lines 96/457/661/1250/1276/1376/1420, 7 in `scr_MyReports.pa.yaml` lines 97/458/662/1245/
+  1439/1477/1656). The corner-radius lines had been copied onto labels (avatar chips, status
+  pills, tag chips, action buttons) that were really plain Labels — Labels have no Radius.
+- **PA2108 ×2** — `DefaultSelectedItems` is **not a property of `ModernDropdown@1.0.2`** in the
+  Financial Year filter on both screens. The manifest-valid preselection property is **`Default`**.
+
+**Why the local checks missed it.** `tools/check_control_props.py` (written in the previous
+turn precisely to catch this PA2108 class) reported 0 errors against the fixed source. Root
+cause: its line-based parser only tracked a single "current" control and dropped every deeper
+nesting level, so properties on nested controls were never compared against the template —
+the exact case Studio rejects on import. Fixed: `scan_file()` now walks a proper indentation
+stack (`- Name:` at X, `Control:` at X+4, `Properties:` at X+4, keys at X+6; a frame closes on
+any line strictly below its `Control:` indent). Re-run against the pre-fix sources now reports
+exactly the 56 + 2 failures from `v5_import_errors`.
+
+**Fix applied (scr_MyActivities.pa.yaml + scr_MyReports.pa.yaml):**
+1. Removed the 4 Radius lines from all 14 `Label@2.5.1` controls (labels don't render corners;
+   pure cosmetic removal — no behavior change).
+2. `DefaultSelectedItems:` → `Default:` on both `MyaFY_drp` / `MyrFY_drp` dropdowns
+   (`Default: =Filter(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY)`).
+3. Valid Radius properties on GroupContainer / Rectangle / Classic Icon / ModernDropdown are
+   untouched.
+
+**Tooling fix.** `check_control_props.py` also gained `FillPortions` in the implicit-allowed set:
+the GroupContainer template in the repo's `Templates.json` predates/omits it, but Studio writes
+it on every AutoLayout container and it imports cleanly (absent from `v5_import_errors`; present
+in the pristine msapp's Controls/*.json and the user's working v4.1 header).
+
+**Verification.** `check_control_props.py` 0 errors/0 warnings (184 controls incl. nested);
+`check_screen_registry.py` OK; `verify_powerfx.py --strict` clean (2508 formulas, 0 errors,
+0 warnings); YAML parse gate OK on all 5 files.
+
+**Repacked.** `APP-MRMS_Project_app_v5_contributor.msapp` rebuilt with the 5 fixed `Src/*.pa.yaml`
+files (byte-identical to `src/`); all 23 non-Src entries byte-identical to the previous pack.
+Import this one — it should pass Studio's parse now.
