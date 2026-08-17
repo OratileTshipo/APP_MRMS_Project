@@ -1043,3 +1043,45 @@ background always paints even if the component-root Fill is not rendered.
 
 **New importable pack (versioned per the repo rule):**
 `APP-MRMS_Project_app_v4_layout-fixed.msapp` — import this one.
+
+---
+
+## 33. v4.1: scr_Projects reverted from components to container header/sidebar
+
+- **Problem:** the reusable header/sidebar components (`cmp_AppHeader` /
+  `cmp_NavRail`, introduced in v2) crash when clicked on `scr_Projects`; the
+  screen was reverted to the pre-component container approach.
+- **What changed (only `src/Src/scr_Projects.pa.yaml`):**
+  - `ProjectsNavRail` (cmp_NavRail instance) → `ProjectsSidebar_con`
+    GroupContainer with the original per-screen icons (Home / Projects /
+    Activities / Monthly Reports / My Activities / Users + decorative
+    Trending / Settings / Support). Nav targets follow the rail audit from §22:
+    Activities → `scr_Activities`, Monthly Reports → `scr_ReportActivities`,
+    My Activities → `scr_MyActivities`, Users → `scr_Users`. The Projects icon
+    is highlighted (`varNavy`) as the active screen; Tooltip/AccessibleLabel
+    carried over from the component.
+  - `ProjectsAppHeader` (cmp_AppHeader instance) → `ProjectsHomeHeader_con`
+    GroupContainer: navy auto-layout header with the "Projects" title, the
+    directorate · programme context line
+    (`varUserDirectorate & " · " & varUserProgramme`), the project search box
+    (`SearchBox_txt_2`, hint "Search projects by title, goal, or reference...")
+    and the bell icon.
+  - Body references updated: `ProjectsAppHeader.SearchText` →
+    `SearchBox_txt_2.Text` (declarative — same pattern as the component's
+    SearchText output) in `PrjResultCount_lbl` and `Project_gal_2.Items`;
+    `ProjectsMainScreen_con.Width` now uses `ProjectsSidebar_con.Width`;
+    `ProjectScreen_con.Height` uses `ProjectsHomeHeader_con.Height`.
+  - `cmp_AppHeader` / `cmp_NavRail` definitions are untouched and stay in use
+    on the other ten screens.
+- **Verification:** screen registry OK; `verify_powerfx.py --strict` clean
+  (9073 formulas, 0 errors, 0 warnings); YAML parse gate OK.
+- **New importable pack:** `APP-MRMS_Project_app_v4.1_containers.msapp` —
+  assembled from the v4 pack with **only** `Src/scr_Projects.pa.yaml` replaced
+  (verified: every other entry byte-identical to v4; `packed.json` unchanged,
+  `LoadFromYaml: true`). ⚠ No `pac` CLI in the build sandbox, so the
+  `Controls/*.json` for scr_Projects is still the component-era build; Studio
+  loads the embedded YAML (`LoadFromYaml: true`) and regenerates the JSON on
+  first Save. For a fully pac-consistent pack run:
+  ```bash
+  pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.1_containers.msapp --layout SourceCode --overwrite
+  ```

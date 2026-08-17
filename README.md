@@ -53,7 +53,8 @@ Every pack is saved under a new name so multiple working versions coexist.
 | `APP-MRMS_Project_app_v1_pristine.msapp` | Original pre-component pack (copy of `backup/original-pack/`) | ✅ imports clean |
 | `APP-MRMS_Project_app_v2_components.msapp` | First component build (header/sidebar as components) | ❌ **fails Studio import — PA2108** (root layout props, fixed in v3) |
 | `APP-MRMS_Project_app_v3_fixed.msapp` | Schema-valid components build (PA2108 fixed) | ✅ imports; UI layout regressions fixed in v4 |
-| `APP-MRMS_Project_app_v4_layout-fixed.msapp` | **Current build**: body heights no longer overflow the header, shell gutters removed, component background fills guaranteed | ✅ verified pack→unpack byte-identical; **import this one** |
+| `APP-MRMS_Project_app_v4_layout-fixed.msapp` | Component build: body heights no longer overflow the header, shell gutters removed, component background fills guaranteed | ✅ verified pack→unpack byte-identical |
+| `APP-MRMS_Project_app_v4.1_containers.msapp` | **scr_Projects reverted from components to container header/sidebar** (components crash when clicked on that screen); all other screens keep the components | ✅ verifier `--strict` clean, 0 errors/warnings; YAML sources updated in `src/`; see CHANGES.md §33 |
 
 Rule going forward: **never overwrite an existing pack** — `cp`/rename to the
 next `_vN_` name and record it in CHANGES.md.
@@ -66,8 +67,12 @@ next `_vN_` name and record it in CHANGES.md.
 
 1. **Repack the latest source** (if you just edited `src/`):
    ```bash
-   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4_layout-fixed.msapp --layout SourceCode --overwrite
+   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.1_containers.msapp --layout SourceCode --overwrite
    ```
+   (v4.1 was assembled here without `pac` by replacing only `Src/scr_Projects.pa.yaml`
+   inside the v4 pack — Studio loads the embedded YAML (`LoadFromYaml: true`) and
+   regenerates the JSON on first Save, but running the pack above produces the
+   fully pac-consistent `.msapp`.)
 2. **Sanity-check the pack locally first** (catches breakage before Studio):
    ```bash
    python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
