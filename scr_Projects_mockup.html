@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP-MRMS | Projects Administration</title>
+<style>
+  :root{
+    --dpwr-navy:#1B2A4A;
+    --dpwr-navy-dark:#111B30;
+    --dpwr-gold:#C9A24B;
+    --accent-blue:#2E5EAA;
+    --grey-bg:#F4F6F9;
+    --card-bg:#FFFFFF;
+    --border:#E1E5EC;
+    --text-dark:#1F2733;
+    --text-mid:#5B6472;
+    --text-light:#8B93A1;
+    --green:#1E8A5F;
+    --green-bg:#E7F6EF;
+    --amber:#B5790A;
+    --amber-bg:#FCF1DC;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --blue-bg:#EAF1FC;
+    --lightgray:#5B6472;
+    --lightgray-bg:#EEF0F3;
+    --peach:#B5622C;
+    --peach-bg:#FBEADE;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;background:var(--grey-bg);color:var(--text-dark);font-size:14px;}
+  .app-shell{display:flex;min-height:100vh;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{width:230px;flex-shrink:0;background:var(--dpwr-navy);color:#fff;display:flex;flex-direction:column;padding:20px 0;}
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:12px;}
+  .sidebar-brand .logo-dot{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--dpwr-gold),#E4C97A);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--dpwr-navy-dark);font-size:13px;flex-shrink:0;}
+  .sidebar-brand .brand-text{line-height:1.2;}
+  .sidebar-brand .brand-text .b1{font-weight:700;font-size:13.5px;letter-spacing:.3px;}
+  .sidebar-brand .brand-text .b2{font-size:10.5px;color:rgba(255,255,255,0.55);}
+  .nav-section-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.38);padding:14px 20px 6px 20px;}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;color:rgba(255,255,255,0.75);font-size:13.5px;cursor:pointer;border-left:3px solid transparent;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{background:rgba(255,255,255,0.09);border-left:3px solid var(--dpwr-gold);color:#fff;font-weight:600;}
+  .nav-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:.9;}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;gap:10px;}
+  .avatar-chip{width:32px;height:32px;border-radius:50%;background:#3A4E7A;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .sidebar-footer .who{line-height:1.25;}
+  .sidebar-footer .who .name{font-size:12.5px;font-weight:600;}
+  .sidebar-footer .who .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+  /* ===== MAIN ===== */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .topbar .crumbs{font-size:12px;color:var(--text-light);}
+  .topbar .crumbs strong{color:var(--text-dark);font-weight:600;}
+  .topbar h1{font-size:19px;margin:2px 0 0 0;font-weight:700;color:var(--text-dark);}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--text-mid);cursor:pointer;position:relative;}
+  .icon-btn .dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid #fff;}
+
+  .content{padding:24px 28px 60px 28px;display:flex;gap:22px;align-items:flex-start;}
+  .form-col{flex:1 1 72%;min-width:0;display:flex;flex-direction:column;gap:18px;}
+  .side-col{flex:0 0 290px;display:flex;flex-direction:column;gap:18px;}
+
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+  .side-card{padding:16px 18px;}
+  .side-card h3{font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);margin:0 0 12px 0;}
+
+  /* Toolbar */
+  .toolbar-card{padding:16px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .search-input{
+    flex:1 1 200px;padding:9px 12px 9px 34px;border:1px solid var(--border);border-radius:8px;
+    font-size:13px;color:var(--text-dark);background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" stroke="%238B93A1" stroke-width="2"><circle cx="6" cy="6" r="5"/><line x1="10" y1="10" x2="13" y2="13"/></svg>') no-repeat 12px center;
+    font-family:inherit;
+  }
+  .filter-select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-dark);background:#fff;font-family:inherit;min-width:150px;}
+  .btn{padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+  .btn-primary{background:var(--accent-blue);color:#fff;}
+  .btn-primary:hover{background:#254E8F;}
+  .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--text-mid);}
+
+  /* Table */
+  .table-card{padding:0;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-light);padding:12px 16px;background:var(--grey-bg);border-bottom:1px solid var(--border);font-weight:600;}
+  tbody td{padding:13px 16px;font-size:13px;color:var(--text-dark);border-bottom:1px solid var(--border);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FAFBFD;}
+
+  .proj-title{font-weight:600;color:var(--text-dark);}
+  .proj-ref{font-size:11.5px;color:var(--text-light);margin-top:2px;}
+
+  .fy-pill{display:inline-block;font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;}
+  .fy-2026{background:var(--green-bg);color:var(--green);}
+  .fy-2025{background:var(--lightgray-bg);color:var(--lightgray);}
+  .fy-2024{background:var(--amber-bg);color:var(--amber);}
+
+  .status-pill{display:inline-block;font-size:11px;font-weight:600;padding:4px 11px;border-radius:20px;}
+  .status-Active{background:var(--green-bg);color:var(--green);}
+  .status-Closed{background:var(--dpwr-navy);color:#fff;}
+  .status-Cancelled{background:var(--amber-bg);color:var(--amber);}
+
+  .budget-val{font-weight:600;font-variant-numeric:tabular-nums;}
+
+  .row-actions{display:flex;gap:6px;justify-content:flex-end;}
+  .icon-action{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--text-mid);cursor:pointer;font-size:12px;}
+  .icon-action:hover{border-color:var(--accent-blue);color:var(--accent-blue);}
+  .icon-action.danger:hover{border-color:var(--red);color:var(--red);}
+
+  .table-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border);font-size:12px;color:var(--text-light);}
+  .pager{display:flex;gap:6px;}
+  .pager button{width:26px;height:26px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:12px;color:var(--text-mid);cursor:pointer;}
+  .pager button.active{background:var(--accent-blue);border-color:var(--accent-blue);color:#fff;font-weight:600;}
+
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;}
+  .stat-row:last-child{border-bottom:none;}
+  .stat-row .k{color:var(--text-mid);}
+  .stat-row .v{color:var(--text-dark);font-weight:700;}
+
+  .role-bar-row{margin-bottom:10px;}
+  .role-bar-label{display:flex;justify-content:space-between;font-size:11.5px;color:var(--text-mid);margin-bottom:4px;}
+  .role-bar-track{height:6px;border-radius:4px;background:var(--grey-bg);overflow:hidden;}
+  .role-bar-fill{height:100%;border-radius:4px;}
+
+  .helper-card{background:var(--blue-bg);border:1px solid #D6E4F7;}
+  .helper-card h3{color:var(--accent-blue);}
+  .helper-card p{font-size:12px;color:#2C4C82;line-height:1.6;margin:0 0 8px 0;}
+  .helper-card p:last-child{margin-bottom:0;}
+
+  .mockup-flag{position:fixed;top:14px;right:14px;background:#111B30;color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.25);z-index:50;letter-spacing:.04em;}
+
+  @media (max-width: 980px){
+    .content{flex-direction:column;}
+    .side-col{flex:1 1 auto;width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-flag">DESIGN MOCKUP — NOT WIRED TO LIVE DATA</div>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-dot">NW</div>
+      <div class="brand-text">
+        <div class="b1">APP-MRMS</div>
+        <div class="b2">DPWR · North West</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#8962;</span> Home Dashboard</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#9776;</span> My Activities</a>
+
+    <div class="nav-section-label">Reporting</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128196;</span> Report Submission</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128194;</span> My Reports</a>
+
+    <div class="nav-section-label">Management</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#10003;</span> Approval Queue</a>
+    <a class="nav-item active" href="#"><span class="nav-icon">&#128194;</span> Projects</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128203;</span> Activities</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128200;</span> Reports Dashboard</a>
+
+    <div class="nav-section-label">Administration</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128101;</span> User Administration</a>
+
+    <div class="sidebar-footer">
+      <div class="avatar-chip">SN</div>
+      <div class="who">
+        <div class="name">S. Ndlovu</div>
+        <div class="role">Administrator</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <div class="crumbs">Management &nbsp;/&nbsp; <strong>Projects</strong></div>
+        <h1>Projects Administration</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+        <div class="icon-btn">?</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===================== LEFT: MAIN COLUMN ===================== -->
+      <div class="form-col">
+
+        <!-- Toolbar -->
+        <div class="card toolbar-card">
+          <input class="search-input" type="text" placeholder="Search projects by title or reference...">
+          <select class="filter-select">
+            <option>All Directorates</option>
+            <option>Communications</option>
+            <option>Immovable Asset Management</option>
+            <option>Infrastructure Coordination, Maintenance</option>
+          </select>
+          <select class="filter-select">
+            <option>All Programmes</option>
+            <option>Programme 1: Administration</option>
+            <option>Programme 2: Immovable Assets</option>
+            <option>Programme 3: Infrastructure Planning</option>
+            <option>Programme 4: Community Based</option>
+          </select>
+          <select class="filter-select">
+            <option>All Financial Years</option>
+            <option>2026/27</option>
+            <option>2025/26</option>
+          </select>
+          <select class="filter-select">
+            <option>All Statuses</option>
+            <option>Active</option>
+            <option>Closed</option>
+            <option>Cancelled</option>
+          </select>
+          <button class="btn btn-primary" style="margin-left:auto;">&#43; Add Project</button>
+        </div>
+
+        <!-- Projects table -->
+        <div class="card table-card">
+          <table>
+            <thead>
+              <tr>
+                <th>Project</th>
+                <th>Directorate</th>
+                <th>Budget</th>
+                <th>Financial Year</th>
+                <th>Status</th>
+                <th>Responsibility</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="proj-title">Improve Community Outreach through Local Media Houses</div>
+                  <div class="proj-ref">Ref: MEC Budget Speech 2025/26</div>
+                </td>
+                <td>Communications</td>
+                <td class="budget-val">R 1,000,000.00</td>
+                <td><span class="fy-pill fy-2026">2026/27</span></td>
+                <td><span class="status-pill status-Active">Active</span></td>
+                <td>Director: Communication</td>
+                <td>
+                  <div class="row-actions">
+                    <div class="icon-action">&#9998;</div>
+                    <div class="icon-action danger">&#128465;</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="proj-title">Incident-reporting system for community matters</div>
+                  <div class="proj-ref">Ref: Lekgotla 2025/26</div>
+                </td>
+                <td>Communications</td>
+                <td class="budget-val">R 250,000.00</td>
+                <td><span class="fy-pill fy-2026">2026/27</span></td>
+                <td><span class="status-pill status-Active">Active</span></td>
+                <td>Director: Communication</td>
+                <td>
+                  <div class="row-actions">
+                    <div class="icon-action">&#9998;</div>
+                    <div class="icon-action danger">&#128465;</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="proj-title">Roll out of prioritised digitisation system</div>
+                  <div class="proj-ref">Ref: Lekgotla 2025/26</div>
+                </td>
+                <td>ICT Management</td>
+                <td class="budget-val">R 5,000,000.00</td>
+                <td><span class="fy-pill fy-2025">2025/26</span></td>
+                <td><span class="status-pill status-Active">Active</span></td>
+                <td>Acting Director: IC&amp;TM</td>
+                <td>
+                  <div class="row-actions">
+                    <div class="icon-action">&#9998;</div>
+                    <div class="icon-action danger">&#128465;</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="proj-title">Disposal of Vacant Stands — 78 properties</div>
+                  <div class="proj-ref">Ref: MEC Budget Speech 2024/25 &amp; 2025/26</div>
+                </td>
+                <td>Immovable Asset Management</td>
+                <td class="budget-val">—</td>
+                <td><span class="fy-pill fy-2025">2025/26</span></td>
+                <td><span class="status-pill status-Active">Active</span></td>
+                <td>Chief Director: IAM</td>
+                <td>
+                  <div class="row-actions">
+                    <div class="icon-action">&#9998;</div>
+                    <div class="icon-action danger">&#128465;</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="proj-title">Multi-tenancy Building in Mahikeng</div>
+                  <div class="proj-ref">Ref: MEC Budget Speech 2025/26</div>
+                </td>
+                <td>Immovable Asset Management</td>
+                <td class="budget-val">—</td>
+                <td><span class="fy-pill fy-2024">2024/25</span></td>
+                <td><span class="status-pill status-Closed">Closed</span></td>
+                <td>Chief Director: IAM</td>
+                <td>
+                  <div class="row-actions">
+                    <div class="icon-action">&#9998;</div>
+                    <div class="icon-action danger">&#128465;</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-footer">
+            <div>Showing 1–5 of 63 projects</div>
+            <div class="pager">
+              <button>&#8249;</button>
+              <button class="active">1</button>
+              <button>2</button>
+              <button>3</button>
+              <button>&#8250;</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ===================== RIGHT: SIDE PANEL ===================== -->
+      <div class="side-col">
+
+        <div class="card side-card">
+          <h3>Portfolio Summary</h3>
+          <div class="stat-row"><span class="k">Total Projects</span><span class="v">63</span></div>
+          <div class="stat-row"><span class="k">Active</span><span class="v">51</span></div>
+          <div class="stat-row"><span class="k">Closed</span><span class="v">9</span></div>
+          <div class="stat-row"><span class="k">Cancelled</span><span class="v">3</span></div>
+          <div class="stat-row"><span class="k">Directorates Represented</span><span class="v">17 / 17</span></div>
+        </div>
+
+        <div class="card side-card">
+          <h3>Projects by Financial Year</h3>
+          <div class="role-bar-row">
+            <div class="role-bar-label"><span>2026/27</span><span>34</span></div>
+            <div class="role-bar-track"><div class="role-bar-fill" style="width:54%;background:var(--green);"></div></div>
+          </div>
+          <div class="role-bar-row">
+            <div class="role-bar-label"><span>2025/26</span><span>21</span></div>
+            <div class="role-bar-track"><div class="role-bar-fill" style="width:33%;background:var(--lightgray);"></div></div>
+          </div>
+          <div class="role-bar-row" style="margin-bottom:0;">
+            <div class="role-bar-label"><span>2024/25</span><span>8</span></div>
+            <div class="role-bar-track"><div class="role-bar-fill" style="width:13%;background:var(--amber);"></div></div>
+          </div>
+        </div>
+
+        <div class="card side-card helper-card">
+          <h3>Administrator Notes</h3>
+          <p><strong>Directorate and Programme</strong> are set once at creation and drive every denormalised label field further down the hierarchy — changing them later requires re-saving dependent Activities.</p>
+          <p><strong>Closing a project</strong> does not delete its Activities or historical reports; it only prevents new Activities being linked.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
