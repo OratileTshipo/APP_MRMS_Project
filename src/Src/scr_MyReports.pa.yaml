@@ -1023,7 +1023,7 @@ Screens:
                                     Height: =36
                                     ItemDisplayText: =ThisItem.Value
                                     Items: =Choices(MonthlyReports.'FinancialYear ')
-                                    Default: =Filter(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY)
+                                    Default: =varCurrentFY
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: =Set(varMyrFilterFY, MyrFY_drp.Selected.Value)
