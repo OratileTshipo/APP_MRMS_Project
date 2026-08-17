@@ -93,10 +93,6 @@ Screens:
                               Height: =32
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
                               Size: =13
                               Text: ="NW"
                               Width: =32
@@ -454,10 +450,6 @@ Screens:
                               Height: =32
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              RadiusBottomLeft: =16
-                              RadiusBottomRight: =16
-                              RadiusTopLeft: =16
-                              RadiusTopRight: =16
                               Size: =12
                               Text: =Upper(Left(Coalesce(varUserFullName, varUserEmail, "?"), 1))
                               Width: =32
@@ -658,10 +650,6 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnSelect: =Notify("APP-MRMS v5 — need help? Contact your supervisor.", NotificationType.Information)
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
                                     Size: =14
                                     Text: ="? "
                                     Tooltip: ="Help"
@@ -1022,7 +1010,7 @@ Screens:
                                     Height: =36
                                     ItemDisplayText: =ThisItem.Value
                                     Items: =Choices(MonthlyReports.'FinancialYear ')
-                                    DefaultSelectedItems: =Filter(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY)
+                                    Default: =Filter(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY)
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: |-
@@ -1247,10 +1235,6 @@ Screens:
                                           Height: =22
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          RadiusBottomLeft: =11
-                                          RadiusBottomRight: =11
-                                          RadiusTopLeft: =11
-                                          RadiusTopRight: =11
                                           Size: =10.5
                                           Text: =ThisItem.Frequency
                                           Width: =92
@@ -1273,10 +1257,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           PaddingLeft: =10
                                           PaddingRight: =10
-                                          RadiusBottomLeft: =11
-                                          RadiusBottomRight: =11
-                                          RadiusTopLeft: =11
-                                          RadiusTopRight: =11
                                           Size: =10.5
                                           Text: |-
                                             ="Project: " & ThisItem.ProjectName
@@ -1373,10 +1353,6 @@ Screens:
                                           Height: =26
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          RadiusBottomLeft: =13
-                                          RadiusBottomRight: =13
-                                          RadiusTopLeft: =13
-                                          RadiusTopRight: =13
                                           Size: =11
                                           Text: =ThisItem.ReportStatus
                                           Width: =110
@@ -1417,10 +1393,6 @@ Screens:
                                             =Set(varMyaSelectedActivityID, ThisItem.ActivityID);
                                              Set(varMyaSelectedActivityName, ThisItem.ActivityName);
                                              Navigate(scr_MyReports, ScreenTransition.Fade)
-                                          RadiusBottomLeft: =8
-                                          RadiusBottomRight: =8
-                                          RadiusTopLeft: =8
-                                          RadiusTopRight: =8
                                           Size: =12.5
                                           Text: |-
                                             =If(

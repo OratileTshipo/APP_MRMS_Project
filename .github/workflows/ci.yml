@@ -27,6 +27,9 @@ jobs:
       - name: Screen registry check (src/Src vs _EditorState)
         run: python3 tools/check_screen_registry.py
 
+      - name: Control property schema check (PA2108 class — nested controls)
+        run: python3 tools/check_control_props.py
+
       - name: Power Fx static verification (strict — delegation findings fail)
         run: python3 tools/verify_powerfx.py --strict
 
