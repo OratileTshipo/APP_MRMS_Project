@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP-MRMS | My Activities</title>
+<style>
+  :root{
+    --dpwr-navy:#1B2A4A;
+    --dpwr-navy-dark:#111B30;
+    --dpwr-gold:#C9A24B;
+    --accent-blue:#2E5EAA;
+    --grey-bg:#F4F6F9;
+    --card-bg:#FFFFFF;
+    --border:#E1E5EC;
+    --text-dark:#1F2733;
+    --text-mid:#5B6472;
+    --text-light:#8B93A1;
+    --green:#1E8A5F;
+    --green-bg:#E7F6EF;
+    --amber:#B5790A;
+    --amber-bg:#FCF1DC;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --blue-bg:#EAF1FC;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;background:var(--grey-bg);color:var(--text-dark);font-size:14px;}
+  .app-shell{display:flex;min-height:100vh;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{width:230px;flex-shrink:0;background:var(--dpwr-navy);color:#fff;display:flex;flex-direction:column;padding:20px 0;}
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:12px;}
+  .sidebar-brand .logo-dot{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--dpwr-gold),#E4C97A);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--dpwr-navy-dark);font-size:13px;flex-shrink:0;}
+  .sidebar-brand .brand-text{line-height:1.2;}
+  .sidebar-brand .brand-text .b1{font-weight:700;font-size:13.5px;letter-spacing:.3px;}
+  .sidebar-brand .brand-text .b2{font-size:10.5px;color:rgba(255,255,255,0.55);}
+  .nav-section-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.38);padding:14px 20px 6px 20px;}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;color:rgba(255,255,255,0.75);font-size:13.5px;cursor:pointer;border-left:3px solid transparent;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{background:rgba(255,255,255,0.09);border-left:3px solid var(--dpwr-gold);color:#fff;font-weight:600;}
+  .nav-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:.9;}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;gap:10px;}
+  .avatar-chip{width:32px;height:32px;border-radius:50%;background:#3A4E7A;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .sidebar-footer .who{line-height:1.25;}
+  .sidebar-footer .who .name{font-size:12.5px;font-weight:600;}
+  .sidebar-footer .who .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+  /* ===== MAIN ===== */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .topbar .crumbs{font-size:12px;color:var(--text-light);}
+  .topbar .crumbs strong{color:var(--text-dark);font-weight:600;}
+  .topbar h1{font-size:19px;margin:2px 0 0 0;font-weight:700;color:var(--text-dark);}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--text-mid);cursor:pointer;position:relative;}
+  .icon-btn .dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid #fff;}
+
+  .content{padding:24px 28px 60px 28px;display:flex;flex-direction:column;gap:18px;}
+
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+
+  /* Summary strip */
+  .summary-strip{display:flex;gap:14px;flex-wrap:wrap;}
+  .summary-chip{flex:1 1 150px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:4px;}
+  .summary-chip .num{font-size:22px;font-weight:700;color:var(--text-dark);}
+  .summary-chip .lbl{font-size:11.5px;color:var(--text-mid);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+  .summary-chip.ontrack .num{color:var(--green);}
+  .summary-chip.duesoon .num{color:var(--amber);}
+  .summary-chip.overdue .num{color:var(--red);}
+  .summary-chip.total .num{color:var(--accent-blue);}
+
+  /* Filter bar */
+  .filter-bar{padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+  .filter-bar .search{flex:1 1 220px;position:relative;}
+  .filter-bar .search input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;}
+  .filter-bar .search .sicon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:13px;}
+  .filter-bar select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-dark);background:#fff;font-family:inherit;}
+  .filter-bar .clear-link{font-size:12px;color:var(--accent-blue);cursor:pointer;font-weight:600;margin-left:auto;}
+
+  /* Activity list */
+  .activity-list{display:flex;flex-direction:column;}
+  .activity-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .activity-row:last-child{border-bottom:none;}
+  .activity-row:hover{background:#FAFBFC;}
+  .rag-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .rag-dot.green{background:var(--green);}
+  .rag-dot.amber{background:var(--amber);}
+  .rag-dot.red{background:var(--red);}
+  .a-main{flex:1;min-width:0;}
+  .a-title{font-size:13.5px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .a-sub{font-size:12px;color:var(--text-mid);margin-top:2px;}
+  .a-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
+  .tag{font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--grey-bg);color:var(--text-mid);border:1px solid var(--border);}
+  .tag.freq{background:var(--blue-bg);color:var(--accent-blue);border-color:transparent;}
+  .a-due{width:150px;flex-shrink:0;font-size:12px;color:var(--text-mid);}
+  .a-due .due-date{font-weight:600;color:var(--text-dark);}
+  .a-due.overdue .due-date{color:var(--red);}
+  .a-due.duesoon .due-date{color:var(--amber);}
+  .a-status{width:120px;flex-shrink:0;}
+  .status-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-block;}
+  .status-none{background:var(--grey-bg);color:var(--text-mid);}
+  .status-draft{background:var(--blue-bg);color:var(--accent-blue);}
+  .status-rejected{background:var(--red-bg);color:var(--red);}
+  .status-submitted{background:var(--green-bg);color:var(--green);}
+  .a-action{flex-shrink:0;}
+  .btn{padding:8px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:6px;}
+  .btn-primary{background:var(--accent-blue);color:#fff;}
+  .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--text-mid);}
+  .btn-danger-outline{background:#fff;border:1px solid #F0C9C0;color:var(--red);}
+
+  .mockup-flag{position:fixed;top:14px;right:14px;background:#111B30;color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.25);z-index:50;letter-spacing:.04em;}
+
+  @media (max-width: 900px){
+    .activity-row{flex-wrap:wrap;}
+    .a-due,.a-status{width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-flag">DESIGN MOCKUP — NOT WIRED TO LIVE DATA</div>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-dot">NW</div>
+      <div class="brand-text">
+        <div class="b1">APP-MRMS</div>
+        <div class="b2">DPWR · North West</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#8962;</span> Home Dashboard</a>
+    <a class="nav-item active" href="#"><span class="nav-icon">&#9776;</span> My Activities</a>
+
+    <div class="nav-section-label">Reporting</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128196;</span> Report Submission</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128194;</span> My Reports</a>
+
+    <div class="nav-section-label">Management</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#10003;</span> Approval Queue</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128194;</span> Projects</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128203;</span> Activities</a>
+
+    <div class="sidebar-footer">
+      <div class="avatar-chip">TM</div>
+      <div class="who">
+        <div class="name">T. Molefe</div>
+        <div class="role">Contributor · Communications</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <div class="crumbs">Overview &nbsp;/&nbsp; <strong>My Activities</strong></div>
+        <h1>My Activities</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+        <div class="icon-btn">?</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Summary strip -->
+      <div class="summary-strip">
+        <div class="summary-chip total"><div class="num">9</div><div class="lbl">Assigned to me</div></div>
+        <div class="summary-chip ontrack"><div class="num">5</div><div class="lbl">On track</div></div>
+        <div class="summary-chip duesoon"><div class="num">2</div><div class="lbl">Due soon</div></div>
+        <div class="summary-chip overdue"><div class="num">2</div><div class="lbl">Overdue</div></div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="card filter-bar">
+        <div class="search">
+          <span class="sicon">&#128269;</span>
+          <input type="text" placeholder="Search activities...">
+        </div>
+        <select><option>Financial Year: 2026/27</option><option>2025/26</option></select>
+        <select><option>All Quarters</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
+        <select><option>All Months</option><option>August</option><option>July</option><option>June</option></select>
+        <span class="clear-link">Clear filters</span>
+      </div>
+
+      <!-- Activity list -->
+      <div class="card activity-list">
+
+        <div class="activity-row">
+          <div class="rag-dot red"></div>
+          <div class="a-main">
+            <div class="a-title">Draft Local Media Support Communication Plan for approval</div>
+            <div class="a-sub">Support Local Media Houses &nbsp;•&nbsp; Communications Directorate</div>
+            <div class="a-tags"><span class="tag freq">Monthly</span><span class="tag">Project: Improve Community Outreach</span></div>
+          </div>
+          <div class="a-due overdue"><div class="due-date">Overdue — 5 Aug</div>Reporting month: August 2026</div>
+          <div class="a-status"><span class="status-pill status-rejected">Rejected</span></div>
+          <div class="a-action"><button class="btn btn-danger-outline">Report &rarr;</button></div>
+        </div>
+
+        <div class="activity-row">
+          <div class="rag-dot amber"></div>
+          <div class="a-main">
+            <div class="a-title">Engage SETA on HR environmental scan collaboration</div>
+            <div class="a-sub">HR Environmental Scan &nbsp;•&nbsp; Human Resource Management</div>
+            <div class="a-tags"><span class="tag freq">Monthly</span><span class="tag">Project: Build a Committed Workforce</span></div>
+          </div>
+          <div class="a-due duesoon"><div class="due-date">Due in 3 days</div>Reporting month: August 2026</div>
+          <div class="a-status"><span class="status-pill status-draft">Draft</span></div>
+          <div class="a-action"><button class="btn btn-primary">Report &rarr;</button></div>
+        </div>
+
+        <div class="activity-row">
+          <div class="rag-dot green"></div>
+          <div class="a-main">
+            <div class="a-title">Generate monthly Reapatala payment compliance report</div>
+            <div class="a-sub">30-Day Payment Compliance &nbsp;•&nbsp; Financial Management</div>
+            <div class="a-tags"><span class="tag freq">Monthly</span><span class="tag">Project: Improve Audit Outcome</span></div>
+          </div>
+          <div class="a-due"><div class="due-date">Due 5 Sep</div>Reporting month: August 2026</div>
+          <div class="a-status"><span class="status-pill status-none">Not started</span></div>
+          <div class="a-action"><button class="btn btn-primary">Report &rarr;</button></div>
+        </div>
+
+        <div class="activity-row">
+          <div class="rag-dot green"></div>
+          <div class="a-main">
+            <div class="a-title">Conduct monthly meetings to check IA compliance</div>
+            <div class="a-sub">Improve Project Delivery &nbsp;•&nbsp; Infrastructure Coordination &amp; Maintenance</div>
+            <div class="a-tags"><span class="tag freq">Monthly</span><span class="tag">Project: Enforce SLA Compliance</span></div>
+          </div>
+          <div class="a-due"><div class="due-date">Due 5 Sep</div>Reporting month: August 2026</div>
+          <div class="a-status"><span class="status-pill status-submitted">Submitted</span></div>
+          <div class="a-action"><button class="btn btn-ghost">View &rarr;</button></div>
+        </div>
+
+        <div class="activity-row">
+          <div class="rag-dot red"></div>
+          <div class="a-main">
+            <div class="a-title">Analyse Fruitless and Wasteful Expenditure register</div>
+            <div class="a-sub">UIFW Reduction &nbsp;•&nbsp; Financial Management</div>
+            <div class="a-tags"><span class="tag freq">Monthly</span><span class="tag">Project: Improve Audit Outcome</span></div>
+          </div>
+          <div class="a-due overdue"><div class="due-date">Overdue — 5 Aug</div>Reporting month: August 2026</div>
+          <div class="a-status"><span class="status-pill status-none">Not started</span></div>
+          <div class="a-action"><button class="btn btn-primary">Report &rarr;</button></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
