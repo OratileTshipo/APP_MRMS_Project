@@ -1,0 +1,64 @@
+Details:
+Src\scr_MyActivities.pa.yaml(96,31) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(97,31) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(98,31) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(99,31) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(457,31) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(458,31) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(459,31) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(460,31) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(661,37) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(662,37) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(663,37) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(664,37) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1025,37) : error PA2108 : Unknown property 'DefaultSelectedItems' for control type 'ModernDropdown@1.0.2'.
+Src\scr_MyActivities.pa.yaml(1250,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1251,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1252,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1253,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1276,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1277,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1278,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1279,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1376,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1377,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1378,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1379,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1420,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1421,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1422,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyActivities.pa.yaml(1423,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(97,31) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(98,31) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(99,31) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(100,31) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(458,31) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(459,31) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(460,31) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(461,31) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(662,37) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(663,37) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(664,37) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(665,37) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1038,37) : error PA2108 : Unknown property 'DefaultSelectedItems' for control type 'ModernDropdown@1.0.2'.
+Src\scr_MyReports.pa.yaml(1245,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1246,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1247,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1248,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1439,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1440,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1441,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1442,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1477,43) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1478,43) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1479,43) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1480,43) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1656,31) : error PA2108 : Unknown property 'RadiusBottomLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1657,31) : error PA2108 : Unknown property 'RadiusBottomRight' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1658,31) : error PA2108 : Unknown property 'RadiusTopLeft' for control type 'Label@2.5.1'.
+Src\scr_MyReports.pa.yaml(1659,31) : error PA2108 : Unknown property 'RadiusTopRight' for control type 'Label@2.5.1'.
+
+Note:
+Make sure to use the Source Code schema, which is the only supported format. To learn more: https://go.microsoft.com/fwlink/?linkid=2299600
+
+Session ID: 602c77f1-5581-4bfb-8924-26f65ccdad0e
