@@ -11,3 +11,4 @@ EditorState:
     - scr_Splash
     - scr_MyActivities
     - scr_MyReports
+    - scr_ReportsDashboard
