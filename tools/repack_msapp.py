@@ -62,6 +62,11 @@ def main():
     parser.add_argument(
         "--appname", default=None, help="New app display name (updates Properties.json + PublishInfo)"
     )
+    parser.add_argument(
+        "--prune", action="store_true",
+        help="Remove stale Src/ entries from the pack that no longer exist in src/Src/ "
+        "(e.g. deleted Component sources)",
+    )
     args = parser.parse_args()
 
     msapp = os.path.abspath(args.msapp)
@@ -136,6 +141,10 @@ def main():
                     data = new_data
                     changed += 1
                 del sources[item.filename]
+            elif args.prune and item.filename.startswith("Src/"):
+                print(f"PRUNED {item.filename}")
+                changed += 1
+                continue
             zout.writestr(item, rewrite(item.filename, data))
         # Any source file not present in the pack is added.
         for name, data in sources.items():
