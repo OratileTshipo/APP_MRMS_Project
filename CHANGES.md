@@ -1085,3 +1085,56 @@ background always paints even if the component-root Fill is not rendered.
   ```bash
   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.1_containers.msapp --layout SourceCode --overwrite
   ```
+
+---
+
+## 34. v4.2: all screens reverted from components to container header/sidebar
+
+- **Request:** after the v4.1 Projects fix (components crash when clicked),
+  remove the `cmp_AppHeader` / `cmp_NavRail` components from **every** screen
+  and replace them with the container header + menu sidebar used on Projects.
+- **What changed (9 screen files, `src/Src/scr_*.pa.yaml`):**
+  - Each screen's `XxxNavRail` (cmp_NavRail instance) → a per-screen container
+    sidebar (`{Screen}Sidebar_con`) with the same 10 icons as Projects
+    (Home / Projects / Activities / Monthly Reports / My Activities / Users +
+    decorative Trending / Settings / Support). Navigation targets unchanged
+    from the rail audit (§22); the active screen's icon is highlighted
+    (`varNavy`) — Home, Projects, Activities, My Activities, Monthly Reports
+    (Report on Activities screen), Users. Approved Reports / Report Form /
+    Report View have no matching rail icon, so none is highlighted (same as
+    the component's ActiveScreen behaviour).
+  - Each screen's `XxxAppHeader` (cmp_AppHeader instance) → a per-screen
+    container header (`{Screen}Header_con`) with the screen-context title,
+    the previous Subtitle (screen-specific formula, or the directorate ·
+    programme fallback), a back arrow where the component had `ShowBack: true`
+    (Approved Reports, Report on Activities, Monthly Report, Report View —
+    `OnSelect: =Back()`, matching the component), the search box where the
+    component had `ShowSearch: true` (Activities, Home, My Activities,
+    Reports), and the bell.
+  - **Signed-in user in the header:** every header except **Home Dashboard**
+    now shows the signed-in user (`Coalesce(varUserFullName, varUserEmail,
+    "Guest")`, tooltip = email) next to the bell.
+  - **Search wiring preserved:** `XxxAppHeader.SearchText` → the new per-screen
+    search box `.Text` (`ActSearchBox_txt`, `HomeSearchBox_txt`,
+    `MyActSearchBox_txt`, `RepsSearchBox_txt`) in every gallery/`Search()`/
+    result-count formula; `Reset(HomeAppHeader)` → `Reset(HomeSearchBox_txt)`
+    in the Home Clear Filters handler (resets the text input to blank).
+  - All other screen logic (OnVisible, galleries, forms, Patch/Submit, KPI
+    cards) is untouched.
+- **Control names:** all new containers/icons/labels use per-screen prefixes
+  (Act/Appr/Home/MyAct/RepAct/RepForm/RepView/Reps/Usr) so no app-global name
+  collides with Projects' v4.1 controls. Verified collision-free.
+- **Component definitions kept:** `src/Src/Component/cmp_AppHeader.pa.yaml`
+  and `cmp_NavRail.pa.yaml` remain in the repo but are no longer instantiated
+  by any screen — safe to delete later if desired.
+- **Verification:** screen registry OK; `verify_powerfx.py --strict` clean
+  (11970 formulas, 0 errors, 0 warnings); YAML parse gate OK.
+- **New importable pack:** `APP-MRMS_Project_app_v4.2_all-containers.msapp` —
+  assembled from the v4.1 pack with only the 9 screen YAMLs replaced
+  (verified: every other entry byte-identical to v4.1, screens match `src/`
+  byte-for-byte; `packed.json` unchanged, `LoadFromYaml: true`). ⚠ No `pac`
+  CLI in the build sandbox — Studio loads the embedded YAML and regenerates
+  the JSON on first Save. For a fully pac-consistent pack run:
+  ```bash
+  pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.2_all-containers.msapp --layout SourceCode --overwrite
+  ```

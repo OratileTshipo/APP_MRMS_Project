@@ -129,11 +129,244 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            - HomeNavRail:
-                Control: CanvasComponent
-                ComponentName: cmp_NavRail
+            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
+            # The Home icon is highlighted (varNavy) as the active screen.
+            - HomeSidebar_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
                 Properties:
-                  ActiveScreen: ="scr_Home"
+                  DropShadow: =DropShadow.None
+                  Fill: =varBgLight
+                  FillPortions: =0
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =30
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =20
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =20
+                  Width: =App.Width * 0.05
+                Children:
+                  - HomeHome_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Home"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =varNavy
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Home
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Home"
+                        Width: =Parent.Width - 20
+                  - HomeProjects_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Projects"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Manufacture
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Projects"
+                        Width: =Parent.Width - 20
+                  - HomeActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.RadarActivityMonitor
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Activities"
+                        Width: =Parent.Width - 20
+                  - HomeMonthlyReports_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Monthly Reports"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.CalendarBlank
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Monthly Reports"
+                        Width: =Parent.Width - 20
+                  - HomeMyActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="My Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.ListWatchlistRemind
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="My Activities"
+                        Width: =Parent.Width - 20
+                  - HomeTrending_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Trending"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Trending
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Trending"
+                        Width: =Parent.Width - 20
+                  - HomeUsers_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Users"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.People
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Users"
+                        Width: =Parent.Width - 20
+                  - HomeSidebarSpacer_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                  - HomeSettings_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Settings"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Settings
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Settings"
+                        Width: =Parent.Width - 20
+                  - HomeSupport_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Support"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Support
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Support"
+                        Width: =Parent.Width - 20
             - MainScreenDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -144,16 +377,182 @@ Screens:
                   LayoutDirection: =LayoutDirection.Vertical
                   LayoutGap: =12
                   LayoutOverflowY: =LayoutOverflow.Scroll
-                  Width: =App.Width - HomeNavRail.Width
+                  Width: =App.Width - HomeSidebar_con.Width
                 Children:
-                  - HomeAppHeader:
-                      Control: CanvasComponent
-                      ComponentName: cmp_AppHeader
+                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
+                  # Home Dashboard header intentionally shows no signed-in user.
+                  - HomeHeader_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
                       Properties:
-                        PageTitle: ="Home Dashboard"
-                        ShowBack: =false
-                        ShowSearch: =true
-                        SearchHint: ="Search projects, activities, reports"
+                        DropShadow: =DropShadow.Semilight
+                        Fill: =varNavy
+                        FillPortions: =0
+                        Height: =App.Height * 0.13
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =App.Width - HomeSidebar_con.Width
+                      Children:
+                        - HomeHeaderLeft_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * .55
+                            Children:
+                              - HomeTitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =Parent.Height * .5
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =25
+                                    Text: ="Home Dashboard"
+                              - HomeSubtitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * .5
+                                    Size: =12
+                                    Text: =varUserDirectorate & " · " & varUserProgramme
+                        - HomeHeaderRight_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =20
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width / 3
+                            Children:
+                              - HomeSearch_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Fill: =varBgLight
+                                    Height: =Parent.Height * .4
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =10
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width - 50
+                                  Children:
+                                    - HomeSearch_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(153, 153, 153, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height * 0.65
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.Search
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.08
+                                    - HomeSearchBox_txt:
+                                        Control: Classic/TextInput@2.3.2
+                                        Properties:
+                                          BorderColor: =RGBA(245, 245, 245, 1)
+                                          BorderThickness: =0
+                                          Clear: =true
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          Default: =
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          DisabledFill: =RGBA(242, 242, 241, 0)
+                                          Fill: =varBgLight
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * 0.65
+                                          HintText: ="Search projects, activities, reports"
+                                          HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                          HoverColor: =RGBA(50, 49, 48, 1)
+                                          HoverFill: =RGBA(255, 255, 255, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                          PressedColor: =RGBA(50, 49, 48, 1)
+                                          PressedFill: =RGBA(255, 255, 255, 1)
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                          Size: =15
+                                          Width: =Parent.Width - HomeSearch_ico.Width - 25
+                              - HomeBell_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 120, 212, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * .4
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Bell
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
+                                    Width: =Parent.Width / 15
                   - RoleBar_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -167,7 +566,7 @@ Screens:
                         LayoutGap: =12
                         PaddingLeft: =8
                         PaddingRight: =8
-                        Width: =Parent.Width - HomeNavRail.Width
+                        Width: =Parent.Width - HomeSidebar_con.Width
                         X: =40
                         Y: =40
                       Children:
@@ -450,13 +849,13 @@ Screens:
                                           Set(varFilterDirectorate, "All");
                                           Set(varFilterQuarter, "All");
                                           Set(varHomeFilter, "All");
-                                          Reset(HomeAppHeader);
+                                          Reset(HomeSearchBox_txt);
                                           Reset(FYFilter_drp);
                                           Reset(ProgrammeFilter_drp);
                                           Reset(drp_DirectorateFilter);
                                           Reset(drp_QuarterFilter);
                                           // Search box now lives in the cmp_AppHeader component
-                                          Reset(HomeAppHeader)
+                                          Reset(HomeSearchBox_txt)
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8
@@ -1195,9 +1594,9 @@ Screens:
                                                           (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
                                                           (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                           (
-                                                              IsBlank(HomeAppHeader.SearchText)
-                                                              || Lower(HomeAppHeader.SearchText) in Lower(Title)
-                                                              || Lower(HomeAppHeader.SearchText) in Lower('ActivityDescription ')
+                                                              IsBlank(HomeSearchBox_txt.Text)
+                                                              || Lower(HomeSearchBox_txt.Text) in Lower(Title)
+                                                              || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
                                                           )
                                                       )
                                                   },
@@ -2061,13 +2460,13 @@ Screens:
 
                                     // --- Free-text search, explicitly case-insensitive via Lower() ---
                                     && (
-                                        IsBlank(HomeAppHeader.SearchText)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Activity.Value)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Project.Value)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(ActivityOwnerLabel)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(ProjectOwnerLabel)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(SubmittedBy.DisplayName)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Output)
+                                        IsBlank(HomeSearchBox_txt.Text)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Activity.Value)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Project.Value)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(ActivityOwnerLabel)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(ProjectOwnerLabel)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(SubmittedBy.DisplayName)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Output)
                                     )
                                 )
 
@@ -2090,9 +2489,9 @@ Screens:
                                     (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
                                     &&
                                     (
-                                        IsBlank(HomeAppHeader.SearchText)
-                                        || HomeAppHeader.SearchText in Title
-                                        || HomeAppHeader.SearchText in 'ProgressNarrative '
+                                        IsBlank(HomeSearchBox_txt.Text)
+                                        || HomeSearchBox_txt.Text in Title
+                                        || HomeSearchBox_txt.Text in 'ProgressNarrative '
                                     )
                                     &&
                                     (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)

@@ -54,7 +54,8 @@ Every pack is saved under a new name so multiple working versions coexist.
 | `APP-MRMS_Project_app_v2_components.msapp` | First component build (header/sidebar as components) | ❌ **fails Studio import — PA2108** (root layout props, fixed in v3) |
 | `APP-MRMS_Project_app_v3_fixed.msapp` | Schema-valid components build (PA2108 fixed) | ✅ imports; UI layout regressions fixed in v4 |
 | `APP-MRMS_Project_app_v4_layout-fixed.msapp` | Component build: body heights no longer overflow the header, shell gutters removed, component background fills guaranteed | ✅ verified pack→unpack byte-identical |
-| `APP-MRMS_Project_app_v4.1_containers.msapp` | **scr_Projects reverted from components to container header/sidebar** (components crash when clicked on that screen); all other screens keep the components | ✅ verifier `--strict` clean, 0 errors/warnings; YAML sources updated in `src/`; see CHANGES.md §33 |
+| `APP-MRMS_Project_app_v4.1_containers.msapp` | **scr_Projects reverted from components to container header/sidebar** (components crash when clicked on that screen) | ✅ verifier `--strict` clean, 0 errors/warnings; see CHANGES.md §33 |
+| `APP-MRMS_Project_app_v4.2_all-containers.msapp` | **All screens use the container header + menu sidebar** (no components); headers show the screen context + signed-in user (except Home Dashboard) | ✅ verifier `--strict` clean (11970 formulas, 0 errors/warnings); YAML sources updated in `src/`; **import this one**; see CHANGES.md §34 |
 
 Rule going forward: **never overwrite an existing pack** — `cp`/rename to the
 next `_vN_` name and record it in CHANGES.md.
@@ -67,7 +68,7 @@ next `_vN_` name and record it in CHANGES.md.
 
 1. **Repack the latest source** (if you just edited `src/`):
    ```bash
-   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.1_containers.msapp --layout SourceCode --overwrite
+   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.2_all-containers.msapp --layout SourceCode --overwrite
    ```
    (v4.1 was assembled here without `pac` by replacing only `Src/scr_Projects.pa.yaml`
    inside the v4 pack — Studio loads the embedded YAML (`LoadFromYaml: true`) and
