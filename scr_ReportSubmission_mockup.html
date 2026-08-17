@@ -1,0 +1,661 @@
+scr_ReportSubmission_mockup.html
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP-MRMS | Report Submission</title>
+<style>
+  :root{
+    --dpwr-navy:#1B2A4A;
+    --dpwr-navy-dark:#111B30;
+    --dpwr-gold:#C9A24B;
+    --accent-blue:#2E5EAA;
+    --grey-bg:#F4F6F9;
+    --card-bg:#FFFFFF;
+    --border:#E1E5EC;
+    --text-dark:#1F2733;
+    --text-mid:#5B6472;
+    --text-light:#8B93A1;
+    --green:#1E8A5F;
+    --green-bg:#E7F6EF;
+    --amber:#B5790A;
+    --amber-bg:#FCF1DC;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --blue-bg:#EAF1FC;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  }
+ 
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
+    background:var(--grey-bg);
+    color:var(--text-dark);
+    font-size:14px;
+  }
+ 
+  .app-shell{
+    display:flex;
+    min-height:100vh;
+  }
+ 
+  /* ===== SIDEBAR ===== */
+  .sidebar{
+    width:230px;
+    flex-shrink:0;
+    background:var(--dpwr-navy);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:20px 0;
+  }
+  .sidebar-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:0 20px 20px 20px;
+    border-bottom:1px solid rgba(255,255,255,0.12);
+    margin-bottom:12px;
+  }
+  .sidebar-brand .logo-dot{
+    width:32px;height:32px;border-radius:8px;
+    background:linear-gradient(135deg,var(--dpwr-gold),#E4C97A);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:var(--dpwr-navy-dark);font-size:13px;flex-shrink:0;
+  }
+  .sidebar-brand .brand-text{line-height:1.2;}
+  .sidebar-brand .brand-text .b1{font-weight:700;font-size:13.5px;letter-spacing:.3px;}
+  .sidebar-brand .brand-text .b2{font-size:10.5px;color:rgba(255,255,255,0.55);}
+ 
+  .nav-section-label{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:rgba(255,255,255,0.38);
+    padding:14px 20px 6px 20px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 20px;
+    color:rgba(255,255,255,0.75);
+    font-size:13.5px;
+    cursor:pointer;
+    border-left:3px solid transparent;
+    text-decoration:none;
+  }
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{
+    background:rgba(255,255,255,0.09);
+    border-left:3px solid var(--dpwr-gold);
+    color:#fff;
+    font-weight:600;
+  }
+  .nav-icon{
+    width:18px;height:18px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    opacity:.9;
+  }
+  .sidebar-footer{
+    margin-top:auto;
+    padding:16px 20px;
+    border-top:1px solid rgba(255,255,255,0.12);
+    display:flex;align-items:center;gap:10px;
+  }
+  .avatar-chip{
+    width:32px;height:32px;border-radius:50%;
+    background:#3A4E7A;color:#fff;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .sidebar-footer .who{line-height:1.25;}
+  .sidebar-footer .who .name{font-size:12.5px;font-weight:600;}
+  .sidebar-footer .who .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+ 
+  /* ===== MAIN ===== */
+  .main{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+  }
+ 
+  .topbar{
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    padding:14px 28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .topbar .crumbs{
+    font-size:12px;color:var(--text-light);
+  }
+  .topbar .crumbs strong{color:var(--text-dark); font-weight:600;}
+  .topbar h1{
+    font-size:19px;margin:2px 0 0 0;font-weight:700;color:var(--text-dark);
+  }
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .icon-btn{
+    width:34px;height:34px;border-radius:8px;
+    border:1px solid var(--border);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-mid);cursor:pointer;position:relative;
+  }
+  .icon-btn .dot{
+    position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;
+    background:var(--red);border:1.5px solid #fff;
+  }
+ 
+  .content{
+    padding:24px 28px 60px 28px;
+    display:flex;
+    gap:22px;
+    align-items:flex-start;
+  }
+ 
+  /* ===== LEFT: FORM ===== */
+  .form-col{flex:1 1 68%; min-width:0; display:flex; flex-direction:column; gap:18px;}
+ 
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+ 
+  /* Activity context strip */
+  .context-card{
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .context-left{display:flex;align-items:flex-start;gap:12px;}
+  .context-icon{
+    width:38px;height:38px;border-radius:9px;background:var(--blue-bg);
+    color:var(--accent-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .context-title{font-size:15px;font-weight:700;color:var(--text-dark);}
+  .context-sub{font-size:12.5px;color:var(--text-mid);margin-top:2px;}
+  .context-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .tag{
+    font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;
+    background:var(--grey-bg);color:var(--text-mid);border:1px solid var(--border);
+  }
+  .tag.due{background:var(--amber-bg);color:var(--amber);border-color:transparent;}
+  .tag.freq{background:var(--blue-bg);color:var(--accent-blue);border-color:transparent;}
+ 
+  .rag-pill{
+    display:flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:600;
+    padding:6px 12px;border-radius:20px;
+    background:var(--green-bg);color:var(--green);
+    flex-shrink:0;
+  }
+  .rag-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+ 
+  /* Form card */
+  .card-header{
+    padding:16px 20px 0 20px;
+  }
+  .card-header .step-label{
+    font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--accent-blue);
+  }
+  .card-header h2{
+    font-size:16px;margin:4px 0 2px 0;color:var(--text-dark);
+  }
+  .card-header p{
+    font-size:12.5px;color:var(--text-mid);margin:0 0 14px 0;
+  }
+  .card-body{padding:4px 20px 20px 20px;}
+  hr.div{border:none;border-top:1px solid var(--border);margin:0;}
+ 
+  .field-group{margin-bottom:16px;}
+  .field-row{display:flex;gap:16px;}
+  .field-row .field-group{flex:1;}
+ 
+  label.field-label{
+    display:block;font-size:12.5px;font-weight:600;color:var(--text-dark);
+    margin-bottom:6px;
+  }
+  label.field-label .req{color:var(--red);margin-left:2px;}
+  label.field-label .hint{
+    font-weight:400;color:var(--text-light);font-size:11.5px;margin-left:6px;
+  }
+ 
+  select.field-input, input.field-input{
+    width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;
+    font-size:13.5px;color:var(--text-dark);background:#fff;
+    font-family:inherit;
+  }
+  select.field-input:focus, input.field-input:focus, textarea.field-input:focus{
+    outline:none;border-color:var(--accent-blue);box-shadow:0 0 0 3px rgba(46,94,170,0.12);
+  }
+ 
+  textarea.field-input{
+    width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:8px;
+    font-size:13.5px;color:var(--text-dark);font-family:inherit;resize:vertical;
+    min-height:96px;line-height:1.5;
+  }
+  .char-counter{
+    text-align:right;font-size:11px;color:var(--text-light);margin-top:4px;
+  }
+ 
+  /* percentage slider */
+  .pct-row{display:flex;align-items:center;gap:14px;}
+  input[type=range]{
+    flex:1;height:6px;border-radius:4px;-webkit-appearance:none;
+    background:linear-gradient(to right, var(--accent-blue) 0%, var(--accent-blue) 65%, var(--border) 65%, var(--border) 100%);
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+    background:#fff;border:3px solid var(--accent-blue);cursor:pointer;
+    box-shadow:0 1px 3px rgba(0,0,0,0.25);
+  }
+  .pct-badge{
+    min-width:56px;text-align:center;font-weight:700;font-size:14px;
+    color:var(--accent-blue);background:var(--blue-bg);border-radius:8px;padding:6px 0;
+  }
+ 
+  /* Attachments */
+  .dropzone{
+    border:1.5px dashed var(--border);
+    border-radius:10px;
+    background:var(--grey-bg);
+    padding:22px 16px;
+    text-align:center;
+    color:var(--text-mid);
+    font-size:12.5px;
+  }
+  .dropzone .dz-icon{
+    width:38px;height:38px;border-radius:10px;background:var(--blue-bg);color:var(--accent-blue);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 10px auto;
+  }
+  .dropzone strong{color:var(--accent-blue);cursor:pointer;}
+  .dropzone .dz-meta{font-size:11px;color:var(--text-light);margin-top:4px;}
+ 
+  .file-chip{
+    display:flex;align-items:center;gap:10px;
+    border:1px solid var(--border);border-radius:8px;
+    padding:9px 12px;margin-top:10px;background:#fff;
+  }
+  .file-chip .f-icon{
+    width:30px;height:30px;border-radius:7px;background:var(--red-bg);color:var(--red);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:700;
+  }
+  .file-chip .f-name{font-size:12.5px;font-weight:600;color:var(--text-dark);}
+  .file-chip .f-meta{font-size:11px;color:var(--text-light);}
+  .file-chip .f-remove{margin-left:auto;color:var(--text-light);cursor:pointer;font-size:16px;line-height:1;}
+ 
+  /* Manager feedback (rejected state) */
+  .feedback-card{
+    border:1px solid #F0C9C0;
+    background:var(--red-bg);
+    border-radius:var(--radius);
+    padding:14px 18px;
+    display:flex;
+    gap:12px;
+  }
+  .feedback-icon{
+    width:32px;height:32px;border-radius:8px;background:#fff;color:var(--red);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;
+  }
+  .feedback-title{font-size:13px;font-weight:700;color:var(--red);}
+  .feedback-body{font-size:12.5px;color:#8A382C;margin-top:3px;line-height:1.5;}
+  .feedback-meta{font-size:11px;color:#A9584C;margin-top:6px;}
+ 
+  /* Action bar */
+  .action-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:14px 20px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    position:sticky;
+    bottom:16px;
+  }
+  .action-left{font-size:11.5px;color:var(--text-light);display:flex;align-items:center;gap:6px;}
+  .action-right{display:flex;gap:10px;}
+ 
+  .btn{
+    padding:10px 18px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid transparent;
+    display:flex;align-items:center;gap:8px;
+  }
+  .btn-ghost{
+    background:#fff;border:1px solid var(--border);color:var(--text-mid);
+  }
+  .btn-secondary{
+    background:var(--grey-bg);border:1px solid var(--border);color:var(--text-dark);
+  }
+  .btn-primary{
+    background:var(--accent-blue);color:#fff;
+  }
+  .btn-primary:hover{background:#254E8F;}
+ 
+  /* ===== RIGHT: SIDE PANEL ===== */
+  .side-col{
+    flex:0 0 300px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+  }
+  .side-card{padding:16px 18px;}
+  .side-card h3{
+    font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--text-light);margin:0 0 12px 0;
+  }
+ 
+  .meta-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 0;border-bottom:1px solid var(--border);font-size:12.5px;
+  }
+  .meta-row:last-child{border-bottom:none;}
+  .meta-row .k{color:var(--text-mid);}
+  .meta-row .v{color:var(--text-dark);font-weight:600;text-align:right;}
+ 
+  .status-badge{
+    font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;
+  }
+  .status-draft{background:var(--blue-bg);color:var(--accent-blue);}
+  .status-rejected{background:var(--red-bg);color:var(--red);}
+ 
+  /* Timeline */
+  .timeline{list-style:none;margin:0;padding:0;}
+  .timeline li{
+    position:relative;
+    padding:0 0 16px 24px;
+    border-left:2px solid var(--border);
+    margin-left:8px;
+    font-size:12px;
+  }
+  .timeline li:last-child{border-left:2px solid transparent;padding-bottom:0;}
+  .timeline li::before{
+    content:'';
+    position:absolute;
+    left:-7px;top:1px;
+    width:12px;height:12px;border-radius:50%;
+    background:#fff;border:2px solid var(--border);
+  }
+  .timeline li.done::before{border-color:var(--green);background:var(--green);}
+  .timeline li.current::before{border-color:var(--accent-blue);background:var(--accent-blue);}
+  .timeline .t-title{font-weight:600;color:var(--text-dark);}
+  .timeline .t-sub{color:var(--text-light);font-size:11px;margin-top:2px;}
+ 
+  .helper-card{
+    background:var(--blue-bg);
+    border:1px solid #D6E4F7;
+  }
+  .helper-card h3{color:var(--accent-blue);}
+  .helper-card p{font-size:12px;color:#2C4C82;line-height:1.6;margin:0 0 8px 0;}
+  .helper-card p:last-child{margin-bottom:0;}
+ 
+  .mockup-flag{
+    position:fixed;
+    top:14px;right:14px;
+    background:#111B30;color:#fff;
+    font-size:11px;font-weight:700;
+    padding:6px 12px;border-radius:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.25);
+    z-index:50;
+    letter-spacing:.04em;
+  }
+ 
+  @media (max-width: 980px){
+    .content{flex-direction:column;}
+    .side-col{flex:1 1 auto; width:100%;}
+    .field-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+ 
+<div class="mockup-flag">DESIGN MOCKUP — NOT WIRED TO LIVE DATA</div>
+ 
+<div class="app-shell">
+ 
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-dot">NW</div>
+      <div class="brand-text">
+        <div class="b1">APP-MRMS</div>
+        <div class="b2">DPWR · North West</div>
+      </div>
+    </div>
+ 
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#8962;</span> Home Dashboard
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#9776;</span> My Activities
+    </a>
+ 
+    <div class="nav-section-label">Reporting</div>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">&#128196;</span> Report Submission
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#128194;</span> My Reports
+    </a>
+ 
+    <div class="nav-section-label">Management</div>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#10003;</span> Approval Queue
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#128194;</span> Projects
+    </a>
+    <a class="nav-item" href="#">
+      <span class="nav-icon">&#128203;</span> Activities
+    </a>
+ 
+    <div class="sidebar-footer">
+      <div class="avatar-chip">TM</div>
+      <div class="who">
+        <div class="name">T. Molefe</div>
+        <div class="role">Contributor · Communications</div>
+      </div>
+    </div>
+  </aside>
+ 
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+ 
+    <div class="topbar">
+      <div>
+        <div class="crumbs">My Activities &nbsp;/&nbsp; <strong>Report Submission</strong></div>
+        <h1>Submit Monthly Report</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+        <div class="icon-btn">?</div>
+      </div>
+    </div>
+ 
+    <div class="content">
+ 
+      <!-- ===================== LEFT: FORM ===================== -->
+      <div class="form-col">
+ 
+        <!-- Activity context -->
+        <div class="card context-card">
+          <div class="context-left">
+            <div class="context-icon">&#128203;</div>
+            <div>
+              <div class="context-title">Draft Communication Plan for approval</div>
+              <div class="context-sub">Support Local Media Houses &nbsp;•&nbsp; Communications Directorate</div>
+              <div class="context-tags">
+                <span class="tag freq">Monthly</span>
+                <span class="tag">Reporting period: August 2026</span>
+                <span class="tag due">Due 5 September 2026</span>
+              </div>
+            </div>
+          </div>
+          <div class="rag-pill"><span class="rag-dot"></span> On Track</div>
+        </div>
+ 
+        <!-- Manager feedback banner (shown for a resubmission scenario) -->
+        <div class="feedback-card">
+          <div class="feedback-icon">!</div>
+          <div>
+            <div class="feedback-title">Returned for correction</div>
+            <div class="feedback-body">
+              "Please quantify the media reach achieved so far and attach the signed communication plan as supporting evidence before resubmitting."
+            </div>
+            <div class="feedback-meta">— D. Sithole, Deputy Director: M&amp;E · 12 August 2026</div>
+          </div>
+        </div>
+ 
+        <!-- Report form -->
+        <div class="card">
+          <div class="card-header">
+            <div class="step-label">Monthly Progress Report</div>
+            <h2>Report Details</h2>
+            <p>Capture this month's planned activity and progress against the assigned Activity.</p>
+          </div>
+          <hr class="div">
+          <div class="card-body">
+ 
+            <div class="field-row">
+              <div class="field-group">
+                <label class="field-label">Reporting Month <span class="req">*</span></label>
+                <select class="field-input">
+                  <option>August 2026</option>
+                  <option>July 2026</option>
+                  <option>June 2026</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Quarter <span class="hint">auto-derived</span></label>
+                <select class="field-input" disabled>
+                  <option>Q2 2026/27</option>
+                </select>
+              </div>
+            </div>
+ 
+            <div class="field-group">
+              <label class="field-label">Planned Activity <span class="req">*</span></label>
+              <textarea class="field-input" placeholder="Describe what was planned for this reporting period...">Draft Local Media Support Communication Plan for approval, in line with the annual Communication Plan target.</textarea>
+              <div class="char-counter">248 / 1000 characters</div>
+            </div>
+ 
+            <div class="field-group">
+              <label class="field-label">Progress Report <span class="req">*</span></label>
+              <textarea class="field-input" placeholder="Describe actual progress made this month..." style="min-height:120px;"></textarea>
+              <div class="char-counter">0 / 1000 characters</div>
+            </div>
+ 
+            <div class="field-group">
+              <label class="field-label">Percentage Complete <span class="req">*</span></label>
+              <div class="pct-row">
+                <input type="range" min="0" max="100" value="65">
+                <div class="pct-badge">65%</div>
+              </div>
+            </div>
+ 
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label">Supporting Evidence <span class="hint">optional, max 10MB per file</span></label>
+              <div class="dropzone">
+                <div class="dz-icon">&#8593;</div>
+                <div><strong>Click to upload</strong> or drag and drop files here</div>
+                <div class="dz-meta">PDF, DOCX, XLSX, JPG or PNG</div>
+              </div>
+              <div class="file-chip">
+                <div class="f-icon">PDF</div>
+                <div>
+                  <div class="f-name">Media_Support_Plan_Draft_v2.pdf</div>
+                  <div class="f-meta">1.4 MB · Uploaded just now</div>
+                </div>
+                <div class="f-remove">&times;</div>
+              </div>
+            </div>
+ 
+          </div>
+        </div>
+ 
+        <!-- Action bar -->
+        <div class="action-bar">
+          <div class="action-left">&#9432; Last saved as draft 4 minutes ago</div>
+          <div class="action-right">
+            <button class="btn btn-ghost">Cancel</button>
+            <button class="btn btn-secondary">Save as Draft</button>
+            <button class="btn btn-primary">Submit Report &rarr;</button>
+          </div>
+        </div>
+ 
+      </div>
+ 
+      <!-- ===================== RIGHT: SIDE PANEL ===================== -->
+      <div class="side-col">
+ 
+        <div class="card side-card">
+          <h3>Report Summary</h3>
+          <div class="meta-row"><span class="k">Status</span><span class="v"><span class="status-badge status-rejected">Rejected</span></span></div>
+          <div class="meta-row"><span class="k">Version</span><span class="v">2</span></div>
+          <div class="meta-row"><span class="k">Owner</span><span class="v">T. Molefe</span></div>
+          <div class="meta-row"><span class="k">Supervisor</span><span class="v">M. van Wyk</span></div>
+          <div class="meta-row"><span class="k">Directorate</span><span class="v">Communications</span></div>
+          <div class="meta-row"><span class="k">Financial Year</span><span class="v">2026/27</span></div>
+        </div>
+ 
+        <div class="card side-card">
+          <h3>Approval Timeline</h3>
+          <ul class="timeline">
+            <li class="done">
+              <div class="t-title">Draft saved</div>
+              <div class="t-sub">10 Aug 2026, 09:14</div>
+            </li>
+            <li class="done">
+              <div class="t-title">Submitted for review</div>
+              <div class="t-sub">10 Aug 2026, 14:02</div>
+            </li>
+            <li class="done">
+              <div class="t-title">Rejected by Supervisor</div>
+              <div class="t-sub">12 Aug 2026, 08:47 · M. van Wyk</div>
+            </li>
+            <li class="current">
+              <div class="t-title">Awaiting resubmission</div>
+              <div class="t-sub">In progress</div>
+            </li>
+            <li>
+              <div class="t-title">DD:M&amp;E final review</div>
+              <div class="t-sub">Escalation tier only</div>
+            </li>
+          </ul>
+        </div>
+ 
+        <div class="card side-card helper-card">
+          <h3>Submission Tips</h3>
+          <p><strong>Be specific.</strong> Quantify progress where possible (e.g. "3 of 4 media houses briefed") rather than general statements.</p>
+          <p><strong>Attach evidence.</strong> Reports with supporting documents are approved faster and reduce follow-up queries.</p>
+          <p><strong>Save often.</strong> Drafts are retained so you can return and finish later without losing work.</p>
+        </div>
+ 
+      </div>
+ 
+    </div>
+  </main>
+</div>
+ 
+</body>
+</html>
