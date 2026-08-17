@@ -9,6 +9,14 @@
 EditorState:
   ScreensOrder:
     - scr_Splash
+    - scr_Home
+    - scr_Users
     - scr_MyActivities
-    - scr_MyReports
-    - scr_ReportsDashboard
+    - scr_ReportForm
+    - scr_ReportView
+    - scr_Projects
+    - scr_Activities
+    - scr_ReportActivities
+    - scr_Reports
+    - scr_ApprovedReports
+    - scr_ApprovalQueue

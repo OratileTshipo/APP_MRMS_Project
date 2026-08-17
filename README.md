@@ -10,7 +10,7 @@ and Roads (DPWR), North West Province.
 | Path | Purpose |
 |---|---|
 | `*.csv` | **Single source of truth** for the SharePoint list schemas and seed data (Directorates, APP_Users, MonthlyReports, Activities, Projects, Programmes) |
-| `APP-MRMS_Project_app_v5_contributor.msapp` | **Current importable Power Apps package** — the v5 contributor app (splash + My Activities + My Reports, mockup UI; CHANGES.md §35). Earlier packs (v1–v4.2) are kept as versioned packs below |
+| `APP-MRMS_Project_app_v6.msapp` | **Current importable Power Apps package** — the v6 full app: v4 layout-fixed shell (`cmp_NavRail` + `cmp_AppHeader` on every screen) plus the new `scr_ApprovalQueue` (queue list + review detail with Approve / Reject / Return-for-correction actions). Earlier packs (v1–v5) are kept as versioned packs below |
 | `src/` | Unpacked msapp source (`pac canvas unpack`, `SourceCode` layout): `App.pa.yaml`, `_EditorState.pa.yaml`, one `.pa.yaml` per screen, and the `.msapr` resources archive |
 | `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation — **updated to match the CSV list schemas** (see CHANGES.md §4–5) |
 | `Project Instructions` | Working brief for the solution build |
@@ -57,7 +57,8 @@ Every pack is saved under a new name so multiple working versions coexist.
 | `APP-MRMS_Project_app_v4_layout-fixed.msapp` | Component build: body heights no longer overflow the header, shell gutters removed, component background fills guaranteed | ✅ verified pack→unpack byte-identical |
 | `APP-MRMS_Project_app_v4.1_containers.msapp` | **scr_Projects reverted from components to container header/sidebar** (components crash when clicked on that screen) | ✅ verifier `--strict` clean, 0 errors/warnings; see CHANGES.md §33 |
 | `APP-MRMS_Project_app_v4.2_all-containers.msapp` | **All screens use the container header + menu sidebar** (no components); headers show the screen context + signed-in user (except Home Dashboard) | ✅ verifier `--strict` clean (11970 formulas, 0 errors/warnings); YAML sources updated in `src/`; superseded by v5; see CHANGES.md §34 |
-| `APP-MRMS_Project_app_v5_contributor.msapp` | **v5 contributor app** — only `scr_Splash` + `scr_MyActivities` + `scr_MyReports`, rebuilt to the mockup UI (labelled navy sidebar, white topbar with breadcrumb, summary strips, search/FY/quarter/month filters, RAG worklist, report history with read-only detail drawer); Admin/DeputyDirectorME blocked at the splash screen; report capture is out of scope (v6) | ✅ verifier `--strict` clean (2564 formulas, 0 errors/warnings); YAML sources updated in `src/`; **import this one**; see CHANGES.md §35 |
+| `APP-MRMS_Project_app_v5_contributor.msapp` | **v5 contributor app** — only `scr_Splash` + `scr_MyActivities` + `scr_MyReports`, rebuilt to the mockup UI (labelled navy sidebar, white topbar with breadcrumb, summary strips, search/FY/quarter/month filters, RAG worklist, report history with read-only detail drawer); Admin/DeputyDirectorME blocked at the splash screen; report capture is out of scope (v6) | ✅ verifier `--strict` clean (2564 formulas, 0 errors/warnings); see CHANGES.md §35 |
+| `APP-MRMS_Project_app_v6.msapp` | **v6 full app** — v4 layout-fixed source (all 12 screens + `cmp_NavRail`/`cmp_AppHeader` shell) + new `scr_ApprovalQueue` built to `scr_ApprovalQueue_mockup.html`: two-column queue (Pending / Overdue / Escalated tabs, directorate filter, search) with a review detail pane (report content, planned activity, progress, review history, comment box) and real Approve / Reject / Return-for-correction actions that Patch `MonthlyReports` (Status / ReviewedBy / ReviewDate / RejectionReason) then refresh the queue. Approval Queue icon added to the shared nav rail; app renamed to v6; stale v4.2 SARIF cleared so the import opens without phantom errors | ✅ verifier `--strict` clean (9540 formulas, 0 errors/warnings); control-prop check 0 errors (incl. new screen); YAML parse OK; pack `Src/*.pa.yaml` byte-identical to `src/`; **import this one** |
 
 Rule going forward: **never overwrite an existing pack** — `cp`/rename to the
 next `_vN_` name and record it in CHANGES.md.
@@ -70,12 +71,13 @@ next `_vN_` name and record it in CHANGES.md.
 
 1. **Repack the latest source** (if you just edited `src/`):
    ```bash
-   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v5_contributor.msapp --layout SourceCode --overwrite
+   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v6.msapp --layout SourceCode --overwrite
    ```
-   (v4.1–v4.2 and v5 were assembled here without `pac` by replacing `Src/*.pa.yaml`
-   inside the previous pack — Studio loads the embedded YAML (`LoadFromYaml: true`) and
-   regenerates the JSON on first Save, but running the pack above produces the
-   fully pac-consistent `.msapp`.)
+   (v4.1–v4.2, v5 and v6 were assembled here without `pac` by replacing `Src/*.pa.yaml`
+   inside the previous pack — use `tools/repack_msapp.py --msapp … --out … --appname …`,
+   which also clears the stale `AppCheckerResult.sarif` — Studio loads the embedded YAML
+   (`LoadFromYaml: true`) and regenerates the JSON on first Save, but running the pack
+   above produces the fully pac-consistent `.msapp`.)
 2. **Sanity-check the pack locally first** (catches breakage before Studio):
    ```bash
    python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
@@ -92,7 +94,7 @@ next `_vN_` name and record it in CHANGES.md.
 3. **Open [make.powerapps.com](https://make.powerapps.com)** and sign in with an
    account that can create apps in the target environment (the one holding the
    SharePoint lists).
-4. **Apps → Import canvas app** (top toolbar) → upload `APP-MRMS_Project_app_v5_contributor.msapp`
+4. **Apps → Import canvas app** (top toolbar) → upload `APP-MRMS_Project_app_v6.msapp`
    from the repo root.
 5. **Re-link the data sources if prompted** — the pack references SharePoint
    lists by name (Programmes, Projects, Activities, MonthlyReports, APP_Users,

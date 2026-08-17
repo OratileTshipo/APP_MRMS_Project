@@ -140,6 +140,13 @@ def scan_file(path):
     pending_labels = {}
     stack = []  # frames: {indent, label, control_value, props_indent, props}
 
+    # YAML block-scalar bodies (OnSelect: |- , Text: |-, Items: |-, ...) hold
+    # multi-line Power Fx formulas whose inner text can contain "Key: value"
+    # patterns (e.g. Patch(..., { Status: "Draft", ... })). Those lines must be
+    # skipped, not parsed as control properties.
+    BLOCK_SCALARS = {"|", "|-", "|+", ">", ">-", ">+"}
+    block_scalar_indent = None  # property-line indent of the open block scalar
+
     for lineno, line in enumerate(lines, start=1):
         if not line.strip() or line.lstrip().startswith("#"):
             continue
@@ -149,6 +156,13 @@ def scan_file(path):
         indent = len(m.group(1))
         is_list_item = line.lstrip().startswith("-")
         key = m.group(2)
+
+        # While inside a block scalar, skip everything more indented than the
+        # scalar's property line (the formula body).
+        if block_scalar_indent is not None:
+            if indent > block_scalar_indent:
+                continue
+            block_scalar_indent = None
 
         # Close any frames this line is at/below (sibling or ancestor).
         # Strict `<`: sibling "- Name:" lines sit 4 spaces below the open
@@ -184,6 +198,9 @@ def scan_file(path):
             and indent >= stack[-1]["props_indent"]
             and key != "Children"
         ):
+            value = m.group(3).strip()
+            if value in BLOCK_SCALARS:
+                block_scalar_indent = indent
             stack[-1]["props"].append(key)
             continue
 
