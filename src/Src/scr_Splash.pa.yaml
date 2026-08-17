@@ -89,7 +89,7 @@ Screens:
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =4
                   DisabledFill: =RGBA(161, 159, 157, 1)
-                  Fill: =varBlue
+                  Fill: =varGold
                   FocusedBorderThickness: =4
                   Height: =2
                   HoverFill: =RGBA(0, 120, 212, 1)
@@ -104,7 +104,7 @@ Screens:
                   BorderColor: =RGBA(0, 0, 0, 0)
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =2
-                  Color: '=ColorValue("#AABBD4") '
+                  Color: =RGBA(170, 187, 212, 1)
                   DisabledBorderColor: =RGBA(0, 0, 0, 0)
                   DisabledColor: =RGBA(161, 159, 157, 1)
                   FocusedBorderThickness: =4
@@ -129,8 +129,29 @@ Screens:
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
                   Size: =11
-                  Text: ="AUTHENTICATING WITH MICROSOFT 365 · LOADING PROGRAMME DATA..."
+                  Text: ="AUTHENTICATING WITH MICROSOFT 365 · LOADING MY ACTIVITIES..."
                   Y: =rec_SplashAccent.Y + 50
+            - lbl_AccessDenied:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  AlignInContainer: =AlignInContainer.Stretch
+                  AutoHeight: =true
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =2
+                  Color: =varGold
+                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                  DisabledColor: =RGBA(161, 159, 157, 1)
+                  FocusedBorderThickness: =4
+                  Font: =Font.'Segoe UI'
+                  FontWeight: =FontWeight.Semibold
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Size: =13
+                  Text: ="Access restricted — this app is for Contributors, Supervisors and Programme Managers. Please use the full APP-MRMS app for administrative functions."
+                  Visible: =varShowAccessDenied
+                  Width: =Parent.Width
             - Timer_Splash:
                 Control: Timer@2.1.0
                 Properties:
@@ -148,7 +169,13 @@ Screens:
                   HoverFill: =RGBA(16, 110, 190, 1)
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
-                  OnTimerEnd: =Navigate(scr_Home, ScreenTransition.Fade)
+                  OnTimerEnd: |-
+                    =// v5 role gate: Contributor / Supervisor / ProgrammeManager only.
+                    If(
+                        varUserRole = "Administrator" || varUserRole = "DeputyDirectorME",
+                        Set(varShowAccessDenied, true),
+                        Navigate(scr_MyActivities, ScreenTransition.Fade)
+                    )
                   PressedBorderColor: =RGBA(16, 110, 190, 1)
                   PressedColor: =RGBA(255, 255, 255, 1)
                   PressedFill: =RGBA(16, 110, 190, 1)
@@ -160,7 +187,7 @@ Screens:
             BorderStyle: =BorderStyle.None
             BorderThickness: =2
             DisabledFill: =RGBA(161, 159, 157, 1)
-            Fill: =varBlue
+            Fill: =varGold
             FocusedBorderThickness: =4
             Height: =8
             HoverFill: =RGBA(0, 120, 212, 1)
@@ -178,6 +205,6 @@ Screens:
             DisabledColor: =RGBA(113, 111, 110, 1)
             FocusedBorderThickness: =4
             Font: =Font.'Segoe UI'
-            Text: '="v1.0  | 2026 " '
+            Text: ="v5.0  | 2026"
             X: =40
             Y: =40
