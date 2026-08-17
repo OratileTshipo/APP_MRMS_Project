@@ -9,40 +9,52 @@
 App:
   Properties:
     # ============================================================
-    # App.OnStart — one-time initialisation.
+    # App.OnStart — one-time initialisation (v5 contributor app).
     #
     # NOTE: Named formulas (App.Formulas) cannot be represented in
     # the pa.yaml source format — the official schema (v3.0) defines
     # the App node with only "Properties", so importing an app that
     # declares them fails with PA2108 "Unknown property". All values
-    # that never change after load (theme, breakpoints, current user,
-    # reporting period) are therefore initialised here with Set(),
-    # exactly as the original Studio-authored app did.
+    # that never change after load (theme, current user, reporting
+    # period) are therefore initialised here with Set(), exactly as
+    # the original Studio-authored app did.
     # ============================================================
     OnStart: |-
-      =// 1. Theme colours
-      Set(varNavy, ColorValue("#122952"));
-      Set(varBlue, ColorValue("#2E75B6"));
-      Set(varLBlue, ColorValue("#D9E6F2"));
-      Set(varGrey, ColorValue("#595959"));
-      Set(varGreen, ColorValue("#1E8A44"));
-      Set(varAmber, ColorValue("#E6A100"));
+      =// 1. Theme colours — v5 palette (mockups: DPWR navy/gold, light canvas)
+      Set(varNavy, ColorValue("#1B2A4A"));
+      Set(varNavyDark, ColorValue("#111B30"));
+      Set(varGold, ColorValue("#C9A24B"));
+      Set(varAccent, ColorValue("#2E5EAA"));
+      Set(varBgGrey, ColorValue("#F4F6F9"));
+      Set(varCardBg, ColorValue("#FFFFFF"));
+      Set(varBorder, ColorValue("#E1E5EC"));
+      Set(varTextDark, ColorValue("#1F2733"));
+      Set(varTextMid, ColorValue("#5B6472"));
+      Set(varTextLight, ColorValue("#8B93A1"));
+      Set(varGreen, ColorValue("#1E8A5F"));
+      Set(varGreenBg, ColorValue("#E7F6EF"));
+      Set(varAmber, ColorValue("#B5790A"));
+      Set(varAmberBg, ColorValue("#FCF1DC"));
       Set(varRed, ColorValue("#C0392B"));
-      Set(varBgLight, ColorValue("#F8F8F8"));
+      Set(varRedBg, ColorValue("#FBEAE8"));
+      Set(varBlueBg, ColorValue("#EAF1FC"));
+      Set(varBgLight, ColorValue("#F4F6F9"));
+      Set(varBlue, ColorValue("#2E5EAA"));
+      Set(varLBlue, ColorValue("#D9E6F2"));
 
       // 2. Responsive breakpoints (evaluated once at startup)
       Set(varIsMobile, App.Width < 640);
       Set(varIsTablet, App.Width >= 640 And App.Width < 1100);
 
       // 3. Current user + derived role/scope
+      // v5 audience: Contributor, Supervisor, ProgrammeManager.
+      // Administrator / DeputyDirectorME are blocked at the splash screen.
       Set(varUserEmail, User().Email);
       Set(varUserFullName, User().FullName);
       Set(varCurrentUserRecord, LookUp(APP_Users, UserAccount.Email = varUserEmail));
-      Set(varUserRole, varCurrentUserRecord.Role.Value);
-      Set(varUserDirectorate, varCurrentUserRecord.Directorate.Value);
-      Set(varUserProgramme, varCurrentUserRecord.Programme.Value);
-      Set(varUserDirectorateID, LookUp(Directorates, Title = varUserDirectorate).DirectorateID);
-      Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
+      Set(varUserRole, If(IsBlank(varCurrentUserRecord), "Contributor", Coalesce(varCurrentUserRecord.Role.Value, "Contributor")));
+      Set(varUserDirectorate, If(IsBlank(varCurrentUserRecord), "", Coalesce(varCurrentUserRecord.Directorate.Value, "")));
+      Set(varUserProgramme, If(IsBlank(varCurrentUserRecord), "", Coalesce(varCurrentUserRecord.Programme.Value, "")));
 
       // 4. Reporting period defaults (derived from Today())
       Set(
@@ -61,44 +73,24 @@ App:
               10, "October", 11, "November", 12, "December", 1, "January", 2, "February", 3, "March"
           )
       );
-      Set(
-          varCurrentQuarter,
-          Switch(
-              true,
-              Month(Today()) >= 4 And Month(Today()) <= 6, "Q1 (Apr-Jun)",
-              Month(Today()) >= 7 And Month(Today()) <= 9, "Q2 (Jul-Sep)",
-              Month(Today()) >= 10 And Month(Today()) <= 12, "Q3 (Oct-Dec)",
-              "Q4 (Jan-Mar)"
-          )
-      );
       Set(varTodaysDate, DateValue(Today()));
 
-      // 5. Filter defaults — mutated by screen controls (scr_Home, scr_Users, scr_MyActivities)
-      // Search text lives in the cmp_AppHeader component instances (SearchText output), not app vars.
-      Set(varHomeFilter, "All");
-      Set(varFilterFY, "All");
-      Set(varFilterProgramme, "All");
-      Set(varFilterDirectorate, "All");
-      Set(varFilterQuarter, "All");
-
-      // 6. Reference data collections — mutable; screens re-collect these
-      Concurrent(
-          ClearCollect(colProgrammes, Filter(Programmes, Active = true)),
-          ClearCollect(colProjects, Filter(Projects, Status.Value = "Active")),
-          ClearCollect(colActivities, Filter(Activities, 'Active ' = true)),
-          ClearCollect(colDirectorates, Filter(Directorates, Active = true))
-      );
-
-      // 7. Notifications — personal, rebuilt on scr_Home.OnVisible
+      // 5. Notifications — personal count for the topbar bell indicator
       ClearCollect(
           colMyNotifications,
           Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false)
       );
       Set(varUnreadCount, CountRows(colMyNotifications));
 
-      // 8. UI state flags
+      // 6. UI state flags + cross-screen filter context
       Set(varNavOpen, false);
       Set(varSidePanelOpen, false);
-      Set(varFormIsValid, false);
+      Set(varShowAccessDenied, false);
+      Set(varMyaSelectedActivityID, Blank());
+      Set(varMyaSelectedActivityName, "");
+      Set(varMyrFilterActivityID, Blank());
+      Set(varMyrFilterActivityName, "");
+      Set(varMyrSelectedReportID, Blank());
+      Set(varMyrDrawerOpen, false);
     StartScreen: =scr_Splash
     Theme: =PowerAppsTheme

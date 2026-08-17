@@ -1138,3 +1138,69 @@ background always paints even if the component-root Fill is not rendered.
   ```bash
   pac canvas pack --sources src --msapp APP-MRMS_Project_app_v4.2_all-containers.msapp --layout SourceCode --overwrite
   ```
+
+## 35. v5: contributor app rebuilt to the My Activities / My Reports mockups
+
+**What changed.** v5 is a new, smaller app for **Contributors, Supervisors and
+Programme Managers only** — Administrator and DeputyDirectorME are blocked at
+the splash screen. It contains exactly three screens:
+
+- `scr_Splash` — same look as v4.1 (navy, gold accents), but the timer now
+  navigates to `scr_MyActivities`, and roles outside the v5 audience see an
+  "access restricted" message instead of entering the app.
+- `scr_MyActivities` — rebuilt to `scr_MyActivities_mockup.html` /
+  `scr_MyActivities_Handoff_Brief.md`: labelled navy sidebar (Overview:
+  Home Dashboard, My Activities · Reporting: My Reports) with the signed-in
+  user + role in the footer, white topbar with breadcrumb, summary strip
+  (Assigned to me / On track / Due soon / Overdue), search + FY + quarter +
+  month filter bar, and the activity worklist with RAG dot, frequency/project
+  tags, due-date label, status pill and Report →/View → action.
+- `scr_MyReports` — new screen per `scr_MyReports_mockup.html` / brief:
+  same shell (My Reports active), summary strip (Drafts / Submitted /
+  Approved / Rejected), status + FY + quarter + month filters, report history
+  with progress bars, status pills and Continue/Resubmit/View actions, plus a
+  **read-only detail drawer** on the same screen (no extra page).
+
+**Data.** Both screens read SharePoint (`Activities` filtered to
+`ActivityOwner.Email = User().Email`; `MonthlyReports` filtered to
+`SubmittedBy.Email = User().Email`) into local collections and filter
+client-side; summary counts derive from the gallery's filtered set
+(`AllItems`) so the numbers always match the visible rows. The worklist joins
+each activity with its latest report for the selected FY live in the gallery
+`Items` (no N+1 collections). Bugs called out in the brief (§7) are fixed:
+RAG is calculated from the real `DueDate` (red = overdue, amber = due within
+7 days), no hardcoded dots, no dead `|| true` filter conditions.
+
+**Removed.** The other nine screens (Home dashboard, Users, Projects,
+Activities, Report on Activities, Reports, Approved Reports, Report Form,
+Report View) and both component definitions (`cmp_AppHeader`, `cmp_NavRail`)
+are gone from `src/` and the v5 pack. The v4.2 pack and `git history` keep
+them for reference. Report capture is intentionally out of scope for v5 —
+row actions hand off to the read-only drawer / the activity's report history,
+and the drawer notes that editing opens in v6.
+
+**Open decisions made (flag with Oray if different).**
+1. My Activities row actions navigate to `scr_MyReports` (pre-filtered to the
+   activity) instead of a `scr_ReportSubmission` screen, which v5 does not
+   include.
+2. Due-soon threshold = 7 days before `DueDate` (Amber); overdue = past
+   `DueDate` (Red).
+3. The month dropdown defaults to **All Months**; rows show the reporting
+   month of their latest report (or the due-date month when none exists).
+4. Read-only detail is a drawer on `scr_MyReports` (brief Open Question 1).
+
+**Verification.** `check_screen_registry.py` OK (3 screens ↔ `_EditorState`);
+`verify_powerfx.py --strict` clean — 2564 formulas, 0 errors, 0 warnings;
+YAML parse gate OK on all 5 source files.
+
+**New importable pack (versioned per the repo rule):**
+`APP-MRMS_Project_app_v5_contributor.msapp` — import this one. Built from the
+v4.2 pack with `Src/` replaced by the v5 source (every non-`Src` entry
+byte-identical to v4.2; `packed.json` unchanged with `LoadFromYaml: true`).
+Same caveat as v4.1/v4.2: no `pac` in this sandbox, so Studio loads the
+embedded YAML and regenerates the JSON on first Save. For a fully
+pac-consistent pack run:
+
+```bash
+pac canvas pack --sources src --msapp APP-MRMS_Project_app_v5_contributor.msapp --layout SourceCode --overwrite
+```
