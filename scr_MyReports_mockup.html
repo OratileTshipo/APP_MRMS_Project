@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APP-MRMS | My Reports</title>
+<style>
+  :root{
+    --dpwr-navy:#1B2A4A;
+    --dpwr-navy-dark:#111B30;
+    --dpwr-gold:#C9A24B;
+    --accent-blue:#2E5EAA;
+    --grey-bg:#F4F6F9;
+    --card-bg:#FFFFFF;
+    --border:#E1E5EC;
+    --text-dark:#1F2733;
+    --text-mid:#5B6472;
+    --text-light:#8B93A1;
+    --green:#1E8A5F;
+    --green-bg:#E7F6EF;
+    --amber:#B5790A;
+    --amber-bg:#FCF1DC;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --blue-bg:#EAF1FC;
+    --grey-badge-bg:#EEF0F3;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(16,24,40,0.04), 0 1px 3px rgba(16,24,40,0.06);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;background:var(--grey-bg);color:var(--text-dark);font-size:14px;}
+  .app-shell{display:flex;min-height:100vh;}
+
+  /* ===== SIDEBAR ===== */
+  .sidebar{width:230px;flex-shrink:0;background:var(--dpwr-navy);color:#fff;display:flex;flex-direction:column;padding:20px 0;}
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:0 20px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:12px;}
+  .sidebar-brand .logo-dot{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--dpwr-gold),#E4C97A);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--dpwr-navy-dark);font-size:13px;flex-shrink:0;}
+  .sidebar-brand .brand-text{line-height:1.2;}
+  .sidebar-brand .brand-text .b1{font-weight:700;font-size:13.5px;letter-spacing:.3px;}
+  .sidebar-brand .brand-text .b2{font-size:10.5px;color:rgba(255,255,255,0.55);}
+  .nav-section-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.38);padding:14px 20px 6px 20px;}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;color:rgba(255,255,255,0.75);font-size:13.5px;cursor:pointer;border-left:3px solid transparent;text-decoration:none;}
+  .nav-item:hover{background:rgba(255,255,255,0.06);}
+  .nav-item.active{background:rgba(255,255,255,0.09);border-left:3px solid var(--dpwr-gold);color:#fff;font-weight:600;}
+  .nav-icon{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;opacity:.9;}
+  .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;gap:10px;}
+  .avatar-chip{width:32px;height:32px;border-radius:50%;background:#3A4E7A;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .sidebar-footer .who{line-height:1.25;}
+  .sidebar-footer .who .name{font-size:12.5px;font-weight:600;}
+  .sidebar-footer .who .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+  /* ===== MAIN ===== */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+  .topbar{background:#fff;border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .topbar .crumbs{font-size:12px;color:var(--text-light);}
+  .topbar .crumbs strong{color:var(--text-dark);font-weight:600;}
+  .topbar h1{font-size:19px;margin:2px 0 0 0;font-weight:700;color:var(--text-dark);}
+  .topbar-right{display:flex;align-items:center;gap:10px;}
+  .icon-btn{width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;color:var(--text-mid);cursor:pointer;position:relative;}
+  .icon-btn .dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--red);border:1.5px solid #fff;}
+
+  .content{padding:24px 28px 60px 28px;display:flex;flex-direction:column;gap:18px;}
+
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);}
+
+  /* Filter bar */
+  .filter-bar{padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;}
+  .filter-bar .search{flex:1 1 220px;position:relative;}
+  .filter-bar .search input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;}
+  .filter-bar .search .sicon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:13px;}
+  .filter-bar select{padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text-dark);background:#fff;font-family:inherit;}
+  .filter-bar .clear-link{font-size:12px;color:var(--accent-blue);cursor:pointer;font-weight:600;margin-left:auto;}
+
+  /* Summary strip */
+  .summary-strip{display:flex;gap:14px;flex-wrap:wrap;}
+  .summary-chip{flex:1 1 150px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;display:flex;flex-direction:column;gap:4px;}
+  .summary-chip .num{font-size:22px;font-weight:700;color:var(--text-dark);}
+  .summary-chip .lbl{font-size:11.5px;color:var(--text-mid);font-weight:600;text-transform:uppercase;letter-spacing:.04em;}
+  .summary-chip.draft .num{color:var(--accent-blue);}
+  .summary-chip.submitted .num{color:var(--green);}
+  .summary-chip.rejected .num{color:var(--red);}
+  .summary-chip.approved .num{color:var(--dpwr-gold);}
+
+  /* Report list */
+  .report-list{display:flex;flex-direction:column;}
+  .report-row{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .report-row:last-child{border-bottom:none;}
+  .report-row:hover{background:#FAFBFC;}
+  .r-icon{width:38px;height:38px;border-radius:9px;background:var(--blue-bg);color:var(--accent-blue);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+  .r-main{flex:1;min-width:0;}
+  .r-title{font-size:13.5px;font-weight:700;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .r-sub{font-size:12px;color:var(--text-mid);margin-top:2px;}
+  .r-progress-wrap{width:120px;flex-shrink:0;}
+  .r-progress-bar{height:6px;border-radius:4px;background:var(--border);overflow:hidden;}
+  .r-progress-fill{height:100%;background:var(--accent-blue);}
+  .r-progress-label{font-size:11px;color:var(--text-light);margin-top:4px;}
+  .r-meta{width:130px;flex-shrink:0;font-size:12px;color:var(--text-mid);}
+  .r-status{width:110px;flex-shrink:0;}
+  .status-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-block;}
+  .status-draft{background:var(--blue-bg);color:var(--accent-blue);}
+  .status-submitted{background:var(--green-bg);color:var(--green);}
+  .status-approved{background:#FCF1DC;color:var(--dpwr-gold);}
+  .status-rejected{background:var(--red-bg);color:var(--red);}
+  .r-action{flex-shrink:0;}
+  .btn{padding:8px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:6px;}
+  .btn-ghost{background:#fff;border:1px solid var(--border);color:var(--text-mid);}
+  .btn-primary{background:var(--accent-blue);color:#fff;}
+  .btn-danger-outline{background:#fff;border:1px solid #F0C9C0;color:var(--red);}
+
+  .empty-state{padding:48px 20px;text-align:center;color:var(--text-mid);}
+  .empty-state .e-icon{font-size:30px;margin-bottom:10px;}
+
+  .mockup-flag{position:fixed;top:14px;right:14px;background:#111B30;color:#fff;font-size:11px;font-weight:700;padding:6px 12px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.25);z-index:50;letter-spacing:.04em;}
+
+  @media (max-width: 900px){
+    .report-row{flex-wrap:wrap;}
+    .r-progress-wrap, .r-meta{width:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="mockup-flag">DESIGN MOCKUP — NOT WIRED TO LIVE DATA</div>
+
+<div class="app-shell">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo-dot">NW</div>
+      <div class="brand-text">
+        <div class="b1">APP-MRMS</div>
+        <div class="b2">DPWR · North West</div>
+      </div>
+    </div>
+
+    <div class="nav-section-label">Overview</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#8962;</span> Home Dashboard</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#9776;</span> My Activities</a>
+
+    <div class="nav-section-label">Reporting</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128196;</span> Report Submission</a>
+    <a class="nav-item active" href="#"><span class="nav-icon">&#128194;</span> My Reports</a>
+
+    <div class="nav-section-label">Management</div>
+    <a class="nav-item" href="#"><span class="nav-icon">&#10003;</span> Approval Queue</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128194;</span> Projects</a>
+    <a class="nav-item" href="#"><span class="nav-icon">&#128203;</span> Activities</a>
+
+    <div class="sidebar-footer">
+      <div class="avatar-chip">TM</div>
+      <div class="who">
+        <div class="name">T. Molefe</div>
+        <div class="role">Contributor · Communications</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <div class="crumbs">Reporting &nbsp;/&nbsp; <strong>My Reports</strong></div>
+        <h1>My Reports</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="icon-btn">&#128276;<span class="dot"></span></div>
+        <div class="icon-btn">?</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- Summary strip -->
+      <div class="summary-strip">
+        <div class="summary-chip draft"><div class="num">2</div><div class="lbl">Drafts</div></div>
+        <div class="summary-chip submitted"><div class="num">5</div><div class="lbl">Submitted</div></div>
+        <div class="summary-chip approved"><div class="num">14</div><div class="lbl">Approved</div></div>
+        <div class="summary-chip rejected"><div class="num">1</div><div class="lbl">Rejected</div></div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="card filter-bar">
+        <div class="search">
+          <span class="sicon">&#128269;</span>
+          <input type="text" placeholder="Search by activity name...">
+        </div>
+        <select><option>All Statuses</option><option>Draft</option><option>Submitted</option><option>Approved</option><option>Rejected</option></select>
+        <select><option>Financial Year: 2026/27</option><option>2025/26</option></select>
+        <select><option>All Quarters</option><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option></select>
+        <select><option>All Months</option><option>August</option><option>July</option><option>June</option></select>
+        <span class="clear-link">Clear filters</span>
+      </div>
+
+      <!-- Report list -->
+      <div class="card report-list">
+
+        <div class="report-row">
+          <div class="r-icon">&#9998;</div>
+          <div class="r-main">
+            <div class="r-title">Draft Communication Plan for approval</div>
+            <div class="r-sub">Communications &nbsp;•&nbsp; August 2026 &nbsp;•&nbsp; v2</div>
+          </div>
+          <div class="r-progress-wrap">
+            <div class="r-progress-bar"><div class="r-progress-fill" style="width:65%;"></div></div>
+            <div class="r-progress-label">65% complete</div>
+          </div>
+          <div class="r-meta">Rejected 12 Aug 2026</div>
+          <div class="r-status"><span class="status-pill status-rejected">Rejected</span></div>
+          <div class="r-action"><button class="btn btn-danger-outline">Resubmit &rarr;</button></div>
+        </div>
+
+        <div class="report-row">
+          <div class="r-icon">&#9998;</div>
+          <div class="r-main">
+            <div class="r-title">HR environmental scan collaboration plan</div>
+            <div class="r-sub">Human Resource Management &nbsp;•&nbsp; August 2026 &nbsp;•&nbsp; v1</div>
+          </div>
+          <div class="r-progress-wrap">
+            <div class="r-progress-bar"><div class="r-progress-fill" style="width:30%;"></div></div>
+            <div class="r-progress-label">30% complete</div>
+          </div>
+          <div class="r-meta">Last saved 2 days ago</div>
+          <div class="r-status"><span class="status-pill status-draft">Draft</span></div>
+          <div class="r-action"><button class="btn btn-ghost">Continue &rarr;</button></div>
+        </div>
+
+        <div class="report-row">
+          <div class="r-icon">&#128196;</div>
+          <div class="r-main">
+            <div class="r-title">Financial Disclosure awareness workshop</div>
+            <div class="r-sub">Risk &amp; Internal Control &nbsp;•&nbsp; July 2026 &nbsp;•&nbsp; v1</div>
+          </div>
+          <div class="r-progress-wrap">
+            <div class="r-progress-bar"><div class="r-progress-fill" style="width:100%;"></div></div>
+            <div class="r-progress-label">100% complete</div>
+          </div>
+          <div class="r-meta">Submitted 5 Jul 2026</div>
+          <div class="r-status"><span class="status-pill status-submitted">Submitted</span></div>
+          <div class="r-action"><button class="btn btn-ghost">View &rarr;</button></div>
+        </div>
+
+        <div class="report-row">
+          <div class="r-icon">&#10003;</div>
+          <div class="r-main">
+            <div class="r-title">Skills audit phase 2 procurement request</div>
+            <div class="r-sub">Human Resource Development &nbsp;•&nbsp; June 2026 &nbsp;•&nbsp; v1</div>
+          </div>
+          <div class="r-progress-wrap">
+            <div class="r-progress-bar"><div class="r-progress-fill" style="width:100%;"></div></div>
+            <div class="r-progress-label">100% complete</div>
+          </div>
+          <div class="r-meta">Approved 9 Jun 2026</div>
+          <div class="r-status"><span class="status-pill status-approved">Approved</span></div>
+          <div class="r-action"><button class="btn btn-ghost">View &rarr;</button></div>
+        </div>
+
+        <div class="report-row">
+          <div class="r-icon">&#10003;</div>
+          <div class="r-main">
+            <div class="r-title">Reapatala 30-day payment compliance report</div>
+            <div class="r-sub">Financial Management &nbsp;•&nbsp; May 2026 &nbsp;•&nbsp; v1</div>
+          </div>
+          <div class="r-progress-wrap">
+            <div class="r-progress-bar"><div class="r-progress-fill" style="width:100%;"></div></div>
+            <div class="r-progress-label">100% complete</div>
+          </div>
+          <div class="r-meta">Approved 7 May 2026</div>
+          <div class="r-status"><span class="status-pill status-approved">Approved</span></div>
+          <div class="r-action"><button class="btn btn-ghost">View &rarr;</button></div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
