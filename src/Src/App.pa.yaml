@@ -41,6 +41,8 @@ App:
       Set(varBgLight, ColorValue("#F4F6F9"));
       Set(varBlue, ColorValue("#2E5EAA"));
       Set(varLBlue, ColorValue("#D9E6F2"));
+      Set(varPurple, ColorValue("#6C4FA1"));
+      Set(varPurpleBg, ColorValue("#EFEAF7"));
 
       // 2. Responsive breakpoints (evaluated once at startup)
       Set(varIsMobile, App.Width < 640);
