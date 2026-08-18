@@ -188,7 +188,7 @@
                   "authentication": "@parameters('$authentication')"
                 }
               },
-              "Create_Notification_Contributor": {
+              "Create_Notification_Contributor_SupervisorReject": {
                 "runAfter": { "Notify_Contributor_SupervisorReject": ["Succeeded"] },
                 "type": "OpenApiConnection",
                 "inputs": {
