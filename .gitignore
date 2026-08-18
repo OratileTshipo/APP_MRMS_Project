@@ -1,7 +1,4 @@
-.DS_Store
-Thumbs.db
-*.tmp
-*.log
-~$*.docx
-__pycache__/
-*.pyc
+```
+# Documentation
+*.md
+```
