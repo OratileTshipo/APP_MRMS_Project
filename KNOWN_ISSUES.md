@@ -19,10 +19,10 @@
 
 | ID | Issue | Status | Owner | Notes |
 |---|---|---|---|---|
-| H1 | DeputyDirectorME: mandatory vs escalation | 🟠 Open | Product Owner | BRD says escalation-only |
-| H2 | Activity completion logic undefined | 🟠 Open | Product Owner | 12 months per activity |
+| H1 | DeputyDirectorME: mandatory vs escalation | ✅ Resolved | Product Owner | **Mandatory 2nd approver** — Deputy must approve after Supervisor |
+| H2 | Activity completion logic undefined | ✅ Resolved | Product Owner | **After EndDate** — Activity marked Completed when EndDate passes |
 | H3 | Rejection flow excluded (duplicate names) | ✅ Resolved | Developer | Fixed action names, rebuilt package with all 4 flows |
-| H4 | Splash timing (1.8s vs 10s) | 🟠 Open | Product Owner | Current: 1.8s → Home |
+| H4 | Splash timing (1.8s vs 10s) | ✅ Resolved | Product Owner | **1.8s** → Home (current implementation confirmed) |
 
 ---
 
@@ -58,6 +58,9 @@
 | 2026-08-18 | L7 | Fixed `Fecbruary` → `February` in APP_MRMS/MonthlyReports.csv (ListSchema XML, 2 occurrences) |
 | 2026-08-18 | H3 | Fixed rejection flow duplicate action names (6 actions renamed), removed from EXCLUDED_FLOW_DIRS, added to manifest, updated README |
 | 2026-08-18 | L5 | Removed `*.md` from .gitignore, added proper OS/Python/temp ignores |
+| 2026-08-18 | H1 | **Decided:** DeputyDirectorME is mandatory 2nd approver (not escalation-only) |
+| 2026-08-18 | H2 | **Decided:** Activity completion logic: after EndDate |
+| 2026-08-18 | H4 | **Decided:** Splash timing: 1.8s → Home (confirmed) |
 
 ---
 
