@@ -7,8 +7,13 @@ workflow. One package, four flows:
 |---|------|---------------------------------------------|
 | 1 | Report Submitted - Notify Supervisor (APP-MRMS) | `Submitted` |
 | 2 | Supervisor Approved - Route to Deputy (APP-MRMS) | `SupervisorApproved` |
-| 3 | Report Rejected - Notify and Route Back (APP-MRMS) | `Rejected` (branches Supervisor vs M&E rejector) |
-| 4 | Report Approved - Finalize (APP-MRMS) | `Approved` (email + notifications + marks Activity Completed/not active + AuditLog) |
+| 3 | Report Approved - Finalize (APP-MRMS) | `Approved` (email + notifications + marks Activity Completed/not active + AuditLog) |
+
+> Note: the former "Report Rejected - Notify and Route Back" flow is **excluded from
+> the shipped package** (duplicate action-name validation error). Its template source
+> is kept at
+> `flows/templates/APP-MRMS-Approval/Microsoft.Flow/flows/d4f9a27c-8851-44ba-9f3c-4989a0e6d467/`
+> for a later fix; add it back once the action names are unique.
 
 ## Before you import
 
