@@ -21,7 +21,7 @@
 |---|---|---|---|---|
 | H1 | DeputyDirectorME: mandatory vs escalation | 🟠 Open | Product Owner | BRD says escalation-only |
 | H2 | Activity completion logic undefined | 🟠 Open | Product Owner | 12 months per activity |
-| H3 | Rejection flow excluded (duplicate names) | 🟠 Open | Developer | Template at `flows/templates/` |
+| H3 | Rejection flow excluded (duplicate names) | ✅ Resolved | Developer | Fixed action names, rebuilt package with all 4 flows |
 | H4 | Splash timing (1.8s vs 10s) | 🟠 Open | Product Owner | Current: 1.8s → Home |
 
 ---
