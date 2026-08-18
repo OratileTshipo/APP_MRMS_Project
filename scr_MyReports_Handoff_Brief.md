@@ -6,7 +6,7 @@
 **Platform:** Power Apps Canvas App on SharePoint Online
 **Status:** Design mockup only. Not yet wired to live data. This brief describes the target build.
 **Companion file:** `scr_MyReports_mockup.html` (visual reference for layout, field grouping, and states — do not translate 1:1, it is a design reference, not a spec of control names)
-**Sidebar/header:** Reuses the shared shell from `scr_ReportSubmission_mockup.html`. The **My Reports** nav item (under the **Reporting** section) is the active state on this screen.
+**Sidebar/header:** Reuses the shared shell from `scr_ReportForm_mockup.html`. The **My Reports** nav item (under the **Reporting** section) is the active state on this screen.
 
 ---
 
@@ -18,7 +18,7 @@
 2. "What drafts do I still need to finish?"
 3. "What was rejected, and do I need to go fix it?"
 
-This screen is **read-and-navigate**, not a data entry screen. It does not edit report content directly — it filters, summarises, and hands off to `scr_ReportSubmission` for anything that still needs writing.
+This screen is **read-and-navigate**, not a data entry screen. It does not edit report content directly — it filters, summarises, and hands off to `scr_ReportForm` for anything that still needs writing.
 
 ---
 
@@ -26,9 +26,9 @@ This screen is **read-and-navigate**, not a data entry screen. It does not edit 
 
 ```
 scr_Home ─────────────┐
-scr_MyActivities ──────┼───▶  scr_MyReports  ──┬──▶  scr_ReportSubmission  (Draft → Continue, Rejected → Resubmit)
+scr_MyActivities ──────┼───▶  scr_MyReports  ──┬──▶  scr_ReportForm  (Draft → Continue, Rejected → Resubmit)
                         │        (this screen)  │
-                        │                       └──▶  scr_ReportDetail / read-only drawer  (Submitted / Approved → View)
+                        │                       └──▶  scr_ReportView  (Submitted / Approved → View)
 ```
 
 **Entry points:**
@@ -37,18 +37,18 @@ scr_MyActivities ──────┼───▶  scr_MyReports  ──┬─�
 |---|---|
 | Sidebar nav — Reporting > My Reports | Always available to any authenticated Contributor |
 | `scr_Home` "Pending Reports" / "Rejected Reports" KPI card | Deep link with a pre-applied Status filter |
-| `scr_ReportSubmission` on Submit or Save Draft | Confirmed exit destination after a save action (per Report Submission brief §2) |
+| `scr_ReportForm` on Submit or Save Draft | Confirmed exit destination after a save action (per Report Form brief §2) |
 
 **Exit points (row-level actions):**
 
 | Row status | Button label | Destination | Parameter passed |
 |---|---|---|---|
-| `Draft` | Continue → | `scr_ReportSubmission` | The existing `MonthlyReports` record |
-| `Rejected` | Resubmit → | `scr_ReportSubmission` | The existing `MonthlyReports` record (triggers `varReportMode = "Rejected"` on the target screen) |
+| `Draft` | Continue → | `scr_ReportForm` | The existing `MonthlyReports` record |
+| `Rejected` | Resubmit → | `scr_ReportForm` | The existing `MonthlyReports` record (triggers `varReportMode = "Rejected"` on the target screen) |
 | `Submitted` | View → | Read-only detail view (drawer or dedicated screen — see Open Question 1) | The existing `MonthlyReports` record, read-only |
 | `Approved` | View → | Same as above | Same as above |
 
-This screen never navigates to `scr_ReportSubmission` for a `Submitted` or `Approved` record — those are locked from further editing by the Contributor. Only `Draft` and `Rejected` are writable states.
+This screen never navigates to `scr_ReportForm` for a `Submitted` or `Approved` record — those are locked from further editing by the Contributor. Only `Draft` and `Rejected` are writable states.
 
 ---
 
@@ -109,7 +109,7 @@ Examples:
 - `Myr_lbl_DraftCount`, `Myr_lbl_SubmittedCount`, `Myr_lbl_ApprovedCount`, `Myr_lbl_RejectedCount`
 - `Myr_btn_ClearFilters`
 
-Do not reuse control names from `scr_MyActivities`, `scr_ReportSubmission`, or any other screen — names must be globally unique per the `pac canvas pack` constraint.
+Do not reuse control names from `scr_MyActivities`, `scr_ReportForm`, or any other screen — names must be globally unique per the `pac canvas pack` constraint.
 
 ---
 
@@ -117,7 +117,7 @@ Do not reuse control names from `scr_MyActivities`, `scr_ReportSubmission`, or a
 
 The report list on this screen (`Myr_gal_Reports`) is a **Gallery**. Per the project's established constraint, hand-authored `Gallery@2.15.0` controls in YAML crash `pac canvas pack` with a PA3001 null-reference error (missing paired EditorState metadata).
 
-Apply the same workaround already used on `scr_Activities` and `scr_ReportSubmission`:
+Apply the same workaround already used on `scr_Activities` and `scr_ReportForm`:
 - If producing YAML directly: strip the gallery to a placeholder `Label` (e.g. `Myr_lbl_ReportsPlaceholder`) for import, and Oray will rebuild the real gallery manually in Power Apps Studio.
 - If producing manual build steps for Studio: this constraint does not apply, build the gallery directly.
 
@@ -138,7 +138,7 @@ This screen does **not** honour `varCanViewAllReports` (the flag that lets Deput
 
 ## 8. Open questions for Oray before this is finalised
 
-1. **Read-only detail view for Submitted/Approved rows** — does "View" open a modal/drawer on this same screen, or navigate to a dedicated `scr_ReportDetail` screen? Not yet decided. The mockup does not model this interaction.
+1. **Read-only detail view for Submitted/Approved rows** — does "View" open a modal/drawer on this same screen, or navigate to `scr_ReportView`? Not yet decided. The mockup does not model this interaction.
 2. **Comment visibility** — should `ManagerComments`/`ReviewedBy` feedback for Approved reports be visible from this list (not just Rejected), e.g. an "Approved with comments" indicator?
 3. **Pagination/paging** — at what row count should this gallery switch from a simple scroll to paged loading? Not yet specified; flag for later once real data volumes are known.
 
