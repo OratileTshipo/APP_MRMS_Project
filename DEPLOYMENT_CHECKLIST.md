@@ -8,6 +8,21 @@
 ## Phase 1: Environment Setup
 
 ### 1.1 SharePoint Site Provisioning
+
+**Option A: Use the provisioning script (recommended)**
+```powershell
+# Install PnP PowerShell
+Install-Module -Name PnP.PowerShell -Scope CurrentUser
+
+# Connect to your SharePoint site
+Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/APP-MRMS" -Interactive
+
+# Generate and run the provisioning script
+python3 tools/provision_sharepoint.py --site-url "https://<tenant>.sharepoint.com/sites/APP-MRMS" --import-data
+.\provision_sharepoint.ps1
+```
+
+**Option B: Manual provisioning**
 - [ ] Create SharePoint site `APP-MRMS` at `https://<tenant>.sharepoint.com/sites/APP-MRMS`
 - [ ] Create **Directorates** list with columns:
   - [ ] Title (Text, required) — display name = "DirectorateName"
