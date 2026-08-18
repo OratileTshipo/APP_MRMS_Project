@@ -46,9 +46,7 @@ MANIFEST_LAST = ["Microsoft.Flow/flows/manifest.json"]
 # Flow folders excluded from the import package. The template source is kept for
 # later fixing, but the flow is not part of the shipped manifest (see
 # flows/templates/APP-MRMS-Approval/manifest.json).
-EXCLUDED_FLOW_DIRS = {
-    "d4f9a27c-8851-44ba-9f3c-4989a0e6d467",  # Report Rejected - Notify and Route Back (APP-MRMS)
-}
+EXCLUDED_FLOW_DIRS = set()  # All flows now have unique action names and are included
 
 
 def parse_args():

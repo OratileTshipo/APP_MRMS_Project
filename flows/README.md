@@ -1,19 +1,14 @@
 # APP-MRMS Approval Workflow Flows
 
-Ready-to-import Power Automate package for the two-stage monthly report approval
+Ready-to-import Power Automate package for the monthly report approval
 workflow. One package, four flows:
 
 | # | Flow | Fires when `MonthlyReports.Status` becomes |
 |---|------|---------------------------------------------|
 | 1 | Report Submitted - Notify Supervisor (APP-MRMS) | `Submitted` |
 | 2 | Supervisor Approved - Route to Deputy (APP-MRMS) | `SupervisorApproved` |
-| 3 | Report Approved - Finalize (APP-MRMS) | `Approved` (email + notifications + marks Activity Completed/not active + AuditLog) |
-
-> Note: the former "Report Rejected - Notify and Route Back" flow is **excluded from
-> the shipped package** (duplicate action-name validation error). Its template source
-> is kept at
-> `flows/templates/APP-MRMS-Approval/Microsoft.Flow/flows/d4f9a27c-8851-44ba-9f3c-4989a0e6d467/`
-> for a later fix; add it back once the action names are unique.
+| 3 | Report Rejected - Notify and Route Back (APP-MRMS) | `Rejected` (notifies Contributor/Supervisor based on who rejected) |
+| 4 | Report Approved - Finalize (APP-MRMS) | `Approved` (email + notifications + marks Activity Completed/not active + AuditLog) |
 
 ## Before you import
 
@@ -57,11 +52,11 @@ Find list GUIDs: open the list → List settings → the browser URL contains
 - `scr_ApprovalQueue` must show `Status = Submitted` for Supervisors and
   `Status = SupervisorApproved` for the Deputy Director (add the second filter).
 - Emails/notifications per decision:
-  - Submitted → Supervisor
-  - SupervisorApproved → Deputy Director + Contributor
-  - Rejected by Supervisor → Contributor (with reason)
-  - Rejected by Deputy → Contributor + Supervisor (with reason)
-  - Approved (final) → Contributor + Supervisor; Activity set to `Completed` / `Active=false`
+  - Submitted → Supervisor (Flow 1)
+  - SupervisorApproved → Deputy Director + Contributor (Flow 2)
+  - Rejected by Supervisor → Contributor with reason (Flow 3, else branch)
+  - Rejected by Deputy → Contributor + Supervisor with reason (Flow 3, then branch)
+  - Approved (final) → Contributor + Supervisor; Activity set to `Completed` / `Active=false` (Flow 4)
 - A `Notifications` row (in-app badge) is created alongside every email.
 
 Templates live in `flows/templates/APP-MRMS-Approval/` (`{{SITE_URL}}`, `{{MR_GUID}}`,
