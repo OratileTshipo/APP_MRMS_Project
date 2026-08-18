@@ -14,15 +14,29 @@
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
-        "$connections": { "defaultValue": {}, "type": "Object" }
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
       },
       "triggers": {
         "When_an_item_is_modified": {
-          "recurrence": { "frequency": "Minute", "interval": 3 },
-          "evaluatedRecurrence": { "frequency": "Minute", "interval": 3 },
+          "recurrence": {
+            "frequency": "Minute",
+            "interval": 3
+          },
+          "evaluatedRecurrence": {
+            "frequency": "Minute",
+            "interval": 3
+          },
           "splitOn": "@triggerOutputs()?['body/value']",
-          "metadata": { "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf" },
+          "metadata": {
+            "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf"
+          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -44,7 +58,12 @@
           "type": "If",
           "expression": {
             "and": [
-              { "equals": [ "@triggerBody()?['Status/Value']", "Submitted" ] }
+              {
+                "equals": [
+                  "@triggerBody()?['Status/Value']",
+                  "Submitted"
+                ]
+              }
             ]
           },
           "actions": {
@@ -61,12 +80,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                   "connectionName": "shared_sharepointonline",
                   "operationId": "GetItem"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Notify_Supervisor": {
-              "runAfter": { "Get_activity": ["Succeeded"] },
+              "runAfter": {
+                "Get_activity": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -79,12 +101,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
                   "connectionName": "shared_office365",
                   "operationId": "SendEmailV2"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Create_Notification": {
-              "runAfter": { "Notify_Supervisor": ["Succeeded"] },
+              "runAfter": {
+                "Notify_Supervisor": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -101,12 +126,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                   "connectionName": "shared_sharepointonline",
                   "operationId": "CreateItem"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Write_AuditLog": {
-              "runAfter": { "Create_Notification": ["Succeeded"] },
+              "runAfter": {
+                "Create_Notification": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -124,8 +152,7 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                   "connectionName": "shared_sharepointonline",
                   "operationId": "CreateItem"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             }
           },

@@ -14,15 +14,29 @@
       "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
       "contentVersion": "1.0.0.0",
       "parameters": {
-        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
-        "$connections": { "defaultValue": {}, "type": "Object" }
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        },
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
       },
       "triggers": {
         "When_an_item_is_modified": {
-          "recurrence": { "frequency": "Minute", "interval": 3 },
-          "evaluatedRecurrence": { "frequency": "Minute", "interval": 3 },
+          "recurrence": {
+            "frequency": "Minute",
+            "interval": 3
+          },
+          "evaluatedRecurrence": {
+            "frequency": "Minute",
+            "interval": 3
+          },
           "splitOn": "@triggerOutputs()?['body/value']",
-          "metadata": { "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf" },
+          "metadata": {
+            "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf"
+          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -52,8 +66,7 @@
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
               "connectionName": "shared_sharepointonline",
               "operationId": "GetItem"
-            },
-            "authentication": "@parameters('$authentication')"
+            }
           }
         },
         "Get_deputy": {
@@ -69,14 +82,17 @@
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
               "connectionName": "shared_sharepointonline",
               "operationId": "GetItems"
-            },
-            "authentication": "@parameters('$authentication')"
+            }
           }
         },
         "Condition_Rejected_By_Deputy": {
           "runAfter": {
-            "Get_activity": ["Succeeded"],
-            "Get_deputy": ["Succeeded"]
+            "Get_activity": [
+              "Succeeded"
+            ],
+            "Get_deputy": [
+              "Succeeded"
+            ]
           },
           "type": "If",
           "expression": {
@@ -100,12 +116,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
                   "connectionName": "shared_office365",
                   "operationId": "SendEmailV2"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Notify_Supervisor_DeputyReject": {
-              "runAfter": { "Notify_Contributor_DeputyReject": ["Succeeded"] },
+              "runAfter": {
+                "Notify_Contributor_DeputyReject": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -118,12 +137,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
                   "connectionName": "shared_office365",
                   "operationId": "SendEmailV2"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Create_Notification_Contributor": {
-              "runAfter": { "Notify_Supervisor_DeputyReject": ["Succeeded"] },
+              "runAfter": {
+                "Notify_Supervisor_DeputyReject": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -140,12 +162,15 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                   "connectionName": "shared_sharepointonline",
                   "operationId": "CreateItem"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             },
             "Create_Notification_Supervisor": {
-              "runAfter": { "Create_Notification_Contributor": ["Succeeded"] },
+              "runAfter": {
+                "Create_Notification_Contributor": [
+                  "Succeeded"
+                ]
+              },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -162,8 +187,7 @@
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                   "connectionName": "shared_sharepointonline",
                   "operationId": "CreateItem"
-                },
-                "authentication": "@parameters('$authentication')"
+                }
               }
             }
           },
@@ -183,12 +207,15 @@
                     "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
                     "connectionName": "shared_office365",
                     "operationId": "SendEmailV2"
-                  },
-                  "authentication": "@parameters('$authentication')"
+                  }
                 }
               },
               "Create_Notification_Contributor_SupervisorReject": {
-                "runAfter": { "Notify_Contributor_SupervisorReject": ["Succeeded"] },
+                "runAfter": {
+                  "Notify_Contributor_SupervisorReject": [
+                    "Succeeded"
+                  ]
+                },
                 "type": "OpenApiConnection",
                 "inputs": {
                   "parameters": {
@@ -205,15 +232,18 @@
                     "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
                     "connectionName": "shared_sharepointonline",
                     "operationId": "CreateItem"
-                  },
-                  "authentication": "@parameters('$authentication')"
+                  }
                 }
               }
             }
           }
         },
         "Write_AuditLog": {
-          "runAfter": { "Condition_Rejected_By_Deputy": ["Succeeded"] },
+          "runAfter": {
+            "Condition_Rejected_By_Deputy": [
+              "Succeeded"
+            ]
+          },
           "type": "OpenApiConnection",
           "inputs": {
             "parameters": {
@@ -231,8 +261,7 @@
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
               "connectionName": "shared_sharepointonline",
               "operationId": "CreateItem"
-            },
-            "authentication": "@parameters('$authentication')"
+            }
           }
         }
       },
