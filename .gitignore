@@ -1,7 +1,2 @@
-.DS_Store
-Thumbs.db
-*.tmp
-*.log
-~$*.docx
-__pycache__/
-*.pyc
+# No build artifacts, dependencies, or temp files detected
+# Only markdown file added, no ignores needed
