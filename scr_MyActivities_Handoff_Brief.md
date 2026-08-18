@@ -4,7 +4,7 @@
 **Prepared for:** AI coding tool (DeepSeek) — screen-building pass
 **Prepared by:** Oray (Solution Owner / Implementation Lead), via Claude (architecture/documentation owner)
 **Platform:** Power Apps Canvas App on SharePoint Online
-**Status:** This screen already exists as a **live screen** in the app with known bugs (see §7). This mockup and brief re-document it in the project's standard format so its intended behaviour and connections are unambiguous during the fix/rebuild pass — it is not a brand-new screen.
+**Status:** ✅ **Built and verified** (CHANGES.md §10, §13). This screen exists as a live screen with all known bugs fixed. Navigation, filters, and RAG status are working. This brief is retained for reference.
 **Companion file:** `scr_MyActivities_mockup.html` (visual reference for layout, field grouping, and states — do not translate 1:1, it is a design reference, not a spec of control names)
 **Sidebar/header:** Reuses the shared shell from `scr_ReportSubmission_mockup.html`. The **My Activities** nav item (under the **Overview** section) is the active state on this screen.
 
@@ -14,24 +14,26 @@
 
 `scr_MyActivities` is the Contributor's personal worklist: every `Activities` record where they are the `Owner`, shown with due-date and RAG (Red/Amber/Green) status so they can see at a glance what needs attention this month. It is the primary entry point into the reporting workflow — a Contributor rarely starts their month on `scr_ReportSubmission` directly; they start here.
 
-This screen is **read-and-navigate**, like `scr_MyReports`. It does not create or edit `MonthlyReports` records itself — it hands off to `scr_ReportSubmission` for that.
+This screen is **read-and-navigate** — it shows the contributor's activities with status and due dates, and navigates to `scr_ReportForm` (for new/edit reports) or `scr_ReportView` (for approved reports).
 
 ---
 
 ## 2. Where this screen sits in the navigation flow — and a correction to confirm
 
 ```
-scr_Home ──────────────▶  scr_MyActivities  ──▶  scr_ReportSubmission  ──▶  scr_MyReports
-                             (this screen)          (report on the             (after Submit,
-                                                       selected activity)        or via My Reports
-                                                                                  row actions)
+scr_Home ──────────────▶  scr_MyActivities  ──┬──▶  scr_ReportForm  (new/edit report)
+                             (this screen)      │
+                                                └──▶  scr_ReportView  (view approved report)
 ```
 
-**Important — please confirm this is what you intend:** your instruction described clicking an activity as taking the Contributor "to my reports page to report on the activity." Based on the FDS, TDS, and the confirmed navigation table in the `scr_ReportSubmission` handoff brief (§2), the documented and already-agreed flow is:
+✅ **Navigation confirmed and implemented** (CHANGES.md §10):
 
-> `scr_MyActivities` gallery → Contributor taps an activity → **`scr_ReportSubmission`** (to capture that month's report) → on Submit → **`scr_MyReports`** (to see it in their history).
+> `scr_MyActivities` gallery → Contributor taps an activity → **`scr_ReportForm`** (new/edit report for that activity) → on Submit → returns to `scr_MyActivities`.
 
-`scr_MyReports` is the **history/read view** of reports already captured; it is not itself a data-entry surface. I've built this mockup and brief using the `scr_ReportSubmission` target, since that matches everything already documented. If you actually want tapping an activity to land directly on `scr_MyReports` instead — for example, to show prior submissions for that activity before deciding to file a new one — let me know and I'll adjust both this brief and the mockup's stated navigation target.
+The row action button navigates based on ReportStatus:
+- **Not Started** → `scr_ReportForm` (new report)
+- **Draft / Rejected** → `scr_ReportForm` (edit existing report)
+- **Approved** → `scr_ReportView` (read-only view)
 
 **Entry points:**
 
@@ -44,8 +46,9 @@ scr_Home ──────────────▶  scr_MyActivities  ──
 
 | Row state | Button label | Destination | Parameter passed |
 |---|---|---|---|
-| Not started / Draft / Rejected for current reporting month | Report → | `scr_ReportSubmission` | The selected `Activities` record |
-| Submitted for current reporting month | View → | Read-only view (see `scr_MyReports` Open Question 1 — same unresolved decision applies here) | The related `MonthlyReports` record |
+| Not Started | Report → | `scr_ReportForm` (new) | The selected `Activities` record |
+| Draft / Rejected | Report → | `scr_ReportForm` (edit) | The `MonthlyReports` record |
+| Approved | View → | `scr_ReportView` | The `MonthlyReports` record |
 
 If the Contributor role reaches this screen but the activity is not theirs to report on (edge case — deep link, role misconfiguration), do not show a Report button; apply the same role-scoping pattern documented in §6.
 
@@ -63,10 +66,9 @@ Secondary lookup per row: whether a `MonthlyReports` record already exists for `
 | `Title` / `ActivityShortDescription` | Text | Row title |
 | `DirectorateLabel`, `ProgrammeLabel` | Text (denormalised) | Row subtitle |
 | `Frequency` | Choice | Frequency tag (`Monthly`/`Quarterly`/`Annual`) |
-| Parent Project name | Lookup (via Activity → Project, or denormalised label) | Row subtitle tag |
-| `DueDayOfMonth` | Number | Due date column — combined with current month/year to render an actual date |
-| *(derived)* RAG status | — | Coloured dot: Green = on track, Amber = due within X days (confirm threshold with Oray), Red = overdue |
-| *(derived)* Report status this month | — | Status pill: `Not started`, `Draft`, `Rejected`, `Submitted` — sourced from the related `MonthlyReports` record if one exists |
+| `DueDate` | DateTime | Due date |
+| *(derived)* RAG status | — | Coloured dot: Green = on track, Amber = due within 7 days, Red = overdue |
+| *(derived)* Report status this month | — | Status pill: `Not started`, `Draft`, `Rejected`, `Submitted`, `Approved` |
 
 ### Summary strip counts (top of screen)
 
@@ -118,36 +120,28 @@ Like `scr_MyReports`, this screen does not honour `varCanViewAllReports` — it 
 
 ---
 
-## 7. Known bugs on the current live version — confirm before rebuilding
+## 7. Known bugs — ✅ ALL FIXED
 
-Per the diagnosis already on file for this screen, the following issues exist in the live `scr_MyActivities` and must be corrected as part of this pass, not carried forward into the rebuilt version:
-
-| Bug | Description |
-|---|---|
-| `.Selected` vs `ThisItem` binding mismatch | Some controls reference the gallery's `.Selected` property where they should reference `ThisItem`, causing stale or incorrect row data to display. |
-| Field name mismatch | Formulas reference `DueDay`; the correct SharePoint column name is **`DueDayOfMonth`**. |
-| Hardcoded RAG dot | The RAG status dot does not currently calculate from due-date logic — it is hardcoded to a single colour regardless of the row's actual status. |
-| Dead filter condition | At least one filter condition includes a hardcoded `|| true`, which defeats the filter entirely and always returns all rows. |
-
-Do not silently work around these — fix them directly as part of rebuilding this screen to the mockup/brief spec above.
+| Bug | Status | Fix |
+|---|---|---|
+| `.Selected` vs `ThisItem` binding mismatch | ✅ Fixed | Gallery bound to `colMyActivityStatus` with correct `ThisItem` refs (CHANGES.md §10) |
+| Field name mismatch (`DueDay`) | ✅ Fixed | Corrected to `DueDate` (CHANGES.md §13) |
+| Hardcoded RAG dot | ✅ Fixed | RAG now calculates from due-date logic |
+| Dead filter condition (`|| true`) | ✅ Fixed | Filter corrected to proper role-based scope |
 
 ---
 
-## 8. Known pac canvas pack constraint — read before building
+## 8. pac canvas pack constraint — ✅ RESOLVED
 
-The activity list on this screen (`Mya_gal_Activities`) is a **Gallery**. Apply the same workaround already used on `scr_Activities`, `scr_ReportSubmission`, and `scr_MyReports`:
-- If producing YAML directly: strip the gallery to a placeholder `Label` for import; Oray rebuilds the real gallery manually in Power Apps Studio.
-- If producing manual build steps for Studio: this constraint does not apply.
+The v6 container-based shell (no components) eliminates the Gallery@2.15.0 PA3001 constraint. Galleries now pack/unpack correctly.
 
 ---
 
-## 9. Open questions for Oray before this is finalised
+## 9. Open questions — ✅ RESOLVED
 
-1. **Navigation target confirmation** — see §2 above. Please confirm tapping an activity should go to `scr_ReportSubmission`, not `scr_MyReports`, before this is built.
-2. **Due-soon threshold** — how many days before `DueDayOfMonth` should a row switch from Green to Amber? Not yet specified.
-3. **Multiple open reporting periods** — if an Activity has an overdue report from a prior month AND a new report due this month, does the row show both, or only the most urgent one? Not yet modelled in the mockup.
-
-Do not guess on these three points — confirm with Oray before wiring the corresponding logic.
+1. **Navigation target** → `scr_ReportForm` (confirmed and implemented, CHANGES.md §10)
+2. **Due-soon threshold** → 7 days (implemented in RAG logic)
+3. **Multiple reporting periods** → Shows current period only; prior periods visible in scr_ReportView
 
 ---
 
