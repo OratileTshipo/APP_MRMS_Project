@@ -1,4 +1,14 @@
-```
-# Documentation
-*.md
-```
+# Generated documentation (keep source docs tracked)
+# *.md  # Disabled — AUDIT_FINDINGS.md, DEPLOYMENT_CHECKLIST.md, etc. are tracked
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+
+# Temporary
+/tmp/
+*.tmp

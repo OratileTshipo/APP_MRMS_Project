@@ -87,7 +87,7 @@
             ]
           },
           "actions": {
-            "Notify_Contributor_DeputyReject": {
+            "Email_Contributor_DeputyRejected": {
               "runAfter": {},
               "type": "OpenApiConnection",
               "inputs": {
@@ -105,8 +105,8 @@
                 "authentication": "@parameters('$authentication')"
               }
             },
-            "Notify_Supervisor_DeputyReject": {
-              "runAfter": { "Notify_Contributor_DeputyReject": ["Succeeded"] },
+            "Email_Supervisor_DeputyRejected": {
+              "runAfter": { "Email_Contributor_DeputyRejected": ["Succeeded"] },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -123,8 +123,8 @@
                 "authentication": "@parameters('$authentication')"
               }
             },
-            "Create_Notification_Contributor": {
-              "runAfter": { "Notify_Supervisor_DeputyReject": ["Succeeded"] },
+            "Create_Notif_Contributor_DeputyReject": {
+              "runAfter": { "Email_Supervisor_DeputyRejected": ["Succeeded"] },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -145,8 +145,8 @@
                 "authentication": "@parameters('$authentication')"
               }
             },
-            "Create_Notification_Supervisor": {
-              "runAfter": { "Create_Notification_Contributor": ["Succeeded"] },
+            "Create_Notif_Supervisor_DeputyReject": {
+              "runAfter": { "Create_Notif_Contributor_DeputyReject": ["Succeeded"] },
               "type": "OpenApiConnection",
               "inputs": {
                 "parameters": {
@@ -170,7 +170,7 @@
           },
           "else": {
             "actions": {
-              "Notify_Contributor_SupervisorReject": {
+              "Email_Contributor_SupervisorRejected": {
                 "runAfter": {},
                 "type": "OpenApiConnection",
                 "inputs": {
@@ -188,8 +188,8 @@
                   "authentication": "@parameters('$authentication')"
                 }
               },
-              "Create_Notification_Contributor_SupervisorReject": {
-                "runAfter": { "Notify_Contributor_SupervisorReject": ["Succeeded"] },
+              "Create_Notif_Contributor_SupervisorReject": {
+                "runAfter": { "Email_Contributor_SupervisorRejected": ["Succeeded"] },
                 "type": "OpenApiConnection",
                 "inputs": {
                   "parameters": {
