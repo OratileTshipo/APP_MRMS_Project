@@ -1,0 +1,139 @@
+{
+  "name": "210ef69f-5bb8-4a11-88ff-c2b7606c71a6",
+  "id": "/providers/Microsoft.Flow/flows/210ef69f-5bb8-4a11-88ff-c2b7606c71a6",
+  "type": "Microsoft.Flow/flows",
+  "properties": {
+    "apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+    "displayName": "Report Submitted - Notify Supervisor (APP-MRMS)",
+    "definition": {
+      "metadata": {
+        "provisioningMethod": "FromDefinition",
+        "creationSource": "Portal",
+        "modifiedSources": "Portal"
+      },
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
+        "$connections": { "defaultValue": {}, "type": "Object" }
+      },
+      "triggers": {
+        "When_an_item_is_modified": {
+          "recurrence": { "frequency": "Minute", "interval": 3 },
+          "evaluatedRecurrence": { "frequency": "Minute", "interval": 3 },
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "metadata": { "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf" },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "{{SITE_URL}}",
+              "table": "{{MR_GUID}}",
+              "changeType": "Modified"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetOnChangedItems"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Condition_Status_Submitted": {
+          "runAfter": {},
+          "type": "If",
+          "expression": {
+            "and": [
+              { "equals": [ "@triggerBody()?['Status/Value']", "Submitted" ] }
+            ]
+          },
+          "actions": {
+            "Get_activity": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "{{SITE_URL}}",
+                  "table": "{{ACT_GUID}}",
+                  "id": "@triggerBody()?['Activity/Id']"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "GetItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Notify_Supervisor": {
+              "runAfter": { "Get_activity": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@outputs('Get_activity')?['body/Supervisor/EMail']",
+                  "emailMessage/Subject": "New monthly report awaiting your review",
+                  "emailMessage/Body": "<p>Dear @{outputs('Get_activity')?['body/Supervisor/Value']},</p><p>A monthly report for activity <b>@{outputs('Get_activity')?['body/Title']}</b> (@{outputs('Get_activity')?['body/ActivityShortDescription']}) was submitted by @{triggerBody()?['SubmittedBy/EMail']} and is now awaiting your review.</p><p>Report ID: @{triggerBody()?['ID']}<br>Reporting Month: @{triggerBody()?['ReportingMonth/Value']}<br>Financial Year: @{triggerBody()?['FinancialYear/Value']}</p><p>Please open the APP-MRMS app and act on this report in your Approval Queue.</p><p>Regards,<br>APP-MRMS System</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Create_Notification": {
+              "runAfter": { "Notify_Supervisor": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "{{SITE_URL}}",
+                  "table": "{{NOTIF_GUID}}",
+                  "item/Title": "New monthly report awaiting your review",
+                  "item/RecipientUser/Claims": "i:0#.f|membership|@{outputs('Get_activity')?['body/Supervisor/EMail']}",
+                  "item/RelatedEntity": "MonthlyReports:@{triggerBody()?['ID']}",
+                  "item/Message": "Report @{triggerBody()?['ID']} for @{outputs('Get_activity')?['body/Title']} was submitted and awaits your review.",
+                  "item/IsRead": false,
+                  "item/CreatedDate": "@utcNow()"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "CreateItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Write_AuditLog": {
+              "runAfter": { "Create_Notification": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "{{SITE_URL}}",
+                  "table": "{{AUDIT_GUID}}",
+                  "item/Title": "StatusChange MonthlyReports:@{triggerBody()?['ID']}",
+                  "item/EntityType": "MonthlyReport",
+                  "item/EntityId": "@{triggerBody()?['ID']}",
+                  "item/Action": "StatusChange",
+                  "item/ActionBy/Claims": "i:0#.f|membership|@{triggerBody()?['SubmittedBy/EMail']}",
+                  "item/ActionDate": "@utcNow()",
+                  "item/Reason": "Submitted"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "CreateItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "else": {}
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

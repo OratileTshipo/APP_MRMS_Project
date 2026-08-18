@@ -1,0 +1,243 @@
+{
+  "name": "d4f9a27c-8851-44ba-9f3c-4989a0e6d467",
+  "id": "/providers/Microsoft.Flow/flows/d4f9a27c-8851-44ba-9f3c-4989a0e6d467",
+  "type": "Microsoft.Flow/flows",
+  "properties": {
+    "apiId": "/providers/Microsoft.PowerApps/apis/shared_logicflows",
+    "displayName": "Report Rejected - Notify and Route Back (APP-MRMS)",
+    "definition": {
+      "metadata": {
+        "provisioningMethod": "FromDefinition",
+        "creationSource": "Portal",
+        "modifiedSources": "Portal"
+      },
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": { "defaultValue": {}, "type": "SecureObject" },
+        "$connections": { "defaultValue": {}, "type": "Object" }
+      },
+      "triggers": {
+        "When_an_item_is_modified": {
+          "recurrence": { "frequency": "Minute", "interval": 3 },
+          "evaluatedRecurrence": { "frequency": "Minute", "interval": 3 },
+          "splitOn": "@triggerOutputs()?['body/value']",
+          "metadata": { "operationMetadataId": "a61588e4-a5d8-4ce1-a1d3-84be04a2beaf" },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "{{SITE_URL}}",
+              "table": "{{MR_GUID}}",
+              "changeType": "Modified"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetOnChangedItems"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Get_activity": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "{{SITE_URL}}",
+              "table": "{{ACT_GUID}}",
+              "id": "@triggerBody()?['Activity/Id']"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItem"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Get_deputy": {
+          "runAfter": {},
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "{{SITE_URL}}",
+              "table": "{{USERS_GUID}}",
+              "filterQuery": "Role eq 'DeputyDirectorME'"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItems"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Condition_Rejected_By_Deputy": {
+          "runAfter": {
+            "Get_activity": ["Succeeded"],
+            "Get_deputy": ["Succeeded"]
+          },
+          "type": "If",
+          "expression": {
+            "equals": [
+              "@outputs('Get_deputy')?['body/value'][0]['UserAccount/EMail']",
+              "@triggerBody()?['ReviewedBy/EMail']"
+            ]
+          },
+          "actions": {
+            "Notify_Contributor_DeputyReject": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@triggerBody()?['SubmittedBy/EMail']",
+                  "emailMessage/Subject": "Your report was returned by the Deputy Director: M&E",
+                  "emailMessage/Body": "<p>Your monthly report (ID: @{triggerBody()?['ID']}) for activity @{outputs('Get_activity')?['body/Title']} was <b>rejected by the Deputy Director: M&amp;E</b>.</p><p>Reason: @{triggerBody()?['RejectionReason']}</p><p>Please correct the issues raised and resubmit the report. The approval process will then restart from the beginning.</p><p>Regards,<br>APP-MRMS System</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Notify_Supervisor_DeputyReject": {
+              "runAfter": { "Notify_Contributor_DeputyReject": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "emailMessage/To": "@outputs('Get_activity')?['body/Supervisor/EMail']",
+                  "emailMessage/Subject": "Report returned by Deputy Director: M&E",
+                  "emailMessage/Body": "<p>The monthly report (ID: @{triggerBody()?['ID']}) you approved for activity @{outputs('Get_activity')?['body/Title']} was <b>rejected by the Deputy Director: M&amp;E</b>.</p><p>Reason: @{triggerBody()?['RejectionReason']}</p><p>The report is being returned to the Contributor for correction and will be resubmitted to you.</p><p>Regards,<br>APP-MRMS System</p>",
+                  "emailMessage/Importance": "Normal"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Create_Notification_Contributor": {
+              "runAfter": { "Notify_Supervisor_DeputyReject": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "{{SITE_URL}}",
+                  "table": "{{NOTIF_GUID}}",
+                  "item/Title": "Report returned by Deputy Director: M&E",
+                  "item/RecipientUser/Claims": "i:0#.f|membership|@{triggerBody()?['SubmittedBy/EMail']}",
+                  "item/RelatedEntity": "MonthlyReports:@{triggerBody()?['ID']}",
+                  "item/Message": "Your report @{triggerBody()?['ID']} was rejected by the Deputy Director: M&E. Reason: @{triggerBody()?['RejectionReason']}",
+                  "item/IsRead": false,
+                  "item/CreatedDate": "@utcNow()"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "CreateItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Create_Notification_Supervisor": {
+              "runAfter": { "Create_Notification_Contributor": ["Succeeded"] },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "parameters": {
+                  "dataset": "{{SITE_URL}}",
+                  "table": "{{NOTIF_GUID}}",
+                  "item/Title": "Report returned by Deputy Director: M&E",
+                  "item/RecipientUser/Claims": "i:0#.f|membership|@{outputs('Get_activity')?['body/Supervisor/EMail']}",
+                  "item/RelatedEntity": "MonthlyReports:@{triggerBody()?['ID']}",
+                  "item/Message": "Report @{triggerBody()?['ID']} you approved was rejected by the Deputy Director: M&E. Reason: @{triggerBody()?['RejectionReason']}",
+                  "item/IsRead": false,
+                  "item/CreatedDate": "@utcNow()"
+                },
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "CreateItem"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Notify_Contributor_SupervisorReject": {
+                "runAfter": {},
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "emailMessage/To": "@triggerBody()?['SubmittedBy/EMail']",
+                    "emailMessage/Subject": "Your report was rejected by your Supervisor",
+                    "emailMessage/Body": "<p>Your monthly report (ID: @{triggerBody()?['ID']}) for activity @{outputs('Get_activity')?['body/Title']} was <b>rejected by your Supervisor</b>.</p><p>Reason: @{triggerBody()?['RejectionReason']}</p><p>Please correct the issues raised and resubmit the report. The approval process will then restart from the beginning.</p><p>Regards,<br>APP-MRMS System</p>",
+                    "emailMessage/Importance": "Normal"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                    "connectionName": "shared_office365",
+                    "operationId": "SendEmailV2"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              },
+              "Create_Notification_Contributor": {
+                "runAfter": { "Notify_Contributor_SupervisorReject": ["Succeeded"] },
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "dataset": "{{SITE_URL}}",
+                    "table": "{{NOTIF_GUID}}",
+                    "item/Title": "Report rejected by your Supervisor",
+                    "item/RecipientUser/Claims": "i:0#.f|membership|@{triggerBody()?['SubmittedBy/EMail']}",
+                    "item/RelatedEntity": "MonthlyReports:@{triggerBody()?['ID']}",
+                    "item/Message": "Your report @{triggerBody()?['ID']} was rejected by your Supervisor. Reason: @{triggerBody()?['RejectionReason']}",
+                    "item/IsRead": false,
+                    "item/CreatedDate": "@utcNow()"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                    "connectionName": "shared_sharepointonline",
+                    "operationId": "CreateItem"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              }
+            }
+          }
+        },
+        "Write_AuditLog": {
+          "runAfter": { "Condition_Rejected_By_Deputy": ["Succeeded"] },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "parameters": {
+              "dataset": "{{SITE_URL}}",
+              "table": "{{AUDIT_GUID}}",
+              "item/Title": "StatusChange MonthlyReports:@{triggerBody()?['ID']}",
+              "item/EntityType": "MonthlyReport",
+              "item/EntityId": "@{triggerBody()?['ID']}",
+              "item/Action": "StatusChange",
+              "item/ActionBy/Claims": "i:0#.f|membership|@{triggerBody()?['ReviewedBy/EMail']}",
+              "item/ActionDate": "@utcNow()",
+              "item/Reason": "@{triggerBody()?['RejectionReason']}"
+            },
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+              "connectionName": "shared_sharepointonline",
+              "operationId": "CreateItem"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "outputs": {}
+    }
+  }
+}

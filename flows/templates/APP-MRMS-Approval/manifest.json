@@ -1,0 +1,107 @@
+{
+  "schema": "1.0",
+  "details": {
+    "displayName": "APP-MRMS Approval Workflow Flows",
+    "description": "Monthly Reporting Management System two-stage approval flows. Flow 1: notify Supervisor on submit. Flow 2: route Supervisor-approved report to Deputy Director M&E. Flow 3: notify Contributor (and Supervisor when M&E rejects) on rejection. Flow 4: finalize report on M&E approval.",
+    "createdTime": "2026-08-18T00:00:00.0000000Z",
+    "packageTelemetryId": "b7e1f2a3-4c5d-4e6f-8a9b-0c1d2e3f4a5b",
+    "creator": "N/A",
+    "sourceEnvironment": "APP-MRMS"
+  },
+  "resources": {
+    "210ef69f-5bb8-4a11-88ff-c2b7606c71a6": {
+      "type": "Microsoft.Flow/flows",
+      "suggestedCreationType": "Update",
+      "creationType": "Existing, New, Update",
+      "details": { "displayName": "Report Submitted - Notify Supervisor (APP-MRMS)" },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": [
+        "a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c",
+        "59fc2557-16b1-45d9-9606-369d53b38eee",
+        "6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3",
+        "1cbb6259-2021-44cc-a05a-4e59aa6e9ca3"
+      ]
+    },
+    "35502f2b-26e0-4d6b-8099-d409277f9dfb": {
+      "type": "Microsoft.Flow/flows",
+      "suggestedCreationType": "Update",
+      "creationType": "Existing, New, Update",
+      "details": { "displayName": "Supervisor Approved - Route to Deputy (APP-MRMS)" },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": [
+        "a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c",
+        "59fc2557-16b1-45d9-9606-369d53b38eee",
+        "6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3",
+        "1cbb6259-2021-44cc-a05a-4e59aa6e9ca3"
+      ]
+    },
+    "d4f9a27c-8851-44ba-9f3c-4989a0e6d467": {
+      "type": "Microsoft.Flow/flows",
+      "suggestedCreationType": "Update",
+      "creationType": "Existing, New, Update",
+      "details": { "displayName": "Report Rejected - Notify and Route Back (APP-MRMS)" },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": [
+        "a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c",
+        "59fc2557-16b1-45d9-9606-369d53b38eee",
+        "6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3",
+        "1cbb6259-2021-44cc-a05a-4e59aa6e9ca3"
+      ]
+    },
+    "c005bc0a-ff88-4a4c-be75-93fcad1e4ef3": {
+      "type": "Microsoft.Flow/flows",
+      "suggestedCreationType": "Update",
+      "creationType": "Existing, New, Update",
+      "details": { "displayName": "Report Approved - Finalize (APP-MRMS)" },
+      "configurableBy": "User",
+      "hierarchy": "Root",
+      "dependsOn": [
+        "a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c",
+        "59fc2557-16b1-45d9-9606-369d53b38eee",
+        "6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3",
+        "1cbb6259-2021-44cc-a05a-4e59aa6e9ca3"
+      ]
+    },
+    "a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "name": "shared_sharepointonline",
+      "type": "Microsoft.PowerApps/apis",
+      "suggestedCreationType": "Existing",
+      "details": { "displayName": "SharePoint" },
+      "configurableBy": "System",
+      "hierarchy": "Child",
+      "dependsOn": []
+    },
+    "59fc2557-16b1-45d9-9606-369d53b38eee": {
+      "type": "Microsoft.PowerApps/apis/connections",
+      "suggestedCreationType": "Existing",
+      "creationType": "Existing",
+      "details": { "displayName": "APP-MRMS SharePoint connection" },
+      "configurableBy": "User",
+      "hierarchy": "Child",
+      "dependsOn": ["a7f9c889-a35f-4e9e-9f58-87c39fd6ae9c"]
+    },
+    "6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_office365",
+      "name": "shared_office365",
+      "type": "Microsoft.PowerApps/apis",
+      "suggestedCreationType": "Existing",
+      "details": { "displayName": "Office 365 Outlook" },
+      "configurableBy": "System",
+      "hierarchy": "Child",
+      "dependsOn": []
+    },
+    "1cbb6259-2021-44cc-a05a-4e59aa6e9ca3": {
+      "type": "Microsoft.PowerApps/apis/connections",
+      "suggestedCreationType": "Existing",
+      "creationType": "Existing",
+      "details": { "displayName": "APP-MRMS Outlook connection" },
+      "configurableBy": "User",
+      "hierarchy": "Child",
+      "dependsOn": ["6f35e80e-b2c3-49c9-a7e8-a8d6677bfcb3"]
+    }
+  }
+}
