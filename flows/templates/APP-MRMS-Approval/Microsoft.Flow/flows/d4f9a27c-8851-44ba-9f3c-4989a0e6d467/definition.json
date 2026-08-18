@@ -27,8 +27,7 @@
           "inputs": {
             "parameters": {
               "dataset": "{{SITE_URL}}",
-              "table": "{{MR_GUID}}",
-              "changeType": "Modified"
+              "table": "{{MR_GUID}}"
             },
             "host": {
               "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
