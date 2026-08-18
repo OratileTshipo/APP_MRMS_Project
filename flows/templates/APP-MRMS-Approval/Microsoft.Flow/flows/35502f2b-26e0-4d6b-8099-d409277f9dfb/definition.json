@@ -78,8 +78,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-                  "connectionName": "shared_sharepointonline",
-                  "operationId": "GetItem"
+                  "operationId": "GetItem",
+                  "connectionReferenceName": "shared_sharepointonline"
                 }
               }
             },
@@ -94,8 +94,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-                  "connectionName": "shared_sharepointonline",
-                  "operationId": "GetItems"
+                  "operationId": "GetItems",
+                  "connectionReferenceName": "shared_sharepointonline"
                 }
               }
             },
@@ -118,8 +118,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
-                  "connectionName": "shared_office365",
-                  "operationId": "SendEmailV2"
+                  "operationId": "SendEmailV2",
+                  "connectionReferenceName": "shared_office365"
                 }
               }
             },
@@ -139,8 +139,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
-                  "connectionName": "shared_office365",
-                  "operationId": "SendEmailV2"
+                  "operationId": "SendEmailV2",
+                  "connectionReferenceName": "shared_office365"
                 }
               }
             },
@@ -164,8 +164,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-                  "connectionName": "shared_sharepointonline",
-                  "operationId": "CreateItem"
+                  "operationId": "CreateItem",
+                  "connectionReferenceName": "shared_sharepointonline"
                 }
               }
             },
@@ -189,8 +189,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-                  "connectionName": "shared_sharepointonline",
-                  "operationId": "CreateItem"
+                  "operationId": "CreateItem",
+                  "connectionReferenceName": "shared_sharepointonline"
                 }
               }
             },
@@ -215,8 +215,8 @@
                 },
                 "host": {
                   "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
-                  "connectionName": "shared_sharepointonline",
-                  "operationId": "CreateItem"
+                  "operationId": "CreateItem",
+                  "connectionReferenceName": "shared_sharepointonline"
                 }
               }
             }
