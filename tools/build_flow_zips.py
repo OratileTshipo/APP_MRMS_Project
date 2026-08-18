@@ -43,6 +43,13 @@ TOKENS = {
 
 MANIFEST_LAST = ["Microsoft.Flow/flows/manifest.json"]
 
+# Flow folders excluded from the import package. The template source is kept for
+# later fixing, but the flow is not part of the shipped manifest (see
+# flows/templates/APP-MRMS-Approval/manifest.json).
+EXCLUDED_FLOW_DIRS = {
+    "d4f9a27c-8851-44ba-9f3c-4989a0e6d467",  # Report Rejected - Notify and Route Back (APP-MRMS)
+}
+
 
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__,
@@ -90,6 +97,8 @@ def main():
     for path in sorted(TEMPLATE_DIR.rglob("*")):
         if path.is_file():
             rel = path.relative_to(TEMPLATE_DIR).as_posix()
+            if any(f"/{guid}/" in "/" + rel for guid in EXCLUDED_FLOW_DIRS):
+                continue
             entries.append((rel, path))
 
     # Root manifest must come first in the archive, then the flow content.
