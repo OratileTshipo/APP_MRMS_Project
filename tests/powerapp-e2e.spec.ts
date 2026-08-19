@@ -37,16 +37,13 @@ test.describe('Source Code Structure', () => {
       'scr_ReportActivities.pa.yaml',
       'scr_Reports.pa.yaml',
       'scr_ApprovedReports.pa.yaml',
+      'scr_ApprovalQueue.pa.yaml',
     ];
 
     for (const screen of requiredScreens) {
       const filePath = path.join(SRC_DIR, screen);
       expect(fs.existsSync(filePath), `Missing screen: ${screen}`).toBeTruthy();
     }
-
-    // Check that ApprovalQueue exists in parent repo
-    const approvalQueuePath = path.join(ROOT_DIR, 'src', 'Src', 'scr_ApprovalQueue.pa.yaml');
-    expect(fs.existsSync(approvalQueuePath), 'Missing screen: scr_ApprovalQueue.pa.yaml (should be in parent repo)').toBeTruthy();
   });
 
   test('should have valid YAML in all screen files', () => {

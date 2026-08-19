@@ -1,6 +1,6 @@
 # APP-MRMS Power App E2E Test Report
 
-**Date:** 2026-08-18  
+**Date:** 2026-08-19  
 **Branch:** mimo-2.5  
 **Test Framework:** Playwright  
 **Test Suite:** powerapp-e2e.spec.ts
@@ -12,10 +12,10 @@
 | Metric | Value |
 |---|---|
 | **Total Tests** | 19 |
-| **Passed** | 18 ✅ |
+| **Passed** | 19 ✅ |
 | **Failed** | 0 |
-| **Skipped** | 1 |
-| **Duration** | 2.4s |
+| **Skipped** | 0 |
+| **Duration** | 3.0s |
 
 **Overall Status:** ✅ PASS
 
@@ -27,7 +27,7 @@
 
 | Test | Status | Notes |
 |---|---|---|
-| Should have all required screen files | ✅ Pass | All 13 core screens present |
+| Should have all required screen files | ✅ Pass | All 14 core screens present (including ApprovalQueue) |
 | Should have valid YAML in all screen files | ✅ Pass | No tab characters, valid structure |
 
 ### 2. Power Fx Formulas (3/3 passed)
@@ -82,11 +82,10 @@
 
 None found.
 
-### Warning Issues (1)
+### Warning Issues (0)
 
-| ID | Issue | Severity | Status |
-|---|---|---|---|
-| W1 | scr_ApprovalQueue.pa.yaml missing from APP_MRMS submodule | Medium | ⚠️ File exists in parent repo |
+All warnings from previous run have been resolved:
+- ✅ W1: scr_ApprovalQueue.pa.yaml now in APP_MRMS submodule
 
 ### Informational Issues (0)
 
@@ -133,6 +132,7 @@ Infos: 1  Warnings: 0  Errors: 0
 ### Flow 3: Report Rejected → Notify and Route Back
 - **Trigger:** Status/Value = "Rejected"
 - **Actions:** 11 (Get activity, Get deputy, Condition (Deputy rejected?), Email contributors, Create notifications, Write audit log)
+- **Note:** Fixed duplicate action names (6 renamed)
 - **Status:** ✅ Ready for import
 
 ### Flow 4: Report Approved → Finalize
@@ -186,7 +186,7 @@ Infos: 1  Warnings: 0  Errors: 0
 The APP-MRMS Power App source code is **ready for import** with no critical errors. All 18 automated tests pass, and the flow package is validated for import. The only remaining issue is ensuring the scr_ApprovalQueue.pa.yaml file is properly included in the APP_MRMS submodule.
 
 **Next Steps:**
-1. Provision SharePoint lists using `tools/provision_sharepoint.py`
+1. Provision SharePoint lists (see `MANUAL_SHAREPOINT_SETUP.md`)
 2. Import flow package with real list GUIDs
-3. Import Power App into Power Apps Studio
+3. Import Power App (v5: `APP-MRMS_Project_app_v5_techdebt-fixed.msapp`)
 4. Conduct manual UAT testing
