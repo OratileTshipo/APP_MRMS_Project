@@ -355,7 +355,39 @@ test.describe('Documentation', () => {
 });
 
 // ============================================================================
-// Test Group 6: Tools Validation
+// Test Group 6: msapp Package Validation
+// ============================================================================
+
+test.describe('msapp Packages', () => {
+  
+  test('should have v4 msapp (baseline)', () => {
+    const v4Path = path.join(APP_MRMS_DIR, 'APP-MRMS_Project_app_v4_layout-fixed.msapp');
+    expect(fs.existsSync(v4Path), 'v4 msapp missing').toBeTruthy();
+    const stats = fs.statSync(v4Path);
+    expect(stats.size).toBeGreaterThan(10000, 'v4 msapp too small');
+  });
+
+  test('should have v5 msapp (tech debt fixes)', () => {
+    const v5Path = path.join(APP_MRMS_DIR, 'APP-MRMS_Project_app_v5_techdebt-fixed.msapp');
+    expect(fs.existsSync(v5Path), 'v5 msapp missing').toBeTruthy();
+    const stats = fs.statSync(v5Path);
+    expect(stats.size).toBeGreaterThan(10000, 'v5 msapp too small');
+  });
+
+  test('v5 should be larger than v4 (has more fixes)', () => {
+    const v4Path = path.join(APP_MRMS_DIR, 'APP-MRMS_Project_app_v4_layout-fixed.msapp');
+    const v5Path = path.join(APP_MRMS_DIR, 'APP-MRMS_Project_app_v5_techdebt-fixed.msapp');
+    
+    if (fs.existsSync(v4Path) && fs.existsSync(v5Path)) {
+      const v4Size = fs.statSync(v4Path).size;
+      const v5Size = fs.statSync(v5Path).size;
+      expect(v5Size).toBeGreaterThanOrEqual(v4Size);
+    }
+  });
+});
+
+// ============================================================================
+// Test Group 7: Tools Validation
 // ============================================================================
 
 test.describe('Tools', () => {
