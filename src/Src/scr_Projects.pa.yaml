@@ -307,7 +307,7 @@ Screens:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width - ProjectsSidebar_con.Width
+                  Width: =App.Width - ProjectsNavRail.Width
                 Children:
                   # Container header — replaces cmp_AppHeader on this screen (v4.1).
                   # Title + directorate/programme context line + search box + bell,
@@ -327,7 +327,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - ProjectsSidebar_con.Width
+                        Width: =App.Width - ProjectsNavRail.Width
                       Children:
                         - HomeHeaderLeft_con_2:
                             Control: GroupContainer@1.5.0
