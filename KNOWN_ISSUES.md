@@ -1,6 +1,6 @@
 # APP-MRMS — Known Issues Tracker
 
-**Last updated:** 2026-08-18
+**Last updated:** 2026-08-19
 
 ---
 
@@ -8,7 +8,7 @@
 
 | ID | Issue | Status | Owner | Notes |
 |---|---|---|---|---|
-| C1 | `SupervisorApproved` status missing from MonthlyReports | 🔴 Open | SharePoint Admin | Must add before flow import |
+| C1 | `SupervisorApproved` status missing from MonthlyReports | ✅ Resolved | Developer | Added to CSV choices and CustomFormatter |
 | C2 | SharePoint site not provisioned | 🔴 Open | SharePoint Admin | 11 lists needed |
 | C3 | APP_Users needs real account seeding | 🔴 Open | SharePoint Admin | 5 roles needed |
 | C4 | Flow package has placeholder GUIDs | 🔴 Open | Developer | Rebuild with `build_flow_zips.py` |
@@ -42,9 +42,9 @@
 | ID | Issue | Status | Owner | Notes |
 |---|---|---|---|---|
 | L1 | Sidebar/header duplication (~200 lines each) | 🟢 Backlog | Developer | Extract components |
-| L2 | Trending/Settings/Support icons dead | 🟢 Backlog | Developer | Phase 2 |
-| L3 | Handoff briefs outdated | 🟢 Backlog | Documentation | Update briefs |
-| L4 | Duplicate file structure (parent + submodule) | 🟢 Backlog | Developer | Clarify source of truth |
+| L2 | Trending/Settings/Support icons dead | ✅ Resolved | Developer | Wired to Dashboard, Users, Support mailto |
+| L3 | Handoff briefs outdated | ✅ Resolved | Documentation | Updated to match v6 screen names |
+| L4 | Duplicate file structure (parent + submodule) | ✅ Resolved | Developer | Synced ApprovalQueue, removed duplicate CSVs |
 | L5 | .gitignore blocks .md files | ✅ Resolved | Developer | Removed *.md rule, added proper ignores |
 | L6 | Activities missing Supervisor (rows 7-12) | 🟢 Backlog | Data Owner | COMM-AC-0013 to 0018 |
 | L7 | ReportingMonth typo: `Fecbruary` | ✅ Resolved | Developer | Fixed to February in MonthlyReports.csv |
@@ -61,6 +61,10 @@
 | 2026-08-18 | H1 | **Decided:** DeputyDirectorME is mandatory 2nd approver (not escalation-only) |
 | 2026-08-18 | H2 | **Decided:** Activity completion logic: after EndDate |
 | 2026-08-18 | H4 | **Decided:** Splash timing: 1.8s → Home (confirmed) |
+| 2026-08-19 | C1 | Added `SupervisorApproved` to MonthlyReports.Status choices in CSV (CHOICES XML + Description + rulesOrder) |
+| 2026-08-19 | L2 | Wired Trending→Dashboard, Settings→Users, Support→mailto in cmp_NavRail component |
+| 2026-08-19 | L3 | Updated handoff briefs: `scr_ReportSubmission`→`scr_ReportForm`, `scr_ReportDetail`→`scr_ReportView` |
+| 2026-08-19 | L4 | Copied scr_ApprovalQueue.pa.yaml to submodule, updated _EditorState, removed 4 duplicate CSVs |
 
 ---
 
