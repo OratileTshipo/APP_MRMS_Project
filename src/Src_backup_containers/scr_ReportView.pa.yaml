@@ -1,0 +1,798 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_ReportView:
+    Properties:
+      Fill: =varBgLight
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =
+        // scr_ReportView.OnVisible
+        // Purpose: load the report to display from the navigation context.
+        // Context params: viewReportID (MonthlyReports.ID), returnTo (optional
+        // screen key — "Approved" when entered from the Approved dashboard).
+
+        Set(varViewReport, LookUp(MonthlyReports, ID = viewReportID));
+        Set(varViewReturnTo, Coalesce(returnTo, "MyActivities"))
+    Children:
+      - ReportView_con:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =App.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Horizontal
+            Width: =App.Width
+          Children:
+            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
+            - RepViewSidebar_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =varBgLight
+                  FillPortions: =0
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =30
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =20
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =20
+                  Width: =App.Width * 0.05
+                Children:
+                  - RepViewHome_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Home"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Home
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Home"
+                        Width: =Parent.Width - 20
+                  - RepViewProjects_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Projects"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Manufacture
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Projects"
+                        Width: =Parent.Width - 20
+                  - RepViewActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.RadarActivityMonitor
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Activities"
+                        Width: =Parent.Width - 20
+                  - RepViewMonthlyReports_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Monthly Reports"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.CalendarBlank
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Monthly Reports"
+                        Width: =Parent.Width - 20
+                  - RepViewMyActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="My Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.ListWatchlistRemind
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="My Activities"
+                        Width: =Parent.Width - 20
+                  - RepViewTrending_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Trending"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Trending
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Trending"
+                        Width: =Parent.Width - 20
+                  - RepViewUsers_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Users"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.People
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Users"
+                        Width: =Parent.Width - 20
+                  - RepViewSidebarSpacer_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                  - RepViewSettings_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Settings"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Settings
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Settings"
+                        Width: =Parent.Width - 20
+                  - RepViewSupport_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Support"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Support
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Support"
+                        Width: =Parent.Width - 20
+            - ReportViewDetails_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Stretch
+                  LayoutDirection: =LayoutDirection.Vertical
+                  Width: =App.Width - RepViewSidebar_con.Width
+                Children:
+                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
+                  # Back arrow returns to the previous screen; shows the signed-in user.
+                  - RepViewHeader_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.Semilight
+                        Fill: =varNavy
+                        FillPortions: =0
+                        Height: =App.Height * 0.13
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =App.Width - RepViewSidebar_con.Width
+                      Children:
+                        - RepViewBack_ico:
+                            Control: Classic/Icon@2.5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                              DisabledColor: =RGBA(225, 223, 221, 1)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height * 0.5
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverColor: =RGBA(255, 255, 255, 1)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Icon: =Icon.ArrowLeft
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: =Back()
+                              PressedBorderColor: =RGBA(0, 0, 0, 0)
+                              PressedColor: =RGBA(255, 255, 255, 1)
+                              PressedFill: =RGBA(0, 0, 0, 0)
+                              Tooltip: ="Go back"
+                              Width: =Parent.Width * 0.04
+                        - RepViewHeaderLeft_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * .55
+                            Children:
+                              - RepViewTitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =Parent.Height * .5
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =25
+                                    Text: ="Report View"
+                              - RepViewSubtitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * .5
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Title)
+                        - RepViewHeaderRight_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =20
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width / 3
+                            Children:
+                              - RepViewUser_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =13
+                                    Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
+                                    Tooltip: =varUserEmail
+                              - RepViewBell_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 120, 212, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * .4
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Bell
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
+                                    Width: =Parent.Width / 15
+                  - ReportViewBody_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =App.Height * 0.87
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =14
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        PaddingBottom: =24
+                        PaddingLeft: =24
+                        PaddingRight: =24
+                        PaddingTop: =20
+                        Width: =Parent.Width
+                      Children:
+                        - ReportViewStatus_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              Width: =Parent.Width
+                            Children:
+                              - ReportViewStatusCard_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.Semilight
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    PaddingBottom: =10
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =10
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width / 3 - 8
+                                  Children:
+                                    - ReportViewStatusKey_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =10.5
+                                          Text: ="STATUS"
+                                    - ReportViewStatusValue_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =varNavy
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =15
+                                          Text: =If(IsBlank(varViewReport), "", varViewReport.Status.Value)
+                              - ReportViewPeriodCard_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.Semilight
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    PaddingBottom: =10
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =10
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width / 3 - 8
+                                  Children:
+                                    - ReportViewPeriodKey_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =10.5
+                                          Text: ="PERIOD"
+                                    - ReportViewPeriodValue_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =varNavy
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =13
+                                          Text: =If(IsBlank(varViewReport), "", varViewReport.ReportingMonth.Value & " · " & varViewReport.Quarter.Value & " · " & varViewReport.FinancialYear.Value)
+                              - ReportViewPctCard_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.Semilight
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    PaddingBottom: =10
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =10
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width / 3 - 8
+                                  Children:
+                                    - ReportViewPctKey_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =10.5
+                                          Text: ="COMPLETE"
+                                    - ReportViewPctValue_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =varNavy
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =15
+                                          Text: =If(IsBlank(varViewReport), "", Text(varViewReport.PercentageComplete) & "%")
+                        - ReportViewSection_title_lbl:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              AutoHeight: =true
+                              Color: =varNavy
+                              FontWeight: =FontWeight.Bold
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =13
+                              Text: ="Report Details"
+                        - ReportViewDetailCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.Semilight
+                              Fill: =RGBA(255, 255, 255, 1)
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =10
+                              PaddingBottom: =14
+                              PaddingLeft: =14
+                              PaddingRight: =14
+                              PaddingTop: =14
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width
+                            Children:
+                              - ReportViewTitleKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="TITLE"
+                              - ReportViewTitleValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =13
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Title)
+                              - ReportViewPlannedKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="PLANNED ACTIVITY"
+                              - ReportViewPlannedValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.PlannedActivity)
+                              - ReportViewOutputKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="OUTPUT"
+                              - ReportViewOutputValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Output)
+                              - ReportViewReasonKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="REASON FOR DEVIATION"
+                              - ReportViewReasonValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.ReasonForDeviation)
+                              - ReportViewRemedialKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="REMEDIAL ACTION"
+                              - ReportViewRemedialValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.RemedialAction)
+                        - ReportViewSection_owner_lbl:
+                            Control: ModernText@1.0.0
+                            Properties:
+                              AutoHeight: =true
+                              Color: =varNavy
+                              FontWeight: =FontWeight.Bold
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =13
+                              Text: ="Ownership & Workflow"
+                        - ReportViewOwnerCard_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.Semilight
+                              Fill: =RGBA(255, 255, 255, 1)
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =10
+                              PaddingBottom: =14
+                              PaddingLeft: =14
+                              PaddingRight: =14
+                              PaddingTop: =14
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width
+                            Children:
+                              - ReportViewOwnerKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="ACTIVITY OWNER"
+                              - ReportViewOwnerValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.ActivityOwnerLabel)
+                              - ReportViewSubmittedKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="SUBMITTED BY"
+                              - ReportViewSubmittedValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.SubmittedBy.DisplayName, ""))
+                              - ReportViewReviewedKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="REVIEWED BY"
+                              - ReportViewReviewedValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(50, 49, 48, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.ReviewedBy.DisplayName, ""))
+                              - ReportViewRejectionKey_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: ="REJECTION REASON"
+                              - ReportViewRejectionValue_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(168, 0, 0, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =12
+                                    Text: =If(IsBlank(varViewReport), "", varViewReport.RejectionReason)
+                        - ReportViewBack_btn:
+                            Control: ModernButton@1.0.0
+                            Properties:
+                              BasePaletteColor: =RGBA(0, 120, 212, 1)
+                              Height: =40
+                              Icon: ="Back"
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: |-
+                                =// Back — return to the screen we came from (Approved dashboard or My Activities)
+                                If(
+                                    varViewReturnTo = "Approved",
+                                    Navigate(scr_ApprovedReports, ScreenTransition.Fade),
+                                    Navigate(scr_MyActivities, ScreenTransition.Fade)
+                                )
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Text: =If(varViewReturnTo = "Approved", "Back to Approved Reports", "Back to My Activities")
+                              Width: =220

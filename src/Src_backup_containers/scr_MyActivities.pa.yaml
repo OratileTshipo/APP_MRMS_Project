@@ -357,7 +357,7 @@ Screens:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width - MyActivitiesNavRail.Width
+                  Width: =App.Width - MyActivitiesSidebar_con.Width
                 Children:
                   # Container header — replaces cmp_AppHeader on this screen (v4.1).
                   # Shows the signed-in user (varUserFullName) next to the bell.
@@ -376,7 +376,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - MyActivitiesNavRail.Width
+                        Width: =App.Width - MyActivitiesSidebar_con.Width
                       Children:
                         - MyActHeaderLeft_con:
                             Control: GroupContainer@1.5.0
