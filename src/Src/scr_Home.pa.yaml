@@ -25,7 +25,7 @@ Screens:
         // 1. FILTER STATE — screen-local UI variables, reset every visit
         // ------------------------------------------------------------
         Set(varHomeFilter, "All");           // KPI card selection (All/PendingApprovals/Overdue/Approved)
-          Set(varFilterFY, "All");             // Financial Year dropdown
+        Set(varFilterFY, "All");             // Financial Year dropdown
         Set(varFilterProgramme, "All");      // Programme dropdown
         Set(varFilterDirectorate, "All");    // Directorate dropdown (cascades off Programme)
         Set(varFilterQuarter, "All");        // Quarter dropdown
@@ -48,17 +48,36 @@ Screens:
                 "Administrator", MonthlyReports,
                 "DeputyDirectorME", MonthlyReports,
                 "ProgrammeManager", Filter(MonthlyReports, ProgrammeLabel = varUserProgramme),
-                "Supervisor", Filter(MonthlyReports, DirectorateLabel = varUserDirectorateID),
+                "Supervisor", Filter(MonthlyReports, DirectorateLabel = varUserDirectorate),
                 Filter(MonthlyReports, SubmittedBy.Email = varUserEmail)
             )
         );
 
         // Refresh the collected Activities set — the inline trend/progress
         // galleries below filter over colActivities, not the raw list.
+        /*
         ClearCollect(
             colActivities,
             Filter(Activities, 'Active ' = true)
         );
+        */
+
+        ClearCollect(
+            colActivities,
+            Switch(
+                varUserRole,
+                "Administrator", Filter(Activities, 'Active ' = true),
+                "DeputyDirectorME", Filter(Activities, 'Active ' = true),
+                "ProgrammeManager", Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
+                "Supervisor", Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID),
+                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID)
+            )
+        );
+
+
+
+
+
 
         // ------------------------------------------------------------
         // 3. NOTIFICATIONS — always personal, never scoped by directorate
@@ -84,7 +103,7 @@ Screens:
             colPendingApprovals,
             If(
                 varUserRole in ["Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"],
-                Filter(colReportsInScope, Status.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
+                Filter(colReportsInScope, ReportStatus.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
                 Table()
             )
         );
@@ -104,7 +123,7 @@ Screens:
             colApprovedThisMonth,
             Filter(
                 colReportsInScope,
-                Status.Value = "Approved",
+                ReportStatus.Value = "Approved",
                 ReportingMonth.Value = varCurrentMonth,
                 'FinancialYear '.Value = varCurrentFY
             )
@@ -129,12 +148,242 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Component sidebar — cmp_NavRail replaces inline containers
-            - HomeNavRail:
-                Control: CanvasComponent
-                ComponentName: cmp_NavRail
+            - HomeSidebar_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
                 Properties:
-                  ActiveScreen: ="scr_Home"
+                  DropShadow: =DropShadow.None
+                  Fill: =varBgLight
+                  FillPortions: =0
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =30
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =20
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =20
+                  Width: =App.Width * 0.05
+                Children:
+                  - HomeHome_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Home"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =varNavy
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Home
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Home"
+                        Width: =Parent.Width - 20
+                  - HomeProjects_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Projects"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Manufacture
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Projects"
+                        Width: =Parent.Width - 20
+                  - HomeActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.RadarActivityMonitor
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Activities"
+                        Width: =Parent.Width - 20
+                  - HomeMonthlyReports_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Monthly Reports"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.CalendarBlank
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Monthly Reports"
+                        Width: =Parent.Width - 20
+                  - HomeMyActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="My Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.ListWatchlistRemind
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="My Activities"
+                        Width: =Parent.Width - 20
+                  - HomeTrending_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Trending"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Trending
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Trending"
+                        Width: =Parent.Width - 20
+                  - HomeUsers_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Users"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.People
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Users"
+                        Width: =Parent.Width - 20
+                  - HomeSidebarSpacer_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                  - HomeSettings_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Settings"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Settings
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Settings"
+                        Width: =Parent.Width - 20
+                  - HomeSupport_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Support"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Support
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Support"
+                        Width: =Parent.Width - 20
             - MainScreenDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -145,17 +394,180 @@ Screens:
                   LayoutDirection: =LayoutDirection.Vertical
                   LayoutGap: =12
                   LayoutOverflowY: =LayoutOverflow.Scroll
-                  Width: =App.Width - HomeNavRail.Width
+                  Width: =App.Width - HomeSidebar_con.Width
                 Children:
-                  # Component header — cmp_AppHeader replaces inline containers
-                  - HomeAppHeader:
-                      Control: CanvasComponent
-                      ComponentName: cmp_AppHeader
+                  - HomeHeader_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
                       Properties:
-                        PageTitle: ="Home Dashboard"
-                        ShowBack: =false
-                        ShowSearch: =true
-                        SearchHint: ="Search projects, activities, reports"
+                        DropShadow: =DropShadow.Semilight
+                        Fill: =varNavy
+                        FillPortions: =0
+                        Height: =App.Height * 0.13
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =20
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =App.Width - HomeSidebar_con.Width
+                      Children:
+                        - HomeHeaderLeft_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingLeft: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * .55
+                            Children:
+                              - HomeTitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =Parent.Height * .5
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =25
+                                    Text: ="Home Dashboard"
+                              - HomeSubtitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * .5
+                                    Size: =12
+                                    Text: =varUserDirectorate & " · " & varUserProgramme & " · " & varUserRole
+                        - HomeHeaderRight_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =20
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width / 3
+                            Children:
+                              - HomeSearch_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    Fill: =varBgLight
+                                    Height: =Parent.Height * .4
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =10
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width - 50
+                                  Children:
+                                    - HomeSearch_ico:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(153, 153, 153, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =Parent.Height * 0.65
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.Search
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =Parent.Width * 0.08
+                                    - HomeSearchBox_txt:
+                                        Control: Classic/TextInput@2.3.2
+                                        Properties:
+                                          BorderColor: =RGBA(245, 245, 245, 1)
+                                          BorderThickness: =0
+                                          Clear: =true
+                                          Color: =RGBA(50, 49, 48, 1)
+                                          Default: =
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          DisabledFill: =RGBA(242, 242, 241, 0)
+                                          Fill: =varBgLight
+                                          Font: =Font.'Segoe UI'
+                                          Height: =Parent.Height * 0.65
+                                          HintText: ="Search projects, activities, reports"
+                                          HoverBorderColor: =RGBA(16, 110, 190, 1)
+                                          HoverColor: =RGBA(50, 49, 48, 1)
+                                          HoverFill: =RGBA(255, 255, 255, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 120, 212, 1)
+                                          PressedColor: =RGBA(50, 49, 48, 1)
+                                          PressedFill: =RGBA(255, 255, 255, 1)
+                                          RadiusBottomLeft: =0
+                                          RadiusBottomRight: =0
+                                          RadiusTopLeft: =0
+                                          RadiusTopRight: =0
+                                          Size: =15
+                                          Width: =Parent.Width - HomeSearch_ico.Width - 25
+                              - HomeBell_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 120, 212, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * .4
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Bell
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
+                                    Width: =Parent.Width / 15
                   - RoleBar_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -169,7 +581,7 @@ Screens:
                         LayoutGap: =12
                         PaddingLeft: =8
                         PaddingRight: =8
-                        Width: =Parent.Width - HomeNavRail.Width
+                        Width: =Parent.Width - HomeSidebar_con.Width
                         X: =40
                         Y: =40
                       Children:
@@ -390,7 +802,12 @@ Screens:
                                     Fill: =varBgLight
                                     Height: '=Parent.Height '
                                     ItemDisplayText: =ThisItem.Title
-                                    Items: =Programmes
+                                    Items: |-
+                                      =If(
+                                          varUserRole in ["Administrator", "DeputyDirectorME"],
+                                          Programmes,
+                                          Filter(Programmes, Title = varUserProgramme)
+                                      )
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: |-
@@ -411,20 +828,35 @@ Screens:
                                           Filter(Directorates, Programme.Value = varFilterProgramme)
                                       )
                                       */
-
+                                      /*
                                       If(
                                           IsBlank(varFilterProgramme) || varFilterProgramme = "All",
                                           Directorates,
                                           Filter(Directorates, Programme.Value = varFilterProgramme)
                                       )
+
+                                      */
+
+                                      If(
+                                          varUserRole in ["Administrator", "DeputyDirectorME"],
+                                          If(
+                                              IsBlank(varFilterProgramme) || varFilterProgramme = "All",
+                                              Directorates,
+                                              Filter(Directorates, Programme.Value = varFilterProgramme)
+                                          ),
+                                          Filter(Directorates, Title = varUserDirectorate)
+                                      )
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: |-
-                                      =
-                                      //Set(varFilterDirectorate, drp_DirectorateFilter.Selected.DirectorateID);
-
-                                      Set(varFilterDirectorate, drp_DirectorateFilter.Selected.Title);         // full name → filters Activities
-                                      Set(varFilterDirectorateID, drp_DirectorateFilter.Selected.DirectorateID) // short code → filters MonthlyReports
+                                      =Set(varFilterDirectorate, drp_DirectorateFilter.Selected.Title);
+                                      Set(varFilterProgramme, 
+                                          If(
+                                              varUserRole in ["Administrator", "DeputyDirectorME"],
+                                              varFilterProgramme,
+                                              varUserProgramme
+                                          )
+                                      )
                                     Width: =Parent.Width / 6
                               - drp_QuarterFilter:
                                   Control: ModernDropdown@1.0.2
@@ -445,17 +877,33 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnSelect: |-
-                                      =
+                                      =/*
                                       // Clear all dashboard filters (KPI, FY, programme, directorate, quarter) and reset the controls
                                       Set(varFilterFY, "All");
                                           Set(varFilterProgramme, "All");
                                           Set(varFilterDirectorate, "All");
                                           Set(varFilterQuarter, "All");
                                           Set(varHomeFilter, "All");
+                                          Reset(HomeSearchBox_txt);
                                           Reset(FYFilter_drp);
                                           Reset(ProgrammeFilter_drp);
                                           Reset(drp_DirectorateFilter);
-                                          Reset(drp_QuarterFilter)
+                                          Reset(drp_QuarterFilter);
+                                          // Search box now lives in the cmp_AppHeader component
+                                          Reset(HomeSearchBox_txt)
+
+                                          */
+                                      Set(varFilterFY, "All");
+                                      Set(varFilterProgramme, "All");
+                                      Set(varFilterDirectorate, "All");
+                                      //Set(varFilterDirectorateID, "All");
+                                      Set(varFilterQuarter, "All");
+                                      Set(varHomeFilter, "All");
+                                      Reset(FYFilter_drp);
+                                      Reset(ProgrammeFilter_drp);
+                                      Reset(drp_DirectorateFilter);
+                                      Reset(drp_QuarterFilter);
+                                      Reset(HomeSearchBox_txt)
                                     RadiusBottomLeft: =8
                                     RadiusBottomRight: =8
                                     RadiusTopLeft: =8
@@ -561,7 +1009,8 @@ Screens:
                                                 )
                                             )*/
 
-                                            CountRows(Filter(colReportsInScope, (varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+
+                                            CountRows(Filter(colReportsInScope, (varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - AllReportsSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -661,7 +1110,9 @@ Screens:
                                                 )
                                             )*/
 
-                                            CountRows(Filter(colReportsInScope, Status.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+
+
+                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - PendingSubtitile_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -732,7 +1183,7 @@ Screens:
                                           Height: =Parent.Height * .2
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnSelect: |+
+                                          OnSelect: |
                                             =Set(varHomeFilter, "Approved")
                                           PaddingBottom: =0
                                           PaddingTop: =0
@@ -747,7 +1198,7 @@ Screens:
                                           Height: =Parent.Height * .6
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnSelect: |+
+                                          OnSelect: |
                                             =Set(varHomeFilter, "Approved")
                                           PaddingBottom: =0
                                           PaddingTop: =0
@@ -766,7 +1217,7 @@ Screens:
                                             )
                                             */
 
-                                            CountRows(Filter(colReportsInScope, Status.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - ApprovedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -854,9 +1305,11 @@ Screens:
                                           LayoutMinWidth: =16
                                           OnSelect: |-
                                             = //Set(varHomeFilter, "Rejected")
-                                             CountRows(
+
+
+                                            CountRows(
                                                 Filter(colReportsInScope,
-                                                    Status.Value = "Rejected",
+                                                    ReportStatus.Value = "Rejected",
                                                     (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                     (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
                                                     (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
@@ -869,7 +1322,9 @@ Screens:
                                           Text: |-
                                             =//CountRows(Filter(colReportsInScope, Status.Value = "Rejected"))
 
-                                            CountRows(Filter(colReportsInScope, Status.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+
+
+                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - RejectedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -954,7 +1409,7 @@ Screens:
                                           Height: =Parent.Height * .6
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnSelect: |-
+                                          OnSelect: |+
                                             =//Set(varHomeFilter, "Overdue")
                                             CountRows(
                                                 Filter(colReportsInScope,
@@ -965,13 +1420,16 @@ Screens:
                                                     (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                                 )
                                             )
+
+
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =40
                                           Text: |-
                                             =//CountRows(Filter(colReportsInScope, IsOverdue))
 
-                                            CountRows(Filter(colReportsInScope, IsOverdue,(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorateID="All"||DirectorateLabel=varFilterDirectorateID),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+
+                                            CountRows(Filter(colReportsInScope, IsOverdue,(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - OverdueSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1001,7 +1459,7 @@ Screens:
                                                         IsOverdue = true,
                                                         (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                         (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                                        (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                        (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                         (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                                     )
                                                 },
@@ -1023,7 +1481,7 @@ Screens:
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =12
-                                          Text: |-
+                                          Text: |+
                                             =// Get last month's name, handling the April year-wrap correctly
                                             // (if current month is January, "last month" is December of the previous calendar year — but
                                             // since your FY starts in April, wrapping from April back to March is the only edge case that matters here)
@@ -1057,7 +1515,7 @@ Screens:
                                                         IsOverdue = true,
                                                         (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                         (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                                        (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                        (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                         (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                                     ),
                                                     lastMonthName: Text(DateAdd(Date(Year(Today()), Month(Today()), 1), -1, TimeUnit.Months), "mmmm")
@@ -1073,6 +1531,7 @@ Screens:
                                                     )
                                                 )
                                             )
+
                   - HomeMiddle_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -1194,9 +1653,9 @@ Screens:
                                                           (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
                                                           (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                           (
-                                                              IsBlank(HomeAppHeader.SearchText)
-                                                              || Lower(HomeAppHeader.SearchText) in Lower(Title)
-                                                              || Lower(HomeAppHeader.SearchText) in Lower('ActivityDescription ')
+                                                              IsBlank(HomeSearchBox_txt.Text)
+                                                              || Lower(HomeSearchBox_txt.Text) in Lower(Title)
+                                                              || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
                                                           )
                                                       )
                                                   },
@@ -1208,10 +1667,10 @@ Screens:
                                                               (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
                                                               (varHomeFilter = "All"
-                                                                  || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                                                  || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
                                                                   || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                                                  || (varHomeFilter = "Approved" && Status.Value = "Approved")
-                                                                  || (varHomeFilter = "Rejected" && Status.Value = "Rejected")
+                                                                  || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
+                                                                  || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
                                                               )
                                                           )
                                                       },
@@ -1555,7 +2014,7 @@ Screens:
                                                               colReportsInScope,
                                                               ProgrammeLabel = Prog.Value,
                                                               'FinancialYear '.Value = effectiveFY,
-                                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                                           ),
                                                           progReportsThisMonth: Filter(
@@ -1563,24 +2022,24 @@ Screens:
                                                               ProgrammeLabel = Prog.Value,
                                                               'FinancialYear '.Value = effectiveFY,
                                                               ReportingMonth.Value = varCurrentMonth,
-                                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID)
+                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
                                                           )
                                                       },
                                                       {
                                                           ProgrammeName: progName,
                                                           TotalActivities: CountRows(progActivities),
                                                           MonthlyReportedCount: CountRows(Distinct(progReportsThisMonth, Activity.Id)),
-                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)),
-                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)),
+                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
                                                           MonthlyReportingRate:
                                                               If(CountRows(progActivities) = 0, 0,
                                                                   RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           MonthlyApprovalRate:
                                                               If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           FYCumulativeRate:
                                                               If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
                                                       }
                                                   )
@@ -1810,7 +2269,7 @@ Screens:
                                               isFlagged = true,
                                               (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                               (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                           )
                                       ) & " reports flagged for attention"
@@ -1822,7 +2281,7 @@ Screens:
                                               isFlagged = true,
                                               (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                               (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                              (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                           )
                                       ) > 0
@@ -2047,26 +2506,26 @@ Screens:
 
                                     // --- KPI card filter (varHomeFilter) ---
                                     (varHomeFilter = "All"
-                                        || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
+                                        || (varHomeFilter = "PendingApprovals" && ReportStatus.Value = "Submitted")
                                         || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                        || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                        || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
                                     )
 
                                     // --- Dropdown filters ---
                                     && (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY)
                                     && (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)
-                                    && (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID)
+                                    && (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
                                     && (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
 
                                     // --- Free-text search, explicitly case-insensitive via Lower() ---
                                     && (
-                                        IsBlank(HomeAppHeader.SearchText)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Activity.Value)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Project.Value)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(ActivityOwnerLabel)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(ProjectOwnerLabel)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(SubmittedBy.DisplayName)
-                                        || Lower(HomeAppHeader.SearchText) in Lower(Output)
+                                        IsBlank(HomeSearchBox_txt.Text)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Activity.Value)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Project.Value)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(ActivityOwnerLabel)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(ProjectOwnerLabel)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(SubmittedBy.DisplayName)
+                                        || Lower(HomeSearchBox_txt.Text) in Lower(Output)
                                     )
                                 )
 
@@ -2089,9 +2548,9 @@ Screens:
                                     (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
                                     &&
                                     (
-                                        IsBlank(HomeAppHeader.SearchText)
-                                        || HomeAppHeader.SearchText in Title
-                                        || HomeAppHeader.SearchText in 'ProgressNarrative '
+                                        IsBlank(HomeSearchBox_txt.Text)
+                                        || HomeSearchBox_txt.Text in Title
+                                        || HomeSearchBox_txt.Text in 'ProgressNarrative '
                                     )
                                     &&
                                     (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
@@ -2227,7 +2686,9 @@ Screens:
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Text: =ThisItem.SubmittedBy.DisplayName
+                                          Text: |-
+                                            =//ThisItem.SubmittedBy_x002f_SubmissionDate.DisplayName
+                                            ThisItem.SubmittedBy.DisplayName
                                     - Rectangle2_8:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2248,7 +2709,7 @@ Screens:
                                         Properties:
                                           Color: |-
                                             =Switch(
-                                            ThisItem.Status.Value,
+                                            ThisItem.ReportStatus.Value,
                                             "Approved",Color.Green,
                                             "In Review",Color.Orange,
                                             "Submitted",Color.Black,
@@ -2257,7 +2718,7 @@ Screens:
                                             )
                                           Fill: |-
                                             =Switch(
-                                            ThisItem.Status.Value,
+                                            ThisItem.ReportStatus.Value,
                                             "Approved",Color.LightGreen,
                                             "In Review",Color.LightGoldenRodYellow,
                                             "Submitted",Color.LightGoldenRodYellow,
@@ -2274,7 +2735,7 @@ Screens:
                                           RadiusBottomRight: =10
                                           RadiusTopLeft: =10
                                           RadiusTopRight: =10
-                                          Text: =ThisItem.Status.Value
+                                          Text: =ThisItem.ReportStatus.Value
                                     - Rectangle2_9:
                                         Control: Rectangle@2.3.0
                                         Properties:

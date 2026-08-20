@@ -65,8 +65,6 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
-            # The Users icon is highlighted (varNavy) as the active screen.
             - UsersSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -311,10 +309,8 @@ Screens:
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Vertical
                   LayoutOverflowY: =LayoutOverflow.Scroll
-                  Width: =App.Width - UsersNavRail.Width
+                  Width: =App.Width - UsersSidebar_con.Width
                 Children:
-                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
-                  # Shows the signed-in user (varUserFullName) next to the bell.
                   - UsersHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -330,7 +326,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - UsersNavRail.Width
+                        Width: =App.Width - UsersSidebar_con.Width
                       Children:
                         - UsrHeaderLeft_con:
                             Control: GroupContainer@1.5.0
@@ -412,7 +408,6 @@ Screens:
                                     FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =13
                                     Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
                                     Tooltip: =varUserEmail
                               - UsrBell_ico:
@@ -458,7 +453,7 @@ Screens:
                               PaddingBottom: =20
                               PaddingLeft: =8
                               PaddingRight: =8
-                              Width: =App.Width - UsersNavRail.Width
+                              Width: =App.Width - UsersSidebar_con.Width
                             Children:
                               - RegInstruction_con:
                                   Control: GroupContainer@1.5.0
@@ -618,13 +613,10 @@ Screens:
                                                               =// cmb_RegEmail.Items — live user search against Microsoft Entra ID (Office365Users connector).
                                                               // SearchUserV2 returns user records (UserPrincipalName/DisplayName/Mail/JobTitle)
                                                               // for the typed search text; the picker stores the selected record in .Selected.
-                                                              Office365Users.SearchUserV2({searchTerm: cmb_RegEmail.SearchText, top: 20})
+                                                              Office365Users.SearchUserV2({searchTerm: cmb_RegEmail.SearchText, top: 20}).value
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
-                                                            OnChange: |-
-                                                              =Set(varRegEmail, cmb_RegEmail.Selected.UserPrincipalName);
-                                                                          Set(varRegEmailExists, Not(IsBlank(LookUp(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName))));
-                                                                          Set(varRegFormIsValid, false)
+                                                            OnChange: "=\nSet(varRegEmail, cmb_RegEmail.Selected.UserPrincipalName);\nSet(varRegEmailExists, Not(IsBlank(LookUp(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName))));\nSet(varRegFormIsValid, false)\n\n         "
                                                             RadiusBottomLeft: =8
                                                             RadiusBottomRight: =8
                                                             RadiusTopLeft: =8
@@ -841,7 +833,11 @@ Screens:
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
                                                             OnChange: |-
-                                                              =Set(varRegProgramme, drp_RegProgramme.Selected.Title);
+                                                              =//Set(varRegProgramme, drp_RegProgramme.Selected.Title);
+                                                              //Set(varRegFormIsValid, false)
+
+                                                              Set(varRegProgramme, drp_RegProgramme.Selected.Title);
+                                                              Set(varRegDirectorate, "");
                                                               Set(varRegFormIsValid, false)
                                                             PaddingBottom: =5
                                                             PaddingLeft: =5
@@ -884,7 +880,9 @@ Screens:
                                                             Fill: =RGBA(255, 255, 255, 1)
                                                             Height: =(Parent.Height * .5) - 2
                                                             ItemDisplayText: =ThisItem.DirectorateID
-                                                            Items: =Filter(Directorates, Active = true)
+                                                            Items: |-
+                                                              =//Filter(Directorates, Active = true)
+                                                              Filter(Directorates, Active = true, Programme.Value = drp_RegProgramme.Selected.Title)
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
                                                             OnChange: |-
@@ -1251,9 +1249,9 @@ Screens:
                                               Control: Classic/CheckBox@2.1.0
                                               Properties:
                                                 BorderColor: =RGBA(0, 0, 0, 0)
-                                                CheckboxBackgroundFill: =RGBA(0, 120, 212, 1)
+                                                CheckboxBackgroundFill: =RGBA(180, 214, 250, 1)
                                                 CheckboxBorderColor: =RGBA(0, 0, 0, 0)
-                                                CheckboxSize: =20
+                                                CheckboxSize: =30
                                                 Color: =RGBA(50, 49, 48, 1)
                                                 DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                                 DisabledColor: =RGBA(161, 159, 157, 1)

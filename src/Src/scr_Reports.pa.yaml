@@ -21,7 +21,6 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
             - RepsSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -266,10 +265,8 @@ Screens:
                   LayoutDirection: =LayoutDirection.Vertical
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
-                  Width: =App.Width - ReportsNavRail.Width
+                  Width: =App.Width - RepsSidebar_con.Width
                 Children:
-                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
-                  # Shows the signed-in user (varUserFullName) next to the bell.
                   - RepsHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -285,7 +282,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - ReportsNavRail.Width
+                        Width: =App.Width - RepsSidebar_con.Width
                       Children:
                         - RepsHeaderLeft_con:
                             Control: GroupContainer@1.5.0
@@ -437,7 +434,6 @@ Screens:
                                     FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =13
                                     Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
                                     Tooltip: =varUserEmail
                               - RepsBell_ico:
@@ -469,7 +465,6 @@ Screens:
                         Height: =Parent.Height - RepsHeader_con.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Horizontal
-                        Width: =Parent.Width
                         LayoutGap: =16
                         PaddingBottom: =2
                         PaddingLeft: =2
@@ -479,6 +474,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
+                        Width: =Parent.Width
                       Children:
                         - SidebarContainer1:
                             Control: GroupContainer@1.5.0
@@ -1236,7 +1232,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="FinancialYear"
                                                 Default: =ThisItem.'FinancialYear '
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,FinancialYear)
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'FinancialYear ')
                                                 Required: =false
                                                 Update: =DataCardValue4.Selected
                                                 Width: =458
@@ -1287,7 +1283,7 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].FinancialYear)
+                                                      Items: =Choices([@MonthlyReports].'FinancialYear ')
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -1353,7 +1349,7 @@ Screens:
                                               Properties:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="PlannedActivity"
-                                                Default: =ThisItem.PlannedAct
+                                                Default: =ThisItem.PlannedActivity
                                                 DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,PlannedActivity)
                                                 MaxLength: =DataSourceInfo([@MonthlyReports], DataSourceInfo.MaxLength, PlannedActivity)
                                                 Required: =false
@@ -1466,7 +1462,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="PercentageComplete"
                                                 Default: =ThisItem.'PercentageComplete '
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,PercentageComplete)
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'PercentageComplete ')
                                                 Required: =false
                                                 Update: =Value(DataCardValue6.Text)
                                                 Width: =458
@@ -1695,7 +1691,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="Version"
                                                 Default: =ThisItem.'Version '
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Version)
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'Version ')
                                                 Required: =false
                                                 Update: =Value(DataCardValue8.Text)
                                                 Width: =458
@@ -1805,7 +1801,7 @@ Screens:
                                               Properties:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="SubmittedBy_x002f_SubmissionDate"
-                                                Default: =ThisItem.SubmittedBy
+                                                Default: =ThisItem.SubmittedBy_x002f_SubmissionDate
                                                 DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,SubmittedBy_x002f_SubmissionDate)
                                                 Required: =false
                                                 Update: =DataCardValue9.Selected
@@ -1923,7 +1919,7 @@ Screens:
                                               Properties:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="ReviewedBy_x002f_ReviewDate"
-                                                Default: =ThisItem.ReviewedBy
+                                                Default: =ThisItem.ReviewedBy_x002f_ReviewDate
                                                 DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,ReviewedBy_x002f_ReviewDate)
                                                 Required: =false
                                                 Update: =DataCardValue10.Selected
@@ -2042,8 +2038,8 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="RejectionReason"
                                                 Default: =ThisItem.'RejectionReason '
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,RejectionReason)
-                                                MaxLength: =DataSourceInfo([@MonthlyReports], DataSourceInfo.MaxLength, RejectionReason)
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'RejectionReason ')
+                                                MaxLength: =DataSourceInfo([@MonthlyReports], DataSourceInfo.MaxLength, 'RejectionReason ')
                                                 Required: =false
                                                 Update: =DataCardValue11.Text
                                                 Width: =458
@@ -2590,7 +2586,8 @@ Screens:
                                                 DataField: ="Activity_x003a__x0020_ActivitySh"
                                                 Default: |-
                                                   =ThisItem.'Activity: ActivityShortDescription'
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Activity_x003a__x0020_ActivitySh)
+                                                DisplayName: |-
+                                                  =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'Activity: ActivityShortDescription')
                                                 Required: =false
                                                 Update: =DataCardValue16.Selected
                                                 Width: =458
@@ -2641,7 +2638,8 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].Activity_x003a__x0020_ActivitySh)
+                                                      Items: |-
+                                                        =Choices([@MonthlyReports].'Activity: ActivityShortDescription')
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -2708,7 +2706,8 @@ Screens:
                                                 DataField: ="Activity_x003a__x0020_EndDate"
                                                 Default: |-
                                                   =ThisItem.'Activity: EndDate'
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Activity_x003a__x0020_EndDate)
+                                                DisplayName: |-
+                                                  =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'Activity: EndDate')
                                                 Required: =false
                                                 Update: =DataCardValue17.Selected
                                                 Width: =458
@@ -2759,7 +2758,8 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].Activity_x003a__x0020_EndDate)
+                                                      Items: |-
+                                                        =Choices([@MonthlyReports].'Activity: EndDate')
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -3271,7 +3271,8 @@ Screens:
                                                 DataField: ="Activity_x003a__x0020_StartDate"
                                                 Default: |-
                                                   =ThisItem.'Activity: StartDate'
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Activity_x003a__x0020_StartDate)
+                                                DisplayName: |-
+                                                  =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'Activity: StartDate')
                                                 Required: =false
                                                 Update: =DataCardValue22.Selected
                                                 Width: =458
@@ -3322,7 +3323,8 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].Activity_x003a__x0020_StartDate)
+                                                      Items: |-
+                                                        =Choices([@MonthlyReports].'Activity: StartDate')
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -4184,7 +4186,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="{Attachments}"
                                                 Default: =ThisItem.Attachments
-                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,'{Attachments}')
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Attachments)
                                                 Required: =false
                                                 Update: =DataCardValue31.Attachments
                                                 Width: =458

@@ -48,8 +48,6 @@ Screens:
 
         ClearCollect(colStatusFilter, {Value: "All"});
         Collect(colStatusFilter, Choices(Projects.Status));
-
-
     Children:
       - scr_Projects_con:
           Control: GroupContainer@1.5.0
@@ -60,10 +58,6 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
-            # Navigation targets match the app-wide rail audit (CHANGES.md §22);
-            # the Projects icon is highlighted (varNavy) because this is the
-            # active screen. Trending/Settings/Support stay decorative.
             - ProjectsSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -307,11 +301,8 @@ Screens:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width - ProjectsNavRail.Width
+                  Width: =App.Width - ProjectsSidebar_con.Width
                 Children:
-                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
-                  # Title + directorate/programme context line + search box + bell,
-                  # matching the original pre-component header layout.
                   - ProjectsHomeHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -327,7 +318,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - ProjectsNavRail.Width
+                        Width: =App.Width - ProjectsSidebar_con.Width
                       Children:
                         - HomeHeaderLeft_con_2:
                             Control: GroupContainer@1.5.0
@@ -359,7 +350,7 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =25
-                                    Text: ="Projects"
+                                    Text: ="Priorities"
                               - HomeDashboardSubtitle_lbl_2:
                                   Control: Label@2.5.1
                                   Properties:
@@ -543,7 +534,7 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Size: =18
-                                          Text: ="Projects"
+                                          Text: ="Priorities"
                                     - AddNew_btn:
                                         Control: ModernButton@1.0.0
                                         Properties:
@@ -695,7 +686,7 @@ Screens:
                                           Items: =colStatusFilter
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnChange: |+
+                                          OnChange: |
                                             =Set(varProjectFilterStatus, ProjectStatusFilter_drp.Selected.Value)
                                           Width: =Parent.Width / 3 - 4
                               - PrjResultCount_lbl:
@@ -918,7 +909,7 @@ Screens:
                                                   =If(
                                                       varMode = "New",
                                                       "New Project",
-                                                      "Project: " & varSelectedProject.ProjectID & " - " & varSelectedProject.PriorityChallenge
+                                                      "Priority: " & varSelectedProject.ProjectID & " - " & varSelectedProject.PriorityChallenge
                                                   )
                                                 X: =40
                                                 Y: =40
@@ -1032,7 +1023,7 @@ Screens:
                                                   */
 
 
-                                                  =// Save_btn.OnSelect — validates every required field, then inserts or
+                                                  // Save_btn.OnSelect — validates every required field, then inserts or
                                                   // updates the Projects record and refreshes the scoped list.
                                                   If(
                                                       IsBlank(PriorityChallenge_txt.Text) || IsBlank(ProjectGoalDescription_txt.Text)
