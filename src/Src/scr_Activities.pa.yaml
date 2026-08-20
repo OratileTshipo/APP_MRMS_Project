@@ -411,6 +411,7 @@ Screens:
                                     - ActSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           Color: =RGBA(153, 153, 153, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -478,6 +479,7 @@ Screens:
                               - ActBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -706,7 +708,7 @@ Screens:
                                           FocusedBorderThickness: =4
                                           Height: =ActivityItems_gal.TemplateHeight * .7
                                           HoverFill: =RGBA(0, 120, 212, 1)
-                                          OnSelect: =
+                                          OnSelect: =Select(Parent)
                                           PressedFill: =RGBA(0, 120, 212, 1)
                                           Width: =6
                                           X: =3
@@ -892,7 +894,7 @@ Screens:
                                                       varActivityFormValid,
                                                       // Auto-generate ActivityID: {DirectorateID}-AC-{next sequential}
                                                       Set(varActDirID, Coalesce(DirectorateLabel_drp.Selected.DirectorateID, "GEN"));
-                                                      Set(varActNextSeq, 1 + CountRows(Filter(Activities, StartsWith(Title, varActDirID & "-AC-"))));
+                                                      Set(varActNextSeq, 1 + CountRows(Filter(colActivitiesInScope, StartsWith(Title, varActDirID & "-AC-"))));
                                                       Set(varNewActivityID, varActDirID & "-AC-" & Text(varActNextSeq, "0000"));
                                                       // Auto-populate ShortDescription from first 10 words of Description
                                                       Set(varAutoShortDesc, Trim(Concat(FirstN(Split(ActivityDescription_txt.Text, " "), 10), Value, " ")));

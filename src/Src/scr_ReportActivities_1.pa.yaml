@@ -30,21 +30,35 @@ Screens:
         Set(varRepActFilterProgramme, "All");
         Set(varRepActFilterStatus, "All");
 
-        // 2. Master list — role-scoped, delegable single-column filters
+        // 2. Master list — role-scoped, delegable single-column filters.
+        //    Load ALL active activities first (no column filter), then narrow
+        //    in-memory for non-admin users.  This avoids any Lookup / delegation
+        //    edge-cases and mirrors the pattern used on scr_Activities.
+        ClearCollect(colReportActivities, Filter(Activities, 'Active ' = true));
+
+        If(
+            Not(varCanViewAllReports),
+            ClearCollect(
+                colReportActivities,
+                Switch(
+                    varUserRole,
+                    "ProgrammeManager",
+                        Filter(colReportActivities, ProgrammeLabel = varUserProgramme),
+                    "Supervisor",
+                        Filter(colReportActivities, DirectorateLabel = varUserDirectorate),
+                    // Default (Contributor) — own directorate only
+                    Filter(colReportActivities, DirectorateLabel = varUserDirectorate)
+                )
+            )
+        );
+
+        // 2b. Collect scoped MonthlyReports for ID generation (avoids CountRows delegation)
         ClearCollect(
-            colReportActivities,
-            Switch(
-                varUserRole,
-                "Administrator",
-                    Filter(Activities, 'Active ' = true),
-                "DeputyDirectorME",
-                    Filter(Activities, 'Active ' = true),
-                "ProgrammeManager",
-                    Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
-                "Supervisor",
-                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate),
-                // Default (Contributor) — own directorate only
-                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate)
+            colMonthlyReportsScoped,
+            If(
+                varCanViewAllReports,
+                Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY),
+                Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY, DirectorateLabel = varUserDirectorate)
             )
         );
 
@@ -182,6 +196,7 @@ Screens:
                                     - RepActSearch_ico_1:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           Color: =RGBA(113, 111, 110, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -875,7 +890,7 @@ Screens:
 
                                                 // Auto-generate ReportID: {DirectorateID}-RP-{next sequential}
                                                 Set(varReportDirID, Coalesce(LookUp(colDirectorates, Title = varReportActivity.DirectorateLabel).DirectorateID, "GEN"));
-                                                Set(varReportNextSeq, 1 + CountRows(Filter(MonthlyReports, StartsWith(Title, varReportDirID & "-RP-"))));
+                                                Set(varReportNextSeq, 1 + CountRows(Filter(colMonthlyReportsScoped, StartsWith(Title, varReportDirID & "-RP-"))));
                                                 Set(varNewReportID, varReportDirID & "-RP-" & Text(varReportNextSeq, "0000"));
 
                                                 Patch(

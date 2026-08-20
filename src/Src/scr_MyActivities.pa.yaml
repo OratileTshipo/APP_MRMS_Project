@@ -575,7 +575,6 @@ Screens:
                                                 PaddingLeft: =4
                                                 Size: =13.5
                                                 Text: =ThisItem.ActivityName
-                                                Tooltip: =ThisItem.ActivityShortDescription
                                           - Rectangle_sep2:
                                               Control: Rectangle@2.3.0
                                               Properties:
@@ -702,7 +701,6 @@ Screens:
                                                 PaddingLeft: =4
                                                 Size: =12
                                                 Text: =ThisItem.ReportStatus
-                                                Tooltip: =ThisItem.ActivityStatus
                                           - Rectangle_sep7:
                                               Control: Rectangle@2.3.0
                                               Properties:

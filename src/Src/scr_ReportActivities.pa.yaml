@@ -30,38 +30,26 @@ Screens:
         Set(varRepActFilterProgramme, "All");
         Set(varRepActFilterStatus, "All");
 
-        // 2. Master list — role-scoped, delegable single-column filters
-        /*ClearCollect(
-            colReportActivities,
-            If(
-                varCanViewAllReports,
-                Filter(Activities, 'Active ' = true),
-                Filter(Activities, ActivityOwner.Email = varUserEmail, 'Active ' = true)
+        // 2. Master list — role-scoped, delegable single-column filters.
+        //    Load ALL active activities first (no column filter), then narrow
+        //    in-memory for non-admin users.  This avoids any Lookup / delegation
+        //    edge-cases and mirrors the pattern used on scr_Activities.
+        ClearCollect(colReportActivities, Filter(Activities, 'Active ' = true));
+
+        If(
+            Not(varCanViewAllReports),
+            ClearCollect(
+                colReportActivities,
+                Switch(
+                    varUserRole,
+                    "ProgrammeManager",
+                        Filter(colReportActivities, ProgrammeLabel = varUserProgramme),
+                    "Supervisor",
+                        Filter(colReportActivities, DirectorateLabel = varUserDirectorate),
+                    // Default (Contributor)
+                    Filter(colReportActivities, DirectorateLabel = varUserDirectorate)
+                )
             )
-        );
-        */
-        ClearCollect(
-            colReportActivities,
-            Switch(
-                varUserRole,
-                "Administrator",
-                    Filter(Activities, 'Active ' = true),
-                "DeputyDirectorME",
-                    Filter(Activities, 'Active ' = true),
-                "ProgrammeManager",
-                    Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
-                "Supervisor",
-                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate),
-                // Default (Contributor)
-                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate)
-            )
-        );
-        Notify(
-            "Role: " & varUserRole 
-            & " | DirectorateID: " & varUserDirectorate
-            & " | Programme: " & varUserProgramme 
-            & " | Activities count: " & CountRows(colReportActivities),
-            NotificationType.Information
         );
 
         // 3. Default selection + report form state — load the existing report
@@ -76,7 +64,6 @@ Screens:
         Reset(RepActMonth_drp);
         Reset(RepActQuarter_drp);
         Reset(RepActFY_drp);
-        Reset(RepActPlanned_txt);
         Reset(RepActPct_txt);
         Reset(RepActFormStatus_drp);
         Reset(RepActReason_txt);
@@ -576,6 +563,7 @@ Screens:
                                     - RepActSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           Color: =RGBA(113, 111, 110, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -673,7 +661,6 @@ Screens:
                                       Reset(RepActMonth_drp);
                                       Reset(RepActQuarter_drp);
                                       Reset(RepActFY_drp);
-                                      Reset(RepActPlanned_txt);
                                       Reset(RepActPct_txt);
                                       Reset(RepActFormStatus_drp);
                                       Reset(RepActReason_txt);
