@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "add-data-source": {
+      "source": "microsoft/power-platform-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/canvas-apps/skills/add-data-source/SKILL.md",
+      "computedHash": "ef9a3161f1a1b455471da4fef06b51954a1ce6d5a335a9c8d9f37d0c3d74573e"
+    },
+    "canvas-app": {
+      "source": "microsoft/power-platform-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/canvas-apps/skills/canvas-app/SKILL.md",
+      "computedHash": "0c9df23440a45f09645619afc8ac9926f00c17976567cabce5d155a63e6ef0c6"
+    },
+    "deploy": {
+      "source": "microsoft/power-platform-skills",
+      "sourceType": "github",
+      "skillPath": "plugins/code-apps/skills/deploy/SKILL.md",
+      "computedHash": "b54790ef92a59d9542e116b0f5fa8f7803477e760db07c85b8206dd3172cff49"
+    }
+  }
+}
