@@ -40,7 +40,7 @@ Screens:
         // Role-first scope: one simple single-column filter per role so the
         // SharePoint query stays delegable (OR across columns is not delegated).
         // MonthlyReports.DirectorateLabel stores the directorate SHORT CODE
-        // (e.g. "ICTM"), so Supervisor matches on varUserDirectorateID.
+        // Supervisor/Contributor: own directorate only (full name).
         ClearCollect(
             colReportsInScope,
             Switch(
@@ -69,8 +69,8 @@ Screens:
                 "Administrator", Filter(Activities, 'Active ' = true),
                 "DeputyDirectorME", Filter(Activities, 'Active ' = true),
                 "ProgrammeManager", Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
-                "Supervisor", Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID),
-                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID)
+                "Supervisor", Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate),
+                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate)
             )
         );
 

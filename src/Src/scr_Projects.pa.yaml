@@ -1014,7 +1014,6 @@ Screens:
                                                           Filter(
                                                               Projects,
                                                               varCanViewAllReports
-                                                                  || Directorate.Value = varUserDirectorateID
                                                                   || Directorate.Value = varUserDirectorate
                                                           )
                                                       );
@@ -1035,12 +1034,18 @@ Screens:
 
                                                       Notify("All fields are required before saving.", NotificationType.Error),
 
+                                                      // Auto-generate ProjectID: {DirectorateID}-PJ-{next sequential}
+                                                      Set(varProjDirID, Coalesce(ProjectDirectorate_drp.Selected.DirectorateID, "GEN"));
+                                                      Set(varProjNextSeq, 1 + CountRows(Filter(Projects, StartsWith(Title, varProjDirID & "-PJ-"))));
+                                                      Set(varNewProjectID, varProjDirID & "-PJ-" & Text(varProjNextSeq, "0000"));
+
                                                       Set(
                                                           varSelectedProject,
                                                           Patch(
                                                               Projects,
                                                               If(varMode = "New", Defaults(Projects), varSelectedProject),
                                                               {
+                                                                  Title: varNewProjectID,
                                                                   PriorityChallenge: PriorityChallenge_txt.Text,
                                                                   ProjectGoalDescription: ProjectGoalDescription_txt.Text,
                                                                   KeyDeliverable: KeyDeliverable_txt.Text,
@@ -1065,7 +1070,6 @@ Screens:
                                                           Filter(
                                                               Projects,
                                                               varCanViewAllReports
-                                                              || Directorate.Value = varUserDirectorateID
                                                               || Directorate.Value = varUserDirectorate
                                                           )
                                                       );

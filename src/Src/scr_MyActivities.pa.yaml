@@ -36,8 +36,8 @@ Screens:
                 "ProgrammeManager",
                     Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
                 "Supervisor",
-                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID),
-                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID)
+                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate),
+                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate)
             )
         );
 

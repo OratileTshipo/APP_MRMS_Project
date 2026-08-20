@@ -928,7 +928,7 @@ Screens:
                                               "Administrator", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated"),
                                               "DeputyDirectorME", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated"),
                                               "ProgrammeManager", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", ProgrammeLabel = varUserProgramme),
-                                              "Supervisor", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", DirectorateLabel = varUserDirectorateID),
+                                              "Supervisor", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", DirectorateLabel = varUserDirectorate),
                                               Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", SubmittedBy.Email = varUserEmail)
                                           )
                                       );
