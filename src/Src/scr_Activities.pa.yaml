@@ -894,6 +894,8 @@ Screens:
                                                       Set(varActDirID, Coalesce(DirectorateLabel_drp.Selected.DirectorateID, "GEN"));
                                                       Set(varActNextSeq, 1 + CountRows(Filter(Activities, StartsWith(Title, varActDirID & "-AC-"))));
                                                       Set(varNewActivityID, varActDirID & "-AC-" & Text(varActNextSeq, "0000"));
+                                                      // Auto-populate ShortDescription from first 10 words of Description
+                                                      Set(varAutoShortDesc, Trim(Concat(FirstN(Split(ActivityDescription_txt.Text, " "), 10), Value, " ")));
                                                       Set(
                                                           varSelectedActivity,
                                                           Patch(
@@ -902,9 +904,8 @@ Screens:
                                                               {
                                                                   // scr_Activities Save — writes the Activities list (schema per Activities.csv)
                                                                   Title: varNewActivityID,
-                                                                  //ActivityCode: ActivityCode_txt.Text,
                                                                   ActivityDescription: ActivityDescription_txt.Text,
-                                                                  ActivityShortDescription: ActivityShortDescription_txt.Text,
+                                                                  ActivityShortDescription: If(IsBlank(ActivityShortDescription_txt.Text), varAutoShortDesc, ActivityShortDescription_txt.Text),
                                                                   Frequency: Frequency_drp.Selected,
                                                                   ProgrammeLabel: ProgrammeLabel_drp.Selected.Title,
                                                                   Directorate: {Id: DirectorateLabel_drp.Selected.ID, Value: DirectorateLabel_drp.Selected.DirectorateID},
