@@ -501,6 +501,7 @@ Screens:
                                     - HomeSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           Color: =RGBA(153, 153, 153, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -550,6 +551,7 @@ Screens:
                               - HomeBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -616,7 +618,13 @@ Screens:
                                     PaddingBottom: =0
                                     PaddingTop: =0
                                     Size: =18
-                                    Text: '="Good Morning," & varUserFullName '
+                                    Text: |-
+                                      =Switch(
+                                          true,
+                                          Hour(Now()) >= 5 && Hour(Now()) < 12, "Good morning, " & varUserFullName,
+                                          Hour(Now()) >= 12 && Hour(Now()) < 17, "Good day, " & varUserFullName,
+                                          "Good evening, " & varUserFullName
+                                      )
                               - CurrentDate_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -1020,7 +1028,15 @@ Screens:
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =12
-                                          Text: ="Across 4 Programmes"
+                                          Text: |-
+                                            =Switch(
+                                                varUserRole,
+                                                "Administrator", "Across all programmes",
+                                                "DeputyDirectorME", "Across all programmes",
+                                                "ProgrammeManager", "Across " & varUserProgramme,
+                                                // Default (Supervisor / Contributor) — scoped to directorate
+                                                "Across " & varUserDirectorate
+                                            )
                         - PendingReviewCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -1637,50 +1653,62 @@ Screens:
                                     Height: =Parent.Height
                                     Items: |-
                                       =// MonthlyTrend_gal.Items — 12-month submissions trend.
-                                      // Builds one row per month of the financial year (Apr→Mar) by filtering
-                                      // the already-collected colActivities (local execution, no delegation limits).
-                                      ForAll(
-                                          Sequence(12, 0, 1) As MonthOffset,
-                                          With(
-                                              { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
+                                      // OPTIMISED: pre-filter activities and reports ONCE (was repeated
+                                      // 12× inside the ForAll).  The outer With() computes two small
+                                      // in-memory collections; each monthly iteration only slices by
+                                      // month, which is a fast in-memory filter.
+                                      With(
+                                          {
+                                              baseActivities: Filter(
+                                                  colActivities,
+                                                  (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                  (
+                                                      IsBlank(HomeSearchBox_txt.Text)
+                                                      || Lower(HomeSearchBox_txt.Text) in Lower(Title)
+                                                      || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
+                                                  )
+                                              ),
+                                              baseReports: Filter(
+                                                  colReportsInScope,
+                                                  (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                  (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
+                                                  (varHomeFilter = "All"
+                                                      || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
+                                                      || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                                      || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
+                                                      || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
+                                                  )
+                                              )
+                                          },
+                                          ForAll(
+                                              Sequence(12, 0, 1) As MonthOffset,
                                               With(
-                                                  {
-                                                      monthName: Text(monthAnchor, "mmmm"),
-                                                      dueThisMonth: Filter(
-                                                          colActivities,
-                                                          Month(EndDate) = Month(monthAnchor),
-                                                          Year(EndDate) = Year(monthAnchor),
-                                                          (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
-                                                          (
-                                                              IsBlank(HomeSearchBox_txt.Text)
-                                                              || Lower(HomeSearchBox_txt.Text) in Lower(Title)
-                                                              || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
-                                                          )
-                                                      )
-                                                  },
+                                                  { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
                                                   With(
                                                       {
-                                                          reportsForDueActivities: Filter(
-                                                              colReportsInScope,
-                                                              !IsBlank(LookUp(dueThisMonth, ID = Activity.Id)),
-                                                              (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
-                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
-                                                              (varHomeFilter = "All"
-                                                                  || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
-                                                                  || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                                                  || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
-                                                                  || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
-                                                              )
+                                                          monthName: Text(monthAnchor, "mmmm"),
+                                                          dueThisMonth: Filter(
+                                                              baseActivities,
+                                                              Month(EndDate) = Month(monthAnchor),
+                                                              Year(EndDate) = Year(monthAnchor)
                                                           )
                                                       },
-                                                      {
-                                                          MonthName: monthName,
-                                                          TotalActivities: CountRows(dueThisMonth),
-                                                          OnTimeCount: CountRows(Filter(reportsForDueActivities, SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
-                                                          LateCount: CountRows(Filter(reportsForDueActivities, SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
-                                                          OutstandingCount: Max(0, CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id)))
-                                                      }
+                                                      With(
+                                                          {
+                                                              reportsForDueActivities: Filter(
+                                                                  baseReports,
+                                                                  !IsBlank(LookUp(dueThisMonth, ID = Activity.Id))
+                                                              )
+                                                          },
+                                                          {
+                                                              MonthName: monthName,
+                                                              TotalActivities: CountRows(dueThisMonth),
+                                                              OnTimeCount: CountRows(Filter(reportsForDueActivities, SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                              LateCount: CountRows(Filter(reportsForDueActivities, SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                              OutstandingCount: Max(0, CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id)))
+                                                          }
+                                                      )
                                                   )
                                               )
                                           )
@@ -1990,59 +2018,56 @@ Screens:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Items: |-
                                       =// ProgrammeProgress_gal.Items — progress per programme for the effective FY.
-                                      // Groups the collected colActivities by ProgrammeLabel and aggregates
-                                      // % complete from the associated monthly reports.
+                                      // OPTIMISED: pre-filter activities and reports ONCE (was repeated
+                                      // per-programme inside the ForAll).  The outer With() computes three
+                                      // small in-memory collections; each programme iteration only slices
+                                      // by ProgrammeLabel, which is a fast in-memory filter.
                                       With(
-                                          { effectiveFY: If(varFilterFY = "All", varCurrentFY, varFilterFY) },
+                                          {
+                                              baseActivities: Filter(
+                                                  colActivities,
+                                                  (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                              ),
+                                              baseReportsFY: Filter(
+                                                  colReportsInScope,
+                                                  'FinancialYear '.Value = If(varFilterFY = "All", varCurrentFY, varFilterFY),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                  (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                              ),
+                                              baseReportsMonth: Filter(
+                                                  colReportsInScope,
+                                                  'FinancialYear '.Value = If(varFilterFY = "All", varCurrentFY, varFilterFY),
+                                                  ReportingMonth.Value = varCurrentMonth,
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                              )
+                                          },
                                           ForAll(
-                                              Distinct(
-                                                  Filter(colActivities, (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)),
-                                                  ProgrammeLabel
-                                              ) As Prog,
+                                              Distinct(baseActivities, ProgrammeLabel) As Prog,
                                               With(
                                                   {
                                                       progName: Prog.Value,
-                                                      progActivities: Filter(
-                                                          colActivities,
-                                                          ProgrammeLabel = Prog.Value,
-                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
-                                                      )
+                                                      progActivities: Filter(baseActivities, ProgrammeLabel = Prog.Value),
+                                                      progReportsFY: Filter(baseReportsFY, ProgrammeLabel = Prog.Value),
+                                                      progReportsMonth: Filter(baseReportsMonth, ProgrammeLabel = Prog.Value)
                                                   },
-                                                  With(
-                                                      {
-                                                          progReportsFY: Filter(
-                                                              colReportsInScope,
-                                                              ProgrammeLabel = Prog.Value,
-                                                              'FinancialYear '.Value = effectiveFY,
-                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
-                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
-                                                          ),
-                                                          progReportsThisMonth: Filter(
-                                                              colReportsInScope,
-                                                              ProgrammeLabel = Prog.Value,
-                                                              'FinancialYear '.Value = effectiveFY,
-                                                              ReportingMonth.Value = varCurrentMonth,
-                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
-                                                          )
-                                                      },
-                                                      {
-                                                          ProgrammeName: progName,
-                                                          TotalActivities: CountRows(progActivities),
-                                                          MonthlyReportedCount: CountRows(Distinct(progReportsThisMonth, Activity.Id)),
-                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                          MonthlyReportingRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          MonthlyApprovalRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          FYCumulativeRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
-                                                      }
-                                                  )
+                                                  {
+                                                      ProgrammeName: progName,
+                                                      TotalActivities: CountRows(progActivities),
+                                                      MonthlyReportedCount: CountRows(Distinct(progReportsMonth, Activity.Id)),
+                                                      MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                      FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                      MonthlyReportingRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(progReportsMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      MonthlyApprovalRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      FYCumulativeRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
+                                                  }
                                               )
                                           )
                                       )

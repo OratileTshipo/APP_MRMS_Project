@@ -23,3 +23,5 @@ EditorState:
     - scr_Reports
     - scr_ApprovedReports
     - scr_ApprovalQueue
+    - scr_ReportActivities_1
+    - Screen2

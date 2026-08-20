@@ -24,15 +24,18 @@ Screens:
         Set(varProjectFilterStatus, "All");
         Set(varDirFilterResetKey, 0);
 
-        // Scoped Projects list — role-first split keeps each branch a simple
-        // single-column delegable filter (SharePoint does not delegate OR across
-        // columns). Projects.Directorate is a Lookup; .Value is the full name.
-        ClearCollect(
-            colProjectsInScope,
-            If(
-                varCanViewAllReports,
-                Projects,
-                Filter(Projects, Directorate.Value = varUserDirectorate)
+        // Scoped Projects list — role-first split.
+        // NOTE: Projects.Directorate is a Lookup column; SharePoint does NOT
+        // delegate filtering on Lookup.Value.  We therefore collect ALL projects
+        // first (delegable — no column filter), then narrow in-memory for
+        // non-admin users where the Lookup.Value comparison works fine.
+        ClearCollect(colProjectsInScope, Projects);
+
+        If(
+            Not(varCanViewAllReports),
+            ClearCollect(
+                colProjectsInScope,
+                Filter(colProjectsInScope, Directorate.Value = varUserDirectorate)
             )
         );
 
@@ -410,6 +413,7 @@ Screens:
                                     - Search_ico_2:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           Color: =RGBA(153, 153, 153, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -460,6 +464,7 @@ Screens:
                               - HomeBell_ico_2:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -473,10 +478,10 @@ Screens:
                                     Icon: =Icon.Bell
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    OnSelect: =
                                     PressedBorderColor: =RGBA(0, 0, 0, 0)
                                     PressedColor: =RGBA(16, 110, 190, 1)
                                     PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
                   - ProjectScreen_con:
                       Control: GroupContainer@1.5.0
@@ -799,7 +804,7 @@ Screens:
                                                 FocusedBorderThickness: =4
                                                 Height: =Project_gal_2.TemplateHeight * .7
                                                 HoverFill: =RGBA(0, 120, 212, 1)
-                                                OnSelect: =
+                                                OnSelect: =Select(Parent)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
                                                 Width: =6
                                                 Y: =15
@@ -825,6 +830,7 @@ Screens:
                                           - PrjRowChevron_ico_2:
                                               Control: Classic/Icon@2.5.0
                                               Properties:
+                                                AccessibleLabel: ="View project details"
                                                 BorderColor: =RGBA(0, 0, 0, 0)
                                                 Color: =RGBA(204, 204, 204, 1)
                                                 DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -1036,7 +1042,7 @@ Screens:
 
                                                       // Auto-generate ProjectID: {DirectorateID}-PJ-{next sequential}
                                                       Set(varProjDirID, Coalesce(ProjectDirectorate_drp.Selected.DirectorateID, "GEN"));
-                                                      Set(varProjNextSeq, 1 + CountRows(Filter(Projects, StartsWith(Title, varProjDirID & "-PJ-"))));
+                                                      Set(varProjNextSeq, 1 + CountRows(Filter(colProjectsInScope, StartsWith(Title, varProjDirID & "-PJ-"))));
                                                       Set(varNewProjectID, varProjDirID & "-PJ-" & Text(varProjNextSeq, "0000"));
 
                                                       Set(

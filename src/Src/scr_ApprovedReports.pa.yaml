@@ -328,6 +328,7 @@ Screens:
                         - ApprBack_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
+                              AccessibleLabel: ="Go back"
                               BorderColor: =RGBA(0, 0, 0, 0)
                               Color: =RGBA(255, 255, 255, 1)
                               DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -432,6 +433,7 @@ Screens:
                               - ApprBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -721,6 +723,7 @@ Screens:
                               - ApprSearch_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Search"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(113, 111, 110, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -1061,6 +1064,7 @@ Screens:
                               - ApprRowChevron_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="View report details"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(204, 204, 204, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
