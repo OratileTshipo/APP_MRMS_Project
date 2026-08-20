@@ -9,7 +9,9 @@
 Screens:
   scr_Splash:
     Properties:
-      Fill: =varNavy
+      Fill: |-
+        =//varNavy
+        RGBA(0, 0, 0, 0)
       ImagePosition: =ImagePosition.Center
       LoadingSpinner: =LoadingSpinner.Controls
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
@@ -30,6 +32,23 @@ Screens:
             PaddingTop: =8
             Width: =App.Width
           Children:
+            - Image1:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =2
+                  DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                  DisabledFill: =RGBA(0, 0, 0, 0)
+                  FocusedBorderThickness: =4
+                  Height: =170
+                  HoverBorderColor: =RGBA(0, 0, 0, 0)
+                  HoverFill: =RGBA(0, 0, 0, 0)
+                  Image: ='dpwr logo'
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PressedBorderColor: =RGBA(0, 0, 0, 0)
+                  PressedFill: =RGBA(0, 0, 0, 0)
             - lbl_AppTitle:
                 Control: Label@2.5.1
                 Properties:
@@ -38,7 +57,9 @@ Screens:
                   BorderColor: =RGBA(0, 0, 0, 0)
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =2
-                  Color: =RGBA(230, 230, 230, 1)
+                  Color: |-
+                    =//RGBA(230, 230, 230, 1)
+                    RGBA(0, 0, 0, 1)
                   DisabledBorderColor: =RGBA(0, 0, 0, 0)
                   DisabledColor: =RGBA(161, 159, 157, 1)
                   FocusedBorderThickness: =4
@@ -57,7 +78,9 @@ Screens:
                   BorderColor: =RGBA(0, 0, 0, 0)
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =2
-                  Color: =varLBlue
+                  Color: |-
+                    =//varLBlue
+                    RGBA(0, 0, 0, 1)
                   DisabledBorderColor: =RGBA(0, 0, 0, 0)
                   DisabledColor: =RGBA(161, 159, 157, 1)
                   FocusedBorderThickness: =4
@@ -73,7 +96,9 @@ Screens:
                   BorderColor: =RGBA(0, 0, 0, 0)
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =2
-                  Color: =RGBA(230, 230, 230, 1)
+                  Color: |-
+                    =//RGBA(230, 230, 230, 1)
+                    RGBA(0, 0, 0, 1)
                   DisabledBorderColor: =RGBA(0, 0, 0, 0)
                   DisabledColor: =RGBA(161, 159, 157, 1)
                   FocusedBorderThickness: =4
@@ -89,7 +114,7 @@ Screens:
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =4
                   DisabledFill: =RGBA(161, 159, 157, 1)
-                  Fill: =varBlue
+                  Fill: =RGBA(45, 128, 40, 1)
                   FocusedBorderThickness: =4
                   Height: =2
                   HoverFill: =RGBA(0, 120, 212, 1)
@@ -104,7 +129,7 @@ Screens:
                   BorderColor: =RGBA(0, 0, 0, 0)
                   BorderStyle: =BorderStyle.None
                   BorderThickness: =2
-                  Color: '=ColorValue("#AABBD4") '
+                  Color: "=//ColorValue(\"#AABBD4\")\r\nRGBA(0, 0, 0, 1) "
                   DisabledBorderColor: =RGBA(0, 0, 0, 0)
                   DisabledColor: =RGBA(161, 159, 157, 1)
                   FocusedBorderThickness: =4
@@ -153,6 +178,14 @@ Screens:
                   PressedColor: =RGBA(255, 255, 255, 1)
                   PressedFill: =RGBA(16, 110, 190, 1)
                   Visible: =false
+            - Button1:
+                Control: ModernButton@1.0.0
+                Properties:
+                  BasePaletteColor: =RGBA(8, 222, 8, 1)
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: =Navigate(scr_Home,ScreenTransition.Fade)
+                  Text: ="Continue"
       - rec_SplashAccent:
           Control: Rectangle@2.3.0
           Properties:
@@ -160,13 +193,13 @@ Screens:
             BorderStyle: =BorderStyle.None
             BorderThickness: =2
             DisabledFill: =RGBA(161, 159, 157, 1)
-            Fill: =varBlue
+            Fill: =RGBA(45, 128, 40, 1)
             FocusedBorderThickness: =4
             Height: =8
             HoverFill: =RGBA(0, 120, 212, 1)
             PressedFill: =RGBA(0, 120, 212, 1)
             Width: =Parent.Width
-            Y: =Parent.Height * 0.75
+            Y: =551
       - lbl_AppVersion:
           Control: Label@2.5.1
           Properties:

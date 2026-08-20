@@ -31,7 +31,6 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
             - RepFormSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -277,8 +276,6 @@ Screens:
                   LayoutDirection: =LayoutDirection.Vertical
                   Width: =App.Width - RepFormSidebar_con.Width
                 Children:
-                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
-                  # Back arrow returns to the previous screen; shows the signed-in user.
                   - RepFormHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -398,7 +395,6 @@ Screens:
                                     FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =13
                                     Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
                                     Tooltip: =varUserEmail
                               - RepFormBell_ico:
@@ -459,6 +455,7 @@ Screens:
                               - ReportFormActivityName_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
                                     AutoHeight: =true
                                     Color: =varNavy
                                     FontWeight: =FontWeight.Bold
@@ -469,6 +466,7 @@ Screens:
                               - ReportFormActivityDesc_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
                                     AutoHeight: =true
                                     Color: =RGBA(96, 94, 92, 1)
                                     LayoutMinHeight: =16
@@ -478,6 +476,7 @@ Screens:
                               - ReportFormContext_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
                                     AutoHeight: =true
                                     Color: =RGBA(113, 111, 110, 1)
                                     LayoutMinHeight: =16
@@ -506,11 +505,8 @@ Screens:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =2
                                     Default: =If(varReportMode = "New", "", varEditReport.Title)
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
-                                    Height: =40
                                     HintText: ="e.g. ICTM-RP-0001"
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
@@ -615,11 +611,11 @@ Screens:
                                     BorderColor: =RGBA(214, 221, 224, 1)
                                     BorderStyle: =BorderStyle.Solid
                                     BorderThickness: =2
-                                    Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.FinancialYear), Value = varCurrentFY), varEditReport.FinancialYear)
+                                    Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY), varEditReport.'FinancialYear ')
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                     Height: =40
                                     ItemDisplayText: =ThisItem.Value
-                                    Items: =Choices(MonthlyReports.FinancialYear)
+                                    Items: =Choices(MonthlyReports.'FinancialYear ')
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Width: =Parent.Width
@@ -645,8 +641,6 @@ Screens:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =2
                                     Default: =If(varReportMode = "New", "", varEditReport.PlannedActivity)
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                     Height: =80
@@ -688,12 +682,9 @@ Screens:
                                         Control: Classic/TextInput@2.3.2
                                         Properties:
                                           BorderColor: =RGBA(214, 221, 224, 1)
-                                          BorderStyle: =BorderStyle.Solid
-                                          BorderThickness: =2
-                                          Default: =If(varReportMode = "New", "0", Text(varEditReport.PercentageComplete))
+                                          Default: =If(varReportMode = "New", "0", Text(varEditReport.'PercentageComplete '))
                                           DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                           Format: =TextFormat.Number
-                                          Height: =40
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           RadiusBottomLeft: =8
@@ -755,8 +746,6 @@ Screens:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =2
                                     Default: =If(varReportMode = "New", "", varEditReport.ReasonForDeviation)
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                     Height: =70
@@ -790,8 +779,6 @@ Screens:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =2
                                     Default: =If(varReportMode = "New", "", varEditReport.RemedialAction)
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                     Height: =70
@@ -825,8 +812,6 @@ Screens:
                                   Control: Classic/TextInput@2.3.2
                                   Properties:
                                     BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =2
                                     Default: =If(varReportMode = "New", "", varEditReport.Output)
                                     DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
                                     Height: =70
@@ -901,14 +886,14 @@ Screens:
                                                   DirectorateLabel: If(IsBlank(varReportActivity), "", varReportActivity.DirectorateLabel),
                                                   ReportingMonth: ReportFormReportingMonth_drp.Selected.Value,
                                                   Quarter: ReportFormQuarter_drp.Selected.Value,
-                                                  FinancialYear: ReportFormFY_drp.Selected.Value,
-                                                  PlannedActivity: ReportFormPlannedAct_txt.Text,
-                                                  PercentageComplete: Value(ReportFormPct_txt.Text),
+                                                  'FinancialYear ': ReportFormFY_drp.Selected.Value,
+                                                  PlannedAct: ReportFormPlannedAct_txt.Text,
+                                                  'PercentageComplete ': Value(ReportFormPct_txt.Text),
                                                   Status: ReportFormStatus_drp.Selected.Value,
                                                   ReasonForDeviation: ReportFormReasonDev_txt.Text,
                                                   RemedialAction: ReportFormRemedial_txt.Text,
                                                   Output: ReportFormOutput_txt.Text,
-                                                  Version: If(varReportMode = "New", 1, Coalesce(varEditReport.Version, 1))
+                                                  'Version ': If(varReportMode = "New", 1, Coalesce(varEditReport.'Version ', 1))
                                               }
                                           );
                                           Navigate(scr_MyActivities, ScreenTransition.Fade)

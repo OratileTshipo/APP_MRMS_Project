@@ -27,12 +27,32 @@ Screens:
         Set(varActFilterStatus, "All");
 
         // ------------------------------------------------------------
-        // 2. LOAD MY ACTIVITIES — this user's own assigned activities
+        // 2. LOAD MY ACTIVITIES — this user's directorate activities
         // ------------------------------------------------------------
+        /*
         ClearCollect(
             colMyActivities,
             Filter(Activities, ActivityOwner.Email = varUserEmail, 'Active ' = true)
         );
+        */
+        ClearCollect(
+            colMyActivities,
+            Switch(
+                varUserRole,
+                "Administrator",
+                    Filter(Activities, 'Active ' = true),
+                "DeputyDirectorME",
+                    Filter(Activities, 'Active ' = true),
+                "ProgrammeManager",
+                    Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
+                "Supervisor",
+                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID),
+                // Default (Contributor)
+                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID)
+            )
+        );
+
+
 
         // ------------------------------------------------------------
         // 3. BUILD ACTIVITY STATUS — join each activity with its latest
@@ -42,10 +62,31 @@ Screens:
         // set into a local collection ONCE, then filter it in the loop below —
         // otherwise the ForAll issues one delegated query to the raw
         // MonthlyReports list PER ACTIVITY (N round trips per screen visit).
+        /*
         ClearCollect(
             colMyReportsFY,
             Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY)
         );
+
+        */
+        ClearCollect(
+            colMyReportsFY,
+            Switch(
+                varUserRole,
+                "Administrator",
+                    Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY),
+                "DeputyDirectorME",
+                    Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY),
+                "ProgrammeManager",
+                    Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY, ProgrammeLabel = varUserProgramme),
+                "Supervisor",
+                    Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY, DirectorateLabel = varUserDirectorate),
+                // Default (Contributor)
+                Filter(MonthlyReports, 'FinancialYear '.Value = varCurrentFY, DirectorateLabel = varUserDirectorate)
+            )
+        );
+
+
         ClearCollect(
             colMyActivityStatus,
             ForAll(
@@ -67,10 +108,10 @@ Screens:
                         DirectorateName: Act.DirectorateLabel,
                         Frequency: Act.'Frequency ',
                         DueDay: Day(Act.DueDate),
-                        ReportStatus: Coalesce(latestReport.Status.Value, "Not Started"),
+                        ReportStatus: Coalesce(latestReport.ReportStatus.Value, "Not Started"),
                         ReportID: Coalesce(latestReport.ID, Blank()),
                         RAG: Switch(
-                            Coalesce(latestReport.Status.Value, "Not Started"),
+                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
                             "Approved", "Green",
                             "Draft", "Amber",
                             "Submitted", "Amber",
@@ -78,7 +119,7 @@ Screens:
                             "Green"
                         ),
                         ActionLabel: Switch(
-                            Coalesce(latestReport.Status.Value, "Not Started"),
+                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
                             "Not Started", "Start Report",
                             "Draft", "Continue",
                             "Submitted", "Submitted ✓",
@@ -86,9 +127,15 @@ Screens:
                             "Approved", "View",
                             "Start Report"
                         ),
-                        ActionDisabled: Coalesce(latestReport.Status.Value, "Not Started") = "Submitted",
+                        ActionDisabled: Coalesce(latestReport.ReportStatus.Value, "Not Started") = "Submitted",
                         IsOverdue: Coalesce(latestReport.IsOverdue, false),
-                        IsFlagged: Coalesce(latestReport.isFlagged, false)
+                        IsFlagged: Coalesce(latestReport.isFlagged, false),
+                        ActivityShortDescription: Act.ActivityShortDescription,
+                        StartDate: Text(Act.StartDate, DateTimeFormat.ShortDate),
+                        DueDate: Text(Act.DueDate, DateTimeFormat.ShortDate),
+                        ActivityOwner : Text(Act.ActivityOwner.DisplayName),
+                        ActivityStatus : Text(Act.Status.Value),
+                        Project : Text(Act.Project.Value)
                     }
                 )
             )
@@ -112,8 +159,6 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            # Container sidebar — replaces cmp_NavRail on this screen (v4.1).
-            # The My Activities icon is highlighted (varNavy) as the active screen.
             - MyActivitiesSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -357,10 +402,8 @@ Screens:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Center
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width - MyActivitiesNavRail.Width
+                  Width: =App.Width - MyActivitiesSidebar_con.Width
                 Children:
-                  # Container header — replaces cmp_AppHeader on this screen (v4.1).
-                  # Shows the signed-in user (varUserFullName) next to the bell.
                   - MyActivitiesHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -376,7 +419,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - MyActivitiesNavRail.Width
+                        Width: =App.Width - MyActivitiesSidebar_con.Width
                       Children:
                         - MyActHeaderLeft_con:
                             Control: GroupContainer@1.5.0
@@ -528,7 +571,6 @@ Screens:
                                     FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =13
                                     Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
                                     Tooltip: =varUserEmail
                               - MyActBell_ico:
@@ -641,31 +683,35 @@ Screens:
                               PaddingRight: =24
                               Width: =Parent.Width
                             Children:
-                              - ActHdrRAG_ico:
-                                  Control: Circle@2.3.0
+                              - ActHdrProject_lbl:
+                                  Control: ModernText@1.0.0
                                   Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    DisabledFill: =RGBA(0, 120, 212, 1)
-                                    Fill: =RGBA(0, 120, 212, 1)
-                                    FocusedBorderThickness: =4
-                                    Height: =Parent.Height
-                                    HoverFill: =RGBA(0, 120, 212, 1)
+                                    FontWeight: =FontWeight.Bold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    PressedFill: =RGBA(0, 120, 212, 1)
-                                    Width: =28
+                                    Size: =11
+                                    Text: ="PROJECT"
+                                    Width: =180
                               - ActHdrActivity_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
-                                    FillPortions: =3
                                     FontWeight: =FontWeight.Bold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     PaddingLeft: =4
                                     Size: =11
                                     Text: ="ACTIVITY"
+                                    Width: =280
+                              - ActHdroOwner_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="OWNER"
+                                    Width: =120
                               - ActHdrFrequency_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -676,6 +722,15 @@ Screens:
                                     Size: =11
                                     Text: ="FREQUENCY"
                                     Width: =120
+                              - ActHdrStart_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    FillPortions: =1
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="START"
                               - ActHdrDue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -700,12 +755,13 @@ Screens:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     Align: =Align.Center
+                                    AutoHeight: =true
                                     FillPortions: =1
                                     FontWeight: =FontWeight.Bold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =11
-                                    Text: ="ACTION"
+                                    Text: ="RECOMMENDED ACTION"
                                     Width: =130
                               - ActHdrChevron_ico:
                                   Control: Classic/Icon@2.5.0
@@ -749,7 +805,8 @@ Screens:
                                   Properties:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Items: |-
-                                      =// ActItems_gal.Items — the joined activity+report status collection,
+                                      =/*
+                                      // ActItems_gal.Items — the joined activity+report status collection,
                                       // filtered by Status (FY/Month fixed in OnVisible) and the header search
                                       // box (matches activity name / code / programme).
                                       Filter(
@@ -759,6 +816,19 @@ Screens:
                                               || Lower(ActivityName) in Lower(MyActSearchBox_txt.Text)
                                               || Lower(ProjectName) in Lower(MyActSearchBox_txt.Text)
                                               || Lower(ProgrammeName) in Lower(MyActSearchBox_txt.Text)
+                                      )
+                                      */
+
+                                      Filter(
+                                          colMyActivityStatus,
+                                          (varActFilterStatus = "All" || ReportStatus = varActFilterStatus),
+                                          (
+                                              IsBlank(MyActSearchBox_txt.Text)
+                                              || Lower(ActivityName) in Lower(MyActSearchBox_txt.Text)
+                                              || Lower(ProjectName) in Lower(MyActSearchBox_txt.Text)
+                                              || Lower(ProgrammeName) in Lower(MyActSearchBox_txt.Text)
+                                              || Lower(DirectorateName) in Lower(MyActSearchBox_txt.Text)
+                                          )
                                       )
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
@@ -770,11 +840,20 @@ Screens:
                                         Properties:
                                           AutoHeight: =true
                                           OnSelect: =
-                                          Size: =10.5
-                                          Text: =ThisItem.ActivityName
-                                          Width: =250
-                                          X: =40
-                                          Y: =40
+                                          Size: =12
+                                          Text: =ThisItem.Frequency.Value
+                                          Width: =100
+                                          X: =600
+                                          Y: =30
+                                    - ActRowStart_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          OnSelect: =
+                                          Size: =12
+                                          Text: =ThisItem.StartDate
+                                          Width: =100
+                                          X: =720
+                                          Y: =30
                                     - ActRowChevron_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -824,42 +903,57 @@ Screens:
                                           FontWeight: =FontWeight.Bold
                                           OnSelect: =
                                           Size: =12
-                                          Text: =ThisItem.ReportStatus
+                                          Text: =ThisItem.ActivityStatus
                                           Width: =100
-                                          X: =930
+                                          X: =950
                                           Y: =30
                                     - ActRowDue_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
                                           OnSelect: =
-                                          Size: =11.5
-                                          Text: ="Day " & ThisItem.DueDay
-                                          X: =300
-                                          Y: =40
+                                          Size: =12
+                                          Text: =ThisItem.DueDay
+                                          Width: =100
+                                          X: =830
+                                          Y: =30
+                                    - ActRowOwner_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          OnSelect: =
+                                          Size: =12
+                                          Text: =ThisItem.ActivityOwner
+                                          Width: =100
+                                          X: =450
+                                          Y: =30
                                     - Text2:
                                         Control: ModernText@1.0.0
                                         Properties:
-                                          Text: =CountRows( colMyActivities)
-                                          X: =280
-                                          Y: =40
+                                          AutoHeight: =true
+                                          PaddingTop: =0
+                                          Text: =//ThisItem.ActivityShortDescription
+                                          Width: =300
+                                          X: =150
+                                          Y: =30
                                     - ActRowProject_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AutoHeight: =true
                                           OnSelect: =Select(Parent)
                                           Size: =11.5
-                                          Text: =ThisItem.ActivityName
-                                          Width: =200
-                                          X: =40
+                                          Text: =ThisItem.ProjectName
+                                          Width: =100
+                                          X: =30
+                                          Y: =30
                                     - ActRowName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AutoHeight: =true
                                           FontWeight: =FontWeight.Bold
                                           OnSelect: =Select(Parent)
                                           Size: =13.5
                                           Text: =ThisItem.ActivityName
-                                          Width: =300
-                                          X: =260
-                                          Y: =40
+                                          X: =150
                                     - ActRowRAG_rec2:
                                         Control: Circle@2.3.0
                                         Properties:
@@ -872,5 +966,5 @@ Screens:
                                           HoverFill: =RGBA(0, 120, 212, 1)
                                           PressedFill: =RGBA(0, 120, 212, 1)
                                           Width: =13
-                                          X: =40
-                                          Y: =40
+                                          X: =8
+                                          Y: =30
