@@ -26,13 +26,13 @@ Screens:
 
         // Scoped Activities list — role-first, single-column delegable filter.
         // Activities.DirectorateLabel stores the short code (e.g. "SPME"),
-        // which matches varUserDirectorateID.
+        // which matches varUserDirectorate (full name).
         ClearCollect(
             colActivitiesInScope,
             If(
                 varCanViewAllReports,
                 Activities,
-                Filter(Activities, DirectorateLabel = varUserDirectorateID)
+                Filter(Activities, DirectorateLabel = varUserDirectorate)
             )
         );
 
@@ -890,6 +890,10 @@ Screens:
                                                   );
                                                   If(
                                                       varActivityFormValid,
+                                                      // Auto-generate ActivityID: {DirectorateID}-AC-{next sequential}
+                                                      Set(varActDirID, Coalesce(DirectorateLabel_drp.Selected.DirectorateID, "GEN"));
+                                                      Set(varActNextSeq, 1 + CountRows(Filter(Activities, StartsWith(Title, varActDirID & "-AC-"))));
+                                                      Set(varNewActivityID, varActDirID & "-AC-" & Text(varActNextSeq, "0000"));
                                                       Set(
                                                           varSelectedActivity,
                                                           Patch(
@@ -897,7 +901,7 @@ Screens:
                                                               If(varMode = "New", Defaults(Activities), varSelectedActivity),
                                                               {
                                                                   // scr_Activities Save — writes the Activities list (schema per Activities.csv)
-                                                                 // Title: Title_txt.Text,
+                                                                  Title: varNewActivityID,
                                                                   //ActivityCode: ActivityCode_txt.Text,
                                                                   ActivityDescription: ActivityDescription_txt.Text,
                                                                   ActivityShortDescription: ActivityShortDescription_txt.Text,
@@ -936,7 +940,7 @@ Screens:
                                                           If(
                                                               varCanViewAllReports,
                                                               Activities,
-                                                              Filter(Activities, DirectorateLabel = varUserDirectorateID)
+                                                              Filter(Activities, DirectorateLabel = varUserDirectorate)
                                                           )
                                                       )
                                                   );
@@ -1056,7 +1060,7 @@ Screens:
                                                 If(
                                                     varCanViewAllReports,
                                                     Activities,
-                                                    Filter(Activities, DirectorateLabel = varUserDirectorateID)
+                                                    Filter(Activities, DirectorateLabel = varUserDirectorate)
                                                 )
                                             );
                                             Notify("Activity deleted.", NotificationType.Success)

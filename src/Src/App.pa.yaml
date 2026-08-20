@@ -30,13 +30,7 @@ App:
       Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
       Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
       Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
-      //Set(varUserDirectorateID, LookUp(Directorates, Title = varUserDirectorate).DirectorateID);
-      Set(varUserDirectorateID, 
-          Coalesce(
-              LookUp(Directorates, Title = varUserDirectorate).DirectorateID,
-              varCurrentUserRecord.'Directorate: DirectorateID'.Value
-          )
-      );
+      Set(varUserDirectorateID, Coalesce(LookUp(Directorates, Title = varUserDirectorate).DirectorateID, varCurrentUserRecord.'Directorate: DirectorateID'.Value));
       Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
 
       // 4. Reporting period defaults (derived from Today())

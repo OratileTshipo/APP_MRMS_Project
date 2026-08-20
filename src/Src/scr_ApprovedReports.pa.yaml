@@ -30,7 +30,7 @@ Screens:
         // 2. Approved-reports scope — same role-first, single-column delegable
         //    pattern as scr_Home's colReportsInScope, restricted to Approved.
         //    MonthlyReports.DirectorateLabel stores the SHORT CODE (e.g. "ICTM"),
-        //    so Supervisor matches on varUserDirectorateID.
+        //    so Supervisor matches on varUserDirectorate.
         ClearCollect(
             colApprovedReports,
             Switch(

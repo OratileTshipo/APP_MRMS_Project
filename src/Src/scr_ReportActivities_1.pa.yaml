@@ -42,9 +42,9 @@ Screens:
                 "ProgrammeManager",
                     Filter(Activities, 'Active ' = true, ProgrammeLabel = varUserProgramme),
                 "Supervisor",
-                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID),
+                    Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate),
                 // Default (Contributor) — own directorate only
-                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorateID)
+                Filter(Activities, 'Active ' = true, DirectorateLabel = varUserDirectorate)
             )
         );
 
@@ -873,11 +873,16 @@ Screens:
 
                                                 Notify("All required fields must be completed before saving.", NotificationType.Error),
 
+                                                // Auto-generate ReportID: {DirectorateID}-RP-{next sequential}
+                                                Set(varReportDirID, Coalesce(LookUp(colDirectorates, Title = varReportActivity.DirectorateLabel).DirectorateID, "GEN"));
+                                                Set(varReportNextSeq, 1 + CountRows(Filter(MonthlyReports, StartsWith(Title, varReportDirID & "-RP-"))));
+                                                Set(varNewReportID, varReportDirID & "-RP-" & Text(varReportNextSeq, "0000"));
+
                                                 Patch(
                                                     MonthlyReports,
                                                     If(varReportMode = "New", Defaults(MonthlyReports), varEditReport),
                                                     {
-                                                        Title: RepActTitle_txt_1.Text,
+                                                        Title: varNewReportID,
                                                         Activity: { Id: varReportActivity.ID, Value: varReportActivity.Title },
                                                         ActivityOwnerLabel: If(IsBlank(varReportActivity), "", varReportActivity.ActivityOwner.DisplayName),
                                                         ProgrammeLabel: If(IsBlank(varReportActivity), "", varReportActivity.ProgrammeLabel),
