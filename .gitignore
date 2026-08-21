@@ -12,3 +12,21 @@ __pycache__/
 # Temporary
 /tmp/
 *.tmp
+
+# DeepSeek Harness runtime
+.deepseek-harness/
+.credentials.yaml
+settings.yaml
+.sessions/
+profiles/
+
+# Node
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+dist/
+*.tsbuildinfo
+# API keys
+.env
+.env.*

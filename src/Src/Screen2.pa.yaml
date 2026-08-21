@@ -135,7 +135,7 @@ Screens:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
+                                          Color: =RGBA(100, 100, 100, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)

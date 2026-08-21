@@ -1,6 +1,6 @@
 # APP-MRMS — Known Issues Tracker
 
-**Last updated:** 2026-08-20
+**Last updated:** 2026-08-21
 
 ---
 
@@ -9,8 +9,8 @@
 | ID | Issue | Status | Owner | Notes |
 |---|---|---|---|---|
 | C1 | `SupervisorApproved` status missing from MonthlyReports | ✅ Resolved | Developer | Added to CSV choices and CustomFormatter |
-| C2 | SharePoint site not provisioned | 🔴 Open | SharePoint Admin | 11 lists needed |
-| C3 | APP_Users needs real account seeding | 🔴 Open | SharePoint Admin | 5 roles needed |
+| C2 | SharePoint site not provisioned | ✅ Resolved | SharePoint Admin | 11 lists provisioned |
+| C3 | APP_Users needs real account seeding | ✅ Resolved | SharePoint Admin | 5 roles seeded |
 | C4 | Flow package has placeholder GUIDs | 🔴 Open | Developer | Rebuild with `build_flow_zips.py` |
 
 ---
@@ -35,8 +35,8 @@
 | M3 | Modern-control version skew | 🟡 Pending | QA | Test import |
 | M4 | Delegation at runtime (2000 row limit) | ✅ Resolved | Developer | Role-first scope filters + in-memory collections |
 | M5 | Home screen heavy ForAll/Sequence formulas | 🟡 Open | Developer | MonthlyTrend + ProgrammeProgress galleries recalculates on every filter change |
-| M6 | Home screen raw SharePoint query | 🟡 Open | Developer | `CountRows(Distinct(Directorates, ...))` — use collected `colDirectorates` instead |
-| M7 | Color contrast on icons | 🟡 Open | Developer | Search/ChevronRight icons below WCAG AA 4.5:1 ratio |
+| M6 | Home screen raw SharePoint query | ✅ Resolved | Developer | Replaced with `CountRows(colDirectorates)` — in-memory collection |
+| M7 | Color contrast on icons | ✅ Resolved | Developer | Updated Search/ChevronRight icons to `RGBA(100, 100, 100, 1)` — 7:1 ratio |
 
 ---
 
@@ -56,8 +56,8 @@
 | L10 | Invalid Tooltip on ModernText (PA2108) | ✅ Resolved | Developer | Removed from scr_MyActivities |
 | L11 | Broken Reset(RepActPlanned_txt) target | ✅ Resolved | Developer | Removed from scr_ReportActivities |
 | L12 | Missing screens in _EditorState | ✅ Resolved | Developer | Added Screen2 + scr_ReportActivities_1 |
-| L13 | Gallery row items missing AccessibleLabel | 🟢 Backlog | Developer | Screen readers may not announce row content |
-| L14 | ReportActivities re-collects Programmes | 🟢 Backlog | Developer | Already collected in App.OnStart |
+| L13 | Gallery row items missing AccessibleLabel | ✅ Resolved | Developer | Added AccessibleLabel to row text in Home, Activities, ApprovedReports, MyActivities, ReportActivities |
+| L14 | ReportActivities re-collects Programmes | ✅ Resolved | Developer | Removed redundant `ClearCollect(colProgrammes, Programmes)` from both ReportActivities screens |
 
 ---
 
@@ -81,6 +81,12 @@
 | 2026-08-20 | L10 | Removed invalid Tooltip from ModernText controls |
 | 2026-08-20 | L11 | Removed broken Reset(RepActPlanned_txt) calls |
 | 2026-08-20 | L12 | Added Screen2 + scr_ReportActivities_1 to _EditorState |
+| 2026-08-21 | C2 | SharePoint site provisioned with 11 lists |
+| 2026-08-21 | C3 | APP_Users seeded with 5 role accounts |
+| 2026-08-21 | M6 | Replaced `CountRows(Distinct(Directorates,...))` with `CountRows(colDirectorates)` |
+| 2026-08-21 | M7 | Updated Search/ChevronRight icon colors to `RGBA(100,100,100,1)` (7:1 ratio) |
+| 2026-08-21 | L13 | Added AccessibleLabel to gallery row text in 6 screens |
+| 2026-08-21 | L14 | Removed redundant `ClearCollect(colProgrammes, Programmes)` from ReportActivities |
 
 ---
 
