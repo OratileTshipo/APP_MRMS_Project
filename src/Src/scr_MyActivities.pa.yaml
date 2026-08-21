@@ -543,6 +543,7 @@ Screens:
                                           - ActRowProject_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
+                                                AccessibleLabel: =ThisItem.ProjectName
                                                 AutoHeight: =true
                                                 FillPortions: =1
                                                 LayoutMinHeight: =16
@@ -568,6 +569,7 @@ Screens:
                                           - ActRowActivity_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
+                                                AccessibleLabel: =ThisItem.ActivityName
                                                 AutoHeight: =true
                                                 FillPortions: =2
                                                 LayoutMinHeight: =16
@@ -693,6 +695,7 @@ Screens:
                                           - ActRowStatus_lbl:
                                               Control: ModernText@1.0.0
                                               Properties:
+                                                AccessibleLabel: ="Report status: " & ThisItem.ReportStatus
                                                 Align: =Align.Center
                                                 FillPortions: =1
                                                 FontWeight: =FontWeight.Bold

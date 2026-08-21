@@ -503,7 +503,7 @@ Screens:
                                         Properties:
                                           AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
+                                          Color: =RGBA(100, 100, 100, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -662,7 +662,7 @@ Screens:
                                             =Upper(Text(Today(),"dddd, d mmmm yyyy")) &
                                              " · " & Upper(varCurrentQuarter) & " " & Upper(varCurrentFY) & 
                                              //" · " & First(Distinct(Activities, ProgrammeLabel)).Value &
-                                             " · " & CountRows(Distinct(Directorates,DirectorateID)) &
+                                             " · " & CountRows(colDirectorates) &
                                              " DIRECTORATES REPORTING"
                                           Width: =Parent.Width
                                           X: =40
@@ -1722,6 +1722,7 @@ Screens:
                                     - MonthName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.MonthName & " month"
                                           Align: =Align.Center
                                           AutoHeight: =true
                                           Text: =ThisItem.MonthName
@@ -1800,6 +1801,7 @@ Screens:
                                     - LateCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.LateCount & " late activities"
                                           Align: =Align.Center
                                           Size: =12
                                           Text: =ThisItem.LateCount
@@ -1824,6 +1826,7 @@ Screens:
                                     - OnTimeCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.OnTimeCount & " on-time activities"
                                           Align: =Align.Center
                                           Size: =12
                                           Text: =ThisItem.OnTimeCount
@@ -2629,6 +2632,7 @@ Screens:
                                     - ProjectName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.Project.Value & " project"
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
@@ -2637,6 +2641,7 @@ Screens:
                                     - ReportName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.Title
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
@@ -2660,6 +2665,7 @@ Screens:
                                     - Directorate_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.DirectorateLabel & " directorate"
                                           AutoHeight: =true
                                           FillPortions: =1
                                           LayoutMinHeight: =16
