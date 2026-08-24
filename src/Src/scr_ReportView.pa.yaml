@@ -478,7 +478,7 @@ Screens:
                                           FontWeight: =FontWeight.Bold
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Text: =If(IsBlank(varViewReport), "", varViewReport.ReportStatus.Value)
+                                          Text: =If(IsBlank(varViewReport), "", varViewReport.Status.Value)
                               - ReportViewPeriodCard_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout

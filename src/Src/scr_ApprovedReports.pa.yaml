@@ -35,11 +35,11 @@ Screens:
             colApprovedReports,
             Switch(
                 varUserRole,
-                "Administrator", Filter(MonthlyReports, ReportStatus.Value = "Approved"),
-                "DeputyDirectorME", Filter(MonthlyReports, ReportStatus.Value = "Approved"),
-                "ProgrammeManager", Filter(MonthlyReports, ReportStatus.Value = "Approved", ProgrammeLabel = varUserProgramme),
-                "Supervisor", Filter(MonthlyReports, ReportStatus.Value = "Approved", DirectorateLabel = varUserDirectorate),
-                Filter(MonthlyReports, ReportStatus.Value = "Approved", SubmittedBy.Email = varUserEmail)
+                "Administrator", Filter(MonthlyReports, Status.Value = "Approved"),
+                "DeputyDirectorME", Filter(MonthlyReports, Status.Value = "Approved"),
+                "ProgrammeManager", Filter(MonthlyReports, Status.Value = "Approved", ProgrammeLabel = varUserProgramme),
+                "Supervisor", Filter(MonthlyReports, Status.Value = "Approved", DirectorateLabel = varUserDirectorate),
+                Filter(MonthlyReports, Status.Value = "Approved", SubmittedBy.Email = varUserEmail)
             )
         );
 

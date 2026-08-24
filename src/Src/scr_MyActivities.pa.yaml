@@ -77,10 +77,10 @@ Screens:
                         DirectorateName: Act.DirectorateLabel,
                         Frequency: Act.'Frequency ',
                         DueDay: Day(Act.DueDate),
-                        ReportStatus: Coalesce(latestReport.ReportStatus.Value, "Not Started"),
+                        ReportStatus: Coalesce(latestReport.Status.Value, "Not Started"),
                         ReportID: Coalesce(latestReport.ID, Blank()),
                         RAG: Switch(
-                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
+                            Coalesce(latestReport.Status.Value, "Not Started"),
                             "Approved", "Green",
                             "Draft", "Amber",
                             "Submitted", "Amber",
@@ -88,7 +88,7 @@ Screens:
                             "Green"
                         ),
                         ActionLabel: Switch(
-                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
+                            Coalesce(latestReport.Status.Value, "Not Started"),
                             "Not Started", "Start Report",
                             "Draft", "Continue",
                             "Submitted", "Submitted ✓",
@@ -96,7 +96,7 @@ Screens:
                             "Approved", "View",
                             "Start Report"
                         ),
-                        ActionDisabled: Coalesce(latestReport.ReportStatus.Value, "Not Started") = "Submitted",
+                        ActionDisabled: Coalesce(latestReport.Status.Value, "Not Started") = "Submitted",
                         IsOverdue: Coalesce(latestReport.IsOverdue, false),
                         IsFlagged: Coalesce(latestReport.isFlagged, false),
                         ActivityShortDescription: Act.ActivityShortDescription,

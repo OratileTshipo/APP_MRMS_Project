@@ -103,7 +103,7 @@ Screens:
             colPendingApprovals,
             If(
                 varUserRole in ["Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"],
-                Filter(colReportsInScope, ReportStatus.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
+                Filter(colReportsInScope, Status.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
                 Table()
             )
         );
@@ -123,7 +123,7 @@ Screens:
             colApprovedThisMonth,
             Filter(
                 colReportsInScope,
-                ReportStatus.Value = "Approved",
+                Status.Value = "Approved",
                 ReportingMonth.Value = varCurrentMonth,
                 'FinancialYear '.Value = varCurrentFY
             )
@@ -1109,7 +1109,7 @@ Screens:
                                           Height: =Parent.Height * .6
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnSelect: =Set(varHomeFilter, "PendingApprovals")
+                                          OnSelect: =If(varUserRole in ["Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"], Navigate(Screen2, ScreenTransition.Cover), Notify("Only reviewers can open the approval queue.", NotificationType.Information))
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =40
@@ -1128,7 +1128,7 @@ Screens:
 
 
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, Status.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - PendingSubtitile_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1233,7 +1233,7 @@ Screens:
                                             )
                                             */
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, Status.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - ApprovedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1325,7 +1325,7 @@ Screens:
 
                                             CountRows(
                                                 Filter(colReportsInScope,
-                                                    ReportStatus.Value = "Rejected",
+                                                    Status.Value = "Rejected",
                                                     (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                     (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
                                                     (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
@@ -1340,7 +1340,7 @@ Screens:
 
 
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, Status.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - RejectedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1674,10 +1674,10 @@ Screens:
                                                   (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                   (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
                                                   (varHomeFilter = "All"
-                                                      || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
+                                                      || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
                                                       || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                                      || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
-                                                      || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
+                                                      || (varHomeFilter = "Approved" && Status.Value = "Approved")
+                                                      || (varHomeFilter = "Rejected" && Status.Value = "Rejected")
                                                   )
                                               )
                                           },
@@ -2058,17 +2058,17 @@ Screens:
                                                       ProgrammeName: progName,
                                                       TotalActivities: CountRows(progActivities),
                                                       MonthlyReportedCount: CountRows(Distinct(progReportsMonth, Activity.Id)),
-                                                      MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                      FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                      MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsMonth, Status.Value = "Approved"), Activity.Id)),
+                                                      FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)),
                                                       MonthlyReportingRate:
                                                           If(CountRows(progActivities) = 0, 0,
                                                               RoundUp((CountRows(Distinct(progReportsMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                       MonthlyApprovalRate:
                                                           If(CountRows(progActivities) = 0, 0,
-                                                              RoundUp((CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsMonth, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                       FYCumulativeRate:
                                                           If(CountRows(progActivities) = 0, 0,
-                                                              RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsFY, Status.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                       FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
                                                   }
                                               )
@@ -2534,9 +2534,9 @@ Screens:
 
                                     // --- KPI card filter (varHomeFilter) ---
                                     (varHomeFilter = "All"
-                                        || (varHomeFilter = "PendingApprovals" && ReportStatus.Value = "Submitted")
+                                        || (varHomeFilter = "PendingApprovals" && Status.Value = "Submitted")
                                         || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                        || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
+                                        || (varHomeFilter = "Approved" && Status.Value = "Approved")
                                     )
 
                                     // --- Dropdown filters ---
@@ -2740,7 +2740,7 @@ Screens:
                                         Properties:
                                           Color: |-
                                             =Switch(
-                                            ThisItem.ReportStatus.Value,
+                                            ThisItem.Status.Value,
                                             "Approved",Color.Green,
                                             "In Review",Color.Orange,
                                             "Submitted",Color.Black,
@@ -2749,7 +2749,7 @@ Screens:
                                             )
                                           Fill: |-
                                             =Switch(
-                                            ThisItem.ReportStatus.Value,
+                                            ThisItem.Status.Value,
                                             "Approved",Color.LightGreen,
                                             "In Review",Color.LightGoldenRodYellow,
                                             "Submitted",Color.LightGoldenRodYellow,
@@ -2766,7 +2766,7 @@ Screens:
                                           RadiusBottomRight: =10
                                           RadiusTopLeft: =10
                                           RadiusTopRight: =10
-                                          Text: =ThisItem.ReportStatus.Value
+                                          Text: =ThisItem.Status.Value
                                     - Rectangle2_9:
                                         Control: Rectangle@2.3.0
                                         Properties:

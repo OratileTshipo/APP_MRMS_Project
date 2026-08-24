@@ -11,6 +11,50 @@ Screens:
     Properties:
       Fill: =RGBA(255, 255, 255, 1)
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =// Screen2.OnVisible — Approval Queue bootstrap.
+        // Builds the role-scoped review queue (Submitted + Escalated reports),
+        // computes the tab badge counts and pre-selects the newest submission.
+        // MonthlyReports.Status is the real Choice column (Draft/Submitted/
+        // Approved/Rejected/Escalated); DirectorateLabel stores full names.
+
+        Set(varQueueTab, "Pending");
+        Set(varQueueSearch, "");
+        Set(varQueueComment, "");
+        Set(varQueueFilterDirectorate, "All");
+
+        // Directorate filter options: an "All" row plus the reference table
+        // (Title holds the full name used by MonthlyReports.Directoratelabel).
+        ClearCollect(colQueueDirectorates, {Title: "All", DirectorateID: "All"});
+        Collect(colQueueDirectorates, ShowColumns(Directorates, "Title", "DirectorateID"));
+
+        // Role-first scope — one single-column filter per branch stays delegable.
+        ClearCollect(
+            colApprovalQueue,
+            Switch(
+                varUserRole,
+                "Administrator", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated"),
+                "DeputyDirectorME", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated"),
+                "ProgrammeManager", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", ProgrammeLabel = varUserProgramme),
+                "Supervisor", Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", DirectorateLabel = varUserDirectorate),
+                Filter(MonthlyReports, Status.Value = "Submitted" || Status.Value = "Escalated", SubmittedBy.Email = varUserEmail)
+            )
+        );
+
+        // Tab badge counts
+        Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, Status.Value = "Submitted")));
+        Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, Status.Value = "Submitted", DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5)));
+        Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, Status.Value = "Escalated")));
+
+        // Pre-select the oldest pending submission so the detail panel is never empty
+        Set(
+            varQueueSelected,
+            If(
+                CountRows(colApprovalQueue) > 0,
+                First(SortByColumns(colApprovalQueue, "SubmissionDate", SortOrder.Ascending)),
+                Blank()
+            )
+        )
     Children:
       - Container4:
           Control: GroupContainer@1.5.0
@@ -44,7 +88,7 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - RepsSidebar_con.Width
+                        Width: =App.Width * 0.95
                       Children:
                         - RepsHeaderLeft_con_1:
                             Control: GroupContainer@1.5.0
@@ -223,7 +267,7 @@ Screens:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
-                        Height: =768
+                        Height: =Parent.Height - RepsHeader_con_1.Height
                         LayoutAlignItems: =LayoutAlignItems.Stretch
                         LayoutDirection: =LayoutDirection.Horizontal
                         Width: =Parent.Width
@@ -530,22 +574,24 @@ Screens:
                                           BorderColor: =RGBA(214, 221, 224, 1)
                                           BorderStyle: =BorderStyle.Solid
                                           BorderThickness: =1
+                                          DelayOutput: =true
                                           Fill: =RGBA(255, 255, 255, 1)
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnChange: =Set(varQueueSearch, ApprQueueSearch_txt.Text)
+                                          OnChange: =Set(varQueueSearch, Self.Text)
                                           Placeholder: ="Search reports..."
                                           Width: =Parent.Width * .6
                                     - ApprQueueDirectorate_drp:
                                         Control: ModernDropdown@1.0.2
                                         Properties:
                                           AccessibleLabel: ="Directorate"
+                                          Default: =LookUp(colQueueDirectorates, Title = varQueueFilterDirectorate)
                                           Fill: =varBgLight
-                                          ItemDisplayText: =ThisItem.DirectorateID
-                                          Items: =Directorates
+                                          ItemDisplayText: =ThisItem.Title
+                                          Items: =colQueueDirectorates
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(ApprQueueDirectorate_drp.Selected), "All", ApprQueueDirectorate_drp.Selected.DirectorateID))
+                                          OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(Self.Selected), "All", Self.Selected.Title))
                                           Width: =Parent.Width  * .28
                               - ApprQueueTabs_con:
                                   Control: GroupContainer@1.5.0
@@ -876,21 +922,13 @@ Screens:
 
                                             */
 
-                                            Coalesce(ThisItem.SubmittedBy_x002f_SubmissionDate.DisplayName, "Unknown") &
+                                            Coalesce(ThisItem.SubmittedBy.DisplayName, "Unknown") &
                                             " · submitted " &
                                             With(
                                                 {
-                                                    vSubmissionDate: LookUp(
-                                                        MonthlyReports,
-                                                        ID = ThisItem.SubmissionDate,
-                                                        SubmissionDate
-                                                    )
+                                                    vDays: DateDiff(Coalesce(ThisItem.SubmissionDate, Today()), Today(), TimeUnit.Days)
                                                 },
-                                                If(
-                                                    DateDiff(vSubmissionDate, Today(), TimeUnit.Days) = 0,
-                                                    "today",
-                                                    DateDiff(vSubmissionDate, Today(), TimeUnit.Days) & " days ago"
-                                                )
+                                                If(vDays <= 0, "today", vDays & " days ago")
                                             )
                                           Width: =ApprQueue_gal.TemplateWidth - 40
                                           X: =1
@@ -1013,7 +1051,7 @@ Screens:
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
                                                 Size: =12
-                                                Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.ProgrammeLabel, "") & " · " & Coalesce(varQueueSelected.DirectorateLabel, "") & " · " & Coalesce(varQueueSelected.SubmittedBy_x002f_SubmissionDate.DisplayName, "Unknown"))
+                                                Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.ProgrammeLabel, "") & " · " & Coalesce(varQueueSelected.DirectorateLabel, "") & " · " & Coalesce(varQueueSelected.SubmittedBy.DisplayName, "Unknown"))
                                                 Width: =Parent.Width
                                     - ApprQueueDetailStatus_con:
                                         Control: GroupContainer@1.5.0
@@ -1153,7 +1191,7 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Size: =12.5
-                                          Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.PlannedActivity, "Not provided"))
+                                          Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.PlannedAct, "Not provided"))
                                           Width: =Parent.Width
                                     - ApprQueueProgressLabel_lbl:
                                         Control: Label@2.5.1
@@ -1321,7 +1359,7 @@ Screens:
                                             =If(
                                                 IsBlank(varQueueSelected),
                                                 "",
-                                                "Submitted by " & Coalesce(varQueueSelected.SubmittedBy_x002f_SubmissionDate.DisplayName, "Unknown") & " on " &
+                                                "Submitted by " & Coalesce(varQueueSelected.SubmittedBy.DisplayName, "Unknown") & " on " &
                                                 Text(Coalesce(varQueueSelected.SubmissionDate, Today()), "d mmm yyyy") &
                                                 If(
                                                     IsBlank(varQueueSelected.'RejectionReason '),
@@ -1443,13 +1481,37 @@ Screens:
                                                             varQueueSelected,
                                                             {
                                                                 Status: "Draft",
-                                                                ReviewedBy: {Email: varUserEmail},
+                                                                ReviewedBy: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                                    Email: varUserEmail,
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
                                                                 ReviewDate: Now(),
                                                                 'RejectionReason ': "Returned for correction: " & varQueueComment
                                                             }
                                                         );
                                                         Set(varQueueComment, "");
                                                         Reset(ApprQueueComment_txt);
+                                                        Collect(Notifications,
+                                                            {
+                                                                Title: "Report returned",
+                                                                RecipientUser: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(Coalesce(varQueueSelected.SubmittedBy.Email, "")),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varQueueSelected.SubmittedBy.DisplayName, ""),
+                                                                    Email: Coalesce(varQueueSelected.SubmittedBy.Email, ""),
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
+                                                                RelatedEntity: Coalesce(varQueueSelected.Title, ""),
+                                                                Message: "Your report " & Coalesce(varQueueSelected.Title, "") & " was returned for correction. See the review note in My Reports.",
+                                                                IsRead: false,
+                                                                CreatedDate: Now()
+                                                            }
+                                                        );
                                                         Notify("Report returned to the contributor for correction.", NotificationType.Success);
                                                         Select(ApprQueueRefresh_btn)
                                                     )
@@ -1487,13 +1549,37 @@ Screens:
                                                             varQueueSelected,
                                                             {
                                                                 Status: "Rejected",
-                                                                ReviewedBy: {Email: varUserEmail},
+                                                                ReviewedBy: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                                    Email: varUserEmail,
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
                                                                 ReviewDate: Now(),
                                                                 'RejectionReason ': varQueueComment
                                                             }
                                                         );
                                                         Set(varQueueComment, "");
                                                         Reset(ApprQueueComment_txt);
+                                                        Collect(Notifications,
+                                                            {
+                                                                Title: "Report rejected",
+                                                                RecipientUser: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(Coalesce(varQueueSelected.SubmittedBy.Email, "")),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varQueueSelected.SubmittedBy.DisplayName, ""),
+                                                                    Email: Coalesce(varQueueSelected.SubmittedBy.Email, ""),
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
+                                                                RelatedEntity: Coalesce(varQueueSelected.Title, ""),
+                                                                Message: "Your report " & Coalesce(varQueueSelected.Title, "") & " was rejected. See the review note in My Reports.",
+                                                                IsRead: false,
+                                                                CreatedDate: Now()
+                                                            }
+                                                        );
                                                         Notify("Report rejected.", NotificationType.Success);
                                                         Select(ApprQueueRefresh_btn)
                                                     )
@@ -1529,14 +1615,38 @@ Screens:
                                                         varQueueSelected,
                                                         {
                                                             Status: "Approved",
-                                                            ReviewedBy: {Email: varUserEmail},
+                                                            ReviewedBy: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                                    Email: varUserEmail,
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
                                                             ReviewDate: Now(),
                                                             'RejectionReason ': ""
                                                         }
                                                     );
                                                     Set(varQueueComment, "");
                                                     Reset(ApprQueueComment_txt);
-                                                    Notify("Report approved.", NotificationType.Success);
+                                                        Collect(Notifications,
+                                                            {
+                                                                Title: "Report approved",
+                                                                RecipientUser: {
+                                                                    Claims: "i:0#.f|membership|" & Lower(Coalesce(varQueueSelected.SubmittedBy.Email, "")),
+                                                                    Department: "",
+                                                                    DisplayName: Coalesce(varQueueSelected.SubmittedBy.DisplayName, ""),
+                                                                    Email: Coalesce(varQueueSelected.SubmittedBy.Email, ""),
+                                                                    JobTitle: "",
+                                                                    Picture: ""
+                                                                },
+                                                                RelatedEntity: Coalesce(varQueueSelected.Title, ""),
+                                                                Message: "Your report " & Coalesce(varQueueSelected.Title, "") & " was approved.",
+                                                                IsRead: false,
+                                                                CreatedDate: Now()
+                                                            }
+                                                        );
+                                                        Notify("Report approved.", NotificationType.Success);
                                                     Select(ApprQueueRefresh_btn)
                                                 )
                                             )
