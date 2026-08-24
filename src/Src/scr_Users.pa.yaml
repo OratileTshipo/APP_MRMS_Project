@@ -13,7 +13,8 @@ Screens:
       LoadingSpinner: =LoadingSpinner.Data
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
-        =// ============================================================
+        =If(IsBlank(varCurrentUserRecord), Navigate(scr_Login, ScreenTransition.None));
+        // ============================================================
         // scr_Registration.OnVisible — PRODUCTION VERSION
         // Purpose: initialise registration form state and reset all fields
         // ============================================================
@@ -413,7 +414,6 @@ Screens:
                               - UsrBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
-                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)

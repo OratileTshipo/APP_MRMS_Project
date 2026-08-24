@@ -11,6 +11,8 @@ Screens:
     Properties:
       Fill: =RGBA(255, 255, 255, 1)
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =If(IsBlank(varCurrentUserRecord), Navigate(scr_Login, ScreenTransition.None));
     Children:
       - RptMainScreen_con:
           Control: GroupContainer@1.5.0
@@ -372,9 +374,8 @@ Screens:
                                     - RepsSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
-                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(100, 100, 100, 1)
+                                          Color: =RGBA(153, 153, 153, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -440,7 +441,6 @@ Screens:
                               - RepsBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
-                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)

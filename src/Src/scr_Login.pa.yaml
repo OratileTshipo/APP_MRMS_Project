@@ -1,0 +1,396 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+#
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+#
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_Login:
+    Properties:
+      Fill: =varBgLight
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =// Fresh login form every time the screen is shown
+        Set(varLoginError, "");
+        If(IsBlank(varLoginAttempts), Set(varLoginAttempts, 0));
+        Reset(LoginEmail_txt);
+        Reset(LoginPassword_txt);
+    Children:
+      - con_LoginRoot:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Height: =App.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGap: =0
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Width: =App.Width
+          Children:
+            - con_LoginHeader:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.Semilight
+                  Fill: =varNavy
+                  FillPortions: =0
+                  Height: =App.Height * 0.13
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =20
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =8
+                  PaddingLeft: =24
+                  PaddingRight: =24
+                  PaddingTop: =8
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =Parent.Width
+                Children:
+                  - img_LoginLogoSmall:
+                      Control: Image@2.2.3
+                      Properties:
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height * 0.6
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Image: ='dpwr logo'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Width: =Parent.Height * 0.6
+                  - lbl_LoginBrand:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(161, 159, 157, 1)
+                        FocusedBorderThickness: =4
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.Height * 0.55
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =25
+                        Text: ="APP-MRMS"
+                  - lbl_LoginBrandSub:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        Color: =RGBA(255, 255, 255, 1)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(161, 159, 157, 1)
+                        FocusedBorderThickness: =4
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.Height * 0.35
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =12
+                        Text: ="Monthly Reporting & Monitoring System · DPWR North West"
+            - con_LoginBody:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =varBgLight
+                  Height: =Parent.Height - con_LoginHeader.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutJustifyContent: =LayoutJustifyContent.Center
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =16
+                  PaddingLeft: =16
+                  PaddingRight: =16
+                  PaddingTop: =16
+                  Width: =Parent.Width
+                Children:
+                  - con_LoginCard:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        DropShadow: =DropShadow.Semilight
+                        Fill: =RGBA(255, 255, 255, 1)
+                        Height: =Min(Parent.Height - 40, 620)
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =14
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =36
+                        PaddingLeft: =48
+                        PaddingRight: =48
+                        PaddingTop: =36
+                        RadiusBottomLeft: =15
+                        RadiusBottomRight: =15
+                        RadiusTopLeft: =15
+                        RadiusTopRight: =15
+                        Width: =If(App.Width < 700, Parent.Width * 0.94, 480)
+                      Children:
+                        - img_LoginCardLogo:
+                            Control: Image@2.2.3
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Center
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledFill: =RGBA(0, 0, 0, 0)
+                              FocusedBorderThickness: =4
+                              Height: =110
+                              HoverBorderColor: =RGBA(0, 0, 0, 0)
+                              HoverFill: =RGBA(0, 0, 0, 0)
+                              Image: ='dpwr logo'
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Width: =110
+                        - lbl_LoginTitle:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =varNavy
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Bold
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =20
+                              Text: ="Sign in to continue"
+                        - lbl_LoginHint:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(96, 94, 92, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =12
+                              Text: ="Enter your departmental email address and your APP-MRMS password."
+                        - LoginEmail_txt:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(214, 221, 224, 1)
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =2
+                              Clear: =true
+                              Color: =RGBA(50, 49, 48, 1)
+                              Default: =
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              DisabledFill: =RGBA(242, 242, 241, 1)
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =44
+                              HintText: ="Email Address"
+                              HoverBorderColor: =varBlue
+                              HoverColor: =RGBA(50, 49, 48, 1)
+                              HoverFill: =RGBA(255, 255, 255, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Size: =13
+                              Width: =Parent.Width
+                        - LoginPassword_txt:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(214, 221, 224, 1)
+                              BorderStyle: =BorderStyle.Solid
+                              BorderThickness: =2
+                              Color: =RGBA(50, 49, 48, 1)
+                              Default: =
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              DisabledFill: =RGBA(242, 242, 241, 1)
+                              Fill: =RGBA(255, 255, 255, 1)
+                              Font: =Font.'Segoe UI'
+                              Height: =44
+                              HintText: ="Password"
+                              HoverBorderColor: =varBlue
+                              HoverColor: =RGBA(50, 49, 48, 1)
+                              HoverFill: =RGBA(255, 255, 255, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Mode: =TextMode.Password
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Size: =13
+                              Width: =Parent.Width
+                        - lbl_LoginError:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =varRed
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =12
+                              Text: =varLoginError
+                              Visible: =!IsBlank(varLoginError)
+                        - btn_LoginSubmit:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =ColorFade(Self.Fill, -15%)
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                              DisabledColor: =RGBA(255, 255, 255, 1)
+                              DisabledFill: =RGBA(166, 166, 166, 1)
+                              DisplayMode: |-
+                                =// Defensive UX only — OnSelect re-validates regardless
+                                If(
+                                    varLoginAttempts >= 5,
+                                    DisplayMode.Disabled,
+                                    If(
+                                        IsBlank(Trim(LoginEmail_txt.Text)) || IsBlank(LoginPassword_txt.Text),
+                                        DisplayMode.Disabled,
+                                        DisplayMode.Edit
+                                    )
+                                )
+                              Fill: =varNavy
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =44
+                              HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                              HoverColor: =RGBA(255, 255, 255, 1)
+                              HoverFill: =ColorFade(varNavy, -15%)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: |-
+                                =// ============================================================================
+                                // LOGIN — validates email + password against APP_Users, then derives the
+                                // full session scope (the derivations App.OnStart previously ran automatically).
+                                // Requires an 'AppPassword' column (single line of text) on APP_Users.
+                                // ============================================================================
+                                If(
+                                    varLoginAttempts >= 5,
+                                    Set(varLoginError, "Too many failed attempts. Close and reopen the app to try again."),
+                                    With(
+                                        { typedEmail: Trim(LoginEmail_txt.Text) },
+                                        Set(varLoginCandidate, LookUp(APP_Users, UserAccount.Email = typedEmail));
+                                        If(
+                                            IsBlank(varLoginCandidate),
+                                            Set(
+                                                varLoginCandidate,
+                                                First(Filter(APP_Users, Lower(UserAccount.Email) = Lower(typedEmail)))
+                                            )
+                                        );
+                                        If(
+                                            IsBlank(typedEmail) || IsBlank(LoginPassword_txt.Text),
+                                            Set(varLoginError, "Please enter both your email and password."),
+                                            IsBlank(varLoginCandidate),
+                                            Set(varLoginError, "Invalid email or password.");
+                                            Set(varLoginAttempts, varLoginAttempts + 1),
+                                            varLoginCandidate.'Active ' = false,
+                                            Set(varLoginError, "This account has been deactivated. Contact your administrator."),
+                                            IsBlank(varLoginCandidate.AppPassword) || varLoginCandidate.AppPassword <> LoginPassword_txt.Text,
+                                            Set(varLoginError, "Invalid email or password.");
+                                            Set(varLoginAttempts, varLoginAttempts + 1),
+
+                                            // SUCCESS — establish the session exactly as App.OnStart used to
+                                            Set(varCurrentUserRecord, varLoginCandidate);
+                                            Set(varUserEmail, Coalesce(varLoginCandidate.UserAccount.Email, typedEmail));
+                                            Set(varUserFullName, Coalesce(varLoginCandidate.UserAccount.DisplayName, varLoginCandidate.Title));
+                                            Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
+                                            Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
+                                            Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
+                                            Set(
+                                                varUserDirectorateID,
+                                                Coalesce(
+                                                    LookUp(Directorates, DirectorateName = varUserDirectorate).DirectorateID,
+                                                    varCurrentUserRecord.'Directorate: DirectorateID'.Value
+                                                )
+                                            );
+                                            Set(varCanViewAllReports, varUserRole = "DeputyDirectorME");
+                                            ClearCollect(
+                                                colMyNotifications,
+                                                Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false)
+                                            );
+                                            Set(varUnreadCount, CountRows(colMyNotifications));
+                                            Set(varLoginCandidate, Blank());
+                                            Set(varLoginError, "");
+                                            Reset(LoginPassword_txt);
+                                            Navigate(scr_Home, ScreenTransition.Fade)
+                                        )
+                                    )
+                                )
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =Self.Color
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Size: =14
+                              Text: ="Sign in"
+                              Width: =Parent.Width
+                        - lbl_LoginFooter:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              AlignInContainer: =AlignInContainer.Stretch
+                              AutoHeight: =true
+                              BorderColor: =RGBA(0, 0, 0, 0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              Color: =RGBA(139, 147, 161, 1)
+                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                              DisabledColor: =RGBA(161, 159, 157, 1)
+                              FocusedBorderThickness: =4
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Lighter
+                              Italic: =true
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =11
+                              Text: ="Developed by DPWR NW · Access is restricted to authorised users"

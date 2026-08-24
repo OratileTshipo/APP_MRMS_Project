@@ -7,21 +7,20 @@
 # For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
 # ************************************************************************************************
 EditorState:
-  ComponentsOrder:
-    - cmp_AppHeader
-    - cmp_NavRail
   ScreensOrder:
     - scr_Splash
+    - scr_Login
     - scr_Home
     - scr_Users
-    - scr_MyActivities
-    - scr_ReportForm
-    - scr_ReportView
     - scr_Projects
     - scr_Activities
+    - scr_MyActivities
     - scr_ReportActivities
+    - scr_ReportView
+    - scr_ReportForm
     - scr_Reports
     - scr_ApprovedReports
-    - scr_ApprovalQueue
-    - scr_ReportActivities_1
     - Screen2
+  ComponentDefinitionsOrder:
+    - cmp_AppHeader
+    - cmp_NavRail

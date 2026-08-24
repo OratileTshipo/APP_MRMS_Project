@@ -12,7 +12,8 @@ Screens:
       Fill: =varBgLight
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
-        =
+        =If(IsBlank(varCurrentUserRecord), Navigate(scr_Login, ScreenTransition.None));
+        
         // scr_Projects.OnVisible
         // Purpose: initialize mode/selection state, then load Projects
         // scoped to the current user's Directorate, and populate the
@@ -24,22 +25,15 @@ Screens:
         Set(varProjectFilterStatus, "All");
         Set(varDirFilterResetKey, 0);
 
-        // Scoped Projects list — role-first Switch keeps every branch a simple,
-        // delegable single-column filter:
-        //   Administrator / DeputyDirectorME -> all programmes & directorates
-        //   ProgrammeManager                 -> all projects in their programme
-        //   Supervisor / Contributor         -> all projects in their directorate
-        // Projects.Directorate is a Lookup whose .Value equals the Directorates
-        // Title (full name) — compare against varUserDirectorateName, which is
-        // resolved from the short code at startup and always matches.
+        // Scoped Projects list — role-first split keeps each branch a simple
+        // single-column delegable filter (SharePoint does not delegate OR across
+        // columns). Projects.Directorate is a Lookup; .Value is the full name.
         ClearCollect(
             colProjectsInScope,
-            Switch(
-                varUserRole,
-                "Administrator", Projects,
-                "DeputyDirectorME", Projects,
-                "ProgrammeManager", Filter(Projects, Programme.Value = varUserProgramme),
-                Filter(Projects, Directorate.Value = varUserDirectorateName)
+            If(
+                varCanViewAllReports,
+                Projects,
+                Filter(Projects, Directorate.Value = varUserDirectorateID)
             )
         );
 
@@ -417,9 +411,8 @@ Screens:
                                     - Search_ico_2:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
-                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(100, 100, 100, 1)
+                                          Color: =RGBA(153, 153, 153, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -468,7 +461,6 @@ Screens:
                               - HomeBell_ico_2:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
-                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -482,10 +474,10 @@ Screens:
                                     Icon: =Icon.Bell
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
+                                    OnSelect: =
                                     PressedBorderColor: =RGBA(0, 0, 0, 0)
                                     PressedColor: =RGBA(16, 110, 190, 1)
                                     PressedFill: =RGBA(0, 0, 0, 0)
-                                    Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
                   - ProjectScreen_con:
                       Control: GroupContainer@1.5.0
@@ -558,6 +550,7 @@ Screens:
                                           RadiusTopLeft: =8
                                           RadiusTopRight: =8
                                           Text: ="New Project"
+                                          Visible: =varMode = "View" && !IsBlank(varSelectedActivity) && (varUserRole = "Administrator" || varUserRole = "DeputyDirectorM&E")
                                           Width: =160
                               - ProjectFilter_con:
                                   Control: GroupContainer@1.5.0
@@ -678,12 +671,12 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |-
-                                            =// Store the FULL NAME (Title) — the gallery and result count
-                                            // compare it to Projects.Directorate.Value, which holds the
-                                            // looked-up Directorates Title, never the short DirectorateID.
+                                            =// DirectorateFilter_drp.OnChange
+                                            //Set(varProjectFilterDirectorate, ProjectDirectorateFilter_drp.Selected.DirectorateID);
+
                                             Set(varProjectFilterDirectorate, 
                                             If(IsBlank(ProjectDirectorateFilter_drp.Selected), 
-                                            "All", ProjectDirectorateFilter_drp.Selected.Title))
+                                            "All", ProjectDirectorateFilter_drp.Selected.DirectorateID))
                                           Width: =Parent.Width / 3 - 4
                                     - ProjectStatusFilter_drp:
                                         Control: ModernDropdown@1.0.2
@@ -719,7 +712,7 @@ Screens:
                                               && (
                                                   IsBlank(SearchBox_txt_2.Text)
                                                   || Lower(SearchBox_txt_2.Text) in Lower(ProjectID)
-                                                  || Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription)
+                                                  //|| Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription)
                                                   || Lower(SearchBox_txt_2.Text) in Lower(Reference)
                                               )
                                           )
@@ -764,7 +757,7 @@ Screens:
                                                 (
                                                     IsBlank(SearchBox_txt_2.Text) ||
                                                     Lower(SearchBox_txt_2.Text) in Lower(ProjectID) ||
-                                                    Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription) ||
+                                                   // Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription) ||
                                                     Lower(SearchBox_txt_2.Text) in Lower(Reference)
                                                 )
                                             )
@@ -808,7 +801,7 @@ Screens:
                                                 FocusedBorderThickness: =4
                                                 Height: =Project_gal_2.TemplateHeight * .7
                                                 HoverFill: =RGBA(0, 120, 212, 1)
-                                                OnSelect: =Select(Parent)
+                                                OnSelect: =
                                                 PressedFill: =RGBA(0, 120, 212, 1)
                                                 Width: =6
                                                 Y: =15
@@ -834,9 +827,8 @@ Screens:
                                           - PrjRowChevron_ico_2:
                                               Control: Classic/Icon@2.5.0
                                               Properties:
-                                                AccessibleLabel: ="View project details"
                                                 BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(100, 100, 100, 1)
+                                                Color: =RGBA(204, 204, 204, 1)
                                                 DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                                 DisabledColor: =RGBA(225, 223, 221, 1)
                                                 DisabledFill: =RGBA(0, 0, 0, 0)
@@ -1024,6 +1016,7 @@ Screens:
                                                           Filter(
                                                               Projects,
                                                               varCanViewAllReports
+                                                                  || Directorate.Value = varUserDirectorateID
                                                                   || Directorate.Value = varUserDirectorate
                                                           )
                                                       );
@@ -1035,7 +1028,7 @@ Screens:
                                                   // Save_btn.OnSelect — validates every required field, then inserts or
                                                   // updates the Projects record and refreshes the scoped list.
                                                   If(
-                                                      IsBlank(PriorityChallenge_txt.Text) || IsBlank(ProjectGoalDescription_txt.Text)
+                                                      IsBlank(PriorityChallenge_txt.Text) 
                                                       || IsBlank(KeyDeliverable_txt.Text) || IsBlank(AnnualTarget_txt.Text) || IsBlank(Reference_txt.Text)
                                                       || IsBlank(Budget_txt.Text) || IsBlank(ProjectProgramme_drp.Selected)
                                                       || IsBlank(ProjectDirectorate_drp.Selected)
@@ -1044,28 +1037,20 @@ Screens:
 
                                                       Notify("All fields are required before saving.", NotificationType.Error),
 
-                                                      // Auto-generate ProjectID: {DirectorateID}-PJ-{next sequential}
-                                                      Set(varProjDirID, Coalesce(ProjectDirectorate_drp.Selected.DirectorateID, "GEN"));
-                                                      Set(varProjNextSeq, 1 + CountRows(Filter(colProjectsInScope, StartsWith(Title, varProjDirID & "-PJ-"))));
-                                                      Set(varNewProjectID, varProjDirID & "-PJ-" & Text(varProjNextSeq, "0000"));
-
                                                       Set(
                                                           varSelectedProject,
                                                           Patch(
                                                               Projects,
                                                               If(varMode = "New", Defaults(Projects), varSelectedProject),
                                                               {
-                                                                  Title: varNewProjectID,
                                                                   PriorityChallenge: PriorityChallenge_txt.Text,
-                                                                  ProjectGoalDescription: ProjectGoalDescription_txt.Text,
+                                                                  //ProjectGoalDescription: ProjectGoalDescription_txt.Text,
                                                                   KeyDeliverable: KeyDeliverable_txt.Text,
                                                                   AnnualTarget: AnnualTarget_txt.Text,
                                                                   Reference: Reference_txt.Text,
                                                                   Budget: Value(Budget_txt.Text),
                                                                   Programme: { Id: ProjectProgramme_drp.Selected.ID, Value: ProjectProgramme_drp.Selected.ProgrammeCode },
-                                                                  // Lookup .Value must be the Directorates Title (full name) so
-                                                                  // role scoping (Directorate.Value = ...) matches every record.
-                                                                  Directorate: { Id: ProjectDirectorate_drp.Selected.ID, Value: Coalesce(ProjectDirectorate_drp.Selected.Title, ProjectDirectorate_drp.Selected.DirectorateID) },
+                                                                  Directorate: { Id: ProjectDirectorate_drp.Selected.ID, Value: ProjectDirectorate_drp.Selected.DirectorateID },
                                                               //    Programme: ProjectProgramme_drp.Selected,
                                                                //   Directorate: ProjectDirectorate_drp.Selected,
                                                                   Responsibility: Responsibility_cmb.Selected.UserAccount,
@@ -1077,16 +1062,13 @@ Screens:
                                                           )
                                                       );
                                                       Set(varMode, "View");
-                                                      // Re-scope with the same role-first Switch used in OnVisible
-                                                      // (single-column filters stay delegable; no OR across columns).
                                                       ClearCollect(
                                                           colProjectsInScope,
-                                                          Switch(
-                                                              varUserRole,
-                                                              "Administrator", Projects,
-                                                              "DeputyDirectorME", Projects,
-                                                              "ProgrammeManager", Filter(Projects, Programme.Value = varUserProgramme),
-                                                              Filter(Projects, Directorate.Value = varUserDirectorateName)
+                                                          Filter(
+                                                              Projects,
+                                                              varCanViewAllReports
+                                                              || Directorate.Value = varUserDirectorateID
+                                                              || Directorate.Value = varUserDirectorate
                                                           )
                                                       );
                                                       Notify("Project saved successfully.", NotificationType.Success)
@@ -1141,7 +1123,7 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Text: ="Edit"
-                                                Visible: =varMode = "View" && !IsBlank(varSelectedProject)
+                                                Visible: =varMode = "View" && !IsBlank(varSelectedActivity) && (varUserRole = "Administrator" || varUserRole = "DeputyDirectorM&E")
                                                 Width: =110
                                                 X: =40
                                                 Y: =40
@@ -1207,6 +1189,7 @@ Screens:
                                           DropShadow: =DropShadow.None
                                           LayoutDirection: =LayoutDirection.Vertical
                                           LayoutGap: =4
+                                          Visible: =false
                                           Width: =Parent.Width
                                         Children:
                                           - ProjectGoalDescription_lbl:
@@ -1225,7 +1208,7 @@ Screens:
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Center
                                                 BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.ProjectGoalDescription)
+                                                Default: =If(varMode = "New", "", varSelectedProject.PriorityChallenge)
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Font: =Font.'Segoe UI'
                                                 Height: =70
@@ -1398,7 +1381,6 @@ Screens:
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Fill: =RGBA(255, 255, 255, 1)
                                                 Height: =40
-                                                Default: =If(varMode = "New", Blank(), LookUp(Programmes, Title = varSelectedProject.Programme.Value))
                                                 ItemDisplayText: =ThisItem.Title
                                                 Items: |-
                                                   =//colProgrammes
@@ -1438,7 +1420,7 @@ Screens:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
                                                 BorderStyle: =BorderStyle.Solid
                                                 BorderThickness: =2
-                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, Title = varSelectedProject.Directorate.Value))
+                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value))
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Fill: =RGBA(255, 255, 255, 1)
                                                 ItemDisplayText: =ThisItem.DirectorateID

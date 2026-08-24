@@ -23,20 +23,10 @@ App:
       Set(varIsMobile, App.Width < 640);
       Set(varIsTablet, App.Width >= 640 And App.Width < 1100);
 
-      // 3. Current user + derived role/scope
-      Set(varUserEmail, User().Email);
-      Set(varUserFullName, User().FullName);
-      Set(varCurrentUserRecord, LookUp(APP_Users, UserAccount.Email = varUserEmail));
-      Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
-      Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
-      Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
-      Set(varUserDirectorateID, Coalesce(LookUp(Directorates, Title = varUserDirectorate).DirectorateID, varCurrentUserRecord.'Directorate: DirectorateID'.Value));
-      // Canonical full name from the Directorates table (its Title column).
-      // Projects.Directorate is a Lookup whose .Value equals this Title, so all
-      // Lookup.Value comparisons must use this resolved name, not the raw
-      // APP_Users choice text which can drift from the Directorates table.
-      Set(varUserDirectorateName, Coalesce(LookUp(Directorates, DirectorateID = varUserDirectorateID).Title, varUserDirectorate));
-      Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
+      // 3. Current user + derived role/scope — now established on scr_Login after a
+      //    successful email + password check against APP_Users. Deliberately left
+      //    unresolved here so no scoped data loads before authentication.
+      //    (Sign-out in cmp_AppHeader clears these back to blank.)
 
       // 4. Reporting period defaults (derived from Today())
       Set(

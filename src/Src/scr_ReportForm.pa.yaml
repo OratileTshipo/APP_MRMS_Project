@@ -12,7 +12,8 @@ Screens:
       Fill: =varBgLight
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
-        =
+        =If(IsBlank(varCurrentUserRecord), Navigate(scr_Login, ScreenTransition.None));
+        
         // scr_ReportForm.OnVisible
         // Purpose: resolve the selected activity and (optionally) an existing
         // report from the navigation context, then set the form mode.
@@ -462,7 +463,7 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =13
-                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.Title)
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.ActivityID)
                               - ReportFormActivityDesc_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -472,7 +473,7 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =11
-                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.ActivityDescription)
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.'ActivityDescription ')
                               - ReportFormContext_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -880,7 +881,7 @@ Screens:
                                               If(varReportMode = "New", Defaults(MonthlyReports), varEditReport),
                                               {
                                                   Title: ReportFormTitle_txt.Text,
-                                                  Activity: { Id: varReportActivity.ID, Value: varReportActivity.Title },
+                                                  Activity: { Id: varReportActivity.ID, Value: varReportActivity.ActivityID },
                                                   ActivityOwnerLabel: If(IsBlank(varReportActivity), "", varReportActivity.ActivityOwner.DisplayName),
                                                   ProgrammeLabel: If(IsBlank(varReportActivity), "", varReportActivity.ProgrammeLabel),
                                                   DirectorateLabel: If(IsBlank(varReportActivity), "", varReportActivity.DirectorateLabel),

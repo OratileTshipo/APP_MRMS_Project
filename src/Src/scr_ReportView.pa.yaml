@@ -12,7 +12,8 @@ Screens:
       Fill: =varBgLight
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
-        =
+        =If(IsBlank(varCurrentUserRecord), Navigate(scr_Login, ScreenTransition.None));
+        
         // scr_ReportView.OnVisible
         // Purpose: load the report to display from the navigation context.
         // Context params: viewReportID (MonthlyReports.ID), returnTo (optional
@@ -295,7 +296,6 @@ Screens:
                         - RepViewBack_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
-                              AccessibleLabel: ="Go back"
                               BorderColor: =RGBA(0, 0, 0, 0)
                               Color: =RGBA(255, 255, 255, 1)
                               DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -400,7 +400,6 @@ Screens:
                               - RepViewBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
-                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -478,7 +477,7 @@ Screens:
                                           FontWeight: =FontWeight.Bold
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Text: =If(IsBlank(varViewReport), "", varViewReport.Status.Value)
+                                          Text: =If(IsBlank(varViewReport), "", varViewReport.ReportStatus.Value)
                               - ReportViewPeriodCard_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout

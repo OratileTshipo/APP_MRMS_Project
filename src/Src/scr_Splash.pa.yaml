@@ -173,7 +173,7 @@ Screens:
                   HoverFill: =RGBA(16, 110, 190, 1)
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
-                  OnTimerEnd: =Navigate(scr_Home, ScreenTransition.Fade)
+                  OnTimerEnd: =Navigate(scr_Login, ScreenTransition.Fade)
                   PressedBorderColor: =RGBA(16, 110, 190, 1)
                   PressedColor: =RGBA(255, 255, 255, 1)
                   PressedFill: =RGBA(16, 110, 190, 1)
@@ -184,7 +184,7 @@ Screens:
                   BasePaletteColor: =RGBA(8, 222, 8, 1)
                   LayoutMinHeight: =16
                   LayoutMinWidth: =16
-                  OnSelect: =Navigate(scr_Home,ScreenTransition.Fade)
+                  OnSelect: =Navigate(scr_Login,ScreenTransition.Fade)
                   Text: ="Continue"
       - rec_SplashAccent:
           Control: Rectangle@2.3.0
