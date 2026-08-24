@@ -31,6 +31,11 @@ App:
       Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
       Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
       Set(varUserDirectorateID, Coalesce(LookUp(Directorates, Title = varUserDirectorate).DirectorateID, varCurrentUserRecord.'Directorate: DirectorateID'.Value));
+      // Canonical full name from the Directorates table (its Title column).
+      // Projects.Directorate is a Lookup whose .Value equals this Title, so all
+      // Lookup.Value comparisons must use this resolved name, not the raw
+      // APP_Users choice text which can drift from the Directorates table.
+      Set(varUserDirectorateName, Coalesce(LookUp(Directorates, DirectorateID = varUserDirectorateID).Title, varUserDirectorate));
       Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
 
       // 4. Reporting period defaults (derived from Today())

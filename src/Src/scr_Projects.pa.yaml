@@ -24,18 +24,22 @@ Screens:
         Set(varProjectFilterStatus, "All");
         Set(varDirFilterResetKey, 0);
 
-        // Scoped Projects list — role-first split.
-        // NOTE: Projects.Directorate is a Lookup column; SharePoint does NOT
-        // delegate filtering on Lookup.Value.  We therefore collect ALL projects
-        // first (delegable — no column filter), then narrow in-memory for
-        // non-admin users where the Lookup.Value comparison works fine.
-        ClearCollect(colProjectsInScope, Projects);
-
-        If(
-            Not(varCanViewAllReports),
-            ClearCollect(
-                colProjectsInScope,
-                Filter(colProjectsInScope, Directorate.Value = varUserDirectorate)
+        // Scoped Projects list — role-first Switch keeps every branch a simple,
+        // delegable single-column filter:
+        //   Administrator / DeputyDirectorME -> all programmes & directorates
+        //   ProgrammeManager                 -> all projects in their programme
+        //   Supervisor / Contributor         -> all projects in their directorate
+        // Projects.Directorate is a Lookup whose .Value equals the Directorates
+        // Title (full name) — compare against varUserDirectorateName, which is
+        // resolved from the short code at startup and always matches.
+        ClearCollect(
+            colProjectsInScope,
+            Switch(
+                varUserRole,
+                "Administrator", Projects,
+                "DeputyDirectorME", Projects,
+                "ProgrammeManager", Filter(Projects, Programme.Value = varUserProgramme),
+                Filter(Projects, Directorate.Value = varUserDirectorateName)
             )
         );
 
@@ -674,12 +678,12 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           OnChange: |-
-                                            =// DirectorateFilter_drp.OnChange
-                                            //Set(varProjectFilterDirectorate, ProjectDirectorateFilter_drp.Selected.DirectorateID);
-
+                                            =// Store the FULL NAME (Title) — the gallery and result count
+                                            // compare it to Projects.Directorate.Value, which holds the
+                                            // looked-up Directorates Title, never the short DirectorateID.
                                             Set(varProjectFilterDirectorate, 
                                             If(IsBlank(ProjectDirectorateFilter_drp.Selected), 
-                                            "All", ProjectDirectorateFilter_drp.Selected.DirectorateID))
+                                            "All", ProjectDirectorateFilter_drp.Selected.Title))
                                           Width: =Parent.Width / 3 - 4
                                     - ProjectStatusFilter_drp:
                                         Control: ModernDropdown@1.0.2
@@ -1059,7 +1063,9 @@ Screens:
                                                                   Reference: Reference_txt.Text,
                                                                   Budget: Value(Budget_txt.Text),
                                                                   Programme: { Id: ProjectProgramme_drp.Selected.ID, Value: ProjectProgramme_drp.Selected.ProgrammeCode },
-                                                                  Directorate: { Id: ProjectDirectorate_drp.Selected.ID, Value: ProjectDirectorate_drp.Selected.DirectorateID },
+                                                                  // Lookup .Value must be the Directorates Title (full name) so
+                                                                  // role scoping (Directorate.Value = ...) matches every record.
+                                                                  Directorate: { Id: ProjectDirectorate_drp.Selected.ID, Value: Coalesce(ProjectDirectorate_drp.Selected.Title, ProjectDirectorate_drp.Selected.DirectorateID) },
                                                               //    Programme: ProjectProgramme_drp.Selected,
                                                                //   Directorate: ProjectDirectorate_drp.Selected,
                                                                   Responsibility: Responsibility_cmb.Selected.UserAccount,
@@ -1071,12 +1077,16 @@ Screens:
                                                           )
                                                       );
                                                       Set(varMode, "View");
+                                                      // Re-scope with the same role-first Switch used in OnVisible
+                                                      // (single-column filters stay delegable; no OR across columns).
                                                       ClearCollect(
                                                           colProjectsInScope,
-                                                          Filter(
-                                                              Projects,
-                                                              varCanViewAllReports
-                                                              || Directorate.Value = varUserDirectorate
+                                                          Switch(
+                                                              varUserRole,
+                                                              "Administrator", Projects,
+                                                              "DeputyDirectorME", Projects,
+                                                              "ProgrammeManager", Filter(Projects, Programme.Value = varUserProgramme),
+                                                              Filter(Projects, Directorate.Value = varUserDirectorateName)
                                                           )
                                                       );
                                                       Notify("Project saved successfully.", NotificationType.Success)
@@ -1388,6 +1398,7 @@ Screens:
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Fill: =RGBA(255, 255, 255, 1)
                                                 Height: =40
+                                                Default: =If(varMode = "New", Blank(), LookUp(Programmes, Title = varSelectedProject.Programme.Value))
                                                 ItemDisplayText: =ThisItem.Title
                                                 Items: |-
                                                   =//colProgrammes
@@ -1427,7 +1438,7 @@ Screens:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
                                                 BorderStyle: =BorderStyle.Solid
                                                 BorderThickness: =2
-                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, DirectorateID = varSelectedProject.Directorate.Value))
+                                                Default: =If(varMode = "New", Blank(), LookUp(colDirectorates, Title = varSelectedProject.Directorate.Value))
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Fill: =RGBA(255, 255, 255, 1)
                                                 ItemDisplayText: =ThisItem.DirectorateID
