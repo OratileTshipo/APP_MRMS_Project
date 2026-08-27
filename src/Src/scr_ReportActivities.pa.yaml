@@ -648,8 +648,7 @@ Screens:
                                           (
                                               IsBlank(varRepActSearchTerm) ||
                                               Lower(varRepActSearchTerm) in Lower(Title) ||
-                                              Lower(varRepActSearchTerm) in Lower(ActivityShortDescription) ||
-                                              Lower(varRepActSearchTerm) in Lower(ActivityCode)
+                                              Lower(varRepActSearchTerm) in Lower(ActivityShortDescription)
                                           )
                                       )
                                     LayoutMinHeight: =16
