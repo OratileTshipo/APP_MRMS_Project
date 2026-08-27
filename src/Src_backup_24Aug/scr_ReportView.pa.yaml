@@ -72,7 +72,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewProjects_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -96,7 +95,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -120,7 +118,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewMonthlyReports_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -144,7 +141,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewMyActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -168,7 +164,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewTrending_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -191,7 +186,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewUsers_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -215,7 +209,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewSidebarSpacer_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -251,7 +244,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepViewSupport_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -274,7 +266,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
             - ReportViewDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -304,6 +295,7 @@ Screens:
                         - RepViewBack_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
+                              AccessibleLabel: ="Go back"
                               BorderColor: =RGBA(0, 0, 0, 0)
                               Color: =RGBA(255, 255, 255, 1)
                               DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -323,8 +315,6 @@ Screens:
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Tooltip: ="Go back"
                               Width: =Parent.Width * 0.04
-                              AccessibleLabel: ="Rep View Back"
-                              TabIndex: =0
                         - RepViewHeaderLeft_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -410,6 +400,7 @@ Screens:
                               - RepViewBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -428,8 +419,6 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Rep View Bell"
-                                    TabIndex: =0
                   - ReportViewBody_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -481,7 +470,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =10.5
                                           Text: ="STATUS"
-                                          AccessibleLabel: ="Report View Status Key"
                                     - ReportViewStatusValue_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -491,7 +479,6 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Text: =If(IsBlank(varViewReport), "", varViewReport.ReportStatus.Value)
-                                          AccessibleLabel: ="Report View Status Value"
                               - ReportViewPeriodCard_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -519,7 +506,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =10.5
                                           Text: ="PERIOD"
-                                          AccessibleLabel: ="Report View Period Key"
                                     - ReportViewPeriodValue_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -530,7 +516,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =13
                                           Text: =If(IsBlank(varViewReport), "", varViewReport.ReportingMonth.Value & " · " & varViewReport.Quarter.Value & " · " & varViewReport.'FinancialYear '.Value)
-                                          AccessibleLabel: ="Report View Period Value"
                               - ReportViewPctCard_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -558,7 +543,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =10.5
                                           Text: ="COMPLETE"
-                                          AccessibleLabel: ="Report View Pct Key"
                                     - ReportViewPctValue_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -568,7 +552,6 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Text: =If(IsBlank(varViewReport), "", Text(varViewReport.'PercentageComplete ') & "%")
-                                          AccessibleLabel: ="Report View Pct Value"
                         - ReportViewSection_title_lbl:
                             Control: ModernText@1.0.0
                             Properties:
@@ -579,7 +562,6 @@ Screens:
                               LayoutMinWidth: =16
                               Size: =13
                               Text: ="Report Details"
-                              AccessibleLabel: ="Report View Section_title"
                         - ReportViewDetailCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -607,7 +589,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="TITLE"
-                                    AccessibleLabel: ="Report View Title Key"
                               - ReportViewTitleValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -618,7 +599,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =13
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.Title)
-                                    AccessibleLabel: ="Report View Title Value"
                               - ReportViewPlannedKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -628,7 +608,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="PLANNED ACTIVITY"
-                                    AccessibleLabel: ="Report View Planned Key"
                               - ReportViewPlannedValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -639,7 +618,6 @@ Screens:
                                     Size: =12
                                     Text: |-
                                       =If(IsBlank(varViewReport), "", varViewReport.'Activity: ActivityShortDescription'.Value)
-                                      AccessibleLabel: ="Activity"
                               - ReportViewOutputKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -649,7 +627,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="OUTPUT"
-                                    AccessibleLabel: ="Report View Output Key"
                               - ReportViewOutputValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -659,7 +636,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.Output)
-                                    AccessibleLabel: ="Report View Output Value"
                               - ReportViewReasonKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -669,7 +645,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="REASON FOR DEVIATION"
-                                    AccessibleLabel: ="Report View Reason Key"
                               - ReportViewReasonValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -679,7 +654,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.ReasonForDeviation)
-                                    AccessibleLabel: ="Report View Reason Value"
                               - ReportViewRemedialKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -689,7 +663,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="REMEDIAL ACTION"
-                                    AccessibleLabel: ="Report View Remedial Key"
                               - ReportViewRemedialValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -699,7 +672,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.RemedialAction)
-                                    AccessibleLabel: ="Report View Remedial Value"
                         - ReportViewSection_owner_lbl:
                             Control: ModernText@1.0.0
                             Properties:
@@ -710,7 +682,6 @@ Screens:
                               LayoutMinWidth: =16
                               Size: =13
                               Text: ="Ownership & Workflow"
-                              AccessibleLabel: ="Report View Section_owner"
                         - ReportViewOwnerCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -738,7 +709,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="ACTIVITY OWNER"
-                                    AccessibleLabel: ="Report View Owner Key"
                               - ReportViewOwnerValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -748,7 +718,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.ActivityOwnerLabel)
-                                    AccessibleLabel: ="Report View Owner Value"
                               - ReportViewSubmittedKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -758,7 +727,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="SUBMITTED BY"
-                                    AccessibleLabel: ="Report View Submitted Key"
                               - ReportViewSubmittedValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -768,7 +736,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.SubmittedBy.DisplayName, ""))
-                                    AccessibleLabel: ="Report View Submitted Value"
                               - ReportViewReviewedKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -778,7 +745,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="REVIEWED BY"
-                                    AccessibleLabel: ="Report View Reviewed Key"
                               - ReportViewReviewedValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -788,7 +754,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.SupervisorReviewedBy.DisplayName, ""))
-                                    AccessibleLabel: ="Report View Reviewed Value"
                               - ReportViewRejectionKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -798,7 +763,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =10.5
                                     Text: ="REJECTION REASON"
-                                    AccessibleLabel: ="Report View Rejection Key"
                               - ReportViewRejectionValue_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -808,7 +772,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     Size: =12
                                     Text: =If(IsBlank(varViewReport), "", varViewReport.'RejectionReason ')
-                                    AccessibleLabel: ="Report View Rejection Value"
                         - ReportViewBack_btn:
                             Control: ModernButton@1.0.0
                             Properties:
@@ -830,4 +793,3 @@ Screens:
                               RadiusTopRight: =8
                               Text: =If(varViewReturnTo = "Approved", "Back to Approved Reports", "Back to My Activities")
                               Width: =220
-                              AccessibleLabel: ="Report View Back"

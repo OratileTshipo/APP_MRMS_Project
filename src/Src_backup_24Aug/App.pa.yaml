@@ -30,14 +30,8 @@ App:
       Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
       Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
       Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
-      //Set(varUserDirectorateID, LookUp(Directorates, Title = varUserDirectorate).DirectorateID);
-      Set(varUserDirectorateID, 
-          Coalesce(
-              LookUp(Directorates, DirectorateName = varUserDirectorate).DirectorateID,
-              varCurrentUserRecord.'Directorate: DirectorateID'.Value
-          )
-      );
-      Set(varCanViewAllReports, varUserRole = "DeputyDirectorME");
+      Set(varUserDirectorateID, Coalesce(LookUp(Directorates, Title = varUserDirectorate).DirectorateID, varCurrentUserRecord.'Directorate: DirectorateID'.Value));
+      Set(varCanViewAllReports, varUserRole = "DeputyDirectorME" || varUserRole = "Administrator");
 
       // 4. Reporting period defaults (derived from Today())
       Set(
@@ -69,7 +63,7 @@ App:
       Set(varTodaysDate, DateValue(Today()));
 
       // 5. Filter defaults — mutated by screen controls (scr_Home, scr_Users, scr_MyActivities)
-      // Search text lives in the app header component
+      // Search text lives in the cmp_AppHeader component instances (SearchText output), not app vars.
       Set(varHomeFilter, "All");
       Set(varFilterFY, "All");
       Set(varFilterProgramme, "All");

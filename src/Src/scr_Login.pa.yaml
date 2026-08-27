@@ -1,0 +1,197 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_Login:
+    Properties:
+      Fill: =RGBA(255, 255, 255, 0.58)
+      LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
+      OnVisible: |-
+        =Set(varLoginError, "");
+        If(IsBlank(varLoginAttempts), Set(varLoginAttempts, 0));
+        Reset(LoginEmail_txt);
+        Reset(LoginPassword_txt)
+    Children:
+      - login_con:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.Semibold
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGap: =30
+            LayoutJustifyContent: =LayoutJustifyContent.Center
+            PaddingBottom: =40
+            PaddingLeft: =80
+            PaddingRight: =80
+            PaddingTop: =40
+            RadiusBottomLeft: =15
+            RadiusBottomRight: =15
+            RadiusTopLeft: =15
+            RadiusTopRight: =15
+            Width: =Parent.Width * 0.4
+            X: =App.Width / 2 - (login_con.Width/2)
+          Children:
+            - Image1_1:
+                Control: Image@2.2.3
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(135, 190, 82, 1)
+                  Height: =Parent.Height * 0.2
+                  Image: ='dpwr logo'
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+            - Welcome_lbl_1:
+                Control: Label@2.5.1
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(135, 190, 82, 1)
+                  Color: =RGBA(29, 29, 29, 1)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Font: =Font.'Open Sans'
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Text: ="LOGIN INTO APP MONTHLY REPORTING APP"
+            - LoginEmail_txt:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(119, 119, 119, 1)
+                  Default: =
+                  Fill: =RGBA(237, 237, 237, 1)
+                  Font: =Font.'Open Sans'
+                  HintText: ="Email Address"
+                  HoverBorderColor: =RGBA(135, 190, 82, 1)
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  HoverFill: =RGBA(53, 74, 36, 1)
+                  Italic: =true
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  RadiusBottomLeft: =10
+                  RadiusBottomRight: =10
+                  RadiusTopLeft: =10
+                  RadiusTopRight: =10
+                  AccessibleLabel: ="Login Email"
+            - LoginPassword_txt:
+                Control: Classic/TextInput@2.3.2
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(0, 0, 0, 0)
+                  Color: =RGBA(119, 119, 119, 1)
+                  Default: =
+                  Fill: =RGBA(237, 237, 237, 1)
+                  Font: =Font.'Open Sans'
+                  HintText: ="Password"
+                  HoverBorderColor: =RGBA(135, 190, 82, 1)
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  HoverFill: =RGBA(53, 74, 36, 1)
+                  Italic: =true
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Mode: =TextMode.Password
+                  RadiusBottomLeft: =10
+                  RadiusBottomRight: =10
+                  RadiusTopLeft: =10
+                  RadiusTopRight: =10
+                  AccessibleLabel: ="Login Password"
+            - LoginError_lbl:
+                Control: Label@2.5.1
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(135, 190, 82, 1)
+                  Color: =RGBA(189, 49, 51, 1)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Font: =Font.'Open Sans'
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Text: =varLoginError
+                  Visible: =!IsBlank(varLoginError)
+            - login_btn:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =ColorFade(Self.Fill, -15%)
+                  Color: =RGBA(255, 255, 255, 1)
+                  DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                  DisplayMode: |-
+                    =// Disabled until both fields are filled — defensive UX, not a security
+                    // control (OnSelect below re-validates regardless)
+
+                    If(
+                            IsBlank(Trim(LoginEmail_txt.Text)) || IsBlank(LoginPassword_txt.Text),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                  Fill: =RGBA(12, 126, 44, 1)
+                  Font: =Font.'Open Sans'
+                  HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  HoverFill: =ColorFade(RGBA(12, 126, 44, 1), -20%)
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  OnSelect: |-
+                    =// LOGIN — validates email + password against APP_Users, then derives session scope.
+                    // Requires an 'AppPassword' column (single line of text) on APP_Users.
+                    If(
+                        varLoginAttempts >= 5,
+                        Set(varLoginError, "Too many failed attempts. Close and reopen the app to try again."),
+                        With(
+                            { typedEmail: Trim(LoginEmail_txt.Text) },
+                            Set(varLoginCandidate, LookUp(APP_Users, UserAccount.Email = typedEmail));
+                            If(
+                                IsBlank(varLoginCandidate),
+                                Set(varLoginCandidate, First(Filter(APP_Users, Lower(UserAccount.Email) = Lower(typedEmail))))
+                            );
+                            If(
+                                IsBlank(typedEmail) || IsBlank(LoginPassword_txt.Text),
+                                Set(varLoginError, "Please enter both your email and password."),
+                                IsBlank(varLoginCandidate),
+                                Set(varLoginError, "Invalid email or password."); Set(varLoginAttempts, varLoginAttempts + 1),
+                                varLoginCandidate.'Active ' = false,
+                                Set(varLoginError, "This account has been deactivated. Contact your administrator."),
+                                IsBlank(varLoginCandidate.AppPassword) || varLoginCandidate.AppPassword <> LoginPassword_txt.Text,
+                                Set(varLoginError, "Invalid email or password."); Set(varLoginAttempts, varLoginAttempts + 1),
+
+                                // SUCCESS — establish the session
+                                Set(varCurrentUserRecord, varLoginCandidate);
+                                Set(varUserEmail, Coalesce(varLoginCandidate.UserAccount.Email, typedEmail));
+                                Set(varUserFullName, Coalesce(varLoginCandidate.UserAccount.DisplayName, varLoginCandidate.Title));
+                                Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
+                                Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
+                                Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
+                                Set(varCanViewAllReports, varUserRole = "DeputyDirectorME");
+                                ClearCollect(colMyNotifications, Filter(Notifications, RecipientUser.Email = varUserEmail, IsRead = false));
+                                Set(varUnreadCount, CountRows(colMyNotifications));
+                                Set(varLoginCandidate, Blank());
+                                Set(varLoginError, "");
+                                Reset(LoginPassword_txt);
+                                Navigate(scr_Home, ScreenTransition.Fade)
+                            )
+                        )
+                    )
+                  PressedBorderColor: =Self.Fill
+                  PressedColor: =Self.Fill
+                  PressedFill: =Self.Color
+                  Text: ="Login"
+                  TabIndex: =0
+            - Footer_lbl:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(135, 190, 82, 1)
+                  Color: =RGBA(29, 29, 29, 1)
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Font: =Font.'Open Sans'
+                  FontWeight: =FontWeight.Lighter
+                  Italic: =true
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Text: ="Developed by DPWR NW"

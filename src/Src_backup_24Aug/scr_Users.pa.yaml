@@ -107,7 +107,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrProjects_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -131,7 +130,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -155,7 +153,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrMonthlyReports_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -179,7 +176,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrMyActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -203,7 +199,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrTrending_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -226,7 +221,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrUsers_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -250,7 +244,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrSidebarSpacer_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -286,7 +279,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - UsrSupport_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -309,7 +301,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
             - ProjectsMainScreen_con_2:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -422,6 +413,7 @@ Screens:
                               - UsrBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -440,8 +432,6 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Usr Bell"
-                                    TabIndex: =0
                   - RegMainScreen_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -493,7 +483,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =20
                                           Text: ="Complete all fields to register a new system user"
-                                          AccessibleLabel: ="Reg Instruction Title"
                                     - RegInstructionSub_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -505,7 +494,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =14
                                           Text: ="The user will receive an email notification with their login credentials once registered"
-                                          AccessibleLabel: ="Reg Instruction Sub"
                               - RegFormTitle_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -518,7 +506,6 @@ Screens:
                                     Text: ="Account Details"
                                     X: =40
                                     Y: =40
-                                    AccessibleLabel: ="Reg Form Title"
                               - RegFormCard_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -578,7 +565,6 @@ Screens:
                                                 Text: ="PERSONAL INFORMATION"
                                                 X: =40
                                                 Y: =40
-                                                AccessibleLabel: ="Reg Section Personal"
                                           - Container8:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
@@ -613,7 +599,6 @@ Screens:
                                                             Size: =12
                                                             Text: ="Select User *"
                                                             Width: =Parent.Width
-                                                            AccessibleLabel: ="Reg Email Label"
                                                       - cmb_RegEmail:
                                                           Control: ModernCombobox@1.1.1
                                                           Properties:
@@ -639,7 +624,6 @@ Screens:
                                                             RadiusTopRight: =8
                                                             SelectMultiple: =false
                                                             Width: =Parent.Width - 10
-                                                            AccessibleLabel: ="cmb_Reg Email"
                                                       - RegFullNameLabel_lbl:
                                                           Control: ModernText@1.0.0
                                                           Properties:
@@ -649,7 +633,6 @@ Screens:
                                                             Size: =12
                                                             Text: ="Full Name *"
                                                             Width: =Parent.Width
-                                                            AccessibleLabel: ="Reg Full Name Label"
                                                       - txt_RegFullName:
                                                           Control: Classic/TextInput@2.3.2
                                                           Properties:
@@ -680,7 +663,6 @@ Screens:
                                                             RadiusTopRight: =8
                                                             Size: =12
                                                             Width: =Parent.Width - 10
-                                                            AccessibleLabel: ="txt_Reg Full Name"
                                                 - Container10:
                                                     Control: GroupContainer@1.5.0
                                                     Variant: AutoLayout
@@ -702,7 +684,6 @@ Screens:
                                                             LayoutMinWidth: =16
                                                             Size: =12
                                                             Text: ="Phone Number"
-                                                            AccessibleLabel: ="Reg Phone Label"
                                                       - txt_RegPhone:
                                                           Control: Classic/TextInput@2.3.2
                                                           Properties:
@@ -731,7 +712,6 @@ Screens:
                                                             RadiusTopRight: =8
                                                             Size: =12
                                                             Width: =Parent.Width - 10
-                                                            AccessibleLabel: ="txt_Reg Phone"
                                                       - RegRoleLabel_lbl:
                                                           Control: ModernText@1.0.0
                                                           Properties:
@@ -741,7 +721,6 @@ Screens:
                                                             LayoutMinWidth: =16
                                                             Size: =12
                                                             Text: ="System Role *"
-                                                            AccessibleLabel: ="Reg Role Label"
                                                       - drp_RegRole:
                                                           Control: ModernDropdown@1.0.2
                                                           Properties:
@@ -797,7 +776,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =14
                                                 Text: ="ORGANISATIONAL DETAILS"
-                                                AccessibleLabel: ="Reg Section Org"
                                           - RegFormRow3_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
@@ -841,7 +819,6 @@ Screens:
                                                             Size: =12
                                                             Text: ="Programme *"
                                                             Width: =Parent.Width - 10
-                                                            AccessibleLabel: ="Reg Programme Label"
                                                       - drp_RegProgramme:
                                                           Control: ModernDropdown@1.0.2
                                                           Properties:
@@ -893,7 +870,6 @@ Screens:
                                                             Size: =12
                                                             Text: ="Directorate *"
                                                             Width: =Parent.Width - 10
-                                                            AccessibleLabel: ="Reg Directorate Label"
                                                       - drp_RegDirectorate:
                                                           Control: ModernDropdown@1.0.2
                                                           Properties:
@@ -951,7 +927,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =14
                                                 Text: ="SECURITY CREDENTIALS"
-                                                AccessibleLabel: ="Reg Section Security_1"
                                           - RegFormRow4_con_1:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
@@ -992,8 +967,7 @@ Screens:
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
                                                             Size: =12
-                                                            Text: ="Password *"
-                                                            AccessibleLabel: ="Reg Password Label_1"
+                                                            Text: ="Temporary Password *"
                                                       - RegPasswordInput_con_1:
                                                           Control: GroupContainer@1.5.0
                                                           Variant: AutoLayout
@@ -1049,7 +1023,6 @@ Screens:
                                                                   RadiusTopRight: =8
                                                                   Size: =14
                                                                   Width: =Parent.Width - RegPasswordToggle_ico_1.Width
-                                                                  AccessibleLabel: ="txt_Reg Password"
                                                             - RegPasswordToggle_ico_1:
                                                                 Control: Classic/Icon@2.5.0
                                                                 Properties:
@@ -1078,8 +1051,6 @@ Screens:
                                                                   PressedColor: =RGBA(16, 110, 190, 1)
                                                                   PressedFill: =RGBA(0, 0, 0, 0)
                                                                   Width: =40
-                                                                  AccessibleLabel: ="Reg Password Toggle_1"
-                                                                  TabIndex: =0
                                                       - RegPasswordStrength_con_1:
                                                           Control: GroupContainer@1.5.0
                                                           Variant: AutoLayout
@@ -1171,7 +1142,6 @@ Screens:
                                                             LayoutMinWidth: =16
                                                             Size: =12
                                                             Text: ="Confirm Password *"
-                                                            AccessibleLabel: ="Reg Confirm Password Label_1"
                                                       - RegConfirmPasswordInput_con_1:
                                                           Control: GroupContainer@1.5.0
                                                           Variant: AutoLayout
@@ -1222,7 +1192,6 @@ Screens:
                                                                   PressedFill: =RGBA(255, 255, 255, 1)
                                                                   Size: =12
                                                                   Width: =Parent.Width - RegConfirmPasswordToggle_ico_1.Width
-                                                                  AccessibleLabel: ="txt_Reg Confirm Password"
                                                             - RegConfirmPasswordToggle_ico_1:
                                                                 Control: Classic/Icon@2.5.0
                                                                 Properties:
@@ -1250,8 +1219,6 @@ Screens:
                                                                   PressedColor: =RGBA(16, 110, 190, 1)
                                                                   PressedFill: =RGBA(0, 0, 0, 0)
                                                                   Width: =40
-                                                                  AccessibleLabel: ="Reg Confirm Password Toggle_1"
-                                                                  TabIndex: =0
                                                       - RegPasswordMismatch_lbl_1:
                                                           Control: ModernText@1.0.0
                                                           Properties:
@@ -1261,7 +1228,6 @@ Screens:
                                                             Size: =11
                                                             Text: ="Passwords do not match"
                                                             Visible: =varRegPasswordMismatch
-                                                            AccessibleLabel: ="Reg Password Mismatch_1"
                                     - RegSectionTerms_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1310,7 +1276,6 @@ Screens:
                                                 Size: =12
                                                 Text: ="I confirm that the user information provided is correct and the user agrees to the system terms of use"
                                                 Width: =Parent.Width
-                                                TabIndex: =0
                                     - RegError_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1347,7 +1312,6 @@ Screens:
                                                 RadiusTopRight: =8
                                                 Text: =varRegErrorMessage
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Reg Error Message"
                                     - RegSuccess_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1384,7 +1348,6 @@ Screens:
                                                 RadiusTopRight: =8
                                                 Text: ="✓ User registered successfully. A confirmation email has been sent."
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Reg Success Message"
                                     - RegFormActions_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1418,7 +1381,6 @@ Screens:
                                                 RadiusTopRight: =8
                                                 Text: ="Cancel"
                                                 Width: =120
-                                                AccessibleLabel: ="Reg Cancel"
                                           - RegSubmit_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
@@ -1426,14 +1388,13 @@ Screens:
                                                 Icon: ="Add"
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
-                                                OnSelect: "=// ============================================================\n// RegSubmit_btn.OnSelect — FINAL WORKING VERSION\n// ============================================================\n\n// ------------------------------------------------------------\n// 1. RESET ERROR STATE\n// ------------------------------------------------------------\nSet(varRegErrorMessage, \"\");\nSet(varRegSubmitSuccess, false);\n\n// ------------------------------------------------------------\n// 2. FIELD VALIDATION\n// ------------------------------------------------------------\nIf(\n    \n    IsBlank(varRegEmail),\n    Set(varRegErrorMessage, \"Please select a user.\"),\n    \n    Not(IsBlank(LookUp(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName))),\n    Set(varRegErrorMessage, \"This user already exists in the system.\"), \n    \n    IsBlank(varRegRole),\n    Set(varRegErrorMessage, \"System Role is required.\"),\n    \n    IsBlank(varRegDirectorate),\n    Set(varRegErrorMessage, \"Directorate is required.\"),\n    \n    IsBlank(varRegProgramme),\n    Set(varRegErrorMessage, \"Programme is required.\"),\n    \n    IsBlank(varRegPassword),\n    Set(varRegErrorMessage, \"Password is required.\"),\n    \n    Len(varRegPassword) < 8,\n    Set(varRegErrorMessage, \"Password must be at least 8 characters.\"),\n    \n    IsBlank(varRegConfirmPassword),\n    Set(varRegErrorMessage, \"Please confirm the password.\"),\n    \n    varRegPassword <> varRegConfirmPassword,\n    Set(varRegErrorMessage, \"Passwords do not match.\"),\n    \n    !varRegAcceptTerms,\n    Set(varRegErrorMessage, \"You must accept the terms of use.\"),\n    \n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    With(\n        {\n        newUser: Patch(\n            APP_Users,\n            Defaults(APP_Users),\n            {\n                Title: varRegFullName,\n                UserAccount: {\n                    Claims: \"i:0#.f|membership|\" & Lower(varRegEmail),\n                    Department: \"Public Works and Roads\",\n                    DisplayName: varRegFullName,\n                    Email: Lower(cmb_RegEmail.Selected.Mail),\n                    JobTitle: cmb_RegEmail.Selected.JobTitle,\n                    Picture: \"\"\n                },\n                Role: {Value: varRegRole},\n                Programme: {\n                    Id: drp_RegProgramme.Selected.ID,\n                    Value: drp_RegProgramme.Selected.Title\n                },\n                Directorate: {\n                    Id: drp_RegDirectorate.Selected.ID,\n                    Value: drp_RegDirectorate.Selected.DirectorateID\n                },\n                AppPassword: txt_RegPassword.Text\n            }\n        )\n    },\n    Patch(\n        APP_Users,\n        newUser,\n        {'Active ': true}\n    )\n);\n    \n    // ------------------------------------------------------------\n    // 4. SUCCESS — reset form\n    // ------------------------------------------------------------\n    Set(varRegSubmitSuccess, true);\n    Set(varRegErrorMessage, \"\");\n    Set(varRegFullName, \"\");\n    Set(varRegEmail, \"\");\n    Set(varRegPhone, \"\");\n    Set(varRegRole, \"\");\n    Set(varRegDirectorate, \"\");\n    Set(varRegProgramme, \"\");\n    Set(varRegPassword, \"\");\n    Set(varRegConfirmPassword, \"\");\n    Set(varRegAcceptTerms, false);\n    Set(varRegPasswordMismatch, false);\n    Set(varRegEmailExists, false);\n    Set(varRegPasswordStrength, \"\");\n    Reset(txt_RegFullName);\n    Reset(cmb_RegEmail);\n    Reset(txt_RegPhone);\n    Reset(drp_RegRole);\n    Reset(drp_RegDirectorate);\n    Reset(drp_RegProgramme);\n    Reset(txt_RegPassword);\n    Reset(txt_RegConfirmPassword);\n    Reset(chk_RegAcceptTerms)\n)"
+                                                OnSelect: "=// ============================================================\n// RegSubmit_btn.OnSelect — FINAL WORKING VERSION\n// ============================================================\n\n// ------------------------------------------------------------\n// 1. RESET ERROR STATE\n// ------------------------------------------------------------\nSet(varRegErrorMessage, \"\");\nSet(varRegSubmitSuccess, false);\n\n// ------------------------------------------------------------\n// 2. FIELD VALIDATION\n// ------------------------------------------------------------\nIf(\n    \n    IsBlank(varRegEmail),\n    Set(varRegErrorMessage, \"Please select a user.\"),\n    \n    Not(IsBlank(LookUp(APP_Users, UserAccount.Email = cmb_RegEmail.Selected.UserPrincipalName))),\n    Set(varRegErrorMessage, \"This user already exists in the system.\"), \n    \n    IsBlank(varRegRole),\n    Set(varRegErrorMessage, \"System Role is required.\"),\n    \n    IsBlank(varRegDirectorate),\n    Set(varRegErrorMessage, \"Directorate is required.\"),\n    \n    IsBlank(varRegProgramme),\n    Set(varRegErrorMessage, \"Programme is required.\"),\n    \n    IsBlank(varRegPassword),\n    Set(varRegErrorMessage, \"Password is required.\"),\n    \n    Len(varRegPassword) < 8,\n    Set(varRegErrorMessage, \"Password must be at least 8 characters.\"),\n    \n    IsBlank(varRegConfirmPassword),\n    Set(varRegErrorMessage, \"Please confirm the password.\"),\n    \n    varRegPassword <> varRegConfirmPassword,\n    Set(varRegErrorMessage, \"Passwords do not match.\"),\n    \n    !varRegAcceptTerms,\n    Set(varRegErrorMessage, \"You must accept the terms of use.\"),\n    \n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    // ------------------------------------------------------------\n    // 3. ALL VALIDATIONS PASSED — SUBMIT\n    // ------------------------------------------------------------\n    With(\n        {\n        newUser: Patch(\n            APP_Users,\n            Defaults(APP_Users),\n            {\n                Title: varRegFullName,\n                UserAccount: {\n                    Claims: \"i:0#.f|membership|\" & Lower(varRegEmail),\n                    Department: \"Public Works and Roads\",\n                    DisplayName: varRegFullName,\n                    Email: Lower(cmb_RegEmail.Selected.Mail),\n                    JobTitle: cmb_RegEmail.Selected.JobTitle,\n                    Picture: \"\"\n                },\n                Role: {Value: varRegRole},\n                Programme: {\n                    Id: drp_RegProgramme.Selected.ID,\n                    Value: drp_RegProgramme.Selected.Title\n                },\n                Directorate: {\n                    Id: drp_RegDirectorate.Selected.ID,\n                    Value: drp_RegDirectorate.Selected.DirectorateID\n                }\n            }\n        )\n    },\n    Patch(\n        APP_Users,\n        newUser,\n        {'Active ': true}\n    )\n);\n    \n    // ------------------------------------------------------------\n    // 4. SUCCESS — reset form\n    // ------------------------------------------------------------\n    Set(varRegSubmitSuccess, true);\n    Set(varRegErrorMessage, \"\");\n    Set(varRegFullName, \"\");\n    Set(varRegEmail, \"\");\n    Set(varRegPhone, \"\");\n    Set(varRegRole, \"\");\n    Set(varRegDirectorate, \"\");\n    Set(varRegProgramme, \"\");\n    Set(varRegPassword, \"\");\n    Set(varRegConfirmPassword, \"\");\n    Set(varRegAcceptTerms, false);\n    Set(varRegPasswordMismatch, false);\n    Set(varRegEmailExists, false);\n    Set(varRegPasswordStrength, \"\");\n    Reset(txt_RegFullName);\n    Reset(cmb_RegEmail);\n    Reset(txt_RegPhone);\n    Reset(drp_RegRole);\n    Reset(drp_RegDirectorate);\n    Reset(drp_RegProgramme);\n    Reset(txt_RegPassword);\n    Reset(txt_RegConfirmPassword);\n    Reset(chk_RegAcceptTerms)\n)"
                                                 RadiusBottomLeft: =8
                                                 RadiusBottomRight: =8
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Text: ="Register User"
                                                 Width: =150
-                                                AccessibleLabel: ="Reg Submit"
                                     - Container11:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout

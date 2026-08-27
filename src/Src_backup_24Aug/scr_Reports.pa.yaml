@@ -63,7 +63,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsProjects_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -87,7 +86,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -111,7 +109,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsMonthlyReports_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -135,7 +132,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsMyActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -159,7 +155,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsTrending_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -182,7 +177,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsUsers_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -206,7 +200,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsSidebarSpacer_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -242,7 +235,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - RepsSupport_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -265,7 +257,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
             - ReportsSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -381,8 +372,9 @@ Screens:
                                     - RepsSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
+                                          Color: =RGBA(100, 100, 100, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -398,8 +390,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.08
-                                          AccessibleLabel: ="Reps Search"
-                                          TabIndex: =0
                                     - RepsSearchBox_txt:
                                         Control: Classic/TextInput@2.3.2
                                         Properties:
@@ -429,7 +419,6 @@ Screens:
                                           RadiusTopRight: =0
                                           Size: =15
                                           Width: =Parent.Width - RepsSearch_ico.Width - 25
-                                          AccessibleLabel: ="Reps Search Box"
                               - RepsUser_lbl:
                                   Control: Label@2.5.1
                                   Properties:
@@ -451,6 +440,7 @@ Screens:
                               - RepsBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -469,8 +459,6 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Reps Bell"
-                                    TabIndex: =0
                   - BodyContainer1:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -495,14 +483,14 @@ Screens:
                             Variant: AutoLayout
                             Properties:
                               Fill: =RGBA(255, 255, 255, 1)
-                              FillPortions: =If(And(App.Width = 640, Or(newMode, editMode, itemSelected)), 0, 3)
+                              FillPortions: =If(And(App.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), 0, 3)
                               LayoutDirection: =LayoutDirection.Vertical
                               LayoutGap: =10
                               LayoutMinWidth: =16
                               PaddingLeft: =16
                               PaddingRight: =16
                               PaddingTop: =10
-                              Visible: =If(And(App.Width = 640, Or(newMode, editMode, itemSelected)), false, true)
+                              Visible: =If(And(App.Size = ScreenSize.Small, Or(newMode, editMode, itemSelected)), false, true)
                             Children:
                               - NewRecordButtonBarContainer1:
                                   Control: GroupContainer@1.5.0
@@ -541,8 +529,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =44
-                                          AccessibleLabel: ="New Record Add Icon1"
-                                          TabIndex: =0
                                     - NewRecordLabel1:
                                         Control: Label@2.5.1
                                         Properties:
@@ -595,7 +581,7 @@ Screens:
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
-                                          Height: =Self.Width * 1.8
+                                          Height: =Self.Size * 1.8
                                           OnSelect: =Select(Parent)
                                           PaddingBottom: =0
                                           PaddingLeft: =12
@@ -606,7 +592,7 @@ Screens:
                                           VerticalAlign: =VerticalAlign.Top
                                           Width: =Parent.TemplateWidth - 86
                                           X: =16
-                                          Y: =(Parent.TemplateHeight - (Self.Width*1.8 + Subtitle1.Size*1.8 + 2 + Body1.Size*1.8)) / 2
+                                          Y: =(Parent.TemplateHeight - (Self.Size*1.8 + Subtitle1.Size*1.8 + 2 + Body1.Size*1.8)) / 2
                                     - Subtitle1:
                                         Control: Label@2.5.1
                                         Properties:
@@ -615,7 +601,7 @@ Screens:
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
-                                          Height: =Self.Width * 1.8
+                                          Height: =Self.Size * 1.8
                                           OnSelect: =Select(Parent)
                                           PaddingBottom: =0
                                           PaddingLeft: =12
@@ -635,7 +621,7 @@ Screens:
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
-                                          Height: =Self.Width * 1.8
+                                          Height: =Self.Size * 1.8
                                           OnSelect: =Select(Parent)
                                           PaddingBottom: =0
                                           PaddingLeft: =12
@@ -674,7 +660,6 @@ Screens:
                                           Width: =50
                                           X: =Parent.TemplateWidth - Self.Width - 12
                                           Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
-                                          TabIndex: =0
                                     - Separator1:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -711,7 +696,7 @@ Screens:
                               RadiusBottomRight: =0
                               RadiusTopLeft: =0
                               RadiusTopRight: =0
-                              Visible: =If(Or(deleteMode, And(App.Width = 640, !newMode, !editMode, !itemSelected)), false, true)
+                              Visible: =If(Or(deleteMode, And(App.Size = ScreenSize.Small, !newMode, !editMode, !itemSelected)), false, true)
                               Width: =0
                             Children:
                               - SelectedRecordHeaderContainer1:
@@ -748,9 +733,8 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           TabIndex: =0
-                                          Visible: =If(App.Width = 640, And(!editMode, !newMode, !deleteMode), false)
+                                          Visible: =If(App.Size = ScreenSize.Small, And(!editMode, !newMode, !deleteMode), false)
                                           Width: =50
-                                          AccessibleLabel: ="Back Icon Button1"
                                     - SelectedRecordTitle1:
                                         Control: Label@2.5.1
                                         Properties:
@@ -794,7 +778,6 @@ Screens:
                                           TabIndex: =0
                                           Visible: =Or(editMode, newMode)
                                           Width: =50
-                                          AccessibleLabel: ="Submit Form Button1"
                                     - ResetFormButton1:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -821,7 +804,6 @@ Screens:
                                           TabIndex: =0
                                           Visible: =Or(editMode, newMode)
                                           Width: =50
-                                          AccessibleLabel: ="Reset Form Button1"
                                     - EditIconButton1:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -848,7 +830,6 @@ Screens:
                                           TabIndex: =0
                                           Visible: =And(!editMode, !newMode, !deleteMode)
                                           Width: =50
-                                          AccessibleLabel: ="Edit Icon Button1"
                                     - DeleteIconButton1:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -875,7 +856,6 @@ Screens:
                                           TabIndex: =0
                                           Visible: =And(!editMode, !newMode, !deleteMode)
                                           Width: =50
-                                          AccessibleLabel: ="Delete Icon Button1"
                               - MainContainer1:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -964,7 +944,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey1.Y + DataCardKey1.Height + 5
-                                                      AccessibleLabel: ="Data Card Value1"
                                                 - ErrorMessage1:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1083,8 +1062,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey2.Y + DataCardKey2.Height + 5
-                                                      AccessibleLabel: ="Data Card Value2"
-                                                      TabIndex: =0
                                                 - ErrorMessage2:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1203,8 +1180,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey3.Y + DataCardKey3.Height + 5
-                                                      AccessibleLabel: ="Data Card Value3"
-                                                      TabIndex: =0
                                                 - ErrorMessage3:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1323,8 +1298,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey4.Y + DataCardKey4.Height + 5
-                                                      AccessibleLabel: ="Data Card Value4"
-                                                      TabIndex: =0
                                                 - ErrorMessage4:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1379,8 +1352,8 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="PlannedActivity"
                                                 Default: =ThisItem.PlannedActivity
-                                                DisplayName: ="Planned Activity"
-                                                MaxLength: =255
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,PlannedActivity)
+                                                MaxLength: =DataSourceInfo([@MonthlyReports], DataSourceInfo.MaxLength, PlannedActivity)
                                                 Required: =false
                                                 Update: =DataCardValue5.Text
                                                 Width: =458
@@ -1437,7 +1410,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey5.Y + DataCardKey5.Height + 5
-                                                      AccessibleLabel: ="Data Card Value5"
                                                 - ErrorMessage5:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1549,7 +1521,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey6.Y + DataCardKey6.Height + 5
-                                                      AccessibleLabel: ="Data Card Value6"
                                                 - ErrorMessage6:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1602,9 +1573,9 @@ Screens:
                                               IsLocked: true
                                               Properties:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
-                                                DataField: ="ReportStatus"
-                                                Default: =ThisItem.ReportStatus
-                                                DisplayName: ="Report Status"
+                                                DataField: ="Status"
+                                                Default: =ThisItem.Status
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,Status)
                                                 Required: =false
                                                 Update: =DataCardValue7.Selected
                                                 Width: =458
@@ -1655,7 +1626,7 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].ReportStatus)
+                                                      Items: =Choices([@MonthlyReports].Status)
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -1668,8 +1639,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey7.Y + DataCardKey7.Height + 5
-                                                      AccessibleLabel: ="Data Card Value7"
-                                                      TabIndex: =0
                                                 - ErrorMessage7:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1781,7 +1750,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey8.Y + DataCardKey8.Height + 5
-                                                      AccessibleLabel: ="Data Card Value8"
                                                 - ErrorMessage8:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1836,7 +1804,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="SubmittedBy_x002f_SubmissionDate"
                                                 Default: =ThisItem.SubmittedBy_x002f_SubmissionDate
-                                                DisplayName: ="Submitted By"
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,SubmittedBy_x002f_SubmissionDate)
                                                 Required: =false
                                                 Update: =DataCardValue9.Selected
                                                 Width: =458
@@ -1887,7 +1855,7 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].SubmittedBy)
+                                                      Items: =Choices([@MonthlyReports].SubmittedBy_x002f_SubmissionDate)
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -1900,8 +1868,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey9.Y + DataCardKey9.Height + 5
-                                                      AccessibleLabel: ="Data Card Value9"
-                                                      TabIndex: =0
                                                 - ErrorMessage9:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -1956,7 +1922,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="ReviewedBy_x002f_ReviewDate"
                                                 Default: =ThisItem.ReviewedBy_x002f_ReviewDate
-                                                DisplayName: ="Reviewed By"
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,ReviewedBy_x002f_ReviewDate)
                                                 Required: =false
                                                 Update: =DataCardValue10.Selected
                                                 Width: =458
@@ -2007,7 +1973,7 @@ Screens:
                                                       HoverBorderColor: =RGBA(16, 110, 190, 1)
                                                       HoverColor: =RGBA(50, 49, 48, 1)
                                                       HoverFill: =RGBA(245, 245, 245, 1)
-                                                      Items: =Choices([@MonthlyReports].ReviewedBy)
+                                                      Items: =Choices([@MonthlyReports].ReviewedBy_x002f_ReviewDate)
                                                       PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
                                                       PressedBorderColor: =RGBA(16, 110, 190, 1)
                                                       PressedColor: =RGBA(255, 255, 255, 1)
@@ -2020,8 +1986,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey10.Y + DataCardKey10.Height + 5
-                                                      AccessibleLabel: ="Data Card Value10"
-                                                      TabIndex: =0
                                                 - ErrorMessage10:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2134,7 +2098,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey11.Y + DataCardKey11.Height + 5
-                                                      AccessibleLabel: ="Data Card Value11"
                                                 - ErrorMessage11:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2356,8 +2319,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey13.Y + DataCardKey13.Height + 5
-                                                      AccessibleLabel: ="Data Card Value13"
-                                                      TabIndex: =0
                                                 - ErrorMessage13:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2465,8 +2426,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey14.Y + DataCardKey14.Height + 5
-                                                      AccessibleLabel: ="Data Card Value14"
-                                                      TabIndex: =0
                                                 - ErrorMessage14:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2521,7 +2480,7 @@ Screens:
                                                 BorderColor: =RGBA(245, 245, 245, 1)
                                                 DataField: ="ReviewDate"
                                                 Default: =ThisItem.ReviewDate
-                                                DisplayName: ="Review Date"
+                                                DisplayName: =DataSourceInfo([@MonthlyReports],DataSourceInfo.DisplayName,ReviewDate)
                                                 Required: =false
                                                 Update: =DataCardValue15.SelectedDate
                                                 Width: =458
@@ -2574,8 +2533,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey15.Y + DataCardKey15.Height + 5
-                                                      AccessibleLabel: ="Data Card Value15"
-                                                      TabIndex: =0
                                                 - ErrorMessage15:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2696,8 +2653,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey16.Y + DataCardKey16.Height + 5
-                                                      AccessibleLabel: ="Data Card Value16"
-                                                      TabIndex: =0
                                                 - ErrorMessage16:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2818,8 +2773,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey17.Y + DataCardKey17.Height + 5
-                                                      AccessibleLabel: ="Data Card Value17"
-                                                      TabIndex: =0
                                                 - ErrorMessage17:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -2932,7 +2885,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey18.Y + DataCardKey18.Height + 5
-                                                      AccessibleLabel: ="Data Card Value18"
                                                 - ErrorMessage18:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3045,7 +2997,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey19.Y + DataCardKey19.Height + 5
-                                                      AccessibleLabel: ="Data Card Value19"
                                                 - ErrorMessage19:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3267,8 +3218,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey21.Y + DataCardKey21.Height + 5
-                                                      AccessibleLabel: ="Data Card Value21"
-                                                      TabIndex: =0
                                                 - ErrorMessage21:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3389,8 +3338,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey22.Y + DataCardKey22.Height + 5
-                                                      AccessibleLabel: ="Data Card Value22"
-                                                      TabIndex: =0
                                                 - ErrorMessage22:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3509,8 +3456,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey23.Y + DataCardKey23.Height + 5
-                                                      AccessibleLabel: ="Data Card Value23"
-                                                      TabIndex: =0
                                                 - ErrorMessage23:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3629,8 +3574,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey24.Y + DataCardKey24.Height + 5
-                                                      AccessibleLabel: ="Data Card Value24"
-                                                      TabIndex: =0
                                                 - ErrorMessage24:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3743,7 +3686,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey25.Y + DataCardKey25.Height + 5
-                                                      AccessibleLabel: ="Data Card Value25"
                                                 - ErrorMessage25:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3856,7 +3798,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey26.Y + DataCardKey26.Height + 5
-                                                      AccessibleLabel: ="Data Card Value26"
                                                 - ErrorMessage26:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -3969,7 +3910,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey28.Y + DataCardKey28.Height + 5
-                                                      AccessibleLabel: ="Data Card Value28"
                                                 - ErrorMessage28:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -4082,7 +4022,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey29.Y + DataCardKey29.Height + 5
-                                                      AccessibleLabel: ="Data Card Value29"
                                                 - ErrorMessage29:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -4195,7 +4134,6 @@ Screens:
                                                       Width: =Parent.Width - 60
                                                       X: =30
                                                       Y: =DataCardKey30.Y + DataCardKey30.Height + 5
-                                                      AccessibleLabel: ="Data Card Value30"
                                                 - ErrorMessage30:
                                                     Control: Label@2.5.1
                                                     MetadataKey: ErrorMessage
@@ -4418,7 +4356,6 @@ Screens:
                                           RadiusTopLeft: =0
                                           RadiusTopRight: =0
                                           Text: ="Cancel"
-                                          TabIndex: =0
                                     - ConfirmDeleteButton1:
                                         Control: Classic/Button@2.2.0
                                         Properties:
@@ -4443,4 +4380,3 @@ Screens:
                                           RadiusTopLeft: =0
                                           RadiusTopRight: =0
                                           Text: ="Delete"
-                                          TabIndex: =0

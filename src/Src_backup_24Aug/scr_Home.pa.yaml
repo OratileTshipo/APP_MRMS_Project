@@ -40,7 +40,7 @@ Screens:
         // Role-first scope: one simple single-column filter per role so the
         // SharePoint query stays delegable (OR across columns is not delegated).
         // MonthlyReports.DirectorateLabel stores the directorate SHORT CODE
-        // (e.g. "ICTM"), so Supervisor matches on varUserDirectorateID.
+        // Supervisor/Contributor: own directorate only (full name).
         ClearCollect(
             colReportsInScope,
             Switch(
@@ -190,7 +190,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeProjects_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -214,7 +213,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -238,7 +236,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeMonthlyReports_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -262,7 +259,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeMyActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -286,7 +282,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeTrending_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -309,7 +304,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeUsers_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -333,7 +327,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeSidebarSpacer_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -369,7 +362,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - HomeSupport_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -392,7 +384,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
             - MainScreenDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -510,8 +501,9 @@ Screens:
                                     - HomeSearch_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
+                                          Color: =RGBA(100, 100, 100, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -527,8 +519,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.08
-                                          AccessibleLabel: ="Home Search"
-                                          TabIndex: =0
                                     - HomeSearchBox_txt:
                                         Control: Classic/TextInput@2.3.2
                                         Properties:
@@ -558,10 +548,10 @@ Screens:
                                           RadiusTopRight: =0
                                           Size: =15
                                           Width: =Parent.Width - HomeSearch_ico.Width - 25
-                                          AccessibleLabel: ="Home Search Box"
                               - HomeBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -580,8 +570,6 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Home Bell"
-                                    TabIndex: =0
                   - RoleBar_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -630,7 +618,13 @@ Screens:
                                     PaddingBottom: =0
                                     PaddingTop: =0
                                     Size: =18
-                                    Text: '="Good Morning," & varUserFullName '
+                                    Text: |-
+                                      =Switch(
+                                          true,
+                                          Hour(Now()) >= 5 && Hour(Now()) < 12, "Good morning, " & varUserFullName,
+                                          Hour(Now()) >= 12 && Hour(Now()) < 17, "Good day, " & varUserFullName,
+                                          "Good evening, " & varUserFullName
+                                      )
                               - CurrentDate_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -668,9 +662,8 @@ Screens:
                                             =Upper(Text(Today(),"dddd, d mmmm yyyy")) &
                                              " · " & Upper(varCurrentQuarter) & " " & Upper(varCurrentFY) & 
                                              //" · " & First(Distinct(Activities, ProgrammeLabel)).Value &
-                                             " · " & CountRows(Distinct(Directorates,DirectorateID)) &
+                                             " · " & CountRows(colDirectorates) &
                                              " DIRECTORATES REPORTING"
-                                            AccessibleLabel: ="Activity"
                                           Width: =Parent.Width
                                           X: =40
                                           Y: =40
@@ -709,7 +702,6 @@ Screens:
                                     RadiusTopRight: =8
                                     Text: ="New Monthly Report"
                                     Width: =200
-                                    AccessibleLabel: ="Button2"
                   - Filters_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -747,26 +739,22 @@ Screens:
                                     Text: ="Financial Year"
                                     Width: =Parent.Width / 6
                                     X: =FYFilter_drp.X
-                                    AccessibleLabel: ="Financial Year Filter"
                               - ProgrammeFilter_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     Text: ="Programme"
                                     Width: =Parent.Width / 6
                                     X: =ProgrammeFilter_drp.X
-                                    AccessibleLabel: ="Programme Filter"
                               - DirectorateFilter_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     Text: ="Directorate"
                                     Width: =Parent.Width / 6
-                                    AccessibleLabel: ="Directorate Filter"
                               - QuarterFilter_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     Text: ="Quarter"
                                     Width: =Parent.Width / 6
-                                    AccessibleLabel: ="Quarter Filter"
                               - placeholder_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: ManualLayout
@@ -783,7 +771,6 @@ Screens:
                                           Text: =
                                           X: =40
                                           Y: =6
-                                          AccessibleLabel: ="Text1"
                         - DropFilters_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -865,12 +852,12 @@ Screens:
                                               Directorates,
                                               Filter(Directorates, Programme.Value = varFilterProgramme)
                                           ),
-                                          Filter(Directorates, DirectorateName = varUserDirectorate)
+                                          Filter(Directorates, Title = varUserDirectorate)
                                       )
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: |-
-                                      =Set(varFilterDirectorate, drp_DirectorateFilter.Selected.DirectorateName);
+                                      =Set(varFilterDirectorate, drp_DirectorateFilter.Selected.Title);
                                       Set(varFilterProgramme, 
                                           If(
                                               varUserRole in ["Administrator", "DeputyDirectorME"],
@@ -910,15 +897,14 @@ Screens:
                                           Reset(ProgrammeFilter_drp);
                                           Reset(drp_DirectorateFilter);
                                           Reset(drp_QuarterFilter);
-                                          // Search box in app header
+                                          // Search box now lives in the cmp_AppHeader component
                                           Reset(HomeSearchBox_txt)
 
                                           */
-
                                       Set(varFilterFY, "All");
                                       Set(varFilterProgramme, "All");
                                       Set(varFilterDirectorate, "All");
-                                      Set(varFilterDirectorateID, "All");
+                                      //Set(varFilterDirectorateID, "All");
                                       Set(varFilterQuarter, "All");
                                       Set(varHomeFilter, "All");
                                       Reset(FYFilter_drp);
@@ -932,7 +918,6 @@ Screens:
                                     RadiusTopRight: =8
                                     Text: ="Clear Filters"
                                     Width: =Parent.Width / 6
-                                    AccessibleLabel: ="Clear Filters"
                   - Cards_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -1009,7 +994,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="TOTAL REPORTS"
-                                          AccessibleLabel: ="All Reports Title"
                                     - AllReportsCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1035,7 +1019,6 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, (varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
                                     - AllReportsSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1045,8 +1028,15 @@ Screens:
                                           PaddingBottom: =0
                                           PaddingTop: =0
                                           Size: =12
-                                          Text: ="Across 4 Programmes"
-                                          AccessibleLabel: ="All Reports Subtitle"
+                                          Text: |-
+                                            =Switch(
+                                                varUserRole,
+                                                "Administrator", "Across all programmes",
+                                                "DeputyDirectorME", "Across all programmes",
+                                                "ProgrammeManager", "Across " & varUserProgramme,
+                                                // Default (Supervisor / Contributor) — scoped to directorate
+                                                "Across " & varUserDirectorate
+                                            )
                         - PendingReviewCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -1110,7 +1100,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="PENDING REVIEW"
-                                          AccessibleLabel: ="Pending Title"
                                     - PendingCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1140,7 +1129,6 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, ReportStatus.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
                                     - PendingSubtitile_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1153,7 +1141,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="Awaiting M&E sign-off"
-                                          AccessibleLabel: ="Pending Subtitile"
                         - ApprovedCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -1218,7 +1205,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="APPROVED"
-                                          AccessibleLabel: ="Approved Title"
                                     - ApprovedCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1247,8 +1233,7 @@ Screens:
                                             )
                                             */
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="M&E Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                     - ApprovedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1262,7 +1247,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="View approved reports →"
-                                          AccessibleLabel: ="Approved Subtitle"
                         - RejectedCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -1326,7 +1310,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="REJECTED"
-                                          AccessibleLabel: ="Rejected Title"
                                     - RejectedCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1358,7 +1341,6 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, ReportStatus.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
                                     - RejectedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1371,7 +1353,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="Returned for correction"
-                                          AccessibleLabel: ="Rejected Subtitle"
                         - OverdueCard_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -1435,7 +1416,6 @@ Screens:
                                           PaddingTop: =0
                                           Size: =12
                                           Text: ="OVERDUE"
-                                          AccessibleLabel: ="Overdue Title"
                                     - OverdueCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1466,7 +1446,6 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, IsOverdue,(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
                                     - OverdueSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1496,7 +1475,7 @@ Screens:
                                                         IsOverdue = true,
                                                         (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                         (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                                        (varFilterDirectorateID = "All" || DirectorateLabel = varFilterDirectorateID),
+                                                        (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
                                                         (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                                     )
                                                 },
@@ -1568,7 +1547,6 @@ Screens:
                                                     )
                                                 )
                                             )
-                                          AccessibleLabel: ="Overdue Subtitle"
 
                   - HomeMiddle_con:
                       Control: GroupContainer@1.5.0
@@ -1636,7 +1614,6 @@ Screens:
                                           Size: =20
                                           Text: ="Monthly Submission Trend"
                                           Width: =Parent.Width * .5
-                                          AccessibleLabel: ="Chart Label"
                                     - ViewReportsDashboard_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1646,7 +1623,6 @@ Screens:
                                           OnSelect: =Navigate(scr_Reports, ScreenTransition.Fade)
                                           Text: ="View Reports Dashboard"
                                           Width: =Parent.Width * .3
-                                          AccessibleLabel: ="View Reports Dashboard"
                                     - ViewReportsDash_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -1668,8 +1644,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.05
-                                          AccessibleLabel: ="View Reports Dash"
-                                          TabIndex: =0
                               - MonthlyTrend_gal:
                                   Control: Gallery@2.15.0
                                   Variant: BrowseLayout_Horizontal_TwoTextOneImageVariant_ver5.0
@@ -1679,50 +1653,62 @@ Screens:
                                     Height: =Parent.Height
                                     Items: |-
                                       =// MonthlyTrend_gal.Items — 12-month submissions trend.
-                                      // Builds one row per month of the financial year (Apr→Mar) by filtering
-                                      // the already-collected colActivities (local execution, no delegation limits).
-                                      ForAll(
-                                          Sequence(12, 0, 1) As MonthOffset,
-                                          With(
-                                              { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
+                                      // OPTIMISED: pre-filter activities and reports ONCE (was repeated
+                                      // 12× inside the ForAll).  The outer With() computes two small
+                                      // in-memory collections; each monthly iteration only slices by
+                                      // month, which is a fast in-memory filter.
+                                      With(
+                                          {
+                                              baseActivities: Filter(
+                                                  colActivities,
+                                                  (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                  (
+                                                      IsBlank(HomeSearchBox_txt.Text)
+                                                      || Lower(HomeSearchBox_txt.Text) in Lower(Title)
+                                                      || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
+                                                  )
+                                              ),
+                                              baseReports: Filter(
+                                                  colReportsInScope,
+                                                  (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
+                                                  (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
+                                                  (varHomeFilter = "All"
+                                                      || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
+                                                      || (varHomeFilter = "Overdue" && IsOverdue = true)
+                                                      || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
+                                                      || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
+                                                  )
+                                              )
+                                          },
+                                          ForAll(
+                                              Sequence(12, 0, 1) As MonthOffset,
                                               With(
-                                                  {
-                                                      monthName: Text(monthAnchor, "mmmm"),
-                                                      dueThisMonth: Filter(
-                                                          colActivities,
-                                                          Month(EndDate) = Month(monthAnchor),
-                                                          Year(EndDate) = Year(monthAnchor),
-                                                          (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
-                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
-                                                          (
-                                                              IsBlank(HomeSearchBox_txt.Text)
-                                                              || Lower(HomeSearchBox_txt.Text) in Lower(ActivityID)
-                                                              || Lower(HomeSearchBox_txt.Text) in Lower('ActivityDescription ')
-                                                          )
-                                                      )
-                                                  },
+                                                  { monthAnchor: DateAdd(Date(Year(Today()),4,1), MonthOffset.Value, TimeUnit.Months) },
                                                   With(
                                                       {
-                                                          reportsForDueActivities: Filter(
-                                                              colReportsInScope,
-                                                              !IsBlank(LookUp(dueThisMonth, ID = Activity.Id)),
-                                                              (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
-                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
-                                                              (varHomeFilter = "All"
-                                                                  || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
-                                                                  || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                                                  || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
-                                                                  || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
-                                                              )
+                                                          monthName: Text(monthAnchor, "mmmm"),
+                                                          dueThisMonth: Filter(
+                                                              baseActivities,
+                                                              Month(EndDate) = Month(monthAnchor),
+                                                              Year(EndDate) = Year(monthAnchor)
                                                           )
                                                       },
-                                                      {
-                                                          MonthName: monthName,
-                                                          TotalActivities: CountRows(dueThisMonth),
-                                                          OnTimeCount: CountRows(Filter(reportsForDueActivities, SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
-                                                          LateCount: CountRows(Filter(reportsForDueActivities, SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
-                                                          OutstandingCount: Max(0, CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id)))
-                                                      }
+                                                      With(
+                                                          {
+                                                              reportsForDueActivities: Filter(
+                                                                  baseReports,
+                                                                  !IsBlank(LookUp(dueThisMonth, ID = Activity.Id))
+                                                              )
+                                                          },
+                                                          {
+                                                              MonthName: monthName,
+                                                              TotalActivities: CountRows(dueThisMonth),
+                                                              OnTimeCount: CountRows(Filter(reportsForDueActivities, SubmissionDate <= LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                              LateCount: CountRows(Filter(reportsForDueActivities, SubmissionDate > LookUp(dueThisMonth, ID = Activity.Id, DueDate))),
+                                                              OutstandingCount: Max(0, CountRows(dueThisMonth) - CountRows(Distinct(reportsForDueActivities, Activity.Id)))
+                                                          }
+                                                      )
                                                   )
                                               )
                                           )
@@ -1736,13 +1722,13 @@ Screens:
                                     - MonthName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.MonthName & " month"
                                           Align: =Align.Center
                                           AutoHeight: =true
                                           Text: =ThisItem.MonthName
                                           Width: =Parent.TemplateWidth - 16
                                           X: =OnTime_rect.X
                                           Y: =Parent.TemplateHeight -30
-                                          AccessibleLabel: ="Month Name"
                                     - Rectangle3:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -1797,7 +1783,6 @@ Screens:
                                           Width: =Outstanding_rect.Width
                                           X: =Outstanding_rect.X
                                           Y: =Outstanding_rect.Y - 25
-                                          AccessibleLabel: ="Outstanding Count"
                                     - Late_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -1816,13 +1801,13 @@ Screens:
                                     - LateCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.LateCount & " late activities"
                                           Align: =Align.Center
                                           Size: =12
                                           Text: =ThisItem.LateCount
                                           Width: =Late_rect.Width
                                           X: =Late_rect.X
                                           Y: =Late_rect.Y - 25
-                                          AccessibleLabel: ="Late Count"
                                     - OnTime_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -1841,13 +1826,13 @@ Screens:
                                     - OnTimeCount_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.OnTimeCount & " on-time activities"
                                           Align: =Align.Center
                                           Size: =12
                                           Text: =ThisItem.OnTimeCount
                                           Width: =OnTime_rect.Width
                                           X: =OnTime_rect.X
                                           Y: =OnTime_rect.Y - 25 // sits just above the bar's top edge
-                                          AccessibleLabel: ="On Time Count"
                               - Legend_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -1889,7 +1874,6 @@ Screens:
                                           Size: =12
                                           Text: ="Submitted"
                                           Width: =Parent.Width / 6
-                                          AccessibleLabel: ="Legend On Time"
                                     - LegendLate_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -1913,7 +1897,6 @@ Screens:
                                           Size: =12
                                           Text: ="Late"
                                           Width: =Parent.Width / 6
-                                          AccessibleLabel: ="Legend Late"
                                     - LegendOutstanding_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -1937,7 +1920,6 @@ Screens:
                                           Size: =12
                                           Text: ="Outstanding"
                                           Width: =Parent.Width / 6
-                                          AccessibleLabel: ="Legend Outstanding"
                         - ProgrammeProgress_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -2032,8 +2014,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.05
-                                          AccessibleLabel: ="All Programmes"
-                                          TabIndex: =0
                               - ProgrammeProgress_gal:
                                   Control: Gallery@2.15.0
                                   Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
@@ -2041,59 +2021,56 @@ Screens:
                                     BorderColor: =RGBA(245, 245, 245, 1)
                                     Items: |-
                                       =// ProgrammeProgress_gal.Items — progress per programme for the effective FY.
-                                      // Groups the collected colActivities by ProgrammeLabel and aggregates
-                                      // % complete from the associated monthly reports.
+                                      // OPTIMISED: pre-filter activities and reports ONCE (was repeated
+                                      // per-programme inside the ForAll).  The outer With() computes three
+                                      // small in-memory collections; each programme iteration only slices
+                                      // by ProgrammeLabel, which is a fast in-memory filter.
                                       With(
-                                          { effectiveFY: If(varFilterFY = "All", varCurrentFY, varFilterFY) },
+                                          {
+                                              baseActivities: Filter(
+                                                  colActivities,
+                                                  (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                              ),
+                                              baseReportsFY: Filter(
+                                                  colReportsInScope,
+                                                  'FinancialYear '.Value = If(varFilterFY = "All", varCurrentFY, varFilterFY),
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
+                                                  (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
+                                              ),
+                                              baseReportsMonth: Filter(
+                                                  colReportsInScope,
+                                                  'FinancialYear '.Value = If(varFilterFY = "All", varCurrentFY, varFilterFY),
+                                                  ReportingMonth.Value = varCurrentMonth,
+                                                  (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
+                                              )
+                                          },
                                           ForAll(
-                                              Distinct(
-                                                  Filter(colActivities, (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme)),
-                                                  ProgrammeLabel
-                                              ) As Prog,
+                                              Distinct(baseActivities, ProgrammeLabel) As Prog,
                                               With(
                                                   {
                                                       progName: Prog.Value,
-                                                      progActivities: Filter(
-                                                          colActivities,
-                                                          ProgrammeLabel = Prog.Value,
-                                                          (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
-                                                      )
+                                                      progActivities: Filter(baseActivities, ProgrammeLabel = Prog.Value),
+                                                      progReportsFY: Filter(baseReportsFY, ProgrammeLabel = Prog.Value),
+                                                      progReportsMonth: Filter(baseReportsMonth, ProgrammeLabel = Prog.Value)
                                                   },
-                                                  With(
-                                                      {
-                                                          progReportsFY: Filter(
-                                                              colReportsInScope,
-                                                              ProgrammeLabel = Prog.Value,
-                                                              'FinancialYear '.Value = effectiveFY,
-                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
-                                                              (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
-                                                          ),
-                                                          progReportsThisMonth: Filter(
-                                                              colReportsInScope,
-                                                              ProgrammeLabel = Prog.Value,
-                                                              'FinancialYear '.Value = effectiveFY,
-                                                              ReportingMonth.Value = varCurrentMonth,
-                                                              (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate)
-                                                          )
-                                                      },
-                                                      {
-                                                          ProgrammeName: progName,
-                                                          TotalActivities: CountRows(progActivities),
-                                                          MonthlyReportedCount: CountRows(Distinct(progReportsThisMonth, Activity.Id)),
-                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                          MonthlyReportingRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          MonthlyApprovalRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          FYCumulativeRate:
-                                                              If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
-                                                          FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
-                                                      }
-                                                  )
+                                                  {
+                                                      ProgrammeName: progName,
+                                                      TotalActivities: CountRows(progActivities),
+                                                      MonthlyReportedCount: CountRows(Distinct(progReportsMonth, Activity.Id)),
+                                                      MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                      FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                      MonthlyReportingRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(progReportsMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      MonthlyApprovalRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      FYCumulativeRate:
+                                                          If(CountRows(progActivities) = 0, 0,
+                                                              RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                      FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
+                                                  }
                                               )
                                           )
                                       )
@@ -2116,7 +2093,6 @@ Screens:
                                           VerticalAlign: =VerticalAlign.Top
                                           Width: =250
                                           Y: =FYTrack_rect.Y + FYTrack_rect.Height
-                                          AccessibleLabel: ="Meta"
                                     - NextArrow_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -2136,7 +2112,6 @@ Screens:
                                           Width: =50
                                           X: =Parent.TemplateWidth - Self.Width - 12
                                           Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
-                                          TabIndex: =0
                                     - Separator_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2156,9 +2131,7 @@ Screens:
                                           PaddingTop: =0
                                           Text: |-
                                             ="FY Progress: " & ThisItem.FYCumulativeRate & "%"
-                                            AccessibleLabel: ="Activity"
                                           Y: |-
-                                          AccessibleLabel: ="FYPct"
                                             =//lbl_ProgrammeName.Y + lbl_ProgrammeName.Height
                                             MonthlyTrack_rect.Y + MonthlyTrack_rect.Height
                                     - FYTrack_rect:
@@ -2233,7 +2206,7 @@ Screens:
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
-                                          Height: =Self.Width * 1.8
+                                          Height: =Self.Size * 1.8
                                           OnSelect: =Select(Parent)
                                           PaddingBottom: =0
                                           PaddingLeft: =12
@@ -2242,7 +2215,6 @@ Screens:
                                           Size: =12
                                           Text: |-
                                             ="Monthly: " & ThisItem.MonthlyReportingRate & "% reported · " & ThisItem.MonthlyApprovalRate & "% approved"
-                                            AccessibleLabel: ="Activity"
                                           VerticalAlign: =VerticalAlign.Top
                                           Width: =ProgrammeName_lbl.Width
                                           X: =ProgrammeName_lbl.X
@@ -2255,7 +2227,7 @@ Screens:
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =If(ThisItem.IsSelected, FontWeight.Semibold, FontWeight.Normal)
-                                          Height: =Self.Width * 1.8
+                                          Height: =Self.Size * 1.8
                                           OnSelect: =Select(Parent)
                                           PaddingBottom: =0
                                           PaddingLeft: =12
@@ -2329,9 +2301,7 @@ Screens:
                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                           )
                                       ) & " reports flagged for attention"
-                                      AccessibleLabel: ="Activity"
                                     Visible: |-
-                                    AccessibleLabel: ="Warning Text"
                                       =//If(CountRows(colFlaggedItems) > 0, true,false)
 
                                       CountRows(
@@ -2368,7 +2338,6 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Text: ="Recent Submissions"
-                                          AccessibleLabel: ="Recent Submissions"
                                     - Spacer_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -2389,7 +2358,6 @@ Screens:
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Text: ="View All Reports"
-                                          AccessibleLabel: ="View All Reports"
                                     - ViewAllReports_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -2411,8 +2379,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.03
-                                          AccessibleLabel: ="View All Reports"
-                                          TabIndex: =0
                         - GalleryColumnHeaders_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -2444,7 +2410,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =0
                                     Text: ="PROJECT"
-                                    AccessibleLabel: ="Gal Hdr Project"
                               - GalHdrReportName_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
@@ -2455,7 +2420,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =10
                                     Text: ="REPORT"
-                                    AccessibleLabel: ="Gal Hdr Report Name"
                               - Rectangle2_2:
                                   Control: Rectangle@2.3.0
                                   Properties:
@@ -2481,7 +2445,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =0
                                     Text: ="DIRECTORATE"
-                                    AccessibleLabel: ="Gal Hdr Directorate"
                               - Rectangle2_4:
                                   Control: Rectangle@2.3.0
                                   Properties:
@@ -2507,7 +2470,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =10
                                     Text: ="ACTIVITY"
-                                    AccessibleLabel: ="Gal Hdr Activity"
                               - Rectangle2_3:
                                   Control: Rectangle@2.3.0
                                   Properties:
@@ -2533,7 +2495,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =10
                                     Text: ="SUBMITTED BY"
-                                    AccessibleLabel: ="Gal Hdr Submitted By"
                               - Rectangle2_5:
                                   Control: Rectangle@2.3.0
                                   Properties:
@@ -2559,7 +2520,6 @@ Screens:
                                     LayoutMinWidth: =16
                                     PaddingLeft: =10
                                     Text: ="STATUS"
-                                    AccessibleLabel: ="Gal Hrd Status"
                         - MonthlyReport_gal:
                             Control: Gallery@2.15.0
                             Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
@@ -2627,7 +2587,6 @@ Screens:
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
                               TemplateSize: =90
-                              Width: =Parent.Width
                             Children:
                               - Image4_1:
                                   Control: Image@2.2.3
@@ -2673,21 +2632,21 @@ Screens:
                                     - ProjectName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.Project.Value & " project"
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           PaddingLeft: =0
                                           Text: =ThisItem.Project.Value
-                                          AccessibleLabel: ="Project Name"
                                     - ReportName_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.Title
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           PaddingLeft: =0
                                           Text: =ThisItem.Title
-                                          AccessibleLabel: ="Report Name"
                                     - Rectangle2_7:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2706,12 +2665,12 @@ Screens:
                                     - Directorate_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
+                                          AccessibleLabel: =ThisItem.DirectorateLabel & " directorate"
                                           AutoHeight: =true
                                           FillPortions: =1
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
                                           Text: =ThisItem.DirectorateLabel
-                                          AccessibleLabel: ="Directorate"
                                     - Rectangle2_1:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2736,8 +2695,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Text: |-
                                             =ThisItem.'Activity: ActivityShortDescription'.Value
-                                            AccessibleLabel: ="Activity"
-                                          AccessibleLabel: ="Activity"
                                     - Rectangle2:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2763,7 +2720,6 @@ Screens:
                                           Text: |-
                                             =//ThisItem.SubmittedBy_x002f_SubmissionDate.DisplayName
                                             ThisItem.SubmittedBy.DisplayName
-                                            AccessibleLabel: ="Activity"
                                     - Rectangle2_8:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2811,7 +2767,6 @@ Screens:
                                           RadiusTopLeft: =10
                                           RadiusTopRight: =10
                                           Text: =ThisItem.ReportStatus.Value
-                                          AccessibleLabel: ="Status"
                                     - Rectangle2_9:
                                         Control: Rectangle@2.3.0
                                         Properties:

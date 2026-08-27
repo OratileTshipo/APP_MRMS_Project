@@ -24,15 +24,18 @@ Screens:
         Set(varProjectFilterStatus, "All");
         Set(varDirFilterResetKey, 0);
 
-        // Scoped Projects list — role-first split keeps each branch a simple
-        // single-column delegable filter (SharePoint does not delegate OR across
-        // columns). Projects.Directorate is a Lookup; .Value is the full name.
-        ClearCollect(
-            colProjectsInScope,
-            If(
-                varCanViewAllReports,
-                Projects,
-                Filter(Projects, Directorate.Value = varUserDirectorateID)
+        // Scoped Projects list — role-first split.
+        // NOTE: Projects.Directorate is a Lookup column; SharePoint does NOT
+        // delegate filtering on Lookup.Value.  We therefore collect ALL projects
+        // first (delegable — no column filter), then narrow in-memory for
+        // non-admin users where the Lookup.Value comparison works fine.
+        ClearCollect(colProjectsInScope, Projects);
+
+        If(
+            Not(varCanViewAllReports),
+            ClearCollect(
+                colProjectsInScope,
+                Filter(colProjectsInScope, Directorate.Value = varUserDirectorate)
             )
         );
 
@@ -100,7 +103,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Projects_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -124,7 +126,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Activities_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -148,7 +149,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - MonthlyReports_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -172,7 +172,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Activitiessds_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -196,7 +195,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Trending_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -219,7 +217,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Users_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -243,7 +240,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - SidebarSpacer_con_1:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -279,7 +275,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
                   - Support_ico_1:
                       Control: Classic/Icon@2.5.0
                       Properties:
@@ -302,7 +297,6 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
             - ProjectsMainScreen_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -419,8 +413,9 @@ Screens:
                                     - Search_ico_2:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
+                                          AccessibleLabel: ="Search"
                                           BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(153, 153, 153, 1)
+                                          Color: =RGBA(100, 100, 100, 1)
                                           DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                           DisabledColor: =RGBA(225, 223, 221, 1)
                                           DisabledFill: =RGBA(0, 0, 0, 0)
@@ -436,8 +431,6 @@ Screens:
                                           PressedColor: =RGBA(16, 110, 190, 1)
                                           PressedFill: =RGBA(0, 0, 0, 0)
                                           Width: =Parent.Width * 0.08
-                                          AccessibleLabel: ="Search_2"
-                                          TabIndex: =0
                                     - SearchBox_txt_2:
                                         Control: Classic/TextInput@2.3.2
                                         Properties:
@@ -468,10 +461,10 @@ Screens:
                                           RadiusTopRight: =0
                                           Size: =15
                                           Width: =Parent.Width - Search_ico_2.Width - 25
-                                          AccessibleLabel: ="Search Box_2"
                               - HomeBell_ico_2:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
+                                    AccessibleLabel: ="Notifications"
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     Color: =RGBA(0, 120, 212, 1)
                                     DisabledBorderColor: =RGBA(245, 245, 245, 1)
@@ -485,13 +478,11 @@ Screens:
                                     Icon: =Icon.Bell
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    OnSelect: =
                                     PressedBorderColor: =RGBA(0, 0, 0, 0)
                                     PressedColor: =RGBA(16, 110, 190, 1)
                                     PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Home Bell_2"
-                                    TabIndex: =0
                   - ProjectScreen_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
@@ -549,7 +540,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Size: =18
                                           Text: ="Priorities"
-                                          AccessibleLabel: ="Project List Title"
                                     - AddNew_btn:
                                         Control: ModernButton@1.0.0
                                         Properties:
@@ -564,9 +554,7 @@ Screens:
                                           RadiusTopLeft: =8
                                           RadiusTopRight: =8
                                           Text: ="New Project"
-                                          Visible: =varMode = "View" && !IsBlank(varSelectedActivity) && (varUserRole = "Administrator" || varUserRole = "DeputyDirectorME")
                                           Width: =160
-                                          AccessibleLabel: ="Add New"
                               - ProjectFilter_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -727,12 +715,11 @@ Screens:
                                               && (
                                                   IsBlank(SearchBox_txt_2.Text)
                                                   || Lower(SearchBox_txt_2.Text) in Lower(ProjectID)
-                                                  //|| Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription)
+                                                  || Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription)
                                                   || Lower(SearchBox_txt_2.Text) in Lower(Reference)
                                               )
                                           )
                                       ) & " projects"
-                                      AccessibleLabel: ="Activity"
                               - PrjGallery_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -773,7 +760,7 @@ Screens:
                                                 (
                                                     IsBlank(SearchBox_txt_2.Text) ||
                                                     Lower(SearchBox_txt_2.Text) in Lower(ProjectID) ||
-                                                   // Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription) ||
+                                                    Lower(SearchBox_txt_2.Text) in Lower(ProjectGoalDescription) ||
                                                     Lower(SearchBox_txt_2.Text) in Lower(Reference)
                                                 )
                                             )
@@ -789,7 +776,7 @@ Screens:
                                               Control: ModernText@1.0.0
                                               Properties:
                                                 Color: =RGBA(0, 0, 0, 1)
-                                                FontWeight: =FontWeight.Semibold
+                                                FontWeight: =FontWeight.Bold
                                                 Height: =Project_gal_2.TemplateHeight / 1.5
                                                 OnSelect: =Select(Parent)
                                                 PaddingBottom: =0
@@ -799,7 +786,6 @@ Screens:
                                                 Width: =Parent.Width * .9
                                                 X: =1
                                                 Y: =2
-                                                AccessibleLabel: ="Prj Row Title_2"
                                           - PrjRowStatus_rec_2:
                                               Control: Rectangle@2.3.0
                                               Properties:
@@ -818,7 +804,7 @@ Screens:
                                                 FocusedBorderThickness: =4
                                                 Height: =Project_gal_2.TemplateHeight * .7
                                                 HoverFill: =RGBA(0, 120, 212, 1)
-                                                OnSelect: =
+                                                OnSelect: =Select(Parent)
                                                 PressedFill: =RGBA(0, 120, 212, 1)
                                                 Width: =6
                                                 Y: =15
@@ -831,7 +817,6 @@ Screens:
                                                 Width: =60
                                                 X: =250
                                                 Y: =Project_gal_2.TemplateHeight / 2.8
-                                                AccessibleLabel: ="Prj Row FY_2"
                                           - PrjRowStatus_lbl_2:
                                               Control: ModernText@1.0.0
                                               Properties:
@@ -841,14 +826,13 @@ Screens:
                                                 Size: =11.5
                                                 Text: =ThisItem.Status.Value
                                                 Width: =70
-                                                X: =350
                                                 Y: =PrjRowFY_lbl_2.Y
-                                                AccessibleLabel: ="Prj Row Status_2"
                                           - PrjRowChevron_ico_2:
                                               Control: Classic/Icon@2.5.0
                                               Properties:
+                                                AccessibleLabel: ="View project details"
                                                 BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(204, 204, 204, 1)
+                                                Color: =RGBA(100, 100, 100, 1)
                                                 DisabledBorderColor: =RGBA(245, 245, 245, 1)
                                                 DisabledColor: =RGBA(225, 223, 221, 1)
                                                 DisabledFill: =RGBA(0, 0, 0, 0)
@@ -865,8 +849,6 @@ Screens:
                                                 Width: =20
                                                 X: =300
                                                 Y: =PrjRowFY_lbl_2.Y
-                                                AccessibleLabel: ="Prj Row Chevron_2"
-                                                TabIndex: =0
                                           - PrjRowMeta_lbl_2:
                                               Control: ModernText@1.0.0
                                               Properties:
@@ -879,7 +861,6 @@ Screens:
                                                 Width: =Parent.Width * .9
                                                 X: =1
                                                 Y: =PrjRowTitle_lbl_2.Y + PrjRowTitle_lbl_2.Height
-                                                AccessibleLabel: ="Prj Row Meta_2"
                         - ProjectForm_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
@@ -936,10 +917,8 @@ Screens:
                                                       "New Project",
                                                       "Priority: " & varSelectedProject.ProjectID & " - " & varSelectedProject.PriorityChallenge
                                                   )
-                                                  AccessibleLabel: ="Activity"
                                                 X: =40
                                                 Y: =40
-                                                AccessibleLabel: ="Form Title"
                                           - Cancel_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
@@ -989,7 +968,6 @@ Screens:
                                                 Text: ="Cancel"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                                AccessibleLabel: ="Cancel"
                                           - Save_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
@@ -1042,7 +1020,6 @@ Screens:
                                                           Filter(
                                                               Projects,
                                                               varCanViewAllReports
-                                                                  || Directorate.Value = varUserDirectorateID
                                                                   || Directorate.Value = varUserDirectorate
                                                           )
                                                       );
@@ -1054,7 +1031,7 @@ Screens:
                                                   // Save_btn.OnSelect — validates every required field, then inserts or
                                                   // updates the Projects record and refreshes the scoped list.
                                                   If(
-                                                      IsBlank(PriorityChallenge_txt.Text) 
+                                                      IsBlank(PriorityChallenge_txt.Text) || IsBlank(ProjectGoalDescription_txt.Text)
                                                       || IsBlank(KeyDeliverable_txt.Text) || IsBlank(AnnualTarget_txt.Text) || IsBlank(Reference_txt.Text)
                                                       || IsBlank(Budget_txt.Text) || IsBlank(ProjectProgramme_drp.Selected)
                                                       || IsBlank(ProjectDirectorate_drp.Selected)
@@ -1063,14 +1040,20 @@ Screens:
 
                                                       Notify("All fields are required before saving.", NotificationType.Error),
 
+                                                      // Auto-generate ProjectID: {DirectorateID}-PJ-{next sequential}
+                                                      Set(varProjDirID, Coalesce(ProjectDirectorate_drp.Selected.DirectorateID, "GEN"));
+                                                      Set(varProjNextSeq, 1 + CountRows(Filter(colProjectsInScope, StartsWith(Title, varProjDirID & "-PJ-"))));
+                                                      Set(varNewProjectID, varProjDirID & "-PJ-" & Text(varProjNextSeq, "0000"));
+
                                                       Set(
                                                           varSelectedProject,
                                                           Patch(
                                                               Projects,
                                                               If(varMode = "New", Defaults(Projects), varSelectedProject),
                                                               {
+                                                                  Title: varNewProjectID,
                                                                   PriorityChallenge: PriorityChallenge_txt.Text,
-                                                                  //ProjectGoalDescription: ProjectGoalDescription_txt.Text,
+                                                                  ProjectGoalDescription: ProjectGoalDescription_txt.Text,
                                                                   KeyDeliverable: KeyDeliverable_txt.Text,
                                                                   AnnualTarget: AnnualTarget_txt.Text,
                                                                   Reference: Reference_txt.Text,
@@ -1093,7 +1076,6 @@ Screens:
                                                           Filter(
                                                               Projects,
                                                               varCanViewAllReports
-                                                              || Directorate.Value = varUserDirectorateID
                                                               || Directorate.Value = varUserDirectorate
                                                           )
                                                       );
@@ -1133,7 +1115,6 @@ Screens:
                                                 Text: ="Save"
                                                 Visible: =varMode = "Edit" || varMode = "New"
                                                 Width: =110
-                                                AccessibleLabel: ="Save"
                                           - Edit_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
@@ -1150,11 +1131,10 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Text: ="Edit"
-                                                Visible: =varMode = "View" && !IsBlank(varSelectedActivity) && (varUserRole = "Administrator" || varUserRole = "DeputyDirectorME")
+                                                Visible: =varMode = "View" && !IsBlank(varSelectedProject)
                                                 Width: =110
                                                 X: =40
                                                 Y: =40
-                                                AccessibleLabel: ="Edit"
                               - FormFields_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -1193,7 +1173,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="PRIORITY / CHALLENGE *"
-                                                AccessibleLabel: ="Priority Challenge"
                                           - PriorityChallenge_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
@@ -1211,7 +1190,6 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: '=Parent.Width '
-                                                AccessibleLabel: ="Priority Challenge"
                                     - ProjectGoalDescription_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1219,7 +1197,6 @@ Screens:
                                           DropShadow: =DropShadow.None
                                           LayoutDirection: =LayoutDirection.Vertical
                                           LayoutGap: =4
-                                          Visible: =false
                                           Width: =Parent.Width
                                         Children:
                                           - ProjectGoalDescription_lbl:
@@ -1233,13 +1210,12 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="PROJECT GOAL DESCRIPTION *"
-                                                AccessibleLabel: ="Project Goal Description"
                                           - ProjectGoalDescription_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Center
                                                 BorderColor: =RGBA(225, 223, 221, 1)
-                                                Default: =If(varMode = "New", "", varSelectedProject.PriorityChallenge)
+                                                Default: =If(varMode = "New", "", varSelectedProject.ProjectGoalDescription)
                                                 DisplayMode: =If(varMode = "View", DisplayMode.View, DisplayMode.Edit)
                                                 Font: =Font.'Segoe UI'
                                                 Height: =70
@@ -1251,7 +1227,6 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: '=Parent.Width '
-                                                AccessibleLabel: ="Project Goal Description"
                                     - KeyDeliverable_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1271,7 +1246,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="KEY DELIVERABLE *"
-                                                AccessibleLabel: ="Key Deliverable"
                                           - KeyDeliverable_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
@@ -1288,7 +1262,6 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Key Deliverable"
                                     - AnnualTarget_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1308,7 +1281,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="ANNUAL TARGET *"
-                                                AccessibleLabel: ="Annual Target"
                                           - AnnualTarget_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
@@ -1321,7 +1293,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Mode: =TextMode.MultiLine
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Annual Target"
                                     - Reference_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1341,7 +1312,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="REFERENCE *"
-                                                AccessibleLabel: ="Reference"
                                           - Reference_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
@@ -1356,7 +1326,6 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Reference"
                                     - Budget_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1376,7 +1345,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="BUDGET (R) *"
-                                                AccessibleLabel: ="Budget"
                                           - Budget_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
@@ -1392,7 +1360,6 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Budget"
                                     - ProjectDirectorate_field_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1412,7 +1379,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="PROGRAMME *"
-                                                AccessibleLabel: ="Project Programme"
                                           - ProjectProgramme_drp:
                                               Control: ModernDropdown@1.0.2
                                               Properties:
@@ -1455,7 +1421,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="DIRECTORATE (inherited from Programme)"
-                                                AccessibleLabel: ="Project Programme_hdr"
                                           - ProjectDirectorate_drp:
                                               Control: ModernDropdown@1.0.2
                                               Properties:
@@ -1496,7 +1461,6 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="RESPONSIBILITY (ACCOUNTABLE PERSON) *"
-                                                AccessibleLabel: ="Responsibility"
                                           - Responsibility_cmb:
                                               Control: ModernCombobox@1.1.1
                                               Properties:
@@ -1533,7 +1497,6 @@ Screens:
                                                 RadiusTopRight: =8
                                                 SelectMultiple: =false
                                                 Width: =Parent.Width
-                                                AccessibleLabel: ="Responsibility"
                                     - ProjectDates_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1562,7 +1525,6 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="START DATE *"
-                                                      AccessibleLabel: ="Project Start Date"
                                                 - ProjectStartDate_pkr:
                                                     Control: ModernDatePicker@1.0.1
                                                     Properties:
@@ -1576,7 +1538,6 @@ Screens:
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
                                                       Width: =Parent.Width
-                                                      AccessibleLabel: ="Project Start Date_pkr"
                                           - ProjectCompletionDate_field_con:
                                               Control: GroupContainer@1.5.0
                                               Variant: AutoLayout
@@ -1596,7 +1557,6 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="COMPLETION DATE *"
-                                                      AccessibleLabel: ="Project Completion Date"
                                                 - ProjectCompletionDate_pkr:
                                                     Control: ModernDatePicker@1.0.1
                                                     Properties:
@@ -1614,7 +1574,6 @@ Screens:
                                                       RadiusTopLeft: =8
                                                       RadiusTopRight: =8
                                                       Width: =Parent.Width
-                                                      AccessibleLabel: ="Project Completion Date_pkr"
                                     - ProjectFYStatus_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout
@@ -1643,7 +1602,6 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="FINANCIAL YEAR *"
-                                                      AccessibleLabel: ="Project FY"
                                                 - ProjectFY_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
@@ -1678,7 +1636,6 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="STATUS *"
-                                                      AccessibleLabel: ="Project Status"
                                                 - ProjectStatus_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:

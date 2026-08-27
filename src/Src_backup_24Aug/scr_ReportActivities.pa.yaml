@@ -85,10 +85,6 @@ Screens:
 
         ClearCollect(colRepActStatusFilter, {Value: "All"});
         Collect(colRepActStatusFilter, Choices(Activities.Status))
-
-        // 6. Field tooltip state
-        Set(varTooltipText, "");
-        Set(varTooltipVisible, false)
     Children:
       - RepActMainScreen_con:
           Control: GroupContainer@1.5.0
@@ -892,30 +888,7 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="TITLE *"
-                                          - RepActTitle_ico_field:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                AccessibleLabel: ="Information for Title_field"
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(0, 120, 212, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =20
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(230, 240, 255, 1)
-                                                Icon: =Icon.InfoBadge
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.", "", "Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Tooltip: ="How to fill in this field"
-                                                Width: =20
-                                                TabIndex: =0
+                                          - RepActTitle_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -959,30 +932,7 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="REPORTING MONTH *"
-                                                - RepActMonth_ico:
-                                                    Control: Classic/Icon@2.5.0
-                                                    Properties:
-                                                      AccessibleLabel: ="Information for Month"
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      Color: =RGBA(0, 120, 212, 1)
-                                                      DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                      DisabledColor: =RGBA(225, 223, 221, 1)
-                                                      DisabledFill: =RGBA(0, 0, 0, 0)
-                                                      FocusedBorderThickness: =4
-                                                      Height: =20
-                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                      HoverColor: =RGBA(16, 110, 190, 1)
-                                                      HoverFill: =RGBA(230, 240, 255, 1)
-                                                      Icon: =Icon.InfoBadge
-                                                      LayoutMinHeight: =16
-                                                      LayoutMinWidth: =16
-                                                      OnSelect: =Set(varTooltipText, If(varTooltipText = "Select the calendar month this report covers (e.g. January, February). Must match the reporting period on record.", "", "Select the calendar month this report covers (e.g. January, February). Must match the reporting period on record.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                      PressedColor: =RGBA(16, 110, 190, 1)
-                                                      PressedFill: =RGBA(0, 0, 0, 0)
-                                                      Tooltip: ="How to fill in this field"
-                                                      Width: =20
-                                                      TabIndex: =0
+                                                - RepActMonth_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1016,30 +966,7 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="QUARTER *"
-                                                - RepActQuarter_ico:
-                                                    Control: Classic/Icon@2.5.0
-                                                    Properties:
-                                                      AccessibleLabel: ="Information for Quarter"
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      Color: =RGBA(0, 120, 212, 1)
-                                                      DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                      DisabledColor: =RGBA(225, 223, 221, 1)
-                                                      DisabledFill: =RGBA(0, 0, 0, 0)
-                                                      FocusedBorderThickness: =4
-                                                      Height: =20
-                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                      HoverColor: =RGBA(16, 110, 190, 1)
-                                                      HoverFill: =RGBA(230, 240, 255, 1)
-                                                      Icon: =Icon.InfoBadge
-                                                      LayoutMinHeight: =16
-                                                      LayoutMinWidth: =16
-                                                      OnSelect: =Set(varTooltipText, If(varTooltipText = "Select the financial quarter (Q1-Q4) that corresponds to the reporting month. Q1=Apr-Jun, Q2=Jul-Sep, Q3=Oct-Dec, Q4=Jan-Mar.", "", "Select the financial quarter (Q1-Q4) that corresponds to the reporting month. Q1=Apr-Jun, Q2=Jul-Sep, Q3=Oct-Dec, Q4=Jan-Mar.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                      PressedColor: =RGBA(16, 110, 190, 1)
-                                                      PressedFill: =RGBA(0, 0, 0, 0)
-                                                      Tooltip: ="How to fill in this field"
-                                                      Width: =20
-                                                      TabIndex: =0
+                                                - RepActQuarter_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1074,30 +1001,7 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="FINANCIAL YEAR *"
-                                          - RepActFY_ico:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                AccessibleLabel: ="Information for FY"
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(0, 120, 212, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =20
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(230, 240, 255, 1)
-                                                Icon: =Icon.InfoBadge
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "Select the financial year this report falls in (e.g. 2025/2026). Must align with the quarter and month selected.", "", "Select the financial year this report falls in (e.g. 2025/2026). Must align with the quarter and month selected.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Tooltip: ="How to fill in this field"
-                                                Width: =20
-                                                TabIndex: =0
+                                          - RepActFY_drp:
                                               Control: ModernDropdown@1.0.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -1141,30 +1045,7 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="PERCENTAGE COMPLETE *"
-                                                - RepActPct_ico:
-                                                    Control: Classic/Icon@2.5.0
-                                                    Properties:
-                                                      AccessibleLabel: ="Information for Pct"
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      Color: =RGBA(0, 120, 212, 1)
-                                                      DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                      DisabledColor: =RGBA(225, 223, 221, 1)
-                                                      DisabledFill: =RGBA(0, 0, 0, 0)
-                                                      FocusedBorderThickness: =4
-                                                      Height: =20
-                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                      HoverColor: =RGBA(16, 110, 190, 1)
-                                                      HoverFill: =RGBA(230, 240, 255, 1)
-                                                      Icon: =Icon.InfoBadge
-                                                      LayoutMinHeight: =16
-                                                      LayoutMinWidth: =16
-                                                      OnSelect: =Set(varTooltipText, If(varTooltipText = "Enter the percentage of the activity completed as of this reporting period (0-100). Used for progress tracking and dashboards.", "", "Enter the percentage of the activity completed as of this reporting period (0-100). Used for progress tracking and dashboards.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                      PressedColor: =RGBA(16, 110, 190, 1)
-                                                      PressedFill: =RGBA(0, 0, 0, 0)
-                                                      Tooltip: ="How to fill in this field"
-                                                      Width: =20
-                                                      TabIndex: =0
+                                                - RepActPct_txt:
                                                     Control: Classic/TextInput@2.3.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1197,30 +1078,7 @@ Screens:
                                                       LayoutMinWidth: =16
                                                       Size: =11
                                                       Text: ="STATUS *"
-                                                - RepActStatus_ico:
-                                                    Control: Classic/Icon@2.5.0
-                                                    Properties:
-                                                      AccessibleLabel: ="Information for Status"
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      Color: =RGBA(0, 120, 212, 1)
-                                                      DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                      DisabledColor: =RGBA(225, 223, 221, 1)
-                                                      DisabledFill: =RGBA(0, 0, 0, 0)
-                                                      FocusedBorderThickness: =4
-                                                      Height: =20
-                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                      HoverColor: =RGBA(16, 110, 190, 1)
-                                                      HoverFill: =RGBA(230, 240, 255, 1)
-                                                      Icon: =Icon.InfoBadge
-                                                      LayoutMinHeight: =16
-                                                      LayoutMinWidth: =16
-                                                      OnSelect: =Set(varTooltipText, If(varTooltipText = "Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.", "", "Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                      PressedColor: =RGBA(16, 110, 190, 1)
-                                                      PressedFill: =RGBA(0, 0, 0, 0)
-                                                      Tooltip: ="How to fill in this field"
-                                                      Width: =20
-                                                      TabIndex: =0
+                                                - RepActFormStatus_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Center
@@ -1253,30 +1111,7 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="REASON FOR DEVIATION"
-                                          - RepActReason_ico:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                AccessibleLabel: ="Information for Reason"
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(0, 120, 212, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =20
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(230, 240, 255, 1)
-                                                Icon: =Icon.InfoBadge
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "If the activity is behind schedule or deviating from the plan, explain why. Include root causes, external factors, or constraints.", "", "If the activity is behind schedule or deviating from the plan, explain why. Include root causes, external factors, or constraints.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Tooltip: ="How to fill in this field"
-                                                Width: =20
-                                                TabIndex: =0
+                                          - RepActReason_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1310,30 +1145,7 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="REMEDIAL ACTION"
-                                          - RepActRemedial_ico:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                AccessibleLabel: ="Information for Remedial"
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(0, 120, 212, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =20
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(230, 240, 255, 1)
-                                                Icon: =Icon.InfoBadge
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "Describe the corrective actions being taken to address any deviation. Include planned steps, responsible parties, and expected resolution timeline.", "", "Describe the corrective actions being taken to address any deviation. Include planned steps, responsible parties, and expected resolution timeline.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Tooltip: ="How to fill in this field"
-                                                Width: =20
-                                                TabIndex: =0
+                                          - RepActRemedial_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1366,30 +1178,7 @@ Screens:
                                                 LayoutMinWidth: =16
                                                 Size: =11
                                                 Text: ="OUTPUT"
-                                          - RepActOutput_ico:
-                                              Control: Classic/Icon@2.5.0
-                                              Properties:
-                                                AccessibleLabel: ="Information for Output"
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                Color: =RGBA(0, 120, 212, 1)
-                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                DisabledColor: =RGBA(225, 223, 221, 1)
-                                                DisabledFill: =RGBA(0, 0, 0, 0)
-                                                FocusedBorderThickness: =4
-                                                Height: =20
-                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                HoverColor: =RGBA(16, 110, 190, 1)
-                                                HoverFill: =RGBA(230, 240, 255, 1)
-                                                Icon: =Icon.InfoBadge
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "Describe the tangible output or deliverable achieved this period. Include key results, milestones reached, or outputs produced.", "", "Describe the tangible output or deliverable achieved this period. Include key results, milestones reached, or outputs produced.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                PressedColor: =RGBA(16, 110, 190, 1)
-                                                PressedFill: =RGBA(0, 0, 0, 0)
-                                                Tooltip: ="How to fill in this field"
-                                                Width: =20
-                                                TabIndex: =0
+                                          - RepActOutput_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1404,265 +1193,7 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                                - RepActAttachements_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    DropShadow: =DropShadow.None
-                                    FillPortions: =0
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutGap: =4
-                                    PaddingBottom: =8
-                                    PaddingLeft: =8
-                                    PaddingRight: =8
-                                    PaddingTop: =8
-                                    Width: =Parent.Width
-                                  Children:
-                                    - RepActAttachments_lbl:
-                                        Control: ModernText@1.0.0
-                                        Properties:
-                                          AutoHeight: =true
-                                          Color: =RGBA(96, 94, 92, 1)
-                                          FontWeight: =FontWeight.Semibold
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Size: =11
-                                          Text: ="PROOF OF EVIDENCE (POE)"
-                                          AccessibleLabel: ="POE Attachments"
-                                    - RepActPOEAttachments_ico:
-                                        Control: Classic/Icon@2.5.0
-                                        Properties:
-                                          AccessibleLabel: ="Information for POE Attachments"
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(0, 120, 212, 1)
-                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                          DisabledColor: =RGBA(225, 223, 221, 1)
-                                          DisabledFill: =RGBA(0, 0, 0, 0)
-                                          FocusedBorderThickness: =4
-                                          Height: =20
-                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                          HoverColor: =RGBA(16, 110, 190, 1)
-                                          HoverFill: =RGBA(230, 240, 255, 1)
-                                          Icon: =Icon.InfoBadge
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varTooltipText, If(varTooltipText = "Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.", "", "Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                          PressedColor: =RGBA(16, 110, 190, 1)
-                                          PressedFill: =RGBA(0, 0, 0, 0)
-                                          Tooltip: ="How to fill in this field"
-                                          Width: =20
-                                          TabIndex: =0
-                                    - RepActPOEAttachment_con:
-                                        Control: GroupContainer@1.5.0
-                                        Variant: AutoLayout
-                                        Properties:
-                                          DropShadow: =DropShadow.None
-                                          Fill: =RGBA(248, 249, 250, 1)
-                                          LayoutAlignItems: =LayoutAlignItems.Stretch
-                                          LayoutDirection: =LayoutDirection.Vertical
-                                          LayoutGap: =8
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          PaddingBottom: =8
-                                          PaddingLeft: =8
-                                          PaddingRight: =8
-                                          PaddingTop: =8
-                                          RadiusBottomLeft: =8
-                                          RadiusBottomRight: =8
-                                          RadiusTopLeft: =8
-                                          RadiusTopRight: =8
-                                          Width: =Parent.Width
-                                        Children:
-                                          - RepActPOEImport_btn:
-                                              Control: ModernButton@1.0.0
-                                              Properties:
-                                                BasePaletteColor: =RGBA(0, 120, 212, 1)
-                                                Height: =36
-                                                Icon: ="Upload"
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Text: ="Upload Evidence"
-                                                Width: =160
-                                                OnSelect: |-
-                                                  =// Navigate to EvidenceLibrary to upload a file linked to this report
-                                                  If(
-                                                      IsBlank(varEditReport),
-                                                      Notify("Save the report first before uploading evidence.", NotificationType.Error),
-                                                      Launch("https://nwpg.sharepoint.com/sites/DPWRPerformanceandMonitoring/EvidenceLibrary/Forms/AllItems.aspx?ParentHEREPORT=" & varEditReport.ID)
-                                                  )
-                                                AccessibleLabel: ="Upload POE Evidence"
-                                          - RepActPOEInfo_lbl:
-                                              Control: Label@2.5.1
-                                              Properties:
-                                                AutoHeight: =true
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                BorderStyle: =BorderStyle.None
-                                                BorderThickness: =2
-                                                Color: =RGBA(139, 147, 161, 1)
-                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                                DisabledColor: =RGBA(161, 159, 157, 1)
-                                                FocusedBorderThickness: =4
-                                                Font: =Font.'Segoe UI'
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =10
-                                                Text: ="Save the report first, then click Upload to add supporting documents (POE). Files link to this report in EvidenceLibrary."
-                                          - RepActPOEFiles_lbl:
-                                              Control: Label@2.5.1
-                                              Properties:
-                                                AutoHeight: =true
-                                                BorderColor: =RGBA(0, 0, 0, 0)
-                                                BorderStyle: =BorderStyle.None
-                                                BorderThickness: =2
-                                                Color: =RGBA(46, 94, 170, 1)
-                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                                DisabledColor: =RGBA(161, 159, 157, 1)
-                                                FocusedBorderThickness: =4
-                                                Font: =Font.'Segoe UI'
-                                                FontWeight: =FontWeight.Semibold
-                                                LayoutMinHeight: =16
-                                                LayoutMinWidth: =16
-                                                Size: =10
-                                                Text: ="UPLOADED EVIDENCE"
-                                          - RepActPOEFiles_gal:
-                                              Control: Gallery@2.15.0
-                                              Variant: BrowseLayout_Horizontal_TwoTextOneImageVariant_ver5.0
-                                              Properties:
-                                                BorderColor: =RGBA(245, 245, 245, 1)
-                                                Height: =100
-                                                Items: =If(IsBlank(varEditReport), Blank(), Filter(EvidenceLibrary, MonthlyReport.Id = varEditReport.ID))
-                                                Width: =Parent.Width - 16
-                                              Children:
-                                                - RepActPOEFileIcon_ico:
-                                                    Control: Classic/Icon@2.5.0
-                                                    Properties:
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      Color: =RGBA(46, 94, 170, 1)
-                                                      DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                                      DisabledColor: =RGBA(225, 223, 221, 1)
-                                                      DisabledFill: =RGBA(0, 0, 0, 0)
-                                                      FocusedBorderThickness: =4
-                                                      Height: =32
-                                                      HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                                      HoverColor: =RGBA(16, 110, 190, 1)
-                                                      HoverFill: =RGBA(0, 0, 0, 0)
-                                                      Icon: =Icon.Document
-                                                      LayoutMinHeight: =16
-                                                      LayoutMinWidth: =16
-                                                      OnSelect: =Select(Parent)
-                                                      PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                                      PressedColor: =RGBA(16, 110, 190, 1)
-                                                      PressedFill: =RGBA(0, 0, 0, 0)
-                                                      Width: =32
-                                                      X: =8
-                                                      Y: =8
-                                                      TabIndex: =0
-                                                - RepActPOEFileName_lbl:
-                                                    Control: Label@2.5.1
-                                                    Properties:
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      BorderStyle: =BorderStyle.None
-                                                      BorderThickness: =2
-                                                      Color: =RGBA(31, 39, 51, 1)
-                                                      DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                                      DisabledColor: =RGBA(161, 159, 157, 1)
-                                                      FocusedBorderThickness: =4
-                                                      Font: =Font.'Segoe UI'
-                                                      FontWeight: =FontWeight.Semibold
-                                                      Height: =18
-                                                      OnSelect: =Select(Parent)
-                                                      Size: =11
-                                                      Text: =ThisItem.Title
-                                                      Width: =Parent.TemplateWidth - 56
-                                                      X: =48
-                                                      Y: =8
-                                                - RepActPOEFileDate_lbl:
-                                                    Control: Label@2.5.1
-                                                    Properties:
-                                                      BorderColor: =RGBA(0, 0, 0, 0)
-                                                      BorderStyle: =BorderStyle.None
-                                                      BorderThickness: =2
-                                                      Color: =RGBA(139, 147, 161, 1)
-                                                      DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                                      DisabledColor: =RGBA(161, 159, 157, 1)
-                                                      FocusedBorderThickness: =4
-                                                      Font: =Font.'Segoe UI'
-                                                      Height: =16
-                                                      OnSelect: =Select(Parent)
-                                                      Size: =9
-                                                      Text: =Text(Coalesce(ThisItem.UploadDate, ThisItem.Created), "d mmm yyyy")
-                                                      Width: =Parent.TemplateWidth - 56
-                                                      X: =48
-                                                      Y: =26
-                              - RepActTooltip_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    Fill: =RGBA(30, 41, 59, 1)
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutGap: =4
-                                    PaddingBottom: =10
-                                    PaddingLeft: =12
-                                    PaddingRight: =12
-                                    PaddingTop: =10
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Visible: =varTooltipVisible
-                                    Width: =Parent.Width
-                                  Children:
-                                    - RepActTooltipTitle_lbl:
-                                        Control: ModernText@1.0.0
-                                        Properties:
-                                          Color: =RGBA(147, 197, 253, 1)
-                                          FontWeight: =FontWeight.Bold
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Size: =11
-                                          Text: ="How to fill in this field"
-                                    - RepActTooltipText_lbl:
-                                        Control: Label@2.5.1
-                                        Properties:
-                                          AutoHeight: =true
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          Color: =RGBA(255, 255, 255, 1)
-                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                          DisabledColor: =RGBA(161, 159, 157, 1)
-                                          FocusedBorderThickness: =4
-                                          Font: =Font.'Segoe UI'
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Size: =11
-                                          Text: =varTooltipText
-                                          Width: =Parent.Width
-                                    - RepActTooltipClose_ico:
-                                        Control: Classic/Icon@2.5.0
-                                        Properties:
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(255, 255, 255, 1)
-                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                          DisabledColor: =RGBA(225, 223, 221, 1)
-                                          DisabledFill: =RGBA(0, 0, 0, 0)
-                                          FocusedBorderThickness: =4
-                                          Height: =20
-                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                          HoverColor: =RGBA(255, 200, 200, 1)
-                                          HoverFill: =RGBA(0, 0, 0, 0)
-                                          Icon: =Icon.Cancel
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varTooltipVisible, false)
-                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                          PressedColor: =RGBA(255, 200, 200, 1)
-                                          PressedFill: =RGBA(0, 0, 0, 0)
-                                          Tooltip: ="Close"
-                                          Width: =20
-                                          TabIndex: =0
-            - RepActFormActions_con:
+                              - RepActFormActions_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:

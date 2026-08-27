@@ -7,21 +7,22 @@
 # For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
 # ************************************************************************************************
 Screens:
-  scr_ReportView:
+  scr_ReportForm:
     Properties:
       Fill: =varBgLight
       LoadingSpinnerColor: =RGBA(0, 120, 212, 1)
       OnVisible: |-
         =
-        // scr_ReportView.OnVisible
-        // Purpose: load the report to display from the navigation context.
-        // Context params: viewReportID (MonthlyReports.ID), returnTo (optional
-        // screen key — "Approved" when entered from the Approved dashboard).
+        // scr_ReportForm.OnVisible
+        // Purpose: resolve the selected activity and (optionally) an existing
+        // report from the navigation context, then set the form mode.
+        // Context params: selectedActivityID (Activities.ID), editReportID (MonthlyReports.ID, optional)
 
-        Set(varViewReport, LookUp(MonthlyReports, ID = viewReportID));
-        Set(varViewReturnTo, Coalesce(returnTo, "MyActivities"))
+        Set(varReportMode, If(IsBlank(editReportID), "New", "Edit"));
+        Set(varReportActivity, LookUp(colActivities, ID = selectedActivityID));
+        Set(varEditReport, If(IsBlank(editReportID), Blank(), LookUp(MonthlyReports, ID = editReportID)))
     Children:
-      - ReportView_con:
+      - ReportForm_con:
           Control: GroupContainer@1.5.0
           Variant: AutoLayout
           Properties:
@@ -30,7 +31,7 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
-            - RepViewSidebar_con:
+            - RepFormSidebar_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
@@ -49,7 +50,7 @@ Screens:
                   PaddingTop: =20
                   Width: =App.Width * 0.05
                 Children:
-                  - RepViewHome_ico:
+                  - RepFormHome_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Home"
@@ -72,8 +73,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Home"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewProjects_ico:
+                  - RepFormProjects_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Projects"
@@ -96,8 +96,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Projects"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewActivities_ico:
+                  - RepFormActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Activities"
@@ -120,8 +119,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewMonthlyReports_ico:
+                  - RepFormMonthlyReports_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Monthly Reports"
@@ -144,8 +142,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Monthly Reports"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewMyActivities_ico:
+                  - RepFormMyActivities_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="My Activities"
@@ -168,8 +165,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="My Activities"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewTrending_ico:
+                  - RepFormTrending_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Trending"
@@ -191,8 +187,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Trending"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewUsers_ico:
+                  - RepFormUsers_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Users"
@@ -215,8 +210,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Users"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewSidebarSpacer_con:
+                  - RepFormSidebarSpacer_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -229,7 +223,7 @@ Screens:
                         PaddingLeft: =8
                         PaddingRight: =8
                         PaddingTop: =8
-                  - RepViewSettings_ico:
+                  - RepFormSettings_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Settings"
@@ -251,8 +245,7 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Settings"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-                  - RepViewSupport_ico:
+                  - RepFormSupport_ico:
                       Control: Classic/Icon@2.5.0
                       Properties:
                         AccessibleLabel: ="Support"
@@ -274,17 +267,16 @@ Screens:
                         PressedFill: =RGBA(0, 0, 0, 0)
                         Tooltip: ="Support"
                         Width: =Parent.Width - 20
-                        TabIndex: =0
-            - ReportViewDetails_con:
+            - ReportFormDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
                 Properties:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Stretch
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width - RepViewSidebar_con.Width
+                  Width: =App.Width - RepFormSidebar_con.Width
                 Children:
-                  - RepViewHeader_con:
+                  - RepFormHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -299,9 +291,9 @@ Screens:
                         RadiusBottomRight: =0
                         RadiusTopLeft: =0
                         RadiusTopRight: =0
-                        Width: =App.Width - RepViewSidebar_con.Width
+                        Width: =App.Width - RepFormSidebar_con.Width
                       Children:
-                        - RepViewBack_ico:
+                        - RepFormBack_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -323,9 +315,7 @@ Screens:
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Tooltip: ="Go back"
                               Width: =Parent.Width * 0.04
-                              AccessibleLabel: ="Rep View Back"
-                              TabIndex: =0
-                        - RepViewHeaderLeft_con:
+                        - RepFormHeaderLeft_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -338,7 +328,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width * .55
                             Children:
-                              - RepViewTitle_lbl:
+                              - RepFormTitle_lbl:
                                   Control: Label@2.5.1
                                   Properties:
                                     AlignInContainer: =AlignInContainer.Stretch
@@ -355,8 +345,8 @@ Screens:
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     Size: =25
-                                    Text: ="Report View"
-                              - RepViewSubtitle_lbl:
+                                    Text: ="Monthly Report"
+                              - RepFormSubtitle_lbl:
                                   Control: Label@2.5.1
                                   Properties:
                                     AlignInContainer: =AlignInContainer.Stretch
@@ -371,8 +361,8 @@ Screens:
                                     Font: =Font.'Segoe UI'
                                     Height: =Parent.Height * .5
                                     Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Title)
-                        - RepViewHeaderRight_con:
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.ActivityShortDescription)
+                        - RepFormHeaderRight_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
@@ -389,7 +379,7 @@ Screens:
                               PaddingTop: =8
                               Width: =Parent.Width / 3
                             Children:
-                              - RepViewUser_lbl:
+                              - RepFormUser_lbl:
                                   Control: Label@2.5.1
                                   Properties:
                                     AlignInContainer: =AlignInContainer.Center
@@ -407,7 +397,7 @@ Screens:
                                     LayoutMinWidth: =16
                                     Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
                                     Tooltip: =varUserEmail
-                              - RepViewBell_ico:
+                              - RepFormBell_ico:
                                   Control: Classic/Icon@2.5.0
                                   Properties:
                                     BorderColor: =RGBA(0, 0, 0, 0)
@@ -428,9 +418,7 @@ Screens:
                                     PressedFill: =RGBA(0, 0, 0, 0)
                                     Tooltip: ="Notifications"
                                     Width: =Parent.Width / 15
-                                    AccessibleLabel: ="Rep View Bell"
-                                    TabIndex: =0
-                  - ReportViewBody_con:
+                  - ReportFormBody_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
@@ -445,389 +433,474 @@ Screens:
                         PaddingTop: =20
                         Width: =Parent.Width
                       Children:
-                        - ReportViewStatus_con:
+                        - ReportFormActivityInfo_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
+                              DropShadow: =DropShadow.Semilight
+                              Fill: =RGBA(255, 255, 255, 1)
                               FillPortions: =0
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =4
+                              PaddingBottom: =10
+                              PaddingLeft: =12
+                              PaddingRight: =12
+                              PaddingTop: =10
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormActivityName_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    Color: =varNavy
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =13
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.Title)
+                              - ReportFormActivityDesc_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.ActivityDescription)
+                              - ReportFormContext_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =10.5
+                                    Text: =If(IsBlank(varReportActivity), "", varReportActivity.ProgrammeLabel & " · " & varReportActivity.DirectorateLabel)
+                        - ReportFormTitle_field_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =4
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormTitle_lbl_field:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="TITLE *"
+                              - ReportFormTitle_txt:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    Default: =If(varReportMode = "New", "", varEditReport.Title)
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    HintText: ="e.g. ICTM-RP-0001"
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width
+                        - ReportFormPeriod_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
                               LayoutDirection: =LayoutDirection.Horizontal
                               LayoutGap: =12
                               Width: =Parent.Width
                             Children:
-                              - ReportViewStatusCard_con:
+                              - ReportFormReportingMonth_field_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
-                                    DropShadow: =DropShadow.Semilight
-                                    Fill: =RGBA(255, 255, 255, 1)
                                     LayoutDirection: =LayoutDirection.Vertical
                                     LayoutGap: =4
-                                    PaddingBottom: =10
-                                    PaddingLeft: =12
-                                    PaddingRight: =12
-                                    PaddingTop: =10
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Width: =Parent.Width / 3 - 8
+                                    Width: =Parent.Width / 2 - 6
                                   Children:
-                                    - ReportViewStatusKey_lbl:
+                                    - ReportFormReportingMonth_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
                                           AutoHeight: =true
-                                          Color: =RGBA(113, 111, 110, 1)
+                                          Color: =RGBA(96, 94, 92, 1)
+                                          FontWeight: =FontWeight.Semibold
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =10.5
-                                          Text: ="STATUS"
-                                          AccessibleLabel: ="Report View Status Key"
-                                    - ReportViewStatusValue_lbl:
-                                        Control: ModernText@1.0.0
+                                          Size: =11
+                                          Text: ="REPORTING MONTH *"
+                                    - ReportFormReportingMonth_drp:
+                                        Control: ModernDropdown@1.0.2
                                         Properties:
-                                          AutoHeight: =true
-                                          Color: =varNavy
-                                          FontWeight: =FontWeight.Bold
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =2
+                                          Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.ReportingMonth), Value = varCurrentMonth), varEditReport.ReportingMonth)
+                                          DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                          Height: =40
+                                          ItemDisplayText: =ThisItem.Value
+                                          Items: =Choices(MonthlyReports.ReportingMonth)
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Text: =If(IsBlank(varViewReport), "", varViewReport.ReportStatus.Value)
-                                          AccessibleLabel: ="Report View Status Value"
-                              - ReportViewPeriodCard_con:
+                                          Width: =Parent.Width
+                              - ReportFormQuarter_field_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
-                                    DropShadow: =DropShadow.Semilight
-                                    Fill: =RGBA(255, 255, 255, 1)
                                     LayoutDirection: =LayoutDirection.Vertical
                                     LayoutGap: =4
-                                    PaddingBottom: =10
-                                    PaddingLeft: =12
-                                    PaddingRight: =12
-                                    PaddingTop: =10
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Width: =Parent.Width / 3 - 8
+                                    Width: =Parent.Width / 2 - 6
                                   Children:
-                                    - ReportViewPeriodKey_lbl:
+                                    - ReportFormQuarter_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
                                           AutoHeight: =true
-                                          Color: =RGBA(113, 111, 110, 1)
+                                          Color: =RGBA(96, 94, 92, 1)
+                                          FontWeight: =FontWeight.Semibold
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =10.5
-                                          Text: ="PERIOD"
-                                          AccessibleLabel: ="Report View Period Key"
-                                    - ReportViewPeriodValue_lbl:
-                                        Control: ModernText@1.0.0
+                                          Size: =11
+                                          Text: ="QUARTER *"
+                                    - ReportFormQuarter_drp:
+                                        Control: ModernDropdown@1.0.2
                                         Properties:
-                                          AutoHeight: =true
-                                          Color: =varNavy
-                                          FontWeight: =FontWeight.Bold
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =2
+                                          Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.Quarter), Value = Left(varCurrentQuarter, 2)), varEditReport.Quarter)
+                                          DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                          Height: =40
+                                          ItemDisplayText: =ThisItem.Value
+                                          Items: =Choices(MonthlyReports.Quarter)
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =13
-                                          Text: =If(IsBlank(varViewReport), "", varViewReport.ReportingMonth.Value & " · " & varViewReport.Quarter.Value & " · " & varViewReport.'FinancialYear '.Value)
-                                          AccessibleLabel: ="Report View Period Value"
-                              - ReportViewPctCard_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    DropShadow: =DropShadow.Semilight
-                                    Fill: =RGBA(255, 255, 255, 1)
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutGap: =4
-                                    PaddingBottom: =10
-                                    PaddingLeft: =12
-                                    PaddingRight: =12
-                                    PaddingTop: =10
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Width: =Parent.Width / 3 - 8
-                                  Children:
-                                    - ReportViewPctKey_lbl:
-                                        Control: ModernText@1.0.0
-                                        Properties:
-                                          AutoHeight: =true
-                                          Color: =RGBA(113, 111, 110, 1)
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Size: =10.5
-                                          Text: ="COMPLETE"
-                                          AccessibleLabel: ="Report View Pct Key"
-                                    - ReportViewPctValue_lbl:
-                                        Control: ModernText@1.0.0
-                                        Properties:
-                                          AutoHeight: =true
-                                          Color: =varNavy
-                                          FontWeight: =FontWeight.Bold
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Text: =If(IsBlank(varViewReport), "", Text(varViewReport.'PercentageComplete ') & "%")
-                                          AccessibleLabel: ="Report View Pct Value"
-                        - ReportViewSection_title_lbl:
-                            Control: ModernText@1.0.0
-                            Properties:
-                              AutoHeight: =true
-                              Color: =varNavy
-                              FontWeight: =FontWeight.Bold
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Size: =13
-                              Text: ="Report Details"
-                              AccessibleLabel: ="Report View Section_title"
-                        - ReportViewDetailCard_con:
+                                          Width: =Parent.Width
+                        - ReportFormFY_field_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
-                              DropShadow: =DropShadow.Semilight
-                              Fill: =RGBA(255, 255, 255, 1)
                               LayoutDirection: =LayoutDirection.Vertical
-                              LayoutGap: =10
-                              PaddingBottom: =14
-                              PaddingLeft: =14
-                              PaddingRight: =14
-                              PaddingTop: =14
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
+                              LayoutGap: =4
                               Width: =Parent.Width
                             Children:
-                              - ReportViewTitleKey_lbl:
+                              - ReportFormFY_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="TITLE"
-                                    AccessibleLabel: ="Report View Title Key"
-                              - ReportViewTitleValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
+                                    Color: =RGBA(96, 94, 92, 1)
                                     FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =13
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Title)
-                                    AccessibleLabel: ="Report View Title Value"
-                              - ReportViewPlannedKey_lbl:
-                                  Control: ModernText@1.0.0
+                                    Size: =11
+                                    Text: ="FINANCIAL YEAR *"
+                              - ReportFormFY_drp:
+                                  Control: ModernDropdown@1.0.2
                                   Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    BorderStyle: =BorderStyle.Solid
+                                    BorderThickness: =2
+                                    Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.'FinancialYear '), Value = varCurrentFY), varEditReport.'FinancialYear ')
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    Height: =40
+                                    ItemDisplayText: =ThisItem.Value
+                                    Items: =Choices(MonthlyReports.'FinancialYear ')
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="PLANNED ACTIVITY"
-                                    AccessibleLabel: ="Report View Planned Key"
-                              - ReportViewPlannedValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: |-
-                                      =If(IsBlank(varViewReport), "", varViewReport.'Activity: ActivityShortDescription'.Value)
-                                      AccessibleLabel: ="Activity"
-                              - ReportViewOutputKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="OUTPUT"
-                                    AccessibleLabel: ="Report View Output Key"
-                              - ReportViewOutputValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.Output)
-                                    AccessibleLabel: ="Report View Output Value"
-                              - ReportViewReasonKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="REASON FOR DEVIATION"
-                                    AccessibleLabel: ="Report View Reason Key"
-                              - ReportViewReasonValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.ReasonForDeviation)
-                                    AccessibleLabel: ="Report View Reason Value"
-                              - ReportViewRemedialKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="REMEDIAL ACTION"
-                                    AccessibleLabel: ="Report View Remedial Key"
-                              - ReportViewRemedialValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.RemedialAction)
-                                    AccessibleLabel: ="Report View Remedial Value"
-                        - ReportViewSection_owner_lbl:
-                            Control: ModernText@1.0.0
-                            Properties:
-                              AutoHeight: =true
-                              Color: =varNavy
-                              FontWeight: =FontWeight.Bold
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Size: =13
-                              Text: ="Ownership & Workflow"
-                              AccessibleLabel: ="Report View Section_owner"
-                        - ReportViewOwnerCard_con:
+                                    Width: =Parent.Width
+                        - ReportFormPlannedAct_field_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
-                              DropShadow: =DropShadow.Semilight
-                              Fill: =RGBA(255, 255, 255, 1)
                               LayoutDirection: =LayoutDirection.Vertical
-                              LayoutGap: =10
-                              PaddingBottom: =14
-                              PaddingLeft: =14
-                              PaddingRight: =14
-                              PaddingTop: =14
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
+                              LayoutGap: =4
                               Width: =Parent.Width
                             Children:
-                              - ReportViewOwnerKey_lbl:
+                              - ReportFormPlannedAct_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:
                                     AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    FontWeight: =FontWeight.Semibold
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="ACTIVITY OWNER"
-                                    AccessibleLabel: ="Report View Owner Key"
-                              - ReportViewOwnerValue_lbl:
-                                  Control: ModernText@1.0.0
+                                    Size: =11
+                                    Text: ="PLANNED ACTIVITY *"
+                              - ReportFormPlannedAct_txt:
+                                  Control: Classic/TextInput@2.3.2
                                   Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    Default: =If(varReportMode = "New", "", varEditReport.PlannedActivity)
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    Height: =80
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.ActivityOwnerLabel)
-                                    AccessibleLabel: ="Report View Owner Value"
-                              - ReportViewSubmittedKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="SUBMITTED BY"
-                                    AccessibleLabel: ="Report View Submitted Key"
-                              - ReportViewSubmittedValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.SubmittedBy.DisplayName, ""))
-                                    AccessibleLabel: ="Report View Submitted Value"
-                              - ReportViewReviewedKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="REVIEWED BY"
-                                    AccessibleLabel: ="Report View Reviewed Key"
-                              - ReportViewReviewedValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(50, 49, 48, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", Coalesce(varViewReport.SupervisorReviewedBy.DisplayName, ""))
-                                    AccessibleLabel: ="Report View Reviewed Value"
-                              - ReportViewRejectionKey_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =10.5
-                                    Text: ="REJECTION REASON"
-                                    AccessibleLabel: ="Report View Rejection Key"
-                              - ReportViewRejectionValue_lbl:
-                                  Control: ModernText@1.0.0
-                                  Properties:
-                                    AutoHeight: =true
-                                    Color: =RGBA(168, 0, 0, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: =If(IsBlank(varViewReport), "", varViewReport.'RejectionReason ')
-                                    AccessibleLabel: ="Report View Rejection Value"
-                        - ReportViewBack_btn:
-                            Control: ModernButton@1.0.0
+                                    Mode: =TextMode.MultiLine
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width
+                        - ReportFormPctStatus_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
                             Properties:
-                              BasePaletteColor: =RGBA(0, 120, 212, 1)
-                              Height: =40
-                              Icon: ="Back"
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              OnSelect: |-
-                                =// Back — return to the screen we came from (Approved dashboard or My Activities)
-                                If(
-                                    varViewReturnTo = "Approved",
-                                    Navigate(scr_ApprovedReports, ScreenTransition.Fade),
-                                    Navigate(scr_MyActivities, ScreenTransition.Fade)
-                                )
-                              RadiusBottomLeft: =8
-                              RadiusBottomRight: =8
-                              RadiusTopLeft: =8
-                              RadiusTopRight: =8
-                              Text: =If(varViewReturnTo = "Approved", "Back to Approved Reports", "Back to My Activities")
-                              Width: =220
-                              AccessibleLabel: ="Report View Back"
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormPct_field_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    Width: =Parent.Width / 2 - 6
+                                  Children:
+                                    - ReportFormPct_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =RGBA(96, 94, 92, 1)
+                                          FontWeight: =FontWeight.Semibold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11
+                                          Text: ="PERCENTAGE COMPLETE *"
+                                    - ReportFormPct_txt:
+                                        Control: Classic/TextInput@2.3.2
+                                        Properties:
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          Default: =If(varReportMode = "New", "0", Text(varEditReport.'PercentageComplete '))
+                                          DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                          Format: =TextFormat.Number
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Width: =Parent.Width
+                              - ReportFormStatus_field_con:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    Width: =Parent.Width / 2 - 6
+                                  Children:
+                                    - ReportFormStatus_lbl:
+                                        Control: ModernText@1.0.0
+                                        Properties:
+                                          AutoHeight: =true
+                                          Color: =RGBA(96, 94, 92, 1)
+                                          FontWeight: =FontWeight.Semibold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11
+                                          Text: ="STATUS *"
+                                    - ReportFormStatus_drp:
+                                        Control: ModernDropdown@1.0.2
+                                        Properties:
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =2
+                                          Default: =If(varReportMode = "New", LookUp(Choices(MonthlyReports.Status), Value = "Draft"), varEditReport.Status)
+                                          DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                          Height: =40
+                                          ItemDisplayText: =ThisItem.Value
+                                          Items: =Choices(MonthlyReports.Status)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Width: =Parent.Width
+                        - ReportFormReasonDev_field_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =4
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormReasonDev_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="REASON FOR DEVIATION"
+                              - ReportFormReasonDev_txt:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    Default: =If(varReportMode = "New", "", varEditReport.ReasonForDeviation)
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    Height: =70
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Mode: =TextMode.MultiLine
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width
+                        - ReportFormRemedial_field_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =4
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormRemedial_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="REMEDIAL ACTION"
+                              - ReportFormRemedial_txt:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    Default: =If(varReportMode = "New", "", varEditReport.RemedialAction)
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    Height: =70
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Mode: =TextMode.MultiLine
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width
+                        - ReportFormOutput_field_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =4
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormOutput_lbl:
+                                  Control: ModernText@1.0.0
+                                  Properties:
+                                    AutoHeight: =true
+                                    Color: =RGBA(96, 94, 92, 1)
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =11
+                                    Text: ="OUTPUT"
+                              - ReportFormOutput_txt:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =RGBA(214, 221, 224, 1)
+                                    Default: =If(varReportMode = "New", "", varEditReport.Output)
+                                    DisplayMode: =If(varReportMode = "View", DisplayMode.View, DisplayMode.Edit)
+                                    Height: =70
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Mode: =TextMode.MultiLine
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.Width
+                        - ReportFormActions_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =12
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              Width: =Parent.Width
+                            Children:
+                              - ReportFormCancel_btn:
+                                  Control: ModernButton@1.0.0
+                                  Properties:
+                                    Appearance: =ButtonAppearance.Transparent
+                                    BorderColor: =RGBA(106, 122, 127, 1)
+                                    BorderStyle: =BorderStyle.Solid
+                                    BorderThickness: =1
+                                    Height: =40
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Text: ="Cancel"
+                                    Width: =110
+                              - ReportFormSave_btn:
+                                  Control: ModernButton@1.0.0
+                                  Properties:
+                                    BasePaletteColor: =RGBA(0, 120, 212, 1)
+                                    Height: =40
+                                    Icon: ="Save"
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: |-
+                                      =
+                                      // ReportFormSave_btn.OnSelect — validates required fields, then
+                                      // inserts (New) or updates (Edit) the MonthlyReports record using
+                                      // the MonthlyReports.csv schema; denormalised activity fields are
+                                      // pulled from the selected activity. Returns to scr_MyActivities.
+                                      If(
+                                          IsBlank(varReportActivity),
+                                          Notify("Select an activity before saving the report.", NotificationType.Error),
+
+                                          IsBlank(ReportFormTitle_txt.Text)
+                                          || IsBlank(ReportFormReportingMonth_drp.Selected)
+                                          || IsBlank(ReportFormQuarter_drp.Selected)
+                                          || IsBlank(ReportFormFY_drp.Selected)
+                                          || IsBlank(ReportFormStatus_drp.Selected),
+
+                                          Notify("All required fields must be completed before saving.", NotificationType.Error),
+
+                                          Patch(
+                                              MonthlyReports,
+                                              If(varReportMode = "New", Defaults(MonthlyReports), varEditReport),
+                                              {
+                                                  Title: ReportFormTitle_txt.Text,
+                                                  Activity: { Id: varReportActivity.ID, Value: varReportActivity.Title },
+                                                  ActivityOwnerLabel: If(IsBlank(varReportActivity), "", varReportActivity.ActivityOwner.DisplayName),
+                                                  ProgrammeLabel: If(IsBlank(varReportActivity), "", varReportActivity.ProgrammeLabel),
+                                                  DirectorateLabel: If(IsBlank(varReportActivity), "", varReportActivity.DirectorateLabel),
+                                                  ReportingMonth: ReportFormReportingMonth_drp.Selected.Value,
+                                                  Quarter: ReportFormQuarter_drp.Selected.Value,
+                                                  'FinancialYear ': ReportFormFY_drp.Selected.Value,
+                                                  PlannedAct: ReportFormPlannedAct_txt.Text,
+                                                  'PercentageComplete ': Value(ReportFormPct_txt.Text),
+                                                  Status: ReportFormStatus_drp.Selected.Value,
+                                                  ReasonForDeviation: ReportFormReasonDev_txt.Text,
+                                                  RemedialAction: ReportFormRemedial_txt.Text,
+                                                  Output: ReportFormOutput_txt.Text,
+                                                  'Version ': If(varReportMode = "New", 1, Coalesce(varEditReport.'Version ', 1))
+                                              }
+                                          );
+                                          Navigate(scr_MyActivities, ScreenTransition.Fade)
+                                      )
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Text: ="Save"
+                                    Width: =110
