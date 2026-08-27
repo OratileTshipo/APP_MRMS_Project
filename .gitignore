@@ -30,3 +30,4 @@ dist/
 # API keys
 .env
 .env.*
+power-automate.pdf
