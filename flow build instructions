@@ -377,7 +377,7 @@ Before creating the flows, confirm these columns exist in SharePoint:
 ## Phase 2 Enhancements (Future)
 
 When ready to expand:
-1. **Overdue Escalation flow** — Daily scheduled flow that sets `IsOverdue = true` and escalates to Programme Manager after 3 days (see [`docs/power-automate/alerting-flow.md`](docs/power-automate/alerting-flow.md) Variation 5)
+1. **Overdue Escalation flow** — Daily scheduled flow that marks overdue activities and escalates to Programme Manager after 3 days (see [`docs/power-automate/overdue-escalation-flow.md`](docs/power-automate/overdue-escalation-flow.md))
 2. **Comment Notification flow** — When a comment is added to ReportComments, notify the report owner
 3. **Teams Adaptive Cards** — Replace plain emails with rich interactive cards in Teams
 4. **Notifications list** — Write in-app notifications for the Canvas App notification centre
@@ -414,6 +414,7 @@ Instead of building flows manually, you can import the pre-built package:
 | [`docs/power-automate/alerting-flow.md`](docs/power-automate/alerting-flow.md) | MonthlyReminder scheduled flow pattern |
 | [`docs/power-automate/flow-import-export.md`](docs/power-automate/flow-import-export.md) | Import/export package format and validation |
 | [`docs/power-automate/definition-json-reference.md`](docs/power-automate/definition-json-reference.md) | `definition.json` structure for importable flows |
+| [`docs/power-automate/overdue-escalation-flow.md`](docs/power-automate/overdue-escalation-flow.md) | Overdue Escalation — daily tiers, escalation, audit trail (Phase 2) |
 | [`docs/power-automate/troubleshooting.md`](docs/power-automate/troubleshooting.md) | Error codes and debugging |
 
 ---
