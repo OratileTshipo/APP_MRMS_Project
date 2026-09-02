@@ -1,0 +1,422 @@
+# Power Automate Notifications — Step-by-Step Setup Guide
+
+> **📚 Reference docs:** See [`docs/power-automate/`](docs/power-automate/) for comprehensive Power Automate reference material extracted from the official Microsoft Learn documentation, including expressions, SharePoint connectors, troubleshooting, and import/export guides.
+
+## Overview
+
+This guide covers setting up **3 simplified notification flows** for the APP-MRMS system. These replace the complex multi-flow architecture with minimal, email-only notifications for Phase 1.
+
+**What these flows do:**
+1. **ReportSubmitted** — Email the Supervisor when a Contributor submits a report
+2. **ReportDecision** — Email the Contributor when their report is approved or rejected
+3. **MonthlyReminder** — Weekly email reminder to Contributors with overdue activities
+
+**What you need before starting:**
+- Power Automate access (included with Microsoft 365 licence) — see [`docs/power-automate/cloud-flows-overview.md`](docs/power-automate/cloud-flows-overview.md) for licensing details
+- The following SharePoint lists already created:
+  - `Activities` (with `Supervisor` Person column, `ActivityOwner` Person column, `DueDate` Date column, `Status` Choice column)
+  - `MonthlyReports` (with `ReportStatus` Choice column, `SubmissionStatus` Choice column, `SubmittedBy` Person column, `SupervisorRejectionReason` Multiple lines of text column)
+  - `Programmes` (with `ProgrammeManager` Person column)
+
+---
+
+## Flow 1: ReportSubmitted — Notify Supervisor on Submission
+
+**Purpose:** When a Contributor submits a monthly report, the responsible Supervisor receives an email alert.
+
+### Prerequisites
+- `MonthlyReports` list has a `ReportStatus` column with choice values including `Supervisor Approved`, `Supervisor Rejected`, `M&E Approved`, `M&E Rejected`, `Not Submitted`
+- `MonthlyReports` list has a `SubmissionStatus` column with choice values: `Draft`, `Submitted`, `Approved`
+- `MonthlyReports` has a lookup/reference to `Activities` (the `Activity` column stores the Activity ID, e.g. `ICMTS-AC-0001`)
+- `Activities` list has a `Supervisor` Person column populated with real M365 accounts
+
+### Step 1: Create the Flow
+
+1. Go to **https://make.powerautomate.com**
+2. Click **+ Create** in the left sidebar
+3. Select **Automated cloud flow**
+4. Flow name: `APP-MRMS Report Submitted Notify Supervisor`
+5. Trigger: Search for `When an item is created or modified` (SharePoint)
+6. Click **Create**
+
+### Step 2: Configure the Trigger
+
+1. **Site Address:** Select your SharePoint site (e.g. `https://yourorg.sharepoint.com/sites/APP-MRMS`)
+2. **List Name:** Select `MonthlyReports`
+3. Leave all other settings as default
+4. Click the **⋯** (three dots) on the trigger card → **Settings**
+5. Under **Trigger Conditions**, click **+ Add** and enter:
+   ```
+   @equals(triggerBody()?['ReportStatus']?['Value'], 'Supervisor Rejected')
+   ```
+6. Click **+ Add** again and enter:
+   ```
+   @equals(triggerBody()?['SubmissionStatus']?['Value'], 'Submitted')
+   ```
+7. Set **Concurrency Control** to **Off** (sequential processing)
+8. Click **Done**
+
+> **Why trigger conditions?** Without them, the flow fires on every edit. The trigger conditions ensure it only runs when `SubmissionStatus` changes to `Submitted` OR `ReportStatus` changes to `Supervisor Rejected`.
+>
+> 📘 **Learn more:** See [`docs/power-automate/trigger-conditions.md`](docs/power-automate/trigger-conditions.md) for the full trigger conditions reference, concurrency control, and polling intervals.
+
+### Step 3: Add "Get Items" to find the Activity
+
+1. Click **+ New step** → Search for `Get items` (SharePoint)
+2. **Site Address:** Same SharePoint site
+3. **List Name:** Select `Activities`
+4. Click **Show advanced options**
+5. **Filter Query:**
+   ```
+   Title eq '@{triggerBody()?['Activity']?['Value']}'
+   ```
+   > This looks up the Activity by its ID (Title field = Activity ID like `ICMTS-AC-0001`)
+>
+> 📘 **Learn more:** See [`docs/power-automate/sharepoint-triggers-and-actions.md`](docs/power-automate/sharepoint-triggers-and-actions.md) for all OData filter patterns, Person/Lookup column access, and Get Items reference.
+
+6. **Top Count:** `1`
+
+### Step 4: Send Email to Supervisor
+
+1. Click **+ New step** → Search for `Send an email (V2)` (Office 365 Outlook)
+2. **To:** Click in the field, then select **Dynamic content** → Under `Get items`, select `Supervisor Email`
+   > If the Supervisor column is empty for this activity, you can add a **Condition** step first to check `Supervisor Email is not equal to null`, and only send if true.
+
+3. **Subject:**
+   ```
+   Report submitted: @{triggerBody()?['Title']} — @{triggerBody()?['ReportingMonth']?['Value']}
+   ```
+   > 📘 **Expression reference:** See [`docs/power-automate/expressions-and-functions.md`](docs/power-automate/expressions-and-functions.md) for `triggerBody()`, `concat()`, `formatDateTime()`, and other functions used in these expressions.
+
+4. **Body:** (switch to HTML mode by clicking `</>` icon)
+   ```html
+   <p><strong>A monthly report has been submitted for your review.</strong></p>
+   <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font-family:Segoe UI, Arial, sans-serif;">
+     <tr><td style="background:#f0f0f0;"><strong>Report</strong></td><td>@{triggerBody()?['Title']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Activity</strong></td><td>@{triggerBody()?['Activity']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Programme</strong></td><td>@{triggerBody()?['ProgrammeLabel']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Directorate</strong></td><td>@{triggerBody()?['DirectorateLabel']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Reporting Month</strong></td><td>@{triggerBody()?['ReportingMonth']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Quarter</strong></td><td>@{triggerBody()?['Quarter']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Progress %</strong></td><td>@{triggerBody()?['PercentageComplete']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Submitted By</strong></td><td>@{triggerBody()?['SubmittedBy']?['DisplayName']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Submission Date</strong></td><td>@{triggerBody()?['SubmissionDate']}</td></tr>
+   </table>
+   <p>Please review this report in the <strong>APP-MRMS</strong> application and approve or reject it.</p>
+   <p><em>This is an automated notification from the APP Monthly Reporting Management System.</em></p>
+   ```
+
+5. **Importance:** Select `High`
+
+6. Click **Save**
+
+### Step 5: Test
+
+1. Go to your SharePoint `MonthlyReports` list
+2. Edit an existing report: set `SubmissionStatus` to `Submitted`
+3. Go back to Power Automate → click **Test** → **Manually** → **Test**
+4. Wait for the flow to complete (should show green checkmarks)
+5. Check the Supervisor's email inbox
+
+---
+
+## Flow 2: ReportDecision — Notify Contributor on Approval/Rejection
+
+**Purpose:** When a Supervisor approves or rejects a report, the Contributor (who submitted it) gets an email.
+
+### Step 1: Create the Flow
+
+1. Go to **https://make.powerautomate.com**
+2. Click **+ Create** → **Automated cloud flow**
+3. Flow name: `APP-MRMS Report Decision Notify Contributor`
+4. Trigger: `When an item is created or modified` (SharePoint)
+5. **Site Address:** Same SharePoint site
+6. **List Name:** `MonthlyReports`
+
+### Step 2: Add Trigger Conditions
+
+1. Click **⋯** on the trigger → **Settings** → **Trigger Conditions**
+2. Add condition 1:
+   ```
+   @equals(triggerBody()?['ReportStatus']?['Value'], 'Supervisor Approved')
+   ```
+3. Add condition 2:
+   ```
+   @equals(triggerBody()?['ReportStatus']?['Value'], 'Supervisor Rejected')
+   ```
+4. Add condition 3:
+   ```
+   @equals(triggerBody()?['ReportStatus']?['Value'], 'M&E Approved')
+   ```
+5. Add condition 4:
+   ```
+   @equals(triggerBody()?['ReportStatus']?['Value'], 'M&E Rejected')
+   ```
+6. Click **Done**
+
+### Step 3: Add a Condition to Split Approved vs Rejected
+
+1. Click **+ New step** → Search for `Condition`
+2. **Condition:** `ReportStatus` **is equal to** `Supervisor Rejected` **OR** `ReportStatus` **is equal to** `M&E Rejected`
+   > In the condition builder: `ReportStatus Value` `is equal to` `Supervisor Rejected`
+
+### Step 4A: If Yes (Rejected) — Send Rejection Email
+
+1. In the **If yes** branch, click **Add an action** → `Send an email (V2)` (Office 365 Outlook)
+2. **To:** `SubmittedBy Email` (from Dynamic content → trigger)
+3. **Subject:**
+   ```
+   Report Rejected: @{triggerBody()?['Title']} — @{triggerBody()?['ReportingMonth']?['Value']}
+   ```
+4. **Body:** (HTML mode)
+   ```html
+   <p><strong>Your monthly report has been rejected and requires correction.</strong></p>
+   <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font-family:Segoe UI, Arial, sans-serif;">
+     <tr><td style="background:#f0f0f0;"><strong>Report</strong></td><td>@{triggerBody()?['Title']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Activity</strong></td><td>@{triggerBody()?['Activity']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Reporting Month</strong></td><td>@{triggerBody()?['ReportingMonth']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Status</strong></td><td>@{triggerBody()?['ReportStatus']?['Value']}</td></tr>
+     <tr><td style="background:#fff0f0;"><strong>Rejection Reason</strong></td><td>@{triggerBody()?['SupervisorRejectionReason']}</td></tr>
+   </table>
+   <p>Please open the <strong>APP-MRMS</strong> application, correct the report, and resubmit.</p>
+   <p><em>This is an automated notification from the APP Monthly Reporting Management System.</em></p>
+   ```
+
+5. **Importance:** `High`
+
+### Step 4B: If No (Approved) — Send Approval Email
+
+1. In the **If no** branch, click **Add an action** → `Send an email (V2)` (Office 365 Outlook)
+2. **To:** `SubmittedBy Email` (from Dynamic content → trigger)
+3. **Subject:**
+   ```
+   Report Approved: @{triggerBody()?['Title']} — @{triggerBody()?['ReportingMonth']?['Value']}
+   ```
+4. **Body:** (HTML mode)
+   ```html
+   <p><strong>Your monthly report has been approved.</strong></p>
+   <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font-family:Segoe UI, Arial, sans-serif;">
+     <tr><td style="background:#f0f0f0;"><strong>Report</strong></td><td>@{triggerBody()?['Title']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Activity</strong></td><td>@{triggerBody()?['Activity']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Reporting Month</strong></td><td>@{triggerBody()?['ReportingMonth']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Status</strong></td><td>@{triggerBody()?['ReportStatus']?['Value']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Reviewed By</strong></td><td>@{triggerBody()?['SupervisorReviewedBy']?['DisplayName']}</td></tr>
+   </table>
+   <p>No further action is required.</p>
+   <p><em>This is an automated notification from the APP Monthly Reporting Management System.</em></p>
+   ```
+
+5. **Importance:** `Normal`
+
+### Step 5: Save and Test
+
+1. Click **Save**
+2. Test by changing `ReportStatus` on a MonthlyReport item to `Supervisor Rejected`
+3. Verify the Contributor receives the rejection email with the reason
+4. Test again with `Supervisor Approved` — verify the approval email
+
+---
+
+## Flow 3: MonthlyReminder — Weekly Due-Date Reminder
+
+**Purpose:** Every Monday morning, email Contributors who have active activities with no report submitted for the current month.
+
+> 📘 **Full reference:** See [`docs/power-automate/alerting-flow.md`](docs/power-automate/alerting-flow.md) for the complete MonthlyReminder flow pattern — including the importable `definition.json` skeleton, all expression references, variations (fallback recipients, in-app notifications, daily overdue escalation), and performance tips.
+
+### Step 1: Create the Flow
+
+1. Go to **https://make.powerautomate.com**
+2. Click **+ Create** → **Automated cloud flow**
+3. Flow name: `APP-MRMS Monthly Reminder`
+4. Trigger: Search for `Recurrence`
+5. **Frequency:** `Week`
+6. **Interval:** `1`
+7. **On these days:** Select `Monday`
+8. **At these hours:** `8`
+9. **At these minutes:** `0`
+10. Click **Create**
+
+### Step 2: Get Active Activities
+
+1. Click **+ New step** → `Get items` (SharePoint)
+2. **Site Address:** Same SharePoint site
+3. **List Name:** `Activities`
+4. **Filter Query:**
+   ```
+   Active eq 1 and Frequency eq 'Monthly'
+   ```
+5. **Top Count:** `500` (adjust based on your data volume)
+
+### Step 3: Apply to Each Activity
+
+1. Click **+ New step** → Search for `Apply to each`
+2. **Select an output from previous steps:** Click in the field → select `value` (from Get items)
+
+### Step 4: Inside Apply to Each — Get Current Reports
+
+1. Inside the Apply to each, click **Add an action** → `Get items` (SharePoint)
+2. **Site Address:** Same
+3. **List Name:** `MonthlyReports`
+4. **Filter Query:**
+   ```
+   Activity eq '@{items('Apply_to_each')?['Title']}' and ReportingMonth eq '@{formatDateTime(utcNow(), 'MMMM')}'
+   ```
+   > This checks for a report matching this Activity's ID for the current month
+>
+> 📘 **Expression tip:** `items('Apply_to_each')` references the current item in the loop. `formatDateTime(utcNow(), 'MMMM')` returns the current month name (e.g., `August`). See [`docs/power-automate/expressions-and-functions.md`](docs/power-automate/expressions-and-functions.md) for more.
+
+5. **Top Count:** `1`
+
+### Step 5: Add a Condition — Only if No Report Found
+
+1. Inside Apply to each, after the second Get items, click **Add an action** → `Condition`
+2. **Condition:** `length(body('Get_items_2')?['value'])` **is equal to** `0`
+   > In the condition builder: click **Expression**, type `length(body('Get_items_2')?['value'])`, then set `is equal to` `0`
+
+### Step 6: If Yes (No Report) — Send Reminder
+
+1. In the **If yes** branch, add `Send an email (V2)` (Office 365 Outlook)
+2. **To:** `ActivityOwner Email` (from `Apply_to_each` → `ActivityOwner/Email`)
+   > Note: If `ActivityOwner` is empty, you may need to use `Supervisor Email` as a fallback. Add a **Condition** to check which to use.
+
+3. **Subject:**
+   ```
+   Reminder: @{items('Apply_to_each')?['Title']} — @{items('Apply_to_each')?['ActivityShortDescription']} due @{items('Apply_to_each')?['DueDate']}
+   ```
+
+4. **Body:** (HTML mode)
+   ```html
+   <p><strong>This is a reminder that your monthly activity report is due soon.</strong></p>
+   <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; font-family:Segoe UI, Arial, sans-serif;">
+     <tr><td style="background:#f0f0f0;"><strong>Activity</strong></td><td>@{items('Apply_to_each')?['Title']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Description</strong></td><td>@{items('Apply_to_each')?['ActivityShortDescription']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Programme</strong></td><td>@{items('Apply_to_each')?['ProgrammeLabel']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Directorate</strong></td><td>@{items('Apply_to_each')?['DirectorateLabel']}</td></tr>
+     <tr><td style="background:#fff0f0;"><strong>Due Date</strong></td><td>@{items('Apply_to_each')?['DueDate']}</td></tr>
+     <tr><td style="background:#f0f0f0;"><strong>Reporting Month</strong></td><td>@{formatDateTime(utcNow(), 'MMMM yyyy')}</td></tr>
+   </table>
+   <p>Please open the <strong>APP-MRMS</strong> application and submit your progress report before the due date.</p>
+   <p><em>This is an automated reminder from the APP Monthly Reporting Management System.</em></p>
+   ```
+
+5. **Importance:** `Normal`
+
+### Step 7: Save and Test
+
+1. Click **Save**
+2. Click **Test** → **Manually** → **Test**
+3. Verify the flow runs and sends emails to Activity Owners with no report for the current month
+4. Check the run history for any errors
+
+---
+
+## Troubleshooting
+
+> 📘 **Full reference:** See [`docs/power-automate/troubleshooting.md`](docs/power-automate/troubleshooting.md) for the complete error code lookup table, common error messages with fixes, and debugging techniques.
+
+### Flow doesn't trigger
+- Check trigger conditions match the column values exactly (case-sensitive for Choice values)
+- Verify the SharePoint list connection is still valid (go to Connections → find SharePoint → click the three dots → see if it says "Connected")
+
+### Emails not received
+- Check spam/junk folder
+- Verify the Person column contains valid M365 accounts (not just email addresses as text)
+- In Power Automate run history, click the failed step to see the error message
+
+### "Column does not exist" error
+- Ensure the column internal names match what you're using in expressions
+- Go to SharePoint list → List Settings → click the column → check the URL for the internal name (the `Field=` parameter)
+
+### Flow runs but email body is empty
+- Check that the dynamic content references match the correct step names
+- If you renamed steps, the dynamic content references may have broken — re-select them
+
+### Supervisor column is empty for some activities
+- Add a **Condition** step before sending: check if `Supervisor Email` is not equal to null
+- In the **If no** (null) branch, add a fallback action — either skip or send to Programme Manager instead
+
+---
+
+## Environment Setup Checklist
+
+Before creating the flows, confirm these columns exist in SharePoint:
+
+### MonthlyReports list
+| Column | Type | Notes |
+|--------|------|-------|
+| Title | Single line text | Report ID (e.g. `ICTM-RP-0001`) |
+| Activity | Lookup/Text | Activity ID (e.g. `ICMTS-AC-0001`) |
+| ReportingMonth | Choice | April, May, June... March |
+| Quarter | Choice | Q1, Q2, Q3, Q4, All |
+| ReportStatus | Choice | Supervisor Approved, M&E Approved, Supervisor Rejected, M&E Rejected, Not Submitted |
+| SubmissionStatus | Choice | Draft, Submitted, Approved |
+| SubmittedBy | Person | The contributor who submitted |
+| SupervisorReviewedBy | Person | The supervisor who reviewed |
+| SupervisorRejectionReason | Multiple lines of text | Reason when rejected |
+| PercentageComplete | Number | 0–100 |
+| ProgrammeLabel | Single line text | Programme name |
+| DirectorateLabel | Single line text | Directorate name |
+
+### Activities list
+| Column | Type | Notes |
+|--------|------|-------|
+| Title | Single line text | Activity ID (e.g. `ICMTS-AC-0001`) |
+| ActivityShortDescription | Single line text | Brief description |
+| ActivityOwner | Person | The contributor responsible |
+| Supervisor | Person | The reviewer/approver |
+| DueDate | Date | When the report is due |
+| StartDate | Date | Activity start |
+| EndDate | Date | Activity end |
+| Frequency | Choice | Monthly, Quarterly, Annual |
+| Status | Choice | Active, Completed |
+| DirectorateLabel | Single line text | Directorate name |
+| ProgrammeLabel | Single line text | Programme name |
+
+---
+
+## Phase 2 Enhancements (Future)
+
+When ready to expand:
+1. **Overdue Escalation flow** — Daily scheduled flow that sets `IsOverdue = true` and escalates to Programme Manager after 3 days (see [`docs/power-automate/alerting-flow.md`](docs/power-automate/alerting-flow.md) Variation 5)
+2. **Comment Notification flow** — When a comment is added to ReportComments, notify the report owner
+3. **Teams Adaptive Cards** — Replace plain emails with rich interactive cards in Teams
+4. **Notifications list** — Write in-app notifications for the Canvas App notification centre
+5. **Audit Log Writer** — Log all status transitions to AuditLog list
+6. **Quarterly Consolidation** — Aggregate approved reports for Power BI dashboards
+
+---
+
+## Importing Flows via Package
+
+Instead of building flows manually, you can import the pre-built package:
+
+1. Use `tools/build_flow_zips.py` to rebuild with your site URL and list GUIDs
+2. Import via **My flows → Import → Package (.zip)** in the Power Automate portal
+3. Bind connections (SharePoint + Outlook) and turn on each flow
+
+> 📘 **Full reference:** See [`docs/power-automate/flow-import-export.md`](docs/power-automate/flow-import-export.md) for the import process, validation rules, and package format. See [`docs/power-automate/definition-json-reference.md`](docs/power-automate/definition-json-reference.md) for the `definition.json` structure.
+
+> 📘 **Validation findings:** See [`docs/flow_import_validation_findings.md`](docs/flow_import_validation_findings.md) for the exact import errors encountered and their fixes.
+
+---
+
+## 📚 Reference Documentation Index
+
+| File | Description |
+|------|-------------|
+| [`docs/power-automate/README.md`](docs/power-automate/README.md) | Master index with architecture diagram |
+| [`docs/power-automate/cloud-flows-overview.md`](docs/power-automate/cloud-flows-overview.md) | Types of flows, licensing, lifecycle |
+| [`docs/power-automate/sharepoint-triggers-and-actions.md`](docs/power-automate/sharepoint-triggers-and-actions.md) | SharePoint connector: triggers, actions, OData filters |
+| [`docs/power-automate/expressions-and-functions.md`](docs/power-automate/expressions-and-functions.md) | Complete expressions/functions reference |
+| [`docs/power-automate/expression-cheat-sheet.md`](docs/power-automate/expression-cheat-sheet.md) | **Quick reference** — 20 most-used expressions |
+| [`docs/power-automate/trigger-conditions.md`](docs/power-automate/trigger-conditions.md) | Trigger conditions, concurrency, polling |
+| [`docs/power-automate/building-flows-manually.md`](docs/power-automate/building-flows-manually.md) | Step-by-step portal walkthrough |
+| [`docs/power-automate/alerting-flow.md`](docs/power-automate/alerting-flow.md) | MonthlyReminder scheduled flow pattern |
+| [`docs/power-automate/flow-import-export.md`](docs/power-automate/flow-import-export.md) | Import/export package format and validation |
+| [`docs/power-automate/definition-json-reference.md`](docs/power-automate/definition-json-reference.md) | `definition.json` structure for importable flows |
+| [`docs/power-automate/troubleshooting.md`](docs/power-automate/troubleshooting.md) | Error codes and debugging |
+
+---
+
+*Last updated: 2 September 2026*
+*Author: APP-MRMS Implementation Team*

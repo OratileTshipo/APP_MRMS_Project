@@ -61,3 +61,41 @@ Find list GUIDs: open the list → List settings → the browser URL contains
 
 Templates live in `flows/templates/APP-MRMS-Approval/` (`{{SITE_URL}}`, `{{MR_GUID}}`,
 `{{ACT_GUID}}`, `{{NOTIF_GUID}}`, `{{AUDIT_GUID}}`, `{{USERS_GUID}}` tokens).
+
+---
+
+## Flow Comparison Matrix
+
+| | Flow 1: Submitted | Flow 2: Approved | Flow 3: Rejected | Flow 4: Finalized | Flow 5: MonthlyReminder |
+|---|---|---|---|---|---|
+| **Trigger** | SharePoint — item modified | SharePoint — item modified | SharePoint — item modified | SharePoint — item modified | Recurrence — Mon 08:00 |
+| **Trigger condition** | `Status eq 'Submitted'` | `Status eq 'SupervisorApproved'` | `Status eq 'Rejected'` | `Status eq 'Approved'` | None (scheduled) |
+| **Trigger list** | MonthlyReports | MonthlyReports | MonthlyReports | MonthlyReports | — |
+| **Reads list** | Activities | — | — | Activities, APP_Users | Activities, MonthlyReports |
+| **Writes list** | — | Notifications | Notifications | Activities, Notifications, AuditLog | — |
+| **Loop?** | No | No | No | No | Yes (Apply to Each) |
+| **Condition?** | No | No | Yes (who rejected?) | No | Yes (no report?) |
+| **Email recipients** | Supervisor | Contributor | Contributor (+ Supervisor if Deputy rejected) | Contributor + Supervisor | ActivityOwner (fallback: Supervisor) |
+| **Email importance** | High | Normal | High | Normal | Normal |
+| **Connections** | SharePoint, Outlook | SharePoint, Outlook | SharePoint, Outlook | SharePoint, Outlook | SharePoint, Outlook |
+| **Manual build guide** | `flow build instructions` §Flow 1 | `flow build instructions` §Flow 2 | `flow build instructions` §Flow 2 | `flow build instructions` §Flow 2 | [`alerting-flow.md`](../docs/power-automate/alerting-flow.md) |
+| **Import package** | ✅ Included | ✅ Included | ✅ Included | ✅ Included | ❌ Not in package |
+| **In-app notification** | ❌ | ✅ | ✅ | ✅ | ❌ (email only) |
+| **Audit log entry** | ❌ | ❌ | ❌ | ✅ | ❌ |
+
+---
+
+## 📚 Reference Documentation Index
+
+| # | File | Description |
+|---|------|-------------|
+| 1 | [`cloud-flows-overview.md`](../docs/power-automate/cloud-flows-overview.md) | Types of flows, core concepts, lifecycle, licensing, connectors |
+| 2 | [`sharepoint-triggers-and-actions.md`](../docs/power-automate/sharepoint-triggers-and-actions.md) | SharePoint connector: triggers, actions, OData filters, Person/Lookup access |
+| 3 | [`expressions-and-functions.md`](../docs/power-automate/expressions-and-functions.md) | Complete expressions/functions reference — strings, collections, logic, dates |
+| 4 | [`expression-cheat-sheet.md`](../docs/power-automate/expression-cheat-sheet.md) | **Quick reference** — 20 most-used expressions for this project |
+| 5 | [`trigger-conditions.md`](../docs/power-automate/trigger-conditions.md) | Trigger conditions, concurrency control, polling intervals, loop prevention |
+| 6 | [`building-flows-manually.md`](../docs/power-automate/building-flows-manually.md) | Step-by-step guide to build flows in the portal without Copilot |
+| 7 | [`alerting-flow.md`](../docs/power-automate/alerting-flow.md) | MonthlyReminder scheduled flow pattern — full reference with variations |
+| 8 | [`flow-import-export.md`](../docs/power-automate/flow-import-export.md) | Import/export package format, validation rules, rebuild script usage |
+| 9 | [`definition-json-reference.md`](../docs/power-automate/definition-json-reference.md) | `definition.json` structure for importable flows |
+| 10 | [`troubleshooting.md`](../docs/power-automate/troubleshooting.md) | Error codes, common errors with fixes, debugging techniques |
