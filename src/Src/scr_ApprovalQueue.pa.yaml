@@ -208,7 +208,7 @@ Screens:
                                     Items: =Directorates
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(ApprQueueDirectorate_drp_1.Selected), "All", ApprQueueDirectorate_drp_1.Selected.DirectorateID))
+                                    OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(ApprQueueDirectorate_drp_1.Selected), "All", ApprQueueDirectorate_drp_1.Selected.DirectorateName))
                                     Width: =86
                         - ApprQueueTabs_con_1:
                             Control: GroupContainer@1.5.0
@@ -372,20 +372,25 @@ Screens:
                                         varQueueTab,
                                         "Pending",
                                             If(
-                                                varUserRole = "DeputyDirectorME",
-                                                IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved",
-                                                SubmissionStatus.Value = "Submitted"
+                                                varUserRole = "Supervisor",
+                                                SubmissionStatus.Value = "Submitted",
+                                                true
                                             ),
                                         "Overdue",
                                             If(
-                                                varUserRole = "DeputyDirectorME",
-                                                (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved") && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
-                                                SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5
+                                                varUserRole = "Supervisor",
+                                                SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
+                                                DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5
                                             ),
                                         "Escalated", IsOverdue = true,
                                         true
                                     ) &&
-                                    (varQueueFilterDirectorate = "All" || DirectorateLabel = varQueueFilterDirectorate) &&
+                                    (
+                                        IsBlank(varQueueFilterDirectorate)
+                                        || varQueueFilterDirectorate = "All"
+                                        || DirectorateLabel = varQueueFilterDirectorate
+                                        || Directorate.Value = varQueueFilterDirectorate
+                                    ) &&
                                     (
                                         IsBlank(varQueueSearch) ||
                                         Lower(Title) in Lower(varQueueSearch) ||
@@ -580,8 +585,8 @@ Screens:
                                         Filter(MonthlyReports, false)
                                     )
                                 );
-                                Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted")));
-                                Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted", DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5)));
+                                Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, If(varUserRole = "Supervisor", SubmissionStatus.Value = "Submitted", true))));
+                                Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, If(varUserRole = "Supervisor", SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5, DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5))));
                                 Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, IsOverdue = true)));
                                 Set(varQueueSelected, If(CountRows(colApprovalQueue) > 0, First(colApprovalQueue), Blank()))
                               Text: =""

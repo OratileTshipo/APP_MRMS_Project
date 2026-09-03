@@ -1293,3 +1293,17 @@ directorates (supervisor-approved reports queue in the DD list).
   `Resources/PublishInfo.json` renamed to the new app name.
 - YAML parse gate: 14/15 files compose (pre-existing `scr_ReportActivities` plain-scalar
   colon quirk at line 717 is unchanged from the InfoIcons pack and out of scope here).
+
+## 2026-09-03 follow-up — DD queue not showing Supervisor Approved reports
+
+Reports with `SubmissionStatus = Approved` and `ReportStatus = Supervisor Approved`
+were collected into `colApprovalQueue` for the DD but then hidden by the Pending tab
+(`SubmissionStatus = "Submitted"`) and the pending/overdue counts. Also, APP_Users
+Role choice is `DeputyDirectorM&E` while formulas compared `DeputyDirectorME`, so the
+DD collection branch never ran. Directorate filter compared `DirectorateLabel` (full
+name) to `DirectorateID` (e.g. ICTM).
+
+Fix: Pending/Overdue tabs and counts now show the role-scoped collection as-is (Supervisor
+still keys off Submitted); `varUserRole` normalises `DeputyDirectorM&E` → `DeputyDirectorME`;
+directorate dropdown OnChange writes `DirectorateName`. Pack:
+`APP-MRMS_Latest_dev_03Sep2026_QueueFix.msapp`.
