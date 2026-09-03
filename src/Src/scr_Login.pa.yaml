@@ -163,14 +163,7 @@ Screens:
                                 Set(varCurrentUserRecord, varLoginCandidate);
                                 Set(varUserEmail, Coalesce(varLoginCandidate.UserAccount.Email, typedEmail));
                                 Set(varUserFullName, Coalesce(varLoginCandidate.UserAccount.DisplayName, varLoginCandidate.Title));
-                                 Set(
-                                     varUserRole,
-                                     If(
-                                         Trim(varCurrentUserRecord.Role.Value) in ["DeputyDirectorME", "DeputyDirectorM&E"],
-                                         "DeputyDirectorME",
-                                         Trim(varCurrentUserRecord.Role.Value)
-                                     )
-                                 );
+                                 Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
                                 Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
                                 Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
                                 Set(varCanViewAllReports, varUserRole = "DeputyDirectorME");

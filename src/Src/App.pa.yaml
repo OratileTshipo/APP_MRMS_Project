@@ -27,14 +27,7 @@ App:
       Set(varUserEmail, User().Email);
       Set(varUserFullName, User().FullName);
       Set(varCurrentUserRecord, LookUp(APP_Users, UserAccount.Email = varUserEmail));
-      Set(
-          varUserRole,
-          If(
-              Trim(varCurrentUserRecord.Role.Value) in ["DeputyDirectorME", "DeputyDirectorM&E"],
-              "DeputyDirectorME",
-              Trim(varCurrentUserRecord.Role.Value)
-          )
-      );
+      Set(varUserRole, Trim(varCurrentUserRecord.Role.Value));
       Set(varUserDirectorate, Trim(varCurrentUserRecord.Directorate.Value));
       Set(varUserProgramme, Trim(varCurrentUserRecord.Programme.Value));
       //Set(varUserDirectorateID, LookUp(Directorates, Title = varUserDirectorate).DirectorateID);

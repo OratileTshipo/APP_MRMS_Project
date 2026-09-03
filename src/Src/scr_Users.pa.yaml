@@ -753,7 +753,7 @@ Screens:
                                                             Fill: =RGBA(255, 255, 255, 1)
                                                             Height: =(Parent.Height / 4) - 2
                                                             ItemDisplayText: =ThisItem.Value
-                                                             Items: =["Contributor", "Supervisor", "ProgrammeManager", "DeputyDirectorM&E", "DeputyDirectorME", "Administrator"]
+                                                             Items: =["Contributor", "Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"]
                                                             LayoutMinHeight: =16
                                                             LayoutMinWidth: =16
                                                             OnChange: |-
