@@ -36,16 +36,20 @@ Usage
     python3 tools/check_control_props.py [--src DIR] [--templates FILE]
 
 Defaults to the repo layout (src/Src/ + the unpacked original manifest at
-reference/canvas-apps/msapp-internals/References/Templates.json).
+reference/canvas-apps/msapp-internals/References/Templates.json). If that
+default manifest is missing (reference/ was dropped from the dev/main lines),
+the copy embedded in a tracked root .msapp pack is used instead.
 Exit code 0 = clean, 1 = unknown properties found.
 """
 
 import argparse
 import glob
+import io
 import json
 import os
 import re
 import sys
+import zipfile
 
 # Repo-relative defaults (script lives in tools/, repo root is one level up)
 DEFAULT_SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "Src")
@@ -81,15 +85,77 @@ CONTROL_ALIASES = {
     "textinput": "text",
 }
 
+# Root .msapp packs that embed the authoritative control manifest. Tried in
+# order when the unpacked reference/ copy is missing; any other root *.msapp
+# that ships References/Templates.json is used as a last resort.
+MANIFEST_PACK_ORDER = ("APP-MRMS_Latest_dev_27Aug2026_InfoIcons.msapp",)
+
 PROPERTY_TAG_RE = re.compile(r"<property\s+name=\"([^\"]+)\"")
+
+
+def _msapp_templates_stream(pack_path):
+    """Return an open text stream over the Templates.json inside a .msapp pack.
+
+    A .msapp file is a zip archive whose References/Templates.json is the same
+    authoritative widget manifest the unpacked reference/ copy is derived
+    from. Returns None if the pack does not contain that member.
+    """
+    with zipfile.ZipFile(pack_path) as pack:
+        try:
+            raw = pack.read("References/Templates.json")
+        except KeyError:
+            return None
+    return io.StringIO(raw.decode("utf-8"))
+
+
+def resolve_manifest(templates_arg):
+    """Resolve --templates to the manifest source the check validates against.
+
+    Normally the given file path. But the canonical unpacked manifest
+    (reference/canvas-apps/msapp-internals/References/Templates.json) was
+    deleted from the dev/main lines during the 2026-08 repo cleanup while this
+    guard still defaults to it, so every CI run hard-failed. When that default
+    path is missing, fall back to the Templates.json embedded in a tracked root
+    .msapp pack (the identical authoritative manifest) instead of exiting 1. A
+    missing path that was supplied explicitly is returned as-is so main()
+    reports it loudly — an explicit path is never silently substituted.
+    """
+    path = os.path.abspath(templates_arg)
+    if os.path.exists(path) or path != os.path.abspath(DEFAULT_TEMPLATES):
+        return path
+
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    packs = [
+        os.path.join(repo_root, name)
+        for name in MANIFEST_PACK_ORDER
+        if os.path.exists(os.path.join(repo_root, name))
+    ]
+    if not packs:
+        packs = sorted(glob.glob(os.path.join(repo_root, "*.msapp")))
+    for pack_path in packs:
+        stream = _msapp_templates_stream(pack_path)
+        if stream is not None:
+            print(
+                "INFO: default manifest "
+                f"{os.path.relpath(path)} not found — using Templates.json "
+                f"embedded in {os.path.basename(pack_path)}"
+            )
+            return stream
+    return path  # no usable pack either: main() will fail loudly below
 INCLUDE_PROPERTY_TAG_RE = re.compile(r"<appMagic:includeProperty\s+name=\"([^\"]+)\"")
 
 KEY_LINE_RE = re.compile(r"^(\s*)-?\s*([A-Za-z_][A-Za-z0-9_]*)\s*:\s*(.*)$")
 
 
-def load_templates(path):
-    """Return {template_name_lower: {"version": str, "properties": set}}."""
-    with open(path, encoding="utf-8") as f:
+def load_templates(source):
+    """Return {template_name_lower: {"version": str, "properties": set}}.
+
+    `source` is either a filesystem path or an open text stream (used when the
+    canonical reference/ manifest is absent and Templates.json is read straight
+    out of a tracked root .msapp pack instead).
+    """
+    f = open(source, encoding="utf-8") if isinstance(source, str) else source
+    with f:
         data = json.load(f)
     used = data.get("UsedTemplates") if isinstance(data, dict) else data
     templates = {}
@@ -225,16 +291,20 @@ def main():
     args = parser.parse_args()
 
     src_dir = os.path.abspath(args.src)
-    templates_path = os.path.abspath(args.templates)
 
     if not os.path.isdir(src_dir):
         print(f"ERROR: source directory not found: {src_dir}")
         sys.exit(1)
-    if not os.path.exists(templates_path):
-        print(f"ERROR: Templates.json not found: {templates_path}")
+
+    # Either a file path (present, or an explicit path that must fail loudly)
+    # or an in-memory stream when the missing default manifest was substituted
+    # from a tracked root .msapp pack.
+    manifest_source = resolve_manifest(args.templates)
+    if isinstance(manifest_source, str) and not os.path.exists(manifest_source):
+        print(f"ERROR: Templates.json not found: {manifest_source}")
         sys.exit(1)
 
-    templates = load_templates(templates_path)
+    templates = load_templates(manifest_source)
 
     errors = []
     warnings = []
