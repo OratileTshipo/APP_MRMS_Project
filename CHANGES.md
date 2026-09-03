@@ -1251,10 +1251,10 @@ Import this one — it should pass Studio's parse now.
 
 ---
 
-# 2026-09-02 — dev branch — Two-status model alignment + DD global approver
+# 2026-09-03 — dev branch — Two-status model alignment + DD global approver
 
 Branch: `dev`. Rebuilt from `APP-MRMS_Latest_dev_27Aug2026_InfoIcons.msapp` as
-`APP-MRMS_Latest_dev_02Sep2026_StatusModel.msapp` (internal app name
+`APP-MRMS_Latest_dev_03Sep2026_StatusModel.msapp` (internal app name
 `APP-MRMS (Status Model Build)`). Every status comparison now uses the two CSV-aligned
 Choice columns on `MonthlyReports` (`SubmissionStatus` = Draft/Submitted/Approved;
 `ReportStatus` = Not Submitted/Supervisor Approved/Supervisor Rejected/M&E Approved/
