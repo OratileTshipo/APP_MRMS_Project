@@ -676,7 +676,6 @@ Screens:
                                              //" · " & First(Distinct(Activities, ProgrammeLabel)).Value &
                                              " · " & CountRows(Distinct(Directorates,DirectorateID)) &
                                              " DIRECTORATES REPORTING"
-                                            AccessibleLabel: ="Activity"
                                           Width: =Parent.Width
                                           X: =40
                                           Y: =40
@@ -1041,7 +1040,7 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, (varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - AllReportsSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1146,7 +1145,7 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"),(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - PendingSubtitile_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1254,7 +1253,7 @@ Screens:
                                             */
 
                                             CountRows(Filter(colReportsInScope, ReportStatus.Value="M&E Approved",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - ApprovedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1364,7 +1363,7 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, ReportStatus.Value="Supervisor Rejected" || ReportStatus.Value="M&E Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - RejectedSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -1472,7 +1471,7 @@ Screens:
 
 
                                             CountRows(Filter(colReportsInScope, IsOverdue,(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - OverdueSubtitle_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
@@ -2160,13 +2159,9 @@ Screens:
                                           PaddingLeft: =12
                                           PaddingRight: =0
                                           PaddingTop: =0
-                                          Text: |-
-                                            ="FY Progress: " & ThisItem.FYCumulativeRate & "%"
-                                            AccessibleLabel: ="Activity"
-                                          Y: |-
+                                          Text: "=\"FY Progress: \" & ThisItem.FYCumulativeRate & \"%\""
+                                          Y: =MonthlyTrack_rect.Y + MonthlyTrack_rect.Height
                                           AccessibleLabel: ="FYPct"
-                                            =//lbl_ProgrammeName.Y + lbl_ProgrammeName.Height
-                                            MonthlyTrack_rect.Y + MonthlyTrack_rect.Height
                                     - FYTrack_rect:
                                         Control: Rectangle@2.3.0
                                         Properties:
@@ -2248,7 +2243,6 @@ Screens:
                                           Size: =12
                                           Text: |-
                                             ="Monthly: " & ThisItem.MonthlyReportingRate & "% reported · " & ThisItem.MonthlyApprovalRate & "% approved"
-                                            AccessibleLabel: ="Activity"
                                           VerticalAlign: =VerticalAlign.Top
                                           Width: =ProgrammeName_lbl.Width
                                           X: =ProgrammeName_lbl.X
@@ -2335,9 +2329,7 @@ Screens:
                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                           )
                                       ) & " reports flagged for attention"
-                                      AccessibleLabel: ="Activity"
                                     Visible: |-
-                                    AccessibleLabel: ="Warning Text"
                                       =//If(CountRows(colFlaggedItems) > 0, true,false)
 
                                       CountRows(
@@ -2349,6 +2341,7 @@ Screens:
                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter)
                                           )
                                       ) > 0
+                                    AccessibleLabel: ="Warning Text"
                               - RecentSubmissions_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -2742,7 +2735,6 @@ Screens:
                                           LayoutMinWidth: =16
                                           Text: |-
                                             =ThisItem.'Activity: ActivityShortDescription'.Value
-                                            AccessibleLabel: ="Activity"
                                           AccessibleLabel: ="Activity"
                                     - Rectangle2:
                                         Control: Rectangle@2.3.0
@@ -2769,7 +2761,7 @@ Screens:
                                           Text: |-
                                             =//ThisItem.SubmittedBy_x002f_SubmissionDate.DisplayName
                                             ThisItem.SubmittedBy.DisplayName
-                                            AccessibleLabel: ="Activity"
+                                          AccessibleLabel: ="Activity"
                                     - Rectangle2_8:
                                         Control: Rectangle@2.3.0
                                         Properties:

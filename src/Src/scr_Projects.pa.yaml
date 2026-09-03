@@ -732,7 +732,7 @@ Screens:
                                               )
                                           )
                                       ) & " projects"
-                                      AccessibleLabel: ="Activity"
+                                    AccessibleLabel: ="Activity"
                               - PrjGallery_con:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
@@ -936,7 +936,6 @@ Screens:
                                                       "New Project",
                                                       "Priority: " & varSelectedProject.ProjectID & " - " & varSelectedProject.PriorityChallenge
                                                   )
-                                                  AccessibleLabel: ="Activity"
                                                 X: =40
                                                 Y: =40
                                                 AccessibleLabel: ="Form Title"

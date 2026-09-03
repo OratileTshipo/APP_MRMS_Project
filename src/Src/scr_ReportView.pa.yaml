@@ -639,7 +639,7 @@ Screens:
                                     Size: =12
                                     Text: |-
                                       =If(IsBlank(varViewReport), "", varViewReport.'Activity: ActivityShortDescription'.Value)
-                                      AccessibleLabel: ="Activity"
+                                    AccessibleLabel: ="Activity"
                               - ReportViewOutputKey_lbl:
                                   Control: ModernText@1.0.0
                                   Properties:

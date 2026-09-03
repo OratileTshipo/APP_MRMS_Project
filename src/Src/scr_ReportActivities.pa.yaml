@@ -714,7 +714,7 @@ Screens:
                                     - RepActRowStatus_lbl:
                                         Control: ModernText@1.0.0
                                         Properties:
-                                          AccessibleLabel: ="Status: " & ThisItem.Status.Value
+                                          AccessibleLabel: "=\"Status: \" & ThisItem.Status.Value"
                                           Align: =Align.Center
                                           FontWeight: =FontWeight.Semibold
                                           OnSelect: =Select(Parent)
@@ -908,13 +908,14 @@ Screens:
                                                 Icon: =Icon.InfoBadge
                                                 LayoutMinHeight: =16
                                                 LayoutMinWidth: =16
-                                                OnSelect: =Set(varTooltipText, If(varTooltipText = "Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.", "", "Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.")); Set(varTooltipVisible, Not varTooltipVisible)
+                                                OnSelect: "=Set(varTooltipText, If(varTooltipText = \"Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.\", \"\", \"Enter the report title using the format: Programme-Activity-SequentialNumber (e.g. ICTM-RP-0001). This uniquely identifies the monthly report.\")); Set(varTooltipVisible, Not varTooltipVisible)"
                                                 PressedBorderColor: =RGBA(0, 0, 0, 0)
                                                 PressedColor: =RGBA(16, 110, 190, 1)
                                                 PressedFill: =RGBA(0, 0, 0, 0)
                                                 Tooltip: ="How to fill in this field"
                                                 Width: =20
                                                 TabIndex: =0
+                                          - RepActTitle_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -982,6 +983,7 @@ Screens:
                                                       Tooltip: ="How to fill in this field"
                                                       Width: =20
                                                       TabIndex: =0
+                                                - RepActMonth_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1039,6 +1041,7 @@ Screens:
                                                       Tooltip: ="How to fill in this field"
                                                       Width: =20
                                                       TabIndex: =0
+                                                - RepActQuarter_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1097,6 +1100,7 @@ Screens:
                                                 Tooltip: ="How to fill in this field"
                                                 Width: =20
                                                 TabIndex: =0
+                                          - RepActFY_drp:
                                               Control: ModernDropdown@1.0.2
                                               Properties:
                                                 AlignInContainer: =AlignInContainer.Stretch
@@ -1164,6 +1168,7 @@ Screens:
                                                       Tooltip: ="How to fill in this field"
                                                       Width: =20
                                                       TabIndex: =0
+                                                - RepActPct_txt:
                                                     Control: Classic/TextInput@2.3.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Stretch
@@ -1213,13 +1218,14 @@ Screens:
                                                       Icon: =Icon.InfoBadge
                                                       LayoutMinHeight: =16
                                                       LayoutMinWidth: =16
-                                                      OnSelect: =Set(varTooltipText, If(varTooltipText = "Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.", "", "Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.")); Set(varTooltipVisible, Not varTooltipVisible)
+                                                      OnSelect: "=Set(varTooltipText, If(varTooltipText = \"Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.\", \"\", \"Select the current submission status: Draft (not yet submitted), Submitted (sent for review), or another status as configured.\")); Set(varTooltipVisible, Not varTooltipVisible)"
                                                       PressedBorderColor: =RGBA(0, 0, 0, 0)
                                                       PressedColor: =RGBA(16, 110, 190, 1)
                                                       PressedFill: =RGBA(0, 0, 0, 0)
                                                       Tooltip: ="How to fill in this field"
                                                       Width: =20
                                                       TabIndex: =0
+                                                - RepActFormStatus_drp:
                                                     Control: ModernDropdown@1.0.2
                                                     Properties:
                                                       AlignInContainer: =AlignInContainer.Center
@@ -1276,6 +1282,7 @@ Screens:
                                                 Tooltip: ="How to fill in this field"
                                                 Width: =20
                                                 TabIndex: =0
+                                          - RepActReason_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1333,6 +1340,7 @@ Screens:
                                                 Tooltip: ="How to fill in this field"
                                                 Width: =20
                                                 TabIndex: =0
+                                          - RepActRemedial_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1389,6 +1397,7 @@ Screens:
                                                 Tooltip: ="How to fill in this field"
                                                 Width: =20
                                                 TabIndex: =0
+                                          - RepActOutput_txt:
                                               Control: Classic/TextInput@2.3.2
                                               Properties:
                                                 BorderColor: =RGBA(214, 221, 224, 1)
@@ -1403,55 +1412,55 @@ Screens:
                                                 RadiusTopLeft: =8
                                                 RadiusTopRight: =8
                                                 Width: =Parent.Width
-                                                - RepActAttachements_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    DropShadow: =DropShadow.None
-                                    FillPortions: =0
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutGap: =4
-                                    PaddingBottom: =8
-                                    PaddingLeft: =8
-                                    PaddingRight: =8
-                                    PaddingTop: =8
-                                    Width: =Parent.Width
-                                  Children:
-                                    - RepActAttachments_lbl:
-                                        Control: ModernText@1.0.0
+                                    - RepActAttachements_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
                                         Properties:
-                                          AutoHeight: =true
-                                          Color: =RGBA(96, 94, 92, 1)
-                                          FontWeight: =FontWeight.Semibold
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Size: =11
-                                          Text: ="PROOF OF EVIDENCE (POE)"
-                                          AccessibleLabel: ="POE Attachments"
-                                    - RepActPOEAttachments_ico:
-                                        Control: Classic/Icon@2.5.0
-                                        Properties:
-                                          AccessibleLabel: ="Information for POE Attachments"
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          Color: =RGBA(0, 120, 212, 1)
-                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                          DisabledColor: =RGBA(225, 223, 221, 1)
-                                          DisabledFill: =RGBA(0, 0, 0, 0)
-                                          FocusedBorderThickness: =4
-                                          Height: =20
-                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                          HoverColor: =RGBA(16, 110, 190, 1)
-                                          HoverFill: =RGBA(230, 240, 255, 1)
-                                          Icon: =Icon.InfoBadge
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varTooltipText, If(varTooltipText = "Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.", "", "Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.")); Set(varTooltipVisible, Not varTooltipVisible)
-                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                          PressedColor: =RGBA(16, 110, 190, 1)
-                                          PressedFill: =RGBA(0, 0, 0, 0)
-                                          Tooltip: ="How to fill in this field"
-                                          Width: =20
-                                          TabIndex: =0
+                                          DropShadow: =DropShadow.None
+                                          FillPortions: =0
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutGap: =4
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          Width: =Parent.Width
+                                        Children:
+                                          - RepActAttachments_lbl:
+                                              Control: ModernText@1.0.0
+                                              Properties:
+                                                AutoHeight: =true
+                                                Color: =RGBA(96, 94, 92, 1)
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =11
+                                                Text: ="PROOF OF EVIDENCE (POE)"
+                                                AccessibleLabel: ="POE Attachments"
+                                          - RepActPOEAttachments_ico:
+                                              Control: Classic/Icon@2.5.0
+                                              Properties:
+                                                AccessibleLabel: ="Information for POE Attachments"
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                Color: =RGBA(0, 120, 212, 1)
+                                                DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                                DisabledColor: =RGBA(225, 223, 221, 1)
+                                                DisabledFill: =RGBA(0, 0, 0, 0)
+                                                FocusedBorderThickness: =4
+                                                Height: =20
+                                                HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                                HoverColor: =RGBA(16, 110, 190, 1)
+                                                HoverFill: =RGBA(230, 240, 255, 1)
+                                                Icon: =Icon.InfoBadge
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: "=Set(varTooltipText, If(varTooltipText = \"Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.\", \"\", \"Upload supporting documents as Proof of Evidence (POE): progress photos, meeting minutes, approval letters, or any evidence of activity implementation.\")); Set(varTooltipVisible, Not varTooltipVisible)"
+                                                PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                                PressedColor: =RGBA(16, 110, 190, 1)
+                                                PressedFill: =RGBA(0, 0, 0, 0)
+                                                Tooltip: ="How to fill in this field"
+                                                Width: =20
+                                                TabIndex: =0
                                     - RepActPOEAttachment_con:
                                         Control: GroupContainer@1.5.0
                                         Variant: AutoLayout

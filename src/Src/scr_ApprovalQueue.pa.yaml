@@ -38,6 +38,244 @@ Screens:
             LayoutDirection: =LayoutDirection.Horizontal
             Width: =App.Width
           Children:
+
+            - ApprQueueSidebar_con:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =varBgLight
+                  FillPortions: =0
+                  Height: =App.Height
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutGap: =30
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =20
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  PaddingTop: =20
+                  Width: =App.Width * 0.05
+                Children:
+                  - ApprQHome_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Home"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Home
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Home"
+                        Width: =Parent.Width - 20
+                  - ApprQProjects_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Projects"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Manufacture
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Projects, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Projects"
+                        Width: =Parent.Width - 20
+                  - ApprQActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.RadarActivityMonitor
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Activities, ScreenTransition.Cover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Activities"
+                        Width: =Parent.Width - 20
+                  - ApprQMonthlyReports_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Monthly Reports"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =varNavy
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.CalendarBlank
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ReportActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Monthly Reports"
+                        Width: =Parent.Width - 20
+                  - ApprQMyActivities_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="My Activities"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.ListWatchlistRemind
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_MyActivities, ScreenTransition.Fade)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="My Activities"
+                        Width: =Parent.Width - 20
+                  - ApprQTrending_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Trending"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Trending
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Trending"
+                        Width: =Parent.Width - 20
+                  - ApprQUsers_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Users"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.People
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Users, ScreenTransition.UnCover)
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Users"
+                        Width: =Parent.Width - 20
+                  - ApprQSidebarSpacer_con:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                  - ApprQSettings_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Settings"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Settings
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Settings"
+                        Width: =Parent.Width - 20
+                  - ApprQSupport_ico:
+                      Control: Classic/Icon@2.5.0
+                      Properties:
+                        AccessibleLabel: ="Support"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        Color: =RGBA(0, 120, 212, 1)
+                        DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                        DisabledColor: =RGBA(225, 223, 221, 1)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =4
+                        Height: =Parent.Height / 20
+                        HoverBorderColor: =RGBA(0, 0, 0, 0)
+                        HoverColor: =RGBA(16, 110, 190, 1)
+                        HoverFill: =RGBA(0, 0, 0, 0)
+                        Icon: =Icon.Support
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PressedBorderColor: =RGBA(0, 0, 0, 0)
+                        PressedColor: =RGBA(16, 110, 190, 1)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Tooltip: ="Support"
+                        Width: =Parent.Width - 20
+
             - ApprQueueDetails_con:
                 Control: GroupContainer@1.5.0
                 Variant: AutoLayout
@@ -45,21 +283,27 @@ Screens:
                   Height: =App.Height
                   LayoutAlignItems: =LayoutAlignItems.Stretch
                   LayoutDirection: =LayoutDirection.Vertical
-                  Width: =App.Width
+                  Width: =App.Width - ApprQueueSidebar_con.Width
                 Children:
-                  - ApprQueueAppHeader_con:
+
+                  - ApprQueueHeader_con:
                       Control: GroupContainer@1.5.0
                       Variant: AutoLayout
                       Properties:
                         DropShadow: =DropShadow.Semilight
                         Fill: =varNavy
+                        FillPortions: =0
                         Height: =App.Height * 0.13
                         LayoutAlignItems: =LayoutAlignItems.Center
                         LayoutDirection: =LayoutDirection.Horizontal
-                        LayoutGap: =14
-                        Width: =Parent.Width
+                        LayoutGap: =20
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =App.Width - ApprQueueSidebar_con.Width
                       Children:
-                        - ApprQueueBack_ico:
+                        - ApprQBack_ico:
                             Control: Classic/Icon@2.5.0
                             Properties:
                               BorderColor: =RGBA(0, 0, 0, 0)
@@ -75,580 +319,756 @@ Screens:
                               Icon: =Icon.ArrowLeft
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Navigate(scr_Home, ScreenTransition.Cover)
+                              OnSelect: =Back()
                               PressedBorderColor: =RGBA(0, 0, 0, 0)
                               PressedColor: =RGBA(255, 255, 255, 1)
                               PressedFill: =RGBA(0, 0, 0, 0)
                               Tooltip: ="Go back"
                               Width: =Parent.Width * 0.04
-                              AccessibleLabel: ="Back"
-                              TabIndex: =0
-                        - ApprQueueTitle_lbl:
-                            Control: Label@2.5.1
-                            Properties:
-                              AlignInContainer: =AlignInContainer.Stretch
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              BorderStyle: =BorderStyle.None
-                              BorderThickness: =2
-                              Color: =RGBA(255, 255, 255, 1)
-                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                              DisabledColor: =RGBA(161, 159, 157, 1)
-                              FocusedBorderThickness: =4
-                              Font: =Font.'Segoe UI'
-                              FontWeight: =FontWeight.Bold
-                              Height: =Parent.Height * 0.5
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Size: =25
-                              Text: ="Approval Queue"
-                        - ApprQueueSubtitle_lbl:
-                            Control: Label@2.5.1
-                            Properties:
-                              AutoHeight: =true
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              BorderStyle: =BorderStyle.None
-                              BorderThickness: =2
-                              Color: =RGBA(255, 255, 255, 1)
-                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                              DisabledColor: =RGBA(161, 159, 157, 1)
-                              FocusedBorderThickness: =4
-                              Font: =Font.'Segoe UI'
-                              Height: =Parent.Height * 0.5
-                              Size: =12
-                              Text: =varQueuePendingCount & " report(s) awaiting review"
-            - ApprQueueBody_con_1:
-                Control: GroupContainer@1.5.0
-                Variant: AutoLayout
-                Properties:
-                  Height: =Parent.Height - ApprQueueAppHeader.Height
-                  LayoutAlignItems: =LayoutAlignItems.Stretch
-                  LayoutDirection: =LayoutDirection.Horizontal
-                  LayoutGap: =14
-                  LayoutMinHeight: =16
-                  LayoutMinWidth: =16
-                  PaddingBottom: =10
-                  PaddingLeft: =10
-                  PaddingRight: =10
-                  PaddingTop: =10
-                  Width: =Parent.Width
-                Children:
-                  - ApprQueueList_col_1:
-                      Control: GroupContainer@1.5.0
-                      Variant: AutoLayout
-                      Properties:
-                        FillPortions: =0
-                        Height: =Parent.Height
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutGap: =10
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        Width: =Parent.Width * 0.38
-                      Children:
-                        - ApprQueueToolbar_con_1:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              Fill: =RGBA(255, 255, 255, 1)
-                              FillPortions: =0
-                              Height: =46
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Horizontal
-                              LayoutGap: =8
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PaddingBottom: =6
-                              PaddingLeft: =10
-                              PaddingRight: =10
-                              PaddingTop: =6
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Width: =Parent.Width
-                            Children:
-                              - ApprQueueSearch_ico_1:
-                                  Control: Classic/Icon@2.5.0
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
-                                    DisabledColor: =RGBA(225, 223, 221, 1)
-                                    DisabledFill: =RGBA(0, 0, 0, 0)
-                                    FocusedBorderThickness: =4
-                                    Height: =18
-                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
-                                    HoverColor: =RGBA(16, 110, 190, 1)
-                                    HoverFill: =RGBA(0, 0, 0, 0)
-                                    Icon: =Icon.Search
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
-                                    PressedColor: =RGBA(16, 110, 190, 1)
-                                    PressedFill: =RGBA(0, 0, 0, 0)
-                                    Width: =18
-                              - ApprQueueSearch_txt_1:
-                                  Control: ModernTextInput@1.1.1
-                                  Properties:
-                                    BorderColor: =RGBA(214, 221, 224, 1)
-                                    BorderStyle: =BorderStyle.Solid
-                                    BorderThickness: =1
-                                    Fill: =RGBA(255, 255, 255, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    OnChange: =Set(varQueueSearch, ApprQueueSearch_txt_1.Text)
-                                    Placeholder: ="Search reports..."
-                                    Width: =Parent.Width - 90
-                              - ApprQueueDirectorate_drp_1:
-                                  Control: ModernDropdown@1.0.2
-                                  Properties:
-                                    AccessibleLabel: ="Directorate"
-                                    Fill: =varBgLight
-                                    ItemDisplayText: =ThisItem.DirectorateID
-                                    Items: =Directorates
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(ApprQueueDirectorate_drp_1.Selected), "All", ApprQueueDirectorate_drp_1.Selected.DirectorateID))
-                                    Width: =86
-                        - ApprQueueTabs_con_1:
+                        - ApprQHeaderLeft_con:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
                               FillPortions: =0
-                              Height: =34
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Horizontal
-                              LayoutGap: =8
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Width: =Parent.Width
-                            Children:
-                              - ApprQueueTabPending_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    BorderColor: =If(varQueueTab = "Pending", varNavy, RGBA(225, 229, 236, 1))
-                                    BorderThickness: =1
-                                    Fill: =If(varQueueTab = "Pending", varNavy, RGBA(255, 255, 255, 1))
-                                    Height: =30
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Width: =Parent.Width / 3 - 6
-                                  Children:
-                                    - ApprQueueTabPending_lbl_1:
-                                        Control: Label@2.5.1
-                                        Properties:
-                                          Align: =Align.Center
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          Color: =If(varQueueTab = "Pending", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
-                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                          DisabledColor: =RGBA(161, 159, 157, 1)
-                                          FocusedBorderThickness: =4
-                                          Font: =Font.'Segoe UI'
-                                          FontWeight: =FontWeight.Semibold
-                                          Height: =26
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varQueueTab, "Pending")
-                                          Size: =11.5
-                                          Text: ="Pending (" & varQueuePendingCount & ")"
-                                          Width: =Parent.Width
-                              - ApprQueueTabOverdue_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    BorderColor: =If(varQueueTab = "Overdue", varNavy, RGBA(225, 229, 236, 1))
-                                    BorderThickness: =1
-                                    Fill: =If(varQueueTab = "Overdue", varNavy, RGBA(255, 255, 255, 1))
-                                    Height: =30
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Width: =Parent.Width / 3 - 6
-                                  Children:
-                                    - ApprQueueTabOverdue_lbl_1:
-                                        Control: Label@2.5.1
-                                        Properties:
-                                          Align: =Align.Center
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          Color: =If(varQueueTab = "Overdue", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
-                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                          DisabledColor: =RGBA(161, 159, 157, 1)
-                                          FocusedBorderThickness: =4
-                                          Font: =Font.'Segoe UI'
-                                          FontWeight: =FontWeight.Semibold
-                                          Height: =26
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varQueueTab, "Overdue")
-                                          Size: =11.5
-                                          Text: ="Overdue (" & varQueueOverdueCount & ")"
-                                          Width: =Parent.Width
-                              - ApprQueueTabEscalated_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    BorderColor: =If(varQueueTab = "Escalated", varNavy, RGBA(225, 229, 236, 1))
-                                    BorderThickness: =1
-                                    Fill: =If(varQueueTab = "Escalated", varNavy, RGBA(255, 255, 255, 1))
-                                    Height: =30
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Width: =Parent.Width / 3 - 6
-                                  Children:
-                                    - ApprQueueTabEscalated_lbl_1:
-                                        Control: Label@2.5.1
-                                        Properties:
-                                          Align: =Align.Center
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          Color: =If(varQueueTab = "Escalated", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
-                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                          DisabledColor: =RGBA(161, 159, 157, 1)
-                                          FocusedBorderThickness: =4
-                                          Font: =Font.'Segoe UI'
-                                          FontWeight: =FontWeight.Semibold
-                                          Height: =26
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varQueueTab, "Escalated")
-                                          Size: =11.5
-                                          Text: ="Escalated (" & varQueueEscalatedCount & ")"
-                              - ApprQueueTabDrafts_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    BorderColor: =If(varQueueTab = "Drafts", varNavy, RGBA(225, 229, 236, 1))
-                                    BorderThickness: =1
-                                    Fill: =If(varQueueTab = "Drafts", varNavy, RGBA(255, 255, 255, 1))
-                                    Height: =30
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Width: =Parent.Width / 3 - 6
-                                  Children:
-                                    - ApprQueueTabDrafts_lbl_1:
-                                        Control: Label@2.5.1
-                                        Properties:
-                                          Align: =Align.Center
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          Color: =If(varQueueTab = "Drafts", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
-                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                          DisabledColor: =RGBA(161, 159, 157, 1)
-                                          FocusedBorderThickness: =4
-                                          Font: =Font.'Segoe UI'
-                                          FontWeight: =FontWeight.Semibold
-                                          Height: =26
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          OnSelect: =Set(varQueueTab, "Drafts")
-                                          Size: =11.5
-                                          Text: ="Drafts"
-                                          Width: =Parent.Width
-                                          Width: =Parent.Width
-                        - ApprQueueEmpty_lbl_1:
-                            Control: Label@2.5.1
-                            Properties:
-                              Align: =Align.Center
-                              AutoHeight: =true
-                              BorderColor: =RGBA(0, 0, 0, 0)
-                              BorderStyle: =BorderStyle.None
-                              BorderThickness: =2
-                              Color: =RGBA(113, 111, 110, 1)
-                              DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                              DisabledColor: =RGBA(161, 159, 157, 1)
-                              FocusedBorderThickness: =4
-                              Font: =Font.'Segoe UI'
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              Text: ="No reports match this view."
-                              Visible: =CountRows(ApprQueue_gal_1.AllItems) = 0
-                              Width: =Parent.Width
-                              Y: =120
-                        - ApprQueue_gal_1:
-                            Control: Gallery@2.15.0
-                            Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
-                            Properties:
-                              BorderColor: =RGBA(245, 245, 245, 1)
                               Height: =Parent.Height
-                              Items: |-
-                                =// ApprQueue_gal.Items — queue cards filtered by the active tab, the
-                                // directorate dropdown and the search box. "Overdue" means a
-                                // Submitted report that has waited more than 5 days for review.
-                                Filter(
-                                    colApprovalQueue,
-                                    Switch(
-                                        varQueueTab,
-                                        "Pending", SubmissionStatus.Value = "Submitted",
-                                        "Overdue", SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
-                                        "Escalated", SubmissionStatus.Value = "Escalated",
-                                        "Drafts", SubmissionStatus.Value = "Draft",
-                                        false
-                                    ) &&
-                                    (varQueueFilterDirectorate = "All" || DirectorateLabel = varQueueFilterDirectorate) &&
-                                    (
-                                        IsBlank(varQueueSearch) ||
-                                        Lower(Title) in Lower(varQueueSearch) ||
-                                        Lower(Coalesce(Output, "")) in Lower(varQueueSearch)
-                                    )
-                                )
+                              LayoutDirection: =LayoutDirection.Vertical
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              OnSelect: =Set(varQueueSelected, ThisItem); Reset(ApprQueueComment_txt_1)
-                              TemplateSize: =118
-                              Width: =Parent.Width
+                              PaddingLeft: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width * .55
                             Children:
-                              - ApprQueueCardBg_con:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    BorderColor: =If(ThisItem.ID = varQueueSelected.ID, RGBA(46, 94, 170, 1), RGBA(225, 229, 236, 1))
-                                    BorderThickness: =1
-                                    Fill: =If(ThisItem.ID = varQueueSelected.ID, RGBA(46, 94, 170, 0.08), RGBA(255, 255, 255, 1))
-                                    Height: =ApprQueue_gal_1.TemplateHeight - 8
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    RadiusBottomLeft: =10
-                                    RadiusBottomRight: =10
-                                    RadiusTopLeft: =10
-                                    RadiusTopRight: =10
-                                    Width: =ApprQueue_gal_1.TemplateWidth - 8
-                              - ApprQueueRowTitle_lbl_1:
+                              - ApprQTitle_lbl:
                                   Control: Label@2.5.1
                                   Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
                                     BorderColor: =RGBA(0, 0, 0, 0)
                                     BorderStyle: =BorderStyle.None
                                     BorderThickness: =2
-                                    Color: =RGBA(31, 39, 51, 1)
+                                    Color: =RGBA(255, 255, 255, 1)
                                     DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                     DisabledColor: =RGBA(161, 159, 157, 1)
                                     FocusedBorderThickness: =4
                                     Font: =Font.'Segoe UI'
                                     FontWeight: =FontWeight.Bold
-                                    Height: =20
-                                    OnSelect: =Select(Parent)
-                                    Text: =Coalesce(ThisItem.Title, "")
-                                    Width: =ApprQueue_gal_1.TemplateWidth - 120
-                                    X: =1
-                                    Y: =12
-                              - ApprQueueRowOverdue_con_1:
+                                    Height: =Parent.Height * .5
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =25
+                                    Text: ="Approval Queue"
+                              - ApprQSubtitle_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    Height: =Parent.Height * .5
+                                    Size: =12
+                                    Text: =varQueuePendingCount & " report(s) awaiting review"
+                        - ApprQHeaderRight_con:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =20
+                              LayoutJustifyContent: =LayoutJustifyContent.End
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width / 3
+                            Children:
+                              - ApprQUser_lbl:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Center
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    FontWeight: =FontWeight.Semibold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Text: =Coalesce(varUserFullName, varUserEmail, "Guest")
+                                    Tooltip: =varUserEmail
+                              - ApprQBell_ico:
+                                  Control: Classic/Icon@2.5.0
+                                  Properties:
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    Color: =RGBA(0, 120, 212, 1)
+                                    DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                    DisabledColor: =RGBA(225, 223, 221, 1)
+                                    DisabledFill: =RGBA(0, 0, 0, 0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height * .4
+                                    HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                    HoverColor: =RGBA(16, 110, 190, 1)
+                                    HoverFill: =RGBA(0, 0, 0, 0)
+                                    Icon: =Icon.Bell
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                    PressedColor: =RGBA(16, 110, 190, 1)
+                                    PressedFill: =RGBA(0, 0, 0, 0)
+                                    Tooltip: ="Notifications"
+                                    Width: =Parent.Width / 15
+
+                  - ApprQueueBody_con_1:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =Parent.Height - ApprQueueHeader_con.Height
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutGap: =14
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =10
+                        PaddingLeft: =10
+                        PaddingRight: =10
+                        PaddingTop: =10
+                        Width: =Parent.Width
+                      Children:
+                        - ApprQueueList_col_1:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              FillPortions: =0
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =10
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Width: =Parent.Width * 0.38
+                            Children:
+                              - ApprQueueToolbar_con_1:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
-                                    Fill: =RGBA(251, 234, 232, 1)
-                                    Height: =22
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    FillPortions: =0
+                                    Height: =46
                                     LayoutAlignItems: =LayoutAlignItems.Center
                                     LayoutDirection: =LayoutDirection.Horizontal
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Visible: =DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) > 5
-                                    Width: =8
-                                    Y: =11
+                                    LayoutGap: =8
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =6
+                                    PaddingLeft: =10
+                                    PaddingRight: =10
+                                    PaddingTop: =6
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                    Width: =Parent.Width
                                   Children:
-                                    - ApprQueueRowOverdue_lbl_1:
+                                    - ApprQueueSearch_ico_1:
+                                        Control: Classic/Icon@2.5.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          DisabledBorderColor: =RGBA(245, 245, 245, 1)
+                                          DisabledColor: =RGBA(225, 223, 221, 1)
+                                          DisabledFill: =RGBA(0, 0, 0, 0)
+                                          FocusedBorderThickness: =4
+                                          Height: =18
+                                          HoverBorderColor: =RGBA(0, 0, 0, 0)
+                                          HoverColor: =RGBA(16, 110, 190, 1)
+                                          HoverFill: =RGBA(0, 0, 0, 0)
+                                          Icon: =Icon.Search
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedBorderColor: =RGBA(0, 0, 0, 0)
+                                          PressedColor: =RGBA(16, 110, 190, 1)
+                                          PressedFill: =RGBA(0, 0, 0, 0)
+                                          Width: =18
+                                    - ApprQueueSearch_txt_1:
+                                        Control: ModernTextInput@1.1.1
+                                        Properties:
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          BorderStyle: =BorderStyle.Solid
+                                          BorderThickness: =1
+                                          Fill: =RGBA(255, 255, 255, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnChange: =Set(varQueueSearch, ApprQueueSearch_txt_1.Text)
+                                          Placeholder: ="Search reports..."
+                                          Width: =Parent.Width - 90
+                                    - ApprQueueDirectorate_drp_1:
+                                        Control: ModernDropdown@1.0.2
+                                        Properties:
+                                          AccessibleLabel: ="Directorate"
+                                          Fill: =varBgLight
+                                          ItemDisplayText: =ThisItem.DirectorateID
+                                          Items: =Directorates
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnChange: =Set(varQueueFilterDirectorate, If(IsBlank(ApprQueueDirectorate_drp_1.Selected), "All", ApprQueueDirectorate_drp_1.Selected.DirectorateID))
+                                          Width: =86
+                              - ApprQueueTabs_con_1:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    FillPortions: =0
+                                    Height: =34
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutGap: =8
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ApprQueueTabPending_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =If(varQueueTab = "Pending", varNavy, RGBA(225, 229, 236, 1))
+                                          BorderThickness: =1
+                                          Fill: =If(varQueueTab = "Pending", varNavy, RGBA(255, 255, 255, 1))
+                                          Height: =30
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Width: =Parent.Width / 3 - 6
+                                        Children:
+                                          - ApprQueueTabPending_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =If(varQueueTab = "Pending", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =26
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Set(varQueueTab, "Pending")
+                                                Size: =11.5
+                                                Text: ="Pending (" & varQueuePendingCount & ")"
+                                                Width: =Parent.Width
+                                    - ApprQueueTabOverdue_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =If(varQueueTab = "Overdue", varNavy, RGBA(225, 229, 236, 1))
+                                          BorderThickness: =1
+                                          Fill: =If(varQueueTab = "Overdue", varNavy, RGBA(255, 255, 255, 1))
+                                          Height: =30
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Width: =Parent.Width / 3 - 6
+                                        Children:
+                                          - ApprQueueTabOverdue_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =If(varQueueTab = "Overdue", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =26
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Set(varQueueTab, "Overdue")
+                                                Size: =11.5
+                                                Text: ="Overdue (" & varQueueOverdueCount & ")"
+                                                Width: =Parent.Width
+                                    - ApprQueueTabEscalated_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =If(varQueueTab = "Escalated", varNavy, RGBA(225, 229, 236, 1))
+                                          BorderThickness: =1
+                                          Fill: =If(varQueueTab = "Escalated", varNavy, RGBA(255, 255, 255, 1))
+                                          Height: =30
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Width: =Parent.Width / 3 - 6
+                                        Children:
+                                          - ApprQueueTabEscalated_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =If(varQueueTab = "Escalated", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =26
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Set(varQueueTab, "Escalated")
+                                                Size: =11.5
+                                                Text: ="Escalated (" & varQueueEscalatedCount & ")"
+                                    - ApprQueueTabDrafts_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =If(varQueueTab = "Drafts", varNavy, RGBA(225, 229, 236, 1))
+                                          BorderThickness: =1
+                                          Fill: =If(varQueueTab = "Drafts", varNavy, RGBA(255, 255, 255, 1))
+                                          Height: =30
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Width: =Parent.Width / 3 - 6
+                                        Children:
+                                          - ApprQueueTabDrafts_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =If(varQueueTab = "Drafts", RGBA(255, 255, 255, 1), RGBA(95, 100, 114, 1))
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =26
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Set(varQueueTab, "Drafts")
+                                                Size: =11.5
+                                                Text: ="Drafts"
+                                                Width: =Parent.Width
+                              - ApprQueueEmpty_lbl_1:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    Align: =Align.Center
+                                    AutoHeight: =true
+                                    BorderColor: =RGBA(0, 0, 0, 0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    Color: =RGBA(113, 111, 110, 1)
+                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                    DisabledColor: =RGBA(161, 159, 157, 1)
+                                    FocusedBorderThickness: =4
+                                    Font: =Font.'Segoe UI'
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Text: ="No reports match this view."
+                                    Visible: =CountRows(ApprQueue_gal_1.AllItems) = 0
+                                    Width: =Parent.Width
+                                    Y: =120
+                              - ApprQueue_gal_1:
+                                  Control: Gallery@2.15.0
+                                  Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
+                                  Properties:
+                                    BorderColor: =RGBA(245, 245, 245, 1)
+                                    Height: =Parent.Height
+                                    Items: |-
+                                      =// ApprQueue_gal.Items — queue cards filtered by the active tab, the
+                                      // directorate dropdown and the search box. "Overdue" means a
+                                      // Submitted report that has waited more than 5 days for review.
+                                      Filter(
+                                          colApprovalQueue,
+                                          Switch(
+                                              varQueueTab,
+                                              "Pending", SubmissionStatus.Value = "Submitted",
+                                              "Overdue", SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
+                                              "Escalated", SubmissionStatus.Value = "Escalated",
+                                              "Drafts", SubmissionStatus.Value = "Draft",
+                                              false
+                                          ) &&
+                                          (varQueueFilterDirectorate = "All" || DirectorateLabel = varQueueFilterDirectorate) &&
+                                          (
+                                              IsBlank(varQueueSearch) ||
+                                              Lower(Title) in Lower(varQueueSearch) ||
+                                              Lower(Coalesce(Output, "")) in Lower(varQueueSearch)
+                                          )
+                                      )
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    OnSelect: =Set(varQueueSelected, ThisItem); Reset(ApprQueueComment_txt_1)
+                                    TemplateSize: =118
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ApprQueueCardBg_con:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          BorderColor: =If(ThisItem.ID = varQueueSelected.ID, RGBA(46, 94, 170, 1), RGBA(225, 229, 236, 1))
+                                          BorderThickness: =1
+                                          Fill: =If(ThisItem.ID = varQueueSelected.ID, RGBA(46, 94, 170, 0.08), RGBA(255, 255, 255, 1))
+                                          Height: =ApprQueue_gal_1.TemplateHeight - 8
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          RadiusBottomLeft: =10
+                                          RadiusBottomRight: =10
+                                          RadiusTopLeft: =10
+                                          RadiusTopRight: =10
+                                          Width: =ApprQueue_gal_1.TemplateWidth - 8
+                                    - ApprQueueRowTitle_lbl_1:
                                         Control: Label@2.5.1
                                         Properties:
-                                          Align: =Align.Center
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           BorderStyle: =BorderStyle.None
                                           BorderThickness: =2
-                                          Color: =RGBA(192, 57, 43, 1)
+                                          Color: =RGBA(31, 39, 51, 1)
                                           DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           FocusedBorderThickness: =4
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =FontWeight.Bold
                                           Height: =20
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
                                           OnSelect: =Select(Parent)
-                                          Size: =10.5
-                                          Text: ="Overdue"
-                                          Width: =Parent.Width
-                              - ApprQueueRowSub_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    Height: =18
-                                    OnSelect: =Select(Parent)
-                                    Size: =11.5
-                                    Text: |-
-                                      =Coalesce(ThisItem.'Activity: ActivityShortDescription', ThisItem.Activity.Value, "")
-                                    Width: =ApprQueue_gal_1.TemplateWidth - 40
-                                    X: =1
-                                    Y: =34
-                              - ApprQueueRowMonth_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(46, 94, 170, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =20
-                                    OnSelect: =Select(Parent)
-                                    Size: =11
-                                    Text: =Coalesce(ThisItem.ReportingMonth.Value, "") & " · " & Coalesce(ThisItem.'FinancialYear '.Value, "")
-                                    Width: =ApprQueue_gal_1.TemplateWidth * 0.5
-                                    X: =0.5
-                                    Y: =56
-                              - ApprQueueRowPct_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    Align: =Align.Right
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(113, 111, 110, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    Height: =20
-                                    OnSelect: =Select(Parent)
-                                    Size: =11
-                                    Text: =Round(Coalesce(ThisItem.'PercentageComplete ', 0), 0) & "% complete"
-                                    Width: =ApprQueue_gal_1.TemplateWidth * 0.35
-                                    Y: =56
-                              - ApprQueueRowFooter_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(139, 147, 161, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    Height: =18
-                                    OnSelect: =Select(Parent)
-                                    Size: =11
-                                    Text: |-
-                                      =Coalesce(ThisItem.SubmittedBy.Email, "Unknown") & " · submitted " &
-                                      If(
-                                          DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) = 0, "today",
-                                          DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) & " days ago"
-                                      )
-                                    Width: =ApprQueue_gal_1.TemplateWidth - 40
-                                    X: =1
-                                    Y: =80
-                  - ApprQueueDetail_col_1:
-                      Control: GroupContainer@1.5.0
-                      Variant: AutoLayout
-                      Properties:
-                        FillPortions: =0
-                        Height: =Parent.Height
-                        LayoutAlignItems: =LayoutAlignItems.Stretch
-                        LayoutDirection: =LayoutDirection.Vertical
-                        LayoutGap: =12
-                        LayoutMinHeight: =16
-                        LayoutMinWidth: =16
-                        Width: =Parent.Width * 0.62
-                      Children:
-                        - ApprQueueRefresh_btn_1:
-                            Control: Button@0.0.45
-                            Properties:
-                              OnSelect: |-
-                                =// Reload the role-scoped queue after an Approve / Reject / Return
-                                ClearCollect(
-                                    colApprovalQueue,
-                                    Switch(
-                                        varUserRole,
-                                        "DeputyDirectorME",
-                                            Filter(MonthlyReports,
-                                                SubmissionStatus.Value = "Approved" && IsBlank(ReportStatus.Value)),
-                                        "Supervisor",
-                                            Filter(MonthlyReports,
-                                                (SubmissionStatus.Value = "Submitted" || SubmissionStatus.Value = "Escalated" || SubmissionStatus.Value = "Draft")
-                                                && DirectorateLabel = varUserDirectorate),
-                                        "Administrator",
-                                            Filter(MonthlyReports,
-                                                !IsBlank(SubmissionStatus.Value) && IsBlank(ReportStatus.Value)),
-                                        Filter(MonthlyReports, false)
-                                    )
-                                );
-                                Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted")));
-                                Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted", DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5)));
-                                Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Escalated")));
-                                Set(varQueueSelected, If(CountRows(colApprovalQueue) > 0, First(colApprovalQueue), Blank()))
-                              Text: =""
-                              Visible: =false
-                        - ApprQueueDetailHeader_con_1:
+                                          Text: =Coalesce(ThisItem.Title, "")
+                                          Width: =ApprQueue_gal_1.TemplateWidth - 120
+                                          X: =1
+                                          Y: =12
+                                    - ApprQueueRowOverdue_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          Fill: =RGBA(251, 234, 232, 1)
+                                          Height: =22
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Visible: =DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) > 5
+                                          Width: =8
+                                          Y: =11
+                                        Children:
+                                          - ApprQueueRowOverdue_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(192, 57, 43, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Bold
+                                                Height: =20
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: =Select(Parent)
+                                                Size: =10.5
+                                                Text: ="Overdue"
+                                                Width: =Parent.Width
+                                    - ApprQueueRowSub_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          Height: =18
+                                          OnSelect: =Select(Parent)
+                                          Size: =11.5
+                                          Text: |-
+                                            =Coalesce(ThisItem.'Activity: ActivityShortDescription', ThisItem.Activity.Value, "")
+                                          Width: =ApprQueue_gal_1.TemplateWidth - 40
+                                          X: =1
+                                          Y: =34
+                                    - ApprQueueRowMonth_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(46, 94, 170, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =20
+                                          OnSelect: =Select(Parent)
+                                          Size: =11
+                                          Text: =Coalesce(ThisItem.ReportingMonth.Value, "") & " · " & Coalesce(ThisItem.'FinancialYear '.Value, "")
+                                          Width: =ApprQueue_gal_1.TemplateWidth * 0.5
+                                          X: =0.5
+                                          Y: =56
+                                    - ApprQueueRowPct_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Right
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(113, 111, 110, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          Height: =20
+                                          OnSelect: =Select(Parent)
+                                          Size: =11
+                                          Text: =Round(Coalesce(ThisItem.'PercentageComplete ', 0), 0) & "% complete"
+                                          Width: =ApprQueue_gal_1.TemplateWidth * 0.35
+                                          Y: =56
+                                    - ApprQueueRowFooter_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(139, 147, 161, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          Height: =18
+                                          OnSelect: =Select(Parent)
+                                          Size: =11
+                                          Text: |-
+                                            =Coalesce(ThisItem.SubmittedBy.Email, "Unknown") & " · submitted " &
+                                            If(
+                                                DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) = 0, "today",
+                                                DateDiff(Coalesce(SubmissionDate, Today()), Today(), TimeUnit.Days) & " days ago"
+                                            )
+                                          Width: =ApprQueue_gal_1.TemplateWidth - 40
+                                          X: =1
+                                          Y: =80
+                        - ApprQueueDetail_col_1:
                             Control: GroupContainer@1.5.0
                             Variant: AutoLayout
                             Properties:
-                              Fill: =RGBA(255, 255, 255, 1)
                               FillPortions: =0
-                              Height: =96
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Horizontal
-                              LayoutGap: =14
+                              Height: =Parent.Height
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Vertical
+                              LayoutGap: =12
                               LayoutMinHeight: =16
                               LayoutMinWidth: =16
-                              PaddingBottom: =14
-                              PaddingLeft: =18
-                              PaddingRight: =18
-                              PaddingTop: =14
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Width: =Parent.Width
+                              Width: =Parent.Width * 0.62
                             Children:
-                              - ApprQueueDetailHeaderText_con_1:
+                              - ApprQueueRefresh_btn_1:
+                                  Control: Button@0.0.45
+                                  Properties:
+                                    OnSelect: |-
+                                      =// Reload the role-scoped queue after an Approve / Reject / Return
+                                      ClearCollect(
+                                          colApprovalQueue,
+                                          Switch(
+                                              varUserRole,
+                                              "DeputyDirectorME",
+                                                  Filter(MonthlyReports,
+                                                      SubmissionStatus.Value = "Approved" && IsBlank(ReportStatus.Value)),
+                                              "Supervisor",
+                                                  Filter(MonthlyReports,
+                                                      (SubmissionStatus.Value = "Submitted" || SubmissionStatus.Value = "Escalated" || SubmissionStatus.Value = "Draft")
+                                                      && DirectorateLabel = varUserDirectorate),
+                                              "Administrator",
+                                                  Filter(MonthlyReports,
+                                                      !IsBlank(SubmissionStatus.Value) && IsBlank(ReportStatus.Value)),
+                                              Filter(MonthlyReports, false)
+                                          )
+                                      );
+                                      Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted")));
+                                      Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted", DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5)));
+                                      Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Escalated")));
+                                      Set(varQueueSelected, If(CountRows(colApprovalQueue) > 0, First(colApprovalQueue), Blank()))
+                                    Text: =""
+                                    Visible: =false
+                              - ApprQueueDetailHeader_con_1:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
-                                    Height: =Parent.Height
-                                    LayoutDirection: =LayoutDirection.Vertical
-                                    LayoutGap: =4
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    FillPortions: =0
+                                    Height: =96
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutGap: =14
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
+                                    PaddingBottom: =14
+                                    PaddingLeft: =18
+                                    PaddingRight: =18
+                                    PaddingTop: =14
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
                                     Width: =Parent.Width
                                   Children:
-                                    - ApprQueueDetailTitle_lbl_1:
+                                    - ApprQueueDetailHeaderText_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          Height: =Parent.Height
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutGap: =4
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Width: =Parent.Width
+                                        Children:
+                                          - ApprQueueDetailTitle_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(31, 39, 51, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Bold
+                                                Height: =22
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =15
+                                                Text: =If(IsBlank(varQueueSelected), "Select a report", Coalesce(varQueueSelected.Title, ""))
+                                                Width: =Parent.Width
+                                          - ApprQueueDetailSub_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                AutoHeight: =true
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(113, 111, 110, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =12
+                                                Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.ProgrammeLabel, "") & " · " & Coalesce(varQueueSelected.DirectorateLabel, "") & " · " & Coalesce(varQueueSelected.SubmittedBy.Email, "Unknown"))
+                                                Width: =Parent.Width
+                                    - ApprQueueDetailStatus_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          Fill: =If(IsBlank(varQueueSelected), RGBA(234, 241, 252, 1), If(varQueueSelected.SubmissionStatus.Value = "Submitted", RGBA(234, 241, 252, 1), If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), RGBA(239, 234, 247, 1), RGBA(234, 241, 252, 1))))
+                                          Height: =30
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =20
+                                          RadiusBottomRight: =20
+                                          RadiusTopLeft: =20
+                                          RadiusTopRight: =20
+                                          Width: =110
+                                        Children:
+                                          - ApprQueueDetailStatus_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =If(IsBlank(varQueueSelected), RGBA(46, 94, 170, 1), If(varQueueSelected.SubmissionStatus.Value = "Submitted", RGBA(46, 94, 170, 1), If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), RGBA(108, 79, 161, 1), RGBA(46, 94, 170, 1))))
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Bold
+                                                Height: =28
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =11
+                                                Text: =If(IsBlank(varQueueSelected), "", If(varQueueSelected.SubmissionStatus.Value = "Submitted", "Awaiting Supervisor", If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), "Awaiting DD", Coalesce(varQueueSelected.SubmissionStatus.Value, "Draft"))))
+                                                Width: =Parent.Width
+                              - ApprQueueReviewCard_con_1:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    Height: =App.Height * 0.42
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    PaddingBottom: =16
+                                    PaddingLeft: =18
+                                    PaddingRight: =18
+                                    PaddingTop: =14
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ApprQueueReviewStep_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(46, 94, 170, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =18
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11
+                                          Text: ="SUBMISSION REVIEW"
+                                    - ApprQueueReviewTitle_lbl_1:
                                         Control: Label@2.5.1
                                         Properties:
                                           BorderColor: =RGBA(0, 0, 0, 0)
@@ -663,256 +1083,188 @@ Screens:
                                           Height: =22
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =15
-                                          Text: =If(IsBlank(varQueueSelected), "Select a report", Coalesce(varQueueSelected.Title, ""))
+                                          Size: =14
+                                          Text: ="Report Content"
+                                    - ApprQueueReviewDivider_rec_1:
+                                        Control: Rectangle@2.3.0
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          DisabledFill: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(225, 229, 236, 1)
+                                          FocusedBorderThickness: =4
+                                          Height: =1
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
                                           Width: =Parent.Width
-                                    - ApprQueueDetailSub_lbl_1:
+                                    - ApprQueuePlannedLabel_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(139, 147, 161, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =18
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11.5
+                                          Text: ="ACTIVITY DESCRIPTION"
+                                    - ApprQueuePlanned_lbl_1:
                                         Control: Label@2.5.1
                                         Properties:
                                           AutoHeight: =true
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           BorderStyle: =BorderStyle.None
                                           BorderThickness: =2
-                                          Color: =RGBA(113, 111, 110, 1)
+                                          Color: =RGBA(31, 39, 51, 1)
                                           DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           FocusedBorderThickness: =4
                                           Font: =Font.'Segoe UI'
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =12
-                                          Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.ProgrammeLabel, "") & " · " & Coalesce(varQueueSelected.DirectorateLabel, "") & " · " & Coalesce(varQueueSelected.SubmittedBy.Email, "Unknown"))
+                                          Size: =12.5
+                                          Text: =If(IsBlank(varQueueSelected), "", Coalesce(LookUp(colActivities, ID = varQueueSelected.Activity.Id).'ActivityDescription ', varQueueSelected.Activity.Value, "Not provided"))
                                           Width: =Parent.Width
-                              - ApprQueueDetailStatus_con_1:
-                                  Control: GroupContainer@1.5.0
-                                  Variant: AutoLayout
-                                  Properties:
-                                    Fill: =If(IsBlank(varQueueSelected), RGBA(234, 241, 252, 1), If(varQueueSelected.SubmissionStatus.Value = "Submitted", RGBA(234, 241, 252, 1), If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), RGBA(239, 234, 247, 1), RGBA(234, 241, 252, 1))))
-                                    Height: =30
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    RadiusBottomLeft: =20
-                                    RadiusBottomRight: =20
-                                    RadiusTopLeft: =20
-                                    RadiusTopRight: =20
-                                    Width: =110
-                                  Children:
-                                    - ApprQueueDetailStatus_lbl_1:
+                                    - ApprQueueProgressLabel_lbl_1:
                                         Control: Label@2.5.1
                                         Properties:
-                                          Align: =Align.Center
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           BorderStyle: =BorderStyle.None
                                           BorderThickness: =2
-                                          Color: =If(IsBlank(varQueueSelected), RGBA(46, 94, 170, 1), If(varQueueSelected.SubmissionStatus.Value = "Submitted", RGBA(46, 94, 170, 1), If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), RGBA(108, 79, 161, 1), RGBA(46, 94, 170, 1))))
+                                          Color: =RGBA(139, 147, 161, 1)
                                           DisabledBorderColor: =RGBA(0, 0, 0, 0)
                                           DisabledColor: =RGBA(161, 159, 157, 1)
                                           FocusedBorderThickness: =4
                                           Font: =Font.'Segoe UI'
-                                          FontWeight: =FontWeight.Bold
-                                          Height: =28
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =18
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Size: =11
-                                          Text: =If(IsBlank(varQueueSelected), "", If(varQueueSelected.SubmissionStatus.Value = "Submitted", "Awaiting Supervisor", If(varQueueSelected.SubmissionStatus.Value = "Approved" && IsBlank(varQueueSelected.ReportStatus.Value), "Awaiting DD", Coalesce(varQueueSelected.SubmissionStatus.Value, "Draft"))))
+                                          Size: =11.5
+                                          Text: ="PROGRESS REPORT"
+                                    - ApprQueueProgress_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          AutoHeight: =true
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(31, 39, 51, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12.5
+                                          Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.Output, "Not provided"))
                                           Width: =Parent.Width
-                        - ApprQueueReviewCard_con_1:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              Fill: =RGBA(255, 255, 255, 1)
-                              Height: =App.Height * 0.42
-                              LayoutAlignItems: =LayoutAlignItems.Stretch
-                              LayoutDirection: =LayoutDirection.Vertical
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              LayoutOverflowY: =LayoutOverflow.Scroll
-                              PaddingBottom: =16
-                              PaddingLeft: =18
-                              PaddingRight: =18
-                              PaddingTop: =14
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Width: =Parent.Width
-                            Children:
-                              - ApprQueueReviewStep_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(46, 94, 170, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Bold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11
-                                    Text: ="SUBMISSION REVIEW"
-                              - ApprQueueReviewTitle_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(31, 39, 51, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Bold
-                                    Height: =22
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =14
-                                    Text: ="Report Content"
-                              - ApprQueueReviewDivider_rec_1:
-                                  Control: Rectangle@2.3.0
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    DisabledFill: =RGBA(161, 159, 157, 1)
-                                    Fill: =RGBA(225, 229, 236, 1)
-                                    FocusedBorderThickness: =4
-                                    Height: =1
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Width: =Parent.Width
-                              - ApprQueuePlannedLabel_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(139, 147, 161, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11.5
-                                    Text: ="ACTIVITY DESCRIPTION"
-                              - ApprQueuePlanned_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    AutoHeight: =true
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(31, 39, 51, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12.5
-                                    Text: =If(IsBlank(varQueueSelected), "", Coalesce(LookUp(colActivities, ID = varQueueSelected.Activity.Id).'ActivityDescription ', varQueueSelected.Activity.Value, "Not provided"))
-                                    Width: =Parent.Width
-                              - ApprQueueProgressLabel_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(139, 147, 161, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11.5
-                                    Text: ="PROGRESS REPORT"
-                              - ApprQueueProgress_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    AutoHeight: =true
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(31, 39, 51, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12.5
-                                    Text: =If(IsBlank(varQueueSelected), "", Coalesce(varQueueSelected.Output, "Not provided"))
-                                    Width: =Parent.Width
-                              - ApprQueuePctLabel_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(139, 147, 161, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11.5
-                                    Text: ="PERCENTAGE COMPLETE"
-                              - ApprQueuePct_con_1:
+                                    - ApprQueuePctLabel_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(139, 147, 161, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =18
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11.5
+                                          Text: ="PERCENTAGE COMPLETE"
+                                    - ApprQueuePct_con_1:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          Height: =24
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =12
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Width: =Parent.Width
+                                        Children:
+                                          - ApprQueuePctTrack_rec_1:
+                                              Control: Rectangle@2.3.0
+                                              Properties:
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                DisabledFill: =RGBA(161, 159, 157, 1)
+                                                Fill: =RGBA(240, 242, 245, 1)
+                                                FocusedBorderThickness: =4
+                                                Height: =8
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Width: =Parent.Width - 60
+                                          - ApprQueuePctFill_rec_1:
+                                              Control: Rectangle@2.3.0
+                                              Properties:
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                DisabledFill: =RGBA(161, 159, 157, 1)
+                                                Fill: =RGBA(46, 94, 170, 1)
+                                                FocusedBorderThickness: =4
+                                                Height: =8
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Width: =Max(4, (Parent.Width - 60) * Coalesce(varQueueSelected.'PercentageComplete ', 0) / 100)
+                                          - ApprQueuePctValue_lbl_1:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Right
+                                                BorderColor: =RGBA(0, 0, 0, 0)
+                                                BorderStyle: =BorderStyle.None
+                                                BorderThickness: =2
+                                                Color: =RGBA(46, 94, 170, 1)
+                                                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                                DisabledColor: =RGBA(161, 159, 157, 1)
+                                                FocusedBorderThickness: =4
+                                                Font: =Font.'Segoe UI'
+                                                FontWeight: =FontWeight.Bold
+                                                Height: =22
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Text: =If(IsBlank(varQueueSelected), "", Round(Coalesce(varQueueSelected.'PercentageComplete ', 0), 0) & "%")
+                                                Width: =48
+                              - ApprQueueCommentsCard_con_1:
                                   Control: GroupContainer@1.5.0
                                   Variant: AutoLayout
                                   Properties:
-                                    Height: =24
-                                    LayoutAlignItems: =LayoutAlignItems.Center
-                                    LayoutDirection: =LayoutDirection.Horizontal
-                                    LayoutGap: =12
+                                    Fill: =RGBA(255, 255, 255, 1)
+                                    FillPortions: =0
+                                    Height: =App.Height * 0.30
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =8
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
+                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    PaddingBottom: =16
+                                    PaddingLeft: =18
+                                    PaddingRight: =18
+                                    PaddingTop: =14
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
                                     Width: =Parent.Width
                                   Children:
-                                    - ApprQueuePctTrack_rec_1:
-                                        Control: Rectangle@2.3.0
-                                        Properties:
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          DisabledFill: =RGBA(161, 159, 157, 1)
-                                          Fill: =RGBA(240, 242, 245, 1)
-                                          FocusedBorderThickness: =4
-                                          Height: =8
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Width: =Parent.Width - 60
-                                    - ApprQueuePctFill_rec_1:
-                                        Control: Rectangle@2.3.0
-                                        Properties:
-                                          BorderColor: =RGBA(0, 0, 0, 0)
-                                          BorderStyle: =BorderStyle.None
-                                          BorderThickness: =2
-                                          DisabledFill: =RGBA(161, 159, 157, 1)
-                                          Fill: =RGBA(46, 94, 170, 1)
-                                          FocusedBorderThickness: =4
-                                          Height: =8
-                                          LayoutMinHeight: =16
-                                          LayoutMinWidth: =16
-                                          Width: =Max(4, (Parent.Width - 60) * Coalesce(varQueueSelected.'PercentageComplete ', 0) / 100)
-                                    - ApprQueuePctValue_lbl_1:
+                                    - ApprQueueCommentsStep_lbl_1:
                                         Control: Label@2.5.1
                                         Properties:
-                                          Align: =Align.Right
                                           BorderColor: =RGBA(0, 0, 0, 0)
                                           BorderStyle: =BorderStyle.None
                                           BorderThickness: =2
@@ -922,357 +1274,317 @@ Screens:
                                           FocusedBorderThickness: =4
                                           Font: =Font.'Segoe UI'
                                           FontWeight: =FontWeight.Bold
-                                          Height: =22
+                                          Height: =18
                                           LayoutMinHeight: =16
                                           LayoutMinWidth: =16
-                                          Text: =If(IsBlank(varQueueSelected), "", Round(Coalesce(varQueueSelected.'PercentageComplete ', 0), 0) & "%")
-                                          Width: =48
-                        - ApprQueueCommentsCard_con_1:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              Fill: =RGBA(255, 255, 255, 1)
-                              FillPortions: =0
-                              Height: =App.Height * 0.30
-                              LayoutAlignItems: =LayoutAlignItems.Stretch
-                              LayoutDirection: =LayoutDirection.Vertical
-                              LayoutGap: =8
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              LayoutOverflowY: =LayoutOverflow.Scroll
-                              PaddingBottom: =16
-                              PaddingLeft: =18
-                              PaddingRight: =18
-                              PaddingTop: =14
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Width: =Parent.Width
-                            Children:
-                              - ApprQueueCommentsStep_lbl_1:
-                                  Control: Label@2.5.1
+                                          Size: =11
+                                          Text: ="REVIEW HISTORY"
+                                    - ApprQueueHistory_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          AutoHeight: =true
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(95, 100, 114, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: |-
+                                            =If(
+                                                IsBlank(varQueueSelected),
+                                                "",
+                                                "Submitted by " & Coalesce(varQueueSelected.SubmittedBy.Email, "Unknown") & " on " &
+                                                Text(Coalesce(varQueueSelected.SubmissionDate, Today()), "d mmm yyyy") &
+                                                If(
+                                                    !IsBlank(varQueueSelected.SupervisorRejectionReason),
+                                                    " · Supervisor note: " & varQueueSelected.SupervisorRejectionReason,
+                                                    !IsBlank(varQueueSelected.DDRejectionReason),
+                                                    " · DD note: " & varQueueSelected.DDRejectionReason,
+                                                    ""
+                                                )
+                                            )
+                                          Width: =Parent.Width
+                                    - ApprQueueCommentLabel_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(31, 39, 51, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =18
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Add a review comment (required for Reject/Return)"
+                                    - ApprQueueComment_txt_1:
+                                        Control: Classic/TextInput@2.3.2
+                                        Properties:
+                                          BorderColor: =RGBA(214, 221, 224, 1)
+                                          Color: =RGBA(31, 39, 51, 1)
+                                          Default: =""
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          DisabledFill: =RGBA(242, 242, 241, 0)
+                                          Font: =Font.'Segoe UI'
+                                          Height: =84
+                                          HintText: ="Add context for your decision — this is visible to the contributor..."
+                                          HoverBorderColor: =RGBA(46, 94, 170, 1)
+                                          HoverColor: =RGBA(31, 39, 51, 1)
+                                          HoverFill: =RGBA(255, 255, 255, 1)
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Mode: =TextMode.MultiLine
+                                          OnChange: =Set(varQueueComment, Self.Text)
+                                          PressedBorderColor: =RGBA(46, 94, 170, 1)
+                                          PressedColor: =RGBA(31, 39, 51, 1)
+                                          PressedFill: =RGBA(255, 255, 255, 1)
+                                          RadiusBottomLeft: =8
+                                          RadiusBottomRight: =8
+                                          RadiusTopLeft: =8
+                                          RadiusTopRight: =8
+                                          Width: =Parent.Width
+                              - ApprQueueActionBar_con_1:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
                                   Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(46, 94, 170, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Bold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11
-                                    Text: ="REVIEW HISTORY"
-                              - ApprQueueHistory_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    AutoHeight: =true
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(95, 100, 114, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: |-
-                                      =If(
-                                          IsBlank(varQueueSelected),
-                                          "",
-                                          "Submitted by " & Coalesce(varQueueSelected.SubmittedBy.Email, "Unknown") & " on " &
-                                          Text(Coalesce(varQueueSelected.SubmissionDate, Today()), "d mmm yyyy") &
-                                          If(
-                                              !IsBlank(varQueueSelected.SupervisorRejectionReason),
-                                              " · Supervisor note: " & varQueueSelected.SupervisorRejectionReason,
-                                              !IsBlank(varQueueSelected.DDRejectionReason),
-                                              " · DD note: " & varQueueSelected.DDRejectionReason,
-                                              ""
-                                          )
-                                      )
-                                    Width: =Parent.Width
-                              - ApprQueueCommentLabel_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(31, 39, 51, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =18
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =12
-                                    Text: ="Add a review comment (required for Reject/Return)"
-                              - ApprQueueComment_txt_1:
-                                  Control: Classic/TextInput@2.3.2
-                                  Properties:
-                                    BorderColor: =RGBA(214, 221, 224, 1)
-                                    Color: =RGBA(31, 39, 51, 1)
-                                    Default: =""
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    DisabledFill: =RGBA(242, 242, 241, 0)
-                                    Font: =Font.'Segoe UI'
-                                    Height: =84
-                                    HintText: ="Add context for your decision — this is visible to the contributor..."
-                                    HoverBorderColor: =RGBA(46, 94, 170, 1)
-                                    HoverColor: =RGBA(31, 39, 51, 1)
-                                    HoverFill: =RGBA(255, 255, 255, 1)
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Mode: =TextMode.MultiLine
-                                    OnChange: =Set(varQueueComment, Self.Text)
-                                    PressedBorderColor: =RGBA(46, 94, 170, 1)
-                                    PressedColor: =RGBA(31, 39, 51, 1)
-                                    PressedFill: =RGBA(255, 255, 255, 1)
-                                    RadiusBottomLeft: =8
-                                    RadiusBottomRight: =8
-                                    RadiusTopLeft: =8
-                                    RadiusTopRight: =8
-                                    Width: =Parent.Width
-                        - ApprQueueActionBar_con_1:
-                            Control: GroupContainer@1.5.0
-                            Variant: AutoLayout
-                            Properties:
-                              Fill: =RGBA(255, 255, 255, 1)
-                              FillPortions: =0
-                              Height: =62
-                              LayoutAlignItems: =LayoutAlignItems.Center
-                              LayoutDirection: =LayoutDirection.Horizontal
-                              LayoutGap: =10
-                              LayoutMinHeight: =16
-                              LayoutMinWidth: =16
-                              PaddingBottom: =10
-                              PaddingLeft: =16
-                              PaddingRight: =16
-                              PaddingTop: =10
-                              RadiusBottomLeft: =10
-                              RadiusBottomRight: =10
-                              RadiusTopLeft: =10
-                              RadiusTopRight: =10
-                              Width: =Parent.Width
-                            Children:
-                              - ApprQueueReviewer_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(139, 147, 161, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    FillPortions: =1
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    Height: =20
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    Size: =11.5
-                                    Text: =Coalesce(varUserRole, "Reviewer") & " · " & Coalesce(varUserDirectorate, "")
-                                    Width: =Parent.Width
-                              - ApprQueueReturn_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    Align: =Align.Center
-                                    BorderColor: =RGBA(225, 229, 236, 1)
-                                    BorderThickness: =1
-                                    Color: =RGBA(95, 100, 114, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
                                     Fill: =RGBA(255, 255, 255, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =38
+                                    FillPortions: =0
+                                    Height: =62
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutGap: =10
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
-                                    OnSelect: |-
-                                      =If(
-                                          IsBlank(varQueueSelected),
-                                          Notify("Select a report from the queue first.", NotificationType.Warning),
-                                          IsBlank(varQueueComment),
-                                          Notify("Add a comment before returning.", NotificationType.Error),
+                                    PaddingBottom: =10
+                                    PaddingLeft: =16
+                                    PaddingRight: =16
+                                    PaddingTop: =10
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                    Width: =Parent.Width
+                                  Children:
+                                    - ApprQueueReviewer_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(139, 147, 161, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          FillPortions: =1
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          Height: =20
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =11.5
+                                          Text: =Coalesce(varUserRole, "Reviewer") & " · " & Coalesce(varUserDirectorate, "")
+                                          Width: =Parent.Width
+                                    - ApprQueueReturn_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(225, 229, 236, 1)
+                                          BorderThickness: =1
+                                          Color: =RGBA(95, 100, 114, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(255, 255, 255, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =38
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =If(
+                                                IsBlank(varQueueSelected),
+                                                Notify("Select a report from the queue first.", NotificationType.Warning),
+                                                IsBlank(varQueueComment),
+                                                Notify("Add a comment before returning.", NotificationType.Error),
 
-                                          Switch(
-                                              varUserRole,
-                                              "DeputyDirectorME",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  SubmissionStatus: {Value: "Draft"},
-                                                  ReportStatus: Blank(),
-                                                  DDReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  DDReviewDate: Now(),
-                                                  DDRejectionReason: "Returned for correction: " & varQueueComment
-                                              }); Notify("Report returned for correction (DD).", NotificationType.Success),
+                                                Switch(
+                                                    varUserRole,
+                                                    "DeputyDirectorME",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        SubmissionStatus: {Value: "Draft"},
+                                                        ReportStatus: Blank(),
+                                                        DDReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        DDReviewDate: Now(),
+                                                        DDRejectionReason: "Returned for correction: " & varQueueComment
+                                                    }); Notify("Report returned for correction (DD).", NotificationType.Success),
 
-                                              "Supervisor",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  SubmissionStatus: {Value: "Draft"},
-                                                  SupervisorReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  SupervisorReviewDate: Now(),
-                                                  SupervisorRejectionReason: "Returned for correction: " & varQueueComment
-                                              }); Notify("Report returned for correction (Supervisor).", NotificationType.Success),
+                                                    "Supervisor",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        SubmissionStatus: {Value: "Draft"},
+                                                        SupervisorReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        SupervisorReviewDate: Now(),
+                                                        SupervisorRejectionReason: "Returned for correction: " & varQueueComment
+                                                    }); Notify("Report returned for correction (Supervisor).", NotificationType.Success),
 
-                                              Notify("Your role cannot return reports.", NotificationType.Error)
-                                          );
+                                                    Notify("Your role cannot return reports.", NotificationType.Error)
+                                                );
 
-                                          Set(varQueueComment, "");
-                                          Reset(ApprQueueComment_txt_1);
-                                          Select(ApprQueueRefresh_btn_1)
-                                      )
-                                    Size: =12.5
-                                    Text: ="Return for Correction"
-                              - ApprQueueReject_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    Align: =Align.Center
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(192, 57, 43, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    Fill: =RGBA(251, 234, 232, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =38
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    OnSelect: |-
-                                      =If(
-                                          IsBlank(varQueueSelected),
-                                          Notify("Select a report from the queue first.", NotificationType.Warning),
-                                          IsBlank(varQueueComment),
-                                          Notify("Add a reason before rejecting.", NotificationType.Error),
+                                                Set(varQueueComment, "");
+                                                Reset(ApprQueueComment_txt_1);
+                                                Select(ApprQueueRefresh_btn_1)
+                                            )
+                                          Size: =12.5
+                                          Text: ="Return for Correction"
+                                    - ApprQueueReject_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(192, 57, 43, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(251, 234, 232, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =38
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =If(
+                                                IsBlank(varQueueSelected),
+                                                Notify("Select a report from the queue first.", NotificationType.Warning),
+                                                IsBlank(varQueueComment),
+                                                Notify("Add a reason before rejecting.", NotificationType.Error),
 
-                                          Switch(
-                                              varUserRole,
-                                              "DeputyDirectorME",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  ReportStatus: {Value: "Rejected"},
-                                                  DDReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  DDReviewDate: Now(),
-                                                  DDRejectionReason: varQueueComment
-                                              }); Notify("Report rejected at final review.", NotificationType.Warning),
+                                                Switch(
+                                                    varUserRole,
+                                                    "DeputyDirectorME",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        ReportStatus: {Value: "Rejected"},
+                                                        DDReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        DDReviewDate: Now(),
+                                                        DDRejectionReason: varQueueComment
+                                                    }); Notify("Report rejected at final review.", NotificationType.Warning),
 
-                                              "Supervisor",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  SubmissionStatus: {Value: "Rejected"},
-                                                  SupervisorReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  SupervisorReviewDate: Now(),
-                                                  SupervisorRejectionReason: varQueueComment
-                                              }); Notify("Report rejected by Supervisor.", NotificationType.Warning),
+                                                    "Supervisor",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        SubmissionStatus: {Value: "Rejected"},
+                                                        SupervisorReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        SupervisorReviewDate: Now(),
+                                                        SupervisorRejectionReason: varQueueComment
+                                                    }); Notify("Report rejected by Supervisor.", NotificationType.Warning),
 
-                                              Notify("Your role cannot reject reports.", NotificationType.Error)
-                                          );
+                                                    Notify("Your role cannot reject reports.", NotificationType.Error)
+                                                );
 
-                                          Set(varQueueComment, "");
-                                          Reset(ApprQueueComment_txt_1);
-                                          Select(ApprQueueRefresh_btn_1)
-                                      )
-                                    Size: =12.5
-                                    Text: ="Reject"
-                                    Width: =96
-                              - ApprQueueApprove_lbl_1:
-                                  Control: Label@2.5.1
-                                  Properties:
-                                    Align: =Align.Center
-                                    BorderColor: =RGBA(0, 0, 0, 0)
-                                    BorderStyle: =BorderStyle.None
-                                    BorderThickness: =2
-                                    Color: =RGBA(255, 255, 255, 1)
-                                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
-                                    DisabledColor: =RGBA(161, 159, 157, 1)
-                                    Fill: =RGBA(30, 138, 68, 1)
-                                    FocusedBorderThickness: =4
-                                    Font: =Font.'Segoe UI'
-                                    FontWeight: =FontWeight.Semibold
-                                    Height: =38
-                                    LayoutMinHeight: =16
-                                    LayoutMinWidth: =16
-                                    OnSelect: |-
-                                      =If(
-                                          IsBlank(varQueueSelected),
-                                          Notify("Select a report from the queue first.", NotificationType.Warning),
+                                                Set(varQueueComment, "");
+                                                Reset(ApprQueueComment_txt_1);
+                                                Select(ApprQueueRefresh_btn_1)
+                                            )
+                                          Size: =12.5
+                                          Text: ="Reject"
+                                          Width: =96
+                                    - ApprQueueApprove_lbl_1:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 0, 0, 0)
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Color: =RGBA(255, 255, 255, 1)
+                                          DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                                          DisabledColor: =RGBA(161, 159, 157, 1)
+                                          Fill: =RGBA(30, 138, 68, 1)
+                                          FocusedBorderThickness: =4
+                                          Font: =Font.'Segoe UI'
+                                          FontWeight: =FontWeight.Semibold
+                                          Height: =38
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =If(
+                                                IsBlank(varQueueSelected),
+                                                Notify("Select a report from the queue first.", NotificationType.Warning),
 
-                                          Switch(
-                                              varUserRole,
-                                              "DeputyDirectorME",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  ReportStatus: {Value: "Approved"},
-                                                  DDReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  DDReviewDate: Now(),
-                                                  DDRejectionReason: ""
-                                              }); Notify("Final approval recorded.", NotificationType.Success),
+                                                Switch(
+                                                    varUserRole,
+                                                    "DeputyDirectorME",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        ReportStatus: {Value: "Approved"},
+                                                        DDReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        DDReviewDate: Now(),
+                                                        DDRejectionReason: ""
+                                                    }); Notify("Final approval recorded.", NotificationType.Success),
 
-                                              "Supervisor",
-                                              Patch(MonthlyReports, varQueueSelected, {
-                                                  SubmissionStatus: {Value: "Approved"},
-                                                  SupervisorReviewedBy: {
-                                                      Claims: "i:0#.f|membership|" & Lower(varUserEmail),
-                                                      Department: "",
-                                                      DisplayName: Coalesce(varUserFullName, varUserEmail),
-                                                      Email: varUserEmail,
-                                                      JobTitle: "",
-                                                      Picture: ""
-                                                  },
-                                                  SupervisorReviewDate: Now(),
-                                                  SupervisorRejectionReason: ""
-                                              }); Notify("Approved — forwarded to Deputy Director M&E.", NotificationType.Success),
+                                                    "Supervisor",
+                                                    Patch(MonthlyReports, varQueueSelected, {
+                                                        SubmissionStatus: {Value: "Approved"},
+                                                        SupervisorReviewedBy: {
+                                                            Claims: "i:0#.f|membership|" & Lower(varUserEmail),
+                                                            Department: "",
+                                                            DisplayName: Coalesce(varUserFullName, varUserEmail),
+                                                            Email: varUserEmail,
+                                                            JobTitle: "",
+                                                            Picture: ""
+                                                        },
+                                                        SupervisorReviewDate: Now(),
+                                                        SupervisorRejectionReason: ""
+                                                    }); Notify("Approved — forwarded to Deputy Director M&E.", NotificationType.Success),
 
-                                              Notify("Your role cannot approve reports.", NotificationType.Error)
-                                          );
+                                                    Notify("Your role cannot approve reports.", NotificationType.Error)
+                                                );
 
-                                          Set(varQueueComment, "");
-                                          Reset(ApprQueueComment_txt_1);
-                                          Select(ApprQueueRefresh_btn_1)
-                                      )
-                                    Size: =12.5
-                                    Text: ="Approve ✓"
-                                    Width: =110
+                                                Set(varQueueComment, "");
+                                                Reset(ApprQueueComment_txt_1);
+                                                Select(ApprQueueRefresh_btn_1)
+                                            )
+                                          Size: =12.5
+                                          Text: ="Approve ✓"
+                                          Width: =110

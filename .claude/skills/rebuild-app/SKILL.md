@@ -12,9 +12,14 @@ Repack the current unpacked source into an importable `.msapp` file.
 
 1. **Verify source integrity:**
    ```bash
+   python3 tools/check_pa_yaml_structure.py   # PA1001 structural guards (run FIRST)
    python3 tools/check_screen_registry.py
    python3 tools/check_control_props.py
+   python3 tools/verify_powerfx.py
    ```
+   If `check_pa_yaml_structure.py` reports issues, fix them before packing —
+   Studio will reject the import with PA1001 otherwise (see
+   docs/PA1001-import-error-catalog.md for each error class and its fix).
 
 2. **Repack the app** (use next version number):
    ```bash

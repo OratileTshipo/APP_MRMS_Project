@@ -771,13 +771,10 @@ Screens:
                                                 "Frequency: " & ThisItem.'Frequency '.Value,
                                                 "Due " & Text(ThisItem.DueDate, "dd mmm yyyy")
                                             )
-                                            AccessibleLabel: ="Activity"
                                           Width: =Parent.Width * .9
                                           X: =10
-                                          Y: |-
+                                          Y: =ActivityItems_gal.TemplateHeight - 30
                                           AccessibleLabel: ="Activity Row Due"
-                                            =//ActivityRowMeta_lbl.Y + ActivityRowMeta_lbl.Height
-                                            ActivityItems_gal.TemplateHeight - 30
                                     - ActivityRowChevron_ico:
                                         Control: Classic/Icon@2.5.0
                                         Properties:
@@ -857,7 +854,7 @@ Screens:
                                                       "New Activity",
                                                       "Activity: " & varSelectedActivity.ActivityID
                                                   )
-                                                  AccessibleLabel: ="Activity"
+                                                AccessibleLabel: ="Activity"
                                           - ActCancel_btn:
                                               Control: ModernButton@1.0.0
                                               Properties:
