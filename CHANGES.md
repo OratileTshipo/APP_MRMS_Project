@@ -1248,3 +1248,48 @@ in the pristine msapp's Controls/*.json and the user's working v4.1 header).
 **Repacked.** `APP-MRMS_Project_app_v5_contributor.msapp` rebuilt with the 5 fixed `Src/*.pa.yaml`
 files (byte-identical to `src/`); all 23 non-Src entries byte-identical to the previous pack.
 Import this one — it should pass Studio's parse now.
+
+---
+
+# 2026-09-02 — dev branch — Two-status model alignment + DD global approver
+
+Branch: `dev`. Rebuilt from `APP-MRMS_Latest_dev_27Aug2026_InfoIcons.msapp` as
+`APP-MRMS_Latest_dev_02Sep2026_StatusModel.msapp` (internal app name
+`APP-MRMS (Status Model Build)`). Every status comparison now uses the two CSV-aligned
+Choice columns on `MonthlyReports` (`SubmissionStatus` = Draft/Submitted/Approved;
+`ReportStatus` = Not Submitted/Supervisor Approved/Supervisor Rejected/M&E Approved/
+M&E Rejected), and the Deputy Director (M&E) is the global final approver for all
+directorates (supervisor-approved reports queue in the DD list).
+
+## What changed (per screen)
+
+- **scr_ApprovalQueue** — Patch actions CSV-aligned: Supervisor Reject →
+  `{SubmissionStatus: Draft, ReportStatus: "Supervisor Rejected"}`; Supervisor Approve →
+  `{SubmissionStatus: Approved, ReportStatus: "Supervisor Approved"}`; DD Reject →
+  `{ReportStatus: "M&E Rejected"}`; DD Approve → `{ReportStatus: "M&E Approved"}`.
+  DD Pending/Overdue queue filters are global (`SubmissionStatus = "Approved"` with blank or
+  "Supervisor Approved" `ReportStatus`); supervisor scope stays on the same directorate
+  (`SubmissionStatus` = Submitted or Draft). Escalated tab/count now uses the list's
+  `IsOverdue` boolean (no `Escalated` Choice exists in the schema).
+- **scr_Home** — `colPendingApprovals` is role-scoped (Supervisor: Submitted; DD: Approved +
+  blank/"Supervisor Approved"); KPI/approved/trend and Pending/Approved/Rejected gallery
+  filters use the literal statuses above; status badge uses
+  `Coalesce(ThisItem.ReportStatus.Value, ThisItem.SubmissionStatus.Value)`.
+- **scr_MyActivities** — per-activity `ReportStatus` derived in a nested `With` (`_s`)
+  from the latest report's `ReportStatus`/`SubmissionStatus`; RAG label/colour, action
+  routing (Start / Resubmit / View / disabled) and the dropdown items cover all seven states.
+- **scr_ReportForm** — STATUS dropdown bound to `Choices(MonthlyReports.SubmissionStatus)`;
+  removed the stale `RepAct*` copy-paste block and commented-out legacy single-`Status`
+  Patch from `ReportFormSave_btn.OnSelect`; handler now validates and Patches with the real
+  `ReportForm*` controls per the CSV schema, then returns to scr_MyActivities.
+
+## Verification
+
+- `verify_powerfx.py`: 0 errors (warnings reduced 45 → 36, all pre-existing cross-screen
+  `Reset/Select` refs in the untouched `scr_ReportActivities` legacy form).
+- `check_screen_registry.py`: OK (13 ↔ 13).
+- Repack verified: all 15 `Src/*.pa.yaml` entries byte-identical to `src/Src/`; the two
+  `Src/Components/*` component sources preserved unchanged; `Properties.json` +
+  `Resources/PublishInfo.json` renamed to the new app name.
+- YAML parse gate: 14/15 files compose (pre-existing `scr_ReportActivities` plain-scalar
+  colon quirk at line 717 is unchanged from the InfoIcons pack and out of scope here).

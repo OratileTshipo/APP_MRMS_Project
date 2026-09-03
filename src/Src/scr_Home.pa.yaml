@@ -103,7 +103,13 @@ Screens:
             colPendingApprovals,
             If(
                 varUserRole in ["Supervisor", "ProgrammeManager", "DeputyDirectorME", "Administrator"],
-                Filter(colReportsInScope, ReportStatus.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
+                If(
+                    varUserRole = "Supervisor",
+                    Filter(colReportsInScope, SubmissionStatus.Value = "Submitted", 'FinancialYear '.Value = varCurrentFY),
+                    varUserRole = "DeputyDirectorME",
+                    Filter(colReportsInScope, SubmissionStatus.Value = "Approved" && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"), 'FinancialYear '.Value = varCurrentFY),
+                    Filter(colReportsInScope, !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"), 'FinancialYear '.Value = varCurrentFY)
+                ),
                 Table()
             )
         );
@@ -123,7 +129,7 @@ Screens:
             colApprovedThisMonth,
             Filter(
                 colReportsInScope,
-                ReportStatus.Value = "Approved",
+                ReportStatus.Value = "M&E Approved",
                 ReportingMonth.Value = varCurrentMonth,
                 'FinancialYear '.Value = varCurrentFY
             )
@@ -1139,7 +1145,7 @@ Screens:
 
 
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Submitted",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"),(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                             AccessibleLabel: ="Activity"
                                     - PendingSubtitile_lbl:
                                         Control: ModernText@1.0.0
@@ -1342,7 +1348,7 @@ Screens:
 
                                             CountRows(
                                                 Filter(colReportsInScope,
-                                                    ReportStatus.Value = "Rejected",
+                                                    ReportStatus.Value = "Supervisor Rejected" || ReportStatus.Value = "M&E Rejected",
                                                     (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                     (varFilterProgramme = "All" || ProgrammeLabel = varFilterProgramme),
                                                     (varFilterDirectorate = "All" || DirectorateLabel = varFilterDirectorate),
@@ -1357,7 +1363,7 @@ Screens:
 
 
 
-                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
+                                            CountRows(Filter(colReportsInScope, ReportStatus.Value="Supervisor Rejected" || ReportStatus.Value="M&E Rejected",(varFilterFY="All"||'FinancialYear '.Value=varFilterFY),(varFilterProgramme="All"||ProgrammeLabel=varFilterProgramme),(varFilterDirectorate="All"||DirectorateLabel=varFilterDirectorate),(varFilterQuarter="All"||Quarter.Value=varFilterQuarter)))
                                             AccessibleLabel: ="Activity"
                                     - RejectedSubtitle_lbl:
                                         Control: ModernText@1.0.0
@@ -1709,10 +1715,10 @@ Screens:
                                                               (varFilterFY = "All" || 'FinancialYear '.Value = varFilterFY),
                                                               (varFilterQuarter = "All" || Quarter.Value = varFilterQuarter),
                                                               (varHomeFilter = "All"
-                                                                  || (varHomeFilter = "PendingApprovals" && SubmissionStatus.Value = "Submitted")
+                                                                  || (varHomeFilter = "PendingApprovals" && !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"))
                                                                   || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                                                  || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
-                                                                  || (varHomeFilter = "Rejected" && ReportStatus.Value = "Rejected")
+                                                                  || (varHomeFilter = "Approved" && ReportStatus.Value = "M&E Approved")
+                                                                  || (varHomeFilter = "Rejected" && (ReportStatus.Value = "Supervisor Rejected" || ReportStatus.Value = "M&E Rejected"))
                                                               )
                                                           )
                                                       },
@@ -2080,17 +2086,17 @@ Screens:
                                                           ProgrammeName: progName,
                                                           TotalActivities: CountRows(progActivities),
                                                           MonthlyReportedCount: CountRows(Distinct(progReportsThisMonth, Activity.Id)),
-                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)),
-                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)),
+                                                          MonthlyApprovedCount: CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "M&E Approved"), Activity.Id)),
+                                                          FYApprovedActivityCount: CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "M&E Approved"), Activity.Id)),
                                                           MonthlyReportingRate:
                                                               If(CountRows(progActivities) = 0, 0,
                                                                   RoundUp((CountRows(Distinct(progReportsThisMonth, Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           MonthlyApprovalRate:
                                                               If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsThisMonth, ReportStatus.Value = "M&E Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           FYCumulativeRate:
                                                               If(CountRows(progActivities) = 0, 0,
-                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
+                                                                  RoundUp((CountRows(Distinct(Filter(progReportsFY, ReportStatus.Value = "M&E Approved"), Activity.Id)) / CountRows(progActivities)) * 100, 0)),
                                                           FlaggedCount: CountRows(Filter(progReportsFY, isFlagged = true))
                                                       }
                                                   )
@@ -2574,9 +2580,9 @@ Screens:
 
                                     // --- KPI card filter (varHomeFilter) ---
                                     (varHomeFilter = "All"
-                                        || (varHomeFilter = "PendingApprovals" && ReportStatus.Value = "Submitted")
+                                        || (varHomeFilter = "PendingApprovals" && !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved"))
                                         || (varHomeFilter = "Overdue" && IsOverdue = true)
-                                        || (varHomeFilter = "Approved" && ReportStatus.Value = "Approved")
+                                        || (varHomeFilter = "Approved" && ReportStatus.Value = "M&E Approved")
                                     )
 
                                     // --- Dropdown filters ---
@@ -2784,20 +2790,24 @@ Screens:
                                         Properties:
                                           Color: |-
                                             =Switch(
-                                            ThisItem.ReportStatus.Value,
-                                            "Approved",Color.Green,
-                                            "In Review",Color.Orange,
+                                            Coalesce(ThisItem.ReportStatus.Value, ThisItem.SubmissionStatus.Value),
+                                            "M&E Approved",Color.Green,
+                                            "Supervisor Approved",Color.Orange,
                                             "Submitted",Color.Black,
-                                            "Rejected",Color.Red,
+                                            "Supervisor Rejected",Color.Red,
+                                            "M&E Rejected",Color.Red,
+                                            "Not Submitted",Color.Gray,
                                             Color.Gray
                                             )
                                           Fill: |-
                                             =Switch(
-                                            ThisItem.ReportStatus.Value,
-                                            "Approved",Color.LightGreen,
-                                            "In Review",Color.LightGoldenRodYellow,
+                                            Coalesce(ThisItem.ReportStatus.Value, ThisItem.SubmissionStatus.Value),
+                                            "M&E Approved",Color.LightGreen,
+                                            "Supervisor Approved",Color.LightGoldenRodYellow,
                                             "Submitted",Color.LightGoldenRodYellow,
-                                            "Rejected",Color.LightCoral,
+                                            "Supervisor Rejected",Color.LightCoral,
+                                            "M&E Rejected",Color.LightCoral,
+                                            "Not Submitted",Color.LightGray,
                                             Color.LightGray
                                             )
                                           FillPortions: =1
@@ -2810,7 +2820,7 @@ Screens:
                                           RadiusBottomRight: =10
                                           RadiusTopLeft: =10
                                           RadiusTopRight: =10
-                                          Text: =ThisItem.ReportStatus.Value
+                                          Text: =If(IsBlank(ThisItem.ReportStatus.Value), Coalesce(ThisItem.SubmissionStatus.Value, "Not Submitted"), ThisItem.ReportStatus.Value)
                                           AccessibleLabel: ="Status"
                                     - Rectangle2_9:
                                         Control: Rectangle@2.3.0

@@ -370,9 +370,19 @@ Screens:
                                     colApprovalQueue,
                                     Switch(
                                         varQueueTab,
-                                        "Pending", SubmissionStatus.Value = "Submitted",
-                                        "Overdue", SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
-                                        "Escalated", SubmissionStatus.Value = "Escalated",
+                                        "Pending",
+                                            If(
+                                                varUserRole = "DeputyDirectorME",
+                                                IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved",
+                                                SubmissionStatus.Value = "Submitted"
+                                            ),
+                                        "Overdue",
+                                            If(
+                                                varUserRole = "DeputyDirectorME",
+                                                (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved") && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5,
+                                                SubmissionStatus.Value = "Submitted" && DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5
+                                            ),
+                                        "Escalated", IsOverdue = true,
                                         true
                                     ) &&
                                     (varQueueFilterDirectorate = "All" || DirectorateLabel = varQueueFilterDirectorate) &&
@@ -559,20 +569,20 @@ Screens:
                                         varUserRole,
                                         "DeputyDirectorME",
                                             Filter(MonthlyReports,
-                                                SubmissionStatus.Value = "Approved" && IsBlank(ReportStatus.Value)),
+                                                SubmissionStatus.Value = "Approved" && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved")),
                                         "Supervisor",
                                             Filter(MonthlyReports,
-                                                (SubmissionStatus.Value = "Submitted" || SubmissionStatus.Value = "Escalated" || SubmissionStatus.Value = "Draft")
+                                                (SubmissionStatus.Value = "Submitted" || SubmissionStatus.Value = "Draft")
                                                 && DirectorateLabel = varUserDirectorate),
                                         "Administrator",
                                             Filter(MonthlyReports,
-                                                !IsBlank(SubmissionStatus.Value) && IsBlank(ReportStatus.Value)),
+                                                !IsBlank(SubmissionStatus.Value) && (IsBlank(ReportStatus.Value) || ReportStatus.Value = "Supervisor Approved")),
                                         Filter(MonthlyReports, false)
                                     )
                                 );
                                 Set(varQueuePendingCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted")));
                                 Set(varQueueOverdueCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Submitted", DateDiff(SubmissionDate, Today(), TimeUnit.Days) > 5)));
-                                Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, SubmissionStatus.Value = "Escalated")));
+                                Set(varQueueEscalatedCount, CountRows(Filter(colApprovalQueue, IsOverdue = true)));
                                 Set(varQueueSelected, If(CountRows(colApprovalQueue) > 0, First(colApprovalQueue), Blank()))
                               Text: =""
                               Visible: =false
@@ -1133,7 +1143,7 @@ Screens:
                                               varUserRole,
                                               "DeputyDirectorME",
                                               Patch(MonthlyReports, varQueueSelected, {
-                                                  ReportStatus: {Value: "Rejected"},
+                                                  ReportStatus: {Value: "M&E Rejected"},
                                                   DDReviewedBy: {
                                                       Claims: "i:0#.f|membership|" & Lower(varUserEmail),
                                                       Department: "",
@@ -1148,7 +1158,8 @@ Screens:
 
                                               "Supervisor",
                                               Patch(MonthlyReports, varQueueSelected, {
-                                                  SubmissionStatus: {Value: "Rejected"},
+                                                  SubmissionStatus: {Value: "Draft"},
+                                                  ReportStatus: {Value: "Supervisor Rejected"},
                                                   SupervisorReviewedBy: {
                                                       Claims: "i:0#.f|membership|" & Lower(varUserEmail),
                                                       Department: "",
@@ -1197,7 +1208,7 @@ Screens:
                                               varUserRole,
                                               "DeputyDirectorME",
                                               Patch(MonthlyReports, varQueueSelected, {
-                                                  ReportStatus: {Value: "Approved"},
+                                                  ReportStatus: {Value: "M&E Approved"},
                                                   DDReviewedBy: {
                                                       Claims: "i:0#.f|membership|" & Lower(varUserEmail),
                                                       Department: "",
@@ -1213,6 +1224,7 @@ Screens:
                                               "Supervisor",
                                               Patch(MonthlyReports, varQueueSelected, {
                                                   SubmissionStatus: {Value: "Approved"},
+                                                  ReportStatus: {Value: "Supervisor Approved"},
                                                   SupervisorReviewedBy: {
                                                       Claims: "i:0#.f|membership|" & Lower(varUserEmail),
                                                       Department: "",

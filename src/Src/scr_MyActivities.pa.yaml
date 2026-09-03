@@ -100,43 +100,65 @@ Screens:
                             )
                         )
                     },
-                    {
-                        ActivityID: Act.ID,
-                        ActivityName: Act.ActivityID,
-                        ProjectName: Act.Project.Value,
-                        ProgrammeName: Act.ProgrammeLabel,
-                        DirectorateName: Act.DirectorateLabel,
-                        Frequency: Act.'Frequency ',
-                        DueDay: Day(Act.DueDate),
-                        ReportStatus: Coalesce(latestReport.ReportStatus.Value, "Not Started"),
-                        ReportID: Coalesce(latestReport.ID, Blank()),
-                        RAG: Switch(
-                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
-                            "Approved", "Green",
-                            "Draft", "Amber",
-                            "Submitted", "Amber",
-                            "Rejected", "Red",
-                            "Green"
-                        ),
-                        ActionLabel: Switch(
-                            Coalesce(latestReport.ReportStatus.Value, "Not Started"),
-                            "Not Started", "Start Report",
-                            "Draft", "Continue",
-                            "Submitted", "Submitted ✓",
-                            "Rejected", "Resubmit",
-                            "Approved", "View",
-                            "Start Report"
-                        ),
-                        ActionDisabled: Coalesce(latestReport.ReportStatus.Value, "Not Started") = "Submitted",
-                        IsOverdue: Coalesce(latestReport.IsOverdue, false),
-                        IsFlagged: Coalesce(latestReport.isFlagged, false),
-                        ActivityShortDescription: Act.ActivityShortDescription,
-                        StartDate: Text(Act.StartDate, DateTimeFormat.ShortDate),
-                        DueDate: Text(Act.DueDate, DateTimeFormat.ShortDate),
-                        ActivityOwner : Text(Act.ActivityOwner.DisplayName),
-                        ActivityStatus : Text(Act.Status.Value),
-                        Project : Text(Act.Project.Value)
-                    }
+                    With(
+                        {
+                            _s: Coalesce(
+                                If(
+                                    IsBlank(latestReport.ID),
+                                    "Not Submitted",
+                                    !IsBlank(latestReport.ReportStatus.Value),
+                                    latestReport.ReportStatus.Value,
+                                    latestReport.SubmissionStatus.Value = "Draft",
+                                    "Draft",
+                                    latestReport.SubmissionStatus.Value in ["Submitted", "Approved"],
+                                    "Submitted",
+                                    "Not Submitted"
+                                ),
+                                "Not Submitted"
+                            )
+                        },
+                        {
+                            ActivityID: Act.ID,
+                            ActivityName: Act.ActivityID,
+                            ProjectName: Act.Project.Value,
+                            ProgrammeName: Act.ProgrammeLabel,
+                            DirectorateName: Act.DirectorateLabel,
+                            Frequency: Act.'Frequency ',
+                            DueDay: Day(Act.DueDate),
+                            ReportStatus: _s,
+                            ReportID: Coalesce(latestReport.ID, Blank()),
+                            RAG: Switch(
+                                _s,
+                                "M&E Approved", "Green",
+                                "Supervisor Approved", "Amber",
+                                "Submitted", "Amber",
+                                "Draft", "Amber",
+                                "Supervisor Rejected", "Red",
+                                "M&E Rejected", "Red",
+                                "Amber"
+                            ),
+                            ActionLabel: Switch(
+                                _s,
+                                "Not Submitted", "Start Report",
+                                "Draft", "Continue",
+                                "Submitted", "Submitted ✓",
+                                "Supervisor Approved", "Submitted ✓",
+                                "Supervisor Rejected", "Resubmit",
+                                "M&E Rejected", "Resubmit",
+                                "M&E Approved", "View",
+                                "Start Report"
+                            ),
+                            ActionDisabled: _s = "Submitted" || _s = "Supervisor Approved",
+                            IsOverdue: Coalesce(latestReport.IsOverdue, false),
+                            IsFlagged: Coalesce(latestReport.isFlagged, false),
+                            ActivityShortDescription: Act.ActivityShortDescription,
+                            StartDate: Text(Act.StartDate, DateTimeFormat.ShortDate),
+                            DueDate: Text(Act.DueDate, DateTimeFormat.ShortDate),
+                            ActivityOwner : Text(Act.ActivityOwner.DisplayName),
+                            ActivityStatus : Text(Act.Status.Value),
+                            Project : Text(Act.Project.Value)
+                        }
+                    )
                 )
             )
         );
@@ -668,7 +690,7 @@ Screens:
                                     Fill: =varBgLight
                                     Height: =34
                                     ItemDisplayText: =ThisItem.Value
-                                    Items: =["All", "Not Started", "Draft", "Submitted", "Approved", "Rejected"]
+                                    Items: =["All", "Not Submitted", "Draft", "Submitted", "Supervisor Approved", "Supervisor Rejected", "M&E Rejected", "M&E Approved"]
                                     LayoutMinHeight: =16
                                     LayoutMinWidth: =16
                                     OnChange: =Set(varActFilterStatus, ActStatusFilter_drp.Selected.Value)
@@ -905,11 +927,11 @@ Screens:
                                           OnSelect: |-
                                             =// Navigate to report form / view based on the report status
                                             If(
-                                                ThisItem.ReportStatus = "Not Started",
+                                                ThisItem.ReportStatus = "Not Submitted",
                                                 Navigate(scr_ReportForm, ScreenTransition.Fade, {selectedActivityID: ThisItem.ActivityID}),
-                                                ThisItem.ReportStatus = "Draft" || ThisItem.ReportStatus = "Rejected",
+                                                ThisItem.ReportStatus = "Draft" || ThisItem.ReportStatus = "Supervisor Rejected" || ThisItem.ReportStatus = "M&E Rejected",
                                                 Navigate(scr_ReportForm, ScreenTransition.Fade, {selectedActivityID: ThisItem.ActivityID, editReportID: ThisItem.ReportID}),
-                                                ThisItem.ReportStatus = "Approved",
+                                                ThisItem.ReportStatus = "M&E Approved",
                                                 Navigate(scr_ReportView, ScreenTransition.Fade, {viewReportID: ThisItem.ReportID}),
                                                 Notify("This report has already been submitted.", NotificationType.Information)
                                             )
