@@ -1,0 +1,114 @@
+{
+  "_description": "Sensitive column detection for APP-MRMS. Schema mode outputs ONLY column names + data types. No sample values, no org data, no personal information.",
+  "_usage": "python3 tools/sanitize_data.py --input file.csv --mode schema",
+  "_rule": "When in doubt, mark it sensitive. The output must be safe for any AI model or public repo.",
+
+  "sensitive_patterns": {
+    "person_columns": {
+      "description": "Person names, emails, user accounts — POPIA personal information",
+      "column_names": [
+        "ActivityOwner", "ActivityOwnerLabel", "Supervisor", "SupervisorLabel",
+        "Director", "DirectorLabel", "DeputyDirector", "DeputyDirectorM&E",
+        "Deligate", "ProgrammeManager", "ProjectOwner", "ProjectOwnerLabel",
+        "SubmittedBy", "SupervisorReviewedBy", "DDReviewedBy",
+        "ActionBy", "Author", "RecipientUser", "Responsibility"
+      ],
+      "contains_patterns": [
+        "Owner", "Manager", "Supervisor", "Reviewer", "Director",
+        "Author", "Recipient", "Person", "Contact", "User"
+      ],
+      "contains_patterns_exclusions": [
+        "Directorate", "ProgrammeLabel", "DirectorateLabel"
+      ]
+    },
+    "email_columns": {
+      "description": "Email addresses and user account identifiers",
+      "column_names": [
+        "UserAccount", "Email", "EmailAddress", "Mail", "SmtpAddress"
+      ],
+      "contains_patterns": [
+        "Email", "Mail", "Account", "Login", "Username"
+      ]
+    },
+    "password_columns": {
+      "description": "Passwords, secrets, API keys",
+      "column_names": [
+        "AppPassword", "Password", "Secret", "ApiKey", "Token",
+        "ClientSecret", "ConnectionString"
+      ],
+      "contains_patterns": [
+        "Password", "Secret", "Token", "Key", "Credential"
+      ]
+    },
+    "org_identifying_columns": {
+      "description": "Columns containing org-specific names, codes, descriptions, or references that identify the organization",
+      "column_names": [
+        "Directorate", "DirectorateName", "DirectorateLabel",
+        "Directorate: DirectorateID", "Directorate: DirectorateName", "Directorate: Title",
+        "Programme", "ProgrammeLabel", "ProgrammeCode",
+        "Project", "Project: Reference",
+        "ActivityDescription", "ActivityShortDescription",
+        "Description", "Notes", "Remarks",
+        "KeyDeliverable", "PriorityChallenge", "AnnualTarget",
+        "Reference", "Output",
+        "Title"
+      ],
+      "contains_patterns": [
+        "Directorate", "Programme", "Project", "Activity",
+        "Description", "Reference", "Deliverable"
+      ]
+    },
+    "comment_text_columns": {
+      "description": "Free-text comments — may contain personal opinions or sensitive narratives",
+      "column_names": [
+        "CommentText", "ReasonForDeviation", "RemedialAction",
+        "RejectionReason", "SupervisorRejectionReason", "DDRejectionReason"
+      ],
+      "contains_patterns": [
+        "Comment", "Reason", "Remark", "Narrative"
+      ]
+    },
+    "financial_columns": {
+      "description": "Budget, financial figures — commercially sensitive",
+      "column_names": [
+        "Budget", "Expenditure", "Revenue", "Cost", "Amount",
+        "Allocation", "FinancialYear"
+      ],
+      "contains_patterns": [
+        "Budget", "Cost", "Amount", "Price", "Revenue", "Expenditure", "Financial"
+      ]
+    },
+    "id_columns": {
+      "description": "Internal IDs, GUIDs, system identifiers — could expose infrastructure",
+      "column_names": [
+        "UserAccountId", "Claims", "PictureURL", "EntityId"
+      ],
+      "contains_patterns": [
+        "Claims", "PictureURL", "InternalId"
+      ]
+    }
+  },
+
+  "safe_patterns": {
+    "description": "Only pure structural/boolean/numeric columns that contain zero org-identifying information",
+    "column_names": [
+      "ID", "Active", "IsOverdue", "isFlagged",
+      "PercentageComplete", "Version",
+      "IsRead", "Frequency", "Status",
+      "ReportStatus", "SubmissionStatus",
+      "Quarter", "ReportingMonth",
+      "EntityType", "Action", "FieldChanged",
+      "OldValue", "NewValue",
+      "KPIName", "KPITarget", "KPIUnit",
+      "StartDate", "EndDate", "DueDate",
+      "SubmissionDate", "SupervisorReviewDate", "DDReviewDate",
+      "CommentDate", "CreatedDate"
+    ]
+  },
+
+  "output_options": {
+    "_schema_mode": "Column name + detected type only. No sample values. Zero org data.",
+    "_redact_mode": "Full dataset with sensitive columns replaced by [REDACTED].",
+    "_headers_only": "Column header names only — absolute minimum."
+  }
+}
