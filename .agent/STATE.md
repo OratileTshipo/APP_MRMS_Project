@@ -1,19 +1,16 @@
-Current Task: Fix everything broken on the `dev` branch of APP-MRMS (user request).
-Current Phase: COMPLETE — verified, awaiting user commit via Changes panel.
-Current Subtask: none (all plan phases closed; protocol state persisted).
+Current Task: Commit + push fix pass to new branch GLM52, then re-verify all changes.
+Current Phase: COMPLETE — committed, pushed, all gates + remote CI green.
+Current Subtask: none (idle, no active subtask).
 
 Completed:
 
-☑ Survey: repo gates + CI history + trackers audited (see PROGRESS.md Checkpoint 1)
-☑ Flow package rebuilt: flows/APP-MRMS-Approval.zip 4/4 manifest flows, real GUIDs, 0 placeholders (C4 closed)
-☑ MonthlyReports.csv: Fecbruary → February ×3 (L7 closed, regression-tested)
-☑ tests/powerapp-e2e.spec.ts rewritten for single-repo layout — 22/22 pass
-☑ Repo hygiene: node_modules/playwright-report/test-results untracked + gitignored; stale .gitmodules removed
-☑ package.json: real description + working test/test:report/verify scripts
-☑ CI: structure-tests job added to .github/workflows/ci.yml
-☑ Docs: KNOWN_ISSUES.md, README.md, docs/2026-09-05-dev-fix-pass.md
+☑ All fix-pass phases (see PLAN.md; unchanged below)
 ☑ knowledge.md (GLM 5.3 directives) created per user request
-☑ .agent/ protocol files scaffolded; full verification re-run this session
+☑ .agent/ protocol files scaffolded; full verification re-run
+☑ Commit 3ecdd1c created on new branch GLM52 (206 files, +762/−363,583 incl. artifact untracking)
+☑ Pushed: origin/GLM52 = 3ecdd1ce65ba, tracking set up
+☑ Re-verification: 3 Python gates PASS, Playwright 22/22, hygiene PASS, flow zip 4/4
+☑ GitHub Actions CI on GLM52: success (run 33994575072, 18s)
 
 In Progress:
 
@@ -21,7 +18,7 @@ In Progress:
 
 Remaining:
 
-☐ User action: review + commit the working tree via Freebuff Changes panel (commits are user-owned here)
+☐ Optional user action: open PR GLM52 → dev (https://github.com/OratileTshipo/APP_MRMS_Project/pull/new/GLM52)
 
 Files Modified:
 
@@ -45,7 +42,8 @@ Tests:
 · python3 tools/check_control_props.py → Errors: 0 (34 pre-existing manifest warnings) — PASS
 · python3 tools/verify_powerfx.py --strict → 13,674 formulas, 0 errors — PASS
 · npm test (Playwright, 4 workers) → 22 passed / 0 failed — PASS
-· hygiene: git ls-files node_modules = 0; Fecbruary count = 0; flow zip 4/4 — PASS
+· hygiene: git ls-files node_modules = 0; Fecbruary count = 0; flow zip 4/4, 0 leftover tokens — PASS
+· remote CI: gh run 33994575072 on GLM52 → success — PASS
 
 Known Issues:
 
@@ -53,5 +51,5 @@ Known Issues:
 · 5 large .msapp packs tracked; some superseded — candidate for future cleanup (not in scope)
 · control_props emits 34 pre-existing "no template in manifest" warnings (TypedDataCard/Toggle) — cosmetic, pre-dates this task
 
-Next Action: none pending — task complete. If the user asks to resume: re-run `npm test` + 3 Python gates, then `git status` to confirm the working tree is unchanged, and pick up any new user request.
-Last Verified: 2026-09-05 — all gates green on `dev` @ 6d58648 with working tree as listed above.
+Next Action: none pending. If resumed: `git status` + `git log --oneline -3` (expect clean tree on GLM52 @ 3ecdd1c), re-run gates if code changed, then take the next user request.
+Last Verified: 2026-09-05 — GLM52 @ 3ecdd1c pushed; local gates + remote CI all green; working tree clean.

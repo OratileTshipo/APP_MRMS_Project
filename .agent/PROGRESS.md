@@ -30,3 +30,13 @@
 ## Checkpoint 6 — Protocol adoption (2026-09-05, session 2)
 - Created `knowledge.md` (GLM 5.3 output directives) per user request — verbatim, root.
 - Scaffolded `.agent/` state files; re-ran full verification (see STATE.md).
+
+## Checkpoint 7 — Commit, push, re-verify (2026-09-05, session 3)
+- Reviewed full diff (MonthlyReports.csv = single-line schema file; no index.php/skill.md in repo).
+- Created branch `GLM52` from `dev` @ 6d58648; committed all fix-pass changes as 3ecdd1c
+  (206 files, +762/−363,583 — bulk is node_modules untracking) with conventional message + Codebuff footer.
+- Pushed: origin/GLM52 = 3ecdd1ce65ba, tracking established.
+- Re-verification battery: registry 0 problems / props 0 errors / powerfx --strict clean /
+  Playwright 22/22 / node_modules tracked 0 / Fecbruary 0 / artifacts untracked + gitignore
+  effective / flow zip 4-of-4 with 0 leftover tokens / working tree clean.
+- GitHub Actions CI on GLM52: run 33994575072 → success (18s).
