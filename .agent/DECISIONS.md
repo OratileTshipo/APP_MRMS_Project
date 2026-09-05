@@ -33,6 +33,13 @@
 7. **`knowledge.md` created verbatim as requested; not gitignored, left untracked.**
    User-provided directive file; committing it is the user's call alongside the fix pass.
 
+9. **Pack pruning keeps old packs on disk and in git history; only untracks them.**
+   `git rm --cached` + .gitignore deny-pattern slims checkouts without rewriting history.
+   The newest pack was promoted to canonical only after byte-level proof (15/15
+   Src/*.pa.yaml SHA-256 match against src/Src/) — otherwise CI's fresh checkout
+   would have zero packs and the Playwright msapp group would fail. src/*.msapr
+   (1.9 MB) deliberately untouched: different format, actively used by src/.
+
 8. **Commits deferred.** Freebuff workspace rule: Changes panel owns commits/pushes;
    run git delivery only on explicit ask. All fix-pass changes sit in the working tree
    (plus 191 staged index deletions) ready for the user to commit or for an explicit ask.

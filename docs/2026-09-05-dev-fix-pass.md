@@ -79,3 +79,23 @@ suite spawns Python subprocesses and the default 24 workers OOM'd a 4 GB sandbox
 | `tools/check_control_props.py` | ✅ 0 errors (34 pre-existing manifest warnings) |
 | `tools/verify_powerfx.py --strict` | ✅ clean (13,674 formulas) |
 | Playwright suite (`npm test`) | ✅ 22/22 |
+
+## 7. msapp pack pruning (2026-09-05, later)
+
+The repo root carried five tracked ~2 MB `.msapp` packs (24Aug-09h38,
+03Sep2026 DDQueue/QueueFix/StatusModel, 27Aug2026 InfoIcons), all superseded.
+Evidence-based pruning:
+
+- The newest pack `APP-MRMS_Latest_dev_05Sep2026_src-sync.msapp` was verified
+  before adoption: valid ZIP container (50 entries), and all 15 `Src/*.pa.yaml`
+  files byte-identical (SHA-256) to `src/Src/` — it is the in-sync pack.
+- `git rm --cached` the five superseded packs (files kept on disk, history
+  untouched); tracked the 05Sep2026 pack as the single canonical pack.
+- `.gitignore` gained a deny-pattern guard so superseded `APP-MRMS_Latest_dev_*`
+  packs cannot be re-added accidentally; the canonical pack stays tracked via a
+  trailing negation rule.
+- CI is unaffected: `pack-roundtrip` packs from `src/` to `/tmp` and does not
+  read root packs; the Playwright msapp group requires ≥1 valid root pack,
+  which the canonical pack satisfies.
+- README's pack tables referenced `APP-MRMS_Project_app_v1–v6.msapp` files that
+  no longer exist; rows were replaced with the current pack policy.

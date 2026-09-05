@@ -41,6 +41,18 @@
   effective / flow zip 4-of-4 with 0 leftover tokens / working tree clean.
 - GitHub Actions CI on GLM52: run 33994575072 → success (18s).
 
+## Checkpoint 9 — msapp pack pruning (2026-09-05, session 5)
+- Inventoried 5 tracked packs (~10.5 MB): 24Aug-09h38, 03Sep DDQueue/QueueFix/StatusModel,
+  27Aug InfoIcons — all superseded. src/*.msapr left alone (different format, in use).
+- Verified CI (packs from src/ to /tmp) and Playwright (needs ≥1 valid root pack)
+  before pruning; README's v1–v6 pack tables were stale (files gone).
+- Adopted APP-MRMS_Latest_dev_05Sep2026_src-sync.msapp as canonical after byte-level
+  proof: valid ZIP, 15/15 Src/*.pa.yaml SHA-256-identical to src/Src/.
+- git rm --cached superseded packs (kept on disk); added canonical pack; .gitignore
+  deny-pattern + negation; README pack policy rewritten; fix-pass doc §7 appended.
+- Verification: registry 0 / props 0 errors / powerfx --strict clean / Playwright 22/22 /
+  check-ignore effective / tracked msapp = 1. Committed + pushed to GLM52.
+
 ## Checkpoint 8 — Pull request (2026-09-05, session 4)
 - Created PR #2: GLM52 → dev, with full summary + verification table in body.
 - PR state OPEN, mergeable: MERGEABLE; all 6 CI checks pass (verify-source, control-props
