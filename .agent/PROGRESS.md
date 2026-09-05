@@ -40,3 +40,9 @@
   Playwright 22/22 / node_modules tracked 0 / Fecbruary 0 / artifacts untracked + gitignore
   effective / flow zip 4-of-4 with 0 leftover tokens / working tree clean.
 - GitHub Actions CI on GLM52: run 33994575072 → success (18s).
+
+## Checkpoint 8 — Pull request (2026-09-05, session 4)
+- Created PR #2: GLM52 → dev, with full summary + verification table in body.
+- PR state OPEN, mergeable: MERGEABLE; all 6 CI checks pass (verify-source, control-props
+  within it, Playwright structure tests, pack round trip — across push and PR runs).
+- URL: https://github.com/OratileTshipo/APP_MRMS_Project/pull/2

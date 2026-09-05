@@ -1,5 +1,5 @@
-Current Task: Commit + push fix pass to new branch GLM52, then re-verify all changes.
-Current Phase: COMPLETE — committed, pushed, all gates + remote CI green.
+Current Task: Commit + push fix pass to new branch GLM52, re-verify, open PR to dev.
+Current Phase: COMPLETE — PR #2 open, all CI checks pass, mergeable.
 Current Subtask: none (idle, no active subtask).
 
 Completed:
@@ -11,6 +11,7 @@ Completed:
 ☑ Pushed: origin/GLM52 = 3ecdd1ce65ba, tracking set up
 ☑ Re-verification: 3 Python gates PASS, Playwright 22/22, hygiene PASS, flow zip 4/4
 ☑ GitHub Actions CI on GLM52: success (run 33994575072, 18s)
+☑ PR #2 opened (GLM52 → dev): OPEN, MERGEABLE, 6/6 checks pass
 
 In Progress:
 
@@ -18,7 +19,7 @@ In Progress:
 
 Remaining:
 
-☐ Optional user action: open PR GLM52 → dev (https://github.com/OratileTshipo/APP_MRMS_Project/pull/new/GLM52)
+☐ Optional user action: review + merge PR #2 (https://github.com/OratileTshipo/APP_MRMS_Project/pull/2)
 
 Files Modified:
 
@@ -51,5 +52,5 @@ Known Issues:
 · 5 large .msapp packs tracked; some superseded — candidate for future cleanup (not in scope)
 · control_props emits 34 pre-existing "no template in manifest" warnings (TypedDataCard/Toggle) — cosmetic, pre-dates this task
 
-Next Action: none pending. If resumed: `git status` + `git log --oneline -3` (expect clean tree on GLM52 @ 3ecdd1c), re-run gates if code changed, then take the next user request.
-Last Verified: 2026-09-05 — GLM52 @ 3ecdd1c pushed; local gates + remote CI all green; working tree clean.
+Next Action: none pending. If resumed: `git status` + `git log --oneline -3` (expect clean tree on GLM52), check `gh pr view 2`, then take the next user request.
+Last Verified: 2026-09-05 — PR #2 OPEN/MERGEABLE, 6/6 CI checks pass, working tree clean on GLM52.
