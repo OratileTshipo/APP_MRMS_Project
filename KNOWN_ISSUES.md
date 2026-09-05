@@ -11,7 +11,7 @@
 | C1 | `SupervisorApproved` status missing from MonthlyReports | ✅ Resolved | Developer | Added to CSV choices and CustomFormatter |
 | C2 | SharePoint site not provisioned | ✅ Resolved | SharePoint Admin | 11 lists provisioned |
 | C3 | APP_Users needs real account seeding | ✅ Resolved | SharePoint Admin | 5 roles seeded |
-| C4 | Flow package has placeholder GUIDs | 🔴 Open | Developer | Rebuild with `build_flow_zips.py` |
+| C4 | Flow package has placeholder GUIDs | ✅ Resolved | Developer | Rebuilt `flows/APP-MRMS-Approval.zip` with `build_flow_zips.py` — all 4 flows packed (incl. Report Rejected), real site/list GUIDs substituted, 0 leftover `{{TOKEN}}` placeholders |
 
 ---
 
@@ -87,6 +87,9 @@
 | 2026-08-21 | M7 | Updated Search/ChevronRight icon colors to `RGBA(100,100,100,1)` (7:1 ratio) |
 | 2026-08-21 | L13 | Added AccessibleLabel to gallery row text in 6 screens |
 | 2026-08-21 | L14 | Removed redundant `ClearCollect(colProgrammes, Programmes)` from ReportActivities |
+| 2026-09-05 | C4 | Rebuilt `APP-MRMS-Approval.zip`: stale zip carried only 3 of the 4 manifest flows (Report Rejected missing → import would fail); rebuilt with real GUIDs, 4/4 flows |
+| 2026-09-05 | L7 | Fixed `Fecbruary` → `February` regression in the MonthlyReports.csv schema header (Choice list + CustomFormatter); regression test added |
+| 2026-09-05 | — | Test suite rewritten for the single-repo layout (old suite targeted the removed `APP_MRMS` submodule — 12 failures); `node_modules/` + Playwright artifacts untracked and gitignored; Playwright job added to CI |
 
 ---
 

@@ -27,6 +27,11 @@ node_modules/
 # Build artifacts
 dist/
 *.tsbuildinfo
+
+# Playwright test outputs
+playwright-report/
+test-results/
+
 # API keys
 .env
 .env.*
