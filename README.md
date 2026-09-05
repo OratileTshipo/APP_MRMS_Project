@@ -10,7 +10,7 @@ and Roads (DPWR), North West Province.
 | Path | Purpose |
 |---|---|
 | `*.csv` | **Single source of truth** for the SharePoint list schemas and seed data (Directorates, APP_Users, MonthlyReports, Activities, Projects, Programmes) |
-| `APP-MRMS_Project_app_v6.msapp` | **Current importable Power Apps package** — the v6 full app: v4 layout-fixed shell (`cmp_NavRail` + `cmp_AppHeader` on every screen) plus the new `scr_ApprovalQueue` (queue list + review detail with Approve / Reject / Return-for-correction actions). Earlier packs (v1–v5) are kept as versioned packs below |
+| `APP-MRMS_Latest_dev_05Sep2026_src-sync.msapp` | **Current importable Power Apps package** — full app (all screens + `cmp_NavRail`/`cmp_AppHeader` shell, incl. `scr_ApprovalQueue`), byte-synced with `src/Src/`. Superseded packs are pruned from tracking (see "Packs" below) |
 | `src/` | Unpacked msapp source (`pac canvas unpack`, `SourceCode` layout): `App.pa.yaml`, `_EditorState.pa.yaml`, one `.pa.yaml` per screen, and the `.msapr` resources archive |
 | `*.docx` | BRD/FDS/TDS, Architecture Pack, Phase 1 Execution Guide, URS Stakeholder Validation — **updated to match the CSV list schemas** (see CHANGES.md §4–5) |
 | `Project Instructions` | Working brief for the solution build |
@@ -19,7 +19,9 @@ and Roads (DPWR), North West Province.
 | `update_docs_schema.py` | Script used to align the Word docs with the CSV schemas |
 | `tools/check_screen_registry.py` | CI guard: fails if any screen file in `src/Src/` has no matching `_EditorState` entry (or vice versa) |
 | `tools/check_control_props.py` | CI guard: compares every control's declared properties against the control manifest (Templates.json) and fails on unknown properties — the PA2108 class Studio rejects on import (catches nested controls; see CHANGES.md §36) |
-| `.github/workflows/ci.yml` | GitHub Actions CI: runs the screen-registry check + `tools/verify_powerfx.py` on every push/PR |
+| `.github/workflows/ci.yml` | GitHub Actions CI: runs the screen-registry check + `tools/verify_powerfx.py`, the Playwright structure suite, and the pack round trip on every push/PR |
+| `tests/powerapp-e2e.spec.ts` | Playwright structure suite: validates the unpacked source, flow import package, CSV schemas, msapp packs and tooling (`npm test`) |
+| `docs/2026-09-05-dev-fix-pass.md` | Record of the 2026-09-05 dev-branch fix pass (flow zip rebuild, test rewrite, repo hygiene) |
 | `reference/` | Permanent reference material for future work (msapp internals, official-docs extractions, doc text, round-trip proof) — see `reference/canvas-apps/README.md` |
 | `backup/` | Pristine pre-change snapshots of the original pack and unpacked source — see `backup/README.md` |
 
@@ -45,23 +47,22 @@ full verification record.
 **Before making changes:** `backup/` holds pristine copies of the original
 `.msapp` and the unpacked source — restore from there if anything breaks.
 
-## Versioned packs
+## Packs
 
-Every pack is saved under a new name so multiple working versions coexist.
+Historical packs (`APP-MRMS_Project_app_v1`–`v6`, the 24Aug/03Sep `Latest_dev`
+builds and the 27Aug InfoIcons build) were pruned from git tracking on
+2026-09-05 to keep the repo lean — see `docs/2026-09-05-dev-fix-pass.md` §7.
+Git history retains them if an old pack is ever needed.
+
+The single tracked pack:
 
 | File | What it is | Status |
 |---|---|---|
-| `APP-MRMS_Project_app_v1_pristine.msapp` | Original pre-component pack (copy of `backup/original-pack/`) | ✅ imports clean |
-| `APP-MRMS_Project_app_v2_components.msapp` | First component build (header/sidebar as components) | ❌ **fails Studio import — PA2108** (root layout props, fixed in v3) |
-| `APP-MRMS_Project_app_v3_fixed.msapp` | Schema-valid components build (PA2108 fixed) | ✅ imports; UI layout regressions fixed in v4 |
-| `APP-MRMS_Project_app_v4_layout-fixed.msapp` | Component build: body heights no longer overflow the header, shell gutters removed, component background fills guaranteed | ✅ verified pack→unpack byte-identical |
-| `APP-MRMS_Project_app_v4.1_containers.msapp` | **scr_Projects reverted from components to container header/sidebar** (components crash when clicked on that screen) | ✅ verifier `--strict` clean, 0 errors/warnings; see CHANGES.md §33 |
-| `APP-MRMS_Project_app_v4.2_all-containers.msapp` | **All screens use the container header + menu sidebar** (no components); headers show the screen context + signed-in user (except Home Dashboard) | ✅ verifier `--strict` clean (11970 formulas, 0 errors/warnings); YAML sources updated in `src/`; superseded by v5; see CHANGES.md §34 |
-| `APP-MRMS_Project_app_v5_contributor.msapp` | **v5 contributor app** — only `scr_Splash` + `scr_MyActivities` + `scr_MyReports`, rebuilt to the mockup UI (labelled navy sidebar, white topbar with breadcrumb, summary strips, search/FY/quarter/month filters, RAG worklist, report history with read-only detail drawer); Admin/DeputyDirectorME blocked at the splash screen; report capture is out of scope (v6) | ✅ verifier `--strict` clean (2564 formulas, 0 errors/warnings); see CHANGES.md §35 |
-| `APP-MRMS_Project_app_v6.msapp` | **v6 full app** — v4 layout-fixed source (all 12 screens + `cmp_NavRail`/`cmp_AppHeader` shell) + new `scr_ApprovalQueue` built to `scr_ApprovalQueue_mockup.html`: two-column queue (Pending / Overdue / Escalated tabs, directorate filter, search) with a review detail pane (report content, planned activity, progress, review history, comment box) and real Approve / Reject / Return-for-correction actions that Patch `MonthlyReports` (Status / ReviewedBy / ReviewDate / RejectionReason) then refresh the queue. Approval Queue icon added to the shared nav rail; app renamed to v6; stale v4.2 SARIF cleared so the import opens without phantom errors | ✅ verifier `--strict` clean (9540 formulas, 0 errors/warnings); control-prop check 0 errors (incl. new screen); YAML parse OK; pack `Src/*.pa.yaml` byte-identical to `src/`; **import this one** |
+| `APP-MRMS_Latest_dev_05Sep2026_src-sync.msapp` | Current importable package; every `Src/*.pa.yaml` byte-identical (SHA-256) to `src/Src/` | ✅ import this one |
 
-Rule going forward: **never overwrite an existing pack** — `cp`/rename to the
-next `_vN_` name and record it in CHANGES.md.
+Rule going forward: **never overwrite the tracked pack** — build the next one
+under a new dated `_src-sync` name, update the `.gitignore` negation, and
+record it in CHANGES.md.
 
 ## Importing the repacked app into Power Apps Studio (checklist)
 
@@ -83,6 +84,7 @@ next `_vN_` name and record it in CHANGES.md.
    python3 tools/check_screen_registry.py   # screen files ↔ _EditorState
    python3 tools/check_control_props.py     # control properties vs Templates.json (PA2108 class)
    python3 tools/verify_powerfx.py          # formula balance, nav targets, patch keys
+   npm test                                 # Playwright structure suite (runs the checks above too)
    python3 -c "import yaml,glob; [yaml.compose(open(f,encoding='utf-8')) for f in glob.glob('src/Src/*.pa.yaml')]"  # YAML parse gate
    ```
    (See CHANGES.md §24 for the full import-failure root causes — named formulas

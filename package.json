@@ -1,15 +1,24 @@
 {
   "name": "app_mrms_project",
   "version": "1.0.0",
-  "description": "[![CI status](https://github.com/OratileTshipo/APP_MRMS_Project/actions/workflows/ci.yml/badge.svg)](https://github.com/OratileTshipo/APP_MRMS_Project/actions/workflows/ci.yml)",
+  "description": "APP-MRMS — Annual Performance Plan Monthly Reporting Management System (Power Apps canvas app + SharePoint Online + Power Automate)",
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report test-results/html-report",
+    "verify": "python3 tools/check_screen_registry.py && python3 tools/check_control_props.py && python3 tools/verify_powerfx.py --strict"
   },
-  "keywords": [],
+  "keywords": [
+    "power-apps",
+    "power-automate",
+    "sharepoint",
+    "canvas-app",
+    "power-fx"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {

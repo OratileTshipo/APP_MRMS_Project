@@ -33,6 +33,26 @@ jobs:
       - name: Power Fx static verification (strict — delegation findings fail)
         run: python3 tools/verify_powerfx.py --strict
 
+  structure-tests:
+    name: Playwright structure tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The suite validates files and runs the Python checks — no browser needed.
+      - name: Run structure test suite
+        run: npx playwright test
+
   pack-roundtrip:
     name: Pack → unpack round trip (byte-identical)
     runs-on: ubuntu-latest
